@@ -1,0 +1,526 @@
+export default function RestaurantBooking() {
+const [messages, setMessages] = React.useState([
+{ role: ‘bot’, text: “Welcome to Maison. I’m here to help you secure a reservation. When are you thinking of joining us?” }
+]);
+const [input, setInput] = React.useState(’’);
+const [isLoading, setIsLoading] = React.useState(false);
+const [showQuick, setShowQuick] = React.useState(true);
+const messagesEndRef = React.useRef(null);
+
+const WEBHOOK = ‘https://trainerapex.app.n8n.cloud/webhook/f80e5f47-634b-459e-979f-afb4945934fd/chat’;
+const sessionId = React.useRef(‘session_’ + Date.now());
+
+React.useEffect(() => {
+messagesEndRef.current?.scrollIntoView({ behavior: ‘smooth’ });
+}, [messages, isLoading]);
+
+async function postMessage(text) {
+if (isLoading || !text.trim()) return;
+setIsLoading(true);
+setShowQuick(false);
+setMessages(prev => […prev, { role: ‘user’, text }]);
+
+```
+try {
+  const res = await fetch(WEBHOOK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'sendMessage',
+      sessionId: sessionId.current,
+      chatInput: text,
+    })
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  const reply = data.output || data.text || data.message
+    || (Array.isArray(data) && (data[0]?.output || data[0]?.text))
+    || "Thank you — we'll check availability and get back to you shortly.";
+  setMessages(prev => [...prev, { role: 'bot', text: reply }]);
+} catch(err) {
+  setMessages(prev => [...prev, { role: 'bot', text: `⚠️ Could not reach the booking system (${err.message}). Note: this preview sandbox blocks external requests — the downloaded HTML file will work correctly in a real browser.` }]);
+}
+setIsLoading(false);
+```
+
+}
+
+function handleSend() {
+const text = input.trim();
+if (!text) return;
+setInput(’’);
+postMessage(text);
+}
+
+const styles = {
+page: {
+fontFamily: “‘Georgia’, serif”,
+background: ‘#faf8f5’,
+minHeight: ‘100vh’,
+display: ‘flex’,
+flexDirection: ‘column’,
+},
+nav: {
+display: ‘flex’,
+alignItems: ‘center’,
+justifyContent: ‘space-between’,
+padding: ‘22px 48px’,
+background: ‘rgba(250,248,245,0.95)’,
+borderBottom: ‘1px solid #e8e4de’,
+},
+logo: {
+fontSize: ‘1.45rem’,
+fontWeight: 300,
+letterSpacing: ‘0.18em’,
+textTransform: ‘uppercase’,
+color: ‘#1a1814’,
+fontFamily: “‘Georgia’, serif”,
+},
+navLinks: {
+display: ‘flex’,
+gap: 32,
+listStyle: ‘none’,
+},
+navLink: {
+fontSize: ‘0.72rem’,
+letterSpacing: ‘0.13em’,
+textTransform: ‘uppercase’,
+color: ‘#8c887f’,
+cursor: ‘pointer’,
+},
+navCta: {
+fontSize: ‘0.72rem’,
+letterSpacing: ‘0.1em’,
+textTransform: ‘uppercase’,
+padding: ‘9px 22px’,
+border: ‘1px solid #1a1814’,
+background: ‘transparent’,
+color: ‘#1a1814’,
+cursor: ‘pointer’,
+fontFamily: “‘Georgia’, serif”,
+},
+hero: {
+flex: 1,
+display: ‘grid’,
+gridTemplateColumns: ‘1fr 1fr’,
+minHeight: ‘calc(100vh - 70px)’,
+},
+heroLeft: {
+display: ‘flex’,
+flexDirection: ‘column’,
+justifyContent: ‘center’,
+padding: ‘80px 56px’,
+borderRight: ‘1px solid #e8e4de’,
+},
+eyebrow: {
+fontSize: ‘0.7rem’,
+letterSpacing: ‘0.2em’,
+textTransform: ‘uppercase’,
+color: ‘#b5956a’,
+marginBottom: 28,
+display: ‘flex’,
+alignItems: ‘center’,
+gap: 12,
+},
+eyebrowLine: {
+display: ‘inline-block’,
+width: 28,
+height: 1,
+background: ‘#b5956a’,
+},
+heroTitle: {
+fontSize: ‘3.6rem’,
+fontWeight: 300,
+lineHeight: 1.1,
+color: ‘#1a1814’,
+marginBottom: 28,
+fontFamily: “‘Georgia’, serif”,
+},
+heroTitleItalic: {
+fontStyle: ‘italic’,
+color: ‘#3d3a35’,
+},
+heroDesc: {
+fontSize: ‘0.9rem’,
+lineHeight: 1.85,
+color: ‘#8c887f’,
+maxWidth: 380,
+marginBottom: 48,
+fontFamily: ‘sans-serif’,
+fontWeight: 300,
+},
+metaRow: {
+display: ‘flex’,
+gap: 36,
+},
+metaItem: {
+display: ‘flex’,
+flexDirection: ‘column’,
+gap: 6,
+},
+metaLabel: {
+fontSize: ‘0.66rem’,
+letterSpacing: ‘0.18em’,
+textTransform: ‘uppercase’,
+color: ‘#8c887f’,
+fontFamily: ‘sans-serif’,
+},
+metaValue: {
+fontSize: ‘1.05rem’,
+color: ‘#1a1814’,
+fontFamily: “‘Georgia’, serif”,
+},
+heroRight: {
+display: ‘flex’,
+alignItems: ‘center’,
+justifyContent: ‘center’,
+padding: ‘60px 48px’,
+background: ‘#ffffff’,
+position: ‘relative’,
+overflow: ‘hidden’,
+},
+bookingPanel: {
+width: ‘100%’,
+maxWidth: 440,
+position: ‘relative’,
+zIndex: 1,
+},
+bookingHeader: {
+marginBottom: 24,
+},
+bookingTitle: {
+fontSize: ‘1.75rem’,
+fontWeight: 300,
+color: ‘#1a1814’,
+marginBottom: 8,
+fontFamily: “‘Georgia’, serif”,
+},
+bookingSubtitle: {
+fontSize: ‘0.82rem’,
+color: ‘#8c887f’,
+lineHeight: 1.65,
+fontFamily: ‘sans-serif’,
+fontWeight: 300,
+},
+chatContainer: {
+background: ‘#f5f2ee’,
+border: ‘1px solid #e8e4de’,
+borderRadius: 4,
+overflow: ‘hidden’,
+boxShadow: ‘0 4px 40px rgba(26,24,20,0.07)’,
+},
+chatTopbar: {
+background: ‘#fff’,
+borderBottom: ‘1px solid #e8e4de’,
+padding: ‘14px 18px’,
+display: ‘flex’,
+alignItems: ‘center’,
+gap: 12,
+},
+chatAvatar: {
+width: 34, height: 34,
+borderRadius: ‘50%’,
+background: ‘#1a1814’,
+display: ‘flex’, alignItems: ‘center’, justifyContent: ‘center’,
+flexShrink: 0,
+fontSize: 14,
+},
+topbarName: {
+fontSize: ‘0.84rem’,
+fontWeight: 500,
+color: ‘#1a1814’,
+fontFamily: ‘sans-serif’,
+},
+topbarStatus: {
+fontSize: ‘0.7rem’,
+color: ‘#b5956a’,
+fontFamily: ‘sans-serif’,
+display: ‘flex’,
+alignItems: ‘center’,
+gap: 5,
+marginTop: 2,
+},
+onlineDot: {
+width: 6, height: 6,
+borderRadius: ‘50%’,
+background: ‘#6dbb7a’,
+display: ‘inline-block’,
+},
+chatMessages: {
+padding: ‘18px’,
+minHeight: 220,
+maxHeight: 260,
+overflowY: ‘auto’,
+display: ‘flex’,
+flexDirection: ‘column’,
+gap: 14,
+},
+msgBot: {
+display: ‘flex’,
+gap: 10,
+alignItems: ‘flex-start’,
+},
+msgUser: {
+display: ‘flex’,
+flexDirection: ‘row-reverse’,
+gap: 10,
+alignItems: ‘flex-start’,
+},
+msgAvatarBot: {
+width: 26, height: 26,
+borderRadius: ‘50%’,
+background: ‘#1a1814’,
+display: ‘flex’, alignItems: ‘center’, justifyContent: ‘center’,
+flexShrink: 0,
+fontSize: 10,
+marginTop: 2,
+},
+bubbleBot: {
+background: ‘#fff’,
+border: ‘1px solid #e8e4de’,
+padding: ‘10px 14px’,
+borderRadius: ‘2px 12px 12px 12px’,
+fontSize: ‘0.845rem’,
+lineHeight: 1.65,
+color: ‘#3d3a35’,
+maxWidth: 300,
+fontFamily: ‘sans-serif’,
+fontWeight: 300,
+},
+bubbleUser: {
+background: ‘#1a1814’,
+border: ‘1px solid #1a1814’,
+padding: ‘10px 14px’,
+borderRadius: ‘12px 2px 12px 12px’,
+fontSize: ‘0.845rem’,
+lineHeight: 1.65,
+color: ‘#fff’,
+maxWidth: 300,
+fontFamily: ‘sans-serif’,
+fontWeight: 300,
+},
+typingBubble: {
+background: ‘#fff’,
+border: ‘1px solid #e8e4de’,
+padding: ‘12px 16px’,
+borderRadius: ‘2px 12px 12px 12px’,
+display: ‘flex’,
+gap: 5,
+alignItems: ‘center’,
+},
+quickReplies: {
+padding: ‘0 18px 14px’,
+display: ‘flex’,
+flexWrap: ‘wrap’,
+gap: 8,
+},
+quickBtn: {
+border: ‘1px solid #e8e4de’,
+background: ‘#fff’,
+padding: ‘6px 14px’,
+fontSize: ‘0.76rem’,
+fontFamily: ‘sans-serif’,
+color: ‘#3d3a35’,
+borderRadius: 20,
+cursor: ‘pointer’,
+letterSpacing: ‘0.02em’,
+},
+inputRow: {
+borderTop: ‘1px solid #e8e4de’,
+background: ‘#fff’,
+padding: ‘11px 15px’,
+display: ‘flex’,
+gap: 10,
+alignItems: ‘center’,
+},
+input: {
+flex: 1,
+border: ‘none’,
+background: ‘transparent’,
+fontFamily: ‘sans-serif’,
+fontSize: ‘0.875rem’,
+color: ‘#1a1814’,
+outline: ‘none’,
+fontWeight: 300,
+},
+sendBtn: {
+width: 34, height: 34,
+borderRadius: ‘50%’,
+border: ‘none’,
+background: ‘#1a1814’,
+cursor: ‘pointer’,
+display: ‘flex’, alignItems: ‘center’, justifyContent: ‘center’,
+flexShrink: 0,
+fontSize: 14,
+color: ‘#fff’,
+},
+bottomStrip: {
+borderTop: ‘1px solid #e8e4de’,
+padding: ‘18px 48px’,
+display: ‘flex’,
+alignItems: ‘center’,
+justifyContent: ‘space-between’,
+background: ‘#fff’,
+},
+stripText: {
+fontSize: ‘0.74rem’,
+color: ‘#8c887f’,
+fontFamily: ‘sans-serif’,
+letterSpacing: ‘0.05em’,
+},
+stripBadges: {
+display: ‘flex’,
+gap: 24,
+alignItems: ‘center’,
+},
+stripBadge: {
+fontSize: ‘0.68rem’,
+textTransform: ‘uppercase’,
+letterSpacing: ‘0.14em’,
+color: ‘#8c887f’,
+fontFamily: ‘sans-serif’,
+},
+divider: {
+width: 1, height: 14,
+background: ‘#e8e4de’,
+},
+};
+
+return (
+<div style={styles.page}>
+{/* NAV */}
+<nav style={styles.nav}>
+<div style={styles.logo}>Maison</div>
+<ul style={styles.navLinks}>
+{[‘Menu’,‘About’,‘Events’,‘Contact’].map(l => (
+<li key={l} style={styles.navLink}>{l}</li>
+))}
+</ul>
+<button style={styles.navCta}>Reserve</button>
+</nav>
+
+```
+  {/* HERO */}
+  <div style={styles.hero}>
+
+    {/* LEFT */}
+    <div style={styles.heroLeft}>
+      <div style={styles.eyebrow}>
+        <span style={styles.eyebrowLine}></span>
+        Est. 2018 · Sydney
+      </div>
+      <h1 style={styles.heroTitle}>
+        An <span style={styles.heroTitleItalic}>experience</span><br />
+        worth<br />remembering.
+      </h1>
+      <p style={styles.heroDesc}>
+        Contemporary Australian cuisine rooted in seasonal produce and refined technique. Reserve your table and let us take care of the rest.
+      </p>
+      <div style={styles.metaRow}>
+        {[['Hours','Tue – Sun'],['Lunch','12 – 3pm'],['Dinner','6 – 10pm']].map(([label, val]) => (
+          <div key={label} style={styles.metaItem}>
+            <span style={styles.metaLabel}>{label}</span>
+            <span style={styles.metaValue}>{val}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* RIGHT — CHAT */}
+    <div style={styles.heroRight}>
+      <div style={styles.bookingPanel}>
+        <div style={styles.bookingHeader}>
+          <h2 style={styles.bookingTitle}>Reserve a table</h2>
+          <p style={styles.bookingSubtitle}>Chat with our reservations assistant — available now to find your perfect time.</p>
+        </div>
+
+        <div style={styles.chatContainer}>
+          {/* Topbar */}
+          <div style={styles.chatTopbar}>
+            <div style={styles.chatAvatar}>🍽</div>
+            <div>
+              <div style={styles.topbarName}>Reservations</div>
+              <div style={styles.topbarStatus}>
+                <span style={styles.onlineDot}></span> Online now
+              </div>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div style={styles.chatMessages}>
+            {messages.map((m, i) => (
+              <div key={i} style={m.role === 'bot' ? styles.msgBot : styles.msgUser}>
+                {m.role === 'bot' && <div style={styles.msgAvatarBot}>🍽</div>}
+                <div style={m.role === 'bot' ? styles.bubbleBot : styles.bubbleUser}>
+                  {m.text}
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div style={styles.msgBot}>
+                <div style={styles.msgAvatarBot}>🍽</div>
+                <div style={styles.typingBubble}>
+                  {[0,1,2].map(i => (
+                    <div key={i} style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: '#8c887f',
+                      animation: `pulse 1.2s ease ${i*0.2}s infinite`,
+                    }} />
+                  ))}
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Quick replies */}
+          {showQuick && (
+            <div style={styles.quickReplies}>
+              {['Tonight','This weekend','Choosing a date'].map(q => (
+                <button key={q} style={styles.quickBtn} onClick={() => { setInput(''); postMessage(q); }}>
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Input */}
+          <div style={styles.inputRow}>
+            <input
+              style={styles.input}
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSend()}
+              placeholder="Type your message…"
+            />
+            <button style={styles.sendBtn} onClick={handleSend}>➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* BOTTOM STRIP */}
+  <div style={styles.bottomStrip}>
+    <span style={styles.stripText}>© 2025 Maison. All rights reserved.</span>
+    <div style={styles.stripBadges}>
+      {['Dine-in','Private Events','Gift Vouchers'].map((b, i, arr) => (
+        <React.Fragment key={b}>
+          <span style={styles.stripBadge}>{b}</span>
+          {i < arr.length - 1 && <div style={styles.divider} />}
+        </React.Fragment>
+      ))}
+    </div>
+  </div>
+
+  <style>{`
+    @keyframes pulse {
+      0%, 80%, 100% { opacity: 0.2; transform: scale(0.85); }
+      40% { opacity: 1; transform: scale(1); }
+    }
+  `}</style>
+</div>
+```
+
+);
+}
