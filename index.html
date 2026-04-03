@@ -1,426 +1,485 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Maison — Reserve Your Table</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-–cream: #faf8f5;
-–white: #ffffff;
-–ink: #1a1814;
-–ink-soft: #3d3a35;
-–ink-muted: #8c887f;
-–accent: #b5956a;
-–accent-light: #e8ddd0;
-–border: #e8e4de;
-}
+  :root {
+    --cream: #faf8f5;
+    --white: #ffffff;
+    --ink: #1a1814;
+    --ink-soft: #3d3a35;
+    --ink-muted: #8c887f;
+    --accent: #b5956a;
+    --accent-light: #e8ddd0;
+    --border: #e8e4de;
+  }
 
-html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; }
 
-body {
-font-family: ‘DM Sans’, sans-serif;
-background: var(–cream);
-color: var(–ink);
-min-height: 100vh;
-overflow-x: hidden;
-}
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* NAV */
-nav {
-position: fixed;
-top: 0; left: 0; right: 0;
-z-index: 100;
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 28px 60px;
-background: rgba(250,248,245,0.85);
-backdrop-filter: blur(12px);
-border-bottom: 1px solid transparent;
-transition: border-color 0.3s;
-}
-nav.scrolled { border-color: var(–border); }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 60px;
+    background: rgba(250,248,245,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  nav.scrolled { border-color: var(--border); }
 
-.nav-logo {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 1.6rem;
-font-weight: 300;
-letter-spacing: 0.15em;
-color: var(–ink);
-text-transform: uppercase;
-text-decoration: none;
-}
+  .nav-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+  }
 
-.nav-links {
-display: flex;
-gap: 40px;
-list-style: none;
-}
-.nav-links a {
-font-size: 0.78rem;
-letter-spacing: 0.12em;
-text-transform: uppercase;
-color: var(–ink-muted);
-text-decoration: none;
-transition: color 0.2s;
-}
-.nav-links a:hover { color: var(–ink); }
+  .nav-logo-mark {
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(26, 24, 20, 0.14);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.5);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--accent);
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
+  }
 
-.nav-cta {
-font-size: 0.78rem;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-padding: 10px 24px;
-border: 1px solid var(–ink);
-background: transparent;
-color: var(–ink);
-cursor: pointer;
-text-decoration: none;
-transition: background 0.25s, color 0.25s;
-}
-.nav-cta:hover { background: var(–ink); color: var(–white); }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
 
-/* HERO */
-.hero {
-min-height: 100vh;
-display: flex;
-align-items: center;
-padding: 120px 60px 80px;
-}
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
 
-.hero-left {
-display: flex;
-flex-direction: column;
-justify-content: center;
-max-width: 680px;
-}
+  .nav-cta {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.25s, color 0.25s;
+  }
+  .nav-cta:hover { background: var(--ink); color: var(--white); }
 
-.hero-eyebrow {
-font-size: 0.72rem;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–accent);
-margin-bottom: 28px;
-display: flex;
-align-items: center;
-gap: 12px;
-}
-.hero-eyebrow::before {
-content: ‘’;
-display: block;
-width: 32px;
-height: 1px;
-background: var(–accent);
-}
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
 
-.hero-title {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: clamp(3.8rem, 7vw, 7rem);
-font-weight: 300;
-line-height: 1.08;
-color: var(–ink);
-margin-bottom: 32px;
-}
-.hero-title em {
-font-style: italic;
-color: var(–ink-soft);
-}
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
 
-.hero-desc {
-font-size: 0.95rem;
-line-height: 1.8;
-color: var(–ink-muted);
-max-width: 480px;
-margin-bottom: 52px;
-font-weight: 300;
-}
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 720px;
+    position: relative;
+    z-index: 1;
+  }
 
-.hero-meta {
-display: flex;
-gap: 40px;
-}
-.hero-meta-item {
-display: flex;
-flex-direction: column;
-gap: 6px;
-}
-.hero-meta-label {
-font-size: 0.68rem;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-color: var(–ink-muted);
-}
-.hero-meta-value {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 1.15rem;
-color: var(–ink);
-font-weight: 400;
-}
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
 
-/* BOTTOM STRIP */
-.bottom-strip {
-border-top: 1px solid var(–border);
-padding: 20px 60px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-background: var(–white);
-}
-.strip-text {
-font-size: 0.78rem;
-color: var(–ink-muted);
-letter-spacing: 0.06em;
-}
-.strip-badges {
-display: flex;
-gap: 28px;
-align-items: center;
-}
-.strip-badge {
-font-size: 0.72rem;
-text-transform: uppercase;
-letter-spacing: 0.14em;
-color: var(–ink-muted);
-}
-.strip-divider {
-width: 1px; height: 16px;
-background: var(–border);
-}
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.8rem, 7vw, 7rem);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--ink);
+    margin-bottom: 26px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--ink-soft);
+  }
 
-/* ANIMATIONS */
-.fade-in {
-opacity: 0;
-transform: translateY(20px);
-transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.fade-in.visible { opacity: 1; transform: translateY(0); }
+  .hero-desc {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--ink-muted);
+    max-width: 520px;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-nav { padding: 20px 24px; }
-.nav-links { display: none; }
-.hero { padding: 100px 24px 60px; }
-.bottom-strip { padding: 20px 24px; flex-direction: column; gap: 12px; text-align: center; }
-}
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 42px;
+  }
 
-/* FLOATING WIDGET STYLES */
-#maison-fab {
-position: fixed;
-bottom: 28px;
-right: 28px;
-z-index: 9999;
-display: flex;
-align-items: center;
-gap: 10px;
-background: #1a1814;
-color: #fff;
-border: none;
-padding: 14px 22px 14px 18px;
-border-radius: 50px;
-cursor: pointer;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 0.82rem;
-font-weight: 400;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-box-shadow: 0 8px 32px rgba(26,24,20,0.22), 0 2px 8px rgba(26,24,20,0.12);
-transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
-animation: fabEntrance 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
-}
-@keyframes fabEntrance {
-from { opacity: 0; transform: translateY(20px) scale(0.9); }
-to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-#maison-fab:hover {
-background: #b5956a;
-transform: translateY(-2px);
-box-shadow: 0 12px 40px rgba(181,149,106,0.35), 0 4px 12px rgba(26,24,20,0.1);
-}
-#maison-fab.open { background: #3d3a35; }
-.fab-icon { width: 20px; height: 20px; flex-shrink: 0; }
-#maison-fab.open .fab-icon-chat { display: none; }
-#maison-fab .fab-icon-close { display: none; }
-#maison-fab.open .fab-icon-close { display: block; }
-#maison-fab::before {
-content: ‘’;
-position: absolute;
-inset: -4px;
-border-radius: 50px;
-border: 2px solid rgba(181,149,106,0.5);
-animation: pulseRing 2.5s ease-out 1.5s infinite;
-pointer-events: none;
-}
-#maison-fab.open::before { display: none; }
-@keyframes pulseRing {
-0%   { transform: scale(1); opacity: 0.6; }
-70%  { transform: scale(1.08); opacity: 0; }
-100% { transform: scale(1.08); opacity: 0; }
-}
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    min-width: 180px;
+    padding: 14px 24px;
+    border: 1px solid var(--ink);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background 0.25s, color 0.25s, transform 0.2s;
+  }
+  .hero-btn:hover { transform: translateY(-1px); }
+  .hero-btn.primary {
+    background: var(--ink);
+    color: var(--white);
+  }
+  .hero-btn.primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .hero-btn.secondary {
+    background: transparent;
+    color: var(--ink);
+  }
+  .hero-btn.secondary:hover {
+    background: rgba(255,255,255,0.55);
+  }
 
-#maison-panel {
-position: fixed;
-bottom: 92px;
-right: 28px;
-z-index: 9998;
-width: 360px;
-max-height: 560px;
-background: #fff;
-border: 1px solid #e8e4de;
-border-radius: 16px;
-box-shadow: 0 20px 60px rgba(26,24,20,0.14), 0 4px 16px rgba(26,24,20,0.06);
-display: flex;
-flex-direction: column;
-overflow: hidden;
-opacity: 0;
-transform: translateY(16px) scale(0.96);
-pointer-events: none;
-transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-transform-origin: bottom right;
-}
-#maison-panel.visible {
-opacity: 1;
-transform: translateY(0) scale(1);
-pointer-events: all;
-}
-.mp-header {
-background: #1a1814;
-padding: 18px 20px;
-display: flex;
-align-items: center;
-gap: 12px;
-flex-shrink: 0;
-}
-.mp-avatar {
-width: 38px; height: 38px;
-border-radius: 50%;
-background: rgba(181,149,106,0.2);
-display: flex; align-items: center; justify-content: center;
-flex-shrink: 0;
-font-size: 16px;
-}
-.mp-header-info { flex: 1; }
-.mp-header-name {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 1.05rem;
-font-weight: 400;
-color: #fff;
-letter-spacing: 0.04em;
-}
-.mp-header-status {
-font-size: 0.7rem;
-color: rgba(255,255,255,0.55);
-display: flex;
-align-items: center;
-gap: 5px;
-margin-top: 2px;
-font-family: ‘DM Sans’, sans-serif;
-}
-.mp-dot { width: 6px; height: 6px; border-radius: 50%; background: #6dbb7a; }
-.mp-close {
-background: none; border: none;
-color: rgba(255,255,255,0.5);
-cursor: pointer; font-size: 18px; padding: 4px; line-height: 1;
-transition: color 0.2s;
-}
-.mp-close:hover { color: #fff; }
-.mp-messages {
-flex: 1; overflow-y: auto; padding: 16px;
-display: flex; flex-direction: column; gap: 12px;
-background: #f5f2ee; min-height: 200px; max-height: 320px;
-}
-.mp-messages::-webkit-scrollbar { width: 3px; }
-.mp-messages::-webkit-scrollbar-thumb { background: #e8e4de; border-radius: 2px; }
-.mp-msg {
-display: flex; gap: 8px; align-items: flex-start;
-animation: msgIn 0.25s ease forwards; opacity: 0;
-}
-@keyframes msgIn {
-from { opacity: 0; transform: translateY(5px); }
-to   { opacity: 1; transform: translateY(0); }
-}
-.mp-msg.user { flex-direction: row-reverse; }
-.mp-msg-av {
-width: 24px; height: 24px; border-radius: 50%;
-background: #1a1814; display: flex; align-items: center;
-justify-content: center; font-size: 10px; flex-shrink: 0; margin-top: 2px;
-}
-.mp-bubble {
-background: #fff; border: 1px solid #e8e4de;
-padding: 9px 13px; border-radius: 3px 12px 12px 12px;
-font-size: 0.83rem; line-height: 1.6; color: #3d3a35;
-max-width: 250px; font-family: ‘DM Sans’, sans-serif; font-weight: 300;
-}
-.mp-msg.user .mp-bubble {
-background: #1a1814; color: #fff;
-border-color: #1a1814; border-radius: 12px 3px 12px 12px;
-}
-.mp-typing { display: flex; gap: 4px; padding: 4px 2px; align-items: center; }
-.mp-typing span {
-width: 5px; height: 5px; border-radius: 50%; background: #8c887f;
-animation: typingDot 1.2s ease infinite;
-}
-.mp-typing span:nth-child(2) { animation-delay: 0.2s; }
-.mp-typing span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes typingDot {
-0%,80%,100% { opacity:0.2; transform:scale(0.85); }
-40% { opacity:1; transform:scale(1); }
-}
-.mp-quick {
-padding: 0 14px 12px; display: flex;
-flex-wrap: wrap; gap: 7px; background: #f5f2ee;
-}
-.mp-qbtn {
-border: 1px solid #e8e4de; background: #fff;
-padding: 5px 12px; font-size: 0.74rem;
-font-family: ‘DM Sans’, sans-serif; color: #3d3a35;
-border-radius: 20px; cursor: pointer;
-transition: border-color 0.2s, background 0.2s;
-}
-.mp-qbtn:hover { border-color: #1a1814; background: #faf8f5; }
-.mp-input-row {
-border-top: 1px solid #e8e4de; background: #fff;
-padding: 10px 14px; display: flex; gap: 8px;
-align-items: center; flex-shrink: 0;
-}
-.mp-input {
-flex: 1; border: none; background: transparent;
-font-family: ‘DM Sans’, sans-serif; font-size: 0.855rem;
-color: #1a1814; outline: none; font-weight: 300;
-}
-.mp-input::placeholder { color: #b5b0a8; }
-.mp-send {
-width: 32px; height: 32px; border-radius: 50%; border: none;
-background: #1a1814; cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-flex-shrink: 0; transition: background 0.2s, transform 0.15s;
-}
-.mp-send:hover { background: #b5956a; transform: scale(1.05); }
-.mp-send svg { width: 13px; height: 13px; fill: #fff; }
-.mp-footer {
-text-align: center; padding: 8px; font-size: 0.65rem;
-color: #c0bbb3; font-family: ‘DM Sans’, sans-serif;
-letter-spacing: 0.06em; background: #fff;
-border-top: 1px solid #f0ece6;
-}
-@media (max-width: 480px) {
-#maison-panel { width: calc(100vw - 24px); right: 12px; bottom: 80px; }
-#maison-fab { right: 12px; bottom: 12px; }
-}
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .hero-meta-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .hero-meta-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .bottom-strip {
+    border-top: 1px solid var(--border);
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+  }
+  .strip-text {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+  }
+  .strip-badges {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .strip-badge {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-muted);
+  }
+  .strip-divider {
+    width: 1px; height: 16px;
+    background: var(--border);
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .bottom-strip {
+      padding: 20px 24px;
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+  }
+
+  #maison-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1a1814;
+    color: #fff;
+    border: none;
+    padding: 14px 22px 14px 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 8px 32px rgba(26,24,20,0.22), 0 2px 8px rgba(26,24,20,0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
+    animation: fabEntrance 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes fabEntrance {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  #maison-fab:hover {
+    background: #b5956a;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(181,149,106,0.35), 0 4px 12px rgba(26,24,20,0.1);
+  }
+  #maison-fab.open { background: #3d3a35; }
+  .fab-icon { width: 20px; height: 20px; flex-shrink: 0; }
+  #maison-fab.open .fab-icon-chat { display: none; }
+  #maison-fab .fab-icon-close { display: none; }
+  #maison-fab.open .fab-icon-close { display: block; }
+
+  #maison-panel {
+    position: fixed;
+    bottom: 92px;
+    right: 28px;
+    z-index: 9998;
+    width: 420px;
+    max-height: 680px;
+    background: #fff;
+    border: 1px solid #e8e4de;
+    border-radius: 20px;
+    box-shadow: 0 28px 80px rgba(26,24,20,0.16), 0 8px 24px rgba(26,24,20,0.06);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    transform-origin: bottom right;
+  }
+  #maison-panel.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+  }
+  .mp-header {
+    background: linear-gradient(180deg, #1a1814 0%, #24211c 100%);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .mp-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(181,149,106,0.2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .mp-header-info { flex: 1; }
+  .mp-header-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 0.04em;
+  }
+  .mp-header-status {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.55);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .mp-dot { width: 6px; height: 6px; border-radius: 50%; background: #6dbb7a; }
+  .mp-close {
+    background: none; border: none;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer; font-size: 18px; padding: 4px; line-height: 1;
+    transition: color 0.2s;
+  }
+  .mp-close:hover { color: #fff; }
+  .mp-messages {
+    flex: 1; overflow-y: auto; padding: 18px;
+    display: flex; flex-direction: column; gap: 12px;
+    background: #f5f2ee; min-height: 260px; max-height: 410px;
+  }
+  .mp-messages::-webkit-scrollbar { width: 3px; }
+  .mp-messages::-webkit-scrollbar-thumb { background: #e8e4de; border-radius: 2px; }
+  .mp-msg {
+    display: flex; gap: 8px; align-items: flex-start;
+    animation: msgIn 0.25s ease forwards; opacity: 0;
+  }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .mp-msg.user { flex-direction: row-reverse; }
+  .mp-msg-av {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #1a1814; display: flex; align-items: center;
+    justify-content: center; font-size: 10px; flex-shrink: 0; margin-top: 2px;
+  }
+  .mp-bubble {
+    background: #fff; border: 1px solid #e8e4de;
+    padding: 10px 14px; border-radius: 3px 14px 14px 14px;
+    font-size: 0.84rem; line-height: 1.65; color: #3d3a35;
+    max-width: 300px; font-family: 'DM Sans', sans-serif; font-weight: 300;
+    white-space: pre-wrap;
+  }
+  .mp-msg.user .mp-bubble {
+    background: #1a1814; color: #fff;
+    border-color: #1a1814; border-radius: 14px 3px 14px 14px;
+  }
+  .mp-typing { display: flex; gap: 4px; padding: 4px 2px; align-items: center; }
+  .mp-typing span {
+    width: 5px; height: 5px; border-radius: 50%; background: #8c887f;
+    animation: typingDot 1.2s ease infinite;
+  }
+  .mp-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .mp-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingDot {
+    0%,80%,100% { opacity:0.2; transform:scale(0.85); }
+    40% { opacity:1; transform:scale(1); }
+  }
+  .mp-quick {
+    padding: 0 16px 14px; display: flex;
+    flex-wrap: wrap; gap: 7px; background: #f5f2ee;
+  }
+  .mp-qbtn {
+    border: 1px solid #e8e4de; background: #fff;
+    padding: 6px 12px; font-size: 0.74rem;
+    font-family: 'DM Sans', sans-serif; color: #3d3a35;
+    border-radius: 20px; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .mp-qbtn:hover { border-color: #1a1814; background: #faf8f5; }
+  .mp-input-row {
+    border-top: 1px solid #e8e4de; background: #fff;
+    padding: 10px 14px; display: flex; gap: 8px;
+    align-items: center; flex-shrink: 0;
+  }
+  .mp-input {
+    flex: 1; border: none; background: transparent;
+    font-family: 'DM Sans', sans-serif; font-size: 0.855rem;
+    color: #1a1814; outline: none; font-weight: 300;
+  }
+  .mp-input::placeholder { color: #b5b0a8; }
+  .mp-send {
+    width: 34px; height: 34px; border-radius: 50%; border: none;
+    background: #1a1814; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s, transform 0.15s;
+  }
+  .mp-send:hover { background: #b5956a; transform: scale(1.05); }
+  .mp-send svg { width: 13px; height: 13px; fill: #fff; }
+  .mp-footer {
+    text-align: center; padding: 8px; font-size: 0.65rem;
+    color: #c0bbb3; font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.06em; background: #fff;
+    border-top: 1px solid #f0ece6;
+  }
+  @media (max-width: 480px) {
+    #maison-panel { width: calc(100vw - 24px); right: 12px; bottom: 80px; }
+    #maison-fab { right: 12px; bottom: 12px; }
+  }
 </style>
-
 </head>
 <body>
 
-<!-- NAV -->
-
 <nav id="nav">
-  <a href="#" class="nav-logo">Maison</a>
+  <a href="#" class="nav-logo-wrap">
+    <div class="nav-logo-mark">M</div>
+    <div class="nav-logo">Maison</div>
+  </a>
   <ul class="nav-links">
     <li><a href="#">Menu</a></li>
     <li><a href="#">About</a></li>
@@ -430,199 +489,27 @@ border-top: 1px solid #f0ece6;
   <a href="#" class="nav-cta" onclick="maisontogglePanel(); return false;">Reserve</a>
 </nav>
 
-<!-- HERO -->
-
 <section class="hero" id="booking">
-  <div class="hero-left">
-    <p class="hero-eyebrow fade-in">Est. 2018 · Sydney</p>
-    <h1 class="hero-title fade-in">
-      An <em>experience</em><br>worth<br>remembering.
-    </h1>
-    <p class="hero-desc fade-in">
-      Contemporary Australian cuisine rooted in seasonal produce
-      and refined technique. Reserve your table and let us take
-      care of the rest.
-    </p>
-    <div class="hero-meta fade-in">
-      <div class="hero-meta-item">
-        <span class="hero-meta-label">Hours</span>
-        <span class="hero-meta-value">Tue – Sun</span>
-      </div>
-      <div class="hero-meta-item">
-        <span class="hero-meta-label">Lunch</span>
-        <span class="hero-meta-value">12 – 3pm</span>
-      </div>
-      <div class="hero-meta-item">
-        <span class="hero-meta-label">Dinner</span>
-        <span class="hero-meta-value">6 – 10pm</span>
-      </div>
-    </div>
-  </div>
-</section>
+  <svg class="hero-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="sf" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="6"/></filter>
+      <filter id="mf" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="14"/></filter>
+      <filter id="lf" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="28"/></filter>
+      <linearGradient id="leftFade" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#faf8f5" stop-opacity="1"/>
+        <stop offset="55%" stop-color="#faf8f5" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="bottomFade" x1="0%" y1="60%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#faf8f5" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#faf8f5" stop-opacity="0.7"/>
+      </linearGradient>
+    </defs>
 
-<!-- BOTTOM STRIP -->
-
-<div class="bottom-strip">
-  <span class="strip-text">© 2025 Maison. All rights reserved.</span>
-  <div class="strip-badges">
-    <span class="strip-badge">Dine-in</span>
-    <div class="strip-divider"></div>
-    <span class="strip-badge">Private Events</span>
-    <div class="strip-divider"></div>
-    <span class="strip-badge">Gift Vouchers</span>
-  </div>
-</div>
-
-<!-- FLOATING BOOKING WIDGET -->
-
-<button id="maison-fab" onclick="maisontogglePanel()" aria-label="Make a Reservation">
-  <svg class="fab-icon fab-icon-chat" viewBox="0 0 24 24" fill="white">
-    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
-  </svg>
-  <svg class="fab-icon fab-icon-close" viewBox="0 0 24 24" fill="white">
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-  </svg>
-  Make a Reservation
-</button>
-
-<div id="maison-panel" role="dialog" aria-label="Booking Chat">
-  <div class="mp-header">
-    <div class="mp-avatar">🍽</div>
-    <div class="mp-header-info">
-      <div class="mp-header-name">Maison Reservations</div>
-      <div class="mp-header-status"><span class="mp-dot"></span> Online now</div>
-    </div>
-    <button class="mp-close" onclick="maisontogglePanel()">✕</button>
-  </div>
-  <div class="mp-messages" id="maisonMessages">
-    <div class="mp-msg bot">
-      <div class="mp-msg-av">🍽</div>
-      <div class="mp-bubble">Welcome to Maison! I'd love to help you reserve a table. When are you thinking of dining with us?</div>
-    </div>
-  </div>
-  <div class="mp-quick" id="maisonQuick">
-    <button class="mp-qbtn" onclick="maisonQuickSend(this,'Tonight')">Tonight</button>
-    <button class="mp-qbtn" onclick="maisonQuickSend(this,'This weekend')">This weekend</button>
-    <button class="mp-qbtn" onclick="maisonQuickSend(this,'Choose a date')">Choose a date</button>
-  </div>
-  <div class="mp-input-row">
-    <input class="mp-input" id="maisonInput" type="text" placeholder="Type a message…" autocomplete="off" />
-    <button class="mp-send" onclick="maisonSend()">
-      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
-    </button>
-  </div>
-  <div class="mp-footer">Powered by Maison · Secure booking</div>
-</div>
-
-<script>
-  // NAV SCROLL
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 20);
-  });
-
-  // FADE IN
-  document.querySelectorAll('.fade-in').forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), 100 + i * 120);
-  });
-
-  // FLOATING WIDGET
-  const MAISON_WEBHOOK = 'https://trainerapex.app.n8n.cloud/webhook/f80e5f47-634b-459e-979f-afb4945934fd/chat';
-  const maisonSessionId = 'widget_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-  let maisonLoading = false;
-  let maisonPanelOpen = false;
-
-  function maisontogglePanel() {
-    maisonPanelOpen = !maisonPanelOpen;
-    document.getElementById('maison-panel').classList.toggle('visible', maisonPanelOpen);
-    document.getElementById('maison-fab').classList.toggle('open', maisonPanelOpen);
-    if (maisonPanelOpen) setTimeout(() => document.getElementById('maisonInput').focus(), 300);
-  }
-
-  function maisonAppend(text, role) {
-    const wrap = document.createElement('div');
-    wrap.className = 'mp-msg ' + role;
-    if (role === 'bot') {
-      const av = document.createElement('div');
-      av.className = 'mp-msg-av';
-      av.textContent = '🍽';
-      wrap.appendChild(av);
-    }
-    const bubble = document.createElement('div');
-    bubble.className = 'mp-bubble';
-    bubble.textContent = text;
-    wrap.appendChild(bubble);
-    const msgs = document.getElementById('maisonMessages');
-    msgs.appendChild(wrap);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function maisonShowTyping() {
-    const wrap = document.createElement('div');
-    wrap.className = 'mp-msg bot';
-    wrap.id = 'maisonTyping';
-    const av = document.createElement('div');
-    av.className = 'mp-msg-av';
-    av.textContent = '🍽';
-    const bubble = document.createElement('div');
-    bubble.className = 'mp-bubble';
-    bubble.innerHTML = '<div class="mp-typing"><span></span><span></span><span></span></div>';
-    wrap.appendChild(av);
-    wrap.appendChild(bubble);
-    const msgs = document.getElementById('maisonMessages');
-    msgs.appendChild(wrap);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function maisonRemoveTyping() {
-    const t = document.getElementById('maisonTyping');
-    if (t) t.remove();
-  }
-
-  async function maisonPost(text) {
-    if (maisonLoading || !text.trim()) return;
-    maisonLoading = true;
-    document.getElementById('maisonQuick').style.display = 'none';
-    maisonAppend(text, 'user');
-    maisonShowTyping();
-    try {
-      const res = await fetch(MAISON_WEBHOOK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'sendMessage',
-          sessionId: maisonSessionId,
-          chatInput: text,
-        })
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      maisonRemoveTyping();
-      const reply = data.output || data.text || data.message
-        || (Array.isArray(data) && (data[0]?.output || data[0]?.text))
-        || "Thank you! We'll confirm your booking shortly.";
-      maisonAppend(reply, 'bot');
-    } catch(err) {
-      maisonRemoveTyping();
-      maisonAppend("Sorry, something went wrong. Please call us directly.", 'bot');
-    }
-    maisonLoading = false;
-  }
-
-  function maisonSend() {
-    const input = document.getElementById('maisonInput');
-    const text = input.value.trim();
-    if (!text) return;
-    input.value = '';
-    maisonPost(text);
-  }
-
-  function maisonQuickSend(btn, text) { maisonPost(text); }
-
-  document.getElementById('maisonInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') maisonSend();
-  });
-</script>
-
-</body>
-</html>
+    <rect width="1440" height="900" fill="#faf8f5"/>
+    <ellipse cx="1200" cy="380" rx="580" ry="480" fill="#e8d4b0" opacity="0.55" filter="url(#lf)"/>
+    <ellipse cx="1380" cy="180" rx="300" ry="260" fill="#d4b896" opacity="0.45" filter="url(#mf)"/>
+    <ellipse cx="950"  cy="720" rx="420" ry="260" fill="#dfc9a4" opacity="0.42" filter="url(#mf)"/>
+    <ellipse cx="1100" cy="500" rx="260" ry="200" fill="#c8a87a" opacity="0.28" filter="url(#mf)"/>
+    <ellipse cx="1350" cy="680" rx="200" ry="160" fill="#b5956a" opacity="0.22" filter="url(#sf)"/>
+    <ellipse cx="820"  cy="200" rx="180" ry="140" fill="#e2cda8" opacity="0.35" filter="url(#mf)"/>
+    <rect width="620" height="900" fill="url
