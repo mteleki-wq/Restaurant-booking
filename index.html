@@ -1,485 +1,439 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Maison — Reserve Your Table</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --cream: #faf8f5;
-    --white: #ffffff;
-    --ink: #1a1814;
-    --ink-soft: #3d3a35;
-    --ink-muted: #8c887f;
-    --accent: #b5956a;
-    --accent-light: #e8ddd0;
-    --border: #e8e4de;
-  }
+:root {
+–cream: #faf8f5;
+–white: #ffffff;
+–ink: #1a1814;
+–ink-soft: #3d3a35;
+–ink-muted: #8c887f;
+–accent: #b5956a;
+–accent-light: #e8ddd0;
+–border: #e8e4de;
+}
 
-  html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--ink);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body {
+font-family: ‘DM Sans’, sans-serif;
+background: var(–cream);
+color: var(–ink);
+min-height: 100vh;
+overflow-x: hidden;
+}
 
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 28px 60px;
-    background: rgba(250,248,245,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s;
-  }
-  nav.scrolled { border-color: var(--border); }
+/* NAV */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 28px 60px;
+background: rgba(250,248,245,0.85);
+backdrop-filter: blur(12px);
+border-bottom: 1px solid transparent;
+transition: border-color 0.3s;
+}
+nav.scrolled { border-color: var(–border); }
 
-  .nav-logo-wrap {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-  }
+.nav-logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 1.6rem;
+font-weight: 300;
+letter-spacing: 0.15em;
+color: var(–ink);
+text-transform: uppercase;
+text-decoration: none;
+}
 
-  .nav-logo-mark {
-    width: 42px;
-    height: 42px;
-    border: 1px solid rgba(26, 24, 20, 0.14);
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: rgba(255,255,255,0.5);
-    font-family: 'Cormorant Garamond', serif;
-    color: var(--accent);
-    font-size: 1.15rem;
-    letter-spacing: 0.04em;
-  }
+.nav-links {
+display: flex;
+gap: 40px;
+list-style: none;
+}
+.nav-links a {
+font-size: 0.78rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–ink-muted);
+text-decoration: none;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(–ink); }
 
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 300;
-    letter-spacing: 0.15em;
-    color: var(--ink);
-    text-transform: uppercase;
-    text-decoration: none;
-  }
+.nav-cta {
+font-size: 0.78rem;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+padding: 10px 24px;
+border: 1px solid var(–ink);
+background: transparent;
+color: var(–ink);
+cursor: pointer;
+text-decoration: none;
+transition: background 0.25s, color 0.25s;
+}
+.nav-cta:hover { background: var(–ink); color: var(–white); }
 
-  .nav-links {
-    display: flex;
-    gap: 40px;
-    list-style: none;
-  }
-  .nav-links a {
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--ink); }
+/* HERO */
+.hero {
+min-height: 100vh;
+display: flex;
+align-items: center;
+padding: 120px 60px 80px;
+position: relative;
+overflow: hidden;
+}
 
-  .nav-cta {
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 10px 24px;
-    border: 1px solid var(--ink);
-    background: transparent;
-    color: var(--ink);
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.25s, color 0.25s;
-  }
-  .nav-cta:hover { background: var(--ink); color: var(--white); }
+.hero-bg {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+z-index: 0;
+pointer-events: none;
+}
 
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 120px 60px 80px;
-    position: relative;
-    overflow: hidden;
-  }
+.hero-left {
+display: flex;
+flex-direction: column;
+justify-content: center;
+max-width: 680px;
+position: relative;
+z-index: 1;
+}
 
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    pointer-events: none;
-  }
+.hero-eyebrow {
+font-size: 0.72rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–accent);
+margin-bottom: 28px;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.hero-eyebrow::before {
+content: ‘’;
+display: block;
+width: 32px;
+height: 1px;
+background: var(–accent);
+}
 
-  .hero-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 720px;
-    position: relative;
-    z-index: 1;
-  }
+.hero-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(3.8rem, 7vw, 7rem);
+font-weight: 300;
+line-height: 1.08;
+color: var(–ink);
+margin-bottom: 32px;
+}
+.hero-title em {
+font-style: italic;
+color: var(–ink-soft);
+}
 
-  .hero-eyebrow {
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 32px;
-    height: 1px;
-    background: var(--accent);
-  }
+.hero-desc {
+font-size: 0.95rem;
+line-height: 1.8;
+color: var(–ink-muted);
+max-width: 480px;
+margin-bottom: 52px;
+font-weight: 300;
+}
 
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3.8rem, 7vw, 7rem);
-    font-weight: 300;
-    line-height: 1.08;
-    color: var(--ink);
-    margin-bottom: 26px;
-  }
-  .hero-title em {
-    font-style: italic;
-    color: var(--ink-soft);
-  }
+.hero-meta {
+display: flex;
+gap: 40px;
+}
+.hero-meta-item {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+.hero-meta-label {
+font-size: 0.68rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(–ink-muted);
+}
+.hero-meta-value {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 1.15rem;
+color: var(–ink);
+font-weight: 400;
+}
 
-  .hero-desc {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: var(--ink-muted);
-    max-width: 520px;
-    margin-bottom: 36px;
-    font-weight: 300;
-  }
+/* BOTTOM STRIP */
+.bottom-strip {
+border-top: 1px solid var(–border);
+padding: 20px 60px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: var(–white);
+}
+.strip-text {
+font-size: 0.78rem;
+color: var(–ink-muted);
+letter-spacing: 0.06em;
+}
+.strip-badges {
+display: flex;
+gap: 28px;
+align-items: center;
+}
+.strip-badge {
+font-size: 0.72rem;
+text-transform: uppercase;
+letter-spacing: 0.14em;
+color: var(–ink-muted);
+}
+.strip-divider {
+width: 1px; height: 16px;
+background: var(–border);
+}
 
-  .hero-actions {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    margin-bottom: 42px;
-  }
+/* ANIMATIONS */
+.fade-in {
+opacity: 0;
+transform: translateY(20px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
 
-  .hero-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    min-width: 180px;
-    padding: 14px 24px;
-    border: 1px solid var(--ink);
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    transition: background 0.25s, color 0.25s, transform 0.2s;
-  }
-  .hero-btn:hover { transform: translateY(-1px); }
-  .hero-btn.primary {
-    background: var(--ink);
-    color: var(--white);
-  }
-  .hero-btn.primary:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-  .hero-btn.secondary {
-    background: transparent;
-    color: var(--ink);
-  }
-  .hero-btn.secondary:hover {
-    background: rgba(255,255,255,0.55);
-  }
+/* RESPONSIVE */
+@media (max-width: 900px) {
+nav { padding: 20px 24px; }
+.nav-links { display: none; }
+.hero { padding: 100px 24px 60px; }
+.bottom-strip { padding: 20px 24px; flex-direction: column; gap: 12px; text-align: center; }
+}
 
-  .hero-meta {
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  .hero-meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .hero-meta-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-  }
-  .hero-meta-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem;
-    color: var(--ink);
-    font-weight: 400;
-  }
+/* FLOATING WIDGET STYLES */
+#maison-fab {
+position: fixed;
+bottom: 28px;
+right: 28px;
+z-index: 9999;
+display: flex;
+align-items: center;
+gap: 10px;
+background: #1a1814;
+color: #fff;
+border: none;
+padding: 14px 22px 14px 18px;
+border-radius: 50px;
+cursor: pointer;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.82rem;
+font-weight: 400;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+box-shadow: 0 8px 32px rgba(26,24,20,0.22), 0 2px 8px rgba(26,24,20,0.12);
+transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
+animation: fabEntrance 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes fabEntrance {
+from { opacity: 0; transform: translateY(20px) scale(0.9); }
+to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+#maison-fab:hover {
+background: #b5956a;
+transform: translateY(-2px);
+box-shadow: 0 12px 40px rgba(181,149,106,0.35), 0 4px 12px rgba(26,24,20,0.1);
+}
+#maison-fab.open { background: #3d3a35; }
+.fab-icon { width: 20px; height: 20px; flex-shrink: 0; }
+#maison-fab.open .fab-icon-chat { display: none; }
+#maison-fab .fab-icon-close { display: none; }
+#maison-fab.open .fab-icon-close { display: block; }
+#maison-fab::before {
+content: ‘’;
+position: absolute;
+inset: -4px;
+border-radius: 50px;
+border: 2px solid rgba(181,149,106,0.5);
+animation: pulseRing 2.5s ease-out 1.5s infinite;
+pointer-events: none;
+}
+#maison-fab.open::before { display: none; }
+@keyframes pulseRing {
+0%   { transform: scale(1); opacity: 0.6; }
+70%  { transform: scale(1.08); opacity: 0; }
+100% { transform: scale(1.08); opacity: 0; }
+}
 
-  .bottom-strip {
-    border-top: 1px solid var(--border);
-    padding: 20px 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--white);
-  }
-  .strip-text {
-    font-size: 0.78rem;
-    color: var(--ink-muted);
-    letter-spacing: 0.06em;
-  }
-  .strip-badges {
-    display: flex;
-    gap: 28px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .strip-badge {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--ink-muted);
-  }
-  .strip-divider {
-    width: 1px; height: 16px;
-    background: var(--border);
-  }
-
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 900px) {
-    nav { padding: 20px 24px; }
-    .nav-links { display: none; }
-    .hero { padding: 100px 24px 60px; }
-    .bottom-strip {
-      padding: 20px 24px;
-      flex-direction: column;
-      gap: 12px;
-      text-align: center;
-    }
-    .hero-actions { flex-direction: column; align-items: flex-start; }
-  }
-
-  #maison-fab {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #1a1814;
-    color: #fff;
-    border: none;
-    padding: 14px 22px 14px 18px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    box-shadow: 0 8px 32px rgba(26,24,20,0.22), 0 2px 8px rgba(26,24,20,0.12);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
-    animation: fabEntrance 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
-  }
-  @keyframes fabEntrance {
-    from { opacity: 0; transform: translateY(20px) scale(0.9); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  #maison-fab:hover {
-    background: #b5956a;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(181,149,106,0.35), 0 4px 12px rgba(26,24,20,0.1);
-  }
-  #maison-fab.open { background: #3d3a35; }
-  .fab-icon { width: 20px; height: 20px; flex-shrink: 0; }
-  #maison-fab.open .fab-icon-chat { display: none; }
-  #maison-fab .fab-icon-close { display: none; }
-  #maison-fab.open .fab-icon-close { display: block; }
-
-  #maison-panel {
-    position: fixed;
-    bottom: 92px;
-    right: 28px;
-    z-index: 9998;
-    width: 420px;
-    max-height: 680px;
-    background: #fff;
-    border: 1px solid #e8e4de;
-    border-radius: 20px;
-    box-shadow: 0 28px 80px rgba(26,24,20,0.16), 0 8px 24px rgba(26,24,20,0.06);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(16px) scale(0.96);
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-    transform-origin: bottom right;
-  }
-  #maison-panel.visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: all;
-  }
-  .mp-header {
-    background: linear-gradient(180deg, #1a1814 0%, #24211c 100%);
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-  }
-  .mp-avatar {
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: rgba(181,149,106,0.2);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-size: 16px;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .mp-header-info { flex: 1; }
-  .mp-header-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem;
-    font-weight: 400;
-    color: #fff;
-    letter-spacing: 0.04em;
-  }
-  .mp-header-status {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.55);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 2px;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .mp-dot { width: 6px; height: 6px; border-radius: 50%; background: #6dbb7a; }
-  .mp-close {
-    background: none; border: none;
-    color: rgba(255,255,255,0.5);
-    cursor: pointer; font-size: 18px; padding: 4px; line-height: 1;
-    transition: color 0.2s;
-  }
-  .mp-close:hover { color: #fff; }
-  .mp-messages {
-    flex: 1; overflow-y: auto; padding: 18px;
-    display: flex; flex-direction: column; gap: 12px;
-    background: #f5f2ee; min-height: 260px; max-height: 410px;
-  }
-  .mp-messages::-webkit-scrollbar { width: 3px; }
-  .mp-messages::-webkit-scrollbar-thumb { background: #e8e4de; border-radius: 2px; }
-  .mp-msg {
-    display: flex; gap: 8px; align-items: flex-start;
-    animation: msgIn 0.25s ease forwards; opacity: 0;
-  }
-  @keyframes msgIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .mp-msg.user { flex-direction: row-reverse; }
-  .mp-msg-av {
-    width: 24px; height: 24px; border-radius: 50%;
-    background: #1a1814; display: flex; align-items: center;
-    justify-content: center; font-size: 10px; flex-shrink: 0; margin-top: 2px;
-  }
-  .mp-bubble {
-    background: #fff; border: 1px solid #e8e4de;
-    padding: 10px 14px; border-radius: 3px 14px 14px 14px;
-    font-size: 0.84rem; line-height: 1.65; color: #3d3a35;
-    max-width: 300px; font-family: 'DM Sans', sans-serif; font-weight: 300;
-    white-space: pre-wrap;
-  }
-  .mp-msg.user .mp-bubble {
-    background: #1a1814; color: #fff;
-    border-color: #1a1814; border-radius: 14px 3px 14px 14px;
-  }
-  .mp-typing { display: flex; gap: 4px; padding: 4px 2px; align-items: center; }
-  .mp-typing span {
-    width: 5px; height: 5px; border-radius: 50%; background: #8c887f;
-    animation: typingDot 1.2s ease infinite;
-  }
-  .mp-typing span:nth-child(2) { animation-delay: 0.2s; }
-  .mp-typing span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes typingDot {
-    0%,80%,100% { opacity:0.2; transform:scale(0.85); }
-    40% { opacity:1; transform:scale(1); }
-  }
-  .mp-quick {
-    padding: 0 16px 14px; display: flex;
-    flex-wrap: wrap; gap: 7px; background: #f5f2ee;
-  }
-  .mp-qbtn {
-    border: 1px solid #e8e4de; background: #fff;
-    padding: 6px 12px; font-size: 0.74rem;
-    font-family: 'DM Sans', sans-serif; color: #3d3a35;
-    border-radius: 20px; cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .mp-qbtn:hover { border-color: #1a1814; background: #faf8f5; }
-  .mp-input-row {
-    border-top: 1px solid #e8e4de; background: #fff;
-    padding: 10px 14px; display: flex; gap: 8px;
-    align-items: center; flex-shrink: 0;
-  }
-  .mp-input {
-    flex: 1; border: none; background: transparent;
-    font-family: 'DM Sans', sans-serif; font-size: 0.855rem;
-    color: #1a1814; outline: none; font-weight: 300;
-  }
-  .mp-input::placeholder { color: #b5b0a8; }
-  .mp-send {
-    width: 34px; height: 34px; border-radius: 50%; border: none;
-    background: #1a1814; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: background 0.2s, transform 0.15s;
-  }
-  .mp-send:hover { background: #b5956a; transform: scale(1.05); }
-  .mp-send svg { width: 13px; height: 13px; fill: #fff; }
-  .mp-footer {
-    text-align: center; padding: 8px; font-size: 0.65rem;
-    color: #c0bbb3; font-family: 'DM Sans', sans-serif;
-    letter-spacing: 0.06em; background: #fff;
-    border-top: 1px solid #f0ece6;
-  }
-  @media (max-width: 480px) {
-    #maison-panel { width: calc(100vw - 24px); right: 12px; bottom: 80px; }
-    #maison-fab { right: 12px; bottom: 12px; }
-  }
+#maison-panel {
+position: fixed;
+bottom: 92px;
+right: 28px;
+z-index: 9998;
+width: 360px;
+max-height: 560px;
+background: #fff;
+border: 1px solid #e8e4de;
+border-radius: 16px;
+box-shadow: 0 20px 60px rgba(26,24,20,0.14), 0 4px 16px rgba(26,24,20,0.06);
+display: flex;
+flex-direction: column;
+overflow: hidden;
+opacity: 0;
+transform: translateY(16px) scale(0.96);
+pointer-events: none;
+transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+transform-origin: bottom right;
+}
+#maison-panel.visible {
+opacity: 1;
+transform: translateY(0) scale(1);
+pointer-events: all;
+}
+.mp-header {
+background: #1a1814;
+padding: 18px 20px;
+display: flex;
+align-items: center;
+gap: 12px;
+flex-shrink: 0;
+}
+.mp-avatar {
+width: 38px; height: 38px;
+border-radius: 50%;
+background: rgba(181,149,106,0.2);
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+font-size: 16px;
+}
+.mp-header-info { flex: 1; }
+.mp-header-name {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 1.05rem;
+font-weight: 400;
+color: #fff;
+letter-spacing: 0.04em;
+}
+.mp-header-status {
+font-size: 0.7rem;
+color: rgba(255,255,255,0.55);
+display: flex;
+align-items: center;
+gap: 5px;
+margin-top: 2px;
+font-family: ‘DM Sans’, sans-serif;
+}
+.mp-dot { width: 6px; height: 6px; border-radius: 50%; background: #6dbb7a; }
+.mp-close {
+background: none; border: none;
+color: rgba(255,255,255,0.5);
+cursor: pointer; font-size: 18px; padding: 4px; line-height: 1;
+transition: color 0.2s;
+}
+.mp-close:hover { color: #fff; }
+.mp-messages {
+flex: 1; overflow-y: auto; padding: 16px;
+display: flex; flex-direction: column; gap: 12px;
+background: #f5f2ee; min-height: 200px; max-height: 320px;
+}
+.mp-messages::-webkit-scrollbar { width: 3px; }
+.mp-messages::-webkit-scrollbar-thumb { background: #e8e4de; border-radius: 2px; }
+.mp-msg {
+display: flex; gap: 8px; align-items: flex-start;
+animation: msgIn 0.25s ease forwards; opacity: 0;
+}
+@keyframes msgIn {
+from { opacity: 0; transform: translateY(5px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.mp-msg.user { flex-direction: row-reverse; }
+.mp-msg-av {
+width: 24px; height: 24px; border-radius: 50%;
+background: #1a1814; display: flex; align-items: center;
+justify-content: center; font-size: 10px; flex-shrink: 0; margin-top: 2px;
+}
+.mp-bubble {
+background: #fff; border: 1px solid #e8e4de;
+padding: 9px 13px; border-radius: 3px 12px 12px 12px;
+font-size: 0.83rem; line-height: 1.6; color: #3d3a35;
+max-width: 250px; font-family: ‘DM Sans’, sans-serif; font-weight: 300;
+}
+.mp-msg.user .mp-bubble {
+background: #1a1814; color: #fff;
+border-color: #1a1814; border-radius: 12px 3px 12px 12px;
+}
+.mp-typing { display: flex; gap: 4px; padding: 4px 2px; align-items: center; }
+.mp-typing span {
+width: 5px; height: 5px; border-radius: 50%; background: #8c887f;
+animation: typingDot 1.2s ease infinite;
+}
+.mp-typing span:nth-child(2) { animation-delay: 0.2s; }
+.mp-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingDot {
+0%,80%,100% { opacity:0.2; transform:scale(0.85); }
+40% { opacity:1; transform:scale(1); }
+}
+.mp-quick {
+padding: 0 14px 12px; display: flex;
+flex-wrap: wrap; gap: 7px; background: #f5f2ee;
+}
+.mp-qbtn {
+border: 1px solid #e8e4de; background: #fff;
+padding: 5px 12px; font-size: 0.74rem;
+font-family: ‘DM Sans’, sans-serif; color: #3d3a35;
+border-radius: 20px; cursor: pointer;
+transition: border-color 0.2s, background 0.2s;
+}
+.mp-qbtn:hover { border-color: #1a1814; background: #faf8f5; }
+.mp-input-row {
+border-top: 1px solid #e8e4de; background: #fff;
+padding: 10px 14px; display: flex; gap: 8px;
+align-items: center; flex-shrink: 0;
+}
+.mp-input {
+flex: 1; border: none; background: transparent;
+font-family: ‘DM Sans’, sans-serif; font-size: 0.855rem;
+color: #1a1814; outline: none; font-weight: 300;
+}
+.mp-input::placeholder { color: #b5b0a8; }
+.mp-send {
+width: 32px; height: 32px; border-radius: 50%; border: none;
+background: #1a1814; cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0; transition: background 0.2s, transform 0.15s;
+}
+.mp-send:hover { background: #b5956a; transform: scale(1.05); }
+.mp-send svg { width: 13px; height: 13px; fill: #fff; }
+.mp-footer {
+text-align: center; padding: 8px; font-size: 0.65rem;
+color: #c0bbb3; font-family: ‘DM Sans’, sans-serif;
+letter-spacing: 0.06em; background: #fff;
+border-top: 1px solid #f0ece6;
+}
+@media (max-width: 480px) {
+#maison-panel { width: calc(100vw - 24px); right: 12px; bottom: 80px; }
+#maison-fab { right: 12px; bottom: 12px; }
+}
 </style>
+
 </head>
 <body>
 
+<!-- NAV -->
+
 <nav id="nav">
-  <a href="#" class="nav-logo-wrap">
-    <div class="nav-logo-mark">M</div>
-    <div class="nav-logo">Maison</div>
-  </a>
+  <a href="#" class="nav-logo">Maison</a>
   <ul class="nav-links">
     <li><a href="#">Menu</a></li>
     <li><a href="#">About</a></li>
@@ -489,7 +443,12 @@
   <a href="#" class="nav-cta" onclick="maisontogglePanel(); return false;">Reserve</a>
 </nav>
 
+<!-- HERO -->
+
 <section class="hero" id="booking">
+
+  <!-- PASTEL RESTAURANT SKETCH BACKGROUND -->
+
   <svg class="hero-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <filter id="sf" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="6"/></filter>
@@ -505,11 +464,414 @@
       </linearGradient>
     </defs>
 
-    <rect width="1440" height="900" fill="#faf8f5"/>
-    <ellipse cx="1200" cy="380" rx="580" ry="480" fill="#e8d4b0" opacity="0.55" filter="url(#lf)"/>
-    <ellipse cx="1380" cy="180" rx="300" ry="260" fill="#d4b896" opacity="0.45" filter="url(#mf)"/>
-    <ellipse cx="950"  cy="720" rx="420" ry="260" fill="#dfc9a4" opacity="0.42" filter="url(#mf)"/>
-    <ellipse cx="1100" cy="500" rx="260" ry="200" fill="#c8a87a" opacity="0.28" filter="url(#mf)"/>
-    <ellipse cx="1350" cy="680" rx="200" ry="160" fill="#b5956a" opacity="0.22" filter="url(#sf)"/>
-    <ellipse cx="820"  cy="200" rx="180" ry="140" fill="#e2cda8" opacity="0.35" filter="url(#mf)"/>
-    <rect width="620" height="900" fill="url
+```
+<!-- BASE -->
+<rect width="1440" height="900" fill="#faf8f5"/>
+
+<!-- PASTEL COLOUR WASHES — bolder, right-side focus -->
+<ellipse cx="1200" cy="380" rx="580" ry="480" fill="#e8d4b0" opacity="0.55" filter="url(#lf)"/>
+<ellipse cx="1380" cy="180" rx="300" ry="260" fill="#d4b896" opacity="0.45" filter="url(#mf)"/>
+<ellipse cx="950"  cy="720" rx="420" ry="260" fill="#dfc9a4" opacity="0.42" filter="url(#mf)"/>
+<ellipse cx="1100" cy="500" rx="260" ry="200" fill="#c8a87a" opacity="0.28" filter="url(#mf)"/>
+<ellipse cx="1350" cy="680" rx="200" ry="160" fill="#b5956a" opacity="0.22" filter="url(#sf)"/>
+<ellipse cx="820"  cy="200" rx="180" ry="140" fill="#e2cda8" opacity="0.35" filter="url(#mf)"/>
+
+<!-- ═══════════════════════════════════
+     RESTAURANT INTERIOR SKETCH
+     Right half of the scene
+═══════════════════════════════════ -->
+
+<!-- FLOOR PERSPECTIVE LINES -->
+<line x1="720" y1="900" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="1.2" opacity="0.18"/>
+<line x1="1440" y1="900" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="1.2" opacity="0.18"/>
+<line x1="800"  y1="900" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="0.6" opacity="0.1"/>
+<line x1="900"  y1="900" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="0.6" opacity="0.1"/>
+<line x1="1000" y1="900" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="0.6" opacity="0.1"/>
+<line x1="1200" y1="900" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="0.6" opacity="0.1"/>
+<line x1="1320" y1="900" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="0.6" opacity="0.1"/>
+
+<!-- BACK WALL -->
+<line x1="720" y1="520" x2="1440" y2="520" stroke="#8c7a5e" stroke-width="1" opacity="0.2"/>
+
+<!-- LARGE ARCHED WINDOW — back wall centre -->
+<path d="M1020,520 L1020,300 Q1020,220 1100,220 Q1180,220 1180,300 L1180,520"
+      fill="#f5e8d5" stroke="#8c7a5e" stroke-width="1.8" opacity="0.55"/>
+<path d="M1040,520 L1040,310 Q1040,245 1100,245 Q1160,245 1160,310 L1160,520"
+      fill="none" stroke="#8c7a5e" stroke-width="0.8" opacity="0.3"/>
+<!-- Window pane cross -->
+<line x1="1100" y1="245" x2="1100" y2="520" stroke="#8c7a5e" stroke-width="0.7" opacity="0.25"/>
+<line x1="1040" y1="390" x2="1160" y2="390" stroke="#8c7a5e" stroke-width="0.7" opacity="0.25"/>
+<!-- Window warm glow -->
+<path d="M1041,391 L1041,519 L1099,519 L1099,391Z" fill="#f8e8c0" opacity="0.22"/>
+<path d="M1101,391 L1101,519 L1159,519 L1159,391Z" fill="#f5e0b0" opacity="0.18"/>
+<path d="M1041,311 Q1041,246 1099,246 L1099,390 L1041,390Z" fill="#faefd8" opacity="0.25"/>
+<path d="M1101,311 Q1101,246 1159,246 L1159,390 L1101,390Z" fill="#f8e8c8" opacity="0.2"/>
+
+<!-- SIDE WALL WINDOWS LEFT -->
+<rect x="760" y="340" width="110" height="155" rx="2" fill="#f5e8d5" stroke="#8c7a5e" stroke-width="1.4" opacity="0.45"/>
+<line x1="815" y1="340" x2="815" y2="495" stroke="#8c7a5e" stroke-width="0.7" opacity="0.3"/>
+<line x1="760" y1="418" x2="870" y2="418" stroke="#8c7a5e" stroke-width="0.7" opacity="0.3"/>
+<rect x="761" y="341" width="53" height="76" fill="#f8ecd5" opacity="0.2"/>
+<rect x="816" y="341" width="53" height="76" fill="#f5e8ce" opacity="0.16"/>
+
+<!-- SIDE WALL WINDOWS RIGHT -->
+<rect x="1310" y="330" width="120" height="165" rx="2" fill="#f5e8d5" stroke="#8c7a5e" stroke-width="1.4" opacity="0.45"/>
+<line x1="1370" y1="330" x2="1370" y2="495" stroke="#8c7a5e" stroke-width="0.7" opacity="0.3"/>
+<line x1="1310" y1="413" x2="1430" y2="413" stroke="#8c7a5e" stroke-width="0.7" opacity="0.3"/>
+<rect x="1311" y="331" width="58" height="81" fill="#f8ecd5" opacity="0.2"/>
+<rect x="1371" y="331" width="58" height="81" fill="#f5e8ce" opacity="0.16"/>
+
+<!-- HANGING PENDANT LIGHTS -->
+<!-- Light 1 -->
+<line x1="980" y1="0" x2="980" y2="260" stroke="#7a6a50" stroke-width="1" opacity="0.3"/>
+<path d="M965,260 Q980,275 995,260 Q995,295 980,300 Q965,295 965,260Z"
+      fill="#f0d898" stroke="#8c7a5e" stroke-width="1" opacity="0.45"/>
+<ellipse cx="980" cy="297" rx="10" ry="4" fill="#f5e090" opacity="0.35" filter="url(#sf)"/>
+
+<!-- Light 2 -->
+<line x1="1100" y1="0" x2="1100" y2="210" stroke="#7a6a50" stroke-width="1" opacity="0.3"/>
+<path d="M1085,210 Q1100,225 1115,210 Q1115,245 1100,250 Q1085,245 1085,210Z"
+      fill="#f0d898" stroke="#8c7a5e" stroke-width="1" opacity="0.45"/>
+<ellipse cx="1100" cy="247" rx="10" ry="4" fill="#f5e090" opacity="0.35" filter="url(#sf)"/>
+
+<!-- Light 3 -->
+<line x1="1220" y1="0" x2="1220" y2="255" stroke="#7a6a50" stroke-width="1" opacity="0.3"/>
+<path d="M1205,255 Q1220,270 1235,255 Q1235,290 1220,295 Q1205,290 1205,255Z"
+      fill="#f0d898" stroke="#8c7a5e" stroke-width="1" opacity="0.45"/>
+<ellipse cx="1220" cy="292" rx="10" ry="4" fill="#f5e090" opacity="0.35" filter="url(#sf)"/>
+
+<!-- ═══ TABLE 1 — FOREGROUND LEFT ═══ -->
+<!-- Pastel table wash -->
+<ellipse cx="900" cy="720" rx="110" ry="28" fill="#e8d5b0" opacity="0.5"/>
+<!-- Table top -->
+<ellipse cx="900" cy="715" rx="108" ry="26" fill="none" stroke="#7a6a50" stroke-width="1.8" opacity="0.55"/>
+<ellipse cx="900" cy="715" rx="98"  ry="22" fill="none" stroke="#7a6a50" stroke-width="0.7" opacity="0.3"/>
+<!-- Table legs -->
+<line x1="870" y1="730" x2="855" y2="840" stroke="#7a6a50" stroke-width="1.5" opacity="0.45"/>
+<line x1="930" y1="730" x2="945" y2="840" stroke="#7a6a50" stroke-width="1.5" opacity="0.45"/>
+<line x1="863" y1="840" x2="947" y2="840" stroke="#7a6a50" stroke-width="1.2" opacity="0.35"/>
+
+<!-- CHAIR 1a — left of table -->
+<path d="M780,650 Q760,650 758,680 L758,760 Q758,780 780,780 L820,780 Q840,780 842,760 L842,680 Q840,650 820,650Z"
+      fill="#d4b896" stroke="#7a6a50" stroke-width="1.5" opacity="0.5"/>
+<!-- Chair back slats -->
+<line x1="775" y1="650" x2="775" y2="700" stroke="#7a6a50" stroke-width="0.8" opacity="0.35"/>
+<line x1="800" y1="648" x2="800" y2="700" stroke="#7a6a50" stroke-width="0.8" opacity="0.35"/>
+<line x1="825" y1="650" x2="825" y2="700" stroke="#7a6a50" stroke-width="0.8" opacity="0.35"/>
+<!-- Chair seat cushion -->
+<ellipse cx="800" cy="750" rx="35" ry="14" fill="#c8a87a" opacity="0.35"/>
+<!-- Chair legs -->
+<line x1="770" y1="780" x2="765" y2="840" stroke="#7a6a50" stroke-width="1.2" opacity="0.4"/>
+<line x1="830" y1="780" x2="835" y2="840" stroke="#7a6a50" stroke-width="1.2" opacity="0.4"/>
+
+<!-- CHAIR 1b — right of table -->
+<path d="M980,650 Q960,650 958,680 L958,760 Q958,780 980,780 L1020,780 Q1040,780 1042,760 L1042,680 Q1040,650 1020,650Z"
+      fill="#d4b896" stroke="#7a6a50" stroke-width="1.5" opacity="0.5"/>
+<line x1="975" y1="650" x2="975" y2="700" stroke="#7a6a50" stroke-width="0.8" opacity="0.35"/>
+<line x1="1000" y1="648" x2="1000" y2="700" stroke="#7a6a50" stroke-width="0.8" opacity="0.35"/>
+<line x1="1025" y1="650" x2="1025" y2="700" stroke="#7a6a50" stroke-width="0.8" opacity="0.35"/>
+<ellipse cx="1000" cy="750" rx="35" ry="14" fill="#c8a87a" opacity="0.35"/>
+<line x1="970" y1="780" x2="965" y2="840" stroke="#7a6a50" stroke-width="1.2" opacity="0.4"/>
+<line x1="1030" y1="780" x2="1035" y2="840" stroke="#7a6a50" stroke-width="1.2" opacity="0.4"/>
+
+<!-- Table setting — glasses & candle -->
+<path d="M878,705 Q878,690 872,678 Q865,662 878,650 Q891,662 884,678 Q878,690 878,705"
+      fill="none" stroke="#7a6a50" stroke-width="1.2" opacity="0.4"/>
+<line x1="878" y1="650" x2="878" y2="630" stroke="#7a6a50" stroke-width="1" opacity="0.38"/>
+<line x1="868" y1="630" x2="888" y2="630" stroke="#7a6a50" stroke-width="1" opacity="0.38"/>
+
+<path d="M922,705 Q922,690 916,678 Q909,662 922,650 Q935,662 928,678 Q922,690 922,705"
+      fill="none" stroke="#7a6a50" stroke-width="1.2" opacity="0.4"/>
+<line x1="922" y1="650" x2="922" y2="630" stroke="#7a6a50" stroke-width="1" opacity="0.38"/>
+<line x1="912" y1="630" x2="932" y2="630" stroke="#7a6a50" stroke-width="1" opacity="0.38"/>
+
+<!-- Candle on table 1 -->
+<rect x="897" y="665" width="7" height="38" fill="#f8f0e0" stroke="#8c7a5e" stroke-width="0.8" opacity="0.55"/>
+<path d="M900.5,663 Q900.5,656 900.5,651" stroke="#e8a840" stroke-width="1.5" opacity="0.6"/>
+<ellipse cx="900" cy="650" rx="4" ry="5" fill="#f5d060" opacity="0.45" filter="url(#sf)"/>
+
+<!-- Plate table 1 -->
+<ellipse cx="900" cy="710" rx="28" ry="8" fill="none" stroke="#7a6a50" stroke-width="1" opacity="0.35"/>
+<ellipse cx="900" cy="710" rx="22" ry="6" fill="#faf0e0" stroke="#7a6a50" stroke-width="0.6" opacity="0.3"/>
+
+<!-- ═══ TABLE 2 — BACKGROUND RIGHT ═══ -->
+<ellipse cx="1320" cy="630" rx="90" ry="22" fill="#e2ccaa" opacity="0.45"/>
+<ellipse cx="1320" cy="626" rx="88" ry="20" fill="none" stroke="#7a6a50" stroke-width="1.6" opacity="0.5"/>
+<line x1="1294" y1="638" x2="1282" y2="730" stroke="#7a6a50" stroke-width="1.3" opacity="0.4"/>
+<line x1="1346" y1="638" x2="1358" y2="730" stroke="#7a6a50" stroke-width="1.3" opacity="0.4"/>
+
+<!-- Chair 2a -->
+<path d="M1225,545 Q1210,545 1208,568 L1208,628 Q1208,645 1225,645 L1258,645 Q1275,645 1277,628 L1277,568 Q1275,545 1258,545Z"
+      fill="#d4b896" stroke="#7a6a50" stroke-width="1.4" opacity="0.48"/>
+<line x1="1222" y1="545" x2="1222" y2="585" stroke="#7a6a50" stroke-width="0.7" opacity="0.32"/>
+<line x1="1242" y1="543" x2="1242" y2="585" stroke="#7a6a50" stroke-width="0.7" opacity="0.32"/>
+<line x1="1260" y1="545" x2="1260" y2="585" stroke="#7a6a50" stroke-width="0.7" opacity="0.32"/>
+<ellipse cx="1242" cy="622" rx="28" ry="11" fill="#c8a87a" opacity="0.3"/>
+<line x1="1218" y1="645" x2="1214" y2="700" stroke="#7a6a50" stroke-width="1.1" opacity="0.38"/>
+<line x1="1266" y1="645" x2="1270" y2="700" stroke="#7a6a50" stroke-width="1.1" opacity="0.38"/>
+
+<!-- Chair 2b -->
+<path d="M1383,545 Q1368,545 1366,568 L1366,628 Q1366,645 1383,645 L1416,645 Q1433,645 1435,628 L1435,568 Q1433,545 1416,545Z"
+      fill="#d4b896" stroke="#7a6a50" stroke-width="1.4" opacity="0.48"/>
+<line x1="1380" y1="545" x2="1380" y2="585" stroke="#7a6a50" stroke-width="0.7" opacity="0.32"/>
+<line x1="1400" y1="543" x2="1400" y2="585" stroke="#7a6a50" stroke-width="0.7" opacity="0.32"/>
+<line x1="1418" y1="545" x2="1418" y2="585" stroke="#7a6a50" stroke-width="0.7" opacity="0.32"/>
+<ellipse cx="1400" cy="622" rx="28" ry="11" fill="#c8a87a" opacity="0.3"/>
+<line x1="1376" y1="645" x2="1372" y2="700" stroke="#7a6a50" stroke-width="1.1" opacity="0.38"/>
+<line x1="1424" y1="645" x2="1428" y2="700" stroke="#7a6a50" stroke-width="1.1" opacity="0.38"/>
+
+<!-- Table 2 setting -->
+<path d="M1304,618 Q1304,606 1299,597 Q1293,585 1304,575 Q1315,585 1309,597 Q1304,606 1304,618"
+      fill="none" stroke="#7a6a50" stroke-width="1.1" opacity="0.38"/>
+<line x1="1304" y1="575" x2="1304" y2="558" stroke="#7a6a50" stroke-width="0.9" opacity="0.35"/>
+<line x1="1296" y1="558" x2="1312" y2="558" stroke="#7a6a50" stroke-width="0.9" opacity="0.35"/>
+<path d="M1336,618 Q1336,606 1331,597 Q1325,585 1336,575 Q1347,585 1341,597 Q1336,606 1336,618"
+      fill="none" stroke="#7a6a50" stroke-width="1.1" opacity="0.38"/>
+<line x1="1336" y1="575" x2="1336" y2="558" stroke="#7a6a50" stroke-width="0.9" opacity="0.35"/>
+<line x1="1328" y1="558" x2="1344" y2="558" stroke="#7a6a50" stroke-width="0.9" opacity="0.35"/>
+<!-- Candle table 2 -->
+<rect x="1318" y="585" width="5" height="30" fill="#f8f0e0" stroke="#8c7a5e" stroke-width="0.7" opacity="0.5"/>
+<ellipse cx="1320" cy="583" rx="3" ry="4" fill="#f5d060" opacity="0.4" filter="url(#sf)"/>
+
+<!-- ═══ TABLE 3 — SMALL BACKGROUND LEFT ═══ -->
+<ellipse cx="800" cy="560" rx="70" ry="18" fill="#e0ccaa" opacity="0.4"/>
+<ellipse cx="800" cy="557" rx="68" ry="16" fill="none" stroke="#7a6a50" stroke-width="1.4" opacity="0.45"/>
+<line x1="780" y1="566" x2="772" y2="630" stroke="#7a6a50" stroke-width="1.2" opacity="0.38"/>
+<line x1="820" y1="566" x2="828" y2="630" stroke="#7a6a50" stroke-width="1.2" opacity="0.38"/>
+
+<!-- Small chairs table 3 -->
+<path d="M730,480 Q718,480 716,498 L716,546 Q716,560 730,560 L758,560 Q772,560 774,546 L774,498 Q772,480 758,480Z"
+      fill="#d4b896" stroke="#7a6a50" stroke-width="1.3" opacity="0.42"/>
+<line x1="728" y1="480" x2="728" y2="512" stroke="#7a6a50" stroke-width="0.7" opacity="0.3"/>
+<line x1="744" y1="479" x2="744" y2="512" stroke="#7a6a50" stroke-width="0.7" opacity="0.3"/>
+<line x1="759" y1="480" x2="759" y2="512" stroke="#7a6a50" stroke-width="0.7" opacity="0.3"/>
+
+<path d="M842,480 Q830,480 828,498 L828,546 Q828,560 842,560 L870,560 Q884,560 886,546 L886,498 Q884,480 870,480Z"
+      fill="#d4b896" stroke="#7a6a50" stroke-width="1.3" opacity="0.42"/>
+<line x1="840" y1="480" x2="840" y2="512" stroke="#7a6a50" stroke-width="0.7" opacity="0.3"/>
+<line x1="856" y1="479" x2="856" y2="512" stroke="#7a6a50" stroke-width="0.7" opacity="0.3"/>
+<line x1="871" y1="480" x2="871" y2="512" stroke="#7a6a50" stroke-width="0.7" opacity="0.3"/>
+
+<!-- Table 3 candle -->
+<rect x="797" y="540" width="5" height="14" fill="#f8f0e0" stroke="#8c7a5e" stroke-width="0.7" opacity="0.5"/>
+<ellipse cx="799" cy="539" rx="3" ry="3" fill="#f5d060" opacity="0.4" filter="url(#sf)"/>
+
+<!-- DECORATIVE PLANT — corner right -->
+<line x1="1420" y1="900" x2="1420" y2="500" stroke="#8a9a70" stroke-width="2" opacity="0.3"/>
+<path d="M1420,700 Q1380,660 1360,620 Q1400,630 1420,680Z" fill="#a8b888" opacity="0.32"/>
+<path d="M1420,680 Q1460,640 1480,600 Q1440,615 1420,660Z" fill="#96aa78" opacity="0.28"/>
+<path d="M1420,720 Q1375,690 1350,660 Q1395,670 1420,705Z" fill="#b0c090" opacity="0.28"/>
+<path d="M1420,740 Q1465,710 1490,678 Q1448,690 1420,722Z" fill="#98ac80" opacity="0.25"/>
+<path d="M1420,760 Q1378,738 1356,710 Q1398,720 1420,748Z" fill="#a4b885" opacity="0.3"/>
+
+<!-- WALL ART / MIRROR — back wall -->
+<ellipse cx="940" cy="410" rx="55" ry="68" fill="none" stroke="#8c7a5e" stroke-width="1.6" opacity="0.38"/>
+<ellipse cx="940" cy="410" rx="48" ry="60" fill="#f0e8d8" stroke="#8c7a5e" stroke-width="0.7" opacity="0.25"/>
+<!-- Frame detail top -->
+<path d="M905,355 Q940,340 975,355" fill="none" stroke="#8c7a5e" stroke-width="1" opacity="0.3"/>
+<path d="M908,352 Q940,336 972,352" fill="none" stroke="#8c7a5e" stroke-width="0.5" opacity="0.2"/>
+
+<!-- WAINSCOTING / DADO RAIL — back wall -->
+<line x1="720" y1="600" x2="1440" y2="600" stroke="#8c7a5e" stroke-width="0.8" opacity="0.2"/>
+<line x1="720" y1="608" x2="1440" y2="608" stroke="#8c7a5e" stroke-width="0.4" opacity="0.12"/>
+
+<!-- GRADIENT OVERLAYS for depth -->
+<rect width="620" height="900" fill="url(#leftFade)"/>
+<rect width="1440" height="900" fill="url(#bottomFade)"/>
+```
+
+  </svg>
+
+  <div class="hero-left">
+    <p class="hero-eyebrow fade-in">Est. 2018 · Sydney</p>
+    <h1 class="hero-title fade-in">
+      An <em>experience</em><br>worth<br>remembering.
+    </h1>
+    <p class="hero-desc fade-in">
+      Contemporary Australian cuisine rooted in seasonal produce
+      and refined technique. Reserve your table and let us take
+      care of the rest.
+    </p>
+    <div class="hero-meta fade-in">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Hours</span>
+        <span class="hero-meta-value">Tue – Sun</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Lunch</span>
+        <span class="hero-meta-value">12 – 3pm</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Dinner</span>
+        <span class="hero-meta-value">6 – 10pm</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM STRIP -->
+
+<div class="bottom-strip">
+  <span class="strip-text">© 2025 Maison. All rights reserved.</span>
+  <div class="strip-badges">
+    <span class="strip-badge">Dine-in</span>
+    <div class="strip-divider"></div>
+    <span class="strip-badge">Private Events</span>
+    <div class="strip-divider"></div>
+    <span class="strip-badge">Gift Vouchers</span>
+  </div>
+</div>
+
+<!-- FLOATING BOOKING WIDGET -->
+
+<button id="maison-fab" onclick="maisontogglePanel()" aria-label="Make a Reservation">
+  <svg class="fab-icon fab-icon-chat" viewBox="0 0 24 24" fill="white">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+  </svg>
+  <svg class="fab-icon fab-icon-close" viewBox="0 0 24 24" fill="white">
+    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+  </svg>
+  Make a Reservation
+</button>
+
+<div id="maison-panel" role="dialog" aria-label="Booking Chat">
+  <div class="mp-header">
+    <div class="mp-avatar">🍽</div>
+    <div class="mp-header-info">
+      <div class="mp-header-name">Maison Reservations</div>
+      <div class="mp-header-status"><span class="mp-dot"></span> Online now</div>
+    </div>
+    <button class="mp-close" onclick="maisontogglePanel()">✕</button>
+  </div>
+  <div class="mp-messages" id="maisonMessages">
+    <div class="mp-msg bot">
+      <div class="mp-msg-av">🍽</div>
+      <div class="mp-bubble">Welcome to Maison! I'd love to help you reserve a table. When are you thinking of dining with us?</div>
+    </div>
+  </div>
+  <div class="mp-quick" id="maisonQuick">
+    <button class="mp-qbtn" onclick="maisonQuickSend(this,'Tonight')">Tonight</button>
+    <button class="mp-qbtn" onclick="maisonQuickSend(this,'This weekend')">This weekend</button>
+    <button class="mp-qbtn" onclick="maisonQuickSend(this,'Choose a date')">Choose a date</button>
+  </div>
+  <div class="mp-input-row">
+    <input class="mp-input" id="maisonInput" type="text" placeholder="Type a message…" autocomplete="off" />
+    <button class="mp-send" onclick="maisonSend()">
+      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+  </div>
+  <div class="mp-footer">Powered by Maison · Secure booking</div>
+</div>
+
+<script>
+  // NAV SCROLL
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // FADE IN
+  document.querySelectorAll('.fade-in').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), 100 + i * 120);
+  });
+
+  // FLOATING WIDGET
+  const MAISON_WEBHOOK = 'https://trainerapex.app.n8n.cloud/webhook/f80e5f47-634b-459e-979f-afb4945934fd/chat';
+  const maisonSessionId = 'widget_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+  let maisonLoading = false;
+  let maisonPanelOpen = false;
+
+  function maisontogglePanel() {
+    maisonPanelOpen = !maisonPanelOpen;
+    document.getElementById('maison-panel').classList.toggle('visible', maisonPanelOpen);
+    document.getElementById('maison-fab').classList.toggle('open', maisonPanelOpen);
+    if (maisonPanelOpen) setTimeout(() => document.getElementById('maisonInput').focus(), 300);
+  }
+
+  function maisonAppend(text, role) {
+    const wrap = document.createElement('div');
+    wrap.className = 'mp-msg ' + role;
+    if (role === 'bot') {
+      const av = document.createElement('div');
+      av.className = 'mp-msg-av';
+      av.textContent = '🍽';
+      wrap.appendChild(av);
+    }
+    const bubble = document.createElement('div');
+    bubble.className = 'mp-bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    const msgs = document.getElementById('maisonMessages');
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function maisonShowTyping() {
+    const wrap = document.createElement('div');
+    wrap.className = 'mp-msg bot';
+    wrap.id = 'maisonTyping';
+    const av = document.createElement('div');
+    av.className = 'mp-msg-av';
+    av.textContent = '🍽';
+    const bubble = document.createElement('div');
+    bubble.className = 'mp-bubble';
+    bubble.innerHTML = '<div class="mp-typing"><span></span><span></span><span></span></div>';
+    wrap.appendChild(av);
+    wrap.appendChild(bubble);
+    const msgs = document.getElementById('maisonMessages');
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function maisonRemoveTyping() {
+    const t = document.getElementById('maisonTyping');
+    if (t) t.remove();
+  }
+
+  async function maisonPost(text) {
+    if (maisonLoading || !text.trim()) return;
+    maisonLoading = true;
+    document.getElementById('maisonQuick').style.display = 'none';
+    maisonAppend(text, 'user');
+    maisonShowTyping();
+    try {
+      const res = await fetch(MAISON_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'sendMessage',
+          sessionId: maisonSessionId,
+          chatInput: text,
+        })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      maisonRemoveTyping();
+      const reply = data.output || data.text || data.message
+        || (Array.isArray(data) && (data[0]?.output || data[0]?.text))
+        || "Thank you! We'll confirm your booking shortly.";
+      maisonAppend(reply, 'bot');
+    } catch(err) {
+      maisonRemoveTyping();
+      maisonAppend("Sorry, something went wrong. Please call us directly.", 'bot');
+    }
+    maisonLoading = false;
+  }
+
+  function maisonSend() {
+    const input = document.getElementById('maisonInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    maisonPost(text);
+  }
+
+  function maisonQuickSend(btn, text) { maisonPost(text); }
+
+  document.getElementById('maisonInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') maisonSend();
+  });
+</script>
+
+</body>
+</html>
