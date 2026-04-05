@@ -287,7 +287,35 @@
             </div>
             <div>
               <label for="time">Time</label>
-              <input id="time" name="time" type="time" required step="900" />
+<select id="time" name="time" required>
+  <option value="">Select a time</option>
+
+  <option value="12:00">12:00 pm</option>
+  <option value="12:15">12:15 pm</option>
+  <option value="12:30">12:30 pm</option>
+  <option value="12:45">12:45 pm</option>
+  <option value="13:00">1:00 pm</option>
+  <option value="13:15">1:15 pm</option>
+  <option value="13:30">1:30 pm</option>
+  <option value="13:45">1:45 pm</option>
+
+  <option value="18:00">6:00 pm</option>
+  <option value="18:15">6:15 pm</option>
+  <option value="18:30">6:30 pm</option>
+  <option value="18:45">6:45 pm</option>
+  <option value="19:00">7:00 pm</option>
+  <option value="19:15">7:15 pm</option>
+  <option value="19:30">7:30 pm</option>
+  <option value="19:45">7:45 pm</option>
+  <option value="20:00">8:00 pm</option>
+  <option value="20:15">8:15 pm</option>
+  <option value="20:30">8:30 pm</option>
+  <option value="20:45">8:45 pm</option>
+  <option value="21:00">9:00 pm</option>
+  <option value="21:15">9:15 pm</option>
+  <option value="21:30">9:30 pm</option>
+  <option value="21:45">9:45 pm</option>
+</select>
             </div>
           </div>
 
@@ -383,9 +411,14 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      if (WEBHOOK_URL.includes("https://trainerapex.app.n8n.cloud/webhook/restaurant-booking-online")) {
-        showError("Please add your real n8n production webhook URL in the HTML first.");
-        return;
+      if (
+  !WEBHOOK_URL ||
+  WEBHOOK_URL.includes("https://trainerapex.app.n8n.cloud/webhook/restaurant-booking-online") ||
+  WEBHOOK_URL.includes("/webhook-test/")
+) {
+  showError("Please add your real n8n production webhook URL in the HTML first.");
+  return;
+}
       }
 
       const formData = new FormData(form);
