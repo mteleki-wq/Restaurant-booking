@@ -383,7 +383,7 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      if (WEBHOOK_URL.includes("https://trainerapex.app.n8n.cloud/webhook-test/restaurant-booking-online")) {
+      if (WEBHOOK_URL.includes("https://trainerapex.app.n8n.cloud/webhook/restaurant-booking-online")) {
         showError("Please add your real n8n production webhook URL in the HTML first.");
         return;
       }
