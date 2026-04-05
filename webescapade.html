@@ -1,182 +1,520 @@
-<script>
-  const WEBHOOK_URL = "https://trainerapex.app.n8n.cloud/webhook/restaurant-booking-online";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escapade | Table Booking</title>
+  <style>
+    :root{
+      --navy:#10243e;
+      --orange:#ef7d22;
+      --cream:#f8f4ee;
+      --card:#ffffff;
+      --text:#172033;
+      --muted:#667085;
+      --line:#d8dee8;
+      --success-bg:#ecfdf5;
+      --success-text:#065f46;
+      --error-bg:#fef2f2;
+      --error-text:#991b1b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        linear-gradient(180deg, rgba(16,36,62,.96) 0px, rgba(16,36,62,.96) 340px, var(--cream) 340px, var(--cream) 100%);
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:28px 18px 48px;
+    }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      color:#fff;
+      margin-bottom:26px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      font-size:2rem;
+      font-weight:800;
+      letter-spacing:.02em;
+      color:var(--orange);
+    }
+    .topinfo{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+      color:#d9e5f5;
+      font-size:.95rem;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:24px;
+      align-items:stretch;
+    }
+    .hero-copy{
+      border-radius:24px;
+      padding:34px;
+      min-height:320px;
+      background:
+        linear-gradient(135deg, rgba(239,125,34,.12), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)),
+        var(--navy);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 16px 40px rgba(0,0,0,.18);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .eyebrow{
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:#c6d6eb;
+      font-size:.78rem;
+      margin-bottom:10px;
+    }
+    h1{
+      margin:0 0 14px;
+      font-size:clamp(2.1rem, 4vw, 3.4rem);
+      line-height:1.02;
+    }
+    .lead{
+      margin:0 0 20px;
+      color:#e5edf7;
+      line-height:1.65;
+      font-size:1.03rem;
+      max-width:56ch;
+    }
+    .hero-points{
+      display:grid;
+      gap:10px;
+      margin-top:8px;
+    }
+    .point{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:12px 14px;
+      color:#f3f6fb;
+      font-size:.95rem;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:0 16px 40px rgba(16,36,62,.12);
+      padding:24px;
+    }
+    .card h2{
+      margin:0 0 18px;
+      color:var(--navy);
+      font-size:1.45rem;
+    }
+    form{display:grid; gap:14px}
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+    label{
+      display:block;
+      font-size:.92rem;
+      font-weight:700;
+      margin-bottom:6px;
+      color:var(--navy);
+    }
+    input, select, textarea, button{
+      width:100%;
+      font:inherit;
+    }
+    input, select, textarea{
+      padding:12px 14px;
+      border:1px solid #cfd8e3;
+      border-radius:14px;
+      background:#fff;
+      color:var(--text);
+    }
+    textarea{
+      min-height:90px;
+      resize:vertical;
+    }
+    input:focus, select:focus, textarea:focus{
+      outline:2px solid rgba(239,125,34,.18);
+      border-color:var(--orange);
+    }
+    button{
+      border:0;
+      border-radius:14px;
+      padding:14px 18px;
+      background:var(--orange);
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(239,125,34,.24);
+    }
+    button[disabled]{opacity:.75; cursor:not-allowed}
+    .helper{
+      color:var(--muted);
+      font-size:.88rem;
+      line-height:1.5;
+    }
+    .message{
+      display:none;
+      padding:14px 16px;
+      border-radius:14px;
+      font-size:.95rem;
+      line-height:1.5;
+      white-space:pre-wrap;
+    }
+    .message.show{display:block}
+    .message.success{
+      background:var(--success-bg);
+      color:var(--success-text);
+      border:1px solid #a7f3d0;
+    }
+    .message.error{
+      background:var(--error-bg);
+      color:var(--error-text);
+      border:1px solid #fecaca;
+    }
+    .info-section{
+      margin-top:24px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:18px;
+    }
+    .info-box{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:20px;
+      box-shadow:0 12px 28px rgba(16,36,62,.08);
+    }
+    .info-box h3{
+      margin:0 0 10px;
+      color:var(--navy);
+      font-size:1.05rem;
+    }
+    .info-box p{
+      margin:0;
+      color:#475467;
+      line-height:1.6;
+      font-size:.94rem;
+    }
+    @media (max-width: 920px){
+      .hero{grid-template-columns:1fr}
+      .info-section{grid-template-columns:1fr}
+    }
+    @media (max-width: 560px){
+      .grid{grid-template-columns:1fr}
+      .wrap{padding:18px 14px 36px}
+      .brand{font-size:1.7rem}
+      .hero-copy,.card,.info-box{border-radius:18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">Escapade</div>
+      <div class="topinfo">
+        <div>Sydney CBD • George St</div>
+        <div>Lunch 12:00 pm – 2:00 pm</div>
+        <div>Dinner 6:00 pm – 10:00 pm</div>
+      </div>
+    </div>
 
-  const form = document.getElementById("bookingForm");
-  const submitBtn = document.getElementById("submitBtn");
-  const successMessage = document.getElementById("successMessage");
-  const errorMessage = document.getElementById("errorMessage");
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Sydney CBD Dining</div>
+        <h1>Reserve your table at Escapade</h1>
+        <p class="lead">
+          Book lunch or dinner in just a few steps. Submit your details below and your reservation request will be checked against the live booking system.
+        </p>
+        <div class="hero-points">
+          <div class="point">Elegant navy and orange branded booking page.</div>
+          <div class="point">Lunch service: 12:00 pm to 2:00 pm</div>
+          <div class="point">Dinner service: 6:00 pm to 10:00 pm</div>
+        </div>
+      </div>
 
-  const nameInput = document.getElementById("name");
-  const phoneInput = document.getElementById("phone");
-  const emailInput = document.getElementById("email");
-  const partySizeInput = document.getElementById("partySize");
-  const dateInput = document.getElementById("date");
-  const timeInput = document.getElementById("time");
-  const notesInput = document.getElementById("notes");
+      <div class="card">
+        <h2>Book a table</h2>
+        <form id="bookingForm" novalidate>
+          <div class="grid">
+            <div>
+              <label for="name">Full name</label>
+              <input id="name" name="name" type="text" placeholder="John Smith" />
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" placeholder="0400 000 000" />
+            </div>
+          </div>
 
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, "0");
-  const dd = String(today.getDate()).padStart(2, "0");
-  dateInput.min = `${yyyy}-${mm}-${dd}`;
+          <div class="grid">
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="john@example.com" />
+            </div>
+            <div>
+              <label for="partySize">Guests</label>
+              <select id="partySize" name="partySize">
+                <option value="">Select</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option>
+                <option>9</option><option>10</option><option>11</option><option>12</option>
+              </select>
+            </div>
+          </div>
 
-  function showSuccess(message) {
-    successMessage.textContent = message;
-    successMessage.classList.add("show");
-    errorMessage.classList.remove("show");
-    errorMessage.textContent = "";
-  }
+          <div class="grid">
+            <div>
+              <label for="date">Date</label>
+              <input id="date" name="date" type="date" />
+            </div>
+            <div>
+              <label for="time">Time</label>
+              <select id="time" name="time">
+                <option value="">Select a time</option>
+                <option value="12:00">12:00 pm</option>
+                <option value="12:15">12:15 pm</option>
+                <option value="12:30">12:30 pm</option>
+                <option value="12:45">12:45 pm</option>
+                <option value="13:00">1:00 pm</option>
+                <option value="13:15">1:15 pm</option>
+                <option value="13:30">1:30 pm</option>
+                <option value="13:45">1:45 pm</option>
+                <option value="18:00">6:00 pm</option>
+                <option value="18:15">6:15 pm</option>
+                <option value="18:30">6:30 pm</option>
+                <option value="18:45">6:45 pm</option>
+                <option value="19:00">7:00 pm</option>
+                <option value="19:15">7:15 pm</option>
+                <option value="19:30">7:30 pm</option>
+                <option value="19:45">7:45 pm</option>
+                <option value="20:00">8:00 pm</option>
+                <option value="20:15">8:15 pm</option>
+                <option value="20:30">8:30 pm</option>
+                <option value="20:45">8:45 pm</option>
+                <option value="21:00">9:00 pm</option>
+                <option value="21:15">9:15 pm</option>
+                <option value="21:30">9:30 pm</option>
+                <option value="21:45">9:45 pm</option>
+              </select>
+            </div>
+          </div>
 
-  function showError(message) {
-    errorMessage.textContent = message;
-    errorMessage.classList.add("show");
-    successMessage.classList.remove("show");
-    successMessage.textContent = "";
-  }
+          <div>
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" placeholder="Birthday dinner, allergy note, special request..."></textarea>
+          </div>
 
-  function clearMessages() {
-    successMessage.classList.remove("show");
-    errorMessage.classList.remove("show");
-    successMessage.textContent = "";
-    errorMessage.textContent = "";
-  }
+          <button id="submitBtn" type="button">Request booking</button>
+          <div class="helper">Live booking request connected to your n8n workflow.</div>
 
-  function formatStart(dateValue, timeValue) {
-    const local = new Date(`${dateValue}T${timeValue}:00`);
-    const tzOffsetMin = -local.getTimezoneOffset();
-    const sign = tzOffsetMin >= 0 ? "+" : "-";
-    const abs = Math.abs(tzOffsetMin);
-    const hh = String(Math.floor(abs / 60)).padStart(2, "0");
-    const mm = String(abs % 60).padStart(2, "0");
+          <div id="successMessage" class="message success"></div>
+          <div id="errorMessage" class="message error"></div>
+        </form>
+      </div>
+    </section>
 
-    const year = local.getFullYear();
-    const month = String(local.getMonth() + 1).padStart(2, "0");
-    const day = String(local.getDate()).padStart(2, "0");
-    const hours = String(local.getHours()).padStart(2, "0");
-    const minutes = String(local.getMinutes()).padStart(2, "0");
-    const seconds = String(local.getSeconds()).padStart(2, "0");
+    <section class="info-section">
+      <div class="info-box">
+        <h3>Opening hours</h3>
+        <p>Lunch service from 12:00 pm to 2:00 pm.<br>Dinner service from 6:00 pm to 10:00 pm.</p>
+      </div>
+      <div class="info-box">
+        <h3>Location</h3>
+        <p>Escapade<br>George St<br>Sydney CBD</p>
+      </div>
+      <div class="info-box">
+        <h3>Booking notes</h3>
+        <p>Please include any special occasion, seating preference, allergy note, or high-chair request in the notes field.</p>
+      </div>
+    </section>
+  </div>
 
-    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${hh}:${mm}`;
-  }
+  <script>
+    const WEBHOOK_URL = "https://trainerapex.app.n8n.cloud/webhook/restaurant-booking-online";
 
-  function isWithinOpeningHours(timeValue) {
-    if (!timeValue) return false;
-    const parts = timeValue.split(":").map(Number);
-    const total = parts[0] * 60 + parts[1];
+    const form = document.getElementById("bookingForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
 
-    const lunchStart = 12 * 60;
-    const lunchEnd = 14 * 60;
-    const dinnerStart = 18 * 60;
-    const dinnerEnd = 22 * 60;
+    const nameInput = document.getElementById("name");
+    const phoneInput = document.getElementById("phone");
+    const emailInput = document.getElementById("email");
+    const partySizeInput = document.getElementById("partySize");
+    const dateInput = document.getElementById("date");
+    const timeInput = document.getElementById("time");
+    const notesInput = document.getElementById("notes");
 
-    return (total >= lunchStart && total < lunchEnd) || (total >= dinnerStart && total < dinnerEnd);
-  }
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    dateInput.min = `${yyyy}-${mm}-${dd}`;
 
-  function validateForm() {
-    if (
-      !WEBHOOK_URL ||
-      WEBHOOK_URL.includes("YOUR_N8N_PRODUCTION_WEBHOOK_URL_HERE") ||
-      WEBHOOK_URL.includes("/webhook-test/")
-    ) {
-      showError("Please add your real n8n production webhook URL in the HTML first.");
-      return false;
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.classList.add("show");
+      errorMessage.classList.remove("show");
+      errorMessage.textContent = "";
     }
 
-    if (!nameInput.value.trim()) {
-      showError("Please enter your full name.");
-      return false;
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add("show");
+      successMessage.classList.remove("show");
+      successMessage.textContent = "";
     }
 
-    if (!phoneInput.value.trim()) {
-      showError("Please enter your phone number.");
-      return false;
+    function clearMessages() {
+      successMessage.classList.remove("show");
+      errorMessage.classList.remove("show");
+      successMessage.textContent = "";
+      errorMessage.textContent = "";
     }
 
-    if (!emailInput.value.trim()) {
-      showError("Please enter your email address.");
-      return false;
+    function formatStart(dateValue, timeValue) {
+      const local = new Date(`${dateValue}T${timeValue}:00`);
+      const tzOffsetMin = -local.getTimezoneOffset();
+      const sign = tzOffsetMin >= 0 ? "+" : "-";
+      const abs = Math.abs(tzOffsetMin);
+      const hh = String(Math.floor(abs / 60)).padStart(2, "0");
+      const mm = String(abs % 60).padStart(2, "0");
+
+      const year = local.getFullYear();
+      const month = String(local.getMonth() + 1).padStart(2, "0");
+      const day = String(local.getDate()).padStart(2, "0");
+      const hours = String(local.getHours()).padStart(2, "0");
+      const minutes = String(local.getMinutes()).padStart(2, "0");
+      const seconds = String(local.getSeconds()).padStart(2, "0");
+
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${hh}:${mm}`;
     }
 
-    if (!partySizeInput.value) {
-      showError("Please select the number of guests.");
-      return false;
+    function isWithinOpeningHours(timeValue) {
+      if (!timeValue) return false;
+      const parts = timeValue.split(":").map(Number);
+      const total = parts[0] * 60 + parts[1];
+
+      const lunchStart = 12 * 60;
+      const lunchEnd = 14 * 60;
+      const dinnerStart = 18 * 60;
+      const dinnerEnd = 22 * 60;
+
+      return (total >= lunchStart && total < lunchEnd) || (total >= dinnerStart && total < dinnerEnd);
     }
 
-    if (!dateInput.value) {
-      showError("Please choose a booking date.");
-      return false;
+    function validateForm() {
+      if (!nameInput.value.trim()) {
+        showError("Please enter your full name.");
+        return false;
+      }
+
+      if (!phoneInput.value.trim()) {
+        showError("Please enter your phone number.");
+        return false;
+      }
+
+      if (!emailInput.value.trim()) {
+        showError("Please enter your email address.");
+        return false;
+      }
+
+      if (!partySizeInput.value) {
+        showError("Please select the number of guests.");
+        return false;
+      }
+
+      if (!dateInput.value) {
+        showError("Please choose a booking date.");
+        return false;
+      }
+
+      if (!timeInput.value) {
+        showError("Please choose a booking time.");
+        return false;
+      }
+
+      if (!isWithinOpeningHours(timeInput.value)) {
+        showError("Please choose a booking time within opening hours: 12:00 pm–2:00 pm or 6:00 pm–10:00 pm.");
+        return false;
+      }
+
+      return true;
     }
 
-    if (!timeInput.value) {
-      showError("Please choose a booking time.");
-      return false;
-    }
+    submitBtn.addEventListener("click", async function () {
+      clearMessages();
 
-    if (!isWithinOpeningHours(timeInput.value)) {
-      showError("Please choose a booking time within opening hours: 12:00 pm–2:00 pm or 6:00 pm–10:00 pm.");
-      return false;
-    }
-
-    return true;
-  }
-
-  submitBtn.addEventListener("click", async function () {
-    clearMessages();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
-
-    const payload = {
-      name: nameInput.value.trim(),
-      phone: phoneInput.value.trim(),
-      email: emailInput.value.trim(),
-      partySize: Number(partySizeInput.value),
-      start: formatStart(dateInput.value, timeInput.value),
-      source: "online",
-      notes: notesInput.value.trim()
-    };
-
-    try {
-      const response = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const text = await response.text();
-      let result = {};
-
-      try {
-        result = text ? JSON.parse(text) : {};
-      } catch (e) {
-        showError("The booking service returned an invalid response.");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Request booking";
+      if (!validateForm()) {
         return;
       }
 
-      if (!response.ok) {
-        showError(result.message || result.error || `Server error (${response.status})`);
-      } else if (result.success === false) {
-        showError(result.message || "Booking was rejected by the booking workflow.");
-      } else {
-        const summaryText = result.summary ? `\nBooking: ${result.summary}` : "";
-        const startText = result.start ? `\nTime: ${result.start}` : "";
-        const linkText = result.calendarLink ? `\nLink: ${result.calendarLink}` : "";
-        showSuccess(`Booking confirmed.${summaryText}${startText}${linkText}`);
-        form.reset();
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+
+      const payload = {
+        name: nameInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        email: emailInput.value.trim(),
+        partySize: Number(partySizeInput.value),
+        start: formatStart(dateInput.value, timeInput.value),
+        source: "online",
+        notes: notesInput.value.trim()
+      };
+
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await response.text();
+        let result = {};
+
+        try {
+          result = text ? JSON.parse(text) : {};
+        } catch (e) {
+          showError("The booking service returned an invalid response.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Request booking";
+          return;
+        }
+
+        if (!response.ok) {
+          showError(result.message || result.error || `Server error (${response.status})`);
+        } else if (result.success === false) {
+          showError(result.message || "Booking was rejected by the booking workflow.");
+        } else {
+          const summaryText = result.summary ? `\\nBooking: ${result.summary}` : "";
+          const startText = result.start ? `\\nTime: ${result.start}` : "";
+          const linkText = result.calendarLink ? `\\nLink: ${result.calendarLink}` : "";
+          showSuccess(`Booking confirmed.${summaryText}${startText}${linkText}`);
+          form.reset();
+        }
+      } catch (error) {
+        showError("Could not reach the booking service. " + (error && error.message ? error.message : ""));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Request booking";
       }
-    } catch (error) {
-      showError("Could not reach the booking service. " + (error && error.message ? error.message : ""));
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Request booking";
-    }
-  });
-</script>
+    });
+  </script>
+</body>
+</html>
