@@ -457,6 +457,13 @@
     }
 
     submitBtn.addEventListener("click", async function () {
+      submitBtn.addEventListener("click", async function () {
+  alert("NEW SCRIPT IS RUNNING");
+  clearMessages();
+
+  if (!validateForm()) {
+    return;
+  }
       clearMessages();
 
       if (!validateForm()) {
