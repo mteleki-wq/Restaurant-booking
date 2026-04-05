@@ -509,10 +509,10 @@
         } else if (result.success === false) {
           showError(result.message || "Booking was rejected by the booking workflow.");
         } else {
-          const summaryText = result.summary ? `\\nBooking: ${result.summary}` : "";
-          const startText = result.start ? `\\nTime: ${result.start}` : "";
-          const linkText = result.calendarLink ? `\\nLink: ${result.calendarLink}` : "";
-          showSuccess(`Booking confirmed.${summaryText}${startText}${linkText}`);
+          const summaryText = result.summary ? "\nBooking: " + result.summary : "";
+const startText = result.start ? "\nTime: " + result.start : "";
+const linkText = result.calendarLink ? "\nLink: " + result.calendarLink : "";
+showSuccess("Booking confirmed." + summaryText + startText + linkText);
           form.reset();
         }
       } catch (error) {
