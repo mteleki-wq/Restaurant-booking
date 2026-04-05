@@ -512,7 +512,7 @@
           const lines = ["Booking confirmed."];
           if (result.summary)     lines.push("Booking: " + result.summary);
           if (result.start)       lines.push("Time: "    + result.start);
-          if (result.calendarLink) lines.push("Link: "   + result.calendarLink);
+          
           showSuccess(lines.join("\n"));
           form.reset();
         }
