@@ -899,5 +899,334 @@ document.getElementById('textModal').addEventListener('click', function(e){ if(e
 document.getElementById('imgModal').addEventListener('click', function(e){ if(e.target===this) closeImgModal(); });
 </script>
 
+<!-- ════════════════════════════════════════
+     LE CULINAIRE — FLOATING ENQUIRY WIDGET
+     Replace LC_WEBHOOK below with your n8n
+     webhook URL to activate AI responses
+════════════════════════════════════════ -->
+
+<style>
+/* FAB BUTTON */
+#lc-fab {
+  position: fixed; bottom: 80px; right: 28px; z-index: 8000;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--charcoal); color: var(--ivory);
+  border: none; padding: 14px 22px 14px 18px; border-radius: 50px;
+  cursor: pointer; font-family: 'Jost', sans-serif;
+  font-size: 0.8rem; font-weight: 400; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 32px rgba(44,43,40,0.22), 0 2px 8px rgba(44,43,40,0.12);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.25s;
+  animation: lcFabIn 0.55s cubic-bezier(0.34,1.56,0.64,1) 1.2s both;
+}
+@keyframes lcFabIn {
+  from { opacity:0; transform: translateY(24px) scale(0.88); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+#lc-fab:hover {
+  background: var(--gold); transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(184,151,58,0.3), 0 4px 12px rgba(44,43,40,0.1);
+}
+#lc-fab.open { background: var(--brown, #5c4f3a); }
+#lc-fab::before {
+  content: ''; position: absolute; inset: -5px; border-radius: 50px;
+  border: 2px solid rgba(184,151,58,0.45);
+  animation: lcPulse 2.8s ease-out 2s infinite; pointer-events: none;
+}
+#lc-fab.open::before { display: none; }
+@keyframes lcPulse {
+  0%   { transform: scale(1); opacity: 0.6; }
+  70%  { transform: scale(1.09); opacity: 0; }
+  100% { transform: scale(1.09); opacity: 0; }
+}
+.lc-fab-icon { width: 18px; height: 18px; flex-shrink: 0; fill: currentColor; }
+#lc-fab .lc-icon-close { display: none; }
+#lc-fab.open .lc-icon-chat { display: none; }
+#lc-fab.open .lc-icon-close { display: block; }
+
+/* PANEL */
+#lc-panel {
+  position: fixed; bottom: 148px; right: 28px; z-index: 7999;
+  width: 360px; max-height: 560px;
+  background: var(--ivory); border: 1px solid var(--border);
+  border-radius: 16px; display: flex; flex-direction: column;
+  overflow: hidden; opacity: 0; pointer-events: none;
+  transform: translateY(18px) scale(0.95); transform-origin: bottom right;
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 20px 60px rgba(44,43,40,0.14), 0 4px 16px rgba(44,43,40,0.06);
+}
+#lc-panel.open { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
+
+/* Panel header */
+.lc-header {
+  background: var(--charcoal); padding: 18px 20px;
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.lc-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(184,151,58,0.2); border: 1px solid rgba(184,151,58,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.lc-header-info { flex: 1; }
+.lc-header-name {
+  font-family: 'Playfair Display', serif; font-size: 1rem;
+  font-weight: 400; color: var(--ivory); letter-spacing: 0.04em;
+}
+.lc-header-status {
+  font-size: 0.68rem; color: rgba(250,247,242,0.5);
+  display: flex; align-items: center; gap: 5px; margin-top: 3px;
+}
+.lc-dot { width: 6px; height: 6px; border-radius: 50%; background: #6dbb7a; flex-shrink: 0; }
+.lc-close {
+  background: none; border: none; color: rgba(250,247,242,0.45);
+  cursor: pointer; font-size: 18px; padding: 4px; line-height: 1;
+  transition: color 0.2s; font-family: 'Jost', sans-serif;
+}
+.lc-close:hover { color: var(--ivory); }
+
+/* Messages */
+.lc-messages {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  background: var(--warm-white); min-height: 180px; max-height: 300px;
+}
+.lc-messages::-webkit-scrollbar { width: 3px; }
+.lc-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.lc-msg { display: flex; gap: 8px; align-items: flex-start; animation: lcMsgIn 0.25s ease forwards; opacity: 0; }
+.lc-msg.user { flex-direction: row-reverse; }
+@keyframes lcMsgIn {
+  from { opacity:0; transform: translateY(6px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.lc-msg-av {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--charcoal); display: flex; align-items: center;
+  justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 2px;
+}
+.lc-bubble {
+  background: var(--ivory); border: 1px solid var(--border);
+  padding: 10px 14px; border-radius: 4px 14px 14px 14px;
+  font-size: 0.83rem; line-height: 1.65; color: var(--charcoal);
+  max-width: 252px; font-family: 'Jost', sans-serif; font-weight: 300;
+}
+.lc-msg.user .lc-bubble {
+  background: var(--charcoal); color: var(--ivory);
+  border-color: var(--charcoal); border-radius: 14px 4px 14px 14px;
+}
+
+/* Typing indicator */
+.lc-typing { display: flex; gap: 5px; padding: 4px 2px; align-items: center; }
+.lc-typing span {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--muted);
+  animation: lcDot 1.2s ease infinite;
+}
+.lc-typing span:nth-child(2) { animation-delay: 0.2s; }
+.lc-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes lcDot {
+  0%,80%,100% { opacity:0.25; transform:scale(0.85); }
+  40% { opacity:1; transform:scale(1); }
+}
+
+/* Quick replies */
+.lc-quick {
+  padding: 0 14px 12px; display: flex; flex-wrap: wrap; gap: 7px;
+  background: var(--warm-white);
+}
+.lc-qbtn {
+  border: 1px solid var(--border); background: var(--ivory);
+  padding: 6px 14px; font-size: 0.73rem; font-family: 'Jost', sans-serif;
+  color: var(--charcoal); border-radius: 20px; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.lc-qbtn:hover { border-color: var(--gold); background: var(--gold-pale, #f0e6c8); color: var(--charcoal); }
+
+/* Input row */
+.lc-input-row {
+  border-top: 1px solid var(--border); background: var(--ivory);
+  padding: 10px 14px; display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+}
+.lc-input {
+  flex: 1; border: none; background: transparent;
+  font-family: 'Jost', sans-serif; font-size: 0.85rem;
+  color: var(--charcoal); outline: none; font-weight: 300;
+}
+.lc-input::placeholder { color: var(--light-muted, #b0a898); }
+.lc-send {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: var(--charcoal); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background 0.2s, transform 0.15s;
+}
+.lc-send:hover { background: var(--gold); transform: scale(1.06); }
+.lc-send svg { width: 13px; height: 13px; fill: var(--ivory); }
+
+/* Footer */
+.lc-footer {
+  text-align: center; padding: 8px; font-size: 0.63rem;
+  color: var(--light-muted, #b0a898); font-family: 'Jost', sans-serif;
+  letter-spacing: 0.08em; background: var(--ivory);
+  border-top: 1px solid rgba(184,151,58,0.08);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  #lc-panel { width: calc(100vw - 24px); right: 12px; bottom: 140px; }
+  #lc-fab { right: 12px; bottom: 72px; }
+}
+</style>
+
+<!-- FAB -->
+
+<button id="lc-fab" onclick="lcToggle()" aria-label="Enquire Now">
+  <!-- Chat icon -->
+  <svg class="lc-fab-icon lc-icon-chat" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <!-- Close icon -->
+  <svg class="lc-fab-icon lc-icon-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+  Course Enquiry
+</button>
+
+<!-- PANEL -->
+
+<div id="lc-panel" role="dialog" aria-label="Le Culinaire Course Enquiry">
+  <div class="lc-header">
+    <div class="lc-avatar">🍴</div>
+    <div class="lc-header-info">
+      <div class="lc-header-name">Le Culinaire</div>
+      <div class="lc-header-status"><span class="lc-dot"></span> Ask us anything</div>
+    </div>
+    <button class="lc-close" onclick="lcToggle()">✕</button>
+  </div>
+  <div class="lc-messages" id="lcMessages">
+    <div class="lc-msg bot">
+      <div class="lc-msg-av">🍴</div>
+      <div class="lc-bubble">Welcome to Le Culinaire! I'm here to help you find the right course. What are you interested in studying?</div>
+    </div>
+  </div>
+  <div class="lc-quick" id="lcQuick">
+    <button class="lc-qbtn" onclick="lcQuickSend('Commercial Cookery')">Cookery</button>
+    <button class="lc-qbtn" onclick="lcQuickSend('Patisserie')">Patisserie</button>
+    <button class="lc-qbtn" onclick="lcQuickSend('Hospitality Management')">Management</button>
+    <button class="lc-qbtn" onclick="lcQuickSend('RSA or RCG short course')">RSA / RCG</button>
+  </div>
+  <div class="lc-input-row">
+    <input class="lc-input" id="lcInput" type="text" placeholder="Ask about courses, fees, dates…" autocomplete="off">
+    <button class="lc-send" onclick="lcSend()">
+      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+  </div>
+  <div class="lc-footer">Le Culinaire Hospitality Institute · RTO 45326</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// REPLACE THIS URL WITH YOUR n8n WEBHOOK URL
+// ══════════════════════════════════════════════
+const LC_WEBHOOK = 'YOUR_N8N_WEBHOOK_URL_HERE';
+
+const lcSessionId = 'lc_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+let lcPanelOpen = false;
+let lcBusy = false;
+
+function lcToggle() {
+  lcPanelOpen = !lcPanelOpen;
+  document.getElementById('lc-panel').classList.toggle('open', lcPanelOpen);
+  document.getElementById('lc-fab').classList.toggle('open', lcPanelOpen);
+  if (lcPanelOpen) setTimeout(() => document.getElementById('lcInput').focus(), 320);
+}
+
+function lcAppend(text, role) {
+  const wrap = document.createElement('div');
+  wrap.className = 'lc-msg ' + role;
+  if (role === 'bot') {
+    const av = document.createElement('div');
+    av.className = 'lc-msg-av'; av.textContent = '🍴';
+    wrap.appendChild(av);
+  }
+  const bubble = document.createElement('div');
+  bubble.className = 'lc-bubble'; bubble.textContent = text;
+  wrap.appendChild(bubble);
+  const msgs = document.getElementById('lcMessages');
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function lcTypingOn() {
+  const wrap = document.createElement('div');
+  wrap.className = 'lc-msg bot'; wrap.id = 'lcTyping';
+  const av = document.createElement('div');
+  av.className = 'lc-msg-av'; av.textContent = '🍴';
+  const bubble = document.createElement('div');
+  bubble.className = 'lc-bubble';
+  bubble.innerHTML = '<div class="lc-typing"><span></span><span></span><span></span></div>';
+  wrap.appendChild(av); wrap.appendChild(bubble);
+  const msgs = document.getElementById('lcMessages');
+  msgs.appendChild(wrap); msgs.scrollTop = msgs.scrollHeight;
+}
+
+function lcTypingOff() {
+  const t = document.getElementById('lcTyping');
+  if (t) t.remove();
+}
+
+async function lcPost(text) {
+  if (lcBusy || !text.trim()) return;
+  lcBusy = true;
+  document.getElementById('lcQuick').style.display = 'none';
+  lcAppend(text, 'user');
+  lcTypingOn();
+
+  // If no webhook set, use a friendly fallback
+  if (!LC_WEBHOOK || LC_WEBHOOK === 'YOUR_N8N_WEBHOOK_URL_HERE') {
+    await new Promise(r => setTimeout(r, 1200));
+    lcTypingOff();
+    const fallbacks = {
+      'cookery': 'Great choice! Our SIT30821 Certificate III in Commercial Cookery is a hands-on course that prepares you for professional kitchen roles. Would you like info on fees or start dates?',
+      'patisserie': 'Our Patisserie courses (Certificate III & IV) cover everything from foundational techniques to advanced artisan pastry. Shall I tell you more about entry requirements?',
+      'management': 'We offer the Diploma (SIT50422) and Advanced Diploma (SIT60322) in Hospitality Management — great for aspiring leaders. Want to know more?',
+      'rsa': 'RSA and RCG short courses are available now — just email studentservice@leculinaire.edu.au to book your spot!',
+    };
+    const key = Object.keys(fallbacks).find(k => text.toLowerCase().includes(k));
+    lcAppend(key ? fallbacks[key] : "Thanks for your enquiry! For the most up-to-date information please email admin@leculinaire.edu.au or call 02 9211 3945 and we'll be happy to help.", 'bot');
+    lcBusy = false;
+    return;
+  }
+
+  try {
+    const res = await fetch(LC_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'sendMessage', sessionId: lcSessionId, chatInput: text })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    lcTypingOff();
+    const reply = data.output || data.text || data.message
+      || (Array.isArray(data) && (data[0]?.output || data[0]?.text))
+      || "Thanks for your message! Our team will follow up shortly.";
+    lcAppend(reply, 'bot');
+  } catch(err) {
+    lcTypingOff();
+    lcAppend('Sorry, something went wrong. Please contact us directly at admin@leculinaire.edu.au or call 02 9211 3945.', 'bot');
+  }
+  lcBusy = false;
+}
+
+function lcSend() {
+  const inp = document.getElementById('lcInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  lcPost(text);
+}
+
+function lcQuickSend(text) { lcPost(text); }
+
+document.getElementById('lcInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') lcSend();
+});
+</script>
+
 </body>
 </html>
