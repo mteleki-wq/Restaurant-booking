@@ -470,10 +470,10 @@ footer { padding: 50px 20px 120px; }
     <li><a href="#skills" onclick="closeMenu()">Skill Sets</a></li>
     <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
-  <a href="/cdn-cgi/l/email-protection#7312171e1a1d331f1610061f1a1d121a01165d1617065d1206" class="mobile-menu-cta">Enquire Now</a>
+  <a href="mailto:admin@leculinaire.edu.au" class="mobile-menu-cta">Enquire Now</a>
   <div class="mobile-contact">
     Level 1 / 276 Botany Rd, Alexandria NSW 2015<br>
-    02 9211 3945 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d7b6b3babeb997bbb2b4a2bbbeb9b6bea5b2f9b2b3a2f9b6a2">[email&#160;protected]</a>
+    02 9211 3945 · admin@leculinaire.edu.au
   </div>
 </div>
 
@@ -487,7 +487,7 @@ footer { padding: 50px 20px 120px; }
     <li><a href="#skills">Skill Sets</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="/cdn-cgi/l/email-protection#68090c05010628040d0b1d04010609011a0d460d0c1d46091d" class="nav-cta">Enquire Now</a>
+  <a href="mailto:admin@leculinaire.edu.au" class="nav-cta">Enquire Now</a>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
@@ -599,7 +599,7 @@ footer { padding: 50px 20px 120px; }
       <h3 class="course-name" data-editable="c6-name">RSA &amp; RCG</h3>
       <div class="course-code" data-editable="c6-code">NSW Approved Provider</div>
       <p class="course-desc" data-editable="c6-desc">Fast-track your compliance credentials. Responsible Service of Alcohol and Responsible Conduct of Gambling — book anytime.</p>
-      <a href="/cdn-cgi/l/email-protection#493a3d3c2d2c273d3a2c3b3f202a2c09252c2a3c25202728203b2c672c2d3c67283c" class="course-link">Book Now</a>
+      <a href="mailto:studentservice@leculinaire.edu.au" class="course-link">Book Now</a>
     </div>
   </div>
 </section>
@@ -677,7 +677,7 @@ footer { padding: 50px 20px 120px; }
   <h2 class="cta-title reveal">Ready to Take the<br><em>First Step?</em></h2>
   <p class="cta-sub reveal" data-editable="cta-sub">Speak with a course adviser today. We'll help you find the right pathway and set you on the road to an extraordinary career in hospitality.</p>
   <div class="cta-btns reveal">
-    <a href="/cdn-cgi/l/email-protection#f091949d999eb09c9593859c999e91998295de959485de9185" class="btn-gold" data-editable="cta-btn1">Enquire Now</a>
+    <a href="mailto:admin@leculinaire.edu.au" class="btn-gold" data-editable="cta-btn1">Enquire Now</a>
     <a href="tel:0292113945" class="btn-outline-light" data-editable="cta-btn2">02 9211 3945</a>
   </div>
 </div>
@@ -692,7 +692,7 @@ footer { padding: 50px 20px 120px; }
       <div class="footer-contact-info">
         <span data-editable="footer-address">Level 1 / 276 Botany Rd, Alexandria NSW 2015</span><br>
         <a href="tel:0292113945" data-editable="footer-phone">02 9211 3945</a><br>
-        <a href="/cdn-cgi/l/email-protection#4120252c282f012d2422342d282f202833246f2425346f2034" data-editable="footer-email"><span class="__cf_email__" data-cfemail="3253565f5b5c725e5751475e5b5c535b40571c5756471c5347">[email&#160;protected]</span></a>
+        <a href="mailto:admin@leculinaire.edu.au" data-editable="footer-email">admin@leculinaire.edu.au</a>
       </div>
     </div>
     <div class="footer-col"><h4>Courses</h4><ul><li><a href="#">Cert III Commercial Cookery</a></li><li><a href="#">Cert IV Kitchen Management</a></li><li><a href="#">Cert III Patisserie</a></li><li><a href="#">Cert IV Patisserie</a></li><li><a href="#">Diploma Hospitality Mgmt</a></li><li><a href="#">Advanced Diploma</a></li></ul></div>
@@ -715,45 +715,44 @@ footer { padding: 50px 20px 120px; }
   <span class="eb-status" id="editorStatus"></span>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-
+<script>
 // ── NAV
-const nav = document.getElementById(‘nav’);
-window.addEventListener(‘scroll’, () => nav.classList.toggle(‘scrolled’, window.scrollY > 60), {passive:true});
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60), {passive:true});
 
 // ── MENU
 function toggleMenu() {
-const m = document.getElementById(‘mobileMenu’), b = document.getElementById(‘hamburger’), o = document.getElementById(‘overlay’);
-m.classList.toggle(‘open’); b.classList.toggle(‘open’); o.classList.toggle(‘open’);
-document.body.style.overflow = m.classList.contains(‘open’) ? ‘hidden’ : ‘’;
+  const m = document.getElementById('mobileMenu'), b = document.getElementById('hamburger'), o = document.getElementById('overlay');
+  m.classList.toggle('open'); b.classList.toggle('open'); o.classList.toggle('open');
+  document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
 }
 function closeMenu() {
-document.getElementById(‘mobileMenu’).classList.remove(‘open’);
-document.getElementById(‘hamburger’).classList.remove(‘open’);
-document.getElementById(‘overlay’).classList.remove(‘open’);
-document.body.style.overflow = ‘’;
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ── PARALLAX
 function parallax() {
-const sy = window.scrollY;
-const hImg = document.querySelector(’.hero-bg img’);
-if (hImg) hImg.style.transform = `translateY(${sy * 0.35}px)`;
-[‘pb1’,‘pb2’].forEach(id => {
-const el = document.getElementById(id);
-const img = document.getElementById(id+‘img’);
-if (el && img) {
-const r = el.getBoundingClientRect();
-img.style.transform = `translateY(${(r.top + r.height/2 - window.innerHeight/2) * 0.25}px)`;
+  const sy = window.scrollY;
+  const hImg = document.querySelector('.hero-bg img');
+  if (hImg) hImg.style.transform = `translateY(${sy * 0.35}px)`;
+  ['pb1','pb2'].forEach(id => {
+    const el = document.getElementById(id);
+    const img = document.getElementById(id+'img');
+    if (el && img) {
+      const r = el.getBoundingClientRect();
+      img.style.transform = `translateY(${(r.top + r.height/2 - window.innerHeight/2) * 0.25}px)`;
+    }
+  });
 }
-});
-}
-window.addEventListener(‘scroll’, parallax, {passive:true});
+window.addEventListener('scroll', parallax, {passive:true});
 parallax();
 
 // ── REVEAL
-const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add(‘visible’); }), {threshold:0.1});
-document.querySelectorAll(’.reveal, .stat’).forEach(el => observer.observe(el));
+const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+document.querySelectorAll('.reveal, .stat').forEach(el => observer.observe(el));
 
 // ══════════════════════════════════
 // ── EDITOR SYSTEM
@@ -764,134 +763,216 @@ let currentImgTarget = null;
 let pendingImgSrc = null;
 
 function toggleEditMode() {
-editMode = !editMode;
-document.body.classList.toggle(‘edit-mode’, editMode);
-const btn = document.getElementById(‘editToggleBtn’);
-const saveBtn = document.getElementById(‘saveBtn’);
-const hint = document.getElementById(‘editorHint’);
-if (editMode) {
-btn.textContent = ‘✏️ Editing ON’;
-btn.classList.add(‘active’);
-saveBtn.style.display = ‘inline-block’;
-hint.textContent = ‘Click any gold-outlined text or blue-outlined image to edit’;
-setStatus(‘Edit mode active — click any element to change it’);
-bindEditables();
-} else {
-btn.textContent = ‘✏️ Enable Editing’;
-btn.classList.remove(‘active’);
-saveBtn.style.display = ‘none’;
-hint.textContent = ‘Enable editing to click any text or image to change it’;
-setStatus(’’);
-}
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('editToggleBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const hint = document.getElementById('editorHint');
+  if (editMode) {
+    btn.textContent = '✏️ Editing ON';
+    btn.classList.add('active');
+    saveBtn.style.display = 'inline-block';
+    hint.textContent = 'Click any gold-outlined text or blue-outlined image to edit';
+    setStatus('Edit mode active — click any element to change it');
+    bindEditables();
+  } else {
+    btn.textContent = '✏️ Enable Editing';
+    btn.classList.remove('active');
+    saveBtn.style.display = 'none';
+    hint.textContent = 'Enable editing to click any text or image to change it';
+    setStatus('');
+  }
 }
 
 function setStatus(msg) {
-document.getElementById(‘editorStatus’).textContent = msg;
+  document.getElementById('editorStatus').textContent = msg;
 }
 
 function bindEditables() {
-// Text editables
-document.querySelectorAll(’[data-editable]’).forEach(el => {
-el.onclick = function(e) {
-if (!editMode) return;
-e.stopPropagation();
-openTextModal(this);
-};
-});
-// Image editables
-document.querySelectorAll(’[data-img]’).forEach(el => {
-el.onclick = function(e) {
-if (!editMode) return;
-e.stopPropagation();
-openImgModal(this);
-};
-});
+  // Text editables
+  document.querySelectorAll('[data-editable]').forEach(el => {
+    el.onclick = function(e) {
+      if (!editMode) return;
+      e.stopPropagation();
+      openTextModal(this);
+    };
+  });
+  // Image editables
+  document.querySelectorAll('[data-img]').forEach(el => {
+    el.onclick = function(e) {
+      if (!editMode) return;
+      e.stopPropagation();
+      openImgModal(this);
+    };
+  });
 }
 
 // ── TEXT MODAL
 function openTextModal(el) {
-currentTarget = el;
-document.getElementById(‘modalTitle’).textContent = ‘Edit Text’;
-document.getElementById(‘modalDesc’).textContent = ‘Edit the text below. Use plain text — no HTML tags needed.’;
-document.getElementById(‘modalInput’).value = el.innerText;
-document.getElementById(‘textModal’).classList.add(‘open’);
+  currentTarget = el;
+  document.getElementById('modalTitle').textContent = 'Edit Text';
+  document.getElementById('modalDesc').textContent = 'Edit the text below. Use plain text — no HTML tags needed.';
+  document.getElementById('modalInput').value = el.innerText;
+  document.getElementById('textModal').classList.add('open');
 }
 function saveText() {
-if (!currentTarget) return;
-currentTarget.innerText = document.getElementById(‘modalInput’).value;
-closeModal();
-setStatus(‘✓ Text updated’);
+  if (!currentTarget) return;
+  currentTarget.innerText = document.getElementById('modalInput').value;
+  closeModal();
+  setStatus('✓ Text updated');
 }
 function closeModal() {
-document.getElementById(‘textModal’).classList.remove(‘open’);
-currentTarget = null;
+  document.getElementById('textModal').classList.remove('open');
+  currentTarget = null;
 }
 
 // ── IMAGE MODAL
 function openImgModal(el) {
-currentImgTarget = el;
-pendingImgSrc = null;
-document.getElementById(‘imgPreview’).classList.remove(‘show’);
-document.getElementById(‘imgUrlInput’).value = ‘’;
-document.getElementById(‘imgModal’).classList.add(‘open’);
-switchImgTab(‘upload’);
+  currentImgTarget = el;
+  pendingImgSrc = null;
+  document.getElementById('imgPreview').classList.remove('show');
+  document.getElementById('imgUrlInput').value = '';
+  document.getElementById('imgModal').classList.add('open');
+  switchImgTab('upload');
 }
 function switchImgTab(tab) {
-document.querySelectorAll(’.img-tab’).forEach((t,i) => t.classList.toggle(‘active’, (i===0&&tab===‘upload’)||(i===1&&tab===‘url’)));
-document.getElementById(‘tab-upload’).classList.toggle(‘active’, tab===‘upload’);
-document.getElementById(‘tab-url’).classList.toggle(‘active’, tab===‘url’);
+  document.querySelectorAll('.img-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='upload')||(i===1&&tab==='url')));
+  document.getElementById('tab-upload').classList.toggle('active', tab==='upload');
+  document.getElementById('tab-url').classList.toggle('active', tab==='url');
 }
 function handleFileUpload(e) {
-const file = e.target.files[0];
-if (!file) return;
-const reader = new FileReader();
-reader.onload = ev => {
-pendingImgSrc = ev.target.result;
-const prev = document.getElementById(‘imgPreview’);
-prev.src = pendingImgSrc;
-prev.classList.add(‘show’);
-};
-reader.readAsDataURL(file);
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingImgSrc = ev.target.result;
+    const prev = document.getElementById('imgPreview');
+    prev.src = pendingImgSrc;
+    prev.classList.add('show');
+  };
+  reader.readAsDataURL(file);
 }
 function previewUrl() {
-const url = document.getElementById(‘imgUrlInput’).value.trim();
-if (!url) return;
-pendingImgSrc = url;
-const prev = document.getElementById(‘imgPreview’);
-prev.src = url; prev.classList.add(‘show’);
+  const url = document.getElementById('imgUrlInput').value.trim();
+  if (!url) return;
+  pendingImgSrc = url;
+  const prev = document.getElementById('imgPreview');
+  prev.src = url; prev.classList.add('show');
 }
 function saveImage() {
-if (!currentImgTarget || !pendingImgSrc) { closeImgModal(); return; }
-// Find the img tag — either the element itself or its child img
-const imgEl = currentImgTarget.tagName === ‘IMG’ ? currentImgTarget : currentImgTarget.querySelector(‘img’);
-if (imgEl) imgEl.src = pendingImgSrc;
-closeImgModal();
-setStatus(‘✓ Image updated’);
+  if (!currentImgTarget || !pendingImgSrc) { closeImgModal(); return; }
+  // Find the img tag — either the element itself or its child img
+  const imgEl = currentImgTarget.tagName === 'IMG' ? currentImgTarget : currentImgTarget.querySelector('img');
+  if (imgEl) imgEl.src = pendingImgSrc;
+  closeImgModal();
+  setStatus('✓ Image updated');
 }
 function closeImgModal() {
-document.getElementById(‘imgModal’).classList.remove(‘open’);
-currentImgTarget = null; pendingImgSrc = null;
+  document.getElementById('imgModal').classList.remove('open');
+  currentImgTarget = null; pendingImgSrc = null;
 }
 
 // ── EXPORT HTML
 function saveHTML() {
-// Temporarily remove editor UI from export
-const bar = document.getElementById(‘editor-bar’);
-const tModal = document.getElementById(‘textModal’);
-const iModal = document.getElementById(‘imgModal’);
-bar.style.display = ‘none’;
-tModal.style.display = ‘none’;
-iModal.style.display = ‘none’;
-document.body.classList.remove(‘edit-mode’);
+  // Temporarily remove editor UI from export
+  const bar = document.getElementById('editor-bar');
+  const tModal = document.getElementById('textModal');
+  const iModal = document.getElementById('imgModal');
+  bar.style.display = 'none';
+  tModal.style.display = 'none';
+  iModal.style.display = 'none';
+  document.body.classList.remove('edit-mode');
 
-const html = ‘<!DOCTYPE html>\n’ + document.documentElement.outerHTML;
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
-bar.style.display = ‘flex’;
-tModal.style.display = ‘’;
-iModal.style.display = ‘’;
-if (editMode) document.body.classList.add(‘edit-mode’);
+  bar.style.display = 'flex';
+  tModal.style.display = '';
+  iModal.style.display = '';
+  if (editMode) document.body.classList.add('edit-mode');
 
-const blob = new Blob([html], {type:‘text/html’});
-const a = document.createElement(‘a’);
-a.href = URL.createObjectURL(blob);
-a.do
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'leculinaire-landing.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setStatus('✓ HTML exported — ready to upload to GitHub or Netlify');
+}
+
+// Close modals on bg click
+document.getElementById('textModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+document.getElementById('imgModal').addEventListener('click', function(e){ if(e.target===this) closeImgModal(); });
+</script>
+
+<!-- JOTFORM AI AGENT FLOATING WIDGET -->
+
+<style>
+#jf-fab {
+  position: fixed; bottom: 80px; right: 24px; z-index: 8000;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--charcoal); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 32px rgba(44,43,40,0.28);
+  transition: transform 0.2s, background 0.25s;
+  animation: jfIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 1.5s both;
+}
+@keyframes jfIn {
+  from { opacity:0; transform:scale(0.6); }
+  to   { opacity:1; transform:scale(1); }
+}
+#jf-fab:hover { background: var(--gold); transform: scale(1.1); }
+#jf-fab svg { width: 28px; height: 28px; fill: #fff; }
+.jf-pulse {
+  position: absolute; inset: -7px; border-radius: 50%;
+  border: 2px solid rgba(184,151,58,0.55);
+  animation: jfPulse 2.5s ease-out 2s infinite;
+  pointer-events: none;
+}
+@keyframes jfPulse {
+  0%   { transform:scale(1); opacity:0.7; }
+  70%  { transform:scale(1.22); opacity:0; }
+  100% { transform:scale(1.22); opacity:0; }
+}
+#jf-panel {
+  position: fixed; bottom: 154px; right: 24px; z-index: 7999;
+  width: 375px; height: 580px; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(44,43,40,0.22);
+  border: 1px solid var(--border);
+  display: none;
+}
+#jf-panel.open { display: block; }
+#jf-panel iframe { width: 100%; height: 100%; border: none; display: block; }
+@media (max-width: 520px) {
+  #jf-panel { width: calc(100vw - 20px); right: 10px; bottom: 136px; height: 68vh; }
+  #jf-fab   { bottom: 72px; right: 16px; }
+}
+</style>
+
+<button id="jf-fab" onclick="jfToggle()" aria-label="Chat with Le Culinaire AI">
+  <div class="jf-pulse"></div>
+  <svg id="jf-o" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <svg id="jf-c" viewBox="0 0 24 24" style="display:none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+</button>
+
+<div id="jf-panel">
+  <iframe
+    src="https://agent.jotform.com/019d7f8e9d737defad7e261e6542284fce96?embedded=1"
+    title="Le Culinaire AI Assistant"
+    allow="microphone"
+    loading="lazy">
+  </iframe>
+</div>
+
+<script>
+let jfOpen = false;
+function jfToggle() {
+  jfOpen = !jfOpen;
+  document.getElementById('jf-panel').classList.toggle('open', jfOpen);
+  document.getElementById('jf-o').style.display = jfOpen ? 'none' : 'block';
+  document.getElementById('jf-c').style.display = jfOpen ? 'block' : 'none';
+  document.getElementById('jf-fab').style.background = jfOpen ? '#5c4f3a' : '';
+}
+</script>
+
+</body>
+</html>
