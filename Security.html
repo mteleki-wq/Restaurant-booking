@@ -450,12 +450,134 @@ footer{padding:48px 20px 24px;}
 .card-row{grid-template-columns:1fr;}
 .modal-body{padding:20px;}
 }
+
+/* ── EDITOR TOOLBAR ── */
+#editor-bar {
+position:fixed;bottom:0;left:0;right:0;z-index:9999;
+background:#070e1c;border-top:2px solid var(–red);
+display:flex;align-items:center;gap:12px;padding:12px 24px;
+font-family:‘Barlow’,sans-serif;font-size:0.78rem;
+}
+#editor-bar .eb-logo {
+font-family:‘Barlow Condensed’,sans-serif;color:var(–gold);
+font-weight:700;font-size:1rem;letter-spacing:0.06em;
+text-transform:uppercase;margin-right:8px;
+}
+.eb-btn {
+background:rgba(192,57,43,0.15);border:1px solid var(–red);
+color:#e88;padding:7px 18px;font-size:0.72rem;
+letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+font-family:‘Barlow’,sans-serif;transition:all 0.25s;font-weight:600;
+}
+.eb-btn:hover{background:var(–red);color:#fff;}
+.eb-btn.active{background:var(–red);color:#fff;}
+.eb-btn.save{background:#1a4a2e;border-color:#27ae60;color:#a8e6b8;}
+.eb-btn.save:hover{background:#27ae60;color:#fff;}
+.eb-status{color:rgba(255,255,255,0.35);font-size:0.7rem;margin-left:auto;}
+#editor-bar .eb-hint{color:rgba(255,255,255,0.25);font-size:0.68rem;}
+
+/* EDIT MODE */
+body.edit-mode [data-editable]{outline:2px dashed rgba(192,57,43,0.5);outline-offset:3px;cursor:pointer;transition:outline 0.2s;}
+body.edit-mode [data-editable]:hover{outline:2px solid var(–red);background:rgba(192,57,43,0.04);}
+body.edit-mode [data-img]{outline:2px dashed rgba(99,160,255,0.6);cursor:pointer;}
+body.edit-mode [data-img]:hover{outline:2px solid #63a0ff;}
+body.edit-mode [data-img]{position:relative;}
+body.edit-mode [data-img]::after{content:‘📷 Change Image’;position:absolute;inset:0;background:rgba(0,0,0,0.5);color:white;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;font-family:‘Barlow’,sans-serif;opacity:0;transition:opacity 0.25s;pointer-events:none;}
+body.edit-mode [data-img]:hover::after{opacity:1;}
+
+/* MODALS */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);}
+.modal-bg.open{opacity:1;pointer-events:all;}
+.ed-modal{background:#fff;width:min(520px,94vw);padding:32px;box-shadow:0 24px 80px rgba(0,0,0,0.4);transform:translateY(16px);transition:transform 0.3s;}
+.modal-bg.open .ed-modal{transform:translateY(0);}
+.ed-modal h3{font-family:‘Barlow Condensed’,sans-serif;font-size:1.3rem;font-weight:700;text-transform:uppercase;color:var(–navy);margin-bottom:6px;letter-spacing:0.04em;}
+.ed-modal p{font-size:0.8rem;color:var(–muted);margin-bottom:18px;line-height:1.6;}
+.ed-modal textarea,.ed-modal input[type=text]{width:100%;background:#f8f9fb;border:1px solid var(–border);padding:12px 14px;font-family:‘Barlow’,sans-serif;font-size:0.9rem;color:var(–navy);resize:vertical;outline:none;transition:border-color 0.2s;margin-bottom:6px;}
+.ed-modal textarea:focus,.ed-modal input[type=text]:focus{border-color:var(–red);}
+.ed-modal textarea{min-height:100px;}
+.ed-modal-btns{display:flex;gap:10px;margin-top:16px;}
+.ed-save{background:var(–red);color:#fff;border:none;padding:11px 28px;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;font-family:‘Barlow’,sans-serif;font-weight:600;transition:background 0.25s;}
+.ed-save:hover{background:var(–red-light);}
+.ed-cancel{background:transparent;border:1px solid var(–border);color:var(–muted);padding:11px 24px;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:‘Barlow’,sans-serif;transition:all 0.25s;}
+.ed-cancel:hover{border-color:var(–navy);color:var(–navy);}
+.img-preview{width:100%;height:160px;object-fit:cover;margin-bottom:12px;border:1px solid var(–border);display:none;}
+.img-preview.show{display:block;}
+.img-upload-label{display:inline-flex;align-items:center;gap:8px;border:1px dashed var(–border);padding:10px 20px;color:var(–muted);font-size:0.78rem;cursor:pointer;transition:all 0.25s;margin-bottom:12px;}
+.img-upload-label:hover{border-color:var(–red);color:var(–red);}
+.img-tabs{display:flex;margin-bottom:16px;}
+.img-tab{flex:1;padding:8px;text-align:center;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:1px solid var(–border);color:var(–muted);transition:all 0.2s;font-weight:600;}
+.img-tab.active{background:var(–red);color:#fff;border-color:var(–red);}
+.img-tab-panel{display:none;}
+.img-tab-panel.active{display:block;}
+
+/* JOTFORM WIDGET */
+#jf-fab{
+position:fixed;bottom:80px;right:24px;z-index:8000;
+width:60px;height:60px;border-radius:50%;
+background:var(–navy);border:none;cursor:pointer;
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 8px 32px rgba(10,22,40,0.4);
+transition:transform 0.2s,background 0.25s;
+animation:jfIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 1.5s both;
+}
+@keyframes jfIn{from{opacity:0;transform:scale(0.5);}to{opacity:1;transform:scale(1);}}
+#jf-fab:hover{background:var(–red);transform:scale(1.1);}
+#jf-fab svg{width:26px;height:26px;fill:#fff;}
+.jf-pulse{position:absolute;inset:-7px;border-radius:50%;border:2px solid rgba(192,57,43,0.5);animation:jfPulse 2.5s ease-out 2s infinite;pointer-events:none;}
+@keyframes jfPulse{0%{transform:scale(1);opacity:0.7;}70%{transform:scale(1.22);opacity:0;}100%{transform:scale(1.22);opacity:0;}}
+#jf-panel{position:fixed;bottom:154px;right:24px;z-index:7999;width:375px;height:580px;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(10,22,40,0.3);border:1px solid rgba(10,22,40,0.2);display:none;}
+#jf-panel.open{display:block;}
+#jf-panel iframe{width:100%;height:100%;border:none;display:block;}
+@media(max-width:520px){
+#jf-panel{width:calc(100vw - 20px);right:10px;bottom:136px;height:68vh;}
+#jf-fab{bottom:72px;right:16px;}
+}
 </style>
 
 </head>
 <body>
 
 <!-- OVERLAY -->
+
+<!-- EDITOR MODALS -->
+
+<div class="modal-bg" id="textModal">
+  <div class="ed-modal">
+    <h3 id="edModalTitle">Edit Text</h3>
+    <p id="edModalDesc">Edit the text below and click Save.</p>
+    <textarea id="edModalInput" rows="4"></textarea>
+    <div class="ed-modal-btns">
+      <button class="ed-save" onclick="saveText()">Save Changes</button>
+      <button class="ed-cancel" onclick="closeTextModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="imgModal">
+  <div class="ed-modal">
+    <h3>Change Image</h3>
+    <p>Upload from your device or paste an image URL.</p>
+    <div class="img-tabs">
+      <div class="img-tab active" onclick="switchImgTab('upload')">Upload File</div>
+      <div class="img-tab" onclick="switchImgTab('url')">Paste URL</div>
+    </div>
+    <div class="img-tab-panel active" id="itab-upload">
+      <label class="img-upload-label">
+        <span>📁</span> Choose image from device
+        <input type="file" accept="image/*" style="display:none" onchange="handleFileUpload(event)">
+      </label>
+    </div>
+    <div class="img-tab-panel" id="itab-url">
+      <input type="text" id="imgUrlInput" placeholder="https://example.com/photo.jpg">
+      <button class="ed-save" style="margin-top:8px;width:100%" onclick="previewUrl()">Preview</button>
+    </div>
+    <img class="img-preview" id="imgPreview" src="" alt="Preview">
+    <div class="ed-modal-btns">
+      <button class="ed-save" onclick="saveImage()">Apply Image</button>
+      <button class="ed-cancel" onclick="closeImgModal()">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <div class="overlay" id="overlay" onclick="closeMobileNav()"></div>
 
@@ -502,12 +624,12 @@ footer{padding:48px 20px 24px;}
 
 <section class="hero" id="home">
   <div class="hero-bg">
-    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80&auto=format&fit=crop" alt="Security Training">
+    <img data-img="hero-bg" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80&auto=format&fit=crop" alt="Security Training">
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-accent"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">🛡️ Alexandria NSW · Security Training</div>
+    <div class="hero-eyebrow" data-editable="hero-eyebrow">🛡️ Alexandria NSW · Security Training</div>
     <h1 class="hero-title">
       Get Your<br><span class="accent">Security</span><br><span class="highlight">Licence Fast</span>
     </h1>
@@ -515,7 +637,7 @@ footer{padding:48px 20px 24px;}
       <div class="duration-pill"><span class="dp-icon">⚡</span>Full Time: 2 Weeks (10 Days)</div>
       <div class="duration-pill"><span class="dp-icon">📅</span>Weekend Classes: 5 Weekends</div>
     </div>
-    <p class="hero-sub">CII in Security Operations + First Aid certification. Practical, hands-on training with experienced trainers in Alexandria NSW.</p>
+    <p class="hero-sub" data-editable="hero-sub">CII in Security Operations + First Aid certification. Practical, hands-on training with experienced trainers in Alexandria NSW.</p>
     <div class="hero-btns">
       <a href="#" class="btn-primary" onclick="openCheckout();return false;">Enrol Now</a>
       <a href="tel:0000000000" class="btn-secondary-outline">📞 Call Now</a>
@@ -536,8 +658,8 @@ footer{padding:48px 20px 24px;}
     <div class="about-text">
       <div class="section-eyebrow reveal">About Us</div>
       <h2 class="section-title reveal" style="margin-bottom:24px;">Practical Training<br>That Gets You <span class="accent">Working</span></h2>
-      <p class="reveal">Rightway Security Academy provides <strong>hands-on, job-ready security training</strong> in Alexandria NSW. We focus on practical skills that employers are looking for — not just theory.</p>
-      <p class="reveal">Our trainers have real industry experience and our <strong>small class sizes</strong> mean every student gets the attention they need to succeed.</p>
+      <p class="reveal" data-editable="about-p1">Rightway Security Academy provides <strong>hands-on, job-ready security training</strong> in Alexandria NSW. We focus on practical skills that employers are looking for — not just theory.</p>
+      <p class="reveal" data-editable="about-p2">Our trainers have real industry experience and our <strong>small class sizes</strong> mean every student gets the attention they need to succeed.</p>
       <div class="about-points">
         <div class="about-point reveal">Small Class Sizes</div>
         <div class="about-point reveal">Experienced Trainers</div>
@@ -549,7 +671,7 @@ footer{padding:48px 20px 24px;}
     </div>
     <div class="about-visual reveal">
       <div class="about-img-wrap">
-        <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&q=80&auto=format&fit=crop" alt="Security Training Classroom">
+        <img data-img="about-img" src="https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&q=80&auto=format&fit=crop" alt="Security Training Classroom">
       </div>
       <div class="about-badge">
         <div class="about-badge-num">10</div>
@@ -628,12 +750,12 @@ footer{padding:48px 20px 24px;}
   <div class="section-eyebrow reveal">Why Choose Us</div>
   <h2 class="section-title reveal">Why Train with<br><span class="accent">Rightway</span></h2>
   <div class="why-grid">
-    <div class="why-card reveal"><div class="why-icon">⚡</div><div class="why-title">Complete in 2 Weeks</div><div class="why-desc">Get your security qualification fast with our intensive 10-day full-time program. Start working sooner.</div></div>
-    <div class="why-card reveal" style="transition-delay:0.1s"><div class="why-icon">📅</div><div class="why-title">Weekend Classes Available</div><div class="why-desc">Can't study full time? Our 5-weekend option lets you balance your current job while you train.</div></div>
-    <div class="why-card reveal" style="transition-delay:0.2s"><div class="why-icon">👥</div><div class="why-title">Small Class Sizes</div><div class="why-desc">We keep our classes small so every student gets individual attention and real hands-on practice.</div></div>
-    <div class="why-card reveal"><div class="why-icon">🎯</div><div class="why-title">Practical Hands-on Training</div><div class="why-desc">Real-world scenarios and practical exercises prepare you for what actually happens on the job.</div></div>
-    <div class="why-card reveal" style="transition-delay:0.1s"><div class="why-icon">🏆</div><div class="why-title">Experienced Trainers</div><div class="why-desc">Learn from trainers with real security industry experience — not just textbook knowledge.</div></div>
-    <div class="why-card reveal" style="transition-delay:0.2s"><div class="why-icon">📍</div><div class="why-title">Alexandria NSW Location</div><div class="why-desc">Conveniently located in Alexandria NSW with easy public transport access from across Sydney.</div></div>
+    <div class="why-card reveal"><div class="why-icon">⚡</div><div class="why-title" data-editable="why-title-1">Complete in 2 Weeks</div><div class="why-desc">Get your security qualification fast with our intensive 10-day full-time program. Start working sooner.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.1s"><div class="why-icon">📅</div><div class="why-title" data-editable="why-title-2">Weekend Classes Available</div><div class="why-desc">Can't study full time? Our 5-weekend option lets you balance your current job while you train.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.2s"><div class="why-icon">👥</div><div class="why-title" data-editable="why-title-3">Small Class Sizes</div><div class="why-desc">We keep our classes small so every student gets individual attention and real hands-on practice.</div></div>
+    <div class="why-card reveal"><div class="why-icon">🎯</div><div class="why-title" data-editable="why-title-4">Practical Hands-on Training</div><div class="why-desc">Real-world scenarios and practical exercises prepare you for what actually happens on the job.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.1s"><div class="why-icon">🏆</div><div class="why-title" data-editable="why-title-5">Experienced Trainers</div><div class="why-desc">Learn from trainers with real security industry experience — not just textbook knowledge.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.2s"><div class="why-icon">📍</div><div class="why-title" data-editable="why-title-6">Alexandria NSW Location</div><div class="why-desc">Conveniently located in Alexandria NSW with easy public transport access from across Sydney.</div></div>
   </div>
 </section>
 
@@ -692,8 +814,8 @@ footer{padding:48px 20px 24px;}
 
 <div class="cta-banner">
   <div class="cta-text">
-    <div class="cta-heading">Get Your Security Licence Fast</div>
-    <div class="cta-sub">Contact us today — courses start regularly in Alexandria NSW.</div>
+    <div class="cta-heading" data-editable="cta-heading">Get Your Security Licence Fast</div>
+    <div class="cta-sub" data-editable="cta-sub">Contact us today — courses start regularly in Alexandria NSW.</div>
   </div>
   <div class="cta-actions">
     <a href="#" class="btn-white" onclick="openCheckout();return false;">Enrol Now</a>
@@ -961,6 +1083,134 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
   });
 });
+</script>
+
+<!-- EDITOR BAR -->
+
+<div id="editor-bar">
+  <span class="eb-logo">RSA Edit</span>
+  <button class="eb-btn" id="editToggleBtn" onclick="toggleEditMode()">✏️ Enable Editing</button>
+  <button class="eb-btn save" id="saveBtn" onclick="saveHTML()" style="display:none">💾 Export HTML</button>
+  <span class="eb-hint" id="editorHint">Enable editing to click any text or image to change it</span>
+  <span class="eb-status" id="editorStatus"></span>
+</div>
+
+<!-- JOTFORM AI FLOATING WIDGET -->
+
+<button id="jf-fab" onclick="jfToggle()" aria-label="Chat with us">
+  <div class="jf-pulse"></div>
+  <svg id="jf-o" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <svg id="jf-c" viewBox="0 0 24 24" style="display:none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+</button>
+<div id="jf-panel">
+  <iframe src="https://agent.jotform.com/019d7f8e9d737defad7e261e6542284fce96?embedded=1" title="Rightway Security AI Assistant" allow="microphone" loading="lazy"></iframe>
+</div>
+
+<script>
+// EDITOR SYSTEM
+let editMode=false, currentTarget=null, currentImgTarget=null, pendingImgSrc=null;
+
+function toggleEditMode(){
+  editMode=!editMode;
+  document.body.classList.toggle('edit-mode',editMode);
+  const btn=document.getElementById('editToggleBtn');
+  const saveBtn=document.getElementById('saveBtn');
+  const hint=document.getElementById('editorHint');
+  if(editMode){
+    btn.textContent='✏️ Editing ON';btn.classList.add('active');
+    saveBtn.style.display='inline-block';
+    hint.textContent='Click any red-outlined text or blue-outlined image to edit';
+    setStatus('Edit mode active — click any element to change it');
+    bindEditables();
+  } else {
+    btn.textContent='✏️ Enable Editing';btn.classList.remove('active');
+    saveBtn.style.display='none';
+    hint.textContent='Enable editing to click any text or image to change it';
+    setStatus('');
+  }
+}
+function setStatus(msg){document.getElementById('editorStatus').textContent=msg;}
+
+function bindEditables(){
+  document.querySelectorAll('[data-editable]').forEach(el=>{
+    el.onclick=function(e){if(!editMode)return;e.stopPropagation();openTextModal(this);};
+  });
+  document.querySelectorAll('[data-img]').forEach(el=>{
+    el.onclick=function(e){if(!editMode)return;e.stopPropagation();openImgModal(this);};
+  });
+}
+
+function openTextModal(el){
+  currentTarget=el;
+  document.getElementById('edModalTitle').textContent='Edit Text';
+  document.getElementById('edModalDesc').textContent='Edit the text below and click Save.';
+  document.getElementById('edModalInput').value=el.innerText;
+  document.getElementById('textModal').classList.add('open');
+}
+function saveText(){
+  if(!currentTarget)return;
+  currentTarget.innerText=document.getElementById('edModalInput').value;
+  closeTextModal();setStatus('✓ Text updated');
+}
+function closeTextModal(){document.getElementById('textModal').classList.remove('open');currentTarget=null;}
+
+function openImgModal(el){
+  currentImgTarget=el;pendingImgSrc=null;
+  document.getElementById('imgPreview').classList.remove('show');
+  document.getElementById('imgUrlInput').value='';
+  document.getElementById('imgModal').classList.add('open');
+  switchImgTab('upload');
+}
+function switchImgTab(tab){
+  document.querySelectorAll('.img-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='upload')||(i===1&&tab==='url')));
+  document.getElementById('itab-upload').classList.toggle('active',tab==='upload');
+  document.getElementById('itab-url').classList.toggle('active',tab==='url');
+}
+function handleFileUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{pendingImgSrc=ev.target.result;const p=document.getElementById('imgPreview');p.src=pendingImgSrc;p.classList.add('show');};
+  reader.readAsDataURL(file);
+}
+function previewUrl(){
+  const url=document.getElementById('imgUrlInput').value.trim();if(!url)return;
+  pendingImgSrc=url;const p=document.getElementById('imgPreview');p.src=url;p.classList.add('show');
+}
+function saveImage(){
+  if(!currentImgTarget||!pendingImgSrc){closeImgModal();return;}
+  const imgEl=currentImgTarget.tagName==='IMG'?currentImgTarget:currentImgTarget.querySelector('img');
+  if(imgEl)imgEl.src=pendingImgSrc;
+  closeImgModal();setStatus('✓ Image updated');
+}
+function closeImgModal(){document.getElementById('imgModal').classList.remove('open');currentImgTarget=null;pendingImgSrc=null;}
+
+function saveHTML(){
+  const bar=document.getElementById('editor-bar');
+  const tM=document.getElementById('textModal');
+  const iM=document.getElementById('imgModal');
+  bar.style.display='none';tM.style.display='none';iM.style.display='none';
+  document.body.classList.remove('edit-mode');
+  const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  bar.style.display='flex';tM.style.display='';iM.style.display='';
+  if(editMode)document.body.classList.add('edit-mode');
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='rightway-security.html';a.click();URL.revokeObjectURL(a.href);
+  setStatus('✓ Exported — ready to upload to GitHub');
+}
+
+document.getElementById('textModal').addEventListener('click',function(e){if(e.target===this)closeTextModal();});
+document.getElementById('imgModal').addEventListener('click',function(e){if(e.target===this)closeImgModal();});
+
+// JOTFORM WIDGET
+let jfOpen=false;
+function jfToggle(){
+  jfOpen=!jfOpen;
+  document.getElementById('jf-panel').classList.toggle('open',jfOpen);
+  document.getElementById('jf-o').style.display=jfOpen?'none':'block';
+  document.getElementById('jf-c').style.display=jfOpen?'block':'none';
+  document.getElementById('jf-fab').style.background=jfOpen?'var(--red)':'';
+}
 </script>
 
 </body>
