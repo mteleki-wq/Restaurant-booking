@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rightway Security Academy | Security Training Alexandria NSW</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#0a1628;--navy-mid:#0f2040;--navy-light:#1a3560;
+  --red:#c0392b;--red-light:#e74c3c;--red-pale:#fdecea;
+  --white:#ffffff;--off-white:#f8f9fb;--light:#eef1f6;
+  --muted:#6b7a99;--border:rgba(10,22,40,0.12);
+  --gold:#f0b429;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--off-white);color:var(--navy);font-family:'Barlow',sans-serif;font-weight:400;overflow-x:hidden;}
+
+/* ── HEADER ── */
+header{
+position:fixed;top:0;left:0;right:0;z-index:1000;
+background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.06);
+display:flex;align-items:center;justify-content:space-between;
+padding:14px 56px;
+}
+.header-logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
+.header-logo-icon{
+width:44px;height:44px;background:var(–red);
+display:flex;align-items:center;justify-content:center;
+font-size:1.4rem;flex-shrink:0;
+}
+.header-logo-text{display:flex;flex-direction:column;}
+.header-logo-name{font-family:‘Barlow Condensed’,sans-serif;font-size:1.15rem;font-weight:700;color:var(–white);letter-spacing:0.06em;text-transform:uppercase;line-height:1;}
+.header-logo-sub{font-size:0.65rem;color:rgba(255,255,255,0.4);letter-spacing:0.14em;text-transform:uppercase;margin-top:2px;}
+nav.main-nav{display:flex;gap:36px;list-style:none;}
+nav.main-nav a{font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6);text-decoration:none;transition:color 0.25s;font-weight:500;}
+nav.main-nav a:hover{color:var(–white);}
+.header-actions{display:flex;gap:10px;}
+.btn-call-hdr{
+display:flex;align-items:center;gap:8px;
+border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);
+padding:9px 20px;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;
+text-decoration:none;transition:all 0.25s;font-family:‘Barlow’,sans-serif;
+font-weight:500;background:none;cursor:pointer;
+}
+.btn-call-hdr:hover{border-color:var(–white);color:var(–white);}
+.btn-enrol-hdr{
+background:var(–red);color:var(–white);border:none;
+padding:10px 24px;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;
+text-decoration:none;font-weight:600;transition:all 0.25s;font-family:‘Barlow’,sans-serif;cursor:pointer;
+}
+.btn-enrol-hdr:hover{background:var(–red-light);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{display:block;width:24px;height:1.5px;background:var(–white);transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-nav{
+position:fixed;top:0;right:-100%;width:280px;height:100vh;
+background:var(–navy);z-index:1100;padding:80px 32px 48px;
+transition:right 0.4s cubic-bezier(0.77,0,0.18,1);
+box-shadow:-8px 0 40px rgba(0,0,0,0.4);
+display:flex;flex-direction:column;
+}
+.mobile-nav.open{right:0;}
+.mobile-nav a{
+font-family:‘Barlow Condensed’,sans-serif;font-size:1.6rem;font-weight:600;
+color:rgba(255,255,255,0.85);text-decoration:none;
+padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08);
+display:block;transition:color 0.25s;letter-spacing:0.04em;text-transform:uppercase;
+}
+.mobile-nav a:hover{color:var(–gold);}
+.mobile-nav .mob-actions{margin-top:28px;display:flex;flex-direction:column;gap:10px;}
+.mobile-close{
+position:absolute;top:20px;right:20px;
+background:rgba(192,57,43,0.2);border:1px solid var(–red);
+color:var(–red);width:32px;height:32px;border-radius:2px;
+cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;
+}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1050;opacity:0;pointer-events:none;transition:opacity 0.4s;}
+.overlay.open{opacity:1;pointer-events:all;}
+
+/* ── HERO ── */
+.hero{
+position:relative;min-height:100vh;display:flex;align-items:center;
+overflow:hidden;padding-top:80px;
+background:var(–navy);
+}
+.hero-bg{position:absolute;inset:0;}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:0.25;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,22,40,0.95) 0%,rgba(10,22,40,0.7) 60%,rgba(10,22,40,0.4) 100%);}
+/* Diagonal accent */
+.hero-accent{position:absolute;top:0;right:0;width:45%;height:100%;background:linear-gradient(135deg,transparent 0%,rgba(192,57,43,0.08) 100%);clip-path:polygon(20% 0,100% 0,100% 100%,0 100%);}
+.hero-content{position:relative;z-index:2;padding:0 56px;max-width:780px;}
+.hero-eyebrow{
+display:inline-flex;align-items:center;gap:10px;
+background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.4);
+color:var(–gold);padding:8px 16px;font-size:0.7rem;
+letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px;
+font-weight:600;
+opacity:0;animation:fadeUp 0.7s ease 0.2s forwards;
+}
+.hero-title{
+font-family:‘Barlow Condensed’,sans-serif;
+font-size:clamp(3.5rem,7vw,7rem);
+font-weight:800;line-height:0.95;color:var(–white);
+margin-bottom:20px;letter-spacing:-0.01em;text-transform:uppercase;
+opacity:0;animation:fadeUp 0.8s ease 0.4s forwards;
+}
+.hero-title .accent{color:var(–red);}
+.hero-title .highlight{color:var(–gold);}
+.hero-duration{
+display:flex;gap:24px;margin-bottom:28px;flex-wrap:wrap;
+opacity:0;animation:fadeUp 0.8s ease 0.55s forwards;
+}
+.duration-pill{
+display:flex;align-items:center;gap:10px;
+background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+padding:10px 20px;color:rgba(255,255,255,0.9);font-size:0.85rem;font-weight:500;
+}
+.duration-pill .dp-icon{font-size:1.1rem;}
+.hero-sub{
+font-size:1.1rem;color:rgba(255,255,255,0.65);line-height:1.75;
+max-width:520px;margin-bottom:40px;
+opacity:0;animation:fadeUp 0.8s ease 0.7s forwards;
+}
+.hero-btns{
+display:flex;gap:14px;flex-wrap:wrap;
+opacity:0;animation:fadeUp 0.8s ease 0.85s forwards;
+}
+.btn-primary{
+background:var(–red);color:var(–white);padding:17px 44px;
+font-family:‘Barlow Condensed’,sans-serif;
+font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;
+text-decoration:none;font-weight:700;transition:all 0.25s;display:inline-block;
+box-shadow:0 4px 24px rgba(192,57,43,0.4);
+}
+.btn-primary:hover{background:var(–red-light);transform:translateY(-2px);}
+.btn-secondary-outline{
+border:2px solid rgba(255,255,255,0.4);color:var(–white);padding:15px 40px;
+font-family:‘Barlow Condensed’,sans-serif;
+font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;
+text-decoration:none;transition:all 0.25s;display:inline-block;font-weight:600;
+}
+.btn-secondary-outline:hover{background:rgba(255,255,255,0.1);border-color:var(–white);}
+.hero-trust{
+position:absolute;bottom:0;left:0;right:0;z-index:2;
+background:rgba(15,32,64,0.95);border-top:1px solid rgba(255,255,255,0.06);
+display:grid;grid-template-columns:repeat(4,1fr);
+}
+.trust-item{padding:20px 28px;border-right:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;}
+.trust-item:last-child{border-right:none;}
+.trust-icon{font-size:1.5rem;flex-shrink:0;}
+.trust-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:3px;}
+.trust-value{font-size:0.88rem;color:rgba(255,255,255,0.9);font-weight:500;}
+
+/* ── SECTIONS ── */
+section{padding:96px 56px;}
+.section-eyebrow{font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;color:var(–red);margin-bottom:12px;font-weight:600;display:flex;align-items:center;gap:10px;}
+.section-eyebrow::before{content:’’;width:28px;height:2px;background:var(–red);}
+.section-title{font-family:‘Barlow Condensed’,sans-serif;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:800;line-height:1.05;color:var(–navy);text-transform:uppercase;letter-spacing:-0.01em;}
+.section-title .accent{color:var(–red);}
+
+/* ── ABOUT STRIP ── */
+.about-strip{background:var(–white);padding:72px 56px;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.about-text p{font-size:1.05rem;color:var(–muted);line-height:1.8;margin-bottom:20px;}
+.about-text p strong{color:var(–navy);}
+.about-points{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px;}
+.about-point{
+display:flex;align-items:center;gap:10px;
+background:var(–off-white);border-left:3px solid var(–red);
+padding:12px 16px;font-size:0.88rem;font-weight:500;color:var(–navy);
+}
+.about-point::before{content:‘✓’;color:var(–red);font-weight:700;font-size:1rem;flex-shrink:0;}
+.about-visual{position:relative;}
+.about-img-wrap{position:relative;overflow:hidden;}
+.about-img-wrap img{width:100%;height:420px;object-fit:cover;object-position:center;}
+.about-badge{
+position:absolute;bottom:-20px;right:-20px;
+background:var(–red);color:var(–white);padding:24px;
+text-align:center;width:130px;height:130px;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.about-badge-num{font-family:‘Barlow Condensed’,sans-serif;font-size:2.4rem;font-weight:800;line-height:1;}
+.about-badge-text{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;opacity:0.85;}
+
+/* ── COURSE SECTION ── */
+.course-section{background:var(–navy);}
+.course-section .section-eyebrow{color:var(–gold);}
+.course-section .section-title{color:var(–white);}
+.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:rgba(255,255,255,0.05);margin-top:52px;}
+.course-block{background:var(–navy-mid);padding:44px 36px;}
+.course-block-title{
+font-family:‘Barlow Condensed’,sans-serif;font-size:1.5rem;font-weight:700;
+color:var(–white);text-transform:uppercase;margin-bottom:20px;
+letter-spacing:0.04em;
+}
+.course-block-title span{color:var(–gold);}
+.course-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.course-list li{
+display:flex;align-items:flex-start;gap:10px;
+font-size:0.92rem;color:rgba(255,255,255,0.65);line-height:1.5;
+}
+.course-list li::before{content:‘→’;color:var(–red);font-weight:700;flex-shrink:0;margin-top:1px;}
+.course-outcome{
+grid-column:1/-1;background:rgba(192,57,43,0.12);
+border:1px solid rgba(192,57,43,0.25);padding:32px 36px;
+display:flex;align-items:center;justify-content:space-between;gap:24px;
+flex-wrap:wrap;
+}
+.outcome-text{font-size:1.1rem;color:rgba(255,255,255,0.9);font-weight:500;}
+.outcome-text strong{color:var(–gold);}
+.course-actions-wrap{display:flex;gap:12px;}
+
+/* ── WHY CHOOSE ── */
+.why-section{background:var(–off-white);}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px;}
+.why-card{
+background:var(–white);padding:36px 28px;
+border-top:3px solid transparent;transition:all 0.3s;
+position:relative;overflow:hidden;
+}
+.why-card:hover{border-top-color:var(–red);transform:translateY(-4px);box-shadow:0 12px 40px rgba(10,22,40,0.1);}
+.why-icon{font-size:2.2rem;margin-bottom:16px;}
+.why-title{font-family:‘Barlow Condensed’,sans-serif;font-size:1.2rem;font-weight:700;color:var(–navy);text-transform:uppercase;margin-bottom:10px;letter-spacing:0.04em;}
+.why-desc{font-size:0.88rem;color:var(–muted);line-height:1.7;}
+
+/* ── DURATION ── */
+.duration-section{background:var(–navy-mid);padding:80px 56px;}
+.duration-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:rgba(255,255,255,0.05);margin-top:52px;}
+.duration-card{
+background:var(–navy);padding:48px 40px;text-align:center;
+border-top:4px solid transparent;transition:border-color 0.3s;
+}
+.duration-card:hover{border-top-color:var(–red);}
+.duration-icon{font-size:3rem;margin-bottom:20px;}
+.duration-label{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:12px;font-weight:600;}
+.duration-value{font-family:‘Barlow Condensed’,sans-serif;font-size:3.5rem;font-weight:800;color:var(–white);line-height:1;margin-bottom:8px;}
+.duration-value span{color:var(–red);}
+.duration-sub{font-size:0.9rem;color:rgba(255,255,255,0.5);}
+.duration-section .section-eyebrow{color:var(–gold);}
+.duration-section .section-title{color:var(–white);}
+
+/* ── CAREERS ── */
+.careers-section{background:var(–white);}
+.careers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px;}
+.career-card{
+background:var(–off-white);padding:32px 24px;
+border-left:4px solid var(–red);
+transition:all 0.3s;
+}
+.career-card:hover{background:var(–navy);transform:translateX(4px);}
+.career-card:hover .career-title{color:var(–white);}
+.career-card:hover .career-desc{color:rgba(255,255,255,0.55);}
+.career-icon{font-size:2rem;margin-bottom:14px;}
+.career-title{font-family:‘Barlow Condensed’,sans-serif;font-size:1.2rem;font-weight:700;color:var(–navy);text-transform:uppercase;margin-bottom:8px;letter-spacing:0.04em;transition:color 0.3s;}
+.career-desc{font-size:0.85rem;color:var(–muted);line-height:1.65;transition:color 0.3s;}
+
+/* ── ENROLMENT STEPS ── */
+.steps-section{background:var(–off-white);}
+.steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:56px;position:relative;}
+.steps-grid::before{content:’’;position:absolute;top:36px;left:10%;right:10%;height:2px;background:linear-gradient(to right,var(–red),var(–navy-light));z-index:0;}
+.step-item{text-align:center;padding:0 16px;position:relative;z-index:1;}
+.step-num{
+width:72px;height:72px;border-radius:50%;
+background:var(–white);border:3px solid var(–red);
+display:flex;align-items:center;justify-content:center;
+font-family:‘Barlow Condensed’,sans-serif;font-size:1.6rem;font-weight:800;
+color:var(–red);margin:0 auto 20px;
+box-shadow:0 4px 20px rgba(192,57,43,0.2);
+}
+.step-title{font-family:‘Barlow Condensed’,sans-serif;font-size:1rem;font-weight:700;color:var(–navy);text-transform:uppercase;margin-bottom:8px;letter-spacing:0.04em;}
+.step-desc{font-size:0.8rem;color:var(–muted);line-height:1.65;}
+
+/* ── CONTACT ── */
+.contact-section{background:var(–navy);display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.contact-left{padding:80px 64px;background:var(–navy-mid);}
+.contact-left .section-eyebrow{color:var(–gold);}
+.contact-left .section-title{color:var(–white);margin-bottom:40px;}
+.contact-details{display:flex;flex-direction:column;gap:24px;margin-bottom:48px;}
+.contact-item{display:flex;gap:16px;align-items:flex-start;}
+.contact-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px;}
+.contact-label{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;font-weight:600;}
+.contact-value{font-size:0.95rem;color:rgba(255,255,255,0.85);}
+.contact-value a{color:var(–gold);text-decoration:none;}
+.contact-right{padding:80px 64px;background:var(–navy);}
+.contact-right .section-eyebrow{color:var(–gold);}
+.contact-right .section-title{color:var(–white);margin-bottom:32px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);font-weight:600;}
+.form-input,.form-select,.form-textarea{
+background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+padding:13px 16px;font-family:‘Barlow’,sans-serif;font-size:0.9rem;
+color:var(–white);outline:none;transition:border-color 0.25s;width:100%;
+}
+.form-input::placeholder{color:rgba(255,255,255,0.25);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(–red);}
+.form-select{appearance:none;color:rgba(255,255,255,0.6);background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘8’ viewBox=‘0 0 12 8’%3E%3Cpath d=‘M1 1l5 5 5-5’ stroke=’%23ffffff’ stroke-width=‘1.5’ fill=‘none’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 14px center;background-color:rgba(255,255,255,0.06);}
+.form-select option{background:var(–navy);color:var(–white);}
+.form-textarea{resize:vertical;min-height:110px;}
+.form-submit{
+width:100%;background:var(–red);color:var(–white);border:none;
+padding:17px;font-family:‘Barlow Condensed’,sans-serif;font-size:1.1rem;
+letter-spacing:0.1em;text-transform:uppercase;font-weight:700;
+cursor:pointer;transition:all 0.3s;margin-top:8px;
+}
+.form-submit:hover{background:var(–red-light);}
+.form-note{font-size:0.75rem;color:rgba(255,255,255,0.3);text-align:center;margin-top:10px;}
+
+/* ── CTA BANNER ── */
+.cta-banner{
+background:var(–red);padding:72px 56px;
+display:flex;align-items:center;justify-content:space-between;gap:32px;
+flex-wrap:wrap;
+}
+.cta-text{}
+.cta-heading{font-family:‘Barlow Condensed’,sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;color:var(–white);text-transform:uppercase;letter-spacing:-0.01em;margin-bottom:8px;}
+.cta-sub{font-size:1rem;color:rgba(255,255,255,0.75);}
+.cta-actions{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0;}
+.btn-white{
+background:var(–white);color:var(–red);padding:16px 40px;
+font-family:‘Barlow Condensed’,sans-serif;font-size:1rem;letter-spacing:0.1em;
+text-transform:uppercase;text-decoration:none;font-weight:700;transition:all 0.25s;
+}
+.btn-white:hover{background:var(–off-white);}
+.btn-outline-white{
+border:2px solid rgba(255,255,255,0.5);color:var(–white);padding:14px 36px;
+font-family:‘Barlow Condensed’,sans-serif;font-size:1rem;letter-spacing:0.1em;
+text-transform:uppercase;text-decoration:none;font-weight:600;transition:all 0.25s;
+display:flex;align-items:center;gap:8px;
+}
+.btn-outline-white:hover{background:rgba(255,255,255,0.12);}
+
+/* ── FOOTER ── */
+footer{background:#070e1c;padding:60px 56px 28px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.footer-logo{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.footer-logo-icon{width:38px;height:38px;background:var(–red);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.footer-logo-name{font-family:‘Barlow Condensed’,sans-serif;font-size:1.1rem;font-weight:700;color:var(–white);text-transform:uppercase;letter-spacing:0.06em;}
+.footer-desc{font-size:0.82rem;color:rgba(255,255,255,0.3);line-height:1.85;margin-bottom:20px;}
+.footer-col h4{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(–gold);margin-bottom:16px;font-weight:600;}
+.footer-col ul{list-style:none;}
+.footer-col li{margin-bottom:10px;}
+.footer-col a{font-size:0.82rem;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.25s;}
+.footer-col a:hover{color:var(–white);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:12px;}
+.footer-copy{font-size:0.7rem;color:rgba(255,255,255,0.2);}
+.footer-tags{display:flex;gap:10px;}
+.footer-tag{border:1px solid rgba(255,255,255,0.08);padding:4px 12px;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.22);}
+
+/* ── CHECKOUT MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(–white);width:min(600px,94vw);max-height:90vh;overflow-y:auto;position:relative;}
+.modal-header{background:var(–navy);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:‘Barlow Condensed’,sans-serif;font-size:1.4rem;font-weight:700;color:var(–white);text-transform:uppercase;letter-spacing:0.06em;}
+.modal-close{background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.25s;}
+.modal-close:hover{border-color:var(–white);color:var(–white);}
+.modal-body{padding:32px;}
+/* Steps */
+.checkout-steps{display:flex;gap:0;margin-bottom:32px;background:var(–off-white);}
+.checkout-step{flex:1;text-align:center;padding:12px 8px;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–muted);font-weight:600;border-bottom:3px solid transparent;transition:all 0.25s;}
+.checkout-step.active{color:var(–red);border-bottom-color:var(–red);background:var(–white);}
+.checkout-step.done{color:var(–navy);border-bottom-color:var(–navy);}
+/* Cart */
+.cart-item{background:var(–off-white);padding:20px;margin-bottom:16px;display:flex;gap:16px;align-items:flex-start;}
+.cart-item-icon{width:52px;height:52px;background:var(–red);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.cart-item-name{font-family:‘Barlow Condensed’,sans-serif;font-size:1.1rem;font-weight:700;color:var(–navy);text-transform:uppercase;margin-bottom:4px;}
+.cart-item-sub{font-size:0.8rem;color:var(–muted);}
+.cart-item-price{font-family:‘Barlow Condensed’,sans-serif;font-size:1.3rem;font-weight:700;color:var(–navy);margin-left:auto;}
+.cart-total{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-top:2px solid var(–navy);margin-top:8px;}
+.cart-total-label{font-family:‘Barlow Condensed’,sans-serif;font-size:1.1rem;font-weight:700;text-transform:uppercase;color:var(–navy);}
+.cart-total-amount{font-family:‘Barlow Condensed’,sans-serif;font-size:1.8rem;font-weight:800;color:var(–red);}
+/* Checkout form */
+.checkout-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.checkout-form-group{display:flex;flex-direction:column;gap:6px;}
+.checkout-form-group.full{grid-column:1/-1;}
+.checkout-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–muted);font-weight:600;}
+.checkout-input{
+background:var(–off-white);border:1px solid var(–border);
+padding:12px 14px;font-family:‘Barlow’,sans-serif;font-size:0.9rem;
+color:var(–navy);outline:none;transition:border-color 0.25s;width:100%;
+}
+.checkout-input:focus{border-color:var(–red);}
+/* Payment */
+.payment-methods{display:flex;gap:10px;margin-bottom:24px;}
+.payment-method{
+flex:1;border:2px solid var(–border);padding:14px;text-align:center;
+cursor:pointer;transition:all 0.25s;font-size:0.8rem;color:var(–muted);font-weight:500;
+}
+.payment-method.active{border-color:var(–red);color:var(–red);}
+.payment-method:hover{border-color:var(–navy);}
+.payment-icon{font-size:1.4rem;display:block;margin-bottom:4px;}
+.card-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;}
+.secure-badge{display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.75rem;color:var(–muted);margin-top:10px;}
+/* Success */
+.success-screen{text-align:center;padding:20px 0;}
+.success-icon{font-size:4rem;margin-bottom:16px;}
+.success-title{font-family:‘Barlow Condensed’,sans-serif;font-size:2rem;font-weight:800;color:var(–navy);text-transform:uppercase;margin-bottom:10px;}
+.success-sub{font-size:0.95rem;color:var(–muted);line-height:1.7;max-width:380px;margin:0 auto 24px;}
+.success-ref{background:var(–off-white);padding:16px;text-align:center;margin-bottom:20px;}
+.success-ref-label{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(–muted);}
+.success-ref-num{font-family:‘Barlow Condensed’,sans-serif;font-size:1.5rem;font-weight:800;color:var(–red);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s,transform 0.6s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+header{padding:12px 28px;}
+nav.main-nav,.header-actions .btn-call-hdr{display:none;}
+.hamburger{display:flex;}
+section{padding:72px 36px;}
+.hero-content{padding:0 36px;}
+.hero-trust{grid-template-columns:repeat(2,1fr);}
+.about-grid{grid-template-columns:1fr;gap:48px;}
+.about-badge{right:0;bottom:0;}
+.course-grid{grid-template-columns:1fr;}
+.why-grid{grid-template-columns:1fr 1fr;}
+.duration-grid{grid-template-columns:1fr 1fr;}
+.careers-grid{grid-template-columns:1fr 1fr;}
+.steps-grid{grid-template-columns:repeat(3,1fr);gap:28px;}
+.steps-grid::before{display:none;}
+.contact-section{grid-template-columns:1fr;}
+.footer-top{grid-template-columns:1fr 1fr;gap:36px;}
+.about-strip,.duration-section,.why-section,.careers-section,.steps-section{padding:72px 36px;}
+.contact-left,.contact-right{padding:60px 36px;}
+.cta-banner{padding:56px 36px;}
+}
+@media(max-width:640px){
+section{padding:56px 20px;}
+.hero-content{padding:0 20px;}
+.hero-trust{grid-template-columns:1fr 1fr;}
+.why-grid,.careers-grid,.duration-grid{grid-template-columns:1fr;}
+.steps-grid{grid-template-columns:1fr 1fr;}
+.footer-top{grid-template-columns:1fr;}
+footer{padding:48px 20px 24px;}
+.cta-banner{flex-direction:column;text-align:center;padding:48px 20px;}
+.about-strip,.duration-section,.why-section,.careers-section,.steps-section{padding:56px 20px;}
+.contact-left,.contact-right{padding:48px 20px;}
+.checkout-form-grid{grid-template-columns:1fr;}
+.card-row{grid-template-columns:1fr;}
+.modal-body{padding:20px;}
+}
+</style>
+
+</head>
+<body>
+
+<!-- OVERLAY -->
+
+<div class="overlay" id="overlay" onclick="closeMobileNav()"></div>
+
+<!-- MOBILE NAV -->
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="#home" onclick="closeMobileNav()">Home</a>
+  <a href="#course" onclick="closeMobileNav()">Course</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+  <div class="mob-actions">
+    <a href="tel:0000000000" class="btn-call-hdr" style="display:flex;align-items:center;justify-content:center;border-color:rgba(255,255,255,0.3);">📞 Call Now</a>
+    <a href="#" class="btn-enrol-hdr" style="display:block;text-align:center;" onclick="openCheckout();closeMobileNav();return false;">Enrol Now</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+
+<header id="header">
+  <a href="#home" class="header-logo">
+    <div class="header-logo-icon">🛡️</div>
+    <div class="header-logo-text">
+      <span class="header-logo-name">Rightway Security</span>
+      <span class="header-logo-sub">Training Academy</span>
+    </div>
+  </a>
+  <nav class="main-nav">
+    <a href="#home">Home</a>
+    <a href="#course">Course</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <a href="tel:0000000000" class="btn-call-hdr">📞 Call Now</a>
+    <a href="#" class="btn-enrol-hdr" onclick="openCheckout();return false;">Enrol Now</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80&auto=format&fit=crop" alt="Security Training">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">🛡️ Alexandria NSW · Security Training</div>
+    <h1 class="hero-title">
+      Get Your<br><span class="accent">Security</span><br><span class="highlight">Licence Fast</span>
+    </h1>
+    <div class="hero-duration">
+      <div class="duration-pill"><span class="dp-icon">⚡</span>Full Time: 2 Weeks (10 Days)</div>
+      <div class="duration-pill"><span class="dp-icon">📅</span>Weekend Classes: 5 Weekends</div>
+    </div>
+    <p class="hero-sub">CII in Security Operations + First Aid certification. Practical, hands-on training with experienced trainers in Alexandria NSW.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary" onclick="openCheckout();return false;">Enrol Now</a>
+      <a href="tel:0000000000" class="btn-secondary-outline">📞 Call Now</a>
+    </div>
+  </div>
+  <div class="hero-trust">
+    <div class="trust-item"><span class="trust-icon">🛡️</span><div><div class="trust-label">Qualification</div><div class="trust-value">CII Security Operations</div></div></div>
+    <div class="trust-item"><span class="trust-icon">🏥</span><div><div class="trust-label">Included</div><div class="trust-value">First Aid Certification</div></div></div>
+    <div class="trust-item"><span class="trust-icon">⚡</span><div><div class="trust-label">Duration</div><div class="trust-value">2 Weeks or 5 Weekends</div></div></div>
+    <div class="trust-item"><span class="trust-icon">📍</span><div><div class="trust-label">Location</div><div class="trust-value">Alexandria NSW</div></div></div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+
+<div class="about-strip" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-eyebrow reveal">About Us</div>
+      <h2 class="section-title reveal" style="margin-bottom:24px;">Practical Training<br>That Gets You <span class="accent">Working</span></h2>
+      <p class="reveal">Rightway Security Academy provides <strong>hands-on, job-ready security training</strong> in Alexandria NSW. We focus on practical skills that employers are looking for — not just theory.</p>
+      <p class="reveal">Our trainers have real industry experience and our <strong>small class sizes</strong> mean every student gets the attention they need to succeed.</p>
+      <div class="about-points">
+        <div class="about-point reveal">Small Class Sizes</div>
+        <div class="about-point reveal">Experienced Trainers</div>
+        <div class="about-point reveal">Practical Hands-on Training</div>
+        <div class="about-point reveal">Alexandria NSW Location</div>
+        <div class="about-point reveal">Job-Ready Skills</div>
+        <div class="about-point reveal">Easy Transport Access</div>
+      </div>
+    </div>
+    <div class="about-visual reveal">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&q=80&auto=format&fit=crop" alt="Security Training Classroom">
+      </div>
+      <div class="about-badge">
+        <div class="about-badge-num">10</div>
+        <div class="about-badge-text">Days to Get Licensed</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COURSE -->
+
+<section class="course-section" id="course">
+  <div class="section-eyebrow reveal">Our Course</div>
+  <h2 class="section-title reveal">CII in Security Operations<br>+ <span style="color:var(--gold);">First Aid</span></h2>
+  <div class="course-grid">
+    <div class="course-block reveal">
+      <div class="course-block-title">What You Will <span>Learn</span></div>
+      <ul class="course-list">
+        <li>Crowd control procedures and techniques</li>
+        <li>Professional communication skills</li>
+        <li>Patrol techniques and observation</li>
+        <li>Incident response and reporting</li>
+        <li>Conflict management and de-escalation</li>
+        <li>Legal responsibilities and use of force</li>
+        <li>Workplace health and safety</li>
+        <li>First Aid & CPR certification</li>
+      </ul>
+    </div>
+    <div class="course-block reveal" style="transition-delay:0.1s">
+      <div class="course-block-title">Course <span>Details</span></div>
+      <ul class="course-list">
+        <li>Entry level security training qualification</li>
+        <li>Includes First Aid certification (included)</li>
+        <li>Practical classroom and scenario training</li>
+        <li>Delivered at Alexandria NSW campus</li>
+        <li>Small class sizes for individual attention</li>
+        <li>Experienced industry trainers</li>
+        <li>Training materials provided</li>
+        <li>Apply for NSW Security Licence on completion</li>
+      </ul>
+    </div>
+    <div class="course-outcome reveal">
+      <div class="outcome-text">On completion you can apply for your <strong>NSW Security Licence</strong> and start working immediately.</div>
+      <div class="course-actions-wrap">
+        <a href="#" class="btn-primary" onclick="openCheckout();return false;">Enrol Now</a>
+        <a href="tel:0000000000" class="btn-secondary-outline" style="padding:13px 28px;">📞 Call</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DURATION -->
+
+<div class="duration-section">
+  <div class="section-eyebrow reveal">Study Options</div>
+  <h2 class="section-title reveal">Choose Your <span style="color:var(--gold);">Schedule</span></h2>
+  <div class="duration-grid">
+    <div class="duration-card reveal">
+      <div class="duration-icon">⚡</div>
+      <div class="duration-label">Full Time Option</div>
+      <div class="duration-value"><span>2</span> Weeks</div>
+      <div class="duration-sub">10 consecutive days · Mon–Fri</div>
+    </div>
+    <div class="duration-card reveal" style="transition-delay:0.15s">
+      <div class="duration-icon">📅</div>
+      <div class="duration-label">Weekend Option</div>
+      <div class="duration-value"><span>5</span> Weekends</div>
+      <div class="duration-sub">Sat & Sun · Balance work and study</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY CHOOSE -->
+
+<section class="why-section">
+  <div class="section-eyebrow reveal">Why Choose Us</div>
+  <h2 class="section-title reveal">Why Train with<br><span class="accent">Rightway</span></h2>
+  <div class="why-grid">
+    <div class="why-card reveal"><div class="why-icon">⚡</div><div class="why-title">Complete in 2 Weeks</div><div class="why-desc">Get your security qualification fast with our intensive 10-day full-time program. Start working sooner.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.1s"><div class="why-icon">📅</div><div class="why-title">Weekend Classes Available</div><div class="why-desc">Can't study full time? Our 5-weekend option lets you balance your current job while you train.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.2s"><div class="why-icon">👥</div><div class="why-title">Small Class Sizes</div><div class="why-desc">We keep our classes small so every student gets individual attention and real hands-on practice.</div></div>
+    <div class="why-card reveal"><div class="why-icon">🎯</div><div class="why-title">Practical Hands-on Training</div><div class="why-desc">Real-world scenarios and practical exercises prepare you for what actually happens on the job.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.1s"><div class="why-icon">🏆</div><div class="why-title">Experienced Trainers</div><div class="why-desc">Learn from trainers with real security industry experience — not just textbook knowledge.</div></div>
+    <div class="why-card reveal" style="transition-delay:0.2s"><div class="why-icon">📍</div><div class="why-title">Alexandria NSW Location</div><div class="why-desc">Conveniently located in Alexandria NSW with easy public transport access from across Sydney.</div></div>
+  </div>
+</section>
+
+<!-- CAREERS -->
+
+<section class="careers-section">
+  <div class="section-eyebrow reveal">Career Opportunities</div>
+  <h2 class="section-title reveal">Where You Can <span class="accent">Work</span></h2>
+  <div class="careers-grid">
+    <div class="career-card reveal"><div class="career-icon">🛍️</div><div class="career-title">Shopping Centres</div><div class="career-desc">Work as a retail security officer protecting shoppers, staff and merchandise in major shopping centres.</div></div>
+    <div class="career-card reveal" style="transition-delay:0.1s"><div class="career-icon">🏗️</div><div class="career-title">Construction Sites</div><div class="career-desc">Protect equipment, materials and personnel at active construction sites across Sydney.</div></div>
+    <div class="career-card reveal" style="transition-delay:0.2s"><div class="career-icon">🎤</div><div class="career-title">Events & Crowd Control</div><div class="career-desc">Work concerts, festivals, sporting events and public gatherings as a licensed crowd controller.</div></div>
+    <div class="career-card reveal"><div class="career-icon">🏢</div><div class="career-title">Corporate Buildings</div><div class="career-desc">Provide access control, reception security and premises protection for corporate clients.</div></div>
+    <div class="career-card reveal" style="transition-delay:0.1s"><div class="career-icon">🖥️</div><div class="career-title">Control Rooms</div><div class="career-desc">Monitor CCTV, coordinate responses and manage security systems in control room roles.</div></div>
+    <div class="career-card reveal" style="transition-delay:0.2s"><div class="career-icon">🏪</div><div class="career-title">Retail Security</div><div class="career-desc">Loss prevention and retail security roles in supermarkets, department stores and retail outlets.</div></div>
+  </div>
+</section>
+
+<!-- ENROLMENT STEPS -->
+
+<section class="steps-section">
+  <div style="text-align:center;">
+    <div class="section-eyebrow reveal" style="justify-content:center;">How to Enrol</div>
+    <h2 class="section-title reveal">Simple <span class="accent">5-Step</span> Enrolment</h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step-item reveal">
+      <div class="step-num">1</div>
+      <div class="step-title">Click Enrol Now</div>
+      <div class="step-desc">Hit the Enrol Now button anywhere on the page to start your enrolment.</div>
+    </div>
+    <div class="step-item reveal" style="transition-delay:0.1s">
+      <div class="step-num">2</div>
+      <div class="step-title">Review Cart</div>
+      <div class="step-desc">Review your course selection and proceed to checkout when ready.</div>
+    </div>
+    <div class="step-item reveal" style="transition-delay:0.2s">
+      <div class="step-num">3</div>
+      <div class="step-title">Your Details</div>
+      <div class="step-desc">Enter your personal information — name, address, phone and email.</div>
+    </div>
+    <div class="step-item reveal" style="transition-delay:0.3s">
+      <div class="step-num">4</div>
+      <div class="step-title">Payment</div>
+      <div class="step-desc">Complete payment securely via credit card, debit card or bank transfer.</div>
+    </div>
+    <div class="step-item reveal" style="transition-delay:0.4s">
+      <div class="step-num">5</div>
+      <div class="step-title">Confirmation</div>
+      <div class="step-desc">Receive your confirmation email with your start date and course details.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+
+<div class="cta-banner">
+  <div class="cta-text">
+    <div class="cta-heading">Get Your Security Licence Fast</div>
+    <div class="cta-sub">Contact us today — courses start regularly in Alexandria NSW.</div>
+  </div>
+  <div class="cta-actions">
+    <a href="#" class="btn-white" onclick="openCheckout();return false;">Enrol Now</a>
+    <a href="tel:0000000000" class="btn-outline-white">📞 Call Now</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+
+<div class="contact-section" id="contact">
+  <div class="contact-left">
+    <div class="section-eyebrow">Contact Us</div>
+    <h2 class="section-title">Get In <span style="color:var(--gold);">Touch</span></h2>
+    <div class="contact-details">
+      <div class="contact-item"><span class="contact-icon">📍</span><div><div class="contact-label">Location</div><div class="contact-value">Alexandria NSW 2015<br>Easy public transport access</div></div></div>
+      <div class="contact-item"><span class="contact-icon">📞</span><div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:0000000000">Add your phone number</a></div></div></div>
+      <div class="contact-item"><span class="contact-icon">✉️</span><div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:info@rightwaysecurity.com.au">Add your email address</a></div></div></div>
+      <div class="contact-item"><span class="contact-icon">🕐</span><div><div class="contact-label">Office Hours</div><div class="contact-value">Mon–Fri 9am–5pm</div></div></div>
+    </div>
+  </div>
+  <div class="contact-right">
+    <div class="section-eyebrow">Enquire Now</div>
+    <h2 class="section-title">Send Us a <span style="color:var(--gold);">Message</span></h2>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">First Name *</label><input type="text" class="form-input" placeholder="First name"></div>
+      <div class="form-group"><label class="form-label">Last Name *</label><input type="text" class="form-input" placeholder="Last name"></div>
+      <div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-input" placeholder="04xx xxx xxx"></div>
+      <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" placeholder="your@email.com"></div>
+      <div class="form-group full">
+        <label class="form-label">Course</label>
+        <select class="form-select form-input">
+          <option>CII in Security Operations + First Aid</option>
+          <option>RSA / RCG (if applicable)</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Preferred Schedule</label>
+        <select class="form-select form-input">
+          <option value="">Select...</option>
+          <option>Full Time — 2 Weeks (Mon–Fri)</option>
+          <option>Weekend Classes — 5 Weekends</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="form-group full"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Any questions or additional information..."></textarea></div>
+    </div>
+    <button class="form-submit">Submit Enquiry</button>
+    <div class="form-note">We'll respond within 1 business day.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">
+        <div class="footer-logo-icon">🛡️</div>
+        <span class="footer-logo-name">Rightway Security Academy</span>
+      </div>
+      <p class="footer-desc">Practical security training in Alexandria NSW. CII in Security Operations and First Aid. Get your licence in 2 weeks.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Training</h4>
+      <ul>
+        <li><a href="#">CII Security Operations</a></li>
+        <li><a href="#">First Aid Training</a></li>
+        <li><a href="#">Full Time — 2 Weeks</a></li>
+        <li><a href="#">Weekend Classes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Academy</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#course">Our Course</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#home">Home</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">Alexandria NSW 2015</a></li>
+        <li><a href="tel:0000000000">Phone: Add number</a></li>
+        <li><a href="mailto:info@rightwaysecurity.com.au">Email: Add email</a></li>
+        <li><a href="#home">Enrol Now</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Rightway Security Academy · Alexandria NSW · All rights reserved.</div>
+    <div class="footer-tags">
+      <div class="footer-tag">Security Training</div>
+      <div class="footer-tag">Alexandria NSW</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ════ CHECKOUT MODAL ════ -->
+
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Your Cart</span>
+      <button class="modal-close" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Step 1: Cart -->
+      <div id="step-cart">
+        <div class="checkout-steps">
+          <div class="checkout-step active">1. Cart</div>
+          <div class="checkout-step">2. Details</div>
+          <div class="checkout-step">3. Payment</div>
+          <div class="checkout-step">4. Confirm</div>
+        </div>
+        <div class="cart-item">
+          <div class="cart-item-icon">🛡️</div>
+          <div>
+            <div class="cart-item-name">CII in Security Operations + First Aid</div>
+            <div class="cart-item-sub">Alexandria NSW · Choose schedule at enrolment</div>
+          </div>
+          <div class="cart-item-price">Contact for Price</div>
+        </div>
+        <div class="cart-total">
+          <span class="cart-total-label">Total</span>
+          <span class="cart-total-amount">Contact Us</span>
+        </div>
+        <button class="form-submit" onclick="goToStep(2)" style="margin-top:16px;">Proceed to Checkout →</button>
+      </div>
+
+```
+  <!-- Step 2: Personal Details -->
+  <div id="step-details" style="display:none;">
+    <div class="checkout-steps">
+      <div class="checkout-step done">1. Cart</div>
+      <div class="checkout-step active">2. Details</div>
+      <div class="checkout-step">3. Payment</div>
+      <div class="checkout-step">4. Confirm</div>
+    </div>
+    <div class="checkout-form-grid">
+      <div class="checkout-form-group"><label class="checkout-label">First Name *</label><input type="text" class="checkout-input" placeholder="First name"></div>
+      <div class="checkout-form-group"><label class="checkout-label">Last Name *</label><input type="text" class="checkout-input" placeholder="Last name"></div>
+      <div class="checkout-form-group full"><label class="checkout-label">Address *</label><input type="text" class="checkout-input" placeholder="Street address"></div>
+      <div class="checkout-form-group"><label class="checkout-label">Suburb *</label><input type="text" class="checkout-input" placeholder="Suburb"></div>
+      <div class="checkout-form-group"><label class="checkout-label">Postcode *</label><input type="text" class="checkout-input" placeholder="2000"></div>
+      <div class="checkout-form-group"><label class="checkout-label">Phone *</label><input type="tel" class="checkout-input" placeholder="04xx xxx xxx"></div>
+      <div class="checkout-form-group"><label class="checkout-label">Email *</label><input type="email" class="checkout-input" placeholder="your@email.com"></div>
+      <div class="checkout-form-group full">
+        <label class="checkout-label">Preferred Schedule *</label>
+        <select class="checkout-input" style="appearance:none;background:var(--off-white);">
+          <option>Full Time — 2 Weeks (Mon–Fri)</option>
+          <option>Weekend Classes — 5 Weekends (Sat & Sun)</option>
+        </select>
+      </div>
+      <div class="checkout-form-group full">
+        <label class="checkout-label">Date of Birth *</label>
+        <input type="date" class="checkout-input">
+      </div>
+    </div>
+    <button class="form-submit" onclick="goToStep(3)" style="margin-top:20px;">Continue to Payment →</button>
+  </div>
+
+  <!-- Step 3: Payment -->
+  <div id="step-payment" style="display:none;">
+    <div class="checkout-steps">
+      <div class="checkout-step done">1. Cart</div>
+      <div class="checkout-step done">2. Details</div>
+      <div class="checkout-step active">3. Payment</div>
+      <div class="checkout-step">4. Confirm</div>
+    </div>
+    <div class="payment-methods">
+      <div class="payment-method active" onclick="selectPayment(this)"><span class="payment-icon">💳</span>Credit Card</div>
+      <div class="payment-method" onclick="selectPayment(this)"><span class="payment-icon">🏦</span>Bank Transfer</div>
+      <div class="payment-method" onclick="selectPayment(this)"><span class="payment-icon">📱</span>PayPal</div>
+    </div>
+    <div class="checkout-form-grid">
+      <div class="checkout-form-group full"><label class="checkout-label">Card Number</label><input type="text" class="checkout-input" placeholder="1234 5678 9012 3456"></div>
+      <div class="checkout-form-group full"><label class="checkout-label">Cardholder Name</label><input type="text" class="checkout-input" placeholder="Name on card"></div>
+      <div class="checkout-form-group"><label class="checkout-label">Expiry Date</label><input type="text" class="checkout-input" placeholder="MM / YY"></div>
+      <div class="checkout-form-group"><label class="checkout-label">CVV</label><input type="text" class="checkout-input" placeholder="123"></div>
+    </div>
+    <div class="secure-badge">🔒 Secured by 256-bit SSL encryption</div>
+    <button class="form-submit" onclick="goToStep(4)" style="margin-top:20px;">Complete Payment →</button>
+  </div>
+
+  <!-- Step 4: Success -->
+  <div id="step-success" style="display:none;">
+    <div class="checkout-steps">
+      <div class="checkout-step done">1. Cart</div>
+      <div class="checkout-step done">2. Details</div>
+      <div class="checkout-step done">3. Payment</div>
+      <div class="checkout-step active">4. Confirmed ✓</div>
+    </div>
+    <div class="success-screen">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Enrolment Confirmed!</div>
+      <p class="success-sub">Thank you for enrolling with Rightway Security Academy. A confirmation email has been sent to your email address with your course details and start date.</p>
+      <div class="success-ref">
+        <div class="success-ref-label">Enrolment Reference</div>
+        <div class="success-ref-num" id="refNum">RSA-0000</div>
+      </div>
+      <p style="font-size:0.85rem;color:var(--muted);">We'll contact you within 1 business day to confirm your schedule and provide pre-course information.</p>
+      <button class="form-submit" onclick="closeCheckout()" style="margin-top:20px;max-width:260px;margin-left:auto;margin-right:auto;display:block;">Close</button>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+// Mobile nav
+function toggleMobileNav(){
+  document.getElementById('mobileNav').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+  document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';
+}
+function closeMobileNav(){
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// Checkout modal
+function openCheckout(){
+  goToStep(1);
+  document.getElementById('checkoutModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCheckout(){
+  document.getElementById('checkoutModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('checkoutModal').addEventListener('click',function(e){if(e.target===this)closeCheckout();});
+
+function goToStep(n){
+  ['cart','details','payment','success'].forEach((s,i)=>{
+    document.getElementById('step-'+s).style.display=i+1===n?'block':'none';
+  });
+  const titles=['Your Cart','Your Details','Payment','Confirmed!'];
+  document.getElementById('modalTitle').textContent=titles[n-1];
+  if(n===4){
+    document.getElementById('refNum').textContent='RSA-'+Math.floor(10000+Math.random()*90000);
+  }
+  document.querySelector('.modal').scrollTop=0;
+}
+
+function selectPayment(el){
+  document.querySelectorAll('.payment-method').forEach(m=>m.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Scroll reveal
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+</script>
+
+</body>
+</html>
