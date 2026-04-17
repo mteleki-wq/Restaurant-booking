@@ -30,6 +30,11 @@
 
 - { margin:0; padding:0; box-sizing:border-box; }
 
+html, body {
+width: 100%;
+overflow-x: hidden;
+}
+
 body {
 font-family: ‘DM Sans’, sans-serif;
 background: var(–bg);
@@ -40,49 +45,65 @@ min-height: 100vh;
 /* ── HEADER ─────────────────────────────────────────────── */
 .header {
 background: var(–navy);
-padding: 28px 40px 22px;
-display: flex;
-align-items: center;
-justify-content: space-between;
+padding: 0;
 position: sticky;
 top: 0;
 z-index: 100;
 box-shadow: 0 4px 24px rgba(26,47,74,0.25);
+width: 100%;
+}
+.header-inner {
+max-width: 1280px;
+margin: 0 auto;
+padding: 20px 32px 16px;
+display: flex;
+align-items: flex-start;
+gap: 24px;
+}
+.header-content {
+flex: 1;
+min-width: 0;
 }
 .header-left h1 {
 font-family: ‘Syne’, sans-serif;
-font-size: 1.5rem;
+font-size: 1.35rem;
 font-weight: 800;
 color: #fff;
 letter-spacing: -0.02em;
+line-height: 1.2;
 }
 .header-left p {
-font-size: 0.82rem;
+font-size: 0.8rem;
 color: #8EA9C4;
-margin-top: 3px;
+margin-top: 4px;
 }
 .header-badge {
 background: var(–teal);
 color: #fff;
 font-size: 0.75rem;
 font-weight: 600;
-padding: 6px 14px;
+padding: 8px 16px;
 border-radius: 20px;
 font-family: ‘Syne’, sans-serif;
 letter-spacing: 0.04em;
+white-space: nowrap;
+flex-shrink: 0;
+align-self: center;
 }
 .progress-wrap {
 display: flex;
 align-items: center;
 gap: 12px;
-margin-top: 14px;
+margin-top: 10px;
+max-width: 500px;
 }
 .progress-bar-outer {
 flex: 1;
-height: 6px;
-background: rgba(255,255,255,0.12);
+height: 5px;
+background: rgba(255,255,255,0.15);
 border-radius: 6px;
 overflow: hidden;
+min-width: 120px;
 }
 .progress-bar-inner {
 height: 100%;
@@ -92,7 +113,7 @@ width: 0%;
 transition: width 0.5s ease;
 }
 .progress-label {
-font-size: 0.75rem;
+font-size: 0.73rem;
 color: #8EA9C4;
 white-space: nowrap;
 }
@@ -101,7 +122,17 @@ white-space: nowrap;
 .board {
 max-width: 1280px;
 margin: 0 auto;
-padding: 32px 32px 60px;
+padding: 28px 32px 60px;
+width: 100%;
+}
+
+/* ── SECTION COLUMNS ─────────────────────────────────────── */
+.columns {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 20px;
+align-items: start;
+width: 100%;
 }
 
 /* ── INTRO STRIP ─────────────────────────────────────────── */
@@ -145,14 +176,6 @@ font-family: ‘Syne’, sans-serif;
 .pill-1 { background: var(–req1-lt); color: var(–req1); }
 .pill-2 { background: var(–req2-lt); color: var(–req2); }
 .pill-3 { background: var(–req3-lt); color: var(–req3); }
-
-/* ── SECTION COLUMNS ─────────────────────────────────────── */
-.columns {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 24px;
-align-items: start;
-}
 
 /* ── REQ COLUMN ─────────────────────────────────────────── */
 .req-col { display: flex; flex-direction: column; gap: 12px; }
@@ -390,31 +413,16 @@ align-self: flex-start;
 .mark-done-btn:hover { opacity: 0.85; transform: scale(1.02); }
 .mark-done-btn.undone { background: #e5e8ec; color: var(–muted); }
 
-/* ── CONNECTOR ───────────────────────────────────────────── */
-.connector-row {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 24px;
-margin: 36px 0 12px;
-}
-.connector-line {
-height: 3px;
-border-radius: 3px;
-position: relative;
-}
-.conn-1 { background: linear-gradient(90deg, var(–req1) 0%, transparent 100%); }
-.conn-2 { background: linear-gradient(90deg, var(–req2) 0%, transparent 100%); }
-.conn-3 { background: linear-gradient(90deg, var(–req3) 0%, transparent 100%); }
-
 /* ── SUMMARY STRIP ───────────────────────────────────────── */
 .summary-strip {
 background: var(–navy);
 border-radius: 14px;
-padding: 28px 32px;
-margin-top: 36px;
+padding: 24px 32px;
+margin-top: 32px;
 display: grid;
-grid-template-columns: 1fr 1fr 1fr 1fr;
+grid-template-columns: repeat(4, 1fr);
 gap: 20px;
+width: 100%;
 }
 .sum-item { text-align: center; }
 .sum-number {
@@ -457,11 +465,15 @@ border-radius: 50%;
 }
 
 /* ── RESPONSIVE ─────────────────────────────────────────── */
-@media (max-width: 900px) {
-.columns, .connector-row { grid-template-columns: 1fr; }
+@media (max-width: 1024px) {
+.columns { grid-template-columns: 1fr; }
 .summary-strip { grid-template-columns: 1fr 1fr; }
-.board { padding: 20px 16px 48px; }
-.header { padding: 18px 20px; }
+}
+@media (max-width: 700px) {
+.board { padding: 16px 12px 48px; }
+.header-inner { padding: 14px 16px 12px; }
+.summary-strip { grid-template-columns: 1fr 1fr; gap: 12px; }
+.intro { flex-direction: column; gap: 12px; }
 }
 
 /* ── ANIMATIONS ─────────────────────────────────────────── */
@@ -481,17 +493,19 @@ to   { opacity: 1; transform: translateY(0); }
 <!-- ── HEADER ─────────────────────────────────────────────── -->
 
 <header class="header">
-  <div style="flex:1">
-    <div class="header-left">
-      <h1>SITXFIN010 — Section C Assessment Roadmap</h1>
-      <p>Prepare and Monitor Budgets  ·  Le' Culinaire Hospitality Institute  ·  RTO 45326</p>
+  <div class="header-inner">
+    <div class="header-content">
+      <div class="header-left">
+        <h1>SITXFIN010 &mdash; Section C Assessment Roadmap</h1>
+        <p>Prepare and Monitor Budgets &nbsp;&middot;&nbsp; Le&rsquo; Culinaire Hospitality Institute &nbsp;&middot;&nbsp; RTO 45326</p>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+        <span class="progress-label" id="progressLabel">0 of 14 completed</span>
+      </div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
-      <span class="progress-label" id="progressLabel">0 of 14 completed</span>
-    </div>
+    <div class="header-badge">Section C</div>
   </div>
-  <div class="header-badge">Section C</div>
 </header>
 
 <!-- ── BOARD ─────────────────────────────────────────────── -->
