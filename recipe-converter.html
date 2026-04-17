@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Convert any recipe to grams and millilitres. Australian metric standards.">
+<title>Recipe to Metric — Le Convertisseur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #f5ede3;
+    color: #2a1f1a;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 1px 1px, rgba(122,53,32,0.08) 1px, transparent 0);
+    background-size: 24px 24px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+  .container { max-width: 720px; margin: 0 auto; padding: 32px 20px; }
+  header { text-align: center; margin-bottom: 32px; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; color: #7a3520; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; margin-bottom: 12px; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 8vw, 60px); font-weight: 700; color: #2a1f1a; letter-spacing: -0.02em; line-height: 1; margin-bottom: 8px; }
+  .tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(16px, 3vw, 20px); color: #9a6c5a; }
+
+label { display: block; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: #7a3520; margin-bottom: 8px; }
+textarea {
+width: 100%;
+padding: 16px;
+font-size: 16px;
+font-family: ‘Inter’, sans-serif;
+border: 2px solid #c9a590;
+border-radius: 8px;
+background: #fffcf7;
+color: #2a1f1a;
+line-height: 1.6;
+min-height: 280px;
+resize: vertical;
+outline: none;
+-webkit-appearance: none;
+transition: border-color 0.2s;
+}
+textarea:focus { border-color: #7a3520; }
+
+.btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+button {
+font-family: ‘Inter’, sans-serif;
+font-size: 14px;
+font-weight: 600;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+padding: 14px 24px;
+border: none;
+border-radius: 999px;
+cursor: pointer;
+transition: all 0.2s;
+-webkit-appearance: none;
+}
+button:active { transform: scale(0.98); }
+.btn-primary { background: #7a3520; color: #f5ede3; flex: 1; min-width: 180px; }
+.btn-primary:hover { box-shadow: 0 8px 20px rgba(122,53,32,0.3); }
+.btn-primary:disabled { background: #c9a590; cursor: not-allowed; }
+.btn-secondary { background: transparent; color: #7a3520; border: 2px solid #7a3520; }
+.btn-secondary:hover { background: #7a3520; color: #f5ede3; }
+.btn-small { font-size: 12px; padding: 10px 16px; }
+
+.tip {
+margin-top: 24px;
+padding: 16px;
+background: rgba(255,255,255,0.6);
+border-radius: 8px;
+font-size: 14px;
+border-left: 3px solid #7a3520;
+}
+.tip strong { color: #7a3520; letter-spacing: 0.1em; text-transform: uppercase; font-size: 12px; }
+
+/* Result view */
+.card {
+background: #fffcf7;
+border: 1px solid #e8ddd4;
+border-radius: 12px;
+padding: 32px 24px;
+box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.title-input { font-family: ‘Cormorant Garamond’, serif; font-size: clamp(28px, 6vw, 42px); font-weight: 700; color: #7a3520; border: none; outline: none; width: 100%; background: transparent; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.1; }
+.edit-hint { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; padding-bottom: 16px; border-bottom: 1px solid #e8ddd4; margin-bottom: 20px; }
+
+.servings-box { background: #f5ede3; padding: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+.servings-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; margin-bottom: 4px; }
+.servings-count { font-family: ‘Cormorant Garamond’, serif; font-size: 28px; font-weight: 700; color: #2a1f1a; }
+.servings-orig { font-size: 11px; color: #9a6c5a; font-style: italic; margin-top: 2px; }
+.scaler { display: flex; align-items: center; gap: 8px; }
+.scaler button { width: 40px; height: 40px; padding: 0; font-size: 20px; background: #7a3520; color: #f5ede3; border-radius: 50%; }
+.scaler input { width: 60px; text-align: center; font-family: ‘Cormorant Garamond’, serif; font-size: 22px; font-weight: 700; color: #2a1f1a; background: transparent; border: none; border-bottom: 2px solid #c9a590; outline: none; padding: 4px 0; -moz-appearance: textfield; }
+.scaler input::-webkit-outer-spin-button, .scaler input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+h2 { font-family: ‘Cormorant Garamond’, serif; font-size: 22px; font-weight: 600; color: #7a3520; border-bottom: 2px solid #7a3520; padding-bottom: 8px; margin: 28px 0 16px; }
+h2:first-of-type { margin-top: 0; }
+
+ul.ingredients { list-style: none; }
+ul.ingredients li { padding: 10px 0; border-bottom: 1px dotted #e8ddd4; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.qty { font-family: ‘Cormorant Garamond’, serif; font-weight: 600; font-size: 18px; color: #7a3520; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ing-name { flex: 1; min-width: 120px; color: #2a1f1a; background: transparent; border: none; outline: none; font-size: 15px; font-family: inherit; }
+.ing-orig { flex-basis: 100%; font-size: 11px; color: #c9a590; margin-top: 2px; }
+
+ol.method { padding-left: 0; list-style: none; counter-reset: step; }
+ol.method li { display: flex; gap: 16px; padding: 10px 0; counter-increment: step; }
+ol.method li::before { content: counter(step) “.”; font-family: ‘Cormorant Garamond’, serif; font-size: 26px; font-weight: 700; color: #7a3520; min-width: 2ch; line-height: 1; }
+ol.method textarea { min-height: auto; padding: 4px 0; border: none; background: transparent; font-size: 15px; line-height: 1.6; }
+
+.action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; justify-content: flex-end; }
+.footer-note { text-align: center; margin-top: 20px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; }
+
+@media print {
+body { background: white; background-image: none; }
+.action-bar, .btn-row, .tip, header .tagline, .edit-hint, .footer-note, .scaler button { display: none !important; }
+.card { box-shadow: none; border: none; padding: 0; }
+.servings-box { background: transparent; padding: 0; border-bottom: 1px solid #e8ddd4; padding-bottom: 12px; }
+.scaler input { border: none; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
+      <span>Le Convertisseur</span>
+    </div>
+    <h1>Recipe to Metric</h1>
+    <p class="tagline">Paste a recipe. Get grams, millilitres, clarity.</p>
+  </header>
+
+  <!-- Input view -->
+
+  <section id="input-view">
+    <label for="recipe-text">Recipe text</label>
+    <textarea id="recipe-text" placeholder="Paste or type your recipe here. For example:
+
+2 cups flour
+1 cup sugar
+2 cups almonds
+
+Or an entire recipe with title, ingredients, and method.”></textarea>
+
+```
+<div class="btn-row">
+  <button class="btn-primary" id="convert-btn" disabled>Convert to Metric</button>
+  <button class="btn-secondary" id="example-btn">Load Example</button>
+</div>
+
+<div class="tip">
+  <strong>iPad tip</strong>
+  <p style="margin-top:6px;">Open a recipe photo in Photos → long-press text → Select All → Copy → paste here. iOS extracts text automatically using Live Text.</p>
+</div>
+```
+
+  </section>
+
+  <!-- Result view -->
+
+  <section id="result-view" style="display:none;">
+    <div class="action-bar">
+      <button class="btn-secondary btn-small" id="copy-btn">Copy</button>
+      <button class="btn-secondary btn-small" id="pdf-btn">PDF</button>
+      <button class="btn-secondary btn-small" id="csv-btn">CSV</button>
+      <button class="btn-primary btn-small" style="flex:0;" id="new-btn">New</button>
+    </div>
+
+```
+<article class="card">
+  <input id="title-input" class="title-input" />
+  <div class="edit-hint">✎ Tap any field to edit</div>
+
+  <div class="servings-box">
+    <div>
+      <div class="servings-label">Scale to serve</div>
+      <div class="servings-count"><span id="target-display">4</span> <span id="people-label">people</span></div>
+      <div class="servings-orig" id="orig-info"></div>
+    </div>
+    <div class="scaler">
+      <button id="minus-btn">−</button>
+      <input type="number" id="target-input" min="1" value="4">
+      <button id="plus-btn">+</button>
+    </div>
+  </div>
+
+  <h2>Ingredients</h2>
+  <ul class="ingredients" id="ingredients-list"></ul>
+
+  <div id="method-section" style="display:none;">
+    <h2>Method</h2>
+    <ol class="method" id="method-list"></ol>
+  </div>
+</article>
+
+<div class="footer-note">Australian metric standards • Runs on your device</div>
+```
+
+  </section>
+</div>
+
+<script>
+// ============ CONVERSION DATA ============
+const DENSITIES = {
+  "plain flour":150,"all-purpose flour":150,"all purpose flour":150,"flour":150,
+  "self-raising flour":150,"self raising flour":150,"bread flour":150,
+  "cake flour":125,"wholemeal flour":145,"almond flour":100,"almond meal":100,
+  "caster sugar":220,"granulated sugar":220,"white sugar":220,"sugar":220,
+  "brown sugar":220,"raw sugar":220,"icing sugar":125,
+  "butter":227,"margarine":227,
+  "milk":250,"water":250,"cream":240,"buttermilk":245,"yoghurt":245,"yogurt":245,
+  "olive oil":218,"vegetable oil":218,"oil":218,"canola oil":218,
+  "honey":340,"maple syrup":320,"golden syrup":340,
+  "cocoa powder":100,"cocoa":100,
+  "rolled oats":90,"oats":90,
+  "rice":200,"white rice":200,"brown rice":190,
+  "breadcrumbs":100,"panko":60,
+  "parmesan":100,"grated cheese":100,"shredded cheese":100,"cheese":100,
+  "almonds":120,"walnuts":120,"pecans":120,"hazelnuts":135,"pistachios":125,"nuts":120,
+  "raisins":150,"sultanas":150,"currants":150,
+  "chocolate chips":170,"chocolate":170,
+  "peanut butter":260,"tomato paste":260,
+};
+const TSP_GRAMS = {
+  "salt":6,"sea salt":6,"table salt":6,"sugar":4,
+  "baking powder":4,"baking soda":5,"bicarb":5,
+  "yeast":3,"dry yeast":3,
+  "pepper":2,"black pepper":2,
+  "cinnamon":2.5,"nutmeg":2.5,"paprika":2.5,"cumin":2.5,"coriander":2,"turmeric":3,
+  "vanilla extract":4,"vanilla":4,
+};
+const WHOLES = {
+  "egg":60,"eggs":60,
+  "onion":150,"onions":150,"brown onion":150,"red onion":150,
+  "garlic clove":4,"garlic cloves":4,"clove":4,"cloves":4,
+  "carrot":80,"carrots":80,"potato":200,"potatoes":200,
+  "tomato":120,"tomatoes":120,
+  "lemon":90,"lemons":90,"lime":60,"limes":60,
+  "apple":180,"apples":180,"banana":120,"bananas":120,
+  "capsicum":160,"chilli":10,"chillies":10,
+};
+
+// ============ PARSER ============
+function parseQty(s) {
+  if (!s) return null;
+  s = s.replace(/½/g,".5").replace(/¼/g,".25").replace(/¾/g,".75").replace(/⅓/g,".333").replace(/⅔/g,".667").trim();
+  const mixed = s.match(/^(\d+)\s+(\d+)\/(\d+)$/);
+  if (mixed) return parseInt(mixed[1]) + parseInt(mixed[2])/parseInt(mixed[3]);
+  const frac = s.match(/^(\d+)\/(\d+)$/);
+  if (frac) return parseInt(frac[1])/parseInt(frac[2]);
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+function findMatch(text, dict) {
+  const t = text.toLowerCase();
+  const keys = Object.keys(dict).sort((a,b) => b.length-a.length);
+  for (const k of keys) if (t.includes(k)) return { key:k, val:dict[k] };
+  return null;
+}
+function parseLine(line) {
+  const original = line.trim();
+  if (!original) return null;
+  let s = original.replace(/^[-•·*\d]+[.)\s]*/, "").trim();
+  const qtyRe = /^((?:\d+\s+)?\d+\/\d+|\d+(?:\.\d+)?|[½¼¾⅓⅔])\s*/;
+  const qtyMatch = s.match(qtyRe);
+  let qty = null;
+  if (qtyMatch) { qty = parseQty(qtyMatch[1]); s = s.slice(qtyMatch[0].length); }
+
+  if (qty != null) {
+    const unitMatch = s.match(/^(g|grams?|kg|kilograms?|ml|millilitres?|milliliters?|l|litres?|liters?|oz|ounces?|lb|pounds?|cups?|tbsp|tbs|tablespoons?|tsp|teaspoons?|fl\s?oz)\b\s*(?:\([^)]*\))?\s*(?:of\s+)?(.*)$/i);
+    if (unitMatch) {
+      const u = unitMatch[1].toLowerCase().replace(/\s+/g,"");
+      const rest = unitMatch[2].trim();
+      if (/^g|^gram/.test(u)) return { original, name:rest, grams:qty, millilitres:null, whole:null, wholeUnit:null };
+      if (/^kg|^kilogram/.test(u)) return { original, name:rest, grams:qty*1000, millilitres:null, whole:null, wholeUnit:null };
+      if (/^ml|^millilitre|^milliliter/.test(u)) return { original, name:rest, grams:null, millilitres:qty, whole:null, wholeUnit:null };
+      if (/^l$|^litre|^liter/.test(u)) return { original, name:rest, grams:null, millilitres:qty*1000, whole:null, wholeUnit:null };
+      if (/^oz|^ounce/.test(u)) return { original, name:rest, grams:qty*28.35, millilitres:null, whole:null, wholeUnit:null };
+      if (/^lb|^pound/.test(u)) return { original, name:rest, grams:qty*454, millilitres:null, whole:null, wholeUnit:null };
+      let mlPer = 0;
+      if (u.startsWith("cup")) mlPer = 250;
+      else if (u.startsWith("tbsp")||u.startsWith("tbs")||u.startsWith("tablespoon")) mlPer = 20;
+      else if (u.startsWith("tsp")||u.startsWith("teaspoon")) mlPer = 5;
+      else if (u.startsWith("floz")||u.startsWith("fluidoz")) mlPer = 30;
+      const ml = qty*mlPer;
+      let grams = null;
+      const d = findMatch(rest, DENSITIES);
+      if (d) grams = (ml/250)*d.val;
+      if (!grams && (u.startsWith("tsp")||u.startsWith("teaspoon"))) {
+        const t = findMatch(rest, TSP_GRAMS);
+        if (t) grams = qty*t.val;
+      }
+      return { original, name:rest, grams, millilitres:ml, whole:null, wholeUnit:null };
+    }
+    const w = findMatch(s, WHOLES);
+    if (w) return { original, name:s, grams:qty*w.val, millilitres:null, whole:qty, wholeUnit:w.key };
+    return { original, name:s, grams:null, millilitres:null, whole:qty, wholeUnit:null };
+  }
+  return { original, name:s, grams:null, millilitres:null, whole:null, wholeUnit:null };
+}
+function parseRecipe(text) {
+  const lines = text.split("\n").map(l=>l.trim()).filter(l=>l);
+  let title = "Recipe";
+  let servings = 4;
+  const ingredients = [];
+  const method = [];
+  let section = "ingredients";
+  let foundTitle = false;
+  for (const line of lines) {
+    if (!foundTitle && !/^(ingredients?|method|directions?|instructions?|steps?)\b/i.test(line)) {
+      title = line.replace(/\(serves?.*\)/i,"").trim() || title;
+      const sm = line.match(/serves?\s*(\d+)|(\d+)\s*servings?/i);
+      if (sm) servings = parseInt(sm[1]||sm[2]);
+      foundTitle = true;
+      continue;
+    }
+    if (/^ingredients?\b/i.test(line)) { section = "ingredients"; continue; }
+    if (/^(method|directions?|instructions?|steps?)\b/i.test(line)) { section = "method"; continue; }
+    if (/^step\s*\d+/i.test(line)) { section = "method"; continue; }
+    if (section === "method") method.push(line);
+    else { const p = parseLine(line); if (p) ingredients.push(p); }
+  }
+  return { title, servings, ingredients, method };
+}
+
+// ============ APP STATE ============
+let recipe = null;
+let orig = 4;
+let target = 4;
+
+// ============ ELEMENTS ============
+const $ = id => document.getElementById(id);
+const textArea = $("recipe-text");
+const convertBtn = $("convert-btn");
+const exampleBtn = $("example-btn");
+const inputView = $("input-view");
+const resultView = $("result-view");
+const titleInput = $("title-input");
+const targetDisplay = $("target-display");
+const targetInput = $("target-input");
+const peopleLabel = $("people-label");
+const origInfo = $("orig-info");
+const ingList = $("ingredients-list");
+const methodSection = $("method-section");
+const methodList = $("method-list");
+
+// ============ FORMATTERS ============
+const scale = v => v == null ? null : v * (target/orig);
+const fmtW = g => g == null ? null : g >= 1000 ? ((g/1000).toFixed(g%1000===0?0:2)+" kg") : (Math.round(g)+" g");
+const fmtV = ml => ml == null ? null : ml >= 1000 ? ((ml/1000).toFixed(ml%1000===0?0:2)+" L") : (Math.round(ml)+" ml");
+const fmtWh = (n,u) => n == null ? null : (Math.round(n*10)/10+" "+(u||"")).trim();
+
+// ============ RENDER ============
+function render() {
+  titleInput.value = recipe.title;
+  targetDisplay.textContent = target;
+  targetInput.value = target;
+  peopleLabel.textContent = target === 1 ? "person" : "people";
+  origInfo.textContent = target !== orig ? `Original: serves ${orig} • ×${(target/orig).toFixed(2)}` : "";
+
+  ingList.innerHTML = "";
+  recipe.ingredients.forEach((i, idx) => {
+    const g = scale(i.grams), ml = scale(i.millilitres), w = scale(i.whole);
+    const parts = [];
+    if (w != null) parts.push(fmtWh(w, i.wholeUnit));
+    if (g != null) parts.push(fmtW(g));
+    if (ml != null && g == null) parts.push(fmtV(ml));
+    else if (ml != null) parts.push(`(${fmtV(ml)})`);
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="qty">${parts.join(" ") || "—"}</span><input class="ing-name" value="${escapeAttr(i.name)}" data-idx="${idx}">${i.original && i.original !== i.name ? `<div class="ing-orig">was: ${escape(i.original)}</div>` : ""}`;
+    ingList.appendChild(li);
+  });
+  // Attach name-edit listeners
+  ingList.querySelectorAll(".ing-name").forEach(input => {
+    input.addEventListener("input", e => {
+      recipe.ingredients[parseInt(e.target.dataset.idx)].name = e.target.value;
+    });
+  });
+
+  if (recipe.method.length) {
+    methodSection.style.display = "block";
+    methodList.innerHTML = "";
+    recipe.method.forEach((s, idx) => {
+      const li = document.createElement("li");
+      const ta = document.createElement("textarea");
+      ta.value = s;
+      ta.rows = Math.max(2, Math.ceil(s.length/70));
+      ta.style.flex = "1";
+      ta.style.resize = "none";
+      ta.addEventListener("input", e => { recipe.method[idx] = e.target.value; });
+      li.appendChild(ta);
+      methodList.appendChild(li);
+    });
+  } else {
+    methodSection.style.display = "none";
+  }
+}
+function escape(s) { return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function escapeAttr(s) { return String(s).replace(/"/g, '&quot;'); }
+
+// ============ EVENTS ============
+textArea.addEventListener("input", () => {
+  convertBtn.disabled = !textArea.value.trim();
+});
+
+exampleBtn.addEventListener("click", () => {
+  textArea.value = `Spaghetti Bolognese (Serves 4)
+Ingredients
+- 375g spaghetti
+- 1 tbsp olive oil
+- 1 brown onion, finely chopped
+- 1 carrot, peeled, finely chopped
+- 500g beef mince
+- 2 garlic cloves, crushed
+- 1 tbsp tomato paste
+- 400g can diced tomatoes
+- 3/4 cup beef stock
+- 1/4 cup grated parmesan
+Method
+1. Cook spaghetti in boiling salted water until al dente. Drain.
+2. Heat oil in a large frying pan. Cook onion and carrot for 3-4 mins until softened.
+3. Add mince and cook, breaking up lumps, until browned. Add garlic and cook 1 min.
+4. Stir in tomato paste, tomatoes and stock. Simmer uncovered for 10-12 mins until thickened.
+5. Serve spaghetti topped with bolognese and parmesan.`;
+  convertBtn.disabled = false;
+});
+
+convertBtn.addEventListener("click", () => {
+  if (!textArea.value.trim()) return;
+  recipe = parseRecipe(textArea.value);
+  orig = recipe.servings;
+  target = recipe.servings;
+  inputView.style.display = "none";
+  resultView.style.display = "block";
+  window.scrollTo(0, 0);
+  render();
+});
+
+$("new-btn").addEventListener("click", () => {
+  recipe = null;
+  textArea.value = "";
+  convertBtn.disabled = true;
+  inputView.style.display = "block";
+  resultView.style.display = "none";
+  window.scrollTo(0, 0);
+});
+
+$("minus-btn").addEventListener("click", () => { target = Math.max(1, target-1); render(); });
+$("plus-btn").addEventListener("click", () => { target = target+1; render(); });
+targetInput.addEventListener("change", e => { target = Math.max(1, parseInt(e.target.value)||1); render(); });
+titleInput.addEventListener("input", e => { recipe.title = e.target.value; });
+
+// ============ EXPORTS ============
+function buildText() {
+  let t = `${recipe.title}\n${"─".repeat(Math.max(4, recipe.title.length))}\nServes ${target}\n\nINGREDIENTS\n\n`;
+  recipe.ingredients.forEach(i => {
+    const g = scale(i.grams), ml = scale(i.millilitres), w = scale(i.whole);
+    const parts = [];
+    if (w != null) parts.push(fmtWh(w, i.wholeUnit));
+    if (g != null) parts.push(fmtW(g));
+    if (ml != null && g == null) parts.push(fmtV(ml));
+    else if (ml != null) parts.push(`(${fmtV(ml)})`);
+    t += `• ${parts.join(" ")} ${i.name}\n`;
+  });
+  if (recipe.method.length) {
+    t += `\nMETHOD\n\n`;
+    recipe.method.forEach((s, idx) => t += `${idx+1}. ${s}\n\n`);
+  }
+  return t;
+}
+
+$("copy-btn").addEventListener("click", () => {
+  navigator.clipboard.writeText(buildText());
+  const btn = $("copy-btn");
+  const orig = btn.textContent;
+  btn.textContent = "✓ Copied";
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+});
+
+$("pdf-btn").addEventListener("click", () => {
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${recipe.title}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap');
+body{font-family:'Inter',sans-serif;max-width:640px;margin:40px auto;padding:0 32px;color:#2a1f1a;line-height:1.6;}
+h1{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;margin:0 0 8px;color:#7a3520;letter-spacing:-0.02em;}
+.meta{font-size:13px;text-transform:uppercase;letter-spacing:0.15em;color:#9a6c5a;margin-bottom:32px;border-bottom:1px solid #e8ddd4;padding-bottom:20px;}
+h2{font-family:'Cormorant Garamond',serif;font-size:24px;color:#7a3520;margin:32px 0 16px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;}
+ul{list-style:none;padding:0;}
+li{padding:8px 0;border-bottom:1px dotted #e8ddd4;display:flex;justify-content:space-between;gap:16px;}
+.qty{font-weight:500;color:#7a3520;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.ing{flex:1;}
+ol{padding-left:20px;}
+ol li{display:list-item;border:none;padding:8px 0;}
+ol li::marker{color:#7a3520;font-weight:600;}
+</style></head><body>
+
+<h1>${escape(recipe.title)}</h1>
+<div class="meta">Serves ${target}</div>
+<h2>Ingredients</h2><ul>
+${recipe.ingredients.map(i => {
+  const g = scale(i.grams), ml = scale(i.millilitres), w = scale(i.whole);
+  const parts = [];
+  if (w != null) parts.push(fmtWh(w, i.wholeUnit));
+  if (g != null) parts.push(fmtW(g));
+  if (ml != null && g == null) parts.push(fmtV(ml));
+  else if (ml != null) parts.push(`(${fmtV(ml)})`);
+  return `<li><span class="ing">${escape(i.name)}</span><span class="qty">${parts.join(" ")}</span></li>`;
+}).join("")}
+</ul>
+${recipe.method.length ? `<h2>Method</h2><ol>${recipe.method.map(s=>`<li>${escape(s)}</li>`).join("")}</ol>` : ""}
+</body></html>`;
+  const w = window.open("", "_blank");
+  w.document.write(html);
+  w.document.close();
+  setTimeout(() => w.print(), 400);
+});
+
+$(“csv-btn”).addEventListener(“click”, () => {
+let csv = “Ingredient,Whole,Weight (g),Volume (ml)\n”;
+recipe.ingredients.forEach(i => {
+const g = scale(i.grams), ml = scale(i.millilitres), w = scale(i.whole);
+const whole = w != null ? fmtWh(w, i.wholeUnit) : “”;
+csv += `"${i.name}","${whole}","${g!=null?Math.round(g):""}","${ml!=null?Math.round(ml):""}"\n`;
+});
+const blob = new Blob([csv], { type:“text/csv” });
+const url = URL.createObjectURL(blob);
+const a = document.createElement(“a”);
+a.href = url;
+a.download = `${recipe.title.replace(/[^a-z0-9]/gi,"_")}.csv`;
+a.click();
+URL.revokeObjectURL(url);
+});
+</script>
+
+</body>
+</html>
