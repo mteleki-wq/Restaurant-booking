@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITXFIN010 Section C — Assessment Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #1A2F4A;
+    --teal:   #0D7A6E;
+    --gold:   #D4A017;
+    --req1:   #0D7A6E;
+    --req2:   #B07030;
+    --req3:   #6B3A8E;
+    --req1-lt: #E8F4F0;
+    --req2-lt: #FEF3E0;
+    --req3-lt: #F3EDF9;
+    --req1-mid:#B2DDD5;
+    --req2-mid:#F0D8A0;
+    --req3-mid:#D5BDE8;
+    --bg:     #F0F3F7;
+    --card:   #FFFFFF;
+    --border: #D8E3EE;
+    --text:   #1A2F4A;
+    --muted:  #5A6E85;
+    --done:   #1D7A4F;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────── */
+  .header {
+    background: var(--navy);
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(26,47,74,0.25);
+  }
+  .header-left h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .header-left p {
+    font-size: 0.82rem;
+    color: #8EA9C4;
+    margin-top: 3px;
+  }
+  .header-badge {
+    background: var(--teal);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 0.04em;
+  }
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .progress-bar-outer {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-size: 0.75rem;
+    color: #8EA9C4;
+    white-space: nowrap;
+  }
+
+  /* ── LAYOUT ─────────────────────────────────────────────── */
+  .board {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 32px 60px;
+  }
+
+  /* ── INTRO STRIP ─────────────────────────────────────────── */
+  .intro {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--gold);
+    border-radius: 12px;
+    padding: 22px 28px;
+    margin-bottom: 36px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  .intro-icon { font-size: 2rem; flex-shrink: 0; }
+  .intro-text h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--navy);
+  }
+  .intro-text p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .intro-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .pill {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+  }
+  .pill-1 { background: var(--req1-lt); color: var(--req1); }
+  .pill-2 { background: var(--req2-lt); color: var(--req2); }
+  .pill-3 { background: var(--req3-lt); color: var(--req3); }
+
+  /* ── SECTION COLUMNS ─────────────────────────────────────── */
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* ── REQ COLUMN ─────────────────────────────────────────── */
+  .req-col { display: flex; flex-direction: column; gap: 12px; }
+
+  .req-header {
+    border-radius: 12px;
+    padding: 20px 22px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .req-header::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .req-1 .req-header { background: linear-gradient(135deg, #0D7A6E 0%, #0A5C53 100%); }
+  .req-2 .req-header { background: linear-gradient(135deg, #B07030 0%, #8B5220 100%); }
+  .req-3 .req-header { background: linear-gradient(135deg, #6B3A8E 0%, #4A2363 100%); }
+
+  .req-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+    margin-bottom: 6px;
+  }
+  .req-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .req-header .req-desc {
+    font-size: 0.8rem;
+    opacity: 0.88;
+    line-height: 1.55;
+  }
+  .req-meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .req-meta span {
+    background: rgba(255,255,255,0.15);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+  }
+  .req-steps-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 0 4px;
+    margin-bottom: 2px;
+  }
+
+  /* ── STEP CARD ───────────────────────────────────────────── */
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .step-card:hover { box-shadow: 0 6px 24px rgba(26,47,74,0.1); transform: translateY(-2px); }
+  .step-card.done { opacity: 0.7; }
+  .step-card.done .step-header { background: #F0FAF5 !important; }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .step-card.open .step-header { border-bottom-color: var(--border); }
+
+  .step-check {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .req-1 .step-check { border-color: var(--req1-mid); color: var(--req1); }
+  .req-2 .step-check { border-color: var(--req2-mid); color: var(--req2); }
+  .req-3 .step-check { border-color: var(--req3-mid); color: var(--req3); }
+  .step-check.checked { background: var(--done); border-color: var(--done); color: #fff; }
+
+  .step-title-wrap { flex: 1; min-width: 0; }
+  .step-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .req-1 .step-label { color: var(--req1); }
+  .req-2 .step-label { color: var(--req2); }
+  .req-3 .step-label { color: var(--req3); }
+
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  .step-chevron {
+    font-size: 0.75rem;
+    color: var(--muted);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .step-card.open .step-chevron { transform: rotate(180deg); }
+
+  /* ── STEP BODY ───────────────────────────────────────────── */
+  .step-body {
+    display: none;
+    padding: 16px;
+    background: #FAFCFE;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .step-card.open .step-body { display: flex; }
+
+  .what-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .what-box h4 {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .what-box p {
+    font-size: 0.83rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .tab-ref {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tab-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+  }
+  .tab-tag.t-assum { background: #E8F0FA; color: #1A4A8B; }
+  .tab-tag.t-budget { background: #E8F4F0; color: #0D5C50; }
+  .tab-tag.t-monthly { background: #EFF5FE; color: #2855A0; }
+  .tab-tag.t-review { background: #FEF3E8; color: #8B4A10; }
+  .tab-tag.t-dash { background: #F3EDF9; color: #5A2880; }
+  .tab-tag.t-instr { background: #FEF9E8; color: #7A5A00; }
+
+  .how-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .how-list li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .how-list li::before {
+    content: '→';
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .req-1 .how-list li::before { color: var(--req1); }
+  .req-2 .how-list li::before { color: var(--req2); }
+  .req-3 .how-list li::before { color: var(--req3); }
+
+  .tip-box {
+    border-radius: 7px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    display: flex;
+    gap: 8px;
+  }
+  .tip-box.tip-warn { background: #FFF3E0; border-left: 3px solid #E08000; color: #5C3800; }
+  .tip-box.tip-info { background: var(--req1-lt); border-left: 3px solid var(--req1); color: #0A4A42; }
+  .tip-box.tip-key  { background: var(--req2-lt); border-left: 3px solid var(--req2); color: #5C3800; }
+  .tip-box.tip-note { background: var(--req3-lt); border-left: 3px solid var(--req3); color: #3A1A5C; }
+
+  .mark-done-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+    align-self: flex-start;
+  }
+  .req-1 .mark-done-btn { background: var(--req1); color: #fff; }
+  .req-2 .mark-done-btn { background: var(--req2); color: #fff; }
+  .req-3 .mark-done-btn { background: var(--req3); color: #fff; }
+  .mark-done-btn:hover { opacity: 0.85; transform: scale(1.02); }
+  .mark-done-btn.undone { background: #e5e8ec; color: var(--muted); }
+
+  /* ── CONNECTOR ───────────────────────────────────────────── */
+  .connector-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 36px 0 12px;
+  }
+  .connector-line {
+    height: 3px;
+    border-radius: 3px;
+    position: relative;
+  }
+  .conn-1 { background: linear-gradient(90deg, var(--req1) 0%, transparent 100%); }
+  .conn-2 { background: linear-gradient(90deg, var(--req2) 0%, transparent 100%); }
+  .conn-3 { background: linear-gradient(90deg, var(--req3) 0%, transparent 100%); }
+
+  /* ── SUMMARY STRIP ───────────────────────────────────────── */
+  .summary-strip {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .sum-item { text-align: center; }
+  .sum-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .sum-label {
+    font-size: 0.75rem;
+    color: #8EA9C4;
+    line-height: 1.4;
+  }
+  .sum-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 10px;
+  }
+
+  /* ── LEGEND ─────────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  /* ── RESPONSIVE ─────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .columns, .connector-row { grid-template-columns: 1fr; }
+    .summary-strip { grid-template-columns: 1fr 1fr; }
+    .board { padding: 20px 16px 48px; }
+    .header { padding: 18px 20px; }
+  }
+
+  /* ── ANIMATIONS ─────────────────────────────────────────── */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .req-col { animation: fadeSlideIn 0.5s ease both; }
+  .req-col:nth-child(1) { animation-delay: 0.1s; }
+  .req-col:nth-child(2) { animation-delay: 0.22s; }
+  .req-col:nth-child(3) { animation-delay: 0.34s; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header class="header">
+  <div style="flex:1">
+    <div class="header-left">
+      <h1>SITXFIN010 — Section C Assessment Roadmap</h1>
+      <p>Prepare and Monitor Budgets  ·  Le' Culinaire Hospitality Institute  ·  RTO 45326</p>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+      <span class="progress-label" id="progressLabel">0 of 14 completed</span>
+    </div>
+  </div>
+  <div class="header-badge">Section C</div>
+</header>
+
+<!-- ── BOARD ─────────────────────────────────────────────── -->
+<main class="board">
+
+  <!-- Intro -->
+  <div class="intro">
+    <div class="intro-icon">🗺️</div>
+    <div class="intro-text">
+      <h2>How to use this board</h2>
+      <p>The Section C performance activity has <strong>3 assessment requirements</strong>. Each column below is one requirement. Click any card to see exactly <em>what</em> to do, <em>which tab</em> of your Excel workbook to use, and <em>how</em> to write your response in the Student Guide. Tick each step as you complete it to track your progress.</p>
+      <div class="intro-pills">
+        <span class="pill pill-1">✦ Req 1 — Prepare the Budget (Part 1 A–J)</span>
+        <span class="pill pill-2">✦ Req 2 — Decision Report (Part 2)</span>
+        <span class="pill pill-3">✦ Req 3 — Monitor &amp; Review (Part 3 Meetings 1–3)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three columns -->
+  <div class="columns">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- REQUIREMENT 1 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="req-col req-1">
+      <div class="req-header">
+        <div class="req-number">ASSESSMENT REQUIREMENT 1</div>
+        <h2>Prepare a Draft &amp; Final Budget for the Next Two Financial Quarters</h2>
+        <p class="req-desc">In consultation with the accounts department — demonstrating consultation, factor analysis, and draft/final versions within designated timelines.</p>
+        <div class="req-meta">
+          <span>📋 Part 1 of Student Guide</span>
+          <span>Sections A → J</span>
+          <span>10 steps</span>
+        </div>
+      </div>
+
+      <p class="req-steps-label">Steps to complete →</p>
+
+      <!-- A: Business Context -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Section A</div>
+            <div class="step-title">Set Your Business Context</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Describe the business you are budgeting for — its type, what the budget covers (sales, food, wages, overheads), and the budget period (Q1 and Q2 dates).</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-instr">📋 Instructions Tab</span>
+          </div>
+          <ul class="how-list">
+            <li>Open the Instructions tab in your Excel workbook</li>
+            <li>Use your restaurant name, cuisine type and budget period</li>
+            <li>Write 3–5 sentences: what is the business, what does the budget cover, and what are the two quarter dates</li>
+            <li>In the Student Guide, fill in the ✏️ YOUR RESPONSE box in Section A</li>
+          </ul>
+          <div class="tip-box tip-info">💡 <span>Do not use the trainer's example restaurant. Your response must describe YOUR restaurant from the Instructions tab.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- B: Consultation -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Section B</div>
+            <div class="step-title">Consultation Process</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Consult relevant parties before preparing your budget. Name at least 3 people or roles you consulted and explain what you discussed with each one.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-assum">⚙️ Assumptions Tab</span>
+            <span class="tab-tag t-budget">💰 Budget_Q1_Q2 Tab</span>
+          </div>
+          <ul class="how-list">
+            <li>Name at least 3 people: e.g. Accounts Officer, Head Chef, Restaurant Supervisor</li>
+            <li>For each person, write 2–3 sentences: what did you ask them, what did they tell you</li>
+            <li>Connect each consultation to a specific figure in your Assumptions tab (e.g. "The Head Chef recommended a food cost of 33% — I entered this in cell C23 of the Assumptions tab")</li>
+            <li>Fill in Section B of the Student Guide</li>
+          </ul>
+          <div class="tip-box tip-warn">⚠️ <span>Generic responses like "I consulted staff" will not meet the standard. Name who, what they said, and where you applied their advice in your workbook.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- C: Data -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Section C</div>
+            <div class="step-title">Data Identified, Accessed &amp; Interpreted</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Identify what data you used, where you got it from, and what it told you. This is your evidence that you analysed real information before entering numbers into the workbook.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-assum">⚙️ Assumptions Tab</span>
+          </div>
+          <ul class="how-list">
+            <li>List the data sources you used: previous sales records, supplier price lists, payroll records, utility bills, booking data, food cost reports</li>
+            <li>For each source, explain how it informed a specific figure in your Assumptions tab (e.g. "Supplier quotes informed my food cost % — I set 33% in cell C23")</li>
+            <li>Write 4–6 sentences describing what the data revealed and how it changed your estimates</li>
+          </ul>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- D: Factors -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Section D</div>
+            <div class="step-title">Internal &amp; External Factors</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Identify the factors with the most potential to influence income and expenditure — both inside the business (internal) and outside (external). Each factor must connect to a specific workbook decision.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-assum">⚙️ Assumptions Tab</span>
+            <span class="tab-tag t-budget">💰 Budget_Q1_Q2 Tab</span>
+          </div>
+          <ul class="how-list">
+            <li><strong>Internal:</strong> Labour costs (Labour Planner), organisational objectives (Budget tab rows 30–34), planned promotions (Marketing line)</li>
+            <li><strong>External:</strong> Commodity prices (food cost % in Assumptions cell C23), economic conditions (conservative Q1 vs Q2 revenue), market trends (marketing budget increase)</li>
+            <li>For each factor, write the specific figure from your workbook that reflects it</li>
+          </ul>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- E: Authorities -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Section E</div>
+            <div class="step-title">3 Authorities Consulted</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Consult at least 3 different authorities, inform them of decisions you are taking, and solicit their advice. Document each authority's specific advice and where you applied it.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-assum">⚙️ Assumptions Tab</span>
+            <span class="tab-tag t-budget">💰 Budget_Q1_Q2 Tab</span>
+          </div>
+          <ul class="how-list">
+            <li>Authority 1 (e.g. Accounts Officer) — what they advised + which cell/tab you updated</li>
+            <li>Authority 2 (e.g. Head Chef) — what they advised + which cell/tab you updated</li>
+            <li>Authority 3 (e.g. Supervisor) — what they advised + which cell/tab you updated</li>
+            <li>Fill in the 3-row table in Section E of the Student Guide</li>
+          </ul>
+          <div class="tip-box tip-info">💡 <span>This section also feeds directly into Part 2 — your Decision Report. Note down the advice now as you'll need it again.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- F: Deadlines -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Section F</div>
+            <div class="step-title">Task Allocation &amp; Deadlines</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Set yourself and colleagues deadlines for the completion of specific tasks. Show a structured, consultative process with named responsibilities.</p></div>
+          <ul class="how-list">
+            <li>Create a 7-day timeline (or adapt to your scenario)</li>
+            <li>Each day: name the task, who is responsible, and what was produced</li>
+            <li>Include: data gathering, consultant meetings, draft completion, feedback, modifications, final budget</li>
+          </ul>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- G+H+I+J: Budget -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Sections G · H · I · J</div>
+            <div class="step-title">Draft Budget → Decisions → Modifications → Final Budget</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Present your two-quarter budget, explain every major decision, document modifications after consultation, and present the final budget to relevant parties.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-budget">💰 Budget_Q1_Q2 Tab — all figures</span>
+            <span class="tab-tag t-assum">⚙️ Assumptions Tab — food cost %, labour %</span>
+          </div>
+          <ul class="how-list">
+            <li><strong>G:</strong> Pull your Q1 and Q2 figures from the Budget_Q1_Q2 tab (cells C8, D8, C11, C16, C26, C27). Do NOT use example figures.</li>
+            <li><strong>H:</strong> For each budget line, write: the figure, why you chose it, and what data or advice informed it</li>
+            <li><strong>I:</strong> Document at least 2 modifications requested after the draft was circulated — who asked, what changed, which tab/row was updated</li>
+            <li><strong>J:</strong> Name who received the final budget and what you communicated to each person</li>
+          </ul>
+          <div class="tip-box tip-warn">⚠️ <span>All figures must come from YOUR workbook. Do not use $180,000 / $195,000 or any trainer example numbers.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+    </div><!-- /req-1 -->
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- REQUIREMENT 2 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="req-col req-2">
+      <div class="req-header">
+        <div class="req-number">ASSESSMENT REQUIREMENT 2</div>
+        <h2>Produce a Decision Report Alongside Your Budget</h2>
+        <p class="req-desc">While producing your budget: consult 3 authorities, analyse internal &amp; external factors, set deadlines, and explain each decision in a brief report.</p>
+        <div class="req-meta">
+          <span>📄 Part 2 of Student Guide</span>
+          <span>Decision Report</span>
+          <span>3 steps</span>
+        </div>
+      </div>
+
+      <p class="req-steps-label">Steps to complete →</p>
+
+      <!-- Step: Gather decision evidence -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Before writing</div>
+            <div class="step-title">Gather Your Decision Evidence</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What you need before you write</h4><p>The decision report references specific figures and specific advice. Make sure you have these ready before you start writing.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-assum">⚙️ Assumptions Tab</span>
+            <span class="tab-tag t-budget">💰 Budget_Q1_Q2 Tab</span>
+          </div>
+          <ul class="how-list">
+            <li>Note your Q1 and Q2 total sales figures (Budget_Q1_Q2, cells C8 and D8)</li>
+            <li>Note your food cost % (Assumptions tab, cell C23) and why you chose it</li>
+            <li>Note your labour total and the award rates used (Assumptions tab, Labour Planner rows 29–37)</li>
+            <li>Note your contingency amount and the risks it covers (Budget tab, row 25)</li>
+            <li>Note your organisational objectives (Budget tab, rows 30–34)</li>
+          </ul>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- Step: Write the report -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Part 2 — Main Task</div>
+            <div class="step-title">Write the Decision Report</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>A brief report explaining — in first person — why you made each major budget decision. Every claim must reference a specific figure or tab in your workbook. This is NOT a list of steps.</p></div>
+          <ul class="how-list">
+            <li><strong>Write 3–5 paragraphs.</strong> Each paragraph = one decision</li>
+            <li><strong>Paragraph 1:</strong> Revenue estimate — why Q1 is conservative, why Q2 is higher (reference C8 and D8)</li>
+            <li><strong>Paragraph 2:</strong> Food cost % — which benchmark, why you chose it, which authority advised it (reference C23)</li>
+            <li><strong>Paragraph 3:</strong> Labour — roles, hours, award rates, total cost (reference Labour Planner)</li>
+            <li><strong>Paragraph 4:</strong> Contingency — amount, what risks it covers (reference row 25 of Budget tab)</li>
+            <li><strong>Paragraph 5:</strong> Organisational objectives — name each objective and link to a budget decision</li>
+          </ul>
+          <div class="tip-box tip-key">📌 <span>Write in first person throughout: "I decided...", "I chose...", "I set the food cost at 33% because...". Never write in third person.</span></div>
+          <div class="tip-box tip-warn">⚠️ <span>This is the most commonly lost marks section. Generic statements without specific figures will not meet the standard.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- Step: Check report quality -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Quality check</div>
+            <div class="step-title">Review Your Decision Report</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>Before moving to Part 3 — check every paragraph</h4><p>Each paragraph in your decision report must contain all three of these elements to meet the assessment standard.</p></div>
+          <ul class="how-list">
+            <li>✅ A specific figure from your workbook (cell reference or amount)</li>
+            <li>✅ A reason for that decision (data, authority advice, or business objective)</li>
+            <li>✅ Written in first person ("I decided..." / "I chose...")</li>
+          </ul>
+          <div class="tip-box tip-key">📌 <span>If any paragraph has the figure but not the reason, or the reason but not the figure — rewrite it before submitting.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+    </div><!-- /req-2 -->
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- REQUIREMENT 3 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="req-col req-3">
+      <div class="req-header">
+        <div class="req-number">ASSESSMENT REQUIREMENT 3</div>
+        <h2>Hold 3 Review Meetings During the Budget Cycle</h2>
+        <p class="req-desc">Review actual performance against estimated, investigate significant deviations, produce a brief budget report, and store and file all reports according to policy.</p>
+        <div class="req-meta">
+          <span>📊 Part 3 of Student Guide</span>
+          <span>Meetings 1 · 2 · 3</span>
+          <span>4 steps</span>
+        </div>
+      </div>
+
+      <p class="req-steps-label">Steps to complete →</p>
+
+      <!-- Step: Enter actuals -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Before all meetings</div>
+            <div class="step-title">Enter Actuals in Your Excel Workbook</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>Do this first — before writing any meeting reports</h4><p>All figures in Part 3 must come from your Monthly_Review tab. Enter your actual figures first so the variance and Fav/Unfav columns calculate automatically.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-monthly">📊 Monthly_Review Tab</span>
+          </div>
+          <ul class="how-list">
+            <li>Open Monthly_Review tab — find the yellow Actual cells (columns E, I, M)</li>
+            <li>Enter Month 1 actuals in row 5: Sales Actual (E5), Food Actual (I5), Wages Actual (M5)</li>
+            <li>Enter Month 2 actuals in row 6: E6, I6, M6</li>
+            <li>Enter Month 3 actuals in row 7: E7, I7, M7</li>
+            <li>Check that Variance and Fav/Unfav columns have calculated automatically</li>
+            <li>Check the Quarter Totals in rows 14–15</li>
+          </ul>
+          <div class="tip-box tip-note">📌 <span>Budget columns (D, H, L) auto-fill from your Budget_Q1_Q2 tab ÷ 3. You only enter the ACTUAL amounts in yellow cells.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- Meeting 1 -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Meeting 1 — End of Month 1</div>
+            <div class="step-title">Monthly Review &amp; Budget Report</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Review Month 1 actual performance against the budget. Identify variances, explain findings, take corrective action, write a brief budget report, and file it.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-monthly">📊 Monthly_Review Row 5</span>
+            <span class="tab-tag t-review">📝 Review_Reports Row 5</span>
+          </div>
+          <ul class="how-list">
+            <li><strong>Variance table:</strong> Copy the figures from row 5 of Monthly_Review into the table in Part 3, Meeting 1 of the Student Guide</li>
+            <li><strong>Findings:</strong> For each line — was it FAV or UNFAV? By how much $? What caused it?</li>
+            <li><strong>Actions:</strong> List 3–5 specific corrective actions that address the variances (e.g. "Reduced Monday lunch prep to cut wastage", not just "controlled costs")</li>
+            <li><strong>Budget report:</strong> 3–5 sentences in formal management style — overall result, main reason, action taken</li>
+            <li><strong>Filing:</strong> Document where the report was saved (e.g. Finance Folder / Q1 / Month 1)</li>
+            <li>Also record in your Review_Reports tab, row 5 (Key Findings, Investigation, Corrective Action, Filing columns)</li>
+          </ul>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- Meeting 2 -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Meeting 2 — End of Month 2</div>
+            <div class="step-title">Performance Review &amp; Budget Report</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>Review Month 2 performance and assess whether Month 1 corrective actions worked. Identify improvements and any remaining concerns.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-monthly">📊 Monthly_Review Row 6</span>
+            <span class="tab-tag t-review">📝 Review_Reports Row 7</span>
+          </div>
+          <ul class="how-list">
+            <li>Copy Month 2 figures from row 6 of Monthly_Review into the Meeting 2 variance table</li>
+            <li>Compare to Month 1 — did performance improve, worsen, or stay the same?</li>
+            <li>Explain what drove the change (e.g. "The Monday lunch special added 40 covers, lifting sales above budget by $1,500")</li>
+            <li>Continue or adjust the Month 1 corrective actions based on the results</li>
+            <li>Write your Month 2 budget report and document where it was filed</li>
+          </ul>
+          <div class="tip-box tip-note">📌 <span>The assessor expects to see that your Month 1 actions had a measurable effect by Month 2. Connect the actions to the results explicitly.</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+      <!-- Meeting 3 -->
+      <div class="step-card" onclick="toggleCard(this)">
+        <div class="step-header">
+          <div class="step-check" onclick="toggleCheck(event, this)"></div>
+          <div class="step-title-wrap">
+            <div class="step-label">Meeting 3 — End of Quarter 1</div>
+            <div class="step-title">Quarter Review, Deviations &amp; Q2 Planning</div>
+          </div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="what-box"><h4>What the assessment requires</h4><p>The most important meeting. Review the full quarter, investigate any variance over 5%, take corrective action for Q2, write the Quarter 1 budget report, and file everything.</p></div>
+          <div class="tab-ref">
+            <span class="tab-tag t-monthly">📊 Monthly_Review Row 14 (Q1 Totals)</span>
+            <span class="tab-tag t-review">📝 Review_Reports Row 9</span>
+            <span class="tab-tag t-review">📝 Review_Reports Rows 14–17 (Deviations)</span>
+          </div>
+          <ul class="how-list">
+            <li><strong>Quarter totals:</strong> Use row 14 of Monthly_Review (Q1 total row) for the variance table</li>
+            <li><strong>Significant deviations:</strong> Calculate variance % for each line. Any line over 5% must be formally investigated — document root cause in the Significant Deviation section of Review_Reports tab (rows 14–17)</li>
+            <li>Formula: Variance % = (Actual − Budget) ÷ Budget × 100</li>
+            <li><strong>Investigation:</strong> List internal causes (staffing, wastage, menu pricing) and external causes (supplier prices, weather, demand)</li>
+            <li><strong>Q2 actions:</strong> List 4–6 specific corrective actions for next quarter — not just "monitor costs"</li>
+            <li><strong>Quarter report:</strong> 4–6 sentences covering overall result, main deviation, cause, and Q2 plan</li>
+            <li><strong>Filing:</strong> Document where ALL reports are stored — Finance Folder / Q1 / Quarter Review</li>
+          </ul>
+          <div class="tip-box tip-warn">⚠️ <span>If no line exceeded 5% variance, state that clearly and explain why. The assessment still needs the investigation — even if the answer is "no significant deviations found."</span></div>
+          <button class="mark-done-btn" onclick="markDone(event, this)">✓ Mark as Done</button>
+        </div>
+      </div>
+
+    </div><!-- /req-3 -->
+  </div><!-- /columns -->
+
+  <!-- Summary strip -->
+  <div class="summary-strip">
+    <div class="sum-item">
+      <div class="sum-number">3</div>
+      <div class="sum-label">Assessment<br>Requirements</div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-number">14</div>
+      <div class="sum-label">Steps to<br>Complete</div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-number">6</div>
+      <div class="sum-label">Excel Tabs<br>Used</div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-number">3</div>
+      <div class="sum-label">Review Meetings<br>Required</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--req1)"></div>Requirement 1 — Prepare Budget (Part 1 A–J)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--req2)"></div>Requirement 2 — Decision Report (Part 2)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--req3)"></div>Requirement 3 — Monitor &amp; Review (Part 3)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--done)"></div>Completed step</div>
+  </div>
+
+</main>
+
+<script>
+  const TOTAL = 14;
+  let completed = new Set();
+
+  function toggleCard(card) {
+    const isOpen = card.classList.contains('open');
+    card.classList.toggle('open', !isOpen);
+  }
+
+  function toggleCheck(e, checkEl) {
+    e.stopPropagation();
+    const card = checkEl.closest('.step-card');
+    const id = Array.from(document.querySelectorAll('.step-card')).indexOf(card);
+    checkEl.classList.toggle('checked');
+    if (checkEl.classList.contains('checked')) {
+      checkEl.textContent = '✓';
+      card.classList.add('done');
+      completed.add(id);
+    } else {
+      checkEl.textContent = '';
+      card.classList.remove('done');
+      completed.delete(id);
+    }
+    updateProgress();
+  }
+
+  function markDone(e, btn) {
+    e.stopPropagation();
+    const card = btn.closest('.step-card');
+    const checkEl = card.querySelector('.step-check');
+    const id = Array.from(document.querySelectorAll('.step-card')).indexOf(card);
+    const nowDone = !btn.classList.contains('undone');
+    btn.classList.toggle('undone', nowDone);
+    btn.textContent = nowDone ? '↩ Mark as Incomplete' : '✓ Mark as Done';
+    checkEl.classList.toggle('checked', nowDone);
+    checkEl.textContent = nowDone ? '✓' : '';
+    card.classList.toggle('done', nowDone);
+    if (nowDone) completed.add(id); else completed.delete(id);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const n = completed.size;
+    const pct = Math.round((n / TOTAL) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${n} of ${TOTAL} completed`;
+  }
+</script>
+</body>
+</html>
