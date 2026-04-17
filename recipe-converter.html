@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -27,105 +26,104 @@
   h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 8vw, 60px); font-weight: 700; color: #2a1f1a; letter-spacing: -0.02em; line-height: 1; margin-bottom: 8px; }
   .tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(16px, 3vw, 20px); color: #9a6c5a; }
 
-label { display: block; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: #7a3520; margin-bottom: 8px; }
-textarea {
-width: 100%;
-padding: 16px;
-font-size: 16px;
-font-family: ‘Inter’, sans-serif;
-border: 2px solid #c9a590;
-border-radius: 8px;
-background: #fffcf7;
-color: #2a1f1a;
-line-height: 1.6;
-min-height: 280px;
-resize: vertical;
-outline: none;
--webkit-appearance: none;
-transition: border-color 0.2s;
-}
-textarea:focus { border-color: #7a3520; }
+  label { display: block; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: #7a3520; margin-bottom: 8px; }
+  textarea {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    border: 2px solid #c9a590;
+    border-radius: 8px;
+    background: #fffcf7;
+    color: #2a1f1a;
+    line-height: 1.6;
+    min-height: 280px;
+    resize: vertical;
+    outline: none;
+    -webkit-appearance: none;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: #7a3520; }
 
-.btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
-button {
-font-family: ‘Inter’, sans-serif;
-font-size: 14px;
-font-weight: 600;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-padding: 14px 24px;
-border: none;
-border-radius: 999px;
-cursor: pointer;
-transition: all 0.2s;
--webkit-appearance: none;
-}
-button:active { transform: scale(0.98); }
-.btn-primary { background: #7a3520; color: #f5ede3; flex: 1; min-width: 180px; }
-.btn-primary:hover { box-shadow: 0 8px 20px rgba(122,53,32,0.3); }
-.btn-primary:disabled { background: #c9a590; cursor: not-allowed; }
-.btn-secondary { background: transparent; color: #7a3520; border: 2px solid #7a3520; }
-.btn-secondary:hover { background: #7a3520; color: #f5ede3; }
-.btn-small { font-size: 12px; padding: 10px 16px; }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+  button {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-appearance: none;
+  }
+  button:active { transform: scale(0.98); }
+  .btn-primary { background: #7a3520; color: #f5ede3; flex: 1; min-width: 180px; }
+  .btn-primary:hover { box-shadow: 0 8px 20px rgba(122,53,32,0.3); }
+  .btn-primary:disabled { background: #c9a590; cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: #7a3520; border: 2px solid #7a3520; }
+  .btn-secondary:hover { background: #7a3520; color: #f5ede3; }
+  .btn-small { font-size: 12px; padding: 10px 16px; }
 
-.tip {
-margin-top: 24px;
-padding: 16px;
-background: rgba(255,255,255,0.6);
-border-radius: 8px;
-font-size: 14px;
-border-left: 3px solid #7a3520;
-}
-.tip strong { color: #7a3520; letter-spacing: 0.1em; text-transform: uppercase; font-size: 12px; }
+  .tip {
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 8px;
+    font-size: 14px;
+    border-left: 3px solid #7a3520;
+  }
+  .tip strong { color: #7a3520; letter-spacing: 0.1em; text-transform: uppercase; font-size: 12px; }
 
-/* Result view */
-.card {
-background: #fffcf7;
-border: 1px solid #e8ddd4;
-border-radius: 12px;
-padding: 32px 24px;
-box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-animation: fadeIn 0.4s ease-out;
-}
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.title-input { font-family: ‘Cormorant Garamond’, serif; font-size: clamp(28px, 6vw, 42px); font-weight: 700; color: #7a3520; border: none; outline: none; width: 100%; background: transparent; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.1; }
-.edit-hint { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; padding-bottom: 16px; border-bottom: 1px solid #e8ddd4; margin-bottom: 20px; }
+  /* Result view */
+  .card {
+    background: #fffcf7;
+    border: 1px solid #e8ddd4;
+    border-radius: 12px;
+    padding: 32px 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    animation: fadeIn 0.4s ease-out;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .title-input { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 6vw, 42px); font-weight: 700; color: #7a3520; border: none; outline: none; width: 100%; background: transparent; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.1; }
+  .edit-hint { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; padding-bottom: 16px; border-bottom: 1px solid #e8ddd4; margin-bottom: 20px; }
 
-.servings-box { background: #f5ede3; padding: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
-.servings-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; margin-bottom: 4px; }
-.servings-count { font-family: ‘Cormorant Garamond’, serif; font-size: 28px; font-weight: 700; color: #2a1f1a; }
-.servings-orig { font-size: 11px; color: #9a6c5a; font-style: italic; margin-top: 2px; }
-.scaler { display: flex; align-items: center; gap: 8px; }
-.scaler button { width: 40px; height: 40px; padding: 0; font-size: 20px; background: #7a3520; color: #f5ede3; border-radius: 50%; }
-.scaler input { width: 60px; text-align: center; font-family: ‘Cormorant Garamond’, serif; font-size: 22px; font-weight: 700; color: #2a1f1a; background: transparent; border: none; border-bottom: 2px solid #c9a590; outline: none; padding: 4px 0; -moz-appearance: textfield; }
-.scaler input::-webkit-outer-spin-button, .scaler input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .servings-box { background: #f5ede3; padding: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+  .servings-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; margin-bottom: 4px; }
+  .servings-count { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #2a1f1a; }
+  .servings-orig { font-size: 11px; color: #9a6c5a; font-style: italic; margin-top: 2px; }
+  .scaler { display: flex; align-items: center; gap: 8px; }
+  .scaler button { width: 40px; height: 40px; padding: 0; font-size: 20px; background: #7a3520; color: #f5ede3; border-radius: 50%; }
+  .scaler input { width: 60px; text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: #2a1f1a; background: transparent; border: none; border-bottom: 2px solid #c9a590; outline: none; padding: 4px 0; -moz-appearance: textfield; }
+  .scaler input::-webkit-outer-spin-button, .scaler input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-h2 { font-family: ‘Cormorant Garamond’, serif; font-size: 22px; font-weight: 600; color: #7a3520; border-bottom: 2px solid #7a3520; padding-bottom: 8px; margin: 28px 0 16px; }
-h2:first-of-type { margin-top: 0; }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #7a3520; border-bottom: 2px solid #7a3520; padding-bottom: 8px; margin: 28px 0 16px; }
+  h2:first-of-type { margin-top: 0; }
 
-ul.ingredients { list-style: none; }
-ul.ingredients li { padding: 10px 0; border-bottom: 1px dotted #e8ddd4; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.qty { font-family: ‘Cormorant Garamond’, serif; font-weight: 600; font-size: 18px; color: #7a3520; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.ing-name { flex: 1; min-width: 120px; color: #2a1f1a; background: transparent; border: none; outline: none; font-size: 15px; font-family: inherit; }
-.ing-orig { flex-basis: 100%; font-size: 11px; color: #c9a590; margin-top: 2px; }
+  ul.ingredients { list-style: none; }
+  ul.ingredients li { padding: 10px 0; border-bottom: 1px dotted #e8ddd4; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .qty { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 18px; color: #7a3520; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ing-name { flex: 1; min-width: 120px; color: #2a1f1a; background: transparent; border: none; outline: none; font-size: 15px; font-family: inherit; }
+  .ing-orig { flex-basis: 100%; font-size: 11px; color: #c9a590; margin-top: 2px; }
 
-ol.method { padding-left: 0; list-style: none; counter-reset: step; }
-ol.method li { display: flex; gap: 16px; padding: 10px 0; counter-increment: step; }
-ol.method li::before { content: counter(step) “.”; font-family: ‘Cormorant Garamond’, serif; font-size: 26px; font-weight: 700; color: #7a3520; min-width: 2ch; line-height: 1; }
-ol.method textarea { min-height: auto; padding: 4px 0; border: none; background: transparent; font-size: 15px; line-height: 1.6; }
+  ol.method { padding-left: 0; list-style: none; counter-reset: step; }
+  ol.method li { display: flex; gap: 16px; padding: 10px 0; counter-increment: step; }
+  ol.method li::before { content: counter(step) "."; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: #7a3520; min-width: 2ch; line-height: 1; }
+  ol.method textarea { min-height: auto; padding: 4px 0; border: none; background: transparent; font-size: 15px; line-height: 1.6; }
 
-.action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; justify-content: flex-end; }
-.footer-note { text-align: center; margin-top: 20px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; }
+  .action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; justify-content: flex-end; }
+  .footer-note { text-align: center; margin-top: 20px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a6c5a; }
 
-@media print {
-body { background: white; background-image: none; }
-.action-bar, .btn-row, .tip, header .tagline, .edit-hint, .footer-note, .scaler button { display: none !important; }
-.card { box-shadow: none; border: none; padding: 0; }
-.servings-box { background: transparent; padding: 0; border-bottom: 1px solid #e8ddd4; padding-bottom: 12px; }
-.scaler input { border: none; }
-}
+  @media print {
+    body { background: white; background-image: none; }
+    .action-bar, .btn-row, .tip, header .tagline, .edit-hint, .footer-note, .scaler button { display: none !important; }
+    .card { box-shadow: none; border: none; padding: 0; }
+    .servings-box { background: transparent; padding: 0; border-bottom: 1px solid #e8ddd4; padding-bottom: 12px; }
+    .scaler input { border: none; }
+  }
 </style>
-
 </head>
 <body>
 
@@ -140,7 +138,6 @@ body { background: white; background-image: none; }
   </header>
 
   <!-- Input view -->
-
   <section id="input-view">
     <label for="recipe-text">Recipe text</label>
     <textarea id="recipe-text" placeholder="Paste or type your recipe here. For example:
@@ -149,24 +146,20 @@ body { background: white; background-image: none; }
 1 cup sugar
 2 cups almonds
 
-Or an entire recipe with title, ingredients, and method.”></textarea>
+Or an entire recipe with title, ingredients, and method."></textarea>
 
-```
-<div class="btn-row">
-  <button class="btn-primary" id="convert-btn" disabled>Convert to Metric</button>
-  <button class="btn-secondary" id="example-btn">Load Example</button>
-</div>
+    <div class="btn-row">
+      <button class="btn-primary" id="convert-btn" disabled>Convert to Metric</button>
+      <button class="btn-secondary" id="example-btn">Load Example</button>
+    </div>
 
-<div class="tip">
-  <strong>iPad tip</strong>
-  <p style="margin-top:6px;">Open a recipe photo in Photos → long-press text → Select All → Copy → paste here. iOS extracts text automatically using Live Text.</p>
-</div>
-```
-
+    <div class="tip">
+      <strong>iPad tip</strong>
+      <p style="margin-top:6px;">Open a recipe photo in Photos → long-press text → Select All → Copy → paste here. iOS extracts text automatically using Live Text.</p>
+    </div>
   </section>
 
   <!-- Result view -->
-
   <section id="result-view" style="display:none;">
     <div class="action-bar">
       <button class="btn-secondary btn-small" id="copy-btn">Copy</button>
@@ -175,36 +168,33 @@ Or an entire recipe with title, ingredients, and method.”></textarea>
       <button class="btn-primary btn-small" style="flex:0;" id="new-btn">New</button>
     </div>
 
-```
-<article class="card">
-  <input id="title-input" class="title-input" />
-  <div class="edit-hint">✎ Tap any field to edit</div>
+    <article class="card">
+      <input id="title-input" class="title-input" />
+      <div class="edit-hint">✎ Tap any field to edit</div>
 
-  <div class="servings-box">
-    <div>
-      <div class="servings-label">Scale to serve</div>
-      <div class="servings-count"><span id="target-display">4</span> <span id="people-label">people</span></div>
-      <div class="servings-orig" id="orig-info"></div>
-    </div>
-    <div class="scaler">
-      <button id="minus-btn">−</button>
-      <input type="number" id="target-input" min="1" value="4">
-      <button id="plus-btn">+</button>
-    </div>
-  </div>
+      <div class="servings-box">
+        <div>
+          <div class="servings-label">Scale to serve</div>
+          <div class="servings-count"><span id="target-display">4</span> <span id="people-label">people</span></div>
+          <div class="servings-orig" id="orig-info"></div>
+        </div>
+        <div class="scaler">
+          <button id="minus-btn">−</button>
+          <input type="number" id="target-input" min="1" value="4">
+          <button id="plus-btn">+</button>
+        </div>
+      </div>
 
-  <h2>Ingredients</h2>
-  <ul class="ingredients" id="ingredients-list"></ul>
+      <h2>Ingredients</h2>
+      <ul class="ingredients" id="ingredients-list"></ul>
 
-  <div id="method-section" style="display:none;">
-    <h2>Method</h2>
-    <ol class="method" id="method-list"></ol>
-  </div>
-</article>
+      <div id="method-section" style="display:none;">
+        <h2>Method</h2>
+        <ol class="method" id="method-list"></ol>
+      </div>
+    </article>
 
-<div class="footer-note">Australian metric standards • Runs on your device</div>
-```
-
+    <div class="footer-note">Australian metric standards • Runs on your device</div>
   </section>
 </div>
 
@@ -502,7 +492,6 @@ ol{padding-left:20px;}
 ol li{display:list-item;border:none;padding:8px 0;}
 ol li::marker{color:#7a3520;font-weight:600;}
 </style></head><body>
-
 <h1>${escape(recipe.title)}</h1>
 <div class="meta">Serves ${target}</div>
 <h2>Ingredients</h2><ul>
@@ -524,22 +513,21 @@ ${recipe.method.length ? `<h2>Method</h2><ol>${recipe.method.map(s=>`<li>${escap
   setTimeout(() => w.print(), 400);
 });
 
-$(“csv-btn”).addEventListener(“click”, () => {
-let csv = “Ingredient,Whole,Weight (g),Volume (ml)\n”;
-recipe.ingredients.forEach(i => {
-const g = scale(i.grams), ml = scale(i.millilitres), w = scale(i.whole);
-const whole = w != null ? fmtWh(w, i.wholeUnit) : “”;
-csv += `"${i.name}","${whole}","${g!=null?Math.round(g):""}","${ml!=null?Math.round(ml):""}"\n`;
-});
-const blob = new Blob([csv], { type:“text/csv” });
-const url = URL.createObjectURL(blob);
-const a = document.createElement(“a”);
-a.href = url;
-a.download = `${recipe.title.replace(/[^a-z0-9]/gi,"_")}.csv`;
-a.click();
-URL.revokeObjectURL(url);
+$("csv-btn").addEventListener("click", () => {
+  let csv = "Ingredient,Whole,Weight (g),Volume (ml)\n";
+  recipe.ingredients.forEach(i => {
+    const g = scale(i.grams), ml = scale(i.millilitres), w = scale(i.whole);
+    const whole = w != null ? fmtWh(w, i.wholeUnit) : "";
+    csv += `"${i.name}","${whole}","${g!=null?Math.round(g):""}","${ml!=null?Math.round(ml):""}"\n`;
+  });
+  const blob = new Blob([csv], { type:"text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${recipe.title.replace(/[^a-z0-9]/gi,"_")}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 });
 </script>
-
 </body>
 </html>
