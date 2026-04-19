@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WebEscapade · Receipt Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --amber:#D4870B;--amber-lt:#F0A500;--green:#00956A;--red:#C0392B;
+  --card:#FFFFFF;--card-bd:#DDE3ED;
+  --lbl:#4A5568;--inp-bg:#F7F9FC;--inp-bd:#C5CDD8;
+  --inp-tx:#1A202C;--inp-ph:#A0AEC0;
+  --txt-hd:#1A202C;--txt-bd:#2D3748;
+  --cat-bg:#EEF2F7;--cat-bd:#C5CDD8;
+  --radius:14px;--sh:0 2px 16px rgba(0,0,0,.09);
+}
+html{height:100%}
+body{min-height:100vh;font-family:'Syne',sans-serif;-webkit-font-smoothing:antialiased;
+  background:linear-gradient(160deg,#0D1B2A 0%,#152236 100%);color:#E2E8F0}
+
+header{padding:15px 18px 13px;display:flex;align-items:center;justify-content:space-between;
+position:sticky;top:0;z-index:100;background:rgba(13,27,42,.97);
+backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:36px;height:36px;border-radius:9px;background:#F0A500;
+display:flex;align-items:center;justify-content:center;font-size:19px}
+.logo-name{font-size:14px;font-weight:700;color:#E2E8F0}
+.logo-tag{font-size:9px;font-family:‘DM Mono’,monospace;color:#F0A500;letter-spacing:.12em;text-transform:uppercase}
+.hdr-r{text-align:right}
+.hdr-date{font-family:‘DM Mono’,monospace;font-size:10px;color:#718096}
+.hdr-ai{font-family:‘DM Mono’,monospace;font-size:10px;color:#00956A;margin-top:1px}
+
+main{max-width:580px;margin:0 auto;padding:18px 14px 130px;width:100%}
+
+.step-bar{display:flex;gap:5px;margin-bottom:4px}
+.seg{height:3px;flex:1;border-radius:99px;background:rgba(255,255,255,.1);transition:background .35s}
+.seg.on{background:#F0A500}.seg.done{background:#00956A}
+.step-lbl{display:flex;justify-content:space-between;
+font-family:‘DM Mono’,monospace;font-size:9px;color:#718096;margin-bottom:18px}
+
+.sec{display:none;animation:fu .3s ease both}.sec.on{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+/* LIGHT CARDS */
+.card{background:#fff;border:1px solid #DDE3ED;border-radius:14px;
+padding:16px;margin-bottom:12px;box-shadow:0 2px 16px rgba(0,0,0,.09)}
+.card-ttl{font-size:10px;font-family:‘DM Mono’,monospace;color:#D4870B;
+letter-spacing:.12em;text-transform:uppercase;margin-bottom:13px;font-weight:500}
+
+/* DARK CARDS */
+.dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+border-radius:14px;padding:16px;margin-bottom:12px}
+.dcard .card-ttl{color:rgba(240,165,0,.85)}
+
+/* FORM FIELDS — all dark text */
+.flbl{display:block;font-size:10px;font-family:‘DM Mono’,monospace;
+color:#4A5568;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;font-weight:500}
+.finp{width:100%;background:#F7F9FC;border:1.5px solid #C5CDD8;border-radius:9px;
+padding:11px 12px;color:#1A202C;font-family:‘Syne’,sans-serif;
+font-size:15px;font-weight:600;outline:none;-webkit-appearance:none;appearance:none;
+transition:border-color .2s,box-shadow .2s}
+.finp:focus{border-color:#D4870B;box-shadow:0 0 0 3px rgba(212,135,11,.12)}
+.finp::placeholder{color:#A0AEC0;font-weight:400}
+select.finp option{background:#fff;color:#1A202C}
+textarea.finp{resize:vertical;min-height:72px}
+
+.fg{margin-bottom:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* QUARTER TABS */
+.q-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.q-tab{background:#EEF2F7;border:1.5px solid #C5CDD8;border-radius:9px;
+padding:10px 4px;text-align:center;cursor:pointer;transition:all .18s}
+.q-tab.on{background:rgba(212,135,11,.1);border-color:#D4870B}
+.qm{display:block;font-size:14px;font-weight:700;color:#1A202C}
+.qs{display:block;font-size:8px;font-family:‘DM Mono’,monospace;color:#4A5568;margin-top:2px}
+.q-tab.on .qm{color:#D4870B}.q-tab.on .qs{color:#D4870B;opacity:.7}
+
+/* SCAN ZONE */
+.scan-z{border:2px dashed rgba(212,135,11,.35);border-radius:12px;
+padding:30px 16px;text-align:center;cursor:pointer;
+position:relative;overflow:hidden;background:#F9FAFB;transition:all .2s}
+.scan-z:hover,.scan-z.drag{border-color:#F0A500;background:rgba(212,135,11,.03)}
+.scan-z input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.s-ico{font-size:40px;margin-bottom:8px}
+.s-ttl{font-size:16px;font-weight:700;color:#1A202C;margin-bottom:4px}
+.s-sub{font-size:12px;color:#4A5568}
+.cam-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;
+background:#D4870B;color:#fff;border:none;border-radius:9px;
+padding:9px 18px;font-family:‘Syne’,sans-serif;font-size:13px;font-weight:700;
+cursor:pointer;transition:all .18s;-webkit-appearance:none}
+.cam-btn:active{transform:scale(.97)}
+.prev-w{position:relative;border-radius:9px;overflow:hidden}
+.prev-w img{width:100%;max-height:220px;object-fit:cover;display:block}
+.prev-bdg{position:absolute;top:7px;right:7px;background:rgba(0,0,0,.65);
+color:#00956A;font-family:‘DM Mono’,monospace;font-size:10px;
+padding:3px 9px;border-radius:99px}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.cat-btn{background:#EEF2F7;border:1.5px solid #C5CDD8;border-radius:9px;
+padding:10px 5px;text-align:center;cursor:pointer;transition:all .18s}
+.cat-btn:hover{border-color:rgba(212,135,11,.5);background:rgba(212,135,11,.05)}
+.cat-btn.on{background:rgba(212,135,11,.12);border-color:#D4870B}
+.cat-btn.ng{border-color:rgba(240,165,0,.3);background:#FFFBF0}
+.cat-btn.ng.on{background:rgba(240,165,0,.2);border-color:#F0A500}
+.c-ico{font-size:20px;display:block;margin-bottom:3px}
+.c-nm{font-size:9px;font-family:‘DM Mono’,monospace;color:#2D3748;display:block}
+.cat-btn.on .c-nm{color:#D4870B}
+
+/* AI BOX */
+.ai-box{font-size:13px;color:#2D3748;line-height:1.65;
+background:#F7F9FC;border:1px solid #DDE3ED;border-radius:9px;padding:11px 13px}
+
+/* SPINNER */
+.spin-card{text-align:center;padding:34px 16px}
+.spinner{width:50px;height:50px;border-radius:50%;border:3px solid #DDE3ED;
+border-top-color:#F0A500;animation:spin .75s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp-ttl{font-size:16px;font-weight:700;color:#1A202C}
+.sp-sub{font-size:12px;font-family:‘DM Mono’,monospace;color:#4A5568;margin-top:5px}
+
+/* BUTTONS */
+.btn{width:100%;padding:13px;border-radius:11px;border:none;
+font-family:‘Syne’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;
+transition:all .18s;display:flex;align-items:center;justify-content:center;gap:7px;
+-webkit-appearance:none}
+.btn:active{transform:scale(.98)}
+.btn-p{background:#D4870B;color:#fff}
+.btn-p:hover{background:#F0A500}
+.btn-p:disabled{background:#C5CDD8;color:#A0AEC0;cursor:not-allowed;transform:none}
+.btn-o{background:transparent;border:1.5px solid rgba(255,255,255,.15);color:#A0AEC0}
+.btn-o:hover{border-color:#F0A500;color:#E2E8F0}
+.btn-g{background:#00956A;color:#fff}
+
+/* BOTTOM NAV */
+.bot{position:fixed;bottom:0;left:0;right:0;background:rgba(13,27,42,.97);
+backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);
+padding:11px 14px;padding-bottom:max(11px,env(safe-area-inset-bottom));display:flex;gap:9px}
+
+/* SUCCESS */
+.succ-w{text-align:center;padding:28px 12px}
+.succ-ring{width:68px;height:68px;border-radius:50%;
+background:rgba(0,149,106,.1);border:2px solid #00956A;
+display:flex;align-items:center;justify-content:center;font-size:28px;
+margin:0 auto 16px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.succ-ttl{font-size:22px;font-weight:800;color:#1A202C;margin-bottom:5px}
+.succ-sub{font-size:13px;color:#4A5568;margin-bottom:18px}
+.d-row{background:#F7F9FC;border:1px solid #DDE3ED;border-radius:9px;
+padding:11px 13px;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.d-k{font-size:11px;color:#4A5568;font-family:‘DM Mono’,monospace}
+.d-v{font-size:13px;font-weight:700;color:#1A202C;text-align:right;max-width:60%}
+.d-v.money{color:#D4870B;font-family:‘DM Mono’,monospace;font-size:16px}
+
+/* LOG */
+.log-row{display:flex;align-items:flex-start;gap:10px;
+padding:10px 0;border-bottom:1px solid #DDE3ED}
+.log-row:last-child{border-bottom:none}
+.l-dot{width:8px;height:8px;border-radius:50%;background:#00956A;flex-shrink:0;margin-top:4px}
+.l-dot.ng{background:#D4870B}
+.l-info{flex:1;min-width:0}
+.l-desc{font-size:13px;color:#1A202C;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.l-meta{font-size:10px;font-family:‘DM Mono’,monospace;color:#4A5568;margin-top:2px}
+.l-amt{font-family:‘DM Mono’,monospace;font-size:13px;color:#D4870B;font-weight:600;white-space:nowrap}
+
+/* HOW-TO */
+.how-r{display:flex;gap:11px;align-items:flex-start;margin-bottom:11px}
+.how-n{width:23px;height:23px;border-radius:50%;
+background:rgba(212,135,11,.12);border:1px solid rgba(212,135,11,.3);
+display:flex;align-items:center;justify-content:center;
+font-size:10px;font-family:‘DM Mono’,monospace;color:#F0A500;flex-shrink:0;margin-top:1px}
+.how-t{font-size:13px;color:#94A3B8;line-height:1.55}
+
+/* ERROR */
+.err{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);
+border-radius:9px;padding:11px 13px;font-size:13px;color:#C0392B;
+margin-bottom:12px;display:none;font-weight:600}
+
+/* TOAST */
+.toast{position:fixed;top:72px;left:50%;
+transform:translateX(-50%) translateY(-14px);
+background:rgba(0,149,106,.15);border:1px solid #00956A;
+color:#00956A;font-family:‘DM Mono’,monospace;font-size:11px;
+padding:8px 18px;border-radius:99px;opacity:0;transition:all .25s;
+pointer-events:none;white-space:nowrap;z-index:9999}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.ai-bdg{display:inline-flex;align-items:center;gap:3px;
+font-size:9px;font-family:‘DM Mono’,monospace;color:#D4870B;
+background:rgba(212,135,11,.1);border:1px solid rgba(212,135,11,.25);
+padding:2px 7px;border-radius:99px;margin-left:7px;vertical-align:middle}
+.api-note{font-size:12px;color:#4A5568;line-height:1.65;margin-top:9px}
+.api-note a{color:#D4870B;text-decoration:none}
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">🧾</div>
+    <div>
+      <div class="logo-name">WebEscapade</div>
+      <div class="logo-tag">Receipt Scanner</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="hdr-date" id="hdrDate"></div>
+    <div class="hdr-ai">● Claude Vision</div>
+  </div>
+</header>
+
+<main>
+  <div class="step-bar">
+    <div class="seg on" id="s1"></div>
+    <div class="seg"    id="s2"></div>
+    <div class="seg"    id="s3"></div>
+  </div>
+  <div class="step-lbl"><span>Scan</span><span>Review</span><span>Done</span></div>
+  <div class="err" id="err"></div>
+
+  <!-- STEP 1 -->
+
+  <div class="sec on" id="p1">
+    <div class="card" id="apiCard">
+      <div class="card-ttl">🔑 API Key Setup</div>
+      <div class="fg">
+        <label class="flbl">Anthropic API Key</label>
+        <input class="finp" type="password" id="apiIn" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
+      </div>
+      <p class="api-note">
+        Stored in browser session only — sent only to Anthropic.<br>
+        Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys.
+      </p>
+      <button class="btn btn-p" style="margin-top:13px;" onclick="saveKey()">Save &amp; Continue →</button>
+    </div>
+
+```
+<div class="card">
+  <div class="card-ttl">📅 Quarter</div>
+  <div class="q-grid">
+    <div class="q-tab on" data-q="Q1" onclick="pickQ(this)"><span class="qm">Q1</span><span class="qs">Jul–Sep 25</span></div>
+    <div class="q-tab"   data-q="Q2" onclick="pickQ(this)"><span class="qm">Q2</span><span class="qs">Oct–Dec 25</span></div>
+    <div class="q-tab"   data-q="Q3" onclick="pickQ(this)"><span class="qm">Q3</span><span class="qs">Jan–Mar 26</span></div>
+    <div class="q-tab"   data-q="Q4" onclick="pickQ(this)"><span class="qm">Q4</span><span class="qs">Apr–Jun 26</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-ttl">📸 Receipt / Invoice</div>
+  <div class="scan-z" id="scanZ" ondragover="dv(event,true)" ondragleave="dv(event,false)" ondrop="onDrop(event)">
+    <input type="file" id="fileIn" accept="image/*" onchange="onFile(event)">
+    <div id="scanPr">
+      <div class="s-ico">📄</div>
+      <div class="s-ttl">Tap to choose image</div>
+      <div class="s-sub">Receipt, invoice or docket photo</div>
+      <button class="cam-btn" onclick="openCam(event)">📷 Use Camera</button>
+    </div>
+    <div id="imgPrev" style="display:none;">
+      <div class="prev-w">
+        <img id="prevImg" src="" alt="Receipt">
+        <div class="prev-bdg">✓ Ready</div>
+      </div>
+      <button class="cam-btn" style="margin-top:11px;" onclick="openCam(event)">📷 Retake Photo</button>
+    </div>
+  </div>
+</div>
+
+<div class="dcard">
+  <div class="card-ttl">💡 How it works</div>
+  <div class="how-r"><div class="how-n">1</div><div class="how-t">Snap a photo — Claude Vision reads date, amount and vendor automatically</div></div>
+  <div class="how-r"><div class="how-n">2</div><div class="how-t">AI picks the category — including NO GST for rego, green slips and government fees</div></div>
+  <div class="how-r"><div class="how-n">3</div><div class="how-t">Review, confirm, then export a CSV formatted for your Excel sheet</div></div>
+</div>
+
+<div class="bot">
+  <button class="btn btn-o" onclick="goManual()">✏️ Manual</button>
+  <button class="btn btn-p" id="scanBtn" onclick="doScan()" disabled>🤖 Scan with AI</button>
+</div>
+```
+
+  </div>
+
+  <!-- STEP 2 -->
+
+  <div class="sec" id="p2">
+    <div class="card spin-card" id="spinCard">
+      <div class="spinner"></div>
+      <div class="sp-ttl">Reading receipt…</div>
+      <div class="sp-sub" id="spinTxt">Sending to Claude Vision</div>
+    </div>
+
+```
+<div id="revForm" style="display:none;">
+  <div class="card">
+    <div class="card-ttl">🔍 Extracted Details <span class="ai-bdg">✦ AI</span></div>
+    <div class="two">
+      <div class="fg"><label class="flbl">Date</label><input class="finp" type="date" id="fDate"></div>
+      <div class="fg"><label class="flbl">Amount ($)</label><input class="finp" type="number" id="fAmt" step="0.01" min="0" placeholder="0.00"></div>
+    </div>
+    <div class="fg">
+      <label class="flbl">Description / Vendor</label>
+      <input class="finp" type="text" id="fDesc" placeholder="e.g. Ampol Eastern Creek – Fuel">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-ttl">🗂️ Category</div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-ttl">💡 AI Notes</div>
+    <div class="ai-box" id="aiNotes">—</div>
+  </div>
+
+  <div class="bot">
+    <button class="btn btn-o" onclick="back()">← Back</button>
+    <button class="btn btn-p" onclick="doConfirm()">✓ Add to Log</button>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- STEP 3 -->
+
+  <div class="sec" id="p3">
+    <div class="card">
+      <div class="succ-w">
+        <div class="succ-ring">✓</div>
+        <div class="succ-ttl">Entry Saved!</div>
+        <div class="succ-sub">Added to session log</div>
+        <div id="succRows"></div>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:8px;">
+          <button class="btn btn-p" onclick="again()">+ Scan Another Receipt</button>
+          <button class="btn btn-o" onclick="showLog()">📋 View Log &amp; Export</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG -->
+
+  <div class="sec" id="pLog">
+    <div class="card">
+      <div class="card-ttl" style="display:flex;justify-content:space-between;">
+        <span>📋 Session Log</span>
+        <span id="logCt" style="color:#00956A;"></span>
+      </div>
+      <div id="logList"></div>
+    </div>
+    <div class="card">
+      <div class="card-ttl">📥 Export to Excel</div>
+      <p style="font-size:13px;color:#2D3748;line-height:1.65;margin-bottom:13px;">
+        Downloads a CSV matching your Excel column layout. Open in Excel, copy the rows, paste
+        (Paste Special → Values Only) into the first blank buffer row above TOTALS (row 97).
+      </p>
+      <button class="btn btn-g" onclick="exportCSV()">⬇ Download CSV</button>
+      <button class="btn btn-o" style="margin-top:8px;" onclick="copyHelp()">📋 Copy Paste Instructions</button>
+    </div>
+    <div style="height:90px;"></div>
+    <div class="bot">
+      <button class="btn btn-o" onclick="again()">← Scanner</button>
+      <button class="btn btn-g"  onclick="exportCSV()">⬇ Export CSV</button>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATS=[
+  {k:'TRANSPORT',   i:'🚗',l:'Transport',  ng:false},
+  {k:'OFFICE MISC', i:'💼',l:'Office Misc',ng:false},
+  {k:'RENT',        i:'🏠',l:'Rent',       ng:true },
+  {k:'MOBILE',      i:'📱',l:'Mobile',     ng:false},
+  {k:'INTERNET',    i:'🌐',l:'Internet',   ng:false},
+  {k:'COMPUTER',    i:'💻',l:'Computer',   ng:false},
+  {k:'CAR LOAN',    i:'🔑',l:'Car Loan',   ng:true },
+  {k:'OFF / EQUIP', i:'🖨️',l:'Off/Equip', ng:false},
+  {k:'WAGES',       i:'👷',l:'Wages',      ng:true },
+  {k:'INSURANCE',   i:'🛡️',l:'Insurance', ng:false},
+  {k:'ENERGY AUS',  i:'⚡',l:'Energy',     ng:false},
+  {k:'EDUCATION',   i:'📚',l:'Education', ng:false},
+  {k:'SERVICE/REPR',i:'🔧',l:'Serv/Repr', ng:false},
+  {k:'LAUNDRY',     i:'👕',l:'Laundry',   ng:true },
+  {k:'OVERSEAS',    i:'✈️',l:'Overseas',  ng:false},
+  {k:'OTHER',       i:'📦',l:'Other',      ng:false},
+  {k:'NO GST',      i:'🚫',l:'No GST',    ng:true },
+];
+
+let S={
+  key:sessionStorage.getItem('we_k')||'',
+  quarter:'Q1',b64:null,mime:null,
+  entries:JSON.parse(sessionStorage.getItem('we_e')||'[]'),
+};
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('hdrDate').textContent=
+    new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  buildCats();
+  if(S.key){document.getElementById('apiIn').value=S.key;document.getElementById('apiCard').style.display='none';}
+});
+
+function buildCats(){
+  document.getElementById('catGrid').innerHTML=CATS.map(c=>
+    `<div class="cat-btn${c.ng?' ng':''}" data-k="${c.k}" onclick="selCat(this)">
+      <span class="c-ico">${c.i}</span><span class="c-nm">${c.l}</span></div>`).join('');
+}
+
+function saveKey(){
+  const v=document.getElementById('apiIn').value.trim();
+  if(!v||v.length<20){showErr('Enter a valid API key');return;}
+  S.key=v;sessionStorage.setItem('we_k',v);
+  document.getElementById('apiCard').style.display='none';
+  toast('API key saved ✓');
+}
+
+function pickQ(el){
+  document.querySelectorAll('.q-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');S.quarter=el.dataset.q;
+}
+
+function openCam(e){
+  e.stopPropagation();
+  const inp=document.createElement('input');
+  inp.type='file';inp.accept='image/*';inp.capture='environment';
+  inp.onchange=onFile;inp.click();
+}
+
+function onFile(e){
+  const f=e?.target?.files?.[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const url=ev.target.result;
+    S.b64=url.split(',')[1];S.mime=f.type||'image/jpeg';
+    document.getElementById('prevImg').src=url;
+    document.getElementById('scanPr').style.display='none';
+    document.getElementById('imgPrev').style.display='block';
+    document.getElementById('scanBtn').disabled=false;
+    toast('Image ready — tap Scan with AI');
+  };r.readAsDataURL(f);
+}
+
+function dv(e,add){e.preventDefault();document.getElementById('scanZ').classList[add?'add':'remove']('drag');}
+function onDrop(e){e.preventDefault();dv(e,false);const f=e.dataTransfer?.files?.[0];if(f?.type?.startsWith('image/'))onFile({target:{files:[f]}});}
+
+async function doScan(){
+  if(!S.key){showErr('Enter your API key first');return;}
+  if(!S.b64){showErr('Select an image first');return;}
+  show('p2');steps(2);
+  document.getElementById('spinCard').style.display='block';
+  document.getElementById('revForm').style.display='none';
+  const st=document.getElementById('spinTxt');
+  const catList=CATS.map(c=>`${c.k}${c.ng?' (no GST)':''}`).join(', ');
+  try{
+    st.textContent='Sending image to Claude Vision…';
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':S.key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true',
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:800,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:S.mime,data:S.b64}},
+          {type:'text',text:`You are a bookkeeping assistant for Marc (WebEscapade), an Australian sole trader.
+Analyse this receipt/invoice and return ONLY valid JSON — no other text, no markdown.
+
+Categories: ${catList}
+
+Rules: Fuel/petrol/tolls→TRANSPORT | Software/subscriptions/office→OFFICE MISC | Rego/green slip/govt fees (no GST)→NO GST | Motor oil/GST-free goods→NO GST | Wages→WAGES | Rent→RENT | Mobile plan→MOBILE | Internet→INTERNET | Devices/tablets→COMPUTER | Insurance (with GST)→INSURANCE | Electricity→ENERGY AUS
+
+Return exactly:
+{"date":"DD/MM/YYYY","amount":0.00,"vendor":"Name","description":"Short description","category":"KEY","hasGST":true,"confidence":"high","notes":"Reason"}`
+        ]}]}
+      })
+    });
+    st.textContent='Processing response…';
+    if(!res.ok){const er=await res.json().catch(()=>({}));throw new Error(er?.error?.message||`API error ${res.status}`);}
+    const data=await res.json();
+    const txt=(data.content||[]).find(b=>b.type==='text')?.text||'';
+    const m=txt.match(/\{[\s\S]*\}/);
+    if(!m)throw new Error('Could not parse AI response — try again');
+    fillForm(JSON.parse(m[0]));
+  }catch(err){
+    document.getElementById('spinCard').style.display='none';
+    showErr('Scan failed: '+err.message);show('p1');steps(1);
+  }
+}
+
+function fillForm(d){
+  document.getElementById('spinCard').style.display='none';
+  document.getElementById('revForm').style.display='block';
+  if(d.date){const p=d.date.split('/');if(p.length===3)document.getElementById('fDate').value=`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
+  else{document.getElementById('fDate').value=new Date().toISOString().split('T')[0];}
+  document.getElementById('fAmt').value=d.amount||'';
+  document.getElementById('fDesc').value=d.description||d.vendor||'';
+  document.getElementById('aiNotes').textContent=(d.notes||'—')+(d.confidence?` [${d.confidence}]`:'');
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('on'));
+  const btn=document.querySelector(`.cat-btn[data-k="${d.category}"]`);
+  if(btn)btn.classList.add('on');
+}
+
+function goManual(){
+  show('p2');steps(2);
+  document.getElementById('spinCard').style.display='none';
+  document.getElementById('revForm').style.display='block';
+  document.getElementById('fDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('fAmt').value='';document.getElementById('fDesc').value='';
+  document.getElementById('aiNotes').textContent='Manual entry';
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('on'));
+}
+
+function selCat(el){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');}
+function getCat(){return document.querySelector('.cat-btn.on')?.dataset.k||null;}
+
+function doConfirm(){
+  const date=document.getElementById('fDate').value;
+  const amt=parseFloat(document.getElementById('fAmt').value);
+  const desc=document.getElementById('fDesc').value.trim();
+  const cat=getCat();
+  if(!date){showErr('Enter a date');return;}
+  if(!amt||amt<=0){showErr('Enter a valid amount');return;}
+  if(!desc){showErr('Enter a description');return;}
+  if(!cat){showErr('Select a category');return;}
+  const ci=CATS.find(c=>c.k===cat);
+  const e={id:Date.now(),quarter:S.quarter,date,
+    dateD:new Date(date).toLocaleDateString('en-AU'),
+    amount:amt,description:desc,category:cat,hasGST:!ci?.ng,ts:new Date().toISOString()};
+  S.entries.push(e);sessionStorage.setItem('we_e',JSON.stringify(S.entries));
+  showSucc(e);
+}
+
+function showSucc(e){
+  show('p3');steps(3);
+  const ci=CATS.find(c=>c.k===e.category);
+  document.getElementById('succRows').innerHTML=`
+    <div class="d-row"><span class="d-k">Quarter</span><span class="d-v" style="color:#D4870B">${e.quarter}</span></div>
+    <div class="d-row"><span class="d-k">Date</span><span class="d-v">${e.dateD}</span></div>
+    <div class="d-row"><span class="d-k">Description</span><span class="d-v">${e.description}</span></div>
+    <div class="d-row"><span class="d-k">Category</span><span class="d-v">${ci?.i||''} ${e.category}</span></div>
+    <div class="d-row"><span class="d-k">Amount</span><span class="d-v money">$${e.amount.toFixed(2)}</span></div>
+    <div class="d-row"><span class="d-k">GST</span><span class="d-v" style="color:${e.hasGST?'#00956A':'#4A5568'}">${e.hasGST?'✓ Includes GST':'✗ No GST'}</span></div>`;
+}
+
+function showLog(){
+  show('pLog');
+  document.getElementById('logCt').textContent=`${S.entries.length} entries`;
+  const list=document.getElementById('logList');
+  if(!S.entries.length){list.innerHTML='<p style="font-size:13px;color:#4A5568;padding:12px 0;">No entries yet.</p>';return;}
+  list.innerHTML=[...S.entries].reverse().map(e=>{
+    const ci=CATS.find(c=>c.k===e.category);
+    return`<div class="log-row">
+      <div class="l-dot${e.hasGST?'':' ng'}"></div>
+      <div class="l-info"><div class="l-desc">${e.description}</div>
+      <div class="l-meta">${e.quarter} · ${e.dateD} · ${ci?.i||''} ${e.category}</div></div>
+      <div class="l-amt">$${e.amount.toFixed(2)}</div></div>`;
+  }).join('');
+}
+
+function exportCSV(){
+  if(!S.entries.length){toast('No entries yet');return;}
+  const ks=CATS.map(c=>c.k);
+  let csv=`WEBESCAPADE EXPENSES — ${new Date().toLocaleDateString('en-AU')}\n"Paste into correct quarter sheet — first blank row above TOTALS row 97 — Paste Special Values Only"\n\n`;
+  for(const q of['Q1','Q2','Q3','Q4']){
+    const rows=S.entries.filter(e=>e.quarter===q);if(!rows.length)continue;
+    csv+=`\n=== ${q} — ${rows.length} entries ===\nDate,Description,${ks.join(',')}\n`;
+    for(const e of rows){
+      const cols=ks.map(k=>k===e.category?e.amount.toFixed(2):'');
+      csv+=`"${e.date}","${e.description.replace(/"/g,'""')}",${cols.join(',')}\n`;
+    }
+    csv+=`"TOTAL ${q}",$${rows.reduce((s,e)=>s+e.amount,0).toFixed(2)}\n`;
+  }
+  const b=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const u=URL.createObjectURL(b);const a=document.createElement('a');
+  a.href=u;a.download=`webescapade_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();URL.revokeObjectURL(u);toast('CSV downloaded ✓');
+}
+
+function copyHelp(){
+  const qs=[...new Set(S.entries.map(e=>e.quarter))].join(', ')||'Q1–Q4';
+  navigator.clipboard?.writeText(`PASTE INSTRUCTIONS — webescapade_expenses_CLEAN.xlsx
+1. Open the Excel file and go to the ${qs} sheet(s)
+2. Find the first blank buffer row above TOTALS (row 97)
+3. Open the downloaded CSV, copy the data rows for that quarter
+4. Click the Date cell in the first blank row
+5. Paste Special → Values Only
+6. Totals, GST, BAS and Annual Summary all update automatically`).then(()=>toast('Instructions copied ✓'));
+}
+
+function again(){
+  S.b64=null;S.mime=null;
+  document.getElementById('prevImg').src='';
+  document.getElementById('scanPr').style.display='block';
+  document.getElementById('imgPrev').style.display='none';
+  document.getElementById('scanBtn').disabled=true;
+  document.getElementById('fileIn').value='';
+  document.getElementById('err').style.display='none';
+  show('p1');steps(1);
+}
+function back(){show('p1');steps(1);}
+function show(id){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
+function steps(n){for(let i=1;i<=3;i++){const s=document.getElementById(`s${i}`);if(!s)continue;s.classList.remove('on','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('on');}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
+function showErr(msg){const b=document.getElementById('err');b.textContent='⚠ '+msg;b.style.display='block';setTimeout(()=>b.style.display='none',4000);}
+</script>
+
+</body>
+</html>
