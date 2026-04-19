@@ -4,25 +4,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>WebEscapade · Receipt Scanner</title>
+<title>WebEscapade · Expense Entry</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --amber:#D4870B;--amber-lt:#F0A500;--green:#00956A;--red:#C0392B;
-  --card:#FFFFFF;--card-bd:#DDE3ED;
-  --lbl:#4A5568;--inp-bg:#F7F9FC;--inp-bd:#C5CDD8;
-  --inp-tx:#1A202C;--inp-ph:#A0AEC0;
-  --txt-hd:#1A202C;--txt-bd:#2D3748;
-  --cat-bg:#EEF2F7;--cat-bd:#C5CDD8;
-  --radius:14px;--sh:0 2px 16px rgba(0,0,0,.09);
-}
 html{height:100%}
 body{min-height:100vh;font-family:'Syne',sans-serif;-webkit-font-smoothing:antialiased;
   background:linear-gradient(160deg,#0D1B2A 0%,#152236 100%);color:#E2E8F0}
 
-header{padding:15px 18px 13px;display:flex;align-items:center;justify-content:space-between;
+header{padding:15px 18px;display:flex;align-items:center;justify-content:space-between;
 position:sticky;top:0;z-index:100;background:rgba(13,27,42,.97);
 backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
 .logo{display:flex;align-items:center;gap:10px}
@@ -32,47 +23,40 @@ display:flex;align-items:center;justify-content:center;font-size:19px}
 .logo-tag{font-size:9px;font-family:‘DM Mono’,monospace;color:#F0A500;letter-spacing:.12em;text-transform:uppercase}
 .hdr-r{text-align:right}
 .hdr-date{font-family:‘DM Mono’,monospace;font-size:10px;color:#718096}
-.hdr-ai{font-family:‘DM Mono’,monospace;font-size:10px;color:#00956A;margin-top:1px}
+.hdr-count{font-family:‘DM Mono’,monospace;font-size:10px;color:#F0A500;margin-top:1px}
 
-main{max-width:580px;margin:0 auto;padding:18px 14px 130px;width:100%}
+main{max-width:600px;margin:0 auto;padding:18px 14px 140px;width:100%}
 
-.step-bar{display:flex;gap:5px;margin-bottom:4px}
-.seg{height:3px;flex:1;border-radius:99px;background:rgba(255,255,255,.1);transition:background .35s}
-.seg.on{background:#F0A500}.seg.done{background:#00956A}
-.step-lbl{display:flex;justify-content:space-between;
-font-family:‘DM Mono’,monospace;font-size:9px;color:#718096;margin-bottom:18px}
+/* TABS */
+.tabs{display:flex;gap:0;margin-bottom:18px;background:rgba(255,255,255,.05);
+border-radius:11px;padding:4px}
+.tab{flex:1;padding:9px;text-align:center;border-radius:8px;cursor:pointer;
+font-size:13px;font-weight:700;color:#718096;transition:all .2s}
+.tab.on{background:#fff;color:#1A202C;box-shadow:0 1px 6px rgba(0,0,0,.15)}
 
-.sec{display:none;animation:fu .3s ease both}.sec.on{display:block}
-@keyframes fu{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
-
-/* LIGHT CARDS */
+/* LIGHT CARD */
 .card{background:#fff;border:1px solid #DDE3ED;border-radius:14px;
-padding:16px;margin-bottom:12px;box-shadow:0 2px 16px rgba(0,0,0,.09)}
+padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
 .card-ttl{font-size:10px;font-family:‘DM Mono’,monospace;color:#D4870B;
 letter-spacing:.12em;text-transform:uppercase;margin-bottom:13px;font-weight:500}
 
-/* DARK CARDS */
-.dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
-border-radius:14px;padding:16px;margin-bottom:12px}
-.dcard .card-ttl{color:rgba(240,165,0,.85)}
-
-/* FORM FIELDS — all dark text */
+/* FORM */
 .flbl{display:block;font-size:10px;font-family:‘DM Mono’,monospace;
 color:#4A5568;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;font-weight:500}
 .finp{width:100%;background:#F7F9FC;border:1.5px solid #C5CDD8;border-radius:9px;
 padding:11px 12px;color:#1A202C;font-family:‘Syne’,sans-serif;
-font-size:15px;font-weight:600;outline:none;-webkit-appearance:none;appearance:none;
+font-size:15px;font-weight:600;outline:none;-webkit-appearance:none;
 transition:border-color .2s,box-shadow .2s}
 .finp:focus{border-color:#D4870B;box-shadow:0 0 0 3px rgba(212,135,11,.12)}
 .finp::placeholder{color:#A0AEC0;font-weight:400}
+select.finp{cursor:pointer}
 select.finp option{background:#fff;color:#1A202C}
-textarea.finp{resize:vertical;min-height:72px}
-
 .fg{margin-bottom:12px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
 /* QUARTER TABS */
-.q-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.q-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:0}
 .q-tab{background:#EEF2F7;border:1.5px solid #C5CDD8;border-radius:9px;
 padding:10px 4px;text-align:center;cursor:pointer;transition:all .18s}
 .q-tab.on{background:rgba(212,135,11,.1);border-color:#D4870B}
@@ -80,122 +64,99 @@ padding:10px 4px;text-align:center;cursor:pointer;transition:all .18s}
 .qs{display:block;font-size:8px;font-family:‘DM Mono’,monospace;color:#4A5568;margin-top:2px}
 .q-tab.on .qm{color:#D4870B}.q-tab.on .qs{color:#D4870B;opacity:.7}
 
-/* SCAN ZONE */
-.scan-z{border:2px dashed rgba(212,135,11,.35);border-radius:12px;
-padding:30px 16px;text-align:center;cursor:pointer;
-position:relative;overflow:hidden;background:#F9FAFB;transition:all .2s}
-.scan-z:hover,.scan-z.drag{border-color:#F0A500;background:rgba(212,135,11,.03)}
-.scan-z input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.s-ico{font-size:40px;margin-bottom:8px}
-.s-ttl{font-size:16px;font-weight:700;color:#1A202C;margin-bottom:4px}
-.s-sub{font-size:12px;color:#4A5568}
-.cam-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;
-background:#D4870B;color:#fff;border:none;border-radius:9px;
-padding:9px 18px;font-family:‘Syne’,sans-serif;font-size:13px;font-weight:700;
-cursor:pointer;transition:all .18s;-webkit-appearance:none}
-.cam-btn:active{transform:scale(.97)}
-.prev-w{position:relative;border-radius:9px;overflow:hidden}
-.prev-w img{width:100%;max-height:220px;object-fit:cover;display:block}
-.prev-bdg{position:absolute;top:7px;right:7px;background:rgba(0,0,0,.65);
-color:#00956A;font-family:‘DM Mono’,monospace;font-size:10px;
-padding:3px 9px;border-radius:99px}
-
-/* CATEGORY GRID */
+/* CAT GRID */
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .cat-btn{background:#EEF2F7;border:1.5px solid #C5CDD8;border-radius:9px;
-padding:10px 5px;text-align:center;cursor:pointer;transition:all .18s}
-.cat-btn:hover{border-color:rgba(212,135,11,.5);background:rgba(212,135,11,.05)}
+padding:10px 5px;text-align:center;cursor:pointer;transition:all .18s;-webkit-tap-highlight-color:transparent}
+.cat-btn:active{transform:scale(.96)}
 .cat-btn.on{background:rgba(212,135,11,.12);border-color:#D4870B}
 .cat-btn.ng{border-color:rgba(240,165,0,.3);background:#FFFBF0}
 .cat-btn.ng.on{background:rgba(240,165,0,.2);border-color:#F0A500}
-.c-ico{font-size:20px;display:block;margin-bottom:3px}
+.c-ico{font-size:22px;display:block;margin-bottom:3px}
 .c-nm{font-size:9px;font-family:‘DM Mono’,monospace;color:#2D3748;display:block}
 .cat-btn.on .c-nm{color:#D4870B}
 
-/* AI BOX */
-.ai-box{font-size:13px;color:#2D3748;line-height:1.65;
-background:#F7F9FC;border:1px solid #DDE3ED;border-radius:9px;padding:11px 13px}
-
-/* SPINNER */
-.spin-card{text-align:center;padding:34px 16px}
-.spinner{width:50px;height:50px;border-radius:50%;border:3px solid #DDE3ED;
-border-top-color:#F0A500;animation:spin .75s linear infinite;margin:0 auto 14px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.sp-ttl{font-size:16px;font-weight:700;color:#1A202C}
-.sp-sub{font-size:12px;font-family:‘DM Mono’,monospace;color:#4A5568;margin-top:5px}
+/* GST TOGGLE */
+.gst-row{display:flex;align-items:center;justify-content:space-between;
+background:#F7F9FC;border:1.5px solid #C5CDD8;border-radius:9px;padding:12px 14px}
+.gst-lbl{font-size:14px;font-weight:600;color:#1A202C}
+.gst-sub{font-size:11px;color:#718096;margin-top:1px}
+.toggle{width:48px;height:26px;background:#C5CDD8;border-radius:99px;
+position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none;-webkit-appearance:none}
+.toggle.on{background:#D4870B}
+.toggle::after{content:’’;position:absolute;width:20px;height:20px;background:#fff;
+border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle.on::after{transform:translateX(22px)}
 
 /* BUTTONS */
-.btn{width:100%;padding:13px;border-radius:11px;border:none;
-font-family:‘Syne’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;
-transition:all .18s;display:flex;align-items:center;justify-content:center;gap:7px;
--webkit-appearance:none}
-.btn:active{transform:scale(.98)}
+.btn{width:100%;padding:14px;border-radius:11px;border:none;
+font-family:‘Syne’,sans-serif;font-size:15px;font-weight:700;cursor:pointer;
+transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;
+-webkit-appearance:none;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}
 .btn-p{background:#D4870B;color:#fff}
 .btn-p:hover{background:#F0A500}
-.btn-p:disabled{background:#C5CDD8;color:#A0AEC0;cursor:not-allowed;transform:none}
 .btn-o{background:transparent;border:1.5px solid rgba(255,255,255,.15);color:#A0AEC0}
 .btn-o:hover{border-color:#F0A500;color:#E2E8F0}
 .btn-g{background:#00956A;color:#fff}
+.btn-r{background:#C0392B;color:#fff}
 
 /* BOTTOM NAV */
 .bot{position:fixed;bottom:0;left:0;right:0;background:rgba(13,27,42,.97);
 backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);
 padding:11px 14px;padding-bottom:max(11px,env(safe-area-inset-bottom));display:flex;gap:9px}
 
-/* SUCCESS */
-.succ-w{text-align:center;padding:28px 12px}
-.succ-ring{width:68px;height:68px;border-radius:50%;
-background:rgba(0,149,106,.1);border:2px solid #00956A;
-display:flex;align-items:center;justify-content:center;font-size:28px;
-margin:0 auto 16px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)}
-@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
-.succ-ttl{font-size:22px;font-weight:800;color:#1A202C;margin-bottom:5px}
-.succ-sub{font-size:13px;color:#4A5568;margin-bottom:18px}
-.d-row{background:#F7F9FC;border:1px solid #DDE3ED;border-radius:9px;
-padding:11px 13px;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.d-k{font-size:11px;color:#4A5568;font-family:‘DM Mono’,monospace}
-.d-v{font-size:13px;font-weight:700;color:#1A202C;text-align:right;max-width:60%}
-.d-v.money{color:#D4870B;font-family:‘DM Mono’,monospace;font-size:16px}
+/* LOG ENTRIES */
+.entry-row{display:flex;align-items:flex-start;gap:10px;
+padding:11px 0;border-bottom:1px solid #DDE3ED;cursor:pointer}
+.entry-row:last-child{border-bottom:none}
+.entry-row:active{background:rgba(212,135,11,.03)}
+.e-dot{width:9px;height:9px;border-radius:50%;background:#00956A;flex-shrink:0;margin-top:4px}
+.e-dot.ng{background:#D4870B}
+.e-info{flex:1;min-width:0}
+.e-desc{font-size:13px;color:#1A202C;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.e-meta{font-size:10px;font-family:‘DM Mono’,monospace;color:#4A5568;margin-top:2px}
+.e-amt{font-family:‘DM Mono’,monospace;font-size:14px;color:#D4870B;font-weight:700;white-space:nowrap}
+.e-del{background:none;border:none;color:#C5CDD8;font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0}
+.e-del:active{color:#C0392B}
 
-/* LOG */
-.log-row{display:flex;align-items:flex-start;gap:10px;
-padding:10px 0;border-bottom:1px solid #DDE3ED}
-.log-row:last-child{border-bottom:none}
-.l-dot{width:8px;height:8px;border-radius:50%;background:#00956A;flex-shrink:0;margin-top:4px}
-.l-dot.ng{background:#D4870B}
-.l-info{flex:1;min-width:0}
-.l-desc{font-size:13px;color:#1A202C;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.l-meta{font-size:10px;font-family:‘DM Mono’,monospace;color:#4A5568;margin-top:2px}
-.l-amt{font-family:‘DM Mono’,monospace;font-size:13px;color:#D4870B;font-weight:600;white-space:nowrap}
+/* SUMMARY STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.stat-box{background:#F7F9FC;border:1px solid #DDE3ED;border-radius:10px;padding:12px}
+.stat-lbl{font-size:9px;font-family:‘DM Mono’,monospace;color:#4A5568;text-transform:uppercase;letter-spacing:.08em}
+.stat-val{font-size:20px;font-weight:800;color:#1A202C;margin-top:3px;font-family:‘DM Mono’,monospace}
+.stat-val.amber{color:#D4870B}
+.stat-val.green{color:#00956A}
 
-/* HOW-TO */
-.how-r{display:flex;gap:11px;align-items:flex-start;margin-bottom:11px}
-.how-n{width:23px;height:23px;border-radius:50%;
-background:rgba(212,135,11,.12);border:1px solid rgba(212,135,11,.3);
-display:flex;align-items:center;justify-content:center;
-font-size:10px;font-family:‘DM Mono’,monospace;color:#F0A500;flex-shrink:0;margin-top:1px}
-.how-t{font-size:13px;color:#94A3B8;line-height:1.55}
+/* EMPTY STATE */
+.empty{text-align:center;padding:36px 20px;color:#718096}
+.empty-ico{font-size:40px;margin-bottom:10px}
+.empty-ttl{font-size:16px;font-weight:700;color:#4A5568;margin-bottom:5px}
+.empty-sub{font-size:13px}
 
 /* ERROR */
 .err{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);
 border-radius:9px;padding:11px 13px;font-size:13px;color:#C0392B;
 margin-bottom:12px;display:none;font-weight:600}
 
-/* TOAST */
-.toast{position:fixed;top:72px;left:50%;
-transform:translateX(-50%) translateY(-14px);
-background:rgba(0,149,106,.15);border:1px solid #00956A;
-color:#00956A;font-family:‘DM Mono’,monospace;font-size:11px;
-padding:8px 18px;border-radius:99px;opacity:0;transition:all .25s;
-pointer-events:none;white-space:nowrap;z-index:9999}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* SUCCESS FLASH */
+.flash{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-14px);
+background:rgba(0,149,106,.95);color:#fff;font-family:‘DM Mono’,monospace;font-size:12px;
+padding:10px 22px;border-radius:99px;opacity:0;transition:all .25s;
+pointer-events:none;white-space:nowrap;z-index:9999;font-weight:500}
+.flash.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.ai-bdg{display:inline-flex;align-items:center;gap:3px;
-font-size:9px;font-family:‘DM Mono’,monospace;color:#D4870B;
-background:rgba(212,135,11,.1);border:1px solid rgba(212,135,11,.25);
-padding:2px 7px;border-radius:99px;margin-left:7px;vertical-align:middle}
-.api-note{font-size:12px;color:#4A5568;line-height:1.65;margin-top:9px}
-.api-note a{color:#D4870B;text-decoration:none}
+/* DARK INFO */
+.info-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.info-box p{font-size:12px;color:#94A3B8;line-height:1.65}
+.info-box strong{color:#E2E8F0}
+
+.divider{height:1px;background:#DDE3ED;margin:12px 0}
+.clr-btn{padding:9px 4px;background:#FFF5F5;border:1.5px solid #FEB2B2;border-radius:9px;
+color:#C0392B;font-family:‘Syne’,sans-serif;font-size:11px;font-weight:700;
+cursor:pointer;transition:all .18s;-webkit-tap-highlight-color:transparent;width:100%}
+.clr-btn:active{background:#FED7D7;transform:scale(.96)}
 </style>
 
 </head>
@@ -206,41 +167,30 @@ padding:2px 7px;border-radius:99px;margin-left:7px;vertical-align:middle}
     <div class="logo-mark">🧾</div>
     <div>
       <div class="logo-name">WebEscapade</div>
-      <div class="logo-tag">Receipt Scanner</div>
+      <div class="logo-tag">Expense Entry</div>
     </div>
   </div>
   <div class="hdr-r">
     <div class="hdr-date" id="hdrDate"></div>
-    <div class="hdr-ai">● Claude Vision</div>
+    <div class="hdr-count" id="hdrCount">0 entries</div>
   </div>
 </header>
 
 <main>
-  <div class="step-bar">
-    <div class="seg on" id="s1"></div>
-    <div class="seg"    id="s2"></div>
-    <div class="seg"    id="s3"></div>
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab on" onclick="showTab('entry')">➕ Add Entry</div>
+    <div class="tab"   onclick="showTab('log')">📋 Log & Export</div>
   </div>
-  <div class="step-lbl"><span>Scan</span><span>Review</span><span>Done</span></div>
+
   <div class="err" id="err"></div>
 
-  <!-- STEP 1 -->
+  <!-- ══ ENTRY TAB ══ -->
 
-  <div class="sec on" id="p1">
-    <div class="card" id="apiCard">
-      <div class="card-ttl">🔑 API Key Setup</div>
-      <div class="fg">
-        <label class="flbl">Anthropic API Key</label>
-        <input class="finp" type="password" id="apiIn" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
-      </div>
-      <p class="api-note">
-        Stored in browser session only — sent only to Anthropic.<br>
-        Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys.
-      </p>
-      <button class="btn btn-p" style="margin-top:13px;" onclick="saveKey()">Save &amp; Continue →</button>
-    </div>
+  <div id="tabEntry">
 
 ```
+<!-- Quarter -->
 <div class="card">
   <div class="card-ttl">📅 Quarter</div>
   <div class="q-grid">
@@ -251,128 +201,123 @@ padding:2px 7px;border-radius:99px;margin-left:7px;vertical-align:middle}
   </div>
 </div>
 
+<!-- Details -->
 <div class="card">
-  <div class="card-ttl">📸 Receipt / Invoice</div>
-  <div class="scan-z" id="scanZ" ondragover="dv(event,true)" ondragleave="dv(event,false)" ondrop="onDrop(event)">
-    <input type="file" id="fileIn" accept="image/*" onchange="onFile(event)">
-    <div id="scanPr">
-      <div class="s-ico">📄</div>
-      <div class="s-ttl">Tap to choose image</div>
-      <div class="s-sub">Receipt, invoice or docket photo</div>
-      <button class="cam-btn" onclick="openCam(event)">📷 Use Camera</button>
+  <div class="card-ttl">📝 Expense Details</div>
+  <div class="two">
+    <div class="fg">
+      <label class="flbl">Date</label>
+      <input class="finp" type="date" id="fDate">
     </div>
-    <div id="imgPrev" style="display:none;">
-      <div class="prev-w">
-        <img id="prevImg" src="" alt="Receipt">
-        <div class="prev-bdg">✓ Ready</div>
-      </div>
-      <button class="cam-btn" style="margin-top:11px;" onclick="openCam(event)">📷 Retake Photo</button>
+    <div class="fg">
+      <label class="flbl">Amount ($)</label>
+      <input class="finp" type="number" id="fAmt" step="0.01" min="0.01" placeholder="0.00">
     </div>
+  </div>
+  <div class="fg">
+    <label class="flbl">Description / Vendor</label>
+    <input class="finp" type="text" id="fDesc" placeholder="e.g. Ampol Eastern Creek – Fuel">
+  </div>
+  <div class="fg">
+    <label class="flbl">Invoice / Receipt #  <span style="color:#A0AEC0;font-size:9px;">(optional)</span></label>
+    <input class="finp" type="text" id="fInv" placeholder="e.g. INV-001">
   </div>
 </div>
 
-<div class="dcard">
-  <div class="card-ttl">💡 How it works</div>
-  <div class="how-r"><div class="how-n">1</div><div class="how-t">Snap a photo — Claude Vision reads date, amount and vendor automatically</div></div>
-  <div class="how-r"><div class="how-n">2</div><div class="how-t">AI picks the category — including NO GST for rego, green slips and government fees</div></div>
-  <div class="how-r"><div class="how-n">3</div><div class="how-t">Review, confirm, then export a CSV formatted for your Excel sheet</div></div>
+<!-- Category -->
+<div class="card">
+  <div class="card-ttl">🗂️ Category</div>
+  <div class="cat-grid" id="catGrid"></div>
+</div>
+
+<!-- GST -->
+<div class="card">
+  <div class="card-ttl">🧾 GST</div>
+  <div class="gst-row">
+    <div>
+      <div class="gst-lbl">Includes GST?</div>
+      <div class="gst-sub" id="gstSub">Tap to toggle</div>
+    </div>
+    <button class="toggle on" id="gstToggle" onclick="toggleGST()"></button>
+  </div>
+  <div style="margin-top:10px;font-size:12px;color:#718096;line-height:1.65;">
+    Turn <strong style="color:#1A202C;">OFF</strong> for: Rent · Wages · Car Rego · Govt fees · NO GST items
+  </div>
 </div>
 
 <div class="bot">
-  <button class="btn btn-o" onclick="goManual()">✏️ Manual</button>
-  <button class="btn btn-p" id="scanBtn" onclick="doScan()" disabled>🤖 Scan with AI</button>
+  <button class="btn btn-o" onclick="clearForm()">✕ Clear</button>
+  <button class="btn btn-p" onclick="addEntry()">✓ Add Entry</button>
 </div>
 ```
 
   </div>
 
-  <!-- STEP 2 -->
+  <!-- ══ LOG TAB ══ -->
 
-  <div class="sec" id="p2">
-    <div class="card spin-card" id="spinCard">
-      <div class="spinner"></div>
-      <div class="sp-ttl">Reading receipt…</div>
-      <div class="sp-sub" id="spinTxt">Sending to Claude Vision</div>
-    </div>
+  <div id="tabLog" style="display:none;">
 
 ```
-<div id="revForm" style="display:none;">
-  <div class="card">
-    <div class="card-ttl">🔍 Extracted Details <span class="ai-bdg">✦ AI</span></div>
-    <div class="two">
-      <div class="fg"><label class="flbl">Date</label><input class="finp" type="date" id="fDate"></div>
-      <div class="fg"><label class="flbl">Amount ($)</label><input class="finp" type="number" id="fAmt" step="0.01" min="0" placeholder="0.00"></div>
+<!-- Stats -->
+<div class="stats-grid" id="statsGrid"></div>
+
+<!-- Quarter filter -->
+<div class="card">
+  <div class="card-ttl">Filter by Quarter</div>
+  <div class="q-grid">
+    <div class="q-tab on" data-q="ALL" onclick="filterQ(this)"><span class="qm" style="font-size:11px;">ALL</span></div>
+    <div class="q-tab"   data-q="Q1"  onclick="filterQ(this)"><span class="qm">Q1</span></div>
+    <div class="q-tab"   data-q="Q2"  onclick="filterQ(this)"><span class="qm">Q2</span></div>
+    <div class="q-tab"   data-q="Q3"  onclick="filterQ(this)"><span class="qm">Q3</span></div>
+  </div>
+  <div style="margin-top:10px;">
+    <div style="font-size:10px;font-family:'DM Mono',monospace;color:#4A5568;
+      text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">
+      Clear by Quarter — tap after exporting
     </div>
-    <div class="fg">
-      <label class="flbl">Description / Vendor</label>
-      <input class="finp" type="text" id="fDesc" placeholder="e.g. Ampol Eastern Creek – Fuel">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;">
+      <button class="clr-btn" onclick="clearQuarter('Q1')">Clear Q1</button>
+      <button class="clr-btn" onclick="clearQuarter('Q2')">Clear Q2</button>
+      <button class="clr-btn" onclick="clearQuarter('Q3')">Clear Q3</button>
+      <button class="clr-btn" onclick="clearQuarter('Q4')">Clear Q4</button>
     </div>
   </div>
+</div>
 
-  <div class="card">
-    <div class="card-ttl">🗂️ Category</div>
-    <div class="cat-grid" id="catGrid"></div>
+<!-- Entries list -->
+<div class="card">
+  <div class="card-ttl" style="display:flex;justify-content:space-between;align-items:center;">
+    <span>Entries</span>
+    <button onclick="clearAll()" style="font-size:10px;font-family:'DM Mono',monospace;color:#C0392B;background:none;border:none;cursor:pointer;font-weight:500;">Clear All</button>
   </div>
+  <div id="entryList"></div>
+</div>
 
-  <div class="card">
-    <div class="card-ttl">💡 AI Notes</div>
-    <div class="ai-box" id="aiNotes">—</div>
+<!-- Export -->
+<div class="card">
+  <div class="card-ttl">📥 Export to Excel</div>
+  <div class="info-box" style="margin-bottom:12px;">
+    <p>
+      Downloads a <strong>CSV file</strong> formatted to match your Excel columns exactly.<br><br>
+      Open in Excel → copy the rows → paste into the first blank buffer row in the correct quarter sheet (above TOTALS row 97) → use <strong>Paste Special → Values Only</strong>.
+    </p>
   </div>
+  <button class="btn btn-g" onclick="exportCSV()">⬇ Download CSV File</button>
+  <button class="btn btn-o" style="margin-top:9px;" onclick="copyHelp()">📋 Copy Paste Instructions</button>
+</div>
 
-  <div class="bot">
-    <button class="btn btn-o" onclick="back()">← Back</button>
-    <button class="btn btn-p" onclick="doConfirm()">✓ Add to Log</button>
-  </div>
+<div style="height:90px;"></div>
+<div class="bot">
+  <button class="btn btn-o" onclick="showTab('entry')">← Add Entry</button>
+  <button class="btn btn-g" onclick="exportCSV()">⬇ Download CSV</button>
 </div>
 ```
 
   </div>
 
-  <!-- STEP 3 -->
-
-  <div class="sec" id="p3">
-    <div class="card">
-      <div class="succ-w">
-        <div class="succ-ring">✓</div>
-        <div class="succ-ttl">Entry Saved!</div>
-        <div class="succ-sub">Added to session log</div>
-        <div id="succRows"></div>
-        <div style="margin-top:18px;display:flex;flex-direction:column;gap:8px;">
-          <button class="btn btn-p" onclick="again()">+ Scan Another Receipt</button>
-          <button class="btn btn-o" onclick="showLog()">📋 View Log &amp; Export</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LOG -->
-
-  <div class="sec" id="pLog">
-    <div class="card">
-      <div class="card-ttl" style="display:flex;justify-content:space-between;">
-        <span>📋 Session Log</span>
-        <span id="logCt" style="color:#00956A;"></span>
-      </div>
-      <div id="logList"></div>
-    </div>
-    <div class="card">
-      <div class="card-ttl">📥 Export to Excel</div>
-      <p style="font-size:13px;color:#2D3748;line-height:1.65;margin-bottom:13px;">
-        Downloads a CSV matching your Excel column layout. Open in Excel, copy the rows, paste
-        (Paste Special → Values Only) into the first blank buffer row above TOTALS (row 97).
-      </p>
-      <button class="btn btn-g" onclick="exportCSV()">⬇ Download CSV</button>
-      <button class="btn btn-o" style="margin-top:8px;" onclick="copyHelp()">📋 Copy Paste Instructions</button>
-    </div>
-    <div style="height:90px;"></div>
-    <div class="bot">
-      <button class="btn btn-o" onclick="again()">← Scanner</button>
-      <button class="btn btn-g"  onclick="exportCSV()">⬇ Export CSV</button>
-    </div>
-  </div>
 </main>
 
-<div class="toast" id="toast"></div>
+<div class="flash" id="flash"></div>
 
 <script>
 const CATS=[
@@ -395,226 +340,349 @@ const CATS=[
   {k:'NO GST',      i:'🚫',l:'No GST',    ng:true },
 ];
 
-let S={
-  key:sessionStorage.getItem('we_k')||'',
-  quarter:'Q1',b64:null,mime:null,
-  entries:JSON.parse(sessionStorage.getItem('we_e')||'[]'),
-};
+let entries = JSON.parse(localStorage.getItem('we_entries') || '[]');
+let quarter = 'Q1';
+let gstOn   = true;
+let filterQ_val = 'ALL';
 
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('hdrDate').textContent=
-    new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('hdrDate').textContent =
+    new Date().toLocaleDateString('en-AU', {weekday:'short', day:'numeric', month:'short'});
+  document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
   buildCats();
-  if(S.key){document.getElementById('apiIn').value=S.key;document.getElementById('apiCard').style.display='none';}
+  updateCount();
 });
 
-function buildCats(){
-  document.getElementById('catGrid').innerHTML=CATS.map(c=>
-    `<div class="cat-btn${c.ng?' ng':''}" data-k="${c.k}" onclick="selCat(this)">
-      <span class="c-ico">${c.i}</span><span class="c-nm">${c.l}</span></div>`).join('');
+function buildCats() {
+  document.getElementById('catGrid').innerHTML = CATS.map(c =>
+    `<div class="cat-btn${c.ng?' ng':''}" data-k="${c.k}" onclick="selCat(this,${c.ng})">
+      <span class="c-ico">${c.i}</span>
+      <span class="c-nm">${c.l}</span>
+    </div>`).join('');
 }
 
-function saveKey(){
-  const v=document.getElementById('apiIn').value.trim();
-  if(!v||v.length<20){showErr('Enter a valid API key');return;}
-  S.key=v;sessionStorage.setItem('we_k',v);
-  document.getElementById('apiCard').style.display='none';
-  toast('API key saved ✓');
+// ── TABS ──
+function showTab(t) {
+  document.getElementById('tabEntry').style.display = t==='entry' ? 'block' : 'none';
+  document.getElementById('tabLog').style.display   = t==='log'   ? 'block' : 'none';
+  document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('on', (i===0&&t==='entry')||(i===1&&t==='log')));
+  if (t === 'log') renderLog();
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function pickQ(el){
-  document.querySelectorAll('.q-tab').forEach(t=>t.classList.remove('on'));
-  el.classList.add('on');S.quarter=el.dataset.q;
+// ── QUARTER ──
+function pickQ(el) {
+  document.querySelectorAll('#tabEntry .q-tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  quarter = el.dataset.q;
 }
 
-function openCam(e){
-  e.stopPropagation();
-  const inp=document.createElement('input');
-  inp.type='file';inp.accept='image/*';inp.capture='environment';
-  inp.onchange=onFile;inp.click();
+function filterQ(el) {
+  document.querySelectorAll('#tabLog .q-tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  filterQ_val = el.dataset.q;
+  renderLog();
 }
 
-function onFile(e){
-  const f=e?.target?.files?.[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    const url=ev.target.result;
-    S.b64=url.split(',')[1];S.mime=f.type||'image/jpeg';
-    document.getElementById('prevImg').src=url;
-    document.getElementById('scanPr').style.display='none';
-    document.getElementById('imgPrev').style.display='block';
-    document.getElementById('scanBtn').disabled=false;
-    toast('Image ready — tap Scan with AI');
-  };r.readAsDataURL(f);
+// ── CATEGORY ──
+function selCat(el, isNG) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  // Auto-set GST based on category
+  if (isNG) { gstOn = false; } else { gstOn = true; }
+  updateGSTUI();
 }
 
-function dv(e,add){e.preventDefault();document.getElementById('scanZ').classList[add?'add':'remove']('drag');}
-function onDrop(e){e.preventDefault();dv(e,false);const f=e.dataTransfer?.files?.[0];if(f?.type?.startsWith('image/'))onFile({target:{files:[f]}});}
+// ── GST ──
+function toggleGST() { gstOn = !gstOn; updateGSTUI(); }
 
-async function doScan(){
-  if(!S.key){showErr('Enter your API key first');return;}
-  if(!S.b64){showErr('Select an image first');return;}
-  show('p2');steps(2);
-  document.getElementById('spinCard').style.display='block';
-  document.getElementById('revForm').style.display='none';
-  const st=document.getElementById('spinTxt');
-  const catList=CATS.map(c=>`${c.k}${c.ng?' (no GST)':''}`).join(', ');
-  try{
-    st.textContent='Sending image to Claude Vision…';
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':S.key,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true',
-      },
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:800,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:S.mime,data:S.b64}},
-          {type:'text',text:`You are a bookkeeping assistant for Marc (WebEscapade), an Australian sole trader.
-Analyse this receipt/invoice and return ONLY valid JSON — no other text, no markdown.
+function updateGSTUI() {
+  const t = document.getElementById('gstToggle');
+  const s = document.getElementById('gstSub');
+  t.classList.toggle('on', gstOn);
+  s.textContent = gstOn ? 'Yes — GST included in amount' : 'No GST on this expense';
+}
 
-Categories: ${catList}
+// ── ADD ENTRY ──
+function addEntry() {
+  const date = document.getElementById('fDate').value;
+  const amt  = parseFloat(document.getElementById('fAmt').value);
+  const desc = document.getElementById('fDesc').value.trim();
+  const inv  = document.getElementById('fInv').value.trim();
+  const cat  = document.querySelector('.cat-btn.on')?.dataset.k;
 
-Rules: Fuel/petrol/tolls→TRANSPORT | Software/subscriptions/office→OFFICE MISC | Rego/green slip/govt fees (no GST)→NO GST | Motor oil/GST-free goods→NO GST | Wages→WAGES | Rent→RENT | Mobile plan→MOBILE | Internet→INTERNET | Devices/tablets→COMPUTER | Insurance (with GST)→INSURANCE | Electricity→ENERGY AUS
+  if (!date)          { showErr('Please enter a date'); return; }
+  if (!amt || amt<=0) { showErr('Please enter a valid amount'); return; }
+  if (!desc)          { showErr('Please enter a description'); return; }
+  if (!cat)           { showErr('Please select a category'); return; }
 
-Return exactly:
-{"date":"DD/MM/YYYY","amount":0.00,"vendor":"Name","description":"Short description","category":"KEY","hasGST":true,"confidence":"high","notes":"Reason"}`
-        ]}]}
-      })
-    });
-    st.textContent='Processing response…';
-    if(!res.ok){const er=await res.json().catch(()=>({}));throw new Error(er?.error?.message||`API error ${res.status}`);}
-    const data=await res.json();
-    const txt=(data.content||[]).find(b=>b.type==='text')?.text||'';
-    const m=txt.match(/\{[\s\S]*\}/);
-    if(!m)throw new Error('Could not parse AI response — try again');
-    fillForm(JSON.parse(m[0]));
-  }catch(err){
-    document.getElementById('spinCard').style.display='none';
-    showErr('Scan failed: '+err.message);show('p1');steps(1);
+  const e = {
+    id:   Date.now(),
+    quarter,
+    date,
+    dateD: new Date(date + 'T00:00:00').toLocaleDateString('en-AU'),
+    amount: amt,
+    description: desc,
+    invoice: inv,
+    category: cat,
+    hasGST: gstOn,
+    gstAmt: gstOn ? +(amt / 11).toFixed(2) : 0,
+  };
+
+  entries.push(e);
+  localStorage.setItem('we_entries', JSON.stringify(entries));
+  updateCount();
+  flash(`✓ Added $${amt.toFixed(2)} — ${desc.substring(0,30)}`);
+  clearForm();
+}
+
+function clearForm() {
+  document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fAmt').value  = '';
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fInv').value  = '';
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on'));
+  gstOn = true; updateGSTUI();
+  document.getElementById('err').style.display = 'none';
+}
+
+// ── LOG ──
+function renderLog() {
+  const filtered = filterQ_val === 'ALL' ? entries : entries.filter(e => e.quarter === filterQ_val);
+  const list = document.getElementById('entryList');
+  const stats = document.getElementById('statsGrid');
+
+  // Stats
+  const total    = filtered.reduce((s,e) => s+e.amount, 0);
+  const gstTotal = filtered.reduce((s,e) => s+e.gstAmt, 0);
+  const quarters = [...new Set(filtered.map(e=>e.quarter))];
+
+  stats.innerHTML = `
+    <div class="stat-box"><div class="stat-lbl">Total Entries</div><div class="stat-val amber">${filtered.length}</div></div>
+    <div class="stat-box"><div class="stat-lbl">Total Amount</div><div class="stat-val amber">$${total.toFixed(2)}</div></div>
+    <div class="stat-box"><div class="stat-lbl">GST Deductible</div><div class="stat-val green">$${gstTotal.toFixed(2)}</div></div>
+    <div class="stat-box"><div class="stat-lbl">Quarters</div><div class="stat-val">${quarters.join(', ')||'—'}</div></div>`;
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-ico">📋</div>
+      <div class="empty-ttl">No entries yet</div>
+      <div class="empty-sub">Add expenses in the Entry tab</div></div>`;
+    return;
   }
-}
 
-function fillForm(d){
-  document.getElementById('spinCard').style.display='none';
-  document.getElementById('revForm').style.display='block';
-  if(d.date){const p=d.date.split('/');if(p.length===3)document.getElementById('fDate').value=`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
-  else{document.getElementById('fDate').value=new Date().toISOString().split('T')[0];}
-  document.getElementById('fAmt').value=d.amount||'';
-  document.getElementById('fDesc').value=d.description||d.vendor||'';
-  document.getElementById('aiNotes').textContent=(d.notes||'—')+(d.confidence?` [${d.confidence}]`:'');
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('on'));
-  const btn=document.querySelector(`.cat-btn[data-k="${d.category}"]`);
-  if(btn)btn.classList.add('on');
-}
-
-function goManual(){
-  show('p2');steps(2);
-  document.getElementById('spinCard').style.display='none';
-  document.getElementById('revForm').style.display='block';
-  document.getElementById('fDate').value=new Date().toISOString().split('T')[0];
-  document.getElementById('fAmt').value='';document.getElementById('fDesc').value='';
-  document.getElementById('aiNotes').textContent='Manual entry';
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('on'));
-}
-
-function selCat(el){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');}
-function getCat(){return document.querySelector('.cat-btn.on')?.dataset.k||null;}
-
-function doConfirm(){
-  const date=document.getElementById('fDate').value;
-  const amt=parseFloat(document.getElementById('fAmt').value);
-  const desc=document.getElementById('fDesc').value.trim();
-  const cat=getCat();
-  if(!date){showErr('Enter a date');return;}
-  if(!amt||amt<=0){showErr('Enter a valid amount');return;}
-  if(!desc){showErr('Enter a description');return;}
-  if(!cat){showErr('Select a category');return;}
-  const ci=CATS.find(c=>c.k===cat);
-  const e={id:Date.now(),quarter:S.quarter,date,
-    dateD:new Date(date).toLocaleDateString('en-AU'),
-    amount:amt,description:desc,category:cat,hasGST:!ci?.ng,ts:new Date().toISOString()};
-  S.entries.push(e);sessionStorage.setItem('we_e',JSON.stringify(S.entries));
-  showSucc(e);
-}
-
-function showSucc(e){
-  show('p3');steps(3);
-  const ci=CATS.find(c=>c.k===e.category);
-  document.getElementById('succRows').innerHTML=`
-    <div class="d-row"><span class="d-k">Quarter</span><span class="d-v" style="color:#D4870B">${e.quarter}</span></div>
-    <div class="d-row"><span class="d-k">Date</span><span class="d-v">${e.dateD}</span></div>
-    <div class="d-row"><span class="d-k">Description</span><span class="d-v">${e.description}</span></div>
-    <div class="d-row"><span class="d-k">Category</span><span class="d-v">${ci?.i||''} ${e.category}</span></div>
-    <div class="d-row"><span class="d-k">Amount</span><span class="d-v money">$${e.amount.toFixed(2)}</span></div>
-    <div class="d-row"><span class="d-k">GST</span><span class="d-v" style="color:${e.hasGST?'#00956A':'#4A5568'}">${e.hasGST?'✓ Includes GST':'✗ No GST'}</span></div>`;
-}
-
-function showLog(){
-  show('pLog');
-  document.getElementById('logCt').textContent=`${S.entries.length} entries`;
-  const list=document.getElementById('logList');
-  if(!S.entries.length){list.innerHTML='<p style="font-size:13px;color:#4A5568;padding:12px 0;">No entries yet.</p>';return;}
-  list.innerHTML=[...S.entries].reverse().map(e=>{
-    const ci=CATS.find(c=>c.k===e.category);
-    return`<div class="log-row">
-      <div class="l-dot${e.hasGST?'':' ng'}"></div>
-      <div class="l-info"><div class="l-desc">${e.description}</div>
-      <div class="l-meta">${e.quarter} · ${e.dateD} · ${ci?.i||''} ${e.category}</div></div>
-      <div class="l-amt">$${e.amount.toFixed(2)}</div></div>`;
+  list.innerHTML = [...filtered].reverse().map(e => {
+    const ci = CATS.find(c => c.k === e.category);
+    return `<div class="entry-row">
+      <div class="e-dot${e.hasGST?'':' ng'}"></div>
+      <div class="e-info">
+        <div class="e-desc">${e.description}</div>
+        <div class="e-meta">${e.quarter} · ${e.dateD} · ${ci?.i||''} ${e.category}${e.invoice?' · '+e.invoice:''} · ${e.hasGST?'GST ✓':'No GST'}</div>
+      </div>
+      <div class="e-amt">$${e.amount.toFixed(2)}</div>
+      <button class="e-del" onclick="delEntry(${e.id})">×</button>
+    </div>`;
   }).join('');
 }
 
-function exportCSV(){
-  if(!S.entries.length){toast('No entries yet');return;}
-  const ks=CATS.map(c=>c.k);
-  let csv=`WEBESCAPADE EXPENSES — ${new Date().toLocaleDateString('en-AU')}\n"Paste into correct quarter sheet — first blank row above TOTALS row 97 — Paste Special Values Only"\n\n`;
-  for(const q of['Q1','Q2','Q3','Q4']){
-    const rows=S.entries.filter(e=>e.quarter===q);if(!rows.length)continue;
-    csv+=`\n=== ${q} — ${rows.length} entries ===\nDate,Description,${ks.join(',')}\n`;
-    for(const e of rows){
-      const cols=ks.map(k=>k===e.category?e.amount.toFixed(2):'');
-      csv+=`"${e.date}","${e.description.replace(/"/g,'""')}",${cols.join(',')}\n`;
+function delEntry(id) {
+  entries = entries.filter(e => e.id !== id);
+  localStorage.setItem('we_entries', JSON.stringify(entries));
+  updateCount();
+  renderLog();
+  flash('Entry deleted');
+}
+
+function clearQuarter(q) {
+  const count = entries.filter(e => e.quarter === q).length;
+  if (!count) { flash(`No ${q} entries to clear`); return; }
+  if (!confirm(`Clear all ${count} ${q} entries? Make sure you have exported them first.`)) return;
+  entries = entries.filter(e => e.quarter !== q);
+  localStorage.setItem('we_entries', JSON.stringify(entries));
+  updateCount();
+  renderLog();
+  flash(`✓ ${q} cleared — ${entries.length} entries remaining`);
+}
+
+function clearAll() {
+  if (!confirm('Delete ALL entries? This cannot be undone.')) return;
+  entries = [];
+  localStorage.setItem('we_entries', JSON.stringify(entries));
+  updateCount();
+  renderLog();
+}
+
+function updateCount() {
+  document.getElementById('hdrCount').textContent =
+    `${entries.length} entr${entries.length===1?'y':'ies'}`;
+}
+
+// ── EXPORT CSV ──
+function exportCSV() {
+  if (!entries.length) { showErr('No entries to export — add some first'); showTab('entry'); return; }
+
+  const catKeys = CATS.map(c => c.k);
+  const today   = new Date().toLocaleDateString('en-AU');
+
+  let csv = `WEBESCAPADE EXPENSES — ${today}\r\n`;
+  csv += `"Paste rows into the correct quarter sheet — first blank row above TOTALS row 97 — Paste Special Values Only"\r\n\r\n`;
+
+  for (const q of ['Q1','Q2','Q3','Q4']) {
+    const rows = entries.filter(e => e.quarter === q);
+    if (!rows.length) continue;
+
+    // Column headers match your Excel sheet exactly
+    const colHdr = `Date,Description,TRANSPORT,OFFICE MISC,LAUNDRY,RENT,MOBILE,INTERNET,COMPUTER,CAR LOAN,OFF / EQUIP,WAGES,INSURANCE,ENERGY AUS,EDUCATION,SERVICE/REPR,OVERSEAS,OTHER,NO GST`;
+    csv += `\r\n=== ${q} ENTRIES — ${rows.length} items ===\r\n`;
+    csv += colHdr + `\r\n`;
+
+    for (const e of rows) {
+      // DD/MM/YYYY date format
+      const d = new Date(e.date + 'T00:00:00');
+      const dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+      // Description combined with invoice number
+      const descFull = e.invoice ? `${e.description} (${e.invoice})` : e.description;
+      // Amount goes in the correct category column, all others blank
+      const cats = ['TRANSPORT','OFFICE MISC','LAUNDRY','RENT','MOBILE','INTERNET','COMPUTER','CAR LOAN','OFF / EQUIP','WAGES','INSURANCE','ENERGY AUS','EDUCATION','SERVICE/REPR','OVERSEAS','OTHER','NO GST'];
+      const cols = cats.map(k => k === e.category ? e.amount.toFixed(2) : '');
+      csv += `"${dateStr}","${descFull.replace(/"/g,'""')}",${cols.join(',')}\r\n`;
     }
-    csv+=`"TOTAL ${q}",$${rows.reduce((s,e)=>s+e.amount,0).toFixed(2)}\n`;
+
+    const total    = rows.reduce((s,e) => s+e.amount, 0);
+    const gstTotal = rows.reduce((s,e) => s+e.gstAmt, 0);
+    csv += `"TOTAL","",${Array(17).fill('').join(',')}\r\n`;
+    csv += `"GROSS $${total.toFixed(2)} — GST $${gstTotal.toFixed(2)}"\r\n`;
   }
-  const b=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const u=URL.createObjectURL(b);const a=document.createElement('a');
-  a.href=u;a.download=`webescapade_${new Date().toISOString().split('T')[0]}.csv`;
-  a.click();URL.revokeObjectURL(u);toast('CSV downloaded ✓');
+
+  // Grand totals
+  const grandTotal = entries.reduce((s,e) => s+e.amount, 0);
+  const grandGST   = entries.reduce((s,e) => s+e.gstAmt, 0);
+  csv += `\r\n=== GRAND TOTALS ===\r\n`;
+  csv += `"ALL QUARTERS TOTAL: $${grandTotal.toFixed(2)} — GST: $${grandGST.toFixed(2)}"\r\n`;
+
+  // iOS Safari compatible export
+  showCSVPanel(csv);
 }
 
-function copyHelp(){
-  const qs=[...new Set(S.entries.map(e=>e.quarter))].join(', ')||'Q1–Q4';
-  navigator.clipboard?.writeText(`PASTE INSTRUCTIONS — webescapade_expenses_CLEAN.xlsx
-1. Open the Excel file and go to the ${qs} sheet(s)
-2. Find the first blank buffer row above TOTALS (row 97)
-3. Open the downloaded CSV, copy the data rows for that quarter
-4. Click the Date cell in the first blank row
-5. Paste Special → Values Only
-6. Totals, GST, BAS and Annual Summary all update automatically`).then(()=>toast('Instructions copied ✓'));
+function copyHelp() {
+  const qs = [...new Set(entries.map(e=>e.quarter))].join(', ') || 'Q1–Q4';
+  const txt = `PASTE INSTRUCTIONS — webescapade_expenses_CLEAN.xlsx
+1. Open webescapade_expenses_CLEAN.xlsx in Excel
+2. Go to the ${qs} sheet(s)
+3. Find the first blank row above TOTALS (row 97)
+4. Open the downloaded CSV file
+5. Copy the data rows for that quarter (not the header or total rows)
+6. Click the Date cell in the first blank row of Excel
+7. Paste Special → Values Only
+8. All totals, GST, BAS Summary and Annual Summary update automatically`;
+  navigator.clipboard?.writeText(txt).then(() => flash('✓ Instructions copied!'))
+    .catch(() => showErr('Could not copy — please copy manually'));
 }
 
-function again(){
-  S.b64=null;S.mime=null;
-  document.getElementById('prevImg').src='';
-  document.getElementById('scanPr').style.display='block';
-  document.getElementById('imgPrev').style.display='none';
-  document.getElementById('scanBtn').disabled=true;
-  document.getElementById('fileIn').value='';
-  document.getElementById('err').style.display='none';
-  show('p1');steps(1);
+// ── UI HELPERS ──
+function showTab(t) {
+  document.getElementById('tabEntry').style.display = t==='entry' ? 'block' : 'none';
+  document.getElementById('tabLog').style.display   = t==='log'   ? 'block' : 'none';
+  document.querySelectorAll('.tab').forEach((el,i) => {
+    el.classList.toggle('on', (i===0&&t==='entry')||(i===1&&t==='log'));
+  });
+  if (t === 'log') renderLog();
+  window.scrollTo({top:0, behavior:'smooth'});
 }
-function back(){show('p1');steps(1);}
-function show(id){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
-function steps(n){for(let i=1;i<=3;i++){const s=document.getElementById(`s${i}`);if(!s)continue;s.classList.remove('on','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('on');}}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
-function showErr(msg){const b=document.getElementById('err');b.textContent='⚠ '+msg;b.style.display='block';setTimeout(()=>b.style.display='none',4000);}
+
+function flash(msg) {
+  const f = document.getElementById('flash');
+  f.textContent = msg; f.classList.add('on');
+  setTimeout(() => f.classList.remove('on'), 2600);
+}
+
+function showErr(msg) {
+  const b = document.getElementById('err');
+  b.textContent = '⚠ ' + msg; b.style.display = 'block';
+  setTimeout(() => b.style.display='none', 4000);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showCSVPanel(csv) {
+  document.getElementById('csvText').value = csv;
+  document.getElementById('csvModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCSVModal() {
+  document.getElementById('csvModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function selectAllCSV() {
+  const ta = document.getElementById('csvText');
+  ta.focus();
+  ta.select();
+  // iOS fallback
+  const range = document.createRange();
+  range.selectNodeContents(ta);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  flash('✓ All selected — now tap Copy');
+}
+
+function copyCSV() {
+  const txt = document.getElementById('csvText').value;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt)
+      .then(() => flash('✓ Copied! Paste into Notes → save as .csv'))
+      .catch(() => selectAllCSV());
+  } else {
+    selectAllCSV();
+    try { document.execCommand('copy'); flash('✓ Copied!'); } catch(e) { flash('Select All then copy manually'); }
+  }
+}
+
 </script>
+
+<!-- CSV EXPORT MODAL -->
+
+<div id="csvModal" style="display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(8px);overflow-y:auto;padding:20px 14px;">
+  <div style="background:#fff;border-radius:16px;max-width:580px;margin:0 auto;overflow:hidden;">
+    <div style="background:#D4870B;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#fff;">📥 Your CSV Data</div>
+      <button onclick="closeCSVModal()" style="background:rgba(255,255,255,.2);border:none;color:#fff;
+        font-size:20px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+    <div style="padding:16px;">
+      <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:9px;padding:12px;margin-bottom:14px;">
+        <p style="font-size:12px;color:#166534;line-height:1.7;font-family:'Syne',sans-serif;">
+          <strong>On iPad:</strong><br>
+          1. Tap <strong>Select All</strong> below, then <strong>Copy</strong><br>
+          2. Open <strong>Notes</strong> app → New note → Paste<br>
+          3. Tap Share → <strong>Save to Files</strong> → name it <code>expenses.csv</code><br>
+          4. Open in Excel / Numbers and copy rows into your sheet
+        </p>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <button onclick="selectAllCSV()" style="flex:1;padding:11px;background:#D4870B;color:#fff;
+          border:none;border-radius:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;">
+          Select All
+        </button>
+        <button onclick="copyCSV()" style="flex:1;padding:11px;background:#00956A;color:#fff;
+          border:none;border-radius:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;">
+          Copy to Clipboard
+        </button>
+      </div>
+      <textarea id="csvText" readonly style="width:100%;height:260px;background:#F7F9FC;
+        border:1.5px solid #C5CDD8;border-radius:9px;padding:10px;
+        font-family:'DM Mono',monospace;font-size:11px;color:#1A202C;
+        resize:none;outline:none;-webkit-user-select:all;user-select:all;"></textarea>
+      <button onclick="closeCSVModal()" style="width:100%;margin-top:10px;padding:12px;
+        background:transparent;border:1.5px solid #C5CDD8;border-radius:9px;
+        font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#4A5568;cursor:pointer;">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
