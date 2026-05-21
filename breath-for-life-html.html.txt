@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Breath for Life · Estetica Wellness</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #F5F1EA; font-family: 'Inter', -apple-system, system-ui, sans-serif; }
+    :root {
+      --bg: #F5F1EA;
+      --cream: #FBF7F0;
+      --cream-warm: #F0E9DC;
+      --ink: #2A2F2C;
+      --ink-soft: #3F4744;
+      --slate: #5C6B68;
+      --slate-light: #A8B0AE;
+      --sage: #8FA088;
+      --sage-light: #B5C2AD;
+      --sage-dark: #6D7E66;
+    }
+    .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up          { animation: fadeUp 0.7s cubic-bezier(0.4,0,0.2,1) both; }
+    .fade-up-delay-1  { animation-delay: 0.1s; }
+    .fade-up-delay-2  { animation-delay: 0.2s; }
+    .fade-up-delay-3  { animation-delay: 0.3s; }
+    .fade-up-delay-4  { animation-delay: 0.4s; }
+    @keyframes gentlePulse {
+      0%,100% { transform: scale(1);    opacity: 0.6; }
+      50%      { transform: scale(1.05); opacity: 0.9; }
+    }
+    /* ---- Tailwind-like utilities ---- */
+    .min-h-screen   { min-height: 100vh; }
+    .w-full         { width: 100%; }
+    .max-w-6xl      { max-width: 72rem; }
+    .max-w-2xl      { max-width: 42rem; }
+    .max-w-xl       { max-width: 36rem; }
+    .mx-auto        { margin-left: auto; margin-right: auto; }
+    .px-6           { padding-left: 1.5rem;  padding-right: 1.5rem; }
+    .px-4           { padding-left: 1rem;    padding-right: 1rem; }
+    .px-5           { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .px-7           { padding-left: 1.75rem; padding-right: 1.75rem; }
+    .py-3           { padding-top: 0.75rem;  padding-bottom: 0.75rem; }
+    .py-4           { padding-top: 1rem;     padding-bottom: 1rem; }
+    .p-2            { padding: 0.5rem; }
+    .p-2\.5         { padding: 0.625rem; }
+    .p-4            { padding: 1rem; }
+    .p-6            { padding: 1.5rem; }
+    .p-7            { padding: 1.75rem; }
+    .p-8            { padding: 2rem; }
+    .pt-8           { padding-top: 2rem; }
+    .pt-6           { padding-top: 1.5rem; }
+    .pt-10          { padding-top: 2.5rem; }
+    .pb-8           { padding-bottom: 2rem; }
+    .pb-12          { padding-bottom: 3rem; }
+    .pb-16          { padding-bottom: 4rem; }
+    .mb-1           { margin-bottom: 0.25rem; }
+    .mb-2           { margin-bottom: 0.5rem; }
+    .mb-3           { margin-bottom: 0.75rem; }
+    .mb-4           { margin-bottom: 1rem; }
+    .mb-5           { margin-bottom: 1.25rem; }
+    .mb-6           { margin-bottom: 1.5rem; }
+    .mb-7           { margin-bottom: 1.75rem; }
+    .mb-8           { margin-bottom: 2rem; }
+    .mt-1           { margin-top: 0.25rem; }
+    .mt-3           { margin-top: 0.75rem; }
+    .mt-4           { margin-top: 1rem; }
+    .mt-6           { margin-top: 1.5rem; }
+    .mt-7           { margin-top: 1.75rem; }
+    .mt-8           { margin-top: 2rem; }
+    .gap-2          { gap: 0.5rem; }
+    .gap-3          { gap: 0.75rem; }
+    .gap-4          { gap: 1rem; }
+    .gap-5          { gap: 1.25rem; }
+    .gap-8          { gap: 2rem; }
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .space-y-3 > * + * { margin-top: 0.75rem; }
+    .space-y-5 > * + * { margin-top: 1.25rem; }
+    .flex           { display: flex; }
+    .grid           { display: grid; }
+    .inline-flex    { display: inline-flex; }
+    .hidden         { display: none; }
+    .items-center   { align-items: center; }
+    .items-start    { align-items: flex-start; }
+    .items-baseline { align-items: baseline; }
+    .items-end      { align-items: flex-end; }
+    .justify-center { justify-content: center; }
+    .justify-between{ justify-content: space-between; }
+    .flex-wrap      { flex-wrap: wrap; }
+    .flex-col       { flex-direction: column; }
+    .relative       { position: relative; }
+    .absolute       { position: absolute; }
+    .fixed          { position: fixed; }
+    .inset-0        { top:0; right:0; bottom:0; left:0; }
+    .top-5          { top: 1.25rem; }
+    .right-5        { right: 1.25rem; }
+    .z-50           { z-index: 50; }
+    .rounded-full   { border-radius: 9999px; }
+    .rounded-xl     { border-radius: 0.75rem; }
+    .rounded-2xl    { border-radius: 1rem; }
+    .rounded-3xl    { border-radius: 1.5rem; }
+    .rounded-md     { border-radius: 0.375rem; }
+    .text-center    { text-align: center; }
+    .text-left      { text-align: left; }
+    .text-right     { text-align: right; }
+    .text-xs        { font-size: 0.75rem;  line-height: 1rem; }
+    .text-sm        { font-size: 0.875rem; line-height: 1.25rem; }
+    .text-base      { font-size: 1rem;     line-height: 1.5rem; }
+    .text-lg        { font-size: 1.125rem; line-height: 1.75rem; }
+    .text-xl        { font-size: 1.25rem;  line-height: 1.75rem; }
+    .text-2xl       { font-size: 1.5rem;   line-height: 2rem; }
+    .text-3xl       { font-size: 1.875rem; line-height: 2.25rem; }
+    .text-4xl       { font-size: 2.25rem;  line-height: 2.5rem; }
+    .text-5xl       { font-size: 3rem;     line-height: 1; }
+    .font-medium    { font-weight: 500; }
+    .font-semibold  { font-weight: 600; }
+    .italic         { font-style: italic; }
+    .leading-none   { line-height: 1; }
+    .leading-relaxed{ line-height: 1.625; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .uppercase      { text-transform: uppercase; }
+    .resize-none    { resize: none; }
+    .overflow-y-auto{ overflow-y: auto; }
+    .overflow-hidden{ overflow: hidden; }
+    .aspect-square  { aspect-ratio: 1/1; }
+    .border-t       { border-top-width: 1px; border-top-style: solid; }
+    .border-b       { border-bottom-width: 1px; border-bottom-style: solid; }
+    .opacity-70     { opacity: 0.7; }
+    .opacity-30     { opacity: 0.3; }
+    .opacity-40     { opacity: 0.4; }
+    .opacity-85     { opacity: 0.85; }
+    .cursor-pointer { cursor: pointer; }
+    .transition     { transition: all 0.2s ease; }
+    .w-2\.5         { width: 0.625rem; }
+    .h-2\.5         { height: 0.625rem; }
+    .w-10           { width: 2.5rem; }
+    .h-10           { height: 2.5rem; }
+    .max-h-\[90vh\] { max-height: 90vh; }
+    button { cursor: pointer; background: none; border: none; font-family: inherit; }
+    textarea { font-family: inherit; }
+    textarea:focus  { outline: 2px solid var(--sage); outline-offset: 1px; }
+    .hover-scale:hover    { transform: scale(1.05); }
+    .hover-scale2:hover   { transform: scale(1.02); }
+    .hover-translateX:hover { transform: translateX(8px); }
+    .grid-cols-10   { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+    @media (min-width: 640px) {
+      .sm\:px-10    { padding-left: 2.5rem; padding-right: 2.5rem; }
+      .sm\:pt-14    { padding-top: 3.5rem; }
+      .sm\:p-10     { padding: 2.5rem; }
+      .sm\:p-12     { padding: 3rem; }
+      .sm\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+      .sm\:text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+      .sm\:text-base{ font-size: 1rem; line-height: 1.5rem; }
+      .grid-cols-10 { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+    }
+    @media (min-width: 768px) {
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+      .lg\:col-span-7 { grid-column: span 7 / span 7; }
+      .lg\:col-span-5 { grid-column: span 5 / span 5; }
+      .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    /* ===================== DATA ===================== */
+
+    const PHASES = {
+      1: { name: 'Reconnection',         subtitle: 'Safety & Regulation',      range: '1–7'   },
+      2: { name: 'Release & Restore',    subtitle: 'Soften & Surrender',       range: '8–14'  },
+      3: { name: 'Reset & Rebuild',      subtitle: 'Resilience & Rhythm',      range: '15–21' },
+      4: { name: 'Integration & Mastery',subtitle: 'Your Daily Practice',      range: '22–40' },
+    };
+
+    const EXERCISES = {
+      belly_4_6:       { name:'Belly Hand Breathing',           description:'One hand on chest, one on belly. Breathe gently into the lower hand.', steps:['One hand on chest, one on belly','Inhale through nose for 4','Exhale slowly for 6','No forcing the belly outward','Repeat 10 rounds, then sit quietly for 1 minute'], inhale:4, exhale:6, hold1:0, hold2:0, rounds:10 },
+      extended_exhale: { name:'Extended Exhale Breathing',      description:'A longer exhale signals the body that it is safe to rest.',             steps:['Inhale through nose for 4','Exhale through mouth for 8','Continue for 5–7 minutes','Finish with 1 minute of gentle humming'],                         inhale:4, exhale:8, hold1:0, hold2:0, rounds:12 },
+      coherent_belly:  { name:'Coherent Belly Breath',          description:'A balanced rhythm that brings heart and breath into coherence.',        steps:['Hands on chest and belly','Inhale through nose for 5','Exhale slowly for 6','Can be done walking or before exercise'],                               inhale:5, exhale:6, hold1:0, hold2:0, rounds:10 },
+      physiological_sigh:{ name:'Physiological Sigh',           description:'Research-supported for rapid stress reduction.',                        steps:['Inhale fully through the nose','Take a small second inhale on top','Release a long, slow exhale','Repeat 5–10 times only','Follow with Relaxation Breath: Inhale 4, Exhale 7 for 5 minutes'], inhale:4, exhale:7, hold1:0, hold2:0, rounds:8 },
+      box:             { name:'Box Breathing (gentle)',          description:'Equal sides of a square — steady and grounding.',                      steps:['Inhale 4','Hold 4','Exhale 4','Hold 4','Only for 3–5 minutes'],                                                                                      inhale:4, exhale:4, hold1:4, hold2:4, rounds:10 },
+      safety_phrase:   { name:'Lengthened Exhale with Safety Phrase', description:'Pair a long exhale with a quiet, reassuring thought.',            steps:['Inhale 4','Exhale 8','On the exhale, quietly think: "I am safe"','Or: "My body can rest"','Continue for 10 minutes'],                          inhale:4, exhale:8, hold1:0, hold2:0, rounds:15 },
+      nasal_walking:   { name:'Nasal Walking Breath',            description:'Sync your breath to your steps. Walk slowly.',                         steps:['Walk at a calm pace','Inhale through nose for 4 steps','Exhale through nose for 5 steps','Continue for 10 minutes'],                              inhale:4, exhale:5, hold1:0, hold2:0, rounds:20 },
+      body_scan:       { name:'Body Scan Breathing',             description:'Lie down. Breathe into each part of the body in turn.',                steps:['Lie down comfortably','Breathe slowly into the jaw — 1 minute','Then shoulders — 1 minute','Chest, belly, hips — 1 minute each','Finish with 5 minutes of slow breathing'], inhale:4, exhale:6, hold1:0, hold2:0, rounds:10 },
+      energising:      { name:'Energising Breath',               description:'Slightly deeper than normal — a gentle wake-up.',                      steps:['Inhale through nose for 4','Exhale through nose for 4','Slightly deeper than normal breathing','Continue for 5 minutes','Finish: stretch arms overhead, open the chest'], inhale:4, exhale:4, hold1:0, hold2:0, rounds:12 },
+      four_six:        { name:'4-6 Breathing',                   description:'A pre-sleep rhythm. 15 minutes before bed.',                           steps:['Inhale through nose for 4','Exhale through nose for 6','Continue for 15 minutes before bed','Optional: soft instrumental music, lavender oil'],    inhale:4, exhale:6, hold1:0, hold2:0, rounds:20 },
+      gratitude:       { name:'Gratitude Breath',                description:'Inhale "Receiving". Exhale "Letting go".',                            steps:['On the inhale, silently say "Receiving"','On the exhale, silently say "Letting go"','Slow nasal breathing for 10 minutes'],                      inhale:5, exhale:6, hold1:0, hold2:0, rounds:15 },
+      sleep_reset:     { name:'Sleep Reset Breath',              description:'A final settling before sleep.',                                        steps:['Inhale 4, exhale 8 — 10 rounds','Then sit in silence for 5 minutes'],                                                                              inhale:4, exhale:8, hold1:0, hold2:0, rounds:10 },
+    };
+
+    const SCHEDULE = {
+      1:{morning:'belly_4_6',evening:'extended_exhale'},2:{morning:'belly_4_6',evening:'extended_exhale'},3:{morning:'belly_4_6',evening:'extended_exhale'},
+      4:{morning:'coherent_belly',evening:'physiological_sigh'},5:{morning:'coherent_belly',evening:'physiological_sigh'},6:{morning:'coherent_belly',evening:'physiological_sigh'},7:{morning:'coherent_belly',evening:'physiological_sigh'},
+      8:{morning:'box',evening:'safety_phrase'},9:{morning:'box',evening:'safety_phrase'},10:{morning:'box',evening:'safety_phrase'},
+      11:{morning:'nasal_walking',evening:'body_scan'},12:{morning:'nasal_walking',evening:'body_scan'},13:{morning:'nasal_walking',evening:'body_scan'},14:{morning:'nasal_walking',evening:'body_scan'},
+      15:{morning:'energising',evening:'four_six'},16:{morning:'energising',evening:'four_six'},17:{morning:'energising',evening:'four_six'},
+      18:{morning:'gratitude',evening:'sleep_reset'},19:{morning:'gratitude',evening:'sleep_reset'},20:{morning:'gratitude',evening:'sleep_reset'},21:{morning:'gratitude',evening:'sleep_reset'},
+    };
+
+    const getDayPhase    = d => d<=7?1:d<=14?2:d<=21?3:4;
+    const getDaySchedule = d => {
+      if (d<=21) return SCHEDULE[d];
+      const m=[{morning:'box',evening:'safety_phrase'},{morning:'nasal_walking',evening:'body_scan'},{morning:'energising',evening:'four_six'},{morning:'gratitude',evening:'sleep_reset'},{morning:'coherent_belly',evening:'physiological_sigh'}];
+      return m[(d-22)%m.length];
+    };
+
+    const HABITS = [
+      {id:'sunlight', label:'10 minutes of morning sunlight'},
+      {id:'dinner',   label:'Finish eating 3 hours before bed'},
+      {id:'phone',    label:'No phone 30 mins before bed'},
+      {id:'dim',      label:'Dim the lights in the evening'},
+    ];
+
+    const REFLECTION_QUESTIONS = [
+      'How did my body feel today?',
+      'Did I feel calmer after breathing?',
+      'Did my sleep improve at all?',
+      'What helped me feel safe?',
+    ];
+
+    /* ===================== ICONS (inline SVG) ===================== */
+
+    const Icon = ({ d, size=18, color='currentColor', fill='none', strokeWidth=2 }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+        {Array.isArray(d) ? d.map((p,i)=><path key={i} d={p}/>) : <path d={d}/>}
+      </svg>
+    );
+
+    const icons = {
+      sun:    ['M12 2v2','M12 20v2','M4.93 4.93l1.41 1.41','M17.66 17.66l1.41 1.41','M2 12h2','M20 12h2','M6.34 17.66l-1.41 1.41','M19.07 4.93l-1.41 1.41','M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7z'],
+      moon:   'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
+      wind:   ['M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2'],
+      heart:  'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+      check:  ['M22 11.08V12a10 10 0 1 1-5.93-9.14','M22 4 12 14.01l-3-3'],
+      circle: 'M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z',
+      book:   ['M4 19.5A2.5 2.5 0 0 1 6.5 17H20','M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'],
+      alert:  ['M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z','M12 9v4','M12 17h.01'],
+      play:   'M5 3l14 9-14 9V3z',
+      pause:  ['M6 4h4v16H6z','M14 4h4v16h-4z'],
+      reset:  'M1 4v6h6M23 20v-6h-6M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15',
+      left:   'M15 18l-6-6 6-6',
+      right:  'M9 18l6-6-6-6',
+      x:      ['M18 6 6 18','M6 6l12 12'],
+      leaf:   'M17 8C8 10 5.9 16.17 3.82 20.25M12 18.18C12 18.18 7 16 7 10c0-3.09 2.73-4.9 5.56-4.18M15 8s4 2 4 8-4.35 4.93-4.35 4.93',
+      spark:  ['M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'],
+      arrow:  'M5 12h14M12 5l7 7-7 7',
+    };
+
+    const SvgIcon = ({name, size=18, color='currentColor', fill='none'}) => {
+      const d = icons[name];
+      if (!d) return null;
+      if (Array.isArray(d)) return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          {d.map((p,i)=><path key={i} d={p}/>)}
+        </svg>
+      );
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d={d}/>
+        </svg>
+      );
+    };
+
+    /* ===================== BREATH TIMER ===================== */
+
+    function BreathTimer({ exercise, onClose }) {
+      const [phase, setPhase]     = useState('ready');
+      const [running, setRunning] = useState(false);
+      const [round, setRound]     = useState(0);
+      const [timeLeft, setTimeLeft] = useState(0);
+      const intervalRef = useRef(null);
+
+      const durations = { inhale:exercise.inhale, hold1:exercise.hold1, exhale:exercise.exhale, hold2:exercise.hold2 };
+
+      const nextPhase = cur => {
+        if (cur==='inhale') return exercise.hold1>0?'hold1':'exhale';
+        if (cur==='hold1')  return 'exhale';
+        if (cur==='exhale') return exercise.hold2>0?'hold2':'inhale';
+        return 'inhale';
+      };
+
+      useEffect(()=>{
+        if (!running) return;
+        if (phase==='ready') { setPhase('inhale'); setTimeLeft(exercise.inhale); return; }
+        intervalRef.current = setInterval(()=>{
+          setTimeLeft(t=>{
+            if (t<=1) {
+              const np = nextPhase(phase);
+              if (np==='inhale') {
+                setRound(r=>{
+                  if (r+1>=exercise.rounds) { setRunning(false); setPhase('done'); return r+1; }
+                  return r+1;
+                });
+              }
+              setPhase(np);
+              return durations[np];
+            }
+            return t-1;
+          });
+        },1000);
+        return ()=>clearInterval(intervalRef.current);
+      },[running,phase]);
+
+      const reset = ()=>{ setRunning(false); setPhase('ready'); setRound(0); setTimeLeft(0); clearInterval(intervalRef.current); };
+      const orbScale = phase==='inhale'?1:phase==='exhale'?0.55:phase==='hold1'?1:phase==='hold2'?0.55:0.75;
+      const orbTime  = phase==='inhale'?`${exercise.inhale}s`:phase==='exhale'?`${exercise.exhale}s`:'0.5s';
+      const phaseLabel = {ready:'Begin when ready',inhale:'Breathe in',hold1:'Hold',exhale:'Breathe out',hold2:'Hold',done:'Practice complete'}[phase];
+
+      return (
+        <div style={{position:'fixed',inset:0,zIndex:50,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(20,25,23,0.85)',backdropFilter:'blur(16px)'}}>
+          <div style={{position:'relative',width:'100%',maxWidth:'36rem',margin:'0 1rem',borderRadius:'1.5rem',padding:'2rem',background:'var(--cream)',boxShadow:'0 30px 80px rgba(0,0,0,0.4)'}}>
+            <button onClick={onClose} style={{position:'absolute',top:'1.25rem',right:'1.25rem',padding:'0.5rem',borderRadius:'9999px',transition:'background 0.2s'}} onMouseOver={e=>e.currentTarget.style.background='rgba(0,0,0,0.05)'} onMouseOut={e=>e.currentTarget.style.background='transparent'}>
+              <SvgIcon name="x" size={20} color="var(--slate)" />
+            </button>
+            <div style={{textAlign:'center',marginBottom:'0.5rem'}}>
+              <p style={{fontSize:'0.75rem',letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:'0.5rem',color:'var(--sage-dark)'}}>Breath Timer</p>
+              <h3 className="font-serif" style={{fontSize:'2rem',color:'var(--ink)'}}>{exercise.name}</h3>
+            </div>
+            <div style={{position:'relative',display:'flex',alignItems:'center',justifyContent:'center',height:'280px'}}>
+              <div style={{position:'absolute',width:'260px',height:'260px',borderRadius:'9999px',border:'1px solid var(--sage)',opacity:0.3}}/>
+              <div style={{position:'absolute',width:'200px',height:'200px',borderRadius:'9999px',border:'1px solid var(--sage)',opacity:0.4}}/>
+              <div style={{width:'180px',height:'180px',borderRadius:'9999px',display:'flex',alignItems:'center',justifyContent:'center',background:'radial-gradient(circle at 30% 30%, var(--sage-light), var(--sage))',transform:`scale(${orbScale})`,transition:`transform ${orbTime} cubic-bezier(0.4,0,0.2,1)`,boxShadow:'0 20px 60px rgba(122,138,116,0.4)'}}>
+                <div style={{textAlign:'center'}}>
+                  <div className="font-serif" style={{fontSize:'3rem',color:'var(--cream)'}}>{phase!=='ready'&&phase!=='done'?timeLeft:''}</div>
+                  <div style={{fontSize:'0.75rem',letterSpacing:'0.2em',textTransform:'uppercase',color:'rgba(251,247,240,0.85)'}}>{phase!=='ready'&&phase!=='done'?phaseLabel:''}</div>
+                </div>
+              </div>
+            </div>
+            <div style={{textAlign:'center',marginBottom:'1.5rem'}}>
+              <p className="font-serif" style={{fontSize:'1.25rem',fontStyle:'italic',color:'var(--slate)'}}>{phase==='ready'||phase==='done'?phaseLabel:`Round ${round+1} of ${exercise.rounds}`}</p>
+            </div>
+            <div style={{display:'flex',justifyContent:'center',gap:'0.75rem'}}>
+              {!running&&phase!=='done'&&(
+                <button onClick={()=>setRunning(true)} style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.75rem 1.75rem',borderRadius:'9999px',fontSize:'0.875rem',letterSpacing:'0.1em',textTransform:'uppercase',background:'var(--sage-dark)',color:'var(--cream)',transition:'transform 0.2s'}} onMouseOver={e=>e.currentTarget.style.transform='scale(1.05)'} onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}>
+                  <SvgIcon name="play" size={16} color="var(--cream)" fill="var(--cream)" /> {phase==='ready'?'Begin':'Resume'}
+                </button>
+              )}
+              {running&&(
+                <button onClick={()=>setRunning(false)} style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.75rem 1.75rem',borderRadius:'9999px',fontSize:'0.875rem',letterSpacing:'0.1em',textTransform:'uppercase',background:'var(--slate)',color:'var(--cream)'}}>
+                  <SvgIcon name="pause" size={16} color="var(--cream)" /> Pause
+                </button>
+              )}
+              <button onClick={reset} style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.75rem 1.75rem',borderRadius:'9999px',fontSize:'0.875rem',letterSpacing:'0.1em',textTransform:'uppercase',border:'1px solid var(--sage-dark)',color:'var(--sage-dark)'}}>
+                <SvgIcon name="reset" size={16} color="var(--sage-dark)" /> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ===================== WINDOW OF TOLERANCE ===================== */
+
+    function WindowOfTolerance() {
+      const [hover, setHover] = useState(null);
+      const zones = [
+        {id:'hyper',       label:'Hyperarousal',          sub:'Fight / Outburst',   phrase:'"I am unsafe"',                    color:'#C4685E', desc:'The sympathetic system is in overdrive. Energy spikes, the body braces for action.'},
+        {id:'escalation',  label:'Escalation',            sub:'Vigilant',           phrase:'"I feel threatened"',              color:'#D89860', desc:'A heightened, watchful state — alert, scanning, on the edge.'},
+        {id:'window',      label:'Window of Tolerance',   sub:'Optimal Range',      phrase:'"I am calm enough to learn"',      color:'#7A8A74', desc:'Here you can process, connect, and decide. This is where the breath returns you.'},
+        {id:'hypo',        label:'Hypoarousal',           sub:'Flight / Avoidant',  phrase:'"I am flustered and avoidant"',    color:'#9CAE99', desc:'Energy withdraws. Disengagement and emotional dimming begin.'},
+        {id:'dissociation',label:'Dissociation',          sub:'Freeze',             phrase:'"I am too overwhelmed"',           color:'#5C6E73', desc:'The system shuts down to protect itself. Numbness, disconnection.'},
+      ];
+      return (
+        <div style={{borderRadius:'1.5rem',padding:'2rem',background:'var(--cream-warm)',border:'1px solid rgba(122,138,116,0.15)'}}>
+          <p style={{fontSize:'0.75rem',letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:'0.5rem',color:'var(--sage-dark)'}}>A Psychological Map</p>
+          <h2 className="font-serif" style={{fontSize:'clamp(1.75rem,4vw,2.5rem)',color:'var(--ink)',marginBottom:'1rem'}}>The Window of Tolerance</h2>
+          <p style={{fontSize:'0.875rem',lineHeight:1.7,marginBottom:'1.5rem',maxWidth:'42rem',color:'var(--slate)'}}>Daniel Siegel's concept describes the optimal range for coping with stress — the zone where you can process information, form connections, and make decisions. Breath practice gently widens this window over time.</p>
+          <div style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
+            {zones.map(z=>(
+              <div key={z.id} onMouseEnter={()=>setHover(z.id)} onMouseLeave={()=>setHover(null)}
+                style={{borderRadius:'1rem',padding:'1rem 1.25rem',cursor:'pointer',background:z.color,opacity:hover===null||hover===z.id?1:0.5,transform:hover===z.id?'translateX(8px)':'translateX(0)',boxShadow:z.id==='window'?'0 8px 24px rgba(122,138,116,0.25)':'none',transition:'all 0.25s ease'}}>
+                <div style={{display:'flex',alignItems:'baseline',justifyContent:'space-between',gap:'0.75rem',flexWrap:'wrap'}}>
+                  <div>
+                    <h3 className="font-serif" style={{fontSize:'1.25rem',color:'white'}}>{z.label}</h3>
+                    <p style={{fontSize:'0.7rem',textTransform:'uppercase',letterSpacing:'0.1em',color:'rgba(255,255,255,0.8)'}}>{z.sub}</p>
+                  </div>
+                  <p className="font-serif" style={{fontStyle:'italic',color:'rgba(255,255,255,0.9)',fontSize:'0.95rem'}}>{z.phrase}</p>
+                </div>
+                {hover===z.id&&<p style={{fontSize:'0.875rem',color:'rgba(255,255,255,0.9)',marginTop:'0.75rem',paddingTop:'0.75rem',borderTop:'1px solid rgba(255,255,255,0.2)',lineHeight:1.6}}>{z.desc}</p>}
+              </div>
+            ))}
+          </div>
+          <p style={{fontSize:'0.75rem',fontStyle:'italic',marginTop:'1.5rem',textAlign:'center',color:'var(--sage-dark)'}}>Hover each band to read more. The breath returns you home.</p>
+        </div>
+      );
+    }
+
+    /* ===================== EXERCISE CARD ===================== */
+
+    function ExerciseCard({ time, exerciseKey, onStart, completed, onToggleComplete }) {
+      const ex = EXERCISES[exerciseKey];
+      const isMorning = time === 'Morning';
+      return (
+        <div style={{borderRadius:'1.5rem',padding:'1.75rem',background:'var(--cream)',border:'1px solid rgba(0,0,0,0.06)',boxShadow:'0 4px 20px rgba(0,0,0,0.04)',transition:'transform 0.2s'}} onMouseOver={e=>e.currentTarget.style.transform='translateY(-2px)'} onMouseOut={e=>e.currentTarget.style.transform='translateY(0)'}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1.25rem'}}>
+            <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+              <div style={{padding:'0.625rem',borderRadius:'9999px',background:isMorning?'#F4E4C1':'#D6DEE4'}}>
+                <SvgIcon name={isMorning?'sun':'moon'} size={18} color={isMorning?'#B8860B':'#3E5266'} />
+              </div>
+              <p style={{fontSize:'0.7rem',letterSpacing:'0.3em',textTransform:'uppercase',color:'var(--slate)'}}>{time}</p>
+            </div>
+            <button onClick={onToggleComplete} style={{transition:'transform 0.2s'}} onMouseOver={e=>e.currentTarget.style.transform='scale(1.1)'} onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}>
+              {completed
+                ? <SvgIcon name="check" size={24} color="var(--sage-dark)" fill="var(--sage)" />
+                : <SvgIcon name="circle" size={24} color="var(--slate-light)" />}
+            </button>
+          </div>
+          <h3 className="font-serif" style={{fontSize:'1.5rem',marginBottom:'0.5rem',color:'var(--ink)'}}>{ex.name}</h3>
+          <p style={{fontSize:'0.875rem',fontStyle:'italic',marginBottom:'1.25rem',color:'var(--slate)'}}>{ex.description}</p>
+          <ul style={{marginBottom:'1.5rem'}}>
+            {ex.steps.map((step,i)=>(
+              <li key={i} style={{display:'flex',gap:'0.75rem',fontSize:'0.875rem',lineHeight:1.6,color:'var(--ink-soft)',marginBottom:'0.375rem'}}>
+                <span className="font-serif" style={{fontStyle:'italic',fontSize:'0.75rem',marginTop:'2px',color:'var(--sage-dark)',minWidth:'1rem'}}>{String(i+1).padStart(2,'0')}</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ul>
+          <button onClick={onStart} style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1.25rem',borderRadius:'9999px',fontSize:'0.875rem',letterSpacing:'0.1em',textTransform:'uppercase',background:'var(--ink)',color:'var(--cream)',transition:'transform 0.2s'}} onMouseOver={e=>e.currentTarget.style.transform='scale(1.02)'} onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}>
+            <span>Begin Practice</span>
+            <SvgIcon name="arrow" size={16} color="var(--cream)" />
+          </button>
+        </div>
+      );
+    }
+
+    /* ===================== DAY SELECTOR ===================== */
+
+    function DaySelector({ currentDay, setCurrentDay, progress }) {
+      return (
+        <div style={{borderRadius:'1.5rem',padding:'1.5rem',background:'var(--cream-warm)'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1rem'}}>
+            <p style={{fontSize:'0.7rem',letterSpacing:'0.3em',textTransform:'uppercase',color:'var(--sage-dark)'}}>The 40-Day Journey</p>
+            <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+              <button onClick={()=>setCurrentDay(Math.max(1,currentDay-1))} style={{padding:'0.375rem',borderRadius:'9999px',opacity:currentDay===1?0.3:1}} disabled={currentDay===1}>
+                <SvgIcon name="left" size={18} color="var(--slate)" />
+              </button>
+              <button onClick={()=>setCurrentDay(Math.min(40,currentDay+1))} style={{padding:'0.375rem',borderRadius:'9999px',opacity:currentDay===40?0.3:1}} disabled={currentDay===40}>
+                <SvgIcon name="right" size={18} color="var(--slate)" />
+              </button>
+            </div>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(10,minmax(0,1fr))',gap:'0.375rem'}}>
+            {Array.from({length:40},(_,i)=>{
+              const day=i+1, isCurrent=day===currentDay;
+              const dp=progress[day]||{};
+              const done=dp.morning&&dp.evening, partial=dp.morning||dp.evening;
+              return (
+                <button key={day} onClick={()=>setCurrentDay(day)}
+                  style={{aspectRatio:'1/1',borderRadius:'0.375rem',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.65rem',transition:'all 0.15s',background:isCurrent?'var(--ink)':done?'var(--sage)':partial?'var(--sage-light)':'rgba(0,0,0,0.04)',color:isCurrent?'var(--cream)':done?'var(--cream)':'var(--slate)',fontWeight:isCurrent?600:400}}>
+                  {day}
+                </button>
+              );
+            })}
+          </div>
+          <div style={{display:'flex',gap:'1rem',marginTop:'1rem',fontSize:'0.65rem',textTransform:'uppercase',letterSpacing:'0.1em',color:'var(--slate)'}}>
+            <span style={{display:'flex',alignItems:'center',gap:'0.375rem'}}><span style={{width:'0.625rem',height:'0.625rem',borderRadius:'0.25rem',background:'var(--ink)',display:'inline-block'}}></span>Today</span>
+            <span style={{display:'flex',alignItems:'center',gap:'0.375rem'}}><span style={{width:'0.625rem',height:'0.625rem',borderRadius:'0.25rem',background:'var(--sage)',display:'inline-block'}}></span>Complete</span>
+            <span style={{display:'flex',alignItems:'center',gap:'0.375rem'}}><span style={{width:'0.625rem',height:'0.625rem',borderRadius:'0.25rem',background:'var(--sage-light)',display:'inline-block'}}></span>Partial</span>
+          </div>
+        </div>
+      );
+    }
+
+    /* ===================== APP ===================== */
+
+    function App() {
+      const [currentDay,   setCurrentDay]   = useState(1);
+      const [progress,     setProgress]     = useState({});
+      const [habits,       setHabits]       = useState({});
+      const [reflections,  setReflections]  = useState({});
+      const [activeTimer,  setActiveTimer]  = useState(null);
+      const [showJournal,  setShowJournal]  = useState(false);
+      const [draft,        setDraft]        = useState({});
+
+      useEffect(()=>{
+        try {
+          const s=JSON.parse(localStorage.getItem('breath_for_life')||'{}');
+          if(s.currentDay)  setCurrentDay(s.currentDay);
+          if(s.progress)    setProgress(s.progress);
+          if(s.habits)      setHabits(s.habits);
+          if(s.reflections) setReflections(s.reflections);
+        } catch(e){}
+      },[]);
+
+      useEffect(()=>{
+        localStorage.setItem('breath_for_life',JSON.stringify({currentDay,progress,habits,reflections}));
+      },[currentDay,progress,habits,reflections]);
+
+      const schedule   = getDaySchedule(currentDay);
+      const phase      = getDayPhase(currentDay);
+      const phaseData  = PHASES[phase];
+      const dayProgress= progress[currentDay]||{};
+      const completedCount = Object.values(progress).filter(p=>p.morning&&p.evening).length;
+
+      const toggleComplete = slot => setProgress(p=>({...p,[currentDay]:{...p[currentDay],[slot]:!p[currentDay]?.[slot]}}));
+      const toggleHabit    = id   => { const k=`${currentDay}_${id}`; setHabits(h=>({...h,[k]:!h[k]})); };
+      const saveReflection = ()   => { setReflections(r=>({...r,[currentDay]:draft})); setShowJournal(false); setDraft({}); };
+
+      const phaseDesc = [
+        '',
+        'This week, we teach the body that it is safe to relax. The focus is nasal breathing, longer exhales, grounding, and gentle vagus nerve regulation.',
+        'This week may bring emotions up gently. No analysing required. The goal is to reduce stored tension and improve sleep depth.',
+        'Improve resilience, emotional steadiness, and sleep rhythm. The window of tolerance is stretching like a muscle.',
+        'The foundation is laid. Choose from your favourite morning and evening tools to solidify the habit and continue widening your window.',
+      ][phase];
+
+      return (
+        <div style={{minHeight:'100vh',background:'var(--bg)'}}>
+
+          {/* HEADER */}
+          <header style={{maxWidth:'72rem',margin:'0 auto',padding:'2.5rem 1.5rem 2rem',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'1rem'}}>
+            <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+              <div style={{position:'relative',width:'2.5rem',height:'2.5rem',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <div style={{position:'absolute',inset:0,borderRadius:'9999px',background:'var(--sage)',opacity:0.3,animation:'gentlePulse 4s ease-in-out infinite'}}/>
+                <SvgIcon name="wind" size={20} color="var(--sage-dark)" />
+              </div>
+              <div>
+                <p style={{fontSize:'0.65rem',letterSpacing:'0.3em',textTransform:'uppercase',color:'var(--sage-dark)'}}>Estetica Wellness</p>
+                <p className="font-serif" style={{fontSize:'1.125rem',lineHeight:1,color:'var(--ink)'}}>Breath for Life</p>
+              </div>
+            </div>
+            <div style={{textAlign:'right'}}>
+              <p style={{fontSize:'0.65rem',letterSpacing:'0.3em',textTransform:'uppercase',color:'var(--slate)'}}>Days Complete</p>
+              <p className="font-serif" style={{fontSize:'1.5rem',color:'var(--ink)'}}>{completedCount} <span style={{fontSize:'1rem',color:'var(--slate-light)'}}>/ 40</span></p>
+            </div>
+          </header>
+
+          {/* HERO */}
+          <section style={{maxWidth:'72rem',margin:'0 auto',padding:'0 1.5rem 3rem'}}>
+            <div style={{display:'grid',gridTemplateColumns:'1fr',gap:'2rem',alignItems:'end'}}>
+              <div>
+                <p style={{fontSize:'0.7rem',letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:'1rem',color:'var(--sage-dark)'}}>Phase {phase} · {phaseData.subtitle}</p>
+                <h1 className="font-serif" style={{lineHeight:0.95,marginBottom:'1.25rem',color:'var(--ink)',fontSize:'clamp(3rem,8vw,5rem)',fontWeight:500}}>
+                  Day <span style={{fontStyle:'italic',color:'var(--sage-dark)'}}>{currentDay}</span>
+                </h1>
+                <p className="font-serif" style={{fontSize:'clamp(1.25rem,3vw,1.75rem)',fontStyle:'italic',marginBottom:'0.75rem',color:'var(--slate)'}}>{phaseData.name}</p>
+                <p style={{fontSize:'1rem',lineHeight:1.7,maxWidth:'36rem',color:'var(--ink-soft)',marginBottom:'1.5rem'}}>{phaseDesc}</p>
+                <DaySelector currentDay={currentDay} setCurrentDay={setCurrentDay} progress={progress} />
+              </div>
+            </div>
+          </section>
+
+          {/* TODAY'S PRACTICE */}
+          <section style={{maxWidth:'72rem',margin:'0 auto',padding:'0 1.5rem 3rem'}}>
+            <div style={{display:'flex',alignItems:'baseline',justifyContent:'space-between',marginBottom:'1.5rem',flexWrap:'wrap',gap:'0.5rem'}}>
+              <h2 className="font-serif" style={{fontSize:'1.875rem',color:'var(--ink)'}}>Today's Practice</h2>
+              <p style={{fontSize:'0.7rem',letterSpacing:'0.3em',textTransform:'uppercase',color:'var(--slate)'}}>Morning · Evening</p>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:'1.25rem'}}>
+              <ExerciseCard time="Morning" exerciseKey={schedule.morning} onStart={()=>setActiveTimer(EXERCISES[schedule.morning])} completed={dayProgress.morning} onToggleComplete={()=>toggleComplete('morning')} />
+              <ExerciseCard time="Evening" exerciseKey={schedule.evening} onStart={()=>setActiveTimer(EXERCISES[schedule.evening])} completed={dayProgress.evening} onToggleComplete={()=>toggleComplete('evening')} />
+            </div>
+          </section>
+
+          {/* HABITS + REFLECTION */}
+          <section style={{maxWidth:'72rem',margin:'0 auto',padding:'0 1.5rem 3rem'}}>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:'1.25rem'}}>
+
+              {/* Habits */}
+              <div style={{borderRadius:'1.5rem',padding:'1.75rem',background:'var(--cream)',border:'1px solid rgba(0,0,0,0.06)'}}>
+                <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'1.25rem'}}>
+                  <SvgIcon name="leaf" size={18} color="var(--sage-dark)" />
+                  <h3 className="font-serif" style={{fontSize:'1.5rem',color:'var(--ink)'}}>Helpful Habits</h3>
+                </div>
+                <p style={{fontSize:'0.875rem',fontStyle:'italic',marginBottom:'1.25rem',color:'var(--slate)'}}>Small choices that support the nervous system.</p>
+                <div>
+                  {HABITS.map(h=>{
+                    const checked=habits[`${currentDay}_${h.id}`];
+                    return (
+                      <button key={h.id} onClick={()=>toggleHabit(h.id)} style={{width:'100%',display:'flex',alignItems:'center',gap:'0.75rem',padding:'0.75rem 1rem',borderRadius:'0.75rem',textAlign:'left',marginBottom:'0.5rem',background:checked?'var(--cream-warm)':'transparent',border:'1px solid rgba(0,0,0,0.05)',transition:'background 0.2s',cursor:'pointer'}}>
+                        <SvgIcon name={checked?'check':'circle'} size={20} color="var(--sage-dark)" fill={checked?'var(--sage-light)':'none'} />
+                        <span style={{fontSize:'0.875rem',color:'var(--ink-soft)'}}>{h.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Reflection */}
+              <div style={{borderRadius:'1.5rem',padding:'1.75rem',background:'var(--cream)',border:'1px solid rgba(0,0,0,0.06)'}}>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1.25rem'}}>
+                  <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                    <SvgIcon name="book" size={18} color="var(--sage-dark)" />
+                    <h3 className="font-serif" style={{fontSize:'1.5rem',color:'var(--ink)'}}>Reflection</h3>
+                  </div>
+                  {reflections[currentDay]&&<SvgIcon name="check" size={20} color="var(--sage-dark)" fill="var(--sage-light)" />}
+                </div>
+                <p style={{fontSize:'0.875rem',fontStyle:'italic',marginBottom:'1.25rem',color:'var(--slate)'}}>End the day with a quiet check-in.</p>
+                {reflections[currentDay] ? (
+                  <div style={{marginBottom:'1.25rem'}}>
+                    {REFLECTION_QUESTIONS.map((q,i)=>reflections[currentDay][i]&&(
+                      <div key={i} style={{marginBottom:'0.75rem'}}>
+                        <p style={{fontSize:'0.7rem',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.25rem',color:'var(--sage-dark)'}}>{q}</p>
+                        <p className="font-serif" style={{fontStyle:'italic',fontSize:'0.875rem',color:'var(--ink-soft)'}}>"{reflections[currentDay][i]}"</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <ul style={{marginBottom:'1.25rem'}}>
+                    {REFLECTION_QUESTIONS.map((q,i)=>(
+                      <li key={i} className="font-serif" style={{fontStyle:'italic',fontSize:'0.875rem',color:'var(--slate)',marginBottom:'0.375rem'}}>· {q}</li>
+                    ))}
+                  </ul>
+                )}
+                <button onClick={()=>{setDraft(reflections[currentDay]||{});setShowJournal(true);}} style={{width:'100%',padding:'0.75rem 1.25rem',borderRadius:'9999px',fontSize:'0.875rem',letterSpacing:'0.1em',textTransform:'uppercase',background:'var(--sage-dark)',color:'var(--cream)',transition:'transform 0.2s'}} onMouseOver={e=>e.currentTarget.style.transform='scale(1.02)'} onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}>
+                  {reflections[currentDay]?'Edit Reflection':'Open Journal'}
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* WINDOW OF TOLERANCE */}
+          <section style={{maxWidth:'72rem',margin:'0 auto',padding:'0 1.5rem 3rem'}}>
+            <WindowOfTolerance />
+          </section>
+
+          {/* SAFETY */}
+          <section style={{maxWidth:'72rem',margin:'0 auto',padding:'0 1.5rem 4rem'}}>
+            <div style={{borderRadius:'1.5rem',padding:'2rem',background:'var(--ink)',color:'var(--cream)'}}>
+              <div style={{display:'flex',alignItems:'flex-start',gap:'1rem',marginBottom:'1.25rem'}}>
+                <SvgIcon name="alert" size={22} color="#E8C77B" />
+                <div>
+                  <p style={{fontSize:'0.7rem',letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:'0.25rem',color:'#E8C77B'}}>Trauma-Sensitive Guidance</p>
+                  <h3 className="font-serif" style={{fontSize:'clamp(1.5rem,3vw,2rem)'}}>Signs to Slow Down</h3>
+                </div>
+              </div>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:'2rem',marginTop:'1.75rem'}}>
+                <div>
+                  <p style={{fontSize:'0.7rem',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.75rem',opacity:0.7}}>Avoid</p>
+                  {['intense breathwork','rapid hyperventilation','very long breath holds','pushing through discomfort'].map((i,k)=>(
+                    <p key={k} style={{fontSize:'0.875rem',marginBottom:'0.5rem'}}>· {i}</p>
+                  ))}
+                </div>
+                <div>
+                  <p style={{fontSize:'0.7rem',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.75rem',opacity:0.7}}>Pause if you notice</p>
+                  {['tingling','panic','emotional flooding','dizziness or agitation'].map((i,k)=>(
+                    <p key={k} style={{fontSize:'0.875rem',marginBottom:'0.5rem'}}>· {i}</p>
+                  ))}
+                </div>
+              </div>
+              <p className="font-serif" style={{fontStyle:'italic',fontSize:'1.125rem',marginTop:'2rem',paddingTop:'1.5rem',borderTop:'1px solid rgba(255,255,255,0.15)',color:'var(--sage-light)'}}>The goal is not catharsis. The goal is safety and regulation.</p>
+            </div>
+          </section>
+
+          {/* FOOTER */}
+          <footer style={{maxWidth:'72rem',margin:'0 auto',padding:'0 1.5rem 3rem',textAlign:'center',borderTop:'1px solid rgba(0,0,0,0.08)',paddingTop:'2rem'}}>
+            <p className="font-serif" style={{fontStyle:'italic',fontSize:'1rem',marginBottom:'0.25rem',color:'var(--slate)'}}>With care,</p>
+            <p className="font-serif" style={{fontSize:'1.25rem',color:'var(--ink)'}}>Linda</p>
+            <p style={{fontSize:'0.7rem',letterSpacing:'0.2em',textTransform:'uppercase',marginTop:'0.25rem',color:'var(--slate-light)'}}>Breath Work Facilitator · NLP Coach</p>
+            <p style={{fontSize:'0.75rem',marginTop:'0.75rem',color:'var(--slate-light)'}}>esteticawellnessinst.com.au</p>
+          </footer>
+
+          {/* TIMER MODAL */}
+          {activeTimer && <BreathTimer exercise={activeTimer} onClose={()=>setActiveTimer(null)} />}
+
+          {/* JOURNAL MODAL */}
+          {showJournal && (
+            <div style={{position:'fixed',inset:0,zIndex:50,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(20,25,23,0.85)',backdropFilter:'blur(16px)',padding:'1rem'}}>
+              <div style={{position:'relative',width:'100%',maxWidth:'36rem',borderRadius:'1.5rem',padding:'2rem',background:'var(--cream)',maxHeight:'90vh',overflowY:'auto'}}>
+                <button onClick={()=>setShowJournal(false)} style={{position:'absolute',top:'1.25rem',right:'1.25rem',padding:'0.5rem',borderRadius:'9999px'}}>
+                  <SvgIcon name="x" size={20} color="var(--slate)" />
+                </button>
+                <p style={{fontSize:'0.7rem',letterSpacing:'0.3em',textTransform:'uppercase',marginBottom:'0.5rem',color:'var(--sage-dark)'}}>Day {currentDay} · Reflection</p>
+                <h3 className="font-serif" style={{fontSize:'2rem',marginBottom:'1.5rem',color:'var(--ink)'}}>A Quiet Check-In</h3>
+                {REFLECTION_QUESTIONS.map((q,i)=>(
+                  <div key={i} style={{marginBottom:'1.25rem'}}>
+                    <label style={{display:'block',fontSize:'0.875rem',fontStyle:'italic',fontFamily:'Cormorant Garamond,Georgia,serif',marginBottom:'0.5rem',color:'var(--slate)'}}>{q}</label>
+                    <textarea value={draft[i]||''} onChange={e=>setDraft({...draft,[i]:e.target.value})}
+                      style={{width:'100%',padding:'0.75rem 1rem',borderRadius:'0.75rem',fontSize:'0.875rem',resize:'none',background:'var(--cream-warm)',border:'1px solid rgba(0,0,0,0.08)',color:'var(--ink)',minHeight:'70px',fontFamily:'inherit'}}
+                      placeholder="Write freely..." />
+                  </div>
+                ))}
+                <button onClick={saveReflection} style={{width:'100%',marginTop:'0.5rem',padding:'0.75rem 1.25rem',borderRadius:'9999px',fontSize:'0.875rem',letterSpacing:'0.1em',textTransform:'uppercase',background:'var(--ink)',color:'var(--cream)',transition:'transform 0.2s'}} onMouseOver={e=>e.currentTarget.style.transform='scale(1.02)'} onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}>
+                  Save Reflection
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
