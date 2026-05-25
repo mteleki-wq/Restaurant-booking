@@ -3,31 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marc Teleki — Web Portfolio</title>
+<title>Marc Teleki — Web Portfolio (Editable)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* =========================================================
-     CONFIG — set your GitHub Pages base URL ONCE here.
-     Every project link below is built from this.
-     Examples:
-       Project repo:  https://mteleki-wq.github.io/REPO-NAME/
-       User repo:     https://mteleki-wq.github.io/
-     Keep the trailing slash.
-     ========================================================= */
-
   :root{
-    --bg:        #f4efe7;   /* warm parchment */
-    --card:      #fbf8f2;
-    --ink:       #211c17;
-    --muted:     #6f655a;
-    --accent:    #5c3a21;   /* chocolate brown */
-    --accent-2:  #9c6b3f;
-    --rule:      #d9cab2;
-    --shadow:    0 1px 2px rgba(33,28,23,.05), 0 14px 30px -18px rgba(33,28,23,.28);
+    --bg:#f4efe7; --card:#fbf8f2; --ink:#211c17; --muted:#6f655a;
+    --accent:#5c3a21; --accent-2:#9c6b3f; --rule:#d9cab2;
+    --shadow:0 1px 2px rgba(33,28,23,.05), 0 14px 30px -18px rgba(33,28,23,.28);
+    --ok:#3c7d4d; --danger:#b0492f;
   }
-
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{
@@ -36,131 +22,142 @@
       radial-gradient(1100px 520px at 12% -8%, #fcf8f0 0%, transparent 60%),
       radial-gradient(900px 500px at 102% 4%, #efe6d6 0%, transparent 55%),
       var(--bg);
-    color:var(--ink);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
+    color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
   }
 
-  /* ---------- HEADER ---------- */
-  header{
-    max-width:1180px;margin:0 auto;padding:74px 32px 30px;
+  /* ---- TOOLBAR ---- */
+  .toolbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(251,248,242,.86); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px;
+    padding:12px 24px;
   }
-  .eyebrow{
-    font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;
-    color:var(--accent-2);font-weight:600;margin-bottom:18px;
+  .toolbar .brand{font-family:'Fraunces',serif;font-weight:600;color:var(--accent);font-size:1.05rem;margin-right:auto}
+  .toolbar label{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .toolbar input.base{
+    font-family:'Outfit';font-size:.82rem;color:var(--ink);
+    border:1px solid var(--rule);border-radius:8px;padding:7px 10px;
+    width:min(420px,52vw);background:#fff;
   }
-  h1{
-    font-family:'Fraunces',serif;font-weight:600;
-    font-size:clamp(2.6rem,6vw,4.6rem);line-height:1.02;
-    letter-spacing:-.01em;color:var(--ink);
+  .btn{
+    font-family:'Outfit';font-weight:600;font-size:.8rem;letter-spacing:.02em;
+    border:1px solid var(--accent);background:var(--accent);color:#fff;
+    border-radius:9px;padding:8px 14px;cursor:pointer;transition:opacity .2s,transform .1s;
   }
-  h1 .light{font-weight:400;font-style:italic;color:var(--accent);}
-  .tagline{
-    margin-top:18px;font-size:clamp(1rem,1.6vw,1.18rem);color:var(--muted);
-    max-width:640px;
-  }
-  .meta{
-    margin-top:26px;display:flex;flex-wrap:wrap;gap:10px 26px;
-    font-size:.92rem;color:var(--muted);
-    border-top:1px solid var(--rule);padding-top:22px;
-  }
-  .meta a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
-  .meta a:hover{border-color:var(--accent)}
+  .btn:hover{opacity:.9} .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:transparent;color:var(--accent)}
+  .btn.tiny{padding:5px 10px;font-size:.72rem;border-radius:7px}
+  .edit-toggle{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted)}
+  .switch{position:relative;width:42px;height:23px;border-radius:999px;background:#d9cab2;cursor:pointer;transition:background .2s;flex:none}
+  .switch.on{background:var(--accent)}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:left .2s}
+  .switch.on::after{left:21px}
 
-  /* ---------- SECTION ---------- */
-  .section{max-width:1180px;margin:0 auto;padding:30px 32px 10px}
-  .section-head{
-    display:flex;align-items:baseline;gap:16px;margin:34px 0 22px;
-  }
-  .section-head h2{
-    font-family:'Fraunces',serif;font-weight:600;font-size:1.55rem;color:var(--accent);
-    white-space:nowrap;
-  }
+  /* ---- HEADER ---- */
+  header{max-width:1180px;margin:0 auto;padding:54px 32px 26px}
+  .eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent-2);font-weight:600;margin-bottom:16px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.03;letter-spacing:-.01em}
+  h1 .light{font-weight:400;font-style:italic;color:var(--accent)}
+  .tagline{margin-top:16px;font-size:clamp(1rem,1.6vw,1.15rem);color:var(--muted);max-width:640px}
+  .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.9rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:20px}
+  .meta a{color:var(--accent);text-decoration:none}
+
+  /* ---- SECTION ---- */
+  .section{max-width:1180px;margin:0 auto;padding:22px 32px 6px}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin:28px 0 18px}
+  .section-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;color:var(--accent);white-space:nowrap}
+  .section-head h2[contenteditable="true"]{outline:none;border-bottom:1px dashed var(--accent-2);cursor:text}
   .section-head .line{flex:1;height:1px;background:var(--rule)}
-  .section-head .count{font-size:.8rem;color:var(--muted);letter-spacing:.05em}
+  .section-head .count{font-size:.78rem;color:var(--muted);letter-spacing:.05em}
 
-  /* ---------- GRID ---------- */
-  .grid{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-    gap:26px;padding-bottom:14px;
-  }
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px;padding-bottom:10px}
 
-  /* ---------- CARD ---------- */
+  /* ---- CARD ---- */
   .card{
-    position:relative;display:flex;flex-direction:column;
-    background:var(--card);border:1px solid var(--rule);border-radius:16px;
-    overflow:hidden;text-decoration:none;color:inherit;
-    box-shadow:var(--shadow);
-    transition:transform .28s cubic-bezier(.2,.7,.2,1), box-shadow .28s, border-color .28s;
-    opacity:0;transform:translateY(16px);
-    animation:rise .6s forwards;
+    position:relative;display:flex;flex-direction:column;background:var(--card);
+    border:1px solid var(--rule);border-radius:16px;overflow:hidden;
+    box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s,border-color .25s;
   }
-  @keyframes rise{to{opacity:1;transform:translateY(0)}}
-  .card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 1px 2px rgba(33,28,23,.06), 0 26px 48px -20px rgba(33,28,23,.4);
-    border-color:var(--accent-2);
-  }
-
-  /* image placeholder / preview */
-  .thumb{
-    position:relative;aspect-ratio:16/10;width:100%;
-    background:
-      linear-gradient(135deg,#efe6d6 0%,#e3d6c0 100%);
-    display:flex;align-items:center;justify-content:center;
-    overflow:hidden;border-bottom:1px solid var(--rule);
-  }
+  .card:hover{transform:translateY(-5px);box-shadow:0 1px 2px rgba(33,28,23,.06),0 24px 44px -20px rgba(33,28,23,.4);border-color:var(--accent-2)}
+  .thumb{position:relative;aspect-ratio:16/10;width:100%;background:linear-gradient(135deg,#efe6d6,#e3d6c0);display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid var(--rule)}
   .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-  /* decorative placeholder pattern shown until a real image is dropped in */
-  .thumb .ph{
-    position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:10px;color:var(--accent);
-    background-image:
-      repeating-linear-gradient(45deg, rgba(92,58,33,.05) 0 12px, transparent 12px 24px);
-  }
-  .thumb .ph svg{width:38px;height:38px;opacity:.5}
-  .thumb .ph span{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2)}
+  .thumb .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--accent);background-image:repeating-linear-gradient(45deg,rgba(92,58,33,.05) 0 12px,transparent 12px 24px)}
+  .thumb .ph svg{width:34px;height:34px;opacity:.5}
+  .thumb .ph span{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2)}
+  .tag{position:absolute;top:12px;left:12px;z-index:2;background:rgba(251,248,242,.92);border:1px solid var(--rule);border-radius:999px;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;color:var(--accent);font-weight:600}
 
-  .card-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
-  .card-body h3{
-    font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;line-height:1.25;
-  }
-  .card-body p{margin-top:7px;font-size:.9rem;color:var(--muted);flex:1}
-  .card-foot{
-    margin-top:16px;display:flex;align-items:center;gap:8px;
-    font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--accent);font-weight:600;
-  }
+  .card-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+  .card-body h3{font-family:'Fraunces',serif;font-size:1.12rem;font-weight:600;line-height:1.25}
+  .card-body p{margin-top:6px;font-size:.88rem;color:var(--muted);flex:1}
+  .card-foot{margin-top:14px;display:flex;align-items:center;gap:7px;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
   .card-foot .arrow{transition:transform .25s}
-  .card:hover .card-foot .arrow{transform:translateX(5px)}
-  .tag{
-    position:absolute;top:14px;left:14px;z-index:2;
-    background:rgba(251,248,242,.92);backdrop-filter:blur(4px);
-    border:1px solid var(--rule);border-radius:999px;
-    font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
-    padding:5px 11px;color:var(--accent);font-weight:600;
-  }
+  .card:hover .card-foot .arrow{transform:translateX(4px)}
 
-  footer{
-    max-width:1180px;margin:40px auto 0;padding:30px 32px 70px;
-    border-top:1px solid var(--rule);color:var(--muted);font-size:.86rem;
-    display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;
+  /* clickable wrapper only active when NOT editing */
+  .card .link-cover{position:absolute;inset:0;z-index:3;cursor:pointer}
+  body.editing .card .link-cover{display:none}
+
+  /* ---- EDIT CONTROLS (shown only in edit mode) ---- */
+  .card .edit-fields{display:none;padding:0 18px 16px;flex-direction:column;gap:8px}
+  body.editing .card .edit-fields{display:flex}
+  body.editing .card .card-foot{display:none}
+  .card .edit-fields label{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2);font-weight:600;margin-bottom:-4px}
+  .card .edit-fields input{font-family:'Outfit';font-size:.82rem;border:1px solid var(--rule);border-radius:7px;padding:6px 9px;background:#fff;color:var(--ink);width:100%}
+  .card .row{display:flex;gap:8px}
+  .card .row .btn{flex:1}
+  .card-actions{position:absolute;top:10px;right:10px;z-index:4;display:none;gap:6px}
+  body.editing .card-actions{display:flex}
+  .card-actions .ico{
+    width:30px;height:30px;border-radius:8px;border:1px solid var(--rule);
+    background:rgba(251,248,242,.95);color:var(--accent);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;
   }
-  footer a{color:var(--accent);text-decoration:none}
+  .card-actions .ico.del{color:var(--danger);border-color:#e3b9ac}
+
+  .add-card{
+    display:none;align-items:center;justify-content:center;min-height:200px;
+    border:2px dashed var(--accent-2);border-radius:16px;background:transparent;
+    color:var(--accent);font-weight:600;cursor:pointer;font-size:.9rem;
+  }
+  body.editing .add-card{display:flex}
+  .add-card:hover{background:rgba(156,107,63,.06)}
+
+  .section-tools{display:none;gap:8px;margin:6px 0 0}
+  body.editing .section-tools{display:flex}
+
+  footer{max-width:1180px;margin:36px auto 0;padding:28px 32px 70px;border-top:1px solid var(--rule);color:var(--muted);font-size:.85rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px}
+
+  .hint{max-width:1180px;margin:0 auto;padding:0 32px}
+  .hint .box{background:rgba(156,107,63,.08);border:1px solid var(--rule);border-radius:12px;padding:14px 18px;font-size:.85rem;color:var(--accent);display:none}
+  body.editing .hint .box{display:block}
 
   @media (max-width:560px){
-    header{padding:54px 22px 24px}
-    .section{padding:22px 22px 6px}
-    .grid{grid-template-columns:1fr}
+    header{padding:42px 20px 20px} .section{padding:18px 20px 4px}
+    .grid{grid-template-columns:1fr} .toolbar{padding:10px 16px}
+    .toolbar input.base{width:100%}
   }
 </style>
 </head>
 <body>
 
+<div class="toolbar">
+  <span class="brand">Portfolio Editor</span>
+  <label>Base URL
+    <input class="base" id="baseUrl" placeholder="https://mteleki-wq.github.io/Restaurant-booking/">
+  </label>
+  <div class="edit-toggle">
+    Edit mode
+    <div class="switch" id="editSwitch" role="switch" aria-checked="false"></div>
+  </div>
+  <button class="btn ghost tiny" id="exportBtn">Download HTML</button>
+  <button class="btn ghost tiny" id="resetBtn">Reset</button>
+</div>
+
 <header>
   <div class="eyebrow">Web · Marketing · AI Automation</div>
-  <h1>Marc Teleki <span class="light">— Portfolio</span></h1>
-  <p class="tagline">A selection of websites, tools and digital projects designed and built through Webescapade — from hospitality booking systems to AI-powered training utilities.</p>
+  <h1 id="hTitle" contenteditable="false">Marc Teleki <span class="light">— Portfolio</span></h1>
+  <p class="tagline" id="hTagline" contenteditable="false">A selection of websites, tools and digital projects designed and built through Webescapade — from hospitality booking systems to AI-powered training utilities.</p>
   <div class="meta">
     <span>Webescapade · est. 2001</span>
     <a href="mailto:marc@webescapade.net">marc@webescapade.net</a>
@@ -169,7 +166,11 @@
   </div>
 </header>
 
-<main id="grid-root"></main>
+<div class="hint"><div class="box">
+  <strong>Editing tips:</strong> Click any card field to change its title, description, tag, link or preview image. Each link can be a full URL <em>or</em> just a filename (it’ll be joined to the Base URL above). Use <strong>＋ Add website</strong> to add cards, the <strong>×</strong> to delete. Click the section titles to rename them. When you’re happy, hit <strong>Download HTML</strong> to save your finished page. Changes are also saved in this browser automatically.
+</div></div>
+
+<main id="root"></main>
 
 <footer>
   <span>© <span id="yr"></span> Marc Teleki · Webescapade</span>
@@ -177,111 +178,311 @@
 </footer>
 
 <script>
-  /* ===== EDIT THIS ONE LINE ===== */
-  const BASE = "https://mteleki-wq.github.io/REPO-NAME/";  // <-- set your live base URL (keep trailing slash)
+(function(){
+  "use strict";
 
-  /* ===== PROJECTS =====
-     file:  the html file in your repo
-     title: shown on the card
-     desc:  one-line description
-     tag:   small label (category)
-     img:   leave "" for placeholder, or drop in an image URL/path later
-     Reorder, rename, add or delete freely. */
-  const sections = [
-    {
-      name: "Hospitality & Training Sites",
-      items: [
-        { file:"leculinaire.html",        title:"Le Culinaire",                desc:"Hospitality institute site.", tag:"Website", img:"" },
-        { file:"Leculinaire2.html",        title:"Le Culinaire — v2",           desc:"Alternate Le Culinaire build.", tag:"Website", img:"" },
-        { file:"webescapade.html",         title:"Webescapade",                 desc:"Consultancy & agency homepage.", tag:"Website", img:"" },
-        { file:"index.html",               title:"Home / Index",                desc:"Main landing page.", tag:"Website", img:"" },
-      ]
-    },
-    {
-      name: "Portfolios",
-      items: [
-        { file:"james collins portfolio.html",   title:"James Collins Portfolio",      desc:"Chef & educator portfolio.", tag:"Portfolio", img:"" },
-        { file:"james collins portfolio 2.html",  title:"James Collins Portfolio — v2", desc:"Refined portfolio build.", tag:"Portfolio", img:"" },
-        { file:"robin portfolio editable.html",   title:"Robin Bessege Portfolio",      desc:"Pastry chef portfolio.", tag:"Portfolio", img:"" },
-        { file:"robin_bessege_portfolio 3.html",  title:"Robin Bessege — v3",           desc:"Latest portfolio iteration.", tag:"Portfolio", img:"" },
-        { file:"robin full editable.html",        title:"Robin — Editable",             desc:"Editable portfolio template.", tag:"Template", img:"" },
-        { file:"robin full editable 2.html",      title:"Robin — Editable v2",          desc:"Editable template, revised.", tag:"Template", img:"" },
-        { file:"robin_full_editable.html",        title:"Robin — Editable (alt)",       desc:"Alternate editable build.", tag:"Template", img:"" },
-      ]
-    },
-    {
-      name: "AI Tools & Utilities",
-      items: [
-        { file:"food-cost-calculator.html",        title:"Food Cost Calculator",        desc:"Dish & menu costing tool.", tag:"Tool", img:"" },
-        { file:"food-cost-calculator 2.html",      title:"Food Cost Calculator — v2",   desc:"Updated costing utility.", tag:"Tool", img:"" },
-        { file:"recipe-converter.html",            title:"Recipe Converter",            desc:"Scale & convert recipes.", tag:"Tool", img:"" },
-        { file:"catering-proposal-generator 3.html", title:"Catering Proposal Gen.",    desc:"AI catering proposal builder.", tag:"Tool", img:"" },
-        { file:"catering-proposal-generator 4.html", title:"Catering Proposal — v4",    desc:"Proposal generator, revised.", tag:"Tool", img:"" },
-        { file:"catering-proposal-generator 5.html", title:"Catering Proposal — v5",    desc:"Latest proposal generator.", tag:"Tool", img:"" },
-        { file:"Catering",                         title:"Catering",                    desc:"Catering page / resource.", tag:"Page", img:"" },
-        { file:"rsa team manager.html",            title:"RSA Team Manager",            desc:"Staff / compliance manager.", tag:"Tool", img:"" },
-        { file:"sitxfin010.html",                  title:"SITXFIN010",                  desc:"Finance unit training tool.", tag:"Training", img:"" },
-      ]
-    },
-    {
-      name: "Security & Other Projects",
-      items: [
-        { file:"Security.html",            title:"Security",                desc:"Security services site.", tag:"Website", img:"" },
-        { file:"rightway-security.html",   title:"Rightway Security",       desc:"Security company website.", tag:"Website", img:"" },
-        { file:"Scanner.html",             title:"Scanner",                 desc:"Scanner utility page.", tag:"Tool", img:"" },
-        { file:"breath-for-life-html.html",title:"Breath for Life",         desc:"Health / wellbeing site.", tag:"Website", img:"" },
-      ]
-    },
+  const DEFAULT_BASE = "https://mteleki-wq.github.io/Restaurant-booking/";
+
+  const DEFAULT_DATA = [
+    { name:"Hospitality & Training Sites", items:[
+      {file:"leculinaire.html", title:"Le Culinaire", desc:"Hospitality institute site.", tag:"Website", img:""},
+      {file:"webescapade.html", title:"Webescapade", desc:"Consultancy & agency homepage.", tag:"Website", img:""},
+      {file:"index.html", title:"Home / Index", desc:"Main landing page.", tag:"Website", img:""},
+    ]},
+    { name:"Portfolios", items:[
+      {file:"marc teleki portfolio.html", title:"Marc Teleki Portfolio", desc:"This portfolio page.", tag:"Portfolio", img:""},
+      {file:"james collins portfolio.html", title:"James Collins Portfolio", desc:"Chef & educator portfolio.", tag:"Portfolio", img:""},
+      {file:"james collins portfolio 2.html", title:"James Collins Portfolio — v2", desc:"Refined build.", tag:"Portfolio", img:""},
+      {file:"robin portfolio editable.html", title:"Robin Bessege Portfolio", desc:"Pastry chef portfolio.", tag:"Portfolio", img:""},
+      {file:"robin_bessege_portfolio 3.html", title:"Robin Bessege — v3", desc:"Latest iteration.", tag:"Portfolio", img:""},
+    ]},
+    { name:"AI Tools & Utilities", items:[
+      {file:"food-cost-calculator.html", title:"Food Cost Calculator", desc:"Dish & menu costing tool.", tag:"Tool", img:""},
+      {file:"recipe-converter.html", title:"Recipe Converter", desc:"Scale & convert recipes.", tag:"Tool", img:""},
+      {file:"catering-proposal-generator 5.html", title:"Catering Proposal Generator", desc:"AI catering proposal builder.", tag:"Tool", img:""},
+      {file:"rsa team manager.html", title:"RSA Team Manager", desc:"Staff / compliance manager.", tag:"Tool", img:""},
+      {file:"sitxfin010.html", title:"SITXFIN010", desc:"Finance unit training tool.", tag:"Training", img:""},
+    ]},
+    { name:"Security & Other Projects", items:[
+      {file:"rightway-security.html", title:"Rightway Security", desc:"Security company website.", tag:"Website", img:""},
+      {file:"Security.html", title:"Security", desc:"Security services site.", tag:"Website", img:""},
+      {file:"breath-for-life-html.html", title:"Breath for Life", desc:"Health / wellbeing site.", tag:"Website", img:""},
+    ]},
   ];
 
-  const placeholderSVG = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/><circle cx="8" cy="6.5" r="0.6" fill="currentColor"/>
-    </svg>`;
+  const STORE_KEY = "marc_portfolio_v1";
+  const PH_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>';
 
-  function buildURL(file){
-    // encode spaces etc. so links work even with spaces in filenames
-    return BASE + encodeURIComponent(file).replace(/%2F/g,"/");
+  let state = load();
+  let editing = false;
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      if(raw){ return JSON.parse(raw); }
+    }catch(e){}
+    return { base: DEFAULT_BASE, sections: JSON.parse(JSON.stringify(DEFAULT_DATA)),
+             title:"Marc Teleki <span class='light'>— Portfolio</span>",
+             tagline:"A selection of websites, tools and digital projects designed and built through Webescapade — from hospitality booking systems to AI-powered training utilities." };
+  }
+  function save(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
   }
 
-  const root = document.getElementById("grid-root");
-  sections.forEach((sec, si) => {
-    const wrap = document.createElement("section");
-    wrap.className = "section";
-    wrap.innerHTML = `
-      <div class="section-head">
-        <h2>${sec.name}</h2>
-        <span class="line"></span>
-        <span class="count">${sec.items.length} project${sec.items.length>1?'s':''}</span>
-      </div>
-      <div class="grid"></div>`;
-    const grid = wrap.querySelector(".grid");
+  function buildURL(file){
+    file = (file||"").trim();
+    if(/^https?:\/\//i.test(file)) return file;            // already a full URL
+    let base = (state.base||"").trim();
+    if(base && !base.endsWith("/")) base += "/";
+    return base + encodeURIComponent(file).replace(/%2F/g,"/");
+  }
 
-    sec.items.forEach((p, i) => {
-      const a = document.createElement("a");
-      a.className = "card";
-      a.href = buildURL(p.file);
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.style.animationDelay = (i*60 + si*40) + "ms";
-      const thumb = p.img
-        ? `<div class="thumb"><img src="${p.img}" alt="${p.title} preview"></div>`
-        : `<div class="thumb"><div class="ph">${placeholderSVG}<span>Preview</span></div></div>`;
-      a.innerHTML = `
-        ${thumb}
-        <span class="tag">${p.tag}</span>
-        <div class="card-body">
-          <h3>${p.title}</h3>
-          <p>${p.desc}</p>
-          <div class="card-foot">Visit site <span class="arrow">→</span></div>
-        </div>`;
-      grid.appendChild(a);
+  const root = document.getElementById("root");
+
+  function render(){
+    root.innerHTML = "";
+    state.sections.forEach((sec, si) => {
+      const wrap = document.createElement("section");
+      wrap.className = "section";
+
+      const head = document.createElement("div");
+      head.className = "section-head";
+      const h2 = document.createElement("h2");
+      h2.textContent = sec.name;
+      h2.setAttribute("contenteditable", editing ? "true" : "false");
+      h2.addEventListener("input", () => { sec.name = h2.textContent; save(); });
+      const line = document.createElement("span"); line.className="line";
+      const count = document.createElement("span"); count.className="count";
+      count.textContent = sec.items.length + (sec.items.length===1?" project":" projects");
+      head.append(h2, line, count);
+      wrap.appendChild(head);
+
+      const grid = document.createElement("div");
+      grid.className = "grid";
+
+      sec.items.forEach((p, i) => grid.appendChild(makeCard(sec, p, si, i)));
+
+      // add-card tile
+      const add = document.createElement("div");
+      add.className = "add-card";
+      add.textContent = "＋ Add website";
+      add.addEventListener("click", () => {
+        sec.items.push({file:"new-page.html", title:"New Website", desc:"Description…", tag:"Website", img:""});
+        save(); render();
+      });
+      grid.appendChild(add);
+      wrap.appendChild(grid);
+
+      // section tools
+      const tools = document.createElement("div");
+      tools.className = "section-tools";
+      const delSec = document.createElement("button");
+      delSec.className = "btn ghost tiny";
+      delSec.textContent = "Delete this section";
+      delSec.addEventListener("click", () => {
+        if(confirm("Delete the section \""+sec.name+"\" and all its cards?")){
+          state.sections.splice(si,1); save(); render();
+        }
+      });
+      tools.appendChild(delSec);
+      wrap.appendChild(tools);
+
+      root.appendChild(wrap);
     });
-    root.appendChild(wrap);
+
+    // add-section button row
+    const secWrap = document.createElement("div");
+    secWrap.className = "section";
+    const addSecBtn = document.createElement("button");
+    addSecBtn.className = "btn ghost tiny";
+    addSecBtn.id = "addSectionBtn";
+    addSecBtn.textContent = "＋ Add a new section";
+    addSecBtn.style.display = editing ? "inline-block" : "none";
+    addSecBtn.addEventListener("click", () => {
+      state.sections.push({name:"New Section", items:[]});
+      save(); render();
+    });
+    secWrap.appendChild(addSecBtn);
+    root.appendChild(secWrap);
+  }
+
+  function makeCard(sec, p, si, i){
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const thumb = document.createElement("div");
+    thumb.className = "thumb";
+    thumb.innerHTML = p.img
+      ? '<img src="'+escAttr(p.img)+'" alt="'+escAttr(p.title)+' preview" onerror="this.style.display=\'none\';this.parentNode.querySelector(\'.ph\')&&(this.parentNode.querySelector(\'.ph\').style.display=\'flex\')">'
+      : '';
+    const ph = document.createElement("div");
+    ph.className = "ph";
+    ph.style.display = p.img ? "none" : "flex";
+    ph.innerHTML = PH_SVG + '<span>Preview</span>';
+    thumb.appendChild(ph);
+
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = p.tag || "Site";
+    thumb.appendChild(tag);
+
+    // clickable cover (view mode)
+    const cover = document.createElement("a");
+    cover.className = "link-cover";
+    cover.href = buildURL(p.file);
+    cover.target = "_blank";
+    cover.rel = "noopener";
+    card.appendChild(cover);
+
+    // delete / actions
+    const actions = document.createElement("div");
+    actions.className = "card-actions";
+    const del = document.createElement("button");
+    del.className = "ico del"; del.title = "Delete"; del.textContent = "×";
+    del.addEventListener("click", (e) => { e.stopPropagation();
+      if(confirm("Delete \""+p.title+"\"?")){ sec.items.splice(i,1); save(); render(); }
+    });
+    const test = document.createElement("button");
+    test.className = "ico"; test.title = "Open link in new tab"; test.textContent = "↗";
+    test.addEventListener("click", (e)=>{ e.stopPropagation(); window.open(buildURL(p.file),"_blank","noopener"); });
+    actions.append(test, del);
+    card.appendChild(actions);
+
+    const body = document.createElement("div");
+    body.className = "card-body";
+    const h3 = document.createElement("h3"); h3.textContent = p.title;
+    const desc = document.createElement("p"); desc.textContent = p.desc;
+    const foot = document.createElement("div");
+    foot.className = "card-foot";
+    foot.innerHTML = 'Visit site <span class="arrow">→</span>';
+    body.append(h3, desc, foot);
+
+    // edit fields
+    const ef = document.createElement("div");
+    ef.className = "edit-fields";
+    ef.append(
+      field("Title", p.title, v=>{p.title=v; h3.textContent=v; cover.href=buildURL(p.file);}),
+      field("Description", p.desc, v=>{p.desc=v; desc.textContent=v;}),
+      field("Tag", p.tag, v=>{p.tag=v; tag.textContent=v;}),
+      field("Link (filename or full URL)", p.file, v=>{p.file=v; cover.href=buildURL(v);}),
+      field("Preview image URL (optional)", p.img, v=>{p.img=v; refreshThumb(thumb, ph, v, p.title);})
+    );
+
+    card.append(thumb, body, ef);
+    return card;
+  }
+
+  function refreshThumb(thumb, ph, url, title){
+    let img = thumb.querySelector("img");
+    if(url){
+      if(!img){ img = document.createElement("img"); thumb.insertBefore(img, ph); }
+      img.style.display = "block";
+      img.alt = title + " preview";
+      img.onerror = function(){ this.style.display="none"; ph.style.display="flex"; };
+      img.src = url;
+      ph.style.display = "none";
+    }else{
+      if(img) img.remove();
+      ph.style.display = "flex";
+    }
+  }
+
+  function field(labelText, value, onChange){
+    const w = document.createElement("div");
+    const l = document.createElement("label"); l.textContent = labelText;
+    const inp = document.createElement("input");
+    inp.value = value || "";
+    inp.addEventListener("input", () => { onChange(inp.value); save(); });
+    w.append(l, inp);
+    return w;
+  }
+
+  function escAttr(s){ return String(s||"").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  // ---- toolbar wiring ----
+  const baseInput = document.getElementById("baseUrl");
+  baseInput.value = state.base || DEFAULT_BASE;
+  baseInput.addEventListener("input", () => {
+    state.base = baseInput.value; save();
+    // update all covers live
+    document.querySelectorAll(".card").forEach(()=>{});
+    render();
   });
 
-  document.getElementById("yr").textContent = new Date().getFullYear();
-</script>
+  const sw = document.getElementById("editSwitch");
+  function setEditing(on){
+    editing = on;
+    document.body.classList.toggle("editing", on);
+    sw.classList.toggle("on", on);
+    sw.setAttribute("aria-checked", on ? "true":"false");
+    document.getElementById("hTitle").setAttribute("contenteditable", on?"true":"false");
+    document.getElementById("hTagline").setAttribute("contenteditable", on?"true":"false");
+    render();
+  }
+  sw.addEventListener("click", () => setEditing(!editing));
 
+  document.getElementById("hTitle").addEventListener("input", e=>{ state.title=e.target.innerHTML; save(); });
+  document.getElementById("hTagline").addEventListener("input", e=>{ state.tagline=e.target.textContent; save(); });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if(confirm("Reset everything back to the original list? Your edits in this browser will be cleared.")){
+      localStorage.removeItem(STORE_KEY);
+      state = load();
+      baseInput.value = state.base;
+      document.getElementById("hTitle").innerHTML = state.title;
+      document.getElementById("hTagline").textContent = state.tagline;
+      render();
+    }
+  });
+
+  // ---- export a clean, view-only HTML file ----
+  document.getElementById("exportBtn").addEventListener("click", exportHTML);
+  function exportHTML(){
+    const base = state.base || "";
+    const join = (f)=>buildURL(f);
+    let cards = "";
+    state.sections.forEach(sec=>{
+      cards += '<section class="section"><div class="section-head"><h2>'+esc(sec.name)+'</h2><span class="line"></span><span class="count">'+sec.items.length+(sec.items.length===1?' project':' projects')+'</span></div><div class="grid">';
+      sec.items.forEach(p=>{
+        const thumb = p.img
+          ? '<div class="thumb"><img src="'+escAttr(p.img)+'" alt="'+escAttr(p.title)+' preview"></div>'
+          : '<div class="thumb"><div class="ph">'+PH_SVG+'<span>Preview</span></div></div>';
+        cards += '<a class="card" href="'+escAttr(join(p.file))+'" target="_blank" rel="noopener">'+thumb+'<span class="tag">'+esc(p.tag||'Site')+'</span><div class="card-body"><h3>'+esc(p.title)+'</h3><p>'+esc(p.desc)+'</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a>';
+      });
+      cards += '</div></section>';
+    });
+
+    const css = document.querySelector("style").innerHTML
+      // strip editor-only rules to keep export lean (cards stay clickable since no .editing class)
+      ;
+
+    const html =
+'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Marc Teleki — Web Portfolio</title>'+
+'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'+
+'<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">'+
+'<style>'+css+'</style></head><body>'+
+'<header><div class="eyebrow">Web · Marketing · AI Automation</div><h1>'+state.title+'</h1>'+
+'<p class="tagline">'+esc(state.tagline)+'</p>'+
+'<div class="meta"><span>Webescapade · est. 2001</span><a href="mailto:marc@webescapade.net">marc@webescapade.net</a><span>0413 872 994</span><span>Eastwood, NSW 2122</span></div></header>'+
+'<main>'+cards+'</main>'+
+'<footer><span>© '+(new Date().getFullYear())+' Marc Teleki · Webescapade</span><span>Built &amp; deployed via GitHub Pages</span></footer>'+
+'</body></html>';
+
+    const blob = new Blob([html], {type:"text/html"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "marc-teleki-portfolio.html";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  // init
+  document.getElementById("hTitle").innerHTML = state.title;
+  document.getElementById("hTagline").textContent = state.tagline;
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  render();
+})();
+</script>
 </body>
 </html>
