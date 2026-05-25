@@ -237,6 +237,14 @@
     return base + encodeURIComponent(file).replace(/%2F/g,"/");
   }
 
+  // Live screenshot of a page URL via a free thumbnail service.
+  // Used when a card has no manual image set.
+  function shotURL(pageUrl){
+    if(!pageUrl) return "";
+    // WordPress mShots renders a screenshot of any public URL.
+    return "https://s.wordpress.com/mshots/v1/" + encodeURIComponent(pageUrl) + "?w=640&h=400";
+  }
+
   const root = document.getElementById("root");
 
   function render(){
@@ -310,15 +318,38 @@
     const card = document.createElement("div");
     card.className = "card";
 
+    const liveUrl = buildURL(p.file);
+    const previewSrc = p.img ? p.img : shotURL(liveUrl);
+
     const thumb = document.createElement("div");
     thumb.className = "thumb";
-    thumb.innerHTML = p.img
-      ? '<img src="'+escAttr(p.img)+'" alt="'+escAttr(p.title)+' preview" onerror="this.style.display=\'none\';this.parentNode.querySelector(\'.ph\')&&(this.parentNode.querySelector(\'.ph\').style.display=\'flex\')">'
-      : '';
+
     const ph = document.createElement("div");
     ph.className = "ph";
-    ph.style.display = p.img ? "none" : "flex";
     ph.innerHTML = PH_SVG + '<span>Preview</span>';
+
+    if(previewSrc){
+      const img = document.createElement("img");
+      img.alt = p.title + " preview";
+      img.loading = "lazy";
+      img.style.display = "block";
+      ph.style.display = "none";
+      // mShots returns a "loading" frame at first; retry a couple of times.
+      let tries = 0;
+      img.onerror = function(){
+        if(tries < 3 && !p.img){
+          tries++;
+          setTimeout(()=>{ img.src = previewSrc + "&retry=" + tries; }, 2500);
+        }else{
+          img.style.display = "none";
+          ph.style.display = "flex";
+        }
+      };
+      img.src = previewSrc;
+      thumb.appendChild(img);
+    }else{
+      ph.style.display = "flex";
+    }
     thumb.appendChild(ph);
 
     const tag = document.createElement("span");
@@ -364,21 +395,25 @@
       field("Title", p.title, v=>{p.title=v; h3.textContent=v; cover.href=buildURL(p.file);}),
       field("Description", p.desc, v=>{p.desc=v; desc.textContent=v;}),
       field("Tag", p.tag, v=>{p.tag=v; tag.textContent=v;}),
-      field("Link (filename or full URL)", p.file, v=>{p.file=v; cover.href=buildURL(v);}),
-      field("Preview image URL (optional)", p.img, v=>{p.img=v; refreshThumb(thumb, ph, v, p.title);})
+      field("Link (filename or full URL)", p.file, v=>{p.file=v; cover.href=buildURL(v); refreshThumb(thumb, ph, p.img ? p.img : shotURL(buildURL(v)), p.title, !p.img);}),
+      field("Preview image (leave blank for auto screenshot)", p.img, v=>{p.img=v; refreshThumb(thumb, ph, v ? v : shotURL(buildURL(p.file)), p.title, !v);})
     );
 
     card.append(thumb, body, ef);
     return card;
   }
 
-  function refreshThumb(thumb, ph, url, title){
+  function refreshThumb(thumb, ph, url, title, isAuto){
     let img = thumb.querySelector("img");
     if(url){
-      if(!img){ img = document.createElement("img"); thumb.insertBefore(img, ph); }
+      if(!img){ img = document.createElement("img"); img.loading="lazy"; thumb.insertBefore(img, ph); }
       img.style.display = "block";
       img.alt = title + " preview";
-      img.onerror = function(){ this.style.display="none"; ph.style.display="flex"; };
+      let tries = 0;
+      img.onerror = function(){
+        if(isAuto && tries < 3){ tries++; setTimeout(()=>{ img.src = url + "&retry=" + tries; }, 2500); }
+        else { this.style.display="none"; ph.style.display="flex"; }
+      };
       img.src = url;
       ph.style.display = "none";
     }else{
@@ -444,8 +479,9 @@
     state.sections.forEach(sec=>{
       cards += '<section class="section"><div class="section-head"><h2>'+esc(sec.name)+'</h2><span class="line"></span><span class="count">'+sec.items.length+(sec.items.length===1?' project':' projects')+'</span></div><div class="grid">';
       sec.items.forEach(p=>{
-        const thumb = p.img
-          ? '<div class="thumb"><img src="'+escAttr(p.img)+'" alt="'+escAttr(p.title)+' preview"></div>'
+        const previewSrc = p.img ? p.img : shotURL(join(p.file));
+        const thumb = previewSrc
+          ? '<div class="thumb"><img src="'+escAttr(previewSrc)+'" alt="'+escAttr(p.title)+' preview" loading="lazy"><div class="ph" style="display:none">'+PH_SVG+'<span>Preview</span></div></div>'
           : '<div class="thumb"><div class="ph">'+PH_SVG+'<span>Preview</span></div></div>';
         cards += '<a class="card" href="'+escAttr(join(p.file))+'" target="_blank" rel="noopener">'+thumb+'<span class="tag">'+esc(p.tag||'Site')+'</span><div class="card-body"><h3>'+esc(p.title)+'</h3><p>'+esc(p.desc)+'</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a>';
       });
@@ -466,6 +502,7 @@
 '<div class="meta"><span>Webescapade · est. 2001</span><a href="mailto:marc@webescapade.net">marc@webescapade.net</a><span>0413 872 994</span><span>Eastwood, NSW 2122</span></div></header>'+
 '<main>'+cards+'</main>'+
 '<footer><span>© '+(new Date().getFullYear())+' Marc Teleki · Webescapade</span><span>Built &amp; deployed via GitHub Pages</span></footer>'+
+'<script>document.querySelectorAll(".thumb img").forEach(function(im){var t=0;im.addEventListener("error",function(){if(t<3){t++;setTimeout(function(){im.src=im.src.split("&retry=")[0]+"&retry="+t;},2500);}else{im.style.display="none";var p=im.parentNode.querySelector(".ph");if(p)p.style.display="flex";}});});<\/script>'+
 '</body></html>';
 
     const blob = new Blob([html], {type:"text/html"});
