@@ -996,208 +996,46 @@ dropZone.addEventListener('drop', e => {
 
 // ── DOWNLOAD ──
 function savePageAsFile() {
-  // 1. Make sure edit mode is OFF visually before capturing
+  // Step 1: ensure edit mode is off
   const wasEditing = editMode;
-  if (wasEditing) {
-    document.body.classList.remove('edit-mode');
-  }
+  document.body.classList.remove('edit-mode');
+  document.body.removeAttribute('class'); // clear all body classes
 
-  // 2. Clone the full document
-  const clone = document.documentElement.cloneNode(true);
+  // Step 2: get the full current HTML
+  let out = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
-  // 3. Strip all edit-only UI from the clone
-  const editOnlySelectors = [
-    '.edit-fab',
-    '.export-bar',
-    '.edit-banner',
-    '.bg-opacity-bar',
-    '.add-credential-btn',
-    '.cred-delete-btn',
-    '.edit-overlay',
-    '.placeholder-edit-overlay',
-    '#uploadModal',
-    '#textModal',
-    '#credModal',
-    '#heroImgInput',
-    '.toast',
-  ];
-  editOnlySelectors.forEach(sel => {
-    clone.querySelectorAll(sel).forEach(el => el.remove());
-  });
+  // Step 3: inject a final override <style> that nukes all edit UI
+  const killCSS = `<style id="final-kill">
+.edit-fab,.export-bar,.edit-banner,.bg-opacity-bar,
+.add-credential-btn,.cred-delete-btn,.edit-overlay,
+.placeholder-edit-overlay,.text-modal-bg,.upload-modal-bg,
+.cred-modal-bg,.toast,#heroImgInput
+{ display:none!important; visibility:hidden!important; }
+[data-editable]{ outline:none!important; background:transparent!important; cursor:default!important; }
+[data-editable]:hover::after{ display:none!important; }
+.photo-card::after{ display:none!important; }
+body.edit-mode [data-editable]:hover{ background:transparent!important; outline:none!important; }
+</style>`;
+  out = out.replace('</head>', killCSS + '\n</head>');
 
-  // 4. Remove data-editable attributes (no edit hints in final)
-  clone.querySelectorAll('[data-editable]').forEach(el => {
-    el.removeAttribute('data-editable');
-  });
+  // Step 4: remove edit-mode from body tag in the string
+  out = out.replace(/ class="edit-mode"/g, '');
+  out = out.replace(/ class="edit-mode [^"]*"/g, '');
 
-  // 5. Remove edit-mode class from body if present
-  clone.querySelector('body').classList.remove('edit-mode');
-
-  // 6. Remove all edit-mode CSS rules by stripping the style content
-  // that pertains to edit-mode — easier: just add an override style
-  const overrideStyle = clone.ownerDocument
-    ? clone.ownerDocument.createElement('style')
-    : document.createElement('style');
-  overrideStyle.textContent = `
-    /* Published view overrides */
-    .edit-fab, .export-bar, .edit-banner, .bg-opacity-bar,
-    .add-credential-btn, .cred-delete-btn, .edit-overlay,
-    .placeholder-edit-overlay, #uploadModal, #textModal,
-    #credModal, .toast { display: none !important; }
-    body.edit-mode [data-editable] { outline: none !important; background: transparent !important; cursor: default !important; }
-    body.edit-mode [data-editable]:hover::after { display: none !important; }
-    body.edit-mode .photo-card::after { display: none !important; }
-    body.edit-mode .photo-card img { transform: none !important; filter: none !important; }
-  `;
-  clone.querySelector('head').appendChild(overrideStyle);
-
-  // 7. Restore edit mode on live page if it was on
+  // Step 5: restore live page if was editing
   if (wasEditing) {
     document.body.classList.add('edit-mode');
+    editMode = true;
   }
 
-  // 8. Serialize and download
-  const doctype = '<!DOCTYPE html>\n';
-  const htmlStr = doctype + clone.outerHTML;
-  const blob = new Blob([htmlStr], { type: 'text/html' });
+  // Step 6: download
+  const blob = new Blob([out], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'james_collins_portfolio_final.html';
+  a.download = 'james_collins_portfolio_FINAL.html';
   a.click();
-  showToast('⬇ Downloading clean portfolio…');
+  showToast('⬇ Final portfolio downloaded');
 }
-
-
-
-
-// ── CREDENTIAL TIMELINE ──
-let credCounter = 7; // starts after existing 6
-
-function openAddCredential() {
-  document.getElementById('credYear').value = '';
-  document.getElementById('credTitle').value = '';
-  document.getElementById('credSub').value = '';
-  document.getElementById('credModal').classList.add('open');
-  setTimeout(() => document.getElementById('credYear').focus(), 300);
-}
-
-function closeCredModal() {
-  document.getElementById('credModal').classList.remove('open');
-}
-
-function addCredential() {
-  const year  = document.getElementById('credYear').value.trim();
-  const title = document.getElementById('credTitle').value.trim();
-  const sub   = document.getElementById('credSub').value.trim();
-  if (!year || !title) { showToast('Please fill in Year and Title'); return; }
-
-  const n = credCounter++;
-  const item = document.createElement('div');
-  item.className = 'credential-item';
-  item.innerHTML = `
-    <span class="cred-year" data-editable="cred-${n}-year">${year}</span>
-    <span class="cred-text">
-      <strong data-editable="cred-${n}-title">${title}</strong>
-      <span data-editable="cred-${n}-sub">${sub || ''}</span>
-    </span>
-    <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
-  `;
-
-  // Wire up the new editable elements
-  item.querySelectorAll('[data-editable]').forEach(el => {
-    el.addEventListener('click', function(e) {
-      if (!editMode) return;
-      e.stopPropagation();
-      openTextModal(this);
-    });
-  });
-
-  document.getElementById('credentialsList').appendChild(item);
-  closeCredModal();
-  showToast('✓ Entry added');
-}
-
-function deleteCredential(btn) {
-  if (!editMode) return;
-  const item = btn.closest('.credential-item');
-  if (document.querySelectorAll('.credential-item').length <= 1) {
-    showToast('Keep at least one entry');
-    return;
-  }
-  item.style.opacity = '0';
-  item.style.transform = 'translateX(-10px)';
-  item.style.transition = 'all 0.3s';
-  setTimeout(() => item.remove(), 300);
-  showToast('Entry removed');
-}
-
-// Close cred modal on bg click
-document.getElementById('credModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('credModal')) closeCredModal();
-});
-// Enter key in cred fields
-['credYear','credTitle','credSub'].forEach(id => {
-  document.getElementById(id).addEventListener('keydown', e => {
-    if (e.key === 'Enter') addCredential();
-    if (e.key === 'Escape') closeCredModal();
-  });
-});
-
-
-// ── HERO IMAGE REPLACE ──
-function openHeroImgPicker() {
-  document.getElementById('heroImgInput').click();
-}
-
-function applyHeroImage(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const dataUrl = ev.target.result;
-    // Apply to hero-img-accent (the visible background image div)
-    const accent = document.querySelector('.hero-img-accent');
-    if (accent) {
-      accent.style.backgroundImage = `url(${dataUrl})`;
-      // Store for download
-      window._heroImgDataUrl = dataUrl;
-    }
-    showToast('✓ Hero image updated');
-  };
-  reader.readAsDataURL(file);
-  // Reset input so same file can be re-selected
-  e.target.value = '';
-}
-
-// ── BACKGROUND OPACITY CONTROL ──
-let currentBgOpacity = 18; // default %
-
-function updateBgOpacity(val) {
-  val = parseInt(val);
-  currentBgOpacity = val;
-  // Update the hero-img-accent opacity
-  const accent = document.querySelector('.hero-img-accent');
-  if (accent) accent.style.opacity = (val / 100).toFixed(2);
-  // Update display
-  document.getElementById('opacityDisplay').textContent = val + '%';
-  // Update slider fill
-  document.getElementById('opacitySlider').style.setProperty('--pct', val + '%');
-  document.getElementById('opacitySlider').value = val;
-  // Update preset active state
-  document.querySelectorAll('.bg-bar-preset').forEach(btn => btn.classList.remove('active'));
-  const presets = [10, 25, 45, 70];
-  presets.forEach((p, i) => {
-    if (val === p) document.querySelectorAll('.bg-bar-preset')[i].classList.add('active');
-  });
-}
-
-function setOpacity(val) {
-  updateBgOpacity(val);
-}
-
-// Init slider fill on load
-document.getElementById('opacitySlider').style.setProperty('--pct', currentBgOpacity + '%');
-
 // ── TOAST ──
 function showToast(msg) {
   const t = document.getElementById('toast');
