@@ -997,64 +997,67 @@ dropZone.addEventListener('drop', e => {
 // ── DOWNLOAD ──
 function savePageAsFile() {
   const wasEditing = editMode;
-
-  // ── Step 1: Bake all current image states into the DOM before serialising ──
-  // Regular images with data-img-id
-  document.querySelectorAll('img[data-img-id]').forEach(el => {
-    // src is already live — nothing to do, outerHTML will capture it
-  });
-  // Background divs with data-img-id (hero accent etc)
-  document.querySelectorAll('div[data-img-id]').forEach(el => {
-    // style.backgroundImage already set live — will be captured
-  });
-  // Placeholder images
-  document.querySelectorAll('.placeholder-card.has-image img.placeholder-img').forEach(el => {
-    // src already live
-  });
-
-  // ── Step 2: Bake hero opacity into inline style ──
-  const accent = document.querySelector('.hero-img-accent');
-  if (accent) {
-    const currentOpacity = accent.style.opacity || '0.18';
-    const currentBg = accent.style.backgroundImage || '';
-    accent.setAttribute('data-saved-style', accent.getAttribute('style') || '');
-    accent.style.opacity = currentOpacity;
-    if (currentBg) accent.style.backgroundImage = currentBg;
-  }
-
-  // ── Step 3: Turn off edit mode on body so no edit classes in output ──
   document.body.classList.remove('edit-mode');
 
-  // ── Step 4: Serialise the full live DOM (with all replaced images) ──
+  // ── Force-sync all live image states into DOM attributes ──
+  // This ensures outerHTML captures the current image even on iOS Safari
+
+  // 1. Regular <img> tags with data-img-id
+  document.querySelectorAll('img[data-img-id]').forEach(el => {
+    el.setAttribute('src', el.src); // force attribute = current resolved src
+  });
+
+  // 2. Placeholder images
+  document.querySelectorAll('img.placeholder-img').forEach(el => {
+    if (el.src && el.src !== window.location.href) {
+      el.setAttribute('src', el.src);
+    }
+  });
+
+  // 3. Background divs (hero-img-accent, hero-bg with data-img-id)
+  document.querySelectorAll('div[data-img-id]').forEach(el => {
+    const bg = el.style.backgroundImage;
+    if (bg && bg !== 'none') {
+      el.setAttribute('style', el.getAttribute('style') || el.style.cssText);
+    }
+  });
+
+  // 4. Hero accent - bake current opacity + background-image into style attr
+  const accent = document.querySelector('.hero-img-accent');
+  if (accent) {
+    accent.setAttribute('style', accent.style.cssText);
+  }
+
+  // ── Serialise the full live DOM ──
   let out = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
-  // ── Step 5: Restore edit mode on live page ──
+  // ── Restore edit mode on the live page ──
   if (wasEditing) {
     document.body.classList.add('edit-mode');
     editMode = true;
   }
 
-  // ── Step 6: Inject kill-switch CSS to hide all edit UI in final file ──
+  // ── Inject kill CSS to hide all edit UI in the final file ──
   const killCSS = `<style id="final-kill">
-/* Final published portfolio — all edit UI hidden */
-.edit-fab, .export-bar, .edit-banner, .bg-opacity-bar,
-.add-credential-btn, .cred-delete-btn, .edit-overlay,
-.placeholder-edit-overlay, .text-modal-bg, .upload-modal-bg,
-.cred-modal-bg, .toast, #heroImgInput,
-#uploadModal, #textModal, #credModal, #bgOpacityBar,
-#editFab, #addCredentialBtn
-{ display:none !important; }
-[data-editable]:hover::after { display:none !important; }
-.photo-card::after { display:none !important; }
-body.edit-mode [data-editable] { outline:none !important; background:transparent !important; cursor:default !important; }
+.edit-fab,.export-bar,.edit-banner,.bg-opacity-bar,
+.add-credential-btn,.cred-delete-btn,.edit-overlay,
+.placeholder-edit-overlay,.text-modal-bg,.upload-modal-bg,
+.cred-modal-bg,.toast,#heroImgInput,
+#uploadModal,#textModal,#credModal,#bgOpacityBar,
+#editFab,#addCredentialBtn
+{ display:none!important; }
+[data-editable]:hover::after{ display:none!important; }
+.photo-card::after{ display:none!important; }
+body.edit-mode [data-editable]{ outline:none!important; background:transparent!important; cursor:default!important; }
 </style>`;
   out = out.replace('</head>', killCSS + '\n</head>');
 
-  // ── Step 7: Remove edit-mode class from body tag string ──
-  out = out.replace(/<body class="edit-mode">/g, '<body>');
-  out = out.replace(/<body class="edit-mode ([^"]+)">/g, '<body class="$1">');
+  // ── Remove edit-mode class from body in the output string ──
+  out = out.replace(/<body([^>]*) class="edit-mode"([^>]*)>/g, '<body$1$2>');
+  out = out.replace(/<body([^>]*) class="([^"]*) edit-mode([^"]*)"([^>]*)>/g, '<body$1 class="$2$3"$4>');
+  out = out.replace(/class="edit-mode"/g, 'class=""');
 
-  // ── Step 8: Download ──
+  // ── Download ──
   const blob = new Blob([out], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
