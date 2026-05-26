@@ -233,6 +233,173 @@
     .edit-fab { bottom:20px; right:20px; padding:12px 18px; }
     .export-bar { bottom:76px; right:20px; }
   }
+
+  /* ── BACKGROUND OPACITY BAR ── */
+  .bg-opacity-bar {
+    position: fixed;
+    bottom: 108px;
+    left: 160px;
+    z-index: 997;
+    background: rgba(13,13,13,0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 50px;
+    padding: 10px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    white-space: nowrap;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+    transform: translateY(8px);
+  }
+  body.edit-mode .bg-opacity-bar {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+  .bg-bar-icon { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .bg-bar-icon svg { width:12px; height:12px; }
+  .bg-bar-label {
+    font-size: 8px; font-weight: 400; letter-spacing: 0.45em;
+    text-transform: uppercase; color: var(--warm-grey); flex-shrink: 0;
+  }
+  .bg-bar-sep, .bg-bar-sep2 {
+    width: 1px; height: 16px;
+    background: rgba(200,169,110,0.18); flex-shrink: 0;
+  }
+  .opacity-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 120px; height: 2px; flex-shrink: 0;
+    background: linear-gradient(to right,
+      var(--gold) 0%, var(--gold) var(--pct,18%),
+      rgba(200,169,110,0.18) var(--pct,18%), rgba(200,169,110,0.18) 100%);
+    border-radius: 2px; outline: none; cursor: pointer;
+  }
+  .opacity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid rgba(13,13,13,0.95);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    cursor: pointer; transition: transform 0.15s;
+  }
+  .opacity-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
+  .opacity-slider::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--gold); border: 2px solid rgba(13,13,13,0.95); cursor: pointer;
+  }
+  .bg-bar-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: 300; color: var(--gold-light);
+    min-width: 34px; text-align: center; flex-shrink: 0;
+  }
+  .bg-bar-presets { display: flex; gap: 3px; flex-shrink: 0; }
+  .bg-bar-preset {
+    background: transparent;
+    border: 1px solid rgba(200,169,110,0.12);
+    border-radius: 50px; padding: 4px 10px; cursor: pointer;
+    font-family: 'Montserrat'; font-size: 8px; font-weight: 400;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(154,144,135,0.6);
+    transition: all 0.22s;
+  }
+  .bg-bar-preset:hover { border-color: rgba(200,169,110,0.4); color: var(--warm-grey); }
+  .bg-bar-preset.active { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.06); }
+
+  @media(max-width:768px) {
+    .bg-opacity-bar { left: 16px; bottom: 160px; padding: 9px 16px; gap: 10px; }
+    .opacity-slider { width: 80px; }
+    .bg-bar-presets { display: none; }
+  }
+
+
+  .bg-bar-change-btn {
+    background: transparent;
+    border: 1px solid rgba(200,169,110,0.25);
+    border-radius: 50px;
+    padding: 5px 13px;
+    cursor: pointer;
+    font-family: 'Montserrat'; font-size: 8px; font-weight: 400;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--warm-grey);
+    display: flex; align-items: center; gap: 6px;
+    transition: all 0.25s; flex-shrink: 0;
+  }
+  .bg-bar-change-btn:hover {
+    border-color: var(--gold); color: var(--gold);
+    background: rgba(200,169,110,0.06);
+  }
+  .bg-bar-change-btn svg { flex-shrink: 0; }
+
+
+  /* ── CREDENTIAL EDITING ── */
+  .credential-item {
+    position: relative;
+    /* override grid to accommodate delete button */
+    grid-template-columns: 80px 1fr auto !important;
+  }
+  .cred-delete-btn {
+    display: none;
+    background: transparent; border: 1px solid rgba(220,80,80,0.25);
+    color: rgba(220,80,80,0.5); border-radius: 50%; width: 20px; height: 20px;
+    font-size: 14px; line-height: 1; cursor: pointer;
+    align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0; align-self: center;
+    font-family: monospace; padding: 0;
+  }
+  body.edit-mode .cred-delete-btn { display: flex; }
+  .cred-delete-btn:hover { background: rgba(220,80,80,0.1); border-color: rgba(220,80,80,0.6); color: rgba(220,80,80,0.9); }
+
+  .add-credential-btn {
+    display: none;
+    margin-top: 16px;
+    background: transparent;
+    border: 1px dashed rgba(200,169,110,0.25);
+    border-radius: 50px; padding: 8px 20px; cursor: pointer;
+    font-family: 'Montserrat'; font-size: 9px; font-weight: 400;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(200,169,110,0.5);
+    transition: all 0.25s;
+    align-items: center; gap: 8px;
+  }
+  body.edit-mode .add-credential-btn { display: flex; }
+  .add-credential-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.04); }
+
+  /* Add credential modal */
+  .cred-modal-bg {
+    position: fixed; inset: 0; z-index: 700;
+    background: rgba(13,13,13,0.88); backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .cred-modal-bg.open { opacity: 1; pointer-events: all; }
+  .cred-modal {
+    background: #1a1a1a; border: 1px solid rgba(200,169,110,0.28);
+    border-radius: 12px; padding: 36px; width: 90%; max-width: 480px;
+    transform: translateY(20px); transition: transform 0.3s;
+  }
+  .cred-modal-bg.open .cred-modal { transform: translateY(0); }
+  .cred-modal-eyebrow { font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; display: block; }
+  .cred-modal-heading { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: var(--cream); margin-bottom: 24px; }
+  .cred-field-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+  .cred-field-label { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); }
+  .cred-field-input {
+    width: 100%; background: #111; border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 8px; padding: 10px 14px; color: var(--cream);
+    font-family: 'Montserrat'; font-size: 12px; font-weight: 300;
+    outline: none; transition: border-color 0.3s;
+  }
+  .cred-field-input:focus { border-color: var(--gold); }
+  .cred-field-input::placeholder { color: rgba(154,144,135,0.4); }
+  .cred-modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+  .cred-btn-add { flex: 1; background: var(--gold); color: var(--ink); border: none; border-radius: 50px; padding: 12px; font-family: 'Montserrat'; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+  .cred-btn-add:hover { background: var(--gold-light); }
+  .cred-btn-cancel { background: transparent; color: var(--warm-grey); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 12px 20px; font-family: 'Montserrat'; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; }
+
 </style>
 </head>
 <body>
@@ -241,6 +408,31 @@
 <div class="edit-banner">
   <span>✏️ Edit Mode Active</span>
   <span class="banner-hint">Tap any image or highlighted text to edit</span>
+</div>
+
+
+<!-- Add Credential Modal -->
+<div class="cred-modal-bg" id="credModal">
+  <div class="cred-modal">
+    <span class="cred-modal-eyebrow">Career Highlights</span>
+    <div class="cred-modal-heading">Add New Entry</div>
+    <div class="cred-field-group">
+      <label class="cred-field-label">Year</label>
+      <input type="text" id="credYear" class="cred-field-input" placeholder="e.g. 2023, 2019–2022, Present">
+    </div>
+    <div class="cred-field-group">
+      <label class="cred-field-label">Title / Organisation</label>
+      <input type="text" id="credTitle" class="cred-field-input" placeholder="e.g. Le Cordon Bleu, Paris">
+    </div>
+    <div class="cred-field-group">
+      <label class="cred-field-label">Description</label>
+      <input type="text" id="credSub" class="cred-field-input" placeholder="e.g. Advanced patisserie & chocolate artistry">
+    </div>
+    <div class="cred-modal-btns">
+      <button class="cred-btn-add" onclick="addCredential()">Add Entry</button>
+      <button class="cred-btn-cancel" onclick="closeCredModal()">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <!-- TEXT MODAL -->
@@ -335,32 +527,43 @@
     <div class="about-right">
       <p class="about-bio" data-editable="about-bio">A teacher and trade-qualified chef whose culinary knowledge is built on a foundation of sound French techniques and traditions. With experience spanning bistro, four- and five-star hotels, Michelin-starred and hatted restaurants, James brings rare depth to both the kitchen and the classroom. Holding a Bachelor of Adult Education (Honours) from UTS, he currently serves as Trainer and Assessor at Le Culinaire Hospitality Institute — and runs his own chocolate and supply business, James Collins Trading.</p>
       <span class="credentials-title">Career Highlights</span>
-      <div class="credentials-list">
+      <div class="credentials-list" id="credentialsList">
         <div class="credential-item">
-          <span class="cred-year">Present</span>
+          <span class="cred-year" data-editable="cred-1-year">Present</span>
           <span class="cred-text"><strong data-editable="cred-1-title">Le Culinaire Hospitality Institute</strong><span data-editable="cred-1-sub">Trainer & Assessor — Cookery & Hospitality</span></span>
+          <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
         </div>
         <div class="credential-item">
-          <span class="cred-year">2010+</span>
+          <span class="cred-year" data-editable="cred-2-year">2010+</span>
           <span class="cred-text"><strong data-editable="cred-2-title">James Collins Trading</strong><span data-editable="cred-2-sub">Chef consultant, supplier & chocolate specialist</span></span>
+          <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
         </div>
         <div class="credential-item">
-          <span class="cred-year">2010</span>
+          <span class="cred-year" data-editable="cred-3-year">2010</span>
           <span class="cred-text"><strong data-editable="cred-3-title">Thornton's, Dublin — Michelin Star</strong><span data-editable="cred-3-sub">Work placement, industry currency & research</span></span>
+          <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
         </div>
         <div class="credential-item">
-          <span class="cred-year">2010</span>
+          <span class="cred-year" data-editable="cred-4-year">2010</span>
           <span class="cred-text"><strong data-editable="cred-4-title">Savour Chocolate School, Melbourne</strong><span data-editable="cred-4-sub">Meilleur Ouvrier de France chocolate masterclass</span></span>
+          <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
         </div>
         <div class="credential-item">
-          <span class="cred-year">2009</span>
+          <span class="cred-year" data-editable="cred-5-year">2009</span>
           <span class="cred-text"><strong data-editable="cred-5-title">Best Student Overall — Ryde TAFE</strong><span data-editable="cred-5-sub">Certificate IV Commercial Cookery award</span></span>
+          <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
         </div>
         <div class="credential-item">
-          <span class="cred-year">2008</span>
+          <span class="cred-year" data-editable="cred-6-year">2008</span>
           <span class="cred-text"><strong data-editable="cred-6-title">University of Technology, Sydney</strong><span data-editable="cred-6-sub">Bachelor of Adult Education (Honours)</span></span>
+          <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
         </div>
       </div>
+      <!-- Add entry button — only visible in edit mode -->
+      <button class="add-credential-btn" id="addCredentialBtn" onclick="openAddCredential()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Entry
+      </button>
     </div>
   </div>
 </section>
@@ -588,24 +791,36 @@
   <p class="footer-copy" data-editable="footer-copy">© 2026 James Collins · All rights reserved</p>
 </footer>
 
-<!-- Background opacity control panel -->
-<div class="bg-opacity-panel" id="bgOpacityPanel">
-  <div class="bg-panel-title">Hero Background Image</div>
-  <div class="bg-opacity-label">
-    <span>Visibility</span>
-    <span class="bg-opacity-value" id="opacityDisplay">18%</span>
+<!-- Background opacity bar -->
+<div class="bg-opacity-bar" id="bgOpacityBar">
+  <div class="bg-bar-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(200,169,110,0.7)" stroke-width="1.5">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5" fill="rgba(200,169,110,0.7)" stroke="none"/>
+      <polyline points="21 15 16 10 5 21" stroke="rgba(200,169,110,0.7)"/>
+    </svg>
+    <span class="bg-bar-label">Background</span>
   </div>
-  <div class="opacity-slider-wrap">
-    <input type="range" class="opacity-slider" id="opacitySlider"
-      min="0" max="100" value="18" oninput="updateBgOpacity(this.value)">
-  </div>
-  <div class="opacity-presets">
-    <button class="opacity-preset active" onclick="setOpacity(10)">Subtle</button>
-    <button class="opacity-preset" onclick="setOpacity(25)">Light</button>
-    <button class="opacity-preset" onclick="setOpacity(45)">Medium</button>
-    <button class="opacity-preset" onclick="setOpacity(70)">Strong</button>
+  <div class="bg-bar-sep"></div>
+  <button class="bg-bar-change-btn" onclick="openHeroImgPicker()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="11" height="11"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Change Image
+  </button>
+  <div class="bg-bar-sep"></div>
+  <input type="range" class="opacity-slider" id="opacitySlider"
+    min="0" max="100" value="18" oninput="updateBgOpacity(this.value)">
+  <span class="bg-bar-value" id="opacityDisplay">18%</span>
+  <div class="bg-bar-sep2"></div>
+  <div class="bg-bar-presets">
+    <button class="bg-bar-preset active" onclick="setOpacity(10)">Subtle</button>
+    <button class="bg-bar-preset" onclick="setOpacity(25)">Light</button>
+    <button class="bg-bar-preset" onclick="setOpacity(45)">Medium</button>
+    <button class="bg-bar-preset" onclick="setOpacity(70)">Strong</button>
   </div>
 </div>
+
+<!-- Hidden hero image file input -->
+<input type="file" id="heroImgInput" accept="image/*" style="display:none" onchange="applyHeroImage(event)">
 
 <!-- Edit FAB -->
 <button class="edit-fab" id="editFab" onclick="toggleEditMode()">
@@ -790,6 +1005,107 @@ function savePageAsFile() {
 }
 
 
+
+
+// ── CREDENTIAL TIMELINE ──
+let credCounter = 7; // starts after existing 6
+
+function openAddCredential() {
+  document.getElementById('credYear').value = '';
+  document.getElementById('credTitle').value = '';
+  document.getElementById('credSub').value = '';
+  document.getElementById('credModal').classList.add('open');
+  setTimeout(() => document.getElementById('credYear').focus(), 300);
+}
+
+function closeCredModal() {
+  document.getElementById('credModal').classList.remove('open');
+}
+
+function addCredential() {
+  const year  = document.getElementById('credYear').value.trim();
+  const title = document.getElementById('credTitle').value.trim();
+  const sub   = document.getElementById('credSub').value.trim();
+  if (!year || !title) { showToast('Please fill in Year and Title'); return; }
+
+  const n = credCounter++;
+  const item = document.createElement('div');
+  item.className = 'credential-item';
+  item.innerHTML = `
+    <span class="cred-year" data-editable="cred-${n}-year">${year}</span>
+    <span class="cred-text">
+      <strong data-editable="cred-${n}-title">${title}</strong>
+      <span data-editable="cred-${n}-sub">${sub || ''}</span>
+    </span>
+    <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove entry">×</button>
+  `;
+
+  // Wire up the new editable elements
+  item.querySelectorAll('[data-editable]').forEach(el => {
+    el.addEventListener('click', function(e) {
+      if (!editMode) return;
+      e.stopPropagation();
+      openTextModal(this);
+    });
+  });
+
+  document.getElementById('credentialsList').appendChild(item);
+  closeCredModal();
+  showToast('✓ Entry added');
+}
+
+function deleteCredential(btn) {
+  if (!editMode) return;
+  const item = btn.closest('.credential-item');
+  if (document.querySelectorAll('.credential-item').length <= 1) {
+    showToast('Keep at least one entry');
+    return;
+  }
+  item.style.opacity = '0';
+  item.style.transform = 'translateX(-10px)';
+  item.style.transition = 'all 0.3s';
+  setTimeout(() => item.remove(), 300);
+  showToast('Entry removed');
+}
+
+// Close cred modal on bg click
+document.getElementById('credModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('credModal')) closeCredModal();
+});
+// Enter key in cred fields
+['credYear','credTitle','credSub'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') addCredential();
+    if (e.key === 'Escape') closeCredModal();
+  });
+});
+
+
+// ── HERO IMAGE REPLACE ──
+function openHeroImgPicker() {
+  document.getElementById('heroImgInput').click();
+}
+
+function applyHeroImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const dataUrl = ev.target.result;
+    // Apply to hero-img-accent (the visible background image div)
+    const accent = document.querySelector('.hero-img-accent');
+    if (accent) {
+      accent.style.backgroundImage = `url(${dataUrl})`;
+      // Store for download
+      window._heroImgDataUrl = dataUrl;
+    }
+    showToast('✓ Hero image updated');
+  };
+  reader.readAsDataURL(file);
+  // Reset input so same file can be re-selected
+  e.target.value = '';
+}
+
 // ── BACKGROUND OPACITY CONTROL ──
 let currentBgOpacity = 18; // default %
 
@@ -805,10 +1121,10 @@ function updateBgOpacity(val) {
   document.getElementById('opacitySlider').style.setProperty('--pct', val + '%');
   document.getElementById('opacitySlider').value = val;
   // Update preset active state
-  document.querySelectorAll('.opacity-preset').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.bg-bar-preset').forEach(btn => btn.classList.remove('active'));
   const presets = [10, 25, 45, 70];
   presets.forEach((p, i) => {
-    if (val === p) document.querySelectorAll('.opacity-preset')[i].classList.add('active');
+    if (val === p) document.querySelectorAll('.bg-bar-preset')[i].classList.add('active');
   });
 }
 
