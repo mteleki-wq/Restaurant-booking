@@ -996,39 +996,65 @@ dropZone.addEventListener('drop', e => {
 
 // ── DOWNLOAD ──
 function savePageAsFile() {
-  // Step 1: ensure edit mode is off
   const wasEditing = editMode;
-  document.body.classList.remove('edit-mode');
-  document.body.removeAttribute('class'); // clear all body classes
 
-  // Step 2: get the full current HTML
+  // ── Step 1: Bake all current image states into the DOM before serialising ──
+  // Regular images with data-img-id
+  document.querySelectorAll('img[data-img-id]').forEach(el => {
+    // src is already live — nothing to do, outerHTML will capture it
+  });
+  // Background divs with data-img-id (hero accent etc)
+  document.querySelectorAll('div[data-img-id]').forEach(el => {
+    // style.backgroundImage already set live — will be captured
+  });
+  // Placeholder images
+  document.querySelectorAll('.placeholder-card.has-image img.placeholder-img').forEach(el => {
+    // src already live
+  });
+
+  // ── Step 2: Bake hero opacity into inline style ──
+  const accent = document.querySelector('.hero-img-accent');
+  if (accent) {
+    const currentOpacity = accent.style.opacity || '0.18';
+    const currentBg = accent.style.backgroundImage || '';
+    accent.setAttribute('data-saved-style', accent.getAttribute('style') || '');
+    accent.style.opacity = currentOpacity;
+    if (currentBg) accent.style.backgroundImage = currentBg;
+  }
+
+  // ── Step 3: Turn off edit mode on body so no edit classes in output ──
+  document.body.classList.remove('edit-mode');
+
+  // ── Step 4: Serialise the full live DOM (with all replaced images) ──
   let out = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
-  // Step 3: inject a final override <style> that nukes all edit UI
-  const killCSS = `<style id="final-kill">
-.edit-fab,.export-bar,.edit-banner,.bg-opacity-bar,
-.add-credential-btn,.cred-delete-btn,.edit-overlay,
-.placeholder-edit-overlay,.text-modal-bg,.upload-modal-bg,
-.cred-modal-bg,.toast,#heroImgInput
-{ display:none!important; visibility:hidden!important; }
-[data-editable]{ outline:none!important; background:transparent!important; cursor:default!important; }
-[data-editable]:hover::after{ display:none!important; }
-.photo-card::after{ display:none!important; }
-body.edit-mode [data-editable]:hover{ background:transparent!important; outline:none!important; }
-</style>`;
-  out = out.replace('</head>', killCSS + '\n</head>');
-
-  // Step 4: remove edit-mode from body tag in the string
-  out = out.replace(/ class="edit-mode"/g, '');
-  out = out.replace(/ class="edit-mode [^"]*"/g, '');
-
-  // Step 5: restore live page if was editing
+  // ── Step 5: Restore edit mode on live page ──
   if (wasEditing) {
     document.body.classList.add('edit-mode');
     editMode = true;
   }
 
-  // Step 6: download
+  // ── Step 6: Inject kill-switch CSS to hide all edit UI in final file ──
+  const killCSS = `<style id="final-kill">
+/* Final published portfolio — all edit UI hidden */
+.edit-fab, .export-bar, .edit-banner, .bg-opacity-bar,
+.add-credential-btn, .cred-delete-btn, .edit-overlay,
+.placeholder-edit-overlay, .text-modal-bg, .upload-modal-bg,
+.cred-modal-bg, .toast, #heroImgInput,
+#uploadModal, #textModal, #credModal, #bgOpacityBar,
+#editFab, #addCredentialBtn
+{ display:none !important; }
+[data-editable]:hover::after { display:none !important; }
+.photo-card::after { display:none !important; }
+body.edit-mode [data-editable] { outline:none !important; background:transparent !important; cursor:default !important; }
+</style>`;
+  out = out.replace('</head>', killCSS + '\n</head>');
+
+  // ── Step 7: Remove edit-mode class from body tag string ──
+  out = out.replace(/<body class="edit-mode">/g, '<body>');
+  out = out.replace(/<body class="edit-mode ([^"]+)">/g, '<body class="$1">');
+
+  // ── Step 8: Download ──
   const blob = new Blob([out], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
