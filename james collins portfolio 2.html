@@ -828,7 +828,7 @@
   Edit Page
 </button>
 <div class="export-bar">
-  <button class="export-btn" onclick="savePageAsFile()">⬇ Download Updated Page</button>
+  <button class="export-btn" onclick="savePageAsFile()">⬇ Save & Download</button>
 </div>
 
 <script>
@@ -996,12 +996,75 @@ dropZone.addEventListener('drop', e => {
 
 // ── DOWNLOAD ──
 function savePageAsFile() {
-  const html = document.documentElement.outerHTML;
-  const blob = new Blob([html], { type:'text/html' });
+  // 1. Make sure edit mode is OFF visually before capturing
+  const wasEditing = editMode;
+  if (wasEditing) {
+    document.body.classList.remove('edit-mode');
+  }
+
+  // 2. Clone the full document
+  const clone = document.documentElement.cloneNode(true);
+
+  // 3. Strip all edit-only UI from the clone
+  const editOnlySelectors = [
+    '.edit-fab',
+    '.export-bar',
+    '.edit-banner',
+    '.bg-opacity-bar',
+    '.add-credential-btn',
+    '.cred-delete-btn',
+    '.edit-overlay',
+    '.placeholder-edit-overlay',
+    '#uploadModal',
+    '#textModal',
+    '#credModal',
+    '#heroImgInput',
+    '.toast',
+  ];
+  editOnlySelectors.forEach(sel => {
+    clone.querySelectorAll(sel).forEach(el => el.remove());
+  });
+
+  // 4. Remove data-editable attributes (no edit hints in final)
+  clone.querySelectorAll('[data-editable]').forEach(el => {
+    el.removeAttribute('data-editable');
+  });
+
+  // 5. Remove edit-mode class from body if present
+  clone.querySelector('body').classList.remove('edit-mode');
+
+  // 6. Remove all edit-mode CSS rules by stripping the style content
+  // that pertains to edit-mode — easier: just add an override style
+  const overrideStyle = clone.ownerDocument
+    ? clone.ownerDocument.createElement('style')
+    : document.createElement('style');
+  overrideStyle.textContent = `
+    /* Published view overrides */
+    .edit-fab, .export-bar, .edit-banner, .bg-opacity-bar,
+    .add-credential-btn, .cred-delete-btn, .edit-overlay,
+    .placeholder-edit-overlay, #uploadModal, #textModal,
+    #credModal, .toast { display: none !important; }
+    body.edit-mode [data-editable] { outline: none !important; background: transparent !important; cursor: default !important; }
+    body.edit-mode [data-editable]:hover::after { display: none !important; }
+    body.edit-mode .photo-card::after { display: none !important; }
+    body.edit-mode .photo-card img { transform: none !important; filter: none !important; }
+  `;
+  clone.querySelector('head').appendChild(overrideStyle);
+
+  // 7. Restore edit mode on live page if it was on
+  if (wasEditing) {
+    document.body.classList.add('edit-mode');
+  }
+
+  // 8. Serialize and download
+  const doctype = '<!DOCTYPE html>\n';
+  const htmlStr = doctype + clone.outerHTML;
+  const blob = new Blob([htmlStr], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'james_collins_portfolio_updated.html';
-  a.click(); showToast('⬇ Downloading…');
+  a.download = 'james_collins_portfolio_final.html';
+  a.click();
+  showToast('⬇ Downloading clean portfolio…');
 }
 
 
