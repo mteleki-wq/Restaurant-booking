@@ -1084,6 +1084,130 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
 }, { threshold:0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── BACKGROUND OPACITY CONTROL ──
+let currentBgOpacity = 18;
+
+function updateBgOpacity(val) {
+  val = parseInt(val);
+  currentBgOpacity = val;
+  const accent = document.querySelector('.hero-img-accent');
+  if (accent) accent.style.opacity = (val / 100).toFixed(2);
+  document.getElementById('opacityDisplay').textContent = val + '%';
+  document.getElementById('opacitySlider').style.setProperty('--pct', val + '%');
+  document.getElementById('opacitySlider').value = val;
+  document.querySelectorAll('.bg-bar-preset').forEach(btn => btn.classList.remove('active'));
+  [10, 25, 45, 70].forEach((p, i) => {
+    if (val === p) document.querySelectorAll('.bg-bar-preset')[i].classList.add('active');
+  });
+}
+
+function setOpacity(val) {
+  updateBgOpacity(val);
+}
+
+// Init slider on load
+window.addEventListener('DOMContentLoaded', () => {
+  const slider = document.getElementById('opacitySlider');
+  if (slider) slider.style.setProperty('--pct', currentBgOpacity + '%');
+});
+
+// ── HERO IMAGE REPLACE ──
+function openHeroImgPicker() {
+  document.getElementById('heroImgInput').click();
+}
+
+function applyHeroImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const dataUrl = ev.target.result;
+    const accent = document.querySelector('.hero-img-accent');
+    if (accent) {
+      accent.style.backgroundImage = 'url(' + dataUrl + ')';
+      window._heroImgDataUrl = dataUrl;
+    }
+    showToast('✓ Hero image updated');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+// ── CREDENTIAL TIMELINE ──
+let credCounter = 7;
+
+function openAddCredential() {
+  document.getElementById('credYear').value = '';
+  document.getElementById('credTitle').value = '';
+  document.getElementById('credSub').value = '';
+  document.getElementById('credModal').classList.add('open');
+  setTimeout(() => document.getElementById('credYear').focus(), 300);
+}
+
+function closeCredModal() {
+  document.getElementById('credModal').classList.remove('open');
+}
+
+function addCredential() {
+  const year  = document.getElementById('credYear').value.trim();
+  const title = document.getElementById('credTitle').value.trim();
+  const sub   = document.getElementById('credSub').value.trim();
+  if (!year || !title) { showToast('Please fill in Year and Title'); return; }
+  const n = credCounter++;
+  const item = document.createElement('div');
+  item.className = 'credential-item';
+  item.innerHTML = `
+    <span class="cred-year" data-editable="cred-${n}-year">${year}</span>
+    <span class="cred-text">
+      <strong data-editable="cred-${n}-title">${title}</strong>
+      <span data-editable="cred-${n}-sub">${sub || ''}</span>
+    </span>
+    <button class="cred-delete-btn" onclick="deleteCredential(this)" title="Remove">×</button>
+  `;
+  item.querySelectorAll('[data-editable]').forEach(el => {
+    el.addEventListener('click', function(e) {
+      if (!editMode) return;
+      e.stopPropagation();
+      openTextModal(this);
+    });
+  });
+  document.getElementById('credentialsList').appendChild(item);
+  closeCredModal();
+  showToast('✓ Entry added');
+}
+
+function deleteCredential(btn) {
+  if (!editMode) return;
+  const item = btn.closest('.credential-item');
+  if (document.querySelectorAll('.credential-item').length <= 1) {
+    showToast('Keep at least one entry');
+    return;
+  }
+  item.style.opacity = '0';
+  item.style.transform = 'translateX(-10px)';
+  item.style.transition = 'all 0.3s';
+  setTimeout(() => item.remove(), 300);
+  showToast('Entry removed');
+}
+
+// Close credential modal on bg click
+document.addEventListener('DOMContentLoaded', () => {
+  const cm = document.getElementById('credModal');
+  if (cm) {
+    cm.addEventListener('click', e => { if (e.target === cm) closeCredModal(); });
+    ['credYear','credTitle','credSub'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('keydown', e => {
+          if (e.key === 'Enter') addCredential();
+          if (e.key === 'Escape') closeCredModal();
+        });
+      }
+    });
+  }
+});
+
 </script>
 </body>
 </html>
