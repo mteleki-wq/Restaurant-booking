@@ -342,7 +342,14 @@ const icon = (id, size, color) =>
 // ----- State -----
 let selected = CATEGORIES[0].foods[0];
 let ddOpen = false;
-const today = new Date().toISOString().slice(0,10);
+// Format a date as YYYY-MM-DD in LOCAL time (not UTC), so it matches the user's calendar day
+function localISO(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+const today = localISO(new Date());
 let eggs = 0, greens = false, noSugar = false, energy = 3;
 
 // ----- Food Explorer -----
@@ -488,8 +495,8 @@ function renderReport() {
   const base = weekStart(new Date());
   const start = new Date(base); start.setDate(start.getDate() + weekOffset * 7);
   const end = new Date(start); end.setDate(end.getDate() + 6);
-  const startStr = start.toISOString().slice(0,10);
-  const endStr = end.toISOString().slice(0,10);
+  const startStr = localISO(start);
+  const endStr = localISO(end);
 
   document.getElementById('wkRange').textContent =
     weekOffset === 0 ? `This week · ${fmt(start)} – ${fmt(end)}` : `${fmt(start)} – ${fmt(end)}`;
@@ -523,7 +530,7 @@ function renderReport() {
   const bars = [];
   for (let i=0; i<7; i++) {
     const d = new Date(start); d.setDate(d.getDate()+i);
-    const key = d.toISOString().slice(0,10);
+    const key = localISO(d);
     bars.push({ day: DAY_NAMES[i], energy: byDay[key] ? byDay[key].energy : 0 });
   }
 
