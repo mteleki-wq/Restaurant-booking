@@ -102,6 +102,33 @@
   .entry-meals { font-weight: 300; font-size: 13.5px; color: rgba(244,241,232,0.62); }
   .empty { font-weight: 300; color: rgba(244,241,232,0.4); font-style: italic; margin-top: 8px; }
 
+  .week-nav { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; }
+  .wk-arrow { width: 40px; height: 40px; border-radius: 10px; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,106,0.3); color: var(--gold); font-size: 18px; transition: all 0.2s; }
+  .wk-arrow:hover:not(:disabled) { border-color: var(--gold); background: rgba(201,168,106,0.12); }
+  .wk-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+  .wk-range { font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; color: var(--gold-soft); }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 30px; }
+  @media (max-width: 720px) { .stat-grid { grid-template-columns: 1fr 1fr; } }
+  .stat { text-align: center; padding: 18px 10px; border: 1px solid rgba(201,168,106,0.15); border-radius: 12px; background: rgba(255,255,255,0.025); }
+  .stat-num { font-family: 'Fraunces', serif; font-size: 30px; color: var(--gold-soft); line-height: 1; }
+  .stat-num span { font-size: 15px; color: rgba(244,241,232,0.4); }
+  .stat-cap { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-top: 8px; }
+
+  .chart-label { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; display: block; }
+  .chart { display: flex; align-items: flex-end; gap: 10px; height: 130px; margin-bottom: 30px; }
+  .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+  .chart-bar-wrap { width: 100%; flex: 1; display: flex; align-items: flex-end; }
+  .chart-bar { width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--gold-soft), var(--gold)); min-height: 3px; transition: height 0.4s ease; }
+  .chart-bar.empty { background: rgba(255,255,255,0.06); }
+  .chart-day { font-size: 11px; color: rgba(244,241,232,0.5); }
+
+  .summary { border-left: 2px solid var(--gold); padding: 4px 0 4px 18px; }
+  .summary p { font-weight: 300; line-height: 1.7; color: rgba(244,241,232,0.8); font-size: 15px; }
+  .summary p + p { margin-top: 12px; }
+  .summary .lead { font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; color: var(--gold-soft); }
+  .report-empty { font-weight: 300; color: rgba(244,241,232,0.45); font-style: italic; text-align: center; padding: 20px 0; }
+
   .disclaimer { margin-top: 48px; font-size: 12px; font-weight: 300; line-height: 1.6; color: rgba(244,241,232,0.42); border-top: 1px solid rgba(201,168,106,0.15); padding-top: 20px; }
 
   .ic { width: 1em; height: 1em; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; flex-shrink: 0; }
@@ -193,6 +220,22 @@
       <span class="j-label">Past entries</span>
       <div id="entries"></div>
     </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- Weekly Report -->
+  <section>
+    <div class="section-label">Weekly Report</div>
+    <div class="section-sub">How the week is tracking, based on your journal</div>
+
+    <div class="week-nav">
+      <button class="wk-arrow" id="wkPrev">&#8592;</button>
+      <span class="wk-range" id="wkRange"></span>
+      <button class="wk-arrow" id="wkNext">&#8594;</button>
+    </div>
+
+    <div class="card" style="padding:30px" id="reportCard"></div>
   </section>
 
   <p class="disclaimer">
@@ -419,11 +462,136 @@ document.getElementById('saveBtn').onclick = () => {
   saveEntries(arr);
   eggs=0; greens=false; noSugar=false; energy=3; mealsEl.value='';
   tGreens.classList.remove('on'); tSugar.classList.remove('on');
-  renderEggs(); renderEnergy(); renderEntries();
+  renderEggs(); renderEnergy(); renderEntries(); renderReport();
 };
 
+// ----- Weekly Report -----
+let weekOffset = 0; // 0 = current week, negative = past weeks
+const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+// Monday-start week containing a given date
+function weekStart(d) {
+  const x = new Date(d);
+  const day = (x.getDay() + 6) % 7; // Mon=0 ... Sun=6
+  x.setDate(x.getDate() - day);
+  x.setHours(0,0,0,0);
+  return x;
+}
+function fmt(d) {
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+function renderReport() {
+  const all = loadEntries();
+
+  // Determine the earliest logged week to bound back-navigation
+  const base = weekStart(new Date());
+  const start = new Date(base); start.setDate(start.getDate() + weekOffset * 7);
+  const end = new Date(start); end.setDate(end.getDate() + 6);
+  const startStr = start.toISOString().slice(0,10);
+  const endStr = end.toISOString().slice(0,10);
+
+  document.getElementById('wkRange').textContent =
+    weekOffset === 0 ? `This week · ${fmt(start)} – ${fmt(end)}` : `${fmt(start)} – ${fmt(end)}`;
+
+  // Disable "next" on current week; disable "prev" if no older entries exist
+  document.getElementById('wkNext').disabled = weekOffset >= 0;
+  const oldest = all.length ? all.reduce((m,e)=> e.date < m ? e.date : m, all[0].date) : startStr;
+  document.getElementById('wkPrev').disabled = oldest >= startStr;
+
+  // Keep only the latest entry per day within this week
+  const inWeek = all.filter(e => e.date >= startStr && e.date <= endStr);
+  const byDay = {};
+  inWeek.forEach(e => { if (!byDay[e.date]) byDay[e.date] = e; }); // entries are newest-first
+
+  const card = document.getElementById('reportCard');
+  const days = Object.values(byDay);
+
+  if (!days.length) {
+    card.innerHTML = '<p class="report-empty">No entries logged for this week yet.</p>';
+    return;
+  }
+
+  // Stats
+  const logged = days.length;
+  const totalEggs = days.reduce((s,e)=> s + (e.eggs||0), 0);
+  const greensDays = days.filter(e=>e.greens).length;
+  const lowCarbDays = days.filter(e=>e.noSugar).length;
+  const avgEnergy = (days.reduce((s,e)=> s + (e.energy||0), 0) / logged);
+
+  // Build 7-day chart array (Mon..Sun)
+  const bars = [];
+  for (let i=0; i<7; i++) {
+    const d = new Date(start); d.setDate(d.getDate()+i);
+    const key = d.toISOString().slice(0,10);
+    bars.push({ day: DAY_NAMES[i], energy: byDay[key] ? byDay[key].energy : 0 });
+  }
+
+  const statHtml = `
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num">${logged}<span>/7</span></div><div class="stat-cap">Days logged</div></div>
+      <div class="stat"><div class="stat-num">${lowCarbDays}<span>/${logged}</span></div><div class="stat-cap">Low-carb days</div></div>
+      <div class="stat"><div class="stat-num">${greensDays}<span>/${logged}</span></div><div class="stat-cap">Greens days</div></div>
+      <div class="stat"><div class="stat-num">${avgEnergy.toFixed(1)}<span>/5</span></div><div class="stat-cap">Avg energy</div></div>
+    </div>`;
+
+  const chartHtml = `
+    <span class="chart-label">Energy through the week</span>
+    <div class="chart">
+      ${bars.map(b => `
+        <div class="chart-col">
+          <div class="chart-bar-wrap">
+            <div class="chart-bar ${b.energy?'':'empty'}" style="height:${b.energy? (b.energy/5*100):4}%"></div>
+          </div>
+          <div class="chart-day">${b.day}</div>
+        </div>`).join('')}
+    </div>`;
+
+  card.innerHTML = statHtml + chartHtml + `<div class="summary">${buildSummary({logged, totalEggs, greensDays, lowCarbDays, avgEnergy, bars})}</div>`;
+}
+
+// Plain-language, non-diagnostic coaching summary based only on logged data
+function buildSummary(s) {
+  const lines = [];
+
+  // Lead — consistency
+  if (s.logged >= 6) lines.push(`<p class="lead">A strong, consistent week — you logged ${s.logged} of 7 days.</p>`);
+  else if (s.logged >= 3) lines.push(`<p class="lead">A solid start — you logged ${s.logged} of 7 days this week.</p>`);
+  else lines.push(`<p class="lead">You logged ${s.logged} day${s.logged>1?'s':''} this week — a little more data will make these insights sharper.</p>`);
+
+  // Habit adherence
+  const habitBits = [];
+  if (s.lowCarbDays) habitBits.push(`kept it low-carb on ${s.lowCarbDays} of your ${s.logged} logged day${s.logged>1?'s':''}`);
+  if (s.greensDays) habitBits.push(`ate leafy greens on ${s.greensDays}`);
+  if (habitBits.length) lines.push(`<p>You ${habitBits.join(' and ')}. ${s.lowCarbDays === s.logged && s.logged>=3 ? 'That consistency is exactly what makes a low-carb approach sustainable.' : 'Steady repetition matters more than any single perfect day.'}</p>`);
+
+  // Eggs note
+  if (s.totalEggs) lines.push(`<p>Across the week you logged ${s.totalEggs} eggs — a reliable source of choline and complete protein.</p>`);
+
+  // Energy trend (compare first half vs second half of logged days)
+  const loggedBars = s.bars.filter(b => b.energy > 0);
+  if (loggedBars.length >= 2) {
+    const mid = Math.floor(loggedBars.length / 2);
+    const firstAvg = loggedBars.slice(0, mid).reduce((a,b)=>a+b.energy,0) / mid;
+    const secondAvg = loggedBars.slice(mid).reduce((a,b)=>a+b.energy,0) / (loggedBars.length - mid);
+    let trend;
+    if (secondAvg - firstAvg >= 0.6) trend = `Your energy trended <strong style="color:var(--gold-soft);font-weight:500">upward</strong> as the week went on`;
+    else if (firstAvg - secondAvg >= 0.6) trend = `Your energy dipped a little toward the end of the week — if you're early in the transition, that's often electrolytes, not effort`;
+    else trend = `Your energy stayed fairly steady, averaging ${s.avgEnergy.toFixed(1)} out of 5`;
+    lines.push(`<p>${trend}.</p>`);
+  }
+
+  // Gentle forward-looking nudge
+  if (s.logged < 7) lines.push(`<p style="color:rgba(244,241,232,0.55)">Logging the remaining days would give next week's report a fuller picture.</p>`);
+
+  return lines.join('');
+}
+
+document.getElementById('wkPrev').onclick = () => { weekOffset--; renderReport(); };
+document.getElementById('wkNext').onclick = () => { if (weekOffset < 0) { weekOffset++; renderReport(); } };
+
 // ----- Init -----
-renderDetail(); renderMenu(); renderEggs(); renderEnergy(); renderEntries();
+renderDetail(); renderMenu(); renderEggs(); renderEnergy(); renderEntries(); renderReport();
 </script>
 </body>
 </html>
