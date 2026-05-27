@@ -32,6 +32,11 @@
       drop-shadow(0 0 14px rgba(255,255,255,.85))
       drop-shadow(0 0 24px rgba(255,255,255,.55)); }
 
+  /* Product image frames (editable: click in Edit mode to upload a photo) */
+  .ytc-img-frame{ height:16rem; padding:0; overflow:hidden; }
+  .ytc-product-img{ width:100%; height:100%; object-fit:cover; border-radius:0.75rem; display:block; }
+  body.editing .ytc-product-img{ cursor:pointer; }
+
   /* Hero overlay gradient */
   .hero-overlay {
     background: linear-gradient(105deg, rgba(15,39,66,.92) 0%, rgba(15,39,66,.62) 45%, rgba(15,39,66,.15) 100%);
@@ -285,9 +290,9 @@
           <div class="px-6 pb-8 pt-2">
             <!-- product header + device image -->
             <div class="grid md:grid-cols-2 gap-6 items-center">
-              <div class="rounded-2xl bg-gradient-to-br from-white/10 to-white/0 border border-white/10 flex items-center justify-center p-10 order-2 md:order-1">
+              <div class="ytc-img-frame rounded-2xl bg-gradient-to-br from-white/10 to-white/0 border border-white/10 flex items-center justify-center order-2 md:order-1">
                 <!-- Replace with <img> of the RX-10 device -->
-                <span class="text-slate-400 text-sm text-center">RX-10 (4G) device image<br>placeholder</span>
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMzgwIiB2aWV3Qm94PSIwIDAgNjAwIDM4MCI+CiAgPHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIzODAiIGZpbGw9IiMxYjMyNTIiLz4KICA8ZyBmaWxsPSJub25lIiBzdHJva2U9IiM1YjdkYTYiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cmVjdCB4PSIyMTAiIHk9IjEyMCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxMzAiIHJ4PSIxMCIvPgogICAgPGNpcmNsZSBjeD0iMjU1IiBjeT0iMTY1IiByPSIxNiIvPgogICAgPHBhdGggZD0iTTIyNSAyNDUgbDQ1IC01MCAzNSAzNSA0MCAtNDUgNDUgNjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogIDwvZz4KICA8dGV4dCB4PSIzMDAiIHk9IjMwMCIgZmlsbD0iIzdjOTNiMyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5SWC0xMCAoNEcpIGRldmljZTwvdGV4dD4KICA8dGV4dCB4PSIzMDAiIHk9IjMzMCIgZmlsbD0iIzViN2RhNiIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DbGljayBpbiBFZGl0IG1vZGUgdG8gYWRkIGEgcGhvdG88L3RleHQ+Cjwvc3ZnPg==" alt="RX-10 (4G) device" class="ytc-product-img" />
               </div>
               <div class="order-1 md:order-2">
                 <h3 class="font-display font-extrabold text-2xl text-white">RX-10 (4G) Vehicle Tracking</h3>
@@ -362,8 +367,8 @@
         <div class="acc-panel">
           <div class="px-6 pb-8 pt-2">
             <div class="grid md:grid-cols-2 gap-6 items-center">
-              <div class="rounded-2xl bg-gradient-to-br from-white/10 to-white/0 border border-white/10 flex items-center justify-center p-10 order-2 md:order-1">
-                <span class="text-slate-400 text-sm text-center">Fleet dashboard image<br>placeholder</span>
+              <div class="ytc-img-frame rounded-2xl bg-gradient-to-br from-white/10 to-white/0 border border-white/10 flex items-center justify-center order-2 md:order-1">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMzgwIiB2aWV3Qm94PSIwIDAgNjAwIDM4MCI+CiAgPHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIzODAiIGZpbGw9IiMxYjMyNTIiLz4KICA8ZyBmaWxsPSJub25lIiBzdHJva2U9IiM1YjdkYTYiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cmVjdCB4PSIyMTAiIHk9IjEyMCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxMzAiIHJ4PSIxMCIvPgogICAgPGNpcmNsZSBjeD0iMjU1IiBjeT0iMTY1IiByPSIxNiIvPgogICAgPHBhdGggZD0iTTIyNSAyNDUgbDQ1IC01MCAzNSAzNSA0MCAtNDUgNDUgNjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogIDwvZz4KICA8dGV4dCB4PSIzMDAiIHk9IjMwMCIgZmlsbD0iIzdjOTNiMyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5GbGVldCBkYXNoYm9hcmQ8L3RleHQ+CiAgPHRleHQgeD0iMzAwIiB5PSIzMzAiIGZpbGw9IiM1YjdkYTYiIGZvbnQtZmFtaWx5PSJNYW5yb3BlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Q2xpY2sgaW4gRWRpdCBtb2RlIHRvIGFkZCBhIHBob3RvPC90ZXh0Pgo8L3N2Zz4=" alt="Fleet dashboard" class="ytc-product-img" />
               </div>
               <div class="order-1 md:order-2">
                 <h3 class="font-display font-extrabold text-2xl text-white">Whole-of-fleet visibility</h3>
@@ -413,8 +418,8 @@
         <div class="acc-panel">
           <div class="px-6 pb-8 pt-2">
             <div class="grid md:grid-cols-2 gap-6 items-center">
-              <div class="rounded-2xl bg-gradient-to-br from-white/10 to-white/0 border border-white/10 flex items-center justify-center p-10 order-2 md:order-1">
-                <span class="text-slate-400 text-sm text-center">Asset tracker image<br>placeholder</span>
+              <div class="ytc-img-frame rounded-2xl bg-gradient-to-br from-white/10 to-white/0 border border-white/10 flex items-center justify-center order-2 md:order-1">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMzgwIiB2aWV3Qm94PSIwIDAgNjAwIDM4MCI+CiAgPHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIzODAiIGZpbGw9IiMxYjMyNTIiLz4KICA8ZyBmaWxsPSJub25lIiBzdHJva2U9IiM1YjdkYTYiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cmVjdCB4PSIyMTAiIHk9IjEyMCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxMzAiIHJ4PSIxMCIvPgogICAgPGNpcmNsZSBjeD0iMjU1IiBjeT0iMTY1IiByPSIxNiIvPgogICAgPHBhdGggZD0iTTIyNSAyNDUgbDQ1IC01MCAzNSAzNSA0MCAtNDUgNDUgNjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogIDwvZz4KICA8dGV4dCB4PSIzMDAiIHk9IjMwMCIgZmlsbD0iIzdjOTNiMyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Bc3NldCB0cmFja2VyPC90ZXh0PgogIDx0ZXh0IHg9IjMwMCIgeT0iMzMwIiBmaWxsPSIjNWI3ZGE2IiBmb250LWZhbWlseT0iTWFucm9wZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNsaWNrIGluIEVkaXQgbW9kZSB0byBhZGQgYSBwaG90bzwvdGV4dD4KPC9zdmc+" alt="Asset tracker" class="ytc-product-img" />
               </div>
               <div class="order-1 md:order-2">
                 <h3 class="font-display font-extrabold text-2xl text-white">Protect high-value equipment</h3>
