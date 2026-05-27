@@ -599,6 +599,210 @@
     alert('AI assistant placeholder — replace this button with your Chatbase / Intercom / Voiceflow embed script.');
   });
 </script>
+<!-- ============================================================= -->
+<!-- ✏️  IN-BROWSER EDITOR  (remove this whole block to disable)    -->
+<!-- Lets you edit text, replace images + logo, then download the   -->
+<!-- updated page as a clean HTML file ready to publish.            -->
+<!-- ============================================================= -->
+<style id="editorStyles">
+  /* Toolbar */
+  #edToolbar{position:fixed;left:14px;bottom:14px;z-index:9999;
+    display:flex;gap:8px;align-items:center;background:#0f2742;color:#fff;
+    padding:8px 10px;border-radius:9999px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+    font-family:'Manrope',sans-serif;font-size:14px}
+  #edToolbar button{border:0;cursor:pointer;font-weight:700;border-radius:9999px;
+    padding:8px 16px;font-size:14px;font-family:inherit;transition:transform .15s ease,background .15s ease}
+  #edToolbar button:hover{transform:translateY(-1px)}
+  .ed-primary{background:#fbbf24;color:#0f2742}
+  .ed-ghost{background:rgba(255,255,255,.12);color:#fff}
+  .ed-green{background:#16a34a;color:#fff}
+  #edStatus{font-size:12px;opacity:.85;padding:0 6px;min-width:90px;text-align:center}
+
+  /* Editing affordances (only while body.editing) */
+  body.editing [data-ed-text]{outline:2px dashed rgba(37,99,168,.55);outline-offset:3px;
+    border-radius:4px;cursor:text;transition:outline-color .15s ease}
+  body.editing [data-ed-text]:hover{outline-color:#2563a8}
+  body.editing [data-ed-text]:focus{outline:2px solid #2563a8;background:rgba(37,99,168,.06)}
+
+  body.editing [data-ed-img]{cursor:pointer;position:relative}
+  body.editing [data-ed-img]:hover{outline:3px solid #fbbf24;outline-offset:2px}
+  /* "change image" hint badge */
+  body.editing [data-ed-img]::after{content:"📷 Replace";position:absolute;top:8px;left:8px;
+    background:rgba(15,39,66,.9);color:#fff;font:600 12px 'Manrope',sans-serif;
+    padding:4px 10px;border-radius:9999px;pointer-events:none;white-space:nowrap}
+
+  /* logo wrapper gets same treatment */
+  body.editing .ed-logo-wrap{cursor:pointer;outline:2px dashed rgba(124,58,158,.6);
+    outline-offset:4px;border-radius:6px}
+  body.editing .ed-logo-wrap:hover{outline:2px solid #7c3a9e}
+
+  #edToast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
+    background:#16a34a;color:#fff;padding:12px 22px;border-radius:9999px;font:600 14px 'Manrope',sans-serif;
+    z-index:9999;opacity:0;transition:opacity .3s ease,transform .3s ease;pointer-events:none}
+  #edToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media print{#edToolbar,#edToast{display:none!important}}
+</style>
+
+<!-- Toolbar -->
+<div id="edToolbar">
+  <button id="edToggle" class="ed-primary">✏️ Edit</button>
+  <span id="edStatus">View mode</span>
+  <button id="edLogoBtn" class="ed-ghost" style="display:none">🛰️ Logo</button>
+  <button id="edDownload" class="ed-green" style="display:none">⬇️ Download</button>
+</div>
+<div id="edToast"></div>
+
+<!-- hidden file inputs -->
+<input type="file" id="edImgInput" accept="image/*" style="display:none" />
+<input type="file" id="edLogoInput" accept="image/*" style="display:none" />
+
+<script id="editorScript">
+(function(){
+  "use strict";
+
+  /* ---------- 1. MARK EDITABLE ELEMENTS ---------- */
+  // Text-bearing tags we allow inline editing on.
+  const TEXT_TAGS = ['H1','H2','H3','H4','P','SPAN','LI','A','BUTTON'];
+  // Never make these (or their contents) editable — they are editor UI / structural.
+  function isEditorUI(el){
+    return el.closest('#edToolbar, #edToast, #editorScript, #editorStyles') !== null;
+  }
+  // A text element qualifies if it has direct text and no block children worth editing separately.
+  function markText(){
+    document.querySelectorAll(TEXT_TAGS.join(',')).forEach(el=>{
+      if(isEditorUI(el)) return;
+      if(el.querySelector(TEXT_TAGS.join(','))) return; // has nested editable -> skip parent
+      const txt = el.textContent.trim();
+      if(!txt) return;
+      el.setAttribute('data-ed-text','');
+    });
+  }
+  // Images: every <img> except inside editor UI. Also the SVG logo gets a wrapper.
+  function markImages(){
+    document.querySelectorAll('img').forEach(img=>{
+      if(isEditorUI(img)) return;
+      img.setAttribute('data-ed-img','');
+    });
+  }
+
+  markText();
+  markImages();
+
+  /* ---------- 2. STATE + TOOLBAR ---------- */
+  const body = document.body;
+  const toggle = document.getElementById('edToggle');
+  const status = document.getElementById('edStatus');
+  const logoBtn = document.getElementById('edLogoBtn');
+  const dlBtn = document.getElementById('edDownload');
+  let editing = false;
+
+  function setEditing(on){
+    editing = on;
+    body.classList.toggle('editing', on);
+    document.querySelectorAll('[data-ed-text]').forEach(el=>{
+      if(on){ el.setAttribute('contenteditable','true'); }
+      else { el.setAttribute('contenteditable','false'); }
+    });
+    toggle.textContent = on ? '✅ Done' : '✏️ Edit';
+    toggle.classList.toggle('ed-primary', !on);
+    toggle.classList.toggle('ed-ghost', on);
+    status.textContent = on ? 'Editing — click text or images' : 'View mode';
+    logoBtn.style.display = on ? '' : 'none';
+    dlBtn.style.display = on ? '' : 'none';
+  }
+  toggle.addEventListener('click', ()=> setEditing(!editing));
+
+  /* ---------- 3. IMAGE REPLACEMENT ---------- */
+  const imgInput = document.getElementById('edImgInput');
+  const logoInput = document.getElementById('edLogoInput');
+  let targetImg = null;
+
+  document.addEventListener('click', function(e){
+    if(!editing) return;
+    const img = e.target.closest('[data-ed-img]');
+    if(img){ e.preventDefault(); targetImg = img; imgInput.click(); }
+  });
+
+  imgInput.addEventListener('change', function(){
+    const file = this.files[0]; if(!file || !targetImg) return;
+    const r = new FileReader();
+    r.onload = ()=>{ targetImg.src = r.result; toast('Image replaced'); };
+    r.readAsDataURL(file);
+    this.value = '';
+  });
+
+  /* ---------- 4. LOGO REPLACEMENT ---------- */
+  // The header logo is an inline SVG. Wrap it so we can swap the whole thing for an <img>.
+  const logoLink = document.querySelector('header a[href="#top"]');
+  logoBtn.addEventListener('click', ()=> logoInput.click());
+  logoInput.addEventListener('change', function(){
+    const file = this.files[0]; if(!file) return;
+    const r = new FileReader();
+    r.onload = ()=>{
+      // Replace the svg (or existing logo img) with the uploaded image, keep the wordmark text.
+      const svg = logoLink.querySelector('svg, img.ed-logo-img');
+      if(svg){
+        const newImg = document.createElement('img');
+        newImg.src = r.result;
+        newImg.className = 'ed-logo-img';
+        newImg.style.height = '46px';
+        newImg.style.width = 'auto';
+        newImg.setAttribute('data-ed-img','');
+        svg.replaceWith(newImg);
+        toast('Logo replaced');
+      }
+    };
+    r.readAsDataURL(file);
+    this.value = '';
+  });
+
+  /* ---------- 5. DOWNLOAD CLEAN COPY ---------- */
+  dlBtn.addEventListener('click', function(){
+    // turn editing off so contenteditable=false is captured
+    const wasEditing = editing;
+    setEditing(false);
+
+    // clone the live document
+    const clone = document.documentElement.cloneNode(true);
+
+    // remove the editor's own bits from the clone
+    clone.querySelectorAll('#edToolbar,#edToast,#edImgInput,#edLogoInput,#editorStyles,#editorScript').forEach(n=>n.remove());
+    // also remove the comment wrapper markers are fine to leave; strip edit attributes
+    clone.querySelectorAll('[data-ed-text]').forEach(el=>{ el.removeAttribute('data-ed-text'); el.removeAttribute('contenteditable'); });
+    clone.querySelectorAll('[data-ed-img]').forEach(el=> el.removeAttribute('data-ed-img'));
+    clone.classList.remove('editing');
+    const b = clone.querySelector('body'); if(b) b.classList.remove('editing');
+
+    const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'youtrac-complete.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+
+    if(wasEditing) setEditing(true);
+    toast('Downloaded! Upload it to GitHub to publish.');
+  });
+
+  /* ---------- 6. TOAST ---------- */
+  let toastTimer;
+  function toast(msg){
+    const t = document.getElementById('edToast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> t.classList.remove('show'), 2600);
+  }
+
+  /* ---------- 7. WARN BEFORE LEAVING WITH UNSAVED EDITS ---------- */
+  let dirty = false;
+  document.addEventListener('input', ()=>{ if(editing) dirty = true; });
+  imgInput.addEventListener('change', ()=> dirty = true);
+  logoInput.addEventListener('change', ()=> dirty = true);
+  dlBtn.addEventListener('click', ()=> dirty = false);
+  window.addEventListener('beforeunload', (e)=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
+})();
+</script>
+
 </body>
 </html>
-
