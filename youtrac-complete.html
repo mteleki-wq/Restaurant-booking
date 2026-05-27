@@ -608,11 +608,32 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 
-  /* ---- AI button placeholder action ---- */
-  document.getElementById('aiChatBtn').addEventListener('click', () => {
-    alert('AI assistant placeholder — replace this button with your Chatbase / Intercom / Voiceflow embed script.');
-  });
+<!-- ============================================================= -->
+<!-- AI AGENT: clicking the "Ask AI" button opens the Jotform agent -->
+<!-- in a floating chat. Kept in its own script so it always runs.  -->
+<!-- ============================================================= -->
+<script>
+  (function(){
+    var AGENT_SRC = 'https://cdn.jotfor.ms/agent/embedjs/019e69a62cf1796095c9ed384663bc5741ce/embed.js?autoOpenChatIn=1';
+    var loaded = false;
+    var btn = document.getElementById('aiChatBtn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      if(!loaded){
+        var s = document.createElement('script');
+        s.src = AGENT_SRC;
+        s.async = true;
+        document.body.appendChild(s);
+        loaded = true;
+        return;
+      }
+      // already loaded: try to re-open the agent's own launcher if it's collapsed
+      var launcher = document.querySelector('[id*="JotformAgent"] button, .ai-agent-bubble, iframe[src*="agent"]');
+      if(launcher && launcher.click) launcher.click();
+    });
+  })();
 </script>
 <!-- ============================================================= -->
 <!-- ✏️  IN-BROWSER EDITOR  (remove this whole block to disable)    -->
