@@ -17,13 +17,15 @@
   body { font-family: 'Manrope', sans-serif; }
   h1,h2,h3,.font-display { font-family: 'Sora', sans-serif; }
 
-  /* Enlarged logo shifted left; overflows the navbar DOWNWARD onto the hero.
-     No negative top margin -> the full logo is always visible (never clipped). */
-  .ytc-logo{ margin-left:-22px; position:relative; z-index:60; align-self:start; }
-  @media(min-width:640px){ .ytc-logo{ margin-left:-48px; } }
-  /* 125px logo. Only a negative BOTTOM margin so it spills down over the hero
-     without being cut off at the top and without growing the navbar upward. */
+  /* Enlarged logo shifted further left; overflows the navbar DOWNWARD onto the
+     hero. No negative top margin -> the full logo is always visible (never clipped). */
+  .ytc-logo{ margin-left:-30px; position:relative; z-index:60; align-self:start;
+    gap:0 !important; }
+  @media(min-width:640px){ .ytc-logo{ margin-left:-60px; } }
+  /* 125px logo. Negative BOTTOM margin = spills down over the hero (not clipped at top).
+     Right margin pushes the wordmark clear so the logo never overlaps the title. */
   .ytc-logo-mark{ width:125px; height:125px; margin-top:0; margin-bottom:-55px;
+    margin-right:28px;
     /* white glow so the logo stays visible where it overlaps the dark hero image */
     filter:
       drop-shadow(0 0 6px rgba(255,255,255,.95))
