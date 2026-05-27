@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Quiet Pantry — Low-Carb Progress Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --green: #1f3a2e;
+    --green-deep: #14271e;
+    --charcoal: #1a1a18;
+    --gold: #c9a86a;
+    --gold-soft: #e4d2a8;
+    --cream: #f4f1e8;
+    --paper: #fbfaf5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(201,168,106,0.10), transparent 60%),
+      linear-gradient(160deg, var(--green-deep) 0%, var(--charcoal) 100%);
+    color: var(--cream);
+    min-height: 100vh;
+    padding: clamp(20px, 5vw, 64px);
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+
+  .eyebrow { font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 14px; }
+  .title { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(34px, 6vw, 58px); line-height: 1.02; margin-bottom: 12px; color: var(--paper); letter-spacing: -0.01em; }
+  .title em { font-style: italic; color: var(--gold-soft); }
+  .lede { max-width: 540px; color: rgba(244,241,232,0.62); font-weight: 300; font-size: 15px; line-height: 1.6; }
+  .rule { height: 1px; margin: 40px 0; background: linear-gradient(90deg, transparent, rgba(201,168,106,0.4), transparent); }
+
+  .section-label { font-family: 'Fraunces', serif; font-style: italic; font-size: 24px; color: var(--paper); margin-bottom: 4px; }
+  .section-sub { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+
+  .card { background: rgba(255,255,255,0.035); border: 1px solid rgba(201,168,106,0.18); border-radius: 18px; backdrop-filter: blur(6px); }
+
+  .dd { position: relative; margin-bottom: 18px; }
+  .dd-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; cursor: pointer; color: var(--cream); background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,106,0.25); border-radius: 14px; font-family: 'Outfit', sans-serif; font-size: 15px; transition: border-color 0.25s, background 0.25s; }
+  .dd-btn:hover { border-color: var(--gold); background: rgba(255,255,255,0.07); }
+  .dd-btn .label { display: flex; gap: 10px; align-items: center; }
+  .dd-btn .chev { transition: transform 0.3s; color: var(--gold); }
+  .dd-btn.open .chev { transform: rotate(180deg); }
+  .dd-menu { position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 20; background: #1b3127; border: 1px solid rgba(201,168,106,0.3); border-radius: 14px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.5); display: none; }
+  .dd-menu.open { display: block; }
+  .dd-group { padding: 10px 20px 4px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+  .dd-item { padding: 11px 20px; cursor: pointer; font-size: 14.5px; color: rgba(244,241,232,0.85); display: flex; align-items: center; gap: 10px; transition: background 0.18s, color 0.18s; }
+  .dd-item:hover { background: rgba(201,168,106,0.14); color: var(--paper); }
+  .dd-item.active { color: var(--gold-soft); }
+
+  .detail { padding: 30px; }
+  .detail-head { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+  .detail-icon { width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px; display: grid; place-items: center; color: var(--green-deep); background: linear-gradient(145deg, var(--gold-soft), var(--gold)); }
+  .detail-name { font-family: 'Fraunces', serif; font-size: 26px; color: var(--paper); }
+  .detail-tag { font-size: 12px; letter-spacing: 0.1em; color: var(--gold); text-transform: uppercase; }
+  .detail-benefit { color: rgba(244,241,232,0.82); line-height: 1.65; font-weight: 300; margin: 16px 0; }
+  .detail-note { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: rgba(244,241,232,0.6); border-left: 2px solid var(--gold); padding-left: 14px; font-weight: 300; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .swap-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(201,168,106,0.12); font-weight: 300; }
+  .swap-row:last-child { border-bottom: none; }
+  .swap-from { color: rgba(244,241,232,0.5); text-decoration: line-through; flex: 1; }
+  .swap-to { color: var(--gold-soft); flex: 1; }
+  .swap-arrow { color: var(--gold); }
+
+  .booster { padding: 26px; }
+  .booster-head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+  .booster-head h4 { font-family: 'Fraunces', serif; font-size: 19px; color: var(--paper); font-weight: 400; }
+  .booster p { font-weight: 300; line-height: 1.6; color: rgba(244,241,232,0.72); font-size: 14.5px; }
+  .pill { display: inline-block; margin-top: 12px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,106,0.4); padding: 5px 12px; border-radius: 999px; }
+
+  .j-field { margin-bottom: 20px; }
+  .j-label { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+  .egg-track { display: flex; gap: 10px; }
+  .egg-dot { width: 44px; height: 44px; border-radius: 12px; cursor: pointer; display: grid; place-items: center; border: 1px solid rgba(201,168,106,0.3); background: rgba(255,255,255,0.03); color: rgba(244,241,232,0.4); transition: all 0.2s; }
+  .egg-dot.on { background: linear-gradient(145deg, var(--gold-soft), var(--gold)); color: var(--green-deep); border-color: transparent; }
+  .toggle { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px 16px; border: 1px solid rgba(201,168,106,0.22); border-radius: 12px; background: rgba(255,255,255,0.03); transition: all 0.2s; font-weight: 300; }
+  .toggle:hover { border-color: var(--gold); }
+  .toggle .box { width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--gold); display: grid; place-items: center; color: var(--green-deep); }
+  .toggle.on .box { background: var(--gold); }
+  .toggle.on { background: rgba(201,168,106,0.1); }
+  .energy-row { display: flex; gap: 8px; }
+  .energy-bar { flex: 1; height: 36px; border-radius: 8px; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,106,0.25); transition: all 0.2s; }
+  .energy-bar.on { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); border-color: transparent; }
+  textarea { width: 100%; min-height: 84px; resize: vertical; padding: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,106,0.25); border-radius: 12px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 300; }
+  textarea:focus { outline: none; border-color: var(--gold); }
+  .save-btn { width: 100%; padding: 16px; margin-top: 4px; cursor: pointer; background: linear-gradient(145deg, var(--gold-soft), var(--gold)); color: var(--green-deep); border: none; border-radius: 12px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.05em; transition: transform 0.15s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .save-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(201,168,106,0.25); }
+
+  .entry { padding: 16px 18px; border: 1px solid rgba(201,168,106,0.15); border-radius: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.025); }
+  .entry-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; flex-wrap: wrap; }
+  .entry-date { font-family: 'Fraunces', serif; font-style: italic; color: var(--gold-soft); }
+  .entry-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; background: rgba(201,168,106,0.16); color: var(--gold-soft); }
+  .entry-meals { font-weight: 300; font-size: 13.5px; color: rgba(244,241,232,0.62); }
+  .empty { font-weight: 300; color: rgba(244,241,232,0.4); font-style: italic; margin-top: 8px; }
+
+  .disclaimer { margin-top: 48px; font-size: 12px; font-weight: 300; line-height: 1.6; color: rgba(244,241,232,0.42); border-top: 1px solid rgba(201,168,106,0.15); padding-top: 20px; }
+
+  .ic { width: 1em; height: 1em; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Low-Carb Pantry &amp; Progress</div>
+    <h1 class="title">The Quiet <em>Pantry</em></h1>
+    <p class="lede">A considered guide to nutrient-dense, low-carb whole foods — and a simple place to track how you feel as you go. Honest about what helps, quiet about what doesn't.</p>
+  </header>
+
+  <div class="rule"></div>
+
+  <!-- Food Explorer -->
+  <section>
+    <div class="section-label">Food Explorer</div>
+    <div class="section-sub">Choose a food to see what it offers</div>
+    <div class="dd">
+      <div class="dd-btn" id="ddBtn">
+        <span class="label" id="ddLabel"></span>
+        <svg class="ic chev" style="width:18px;height:18px"><use href="#i-chevron"/></svg>
+      </div>
+      <div class="dd-menu" id="ddMenu"></div>
+    </div>
+    <div class="card detail" id="detail"></div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- Swaps -->
+  <section>
+    <div class="section-label">Smart Swaps</div>
+    <div class="section-sub">Trade high-carb staples for lighter alternatives</div>
+    <div class="card" style="padding:8px 26px" id="swaps"></div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- Boosters -->
+  <section>
+    <div class="section-label">Optimizing Progress</div>
+    <div class="section-sub">Supportive habits — with honest expectations</div>
+    <div class="grid2" id="boosters"></div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- Journal -->
+  <section>
+    <div class="section-label">Daily Journal</div>
+    <div class="section-sub" id="todayLabel"></div>
+    <div class="grid2">
+      <div class="card" style="padding:26px">
+        <div class="j-field">
+          <span class="j-label">Eggs today (tap to count)</span>
+          <div class="egg-track" id="eggTrack"></div>
+        </div>
+        <div class="j-field">
+          <span class="j-label">Daily checklist</span>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="toggle" id="tGreens">
+              <span class="box"><svg class="ic" style="width:14px;height:14px"><use href="#i-check"/></svg></span>
+              <svg class="ic" style="width:16px;height:16px;color:var(--gold)"><use href="#i-leaf"/></svg> Ate leafy greens
+            </div>
+            <div class="toggle" id="tSugar">
+              <span class="box"><svg class="ic" style="width:14px;height:14px"><use href="#i-check"/></svg></span>
+              <svg class="ic" style="width:16px;height:16px;color:var(--gold)"><use href="#i-zap"/></svg> Kept it low-sugar / low-carb
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:26px">
+        <div class="j-field">
+          <span class="j-label">Energy level</span>
+          <div class="energy-row" id="energyRow"></div>
+        </div>
+        <div class="j-field">
+          <span class="j-label">Meals &amp; notes</span>
+          <textarea id="meals" placeholder="What did you eat today?"></textarea>
+        </div>
+        <button class="save-btn" id="saveBtn">
+          <svg class="ic" style="width:15px;height:15px"><use href="#i-note"/></svg> Save Entry
+        </button>
+      </div>
+    </div>
+    <div style="margin-top:24px">
+      <span class="j-label">Past entries</span>
+      <div id="entries"></div>
+    </div>
+  </section>
+
+  <p class="disclaimer">
+    This app is for general educational purposes and is not medical or nutritional advice. Individual needs vary — especially if you're pregnant, managing diabetes, taking medication, or have a history of disordered eating. Please consult a qualified healthcare professional before making significant dietary changes. Journal entries are saved to this browser only.
+  </p>
+</div>
+
+<!-- icon defs -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <g id="i-chevron"><polyline points="6 9 12 15 18 9"/></g>
+    <g id="i-check"><polyline points="20 6 9 17 4 12"/></g>
+    <g id="i-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></g>
+    <g id="i-refresh"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></g>
+    <g id="i-leaf"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></g>
+    <g id="i-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></g>
+    <g id="i-note"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></g>
+    <g id="i-egg"><path d="M12 22c4 0 7-2.5 7-7 0-4.5-3-13-7-13S5 10.5 5 15c0 4.5 3 7 7 7z"/></g>
+    <g id="i-beef"><circle cx="12.5" cy="8.5" r="5.5"/><path d="M5 14a8 8 0 0 0 14 0"/></g>
+    <g id="i-fish"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6s-7.56-2.53-8.5-6Z"/><path d="M18 12v.5"/><path d="M2 12s2-2 4 0-2 2-4 0"/></g>
+    <g id="i-sprout"><path d="M7 20h10"/><path d="M12 20c0-7 0-9 0-12"/><path d="M12 11C12 7 9 5 5 5c0 4 3 6 7 6z"/><path d="M12 9c0-3 2-5 5-5 0 3-2 5-5 5z"/></g>
+    <g id="i-droplet"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></g>
+    <g id="i-nut"><path d="M12 4 4 8v8l8 4 8-4V8z"/></g>
+    <g id="i-flask"><path d="M9 3h6"/><path d="M10 3v6l-5 9a1 1 0 0 0 1 1.5h12a1 1 0 0 0 1-1.5l-5-9V3"/></g>
+    <g id="i-sparkles"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/></g>
+    <g id="i-salad"><path d="M7 21h10"/><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9z"/><path d="M11.38 12a2.4 2.4 0 0 1-2.4-2.4c0-1.3 1.07-2.4 2.4-2.4a4.8 4.8 0 0 0 4.8-4.8c1.33 0 2.4 1.07 2.4 2.4a4.8 4.8 0 0 1-4.8 4.8"/></g>
+    <g id="i-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></g>
+  </defs>
+</svg>
+
+<script>
+const CATEGORIES = [
+  { group: "Proteins", foods: [
+    { name:"Red Meat", icon:"i-beef", tag:"Grass-fed beef, lamb, liver",
+      benefit:"A dense source of iron, vitamin B12, zinc and CLA. Grass-fed cuts tend to carry a more favorable fatty-acid profile than grain-finished.",
+      note:"Liver is especially nutrient-rich, but moderate it if you're watching vitamin A intake." },
+    { name:"Eggs", icon:"i-egg", tag:"Whole eggs, 2–4 daily",
+      benefit:"Among the best dietary sources of choline, which supports liver function and brain health. Also a complete, highly absorbable protein.",
+      note:"Eat the yolk — most of the choline and fat-soluble vitamins live there." },
+    { name:"Oily Fish", icon:"i-fish", tag:"Wild salmon, sardines, mackerel",
+      benefit:"Rich in long-chain omega-3 fatty acids (EPA/DHA) linked to lower inflammation and cardiovascular support. Sardines add calcium and vitamin D.",
+      note:"Aim for 2–3 servings per week." },
+  ]},
+  { group: "Vegetables", foods: [
+    { name:"Arugula", icon:"i-leaf", tag:"Peppery leafy green",
+      benefit:"Naturally high in dietary nitrates, which the body converts to nitric oxide to support blood flow. Also delivers folate, vitamin K and magnesium.",
+      note:"Low in carbs and calories — generous portions are fine." },
+    { name:"Cruciferous Veg", icon:"i-sprout", tag:"Broccoli, cauliflower, cabbage",
+      benefit:"Contains fiber and sulforaphane-forming compounds studied for supporting the body's detoxification pathways. Filling without spiking blood sugar.",
+      note:"These do contain carbs — but they're slow, fiber-rich carbs that fit a low-carb plan." },
+    { name:"Fermented Veg", icon:"i-flask", tag:"Sauerkraut, kimchi",
+      benefit:"Live cultures support gut microbiome diversity. Helpful if you experience bloating or gas while transitioning to a lower-carb diet.",
+      note:"Choose unpasteurized, refrigerated versions for live cultures." },
+    { name:"Mushrooms", icon:"i-sprout", tag:"Cremini, shiitake, portobello",
+      benefit:"Low-carb, savory and rich in B vitamins, selenium and beta-glucans. Add umami depth without sugar.",
+      note:"Sun-exposed mushrooms can be a modest vitamin D source." },
+  ]},
+  { group: "Healthy Fats", foods: [
+    { name:"Butter & Dairy", icon:"i-droplet", tag:"Grass-fed butter, full-fat dairy",
+      benefit:"Grass-fed butter supplies vitamin A and K2 alongside healthy saturated fat for satiety. Full-fat dairy keeps you fuller longer.",
+      note:"Skip if dairy-sensitive; ghee is a clarified, lactose-free alternative." },
+    { name:"Avocado & Olive Oil", icon:"i-droplet", tag:"Monounsaturated fats",
+      benefit:"Extra-virgin olive oil and avocado are rich in monounsaturated fats and polyphenols associated with anti-inflammatory effects and heart health.",
+      note:"Use olive oil cold or at low heat to preserve its compounds." },
+    { name:"Nuts", icon:"i-nut", tag:"Almonds, macadamia, walnuts",
+      benefit:"Provide fiber, magnesium and healthy fats. Walnuts add plant omega-3s; macadamias are lowest in carbs.",
+      note:"Portion-aware: a small handful, not the whole bag." },
+  ]},
+  { group: "Flavor & Support", foods: [
+    { name:"Chia Seeds", icon:"i-sprout", tag:"2 tablespoons daily",
+      benefit:"Exceptionally high in soluble fiber, which helps keep digestion regular during a low-carb transition. Also a plant source of omega-3s.",
+      note:"Soak in water or stir into yogurt; drink plenty of fluids alongside." },
+    { name:"Herbs & Spices", icon:"i-leaf", tag:"Turmeric, ginger, garlic, pepper",
+      benefit:"Zero-impact flavor that makes a low-carb diet sustainable. Many carry antioxidant and anti-inflammatory compounds of their own.",
+      note:"Pair turmeric with black pepper to aid absorption." },
+  ]},
+];
+
+const SWAPS = [
+  { from:"Potatoes", to:"Mashed cauliflower" },
+  { from:"White rice", to:"Riced cauliflower" },
+  { from:"Pasta", to:"Zucchini or shirataki noodles" },
+  { from:"Bread crumbs", to:"Ground pork rinds or almond flour" },
+];
+
+const BOOSTERS = [
+  { icon:"i-moon", title:"Apple Cider Vinegar",
+    text:"One tablespoon diluted in a large glass of water may slightly blunt post-meal blood-sugar spikes. It won't accelerate ketosis or fat loss — and always dilute it: undiluted vinegar at night can worsen reflux and erode tooth enamel.",
+    pill:"Optional · diluted only" },
+  { icon:"i-sprout", title:"Chia for Digestion",
+    text:"Two tablespoons of chia seeds add roughly 10g of fiber to help keep digestion regular while you transition to lower-carb eating. Soak them and drink water alongside.",
+    pill:"2 tbsp daily" },
+  { icon:"i-flask", title:"Fermented Foods",
+    text:"If bloating or gas shows up during the switch, a small daily serving of sauerkraut or kimchi can support gut balance. Start small.",
+    pill:"If bloated" },
+  { icon:"i-droplet", title:"Electrolytes",
+    text:"The most common early low-carb complaint is fatigue from lost sodium and potassium. Salt your food and consider magnesium — this helps far more than vinegar.",
+    pill:"Underrated" },
+];
+
+const icon = (id, size, color) =>
+  `<svg class="ic" style="width:${size}px;height:${size}px${color?';color:'+color:''}"><use href="#${id}"/></svg>`;
+
+// ----- State -----
+let selected = CATEGORIES[0].foods[0];
+let ddOpen = false;
+const today = new Date().toISOString().slice(0,10);
+let eggs = 0, greens = false, noSugar = false, energy = 3;
+
+// ----- Food Explorer -----
+const ddBtn = document.getElementById('ddBtn');
+const ddMenu = document.getElementById('ddMenu');
+const ddLabel = document.getElementById('ddLabel');
+const detail = document.getElementById('detail');
+
+function renderDetail() {
+  detail.innerHTML = `
+    <div class="detail-head">
+      <div class="detail-icon">${icon(selected.icon, 26)}</div>
+      <div>
+        <div class="detail-name">${selected.name}</div>
+        <div class="detail-tag">${selected.tag}</div>
+      </div>
+    </div>
+    <p class="detail-benefit">${selected.benefit}</p>
+    <div class="detail-note">${icon('i-info',16,'var(--gold)')}<span>${selected.note}</span></div>`;
+  ddLabel.innerHTML = `${icon(selected.icon,18,'var(--gold)')}${selected.name}`;
+}
+
+function renderMenu() {
+  ddMenu.innerHTML = CATEGORIES.map(cat =>
+    `<div class="dd-group">${cat.group}</div>` +
+    cat.foods.map(f =>
+      `<div class="dd-item${f.name===selected.name?' active':''}" data-name="${f.name}">${icon(f.icon,15)}${f.name}</div>`
+    ).join('')
+  ).join('');
+  ddMenu.querySelectorAll('.dd-item').forEach(el => {
+    el.onclick = () => {
+      const name = el.dataset.name;
+      CATEGORIES.forEach(c => c.foods.forEach(f => { if (f.name===name) selected = f; }));
+      ddOpen = false; ddMenu.classList.remove('open'); ddBtn.classList.remove('open');
+      renderDetail(); renderMenu();
+    };
+  });
+}
+
+ddBtn.onclick = () => {
+  ddOpen = !ddOpen;
+  ddMenu.classList.toggle('open', ddOpen);
+  ddBtn.classList.toggle('open', ddOpen);
+};
+document.addEventListener('click', e => {
+  if (!e.target.closest('.dd')) { ddOpen=false; ddMenu.classList.remove('open'); ddBtn.classList.remove('open'); }
+});
+
+// ----- Swaps -----
+document.getElementById('swaps').innerHTML = SWAPS.map(s =>
+  `<div class="swap-row"><span class="swap-from">${s.from}</span>${icon('i-refresh',16)}<span class="swap-to">${s.to}</span></div>`
+).join('');
+
+// ----- Boosters -----
+document.getElementById('boosters').innerHTML = BOOSTERS.map(b =>
+  `<div class="card booster">
+     <div class="booster-head">${icon(b.icon,20,'var(--gold)')}<h4>${b.title}</h4></div>
+     <p>${b.text}</p><span class="pill">${b.pill}</span>
+   </div>`
+).join('');
+
+// ----- Journal -----
+document.getElementById('todayLabel').textContent = today;
+const eggTrack = document.getElementById('eggTrack');
+const energyRow = document.getElementById('energyRow');
+const tGreens = document.getElementById('tGreens');
+const tSugar = document.getElementById('tSugar');
+const mealsEl = document.getElementById('meals');
+
+function renderEggs() {
+  eggTrack.innerHTML = [1,2,3,4].map(n =>
+    `<div class="egg-dot${eggs>=n?' on':''}" data-n="${n}">${icon('i-egg',20)}</div>`).join('');
+  eggTrack.querySelectorAll('.egg-dot').forEach(el => {
+    el.onclick = () => { const n=+el.dataset.n; eggs = (eggs===n)? n-1 : n; renderEggs(); };
+  });
+}
+function renderEnergy() {
+  energyRow.innerHTML = [1,2,3,4,5].map(n =>
+    `<div class="energy-bar${energy>=n?' on':''}" data-n="${n}"></div>`).join('');
+  energyRow.querySelectorAll('.energy-bar').forEach(el => {
+    el.onclick = () => { energy = +el.dataset.n; renderEnergy(); };
+  });
+}
+tGreens.onclick = () => { greens=!greens; tGreens.classList.toggle('on',greens); };
+tSugar.onclick = () => { noSugar=!noSugar; tSugar.classList.toggle('on',noSugar); };
+
+function loadEntries() {
+  try { return JSON.parse(localStorage.getItem('quietPantryEntries')||'[]'); }
+  catch { return []; }
+}
+function saveEntries(arr) {
+  try { localStorage.setItem('quietPantryEntries', JSON.stringify(arr)); } catch(e){}
+}
+function renderEntries() {
+  const arr = loadEntries();
+  const box = document.getElementById('entries');
+  if (!arr.length) { box.innerHTML = '<p class="empty">No entries yet — save your first above.</p>'; return; }
+  box.innerHTML = arr.map(e =>
+    `<div class="entry">
+       <div class="entry-top">
+         <span class="entry-date">${e.date}</span>
+         <div class="entry-badges">
+           <span class="badge">${e.eggs} eggs</span>
+           ${e.greens?'<span class="badge">greens</span>':''}
+           ${e.noSugar?'<span class="badge">low-carb</span>':''}
+           <span class="badge">energy ${e.energy}/5</span>
+         </div>
+       </div>
+       ${e.meals?`<div class="entry-meals">${e.meals.replace(/</g,'&lt;')}</div>`:''}
+     </div>`
+  ).join('');
+}
+
+document.getElementById('saveBtn').onclick = () => {
+  const arr = loadEntries();
+  arr.unshift({ date: today, eggs, greens, noSugar, energy, meals: mealsEl.value, id: Date.now() });
+  saveEntries(arr);
+  eggs=0; greens=false; noSugar=false; energy=3; mealsEl.value='';
+  tGreens.classList.remove('on'); tSugar.classList.remove('on');
+  renderEggs(); renderEnergy(); renderEntries();
+};
+
+// ----- Init -----
+renderDetail(); renderMenu(); renderEggs(); renderEnergy(); renderEntries();
+</script>
+</body>
+</html>
