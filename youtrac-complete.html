@@ -478,18 +478,36 @@
       <h3 class="font-display font-bold text-xl mb-4">Information Pack Request</h3>
 
       <!-- ============================================================
-           JOTFORM EMBED GOES HERE
-           Replace everything inside this container with the embed code
-           from your Jotform dashboard (Publish → Embed → iFrame/Script).
-           Example iframe:
-           <iframe src="https://form.jotform.com/YOUR_FORM_ID"
-                   style="width:100%;height:640px;border:none;"></iframe>
+           JOTFORM FORM
+           Easiest: in Edit mode, paste your Jotform link (e.g.
+           https://form.jotform.com/XXXXXXXXXXXXX) in the box and click
+           "Load form". The form appears below and is saved when you Download.
+           (Advanced: you can also hard-code the src on the iframe directly.)
       ============================================================ -->
-      <div id="jotform-container"
+
+      <!-- URL loader: only visible while editing -->
+      <div id="jf-loader" data-ed-skip class="hidden mb-4">
+        <label class="block text-sm font-semibold text-slate-600 mb-1">Jotform link</label>
+        <div class="flex gap-2">
+          <input id="jf-url" type="url" inputmode="url" placeholder="https://form.jotform.com/2425..."
+                 class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:outline-none focus:border-brand-blue" />
+          <button id="jf-load" type="button"
+                  class="rounded-lg bg-brand-blue text-white text-sm font-bold px-4 py-2 hover:bg-brand-navy transition">Load form</button>
+        </div>
+        <p class="text-xs text-slate-400 mt-1">Paste the public form link from Jotform → Publish → Copy Link.</p>
+      </div>
+
+      <!-- The form itself. Empty src until you add a link. -->
+      <iframe id="jf-frame" title="Information Pack Request form" src="https://form.jotform.com/80568375184870"
+              class="w-full rounded-2xl border border-slate-200"
+              style="height:640px;display:block;" allow="geolocation; microphone; camera"></iframe>
+
+      <!-- Friendly placeholder shown when no form link is set yet -->
+      <div id="jf-empty" style="display:none"
            class="min-h-[420px] rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-col items-center justify-center text-center p-8 text-slate-400">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="mb-3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
-        <p class="font-semibold text-slate-500">Jotform embed placeholder</p>
-        <p class="text-sm mt-1">Paste your Jotform iframe / script here.</p>
+        <p class="font-semibold text-slate-500">No form linked yet</p>
+        <p class="text-sm mt-1">Click <strong>Edit</strong>, then paste your Jotform link above.</p>
       </div>
     </div>
 
@@ -662,7 +680,7 @@
   const TEXT_TAGS = ['H1','H2','H3','H4','P','SPAN','LI','A','BUTTON'];
   // Never make these (or their contents) editable — they are editor UI / structural.
   function isEditorUI(el){
-    return el.closest('#edToolbar, #edToast, #editorScript, #editorStyles') !== null;
+    return el.closest('#edToolbar, #edToast, #editorScript, #editorStyles, [data-ed-skip]') !== null;
   }
   // A text element qualifies if it has direct text and no block children worth editing separately.
   function markText(){
@@ -706,6 +724,8 @@
     status.textContent = on ? 'Editing — click text or images' : 'View mode';
     logoBtn.style.display = on ? '' : 'none';
     dlBtn.style.display = on ? '' : 'none';
+    const jfLoader = document.getElementById('jf-loader');
+    if(jfLoader) jfLoader.classList.toggle('hidden', !on);
   }
   toggle.addEventListener('click', ()=> setEditing(!editing));
 
@@ -753,6 +773,52 @@
     this.value = '';
   });
 
+  /* ---------- 4b. JOTFORM LINK LOADER ---------- */
+  const jfFrame = document.getElementById('jf-frame');
+  const jfEmpty = document.getElementById('jf-empty');
+  const jfUrl   = document.getElementById('jf-url');
+  const jfLoad  = document.getElementById('jf-load');
+
+  // Accepts a full URL or just a form ID; returns a clean embeddable URL or null.
+  function normalizeJotform(input){
+    let v = (input || '').trim();
+    if(!v) return null;
+    // bare numeric form id -> build the standard form URL
+    if(/^\d{8,}$/.test(v)) return 'https://form.jotform.com/' + v;
+    // add protocol if missing
+    if(!/^https?:\/\//i.test(v)) v = 'https://' + v;
+    // only allow jotform domains for safety
+    try{
+      const u = new URL(v);
+      if(!/jotform\.(com|co|us|eu)$/i.test(u.hostname) && !/\.jotform\./i.test(u.hostname)) {
+        // still allow it, but it must at least look like a url
+      }
+      return u.href;
+    }catch(e){ return null; }
+  }
+
+  function showForm(src){
+    if(!src) return;
+    jfFrame.src = src;
+    jfFrame.setAttribute('src', src);   // ensure attribute (not just property) for download
+    jfFrame.style.display = 'block';
+    if(jfEmpty) jfEmpty.style.display = 'none';
+  }
+
+  if(jfLoad){
+    jfLoad.addEventListener('click', ()=>{
+      const src = normalizeJotform(jfUrl.value);
+      if(!src){ toast('Please paste a valid Jotform link'); return; }
+      showForm(src);
+      dirty = true;
+      toast('Form loaded — Download to save it');
+    });
+    // pressing Enter in the field also loads
+    jfUrl.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); jfLoad.click(); } });
+  }
+  // If a src was already saved into the iframe (e.g. in a downloaded file), show it.
+  if(jfFrame && jfFrame.getAttribute('src')){ showForm(jfFrame.getAttribute('src')); }
+
   /* ---------- 5. DOWNLOAD CLEAN COPY ---------- */
   dlBtn.addEventListener('click', function(){
     // turn editing off so contenteditable=false is captured
@@ -764,6 +830,23 @@
 
     // remove the editor's own bits from the clone
     clone.querySelectorAll('#edToolbar,#edToast,#edImgInput,#edLogoInput,#editorStyles,#editorScript').forEach(n=>n.remove());
+    // remove the edit-only Jotform URL loader from the published copy
+    clone.querySelectorAll('[data-ed-skip]').forEach(n=>n.remove());
+    // make sure the live iframe src is written into the clone, and drop the
+    // "no form linked" placeholder if a form has actually been loaded
+    (function(){
+      const liveFrame = document.getElementById('jf-frame');
+      const cloneFrame = clone.querySelector('#jf-frame');
+      const cloneEmpty = clone.querySelector('#jf-empty');
+      if(liveFrame && cloneFrame){
+        const src = liveFrame.getAttribute('src') || '';
+        if(src){
+          cloneFrame.setAttribute('src', src);
+          cloneFrame.style.display = 'block';
+          if(cloneEmpty) cloneEmpty.remove();
+        }
+      }
+    })();
     // also remove the comment wrapper markers are fine to leave; strip edit attributes
     clone.querySelectorAll('[data-ed-text]').forEach(el=>{ el.removeAttribute('data-ed-text'); el.removeAttribute('contenteditable'); });
     clone.querySelectorAll('[data-ed-img]').forEach(el=> el.removeAttribute('data-ed-img'));
