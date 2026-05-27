@@ -17,10 +17,12 @@
   body { font-family: 'Manrope', sans-serif; }
   h1,h2,h3,.font-display { font-family: 'Sora', sans-serif; }
 
-  /* Enlarged logo (2x) shifted left; allowed to overflow the navbar */
-  .ytc-logo{ margin-left:-10px; }
-  @media(min-width:640px){ .ytc-logo{ margin-left:-18px; } }
-  .ytc-logo-mark{ width:96px; height:96px; margin-top:-22px; margin-bottom:-22px; }
+  /* Enlarged logo shifted left; allowed to overflow the navbar onto the hero */
+  .ytc-logo{ margin-left:-18px; position:relative; z-index:60; }
+  @media(min-width:640px){ .ytc-logo{ margin-left:-40px; } }
+  /* 125px = ~30% bigger than 96px. Negative top/bottom keeps navbar height fixed
+     while the mark spills downward onto the hero image without shifting layout. */
+  .ytc-logo-mark{ width:125px; height:125px; margin-top:-30px; margin-bottom:-46px; }
 
   /* Hero overlay gradient */
   .hero-overlay {
@@ -806,4 +808,3 @@
 
 </body>
 </html>
-µ
