@@ -129,6 +129,64 @@
   .summary .lead { font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; color: var(--gold-soft); }
   .report-empty { font-weight: 300; color: rgba(244,241,232,0.45); font-style: italic; text-align: center; padding: 20px 0; }
 
+  .mb-goal { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 14px; border: 1px solid rgba(201,168,106,0.25); background: rgba(255,255,255,0.03); margin-bottom: 18px; }
+  .mb-goal .goal-eggs { display: flex; gap: 7px; }
+  .mb-goal .goal-egg { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; border: 1px solid rgba(201,168,106,0.3); color: rgba(244,241,232,0.35); }
+  .mb-goal .goal-egg.on { background: linear-gradient(145deg, var(--gold-soft), var(--gold)); color: var(--green-deep); border-color: transparent; }
+  .mb-goal .goal-text { font-weight: 300; font-size: 14px; color: rgba(244,241,232,0.75); }
+  .mb-goal .goal-text strong { color: var(--gold-soft); font-weight: 500; }
+
+  .mb-picker { display: flex; gap: 10px; margin-top: 4px; }
+  .mb-select { flex: 1; padding: 13px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,106,0.25); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; cursor: pointer; }
+  .mb-select:focus { outline: none; border-color: var(--gold); }
+  .mb-select optgroup { background: #1b3127; color: var(--gold); }
+  .mb-select option { background: #1b3127; color: var(--cream); }
+  .mb-add { padding: 13px 22px; border-radius: 12px; border: none; cursor: pointer; background: linear-gradient(145deg, var(--gold-soft), var(--gold)); color: var(--green-deep); font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; transition: transform 0.15s; }
+  .mb-add:hover { transform: translateY(-1px); }
+  .mb-hint { font-size: 13px; font-weight: 300; line-height: 1.55; margin-top: 14px; min-height: 20px; color: var(--gold-soft); }
+  .mb-hint:empty { display: none; }
+
+  .plate-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 0; border-bottom: 1px solid rgba(201,168,106,0.12); font-weight: 300; }
+  .plate-item:last-of-type { border-bottom: none; }
+  .plate-item .pi-name { flex: 1; font-size: 14px; }
+  .plate-item .pi-name small { color: rgba(244,241,232,0.45); }
+  .plate-item .pi-carb { font-size: 13px; color: var(--gold-soft); white-space: nowrap; }
+  .plate-item .pi-x { width: 24px; height: 24px; border-radius: 6px; border: 1px solid rgba(201,168,106,0.25); background: transparent; color: rgba(244,241,232,0.5); cursor: pointer; font-size: 14px; line-height: 1; flex-shrink: 0; }
+  .plate-item .pi-x:hover { border-color: var(--gold); color: var(--gold); }
+  .plate-empty { font-weight: 300; font-style: italic; color: rgba(244,241,232,0.4); padding: 8px 0; }
+
+  .mb-totals { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(201,168,106,0.2); display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+  .mb-totals.hidden { display: none; }
+  .tot { text-align: center; }
+  .tot-num { font-family: 'Fraunces', serif; font-size: 22px; color: var(--gold-soft); line-height: 1; }
+  .tot-cap { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-top: 5px; }
+
+  .edit-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--gold); background: rgba(20,39,30,0.85); backdrop-filter: blur(8px); color: var(--gold-soft); font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s; }
+  .edit-toggle:hover { background: var(--gold); color: var(--green-deep); }
+  .edit-toggle.editing { background: var(--gold); color: var(--green-deep); }
+
+  /* editable text affordance — only visible in edit mode */
+  body.edit-mode [data-edit] { outline: 1px dashed rgba(201,168,106,0.5); outline-offset: 3px; border-radius: 3px; cursor: text; transition: background 0.15s; }
+  body.edit-mode [data-edit]:hover { background: rgba(201,168,106,0.08); }
+  body.edit-mode [data-edit]:focus { outline: 1px solid var(--gold); background: rgba(201,168,106,0.1); }
+
+  .custom-food { display: none; }
+  body.edit-mode .custom-food { display: block; }
+  .cf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .cf-in { padding: 11px 13px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,106,0.25); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 13.5px; font-weight: 300; }
+  .cf-in:focus { outline: none; border-color: var(--gold); }
+  .cf-in::placeholder { color: rgba(244,241,232,0.4); }
+  .cf-save { grid-column: 1 / -1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; background: linear-gradient(145deg, var(--gold-soft), var(--gold)); color: var(--green-deep); font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13.5px; transition: transform 0.15s; }
+  .cf-save:hover { transform: translateY(-1px); }
+  .cf-list { margin-top: 14px; }
+  .cf-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 0; border-bottom: 1px solid rgba(201,168,106,0.12); font-weight: 300; font-size: 13.5px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row .cf-rname { flex: 1; color: var(--gold-soft); }
+  .cf-row .cf-rname small { color: rgba(244,241,232,0.45); }
+  .cf-btns { display: flex; gap: 6px; }
+  .cf-mini { width: 26px; height: 26px; border-radius: 6px; border: 1px solid rgba(201,168,106,0.25); background: transparent; color: rgba(244,241,232,0.6); cursor: pointer; font-size: 12px; }
+  .cf-mini:hover { border-color: var(--gold); color: var(--gold); }
+
   .disclaimer { margin-top: 48px; font-size: 12px; font-weight: 300; line-height: 1.6; color: rgba(244,241,232,0.42); border-top: 1px solid rgba(201,168,106,0.15); padding-top: 20px; }
 
   .ic { width: 1em; height: 1em; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; flex-shrink: 0; }
@@ -136,6 +194,7 @@
 </head>
 <body>
 <div class="wrap">
+  <button class="edit-toggle" id="editToggle">Edit</button>
   <header>
     <div class="eyebrow">Low-Carb Pantry &amp; Progress</div>
     <h1 class="title">The Quiet <em>Pantry</em></h1>
@@ -236,6 +295,46 @@
     </div>
 
     <div class="card" style="padding:30px" id="reportCard"></div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- Meal Builder -->
+  <section>
+    <div class="section-label">Meal Builder</div>
+    <div class="section-sub">Build a plate and see the net carbs add up</div>
+
+    <div class="mb-goal" id="eggGoal"></div>
+
+    <div class="grid2" style="align-items:start">
+      <div class="card" style="padding:26px">
+        <span class="j-label">Add foods to your plate</span>
+        <div class="mb-picker">
+          <select id="mbSelect" class="mb-select"></select>
+          <button class="mb-add" id="mbAdd">Add</button>
+        </div>
+        <p class="mb-hint" id="mbHint"></p>
+
+        <div class="custom-food" id="customFood">
+          <span class="j-label" style="margin-top:18px">Create your own food</span>
+          <div class="cf-grid">
+            <input id="cfName" class="cf-in" placeholder="Food name & serving" />
+            <input id="cfNet" class="cf-in" type="number" step="0.1" min="0" placeholder="Net carbs (g)" />
+            <input id="cfProtein" class="cf-in" type="number" step="0.1" min="0" placeholder="Protein (g)" />
+            <input id="cfFat" class="cf-in" type="number" step="0.1" min="0" placeholder="Fat (g)" />
+            <input id="cfCal" class="cf-in" type="number" step="1" min="0" placeholder="Calories" />
+            <button class="cf-save" id="cfSave">Add to dropdown</button>
+          </div>
+          <div id="cfList" class="cf-list"></div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:26px">
+        <span class="j-label">Your plate</span>
+        <div id="plateList"></div>
+        <div class="mb-totals" id="plateTotals"></div>
+      </div>
+    </div>
   </section>
 
   <p class="disclaimer">
@@ -370,6 +469,7 @@ function renderDetail() {
     <p class="detail-benefit">${selected.benefit}</p>
     <div class="detail-note">${icon('i-info',16,'var(--gold)')}<span>${selected.note}</span></div>`;
   ddLabel.innerHTML = `${icon(selected.icon,18,'var(--gold)')}${selected.name}`;
+  if (typeof tagEditable === 'function') { tagEditable(); applyTextEdits(); if (editing) setEditing(true); }
 }
 
 function renderMenu() {
@@ -469,7 +569,7 @@ document.getElementById('saveBtn').onclick = () => {
   saveEntries(arr);
   eggs=0; greens=false; noSugar=false; energy=3; mealsEl.value='';
   tGreens.classList.remove('on'); tSugar.classList.remove('on');
-  renderEggs(); renderEnergy(); renderEntries(); renderReport();
+  renderEggs(); renderEnergy(); renderEntries(); renderReport(); renderEggGoal();
 };
 
 // ----- Weekly Report -----
@@ -597,8 +697,274 @@ function buildSummary(s) {
 document.getElementById('wkPrev').onclick = () => { weekOffset--; renderReport(); };
 document.getElementById('wkNext').onclick = () => { if (weekOffset < 0) { weekOffset++; renderReport(); } };
 
+// ----- Meal Builder -----
+// Values are approximate, per typical serving. Net carbs = total carbs minus fiber.
+// Sources vary slightly; these are reasonable rounded figures for guidance, not lab-exact.
+const FOODS = [
+  { group:"Proteins", items:[
+    { name:"Beef (150g)", net:0, protein:38, fat:15, cal:300 },
+    { name:"Lamb (150g)", net:0, protein:36, fat:21, cal:350 },
+    { name:"Salmon, wild (150g)", net:0, protein:34, fat:13, cal:280 },
+    { name:"Sardines (1 tin)", net:0, protein:23, fat:11, cal:190 },
+    { name:"Egg (1 large)", net:0.4, protein:6, fat:5, cal:72 },
+  ]},
+  { group:"Vegetables", items:[
+    { name:"Arugula (1 cup)", net:0.4, protein:0.5, fat:0, cal:5 },
+    { name:"Mushrooms (1 cup)", net:1.6, protein:2.2, fat:0, cal:15 },
+    { name:"Broccoli (1 cup)", net:3.6, protein:2.6, fat:0, cal:31 },
+    { name:"Cauliflower (1 cup)", net:3.2, protein:2, fat:0, cal:27 },
+    { name:"Kale (1 cup)", net:1.4, protein:2.2, fat:0, cal:33 },
+    { name:"Sauerkraut (1/2 cup)", net:1.5, protein:1, fat:0, cal:14 },
+  ]},
+  { group:"Fats & Nuts", items:[
+    { name:"Avocado (1/2)", net:1.8, protein:2, fat:15, cal:160 },
+    { name:"Olive oil (1 tbsp)", net:0, protein:0, fat:14, cal:119 },
+    { name:"Grass-fed butter (1 tbsp)", net:0, protein:0, fat:12, cal:102 },
+    { name:"Macadamias (28g)", net:1.5, protein:2, fat:21, cal:200 },
+    { name:"Pecans (28g)", net:1.2, protein:2.6, fat:20, cal:196 },
+  ]},
+  { group:"Seeds & Extras", items:[
+    { name:"Chia seeds (2 tbsp)", net:2, protein:4, fat:9, cal:138 },
+    { name:"Fresh herbs (serving)", net:0, protein:0, fat:0, cal:1 },
+    { name:"Turmeric / cinnamon (1 tsp)", net:1, protein:0, fat:0, cal:6 },
+  ]},
+  { group:"Higher-carb (will suggest a swap)", items:[
+    { name:"Potato (1 medium)", net:33, protein:4, fat:0, cal:160, swap:"cauliflower or broccoli" },
+    { name:"White rice (1 cup)", net:44, protein:4, fat:0, cal:205, swap:"riced cauliflower" },
+    { name:"Pasta (1 cup)", net:40, protein:8, fat:1, cal:220, swap:"zucchini noodles" },
+    { name:"Bread (1 slice)", net:13, protein:3, fat:1, cal:80, swap:"a lettuce wrap" },
+  ]},
+];
+
+let plate = [];
+
+// Populate dropdown
+(function fillSelect(){
+  const sel = document.getElementById('mbSelect');
+  sel.innerHTML = FOODS.map(g =>
+    `<optgroup label="${g.group}">` +
+    g.items.map((it,i) => `<option value="${g.group}|${it.name}">${it.name} — ${it.net}g net</option>`).join('') +
+    `</optgroup>`
+  ).join('');
+})();
+
+function findFood(key){
+  const [grp, name] = key.split('|');
+  const g = FOODS.find(x => x.group === grp);
+  return g ? g.items.find(i => i.name === name) : null;
+}
+
+document.getElementById('mbAdd').onclick = () => {
+  const key = document.getElementById('mbSelect').value;
+  const food = findFood(key);
+  if (!food) return;
+  plate.push(food);
+  const hint = document.getElementById('mbHint');
+  if (food.swap) {
+    hint.style.color = 'var(--gold-soft)';
+    hint.innerHTML = `Heads up — ${food.name.split(' (')[0]} is higher in carbs (${food.net}g net). If you're aiming low-carb, ${food.swap} is a lighter swap. Added anyway so you can see the impact.`;
+  } else {
+    hint.style.color = 'rgba(244,241,232,0.6)';
+    hint.textContent = `Added ${food.name}.`;
+  }
+  renderPlate();
+};
+
+function renderPlate(){
+  const list = document.getElementById('plateList');
+  const totalsEl = document.getElementById('plateTotals');
+  if (!plate.length) {
+    list.innerHTML = '<p class="plate-empty">Nothing on the plate yet — add a food to start.</p>';
+    totalsEl.className = 'mb-totals hidden';
+    totalsEl.innerHTML = '';
+    return;
+  }
+  list.innerHTML = plate.map((f,idx) =>
+    `<div class="plate-item">
+       <span class="pi-name">${f.name}${f.swap?' <small>· higher carb</small>':''}</span>
+       <span class="pi-carb">${f.net}g net</span>
+       <button class="pi-x" data-i="${idx}">&times;</button>
+     </div>`).join('');
+  list.querySelectorAll('.pi-x').forEach(b => {
+    b.onclick = () => { plate.splice(+b.dataset.i, 1); renderPlate(); };
+  });
+
+  const t = plate.reduce((a,f)=>({
+    net:a.net+f.net, protein:a.protein+f.protein, fat:a.fat+f.fat, cal:a.cal+f.cal
+  }), {net:0,protein:0,fat:0,cal:0});
+
+  totalsEl.className = 'mb-totals';
+  totalsEl.innerHTML = `
+    <div class="tot"><div class="tot-num">${t.net.toFixed(1)}g</div><div class="tot-cap">Net carbs</div></div>
+    <div class="tot"><div class="tot-num">${Math.round(t.protein)}g</div><div class="tot-cap">Protein</div></div>
+    <div class="tot"><div class="tot-num">${Math.round(t.fat)}g</div><div class="tot-cap">Fat</div></div>
+    <div class="tot"><div class="tot-num">${Math.round(t.cal)}</div><div class="tot-cap">Calories</div></div>`;
+}
+
+// Daily eggs goal — reads today's logged eggs from saved entries
+function renderEggGoal(){
+  const all = loadEntries();
+  const todayEntries = all.filter(e => e.date === today);
+  const loggedEggs = todayEntries.reduce((m,e)=> Math.max(m, e.eggs||0), 0);
+  const shown = Math.max(loggedEggs, eggs); // reflect in-progress journal too
+  const el = document.getElementById('eggGoal');
+  const dots = [1,2,3,4].map(n =>
+    `<div class="goal-egg ${shown>=n?'on':''}">${icon('i-egg',16)}</div>`).join('');
+  const met = shown >= 2;
+  el.innerHTML = `
+    <div class="goal-eggs">${dots}</div>
+    <div class="goal-text">${met
+      ? `<strong>Daily eggs goal met</strong> — ${shown} logged. A solid choline and protein base.`
+      : `Daily goal: <strong>2–4 eggs</strong>. ${shown} logged so far today.`}</div>`;
+}
+
+document.getElementById('mbAdd'); // (anchor; listener set above)
+renderPlate();
+renderEggGoal();
+
+// Keep the egg goal in sync when the journal eggs change or an entry is saved
+const _origRenderEggs = renderEggs;
+renderEggs = function(){ _origRenderEggs(); renderEggGoal(); };
+
+// ----- Custom Foods (persisted) -----
+function loadCustom(){
+  try { return JSON.parse(localStorage.getItem('quietPantryCustomFoods')||'[]'); }
+  catch { return []; }
+}
+function saveCustom(arr){
+  try { localStorage.setItem('quietPantryCustomFoods', JSON.stringify(arr)); } catch(e){}
+}
+
+// Rebuild the dropdown including a "My Foods" optgroup
+function fillSelectWithCustom(){
+  const sel = document.getElementById('mbSelect');
+  const prev = sel.value;
+  let html = FOODS.map(g =>
+    `<optgroup label="${g.group}">` +
+    g.items.map(it => `<option value="${g.group}|${it.name}">${it.name} — ${it.net}g net</option>`).join('') +
+    `</optgroup>`
+  ).join('');
+  const custom = loadCustom();
+  if (custom.length) {
+    html += `<optgroup label="My Foods">` +
+      custom.map(it => `<option value="My Foods|${it.name}">${it.name} — ${it.net}g net</option>`).join('') +
+      `</optgroup>`;
+  }
+  sel.innerHTML = html;
+  if (prev) sel.value = prev;
+}
+
+// Extend findFood to also look in custom foods
+const _origFindFood = findFood;
+findFood = function(key){
+  const [grp, name] = key.split('|');
+  if (grp === 'My Foods') return loadCustom().find(i => i.name === name) || null;
+  return _origFindFood(key);
+};
+
+function renderCustomList(){
+  const box = document.getElementById('cfList');
+  const arr = loadCustom();
+  if (!arr.length) { box.innerHTML = ''; return; }
+  box.innerHTML = arr.map((f,i) =>
+    `<div class="cf-row">
+       <span class="cf-rname">${f.name} <small>· ${f.net}g net · ${f.protein||0}p / ${f.fat||0}f · ${f.cal||0} cal</small></span>
+       <span class="cf-btns">
+         <button class="cf-mini" data-edit-i="${i}" title="Edit">&#9998;</button>
+         <button class="cf-mini" data-del-i="${i}" title="Delete">&times;</button>
+       </span>
+     </div>`).join('');
+  box.querySelectorAll('[data-del-i]').forEach(b => {
+    b.onclick = () => { const a=loadCustom(); a.splice(+b.dataset.delI,1); saveCustom(a); fillSelectWithCustom(); renderCustomList(); };
+  });
+  box.querySelectorAll('[data-edit-i]').forEach(b => {
+    b.onclick = () => {
+      const a=loadCustom(); const f=a[+b.dataset.editI];
+      document.getElementById('cfName').value = f.name.replace(/^My: /,'');
+      document.getElementById('cfNet').value = f.net;
+      document.getElementById('cfProtein').value = f.protein||'';
+      document.getElementById('cfFat').value = f.fat||'';
+      document.getElementById('cfCal').value = f.cal||'';
+      a.splice(+b.dataset.editI,1); saveCustom(a); fillSelectWithCustom(); renderCustomList();
+    };
+  });
+}
+
+document.getElementById('cfSave').onclick = () => {
+  const name = document.getElementById('cfName').value.trim();
+  const net = parseFloat(document.getElementById('cfNet').value);
+  if (!name || isNaN(net)) {
+    const h = document.getElementById('mbHint');
+    h.style.color = 'var(--gold-soft)';
+    h.textContent = 'Please enter at least a food name and its net carbs.';
+    return;
+  }
+  const food = {
+    name, net,
+    protein: parseFloat(document.getElementById('cfProtein').value)||0,
+    fat: parseFloat(document.getElementById('cfFat').value)||0,
+    cal: parseFloat(document.getElementById('cfCal').value)||0,
+    custom: true
+  };
+  const arr = loadCustom(); arr.push(food); saveCustom(arr);
+  ['cfName','cfNet','cfProtein','cfFat','cfCal'].forEach(id => document.getElementById(id).value='');
+  fillSelectWithCustom(); renderCustomList();
+  const h = document.getElementById('mbHint');
+  h.style.color = 'rgba(244,241,232,0.6)';
+  h.textContent = `Added "${name}" to the dropdown.`;
+};
+
+// ----- Whole-page text editing (persisted) -----
+const EDITABLE_SELECTORS = ['.title','.lede','.eyebrow','.section-label','.section-sub','.booster-head h4','.booster p','.pill','.swap-from','.swap-to','.detail-benefit','.disclaimer','.j-label'];
+
+function tagEditable(){
+  let counter = 0;
+  EDITABLE_SELECTORS.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      if (el.hasAttribute('data-edit')) return;
+      el.setAttribute('data-edit', '');
+      el.setAttribute('data-edit-id', 'e' + (counter++) + '-' + sel.replace(/[^a-z]/gi,''));
+    });
+  });
+}
+
+function applyTextEdits(){
+  let saved;
+  try { saved = JSON.parse(localStorage.getItem('quietPantryTextEdits')||'{}'); }
+  catch { saved = {}; }
+  document.querySelectorAll('[data-edit-id]').forEach(el => {
+    const id = el.getAttribute('data-edit-id');
+    if (saved[id] !== undefined) el.innerHTML = saved[id];
+  });
+}
+
+function saveTextEdits(){
+  const saved = {};
+  document.querySelectorAll('[data-edit-id]').forEach(el => {
+    saved[el.getAttribute('data-edit-id')] = el.innerHTML;
+  });
+  try { localStorage.setItem('quietPantryTextEdits', JSON.stringify(saved)); } catch(e){}
+}
+
+let editing = false;
+function setEditing(on){
+  editing = on;
+  document.body.classList.toggle('edit-mode', on);
+  const btn = document.getElementById('editToggle');
+  btn.textContent = on ? 'Done' : 'Edit';
+  btn.classList.toggle('editing', on);
+  document.querySelectorAll('[data-edit]').forEach(el => {
+    el.contentEditable = on ? 'true' : 'false';
+  });
+  if (!on) saveTextEdits(); // persist on exit
+}
+
+document.getElementById('editToggle').onclick = () => setEditing(!editing);
+
 // ----- Init -----
 renderDetail(); renderMenu(); renderEggs(); renderEnergy(); renderEntries(); renderReport();
+fillSelectWithCustom(); renderCustomList();
+tagEditable(); applyTextEdits();
 </script>
 </body>
 </html>
