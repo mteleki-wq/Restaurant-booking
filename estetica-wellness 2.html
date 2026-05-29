@@ -891,8 +891,8 @@ footer{background:var(--ink);padding:52px 72px 32px;color:rgba(255,255,255,.32)}
 </div><!-- /site-wrap -->
 
 <div id="toast">Changes saved</div>
-
 <script>
+
 // ── PAGE NAV ──
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1113,254 +1113,280 @@ function resetAll() {
 
 // ── EXPORT ──
 function exportSite() {
-  const g = id => {
-    const el = document.getElementById(id);
-    if (!el) return '';
-    return el.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  };
   const gRaw = id => { const el = document.getElementById(id); return el ? el.value : ''; };
 
-  // Collect images
-  const heroBg   = imageStore['hero-bg']   || document.getElementById('hero-bg').style.backgroundImage.replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'');
-  const acImgs   = [1,2,3,4,5].map(n => imageStore['ac'+n+'-img'] || document.getElementById('ac'+n+'-img').style.backgroundImage.replace(/^url\(['"]?/,'').replace(/['"]?\)$/,''));
-  const wkImgs   = [1,2,3].map(n => imageStore['wk-thumb-'+n] || '');
-  const portrait = imageStore['about-portrait'] || '';
+  const heroBg  = imageStore['hero-bg']  || document.getElementById('hero-bg').style.backgroundImage.replace(/^url\(["']?/,'').replace(/["']?\)$/,'');
+  const acImgs  = [1,2,3,4,5].map(n => imageStore['ac'+n+'-img'] || document.getElementById('ac'+n+'-img').style.backgroundImage.replace(/^url\(["']?/,'').replace(/["']?\)$/,''));
+  const wkImgs  = [1,2,3].map(n => imageStore['wk-thumb-'+n] || '');
+  const pImg    = imageStore['about-portrait'] || '';
 
-  // Build workshop cards
-  const wkFallbacks = ['linear-gradient(135deg,#c8c0b0,#a09080)','linear-gradient(135deg,#b0c8b8,#809870)','linear-gradient(135deg,#b8b0c8,#887890)'];
-  const wkCards = [0,1,2].map(i => {
-    const n = i+1;
-    const cls = 'wk-thumb' + (n>1?' t'+n:'');
-    const style = wkImgs[i]
-      ? 'background-image:url("' + wkImgs[i] + '");background-size:cover;background-position:center'
-      : 'background:' + wkFallbacks[i];
-    return '<div class="wk-card"><div class="' + cls + '" style="' + style + '"></div>'
-         + '<div class="wk-body"><h4>' + gRaw('f-w'+n+'-title') + '</h4>'
-         + '<p>' + gRaw('f-w'+n+'-text') + '</p>'
-         + '<a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire \u2192</a>'
-         + '</div></div>';
-  }).join('');
+  const wkFb = ['linear-gradient(135deg,#c8c0b0,#a09080)','linear-gradient(135deg,#b0c8b8,#809870)','linear-gradient(135deg,#b8b0c8,#887890)'];
+  const acTags  = ['Individual \xb7 Face to Face or Online','Group \xb7 RTOs &amp; Vocational Education','Group \xb7 Corporate Workplace','Individual \xb7 30-Day Program','Private or Group \xb7 60\u201390 min'];
+  const acChipSets = [['60\u201390 min','1:1 Session','Face to Face or Online'],['60\u201390 min','Group Session','PD Certificate Included'],['60\u201390 min','Team Session','On-site Available'],['30-Day Program','1:1 + Plan','Personalised'],['60\u201390 min','Private or Group','Personalised Toolkit']];
 
-  // Build portrait html
-  const portraitHtml = portrait
-    ? '<div class="portrait" style="background-image:url(\'' + portrait + '\');background-size:cover;background-position:center top;"></div>'
-    : '<div class="portrait"><svg width="60" height="60" viewBox="0 0 80 80" fill="none" style="opacity:.22"><circle cx="40" cy="30" r="16" stroke="white" stroke-width="1"/><path d="M8 72C8 52 72 52 72 72" stroke="white" stroke-width="1"/></svg></div>';
+  function tag(t,cls,content,style) {
+    var s = style ? ' style="'+style+'"' : '';
+    var c = cls  ? ' class="'+cls+'"'   : '';
+    return '<'+t+c+s+'>'+content+'<\/'+t+'>';
+  }
+  function a(href,cls,txt,target) {
+    return '<a href="'+href+'" class="'+cls+'"'+(target?' target="'+target+'"':'')+'>'+txt+'<\/a>';
+  }
 
-  // Build accordion items
-  const acTags  = ['Individual \u00b7 Face to Face or Online','Group \u00b7 RTOs &amp; Vocational Education','Group \u00b7 Corporate Workplace','Individual \u00b7 30-Day Program','Private or Group \u00b7 60\u201390 min'];
-  const acChips = [['60\u201390 min','1:1 Session','Face to Face or Online'],['60\u201390 min','Group Session','PD Certificate Included'],['60\u201390 min','Team Session','On-site Available'],['30-Day Program','1:1 + Plan','Personalised'],['60\u201390 min','Private or Group','Personalised Toolkit']];
-  const acItems = [0,1,2,3,4].map(i => {
-    const n = i+1;
-    const chips = acChips[i].map(c => '<span class="chip">' + c + '</span>').join('');
-    return '<div class="ac-item" id="ac'+n+'">'
-      + '<button class="ac-trigger" onclick="toggleAc('+n+')">'
-      + '<div class="ac-left"><span class="ac-num">0'+n+'</span>'
-      + '<div class="ac-titles"><span class="ac-tag">'+acTags[i]+'</span>'
-      + '<span class="ac-title">'+gRaw('f-s'+n+'-title')+'</span></div></div>'
-      + '<div class="ac-icon">+</div></button>'
-      + '<div class="ac-body"><div class="ac-inner">'
-      + '<div class="ac-img" style="background-image:url(\''+acImgs[i]+'\');background-size:cover;background-position:center;min-height:280px;"></div>'
-      + '<div class="ac-content"><p>'+gRaw('f-s'+n+'-text')+'</p>'
-      + '<div class="ac-chips">'+chips+'</div>'
-      + '<a class="ac-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire &amp; Enrol \u2192</a>'
-      + '</div></div></div></div>';
-  }).join('');
+  // Build sections using string concat only
+  var acItems = '';
+  for (var i=0;i<5;i++) {
+    var n = i+1;
+    var chips = acChipSets[i].map(function(c){return '<span class="chip">'+c+'<\/span>';}).join('');
+    var imgSt = 'background-image:url("'+acImgs[i]+'");background-size:cover;background-position:center;min-height:280px;';
+    acItems += '<div class="ac-item" id="ac'+n+'">'
+      +'<button class="ac-trigger" onclick="toggleAc('+n+')">'
+      +'<div class="ac-left"><span class="ac-num">0'+n+'<\/span>'
+      +'<div class="ac-titles"><span class="ac-tag">'+acTags[i]+'<\/span>'
+      +'<span class="ac-title">'+gRaw('f-s'+n+'-title')+'<\/span><\/div><\/div>'
+      +'<div class="ac-icon">+<\/div><\/button>'
+      +'<div class="ac-body"><div class="ac-inner">'
+      +'<div class="ac-img" style="'+imgSt+'"><\/div>'
+      +'<div class="ac-content"><p>'+gRaw('f-s'+n+'-text')+'<\/p>'
+      +'<div class="ac-chips">'+chips+'<\/div>'
+      +'<a class="ac-enrol" href="https:\/\/www.esteticawellnessinst.com\/contact" target="_blank">Enquire &amp; Enrol \u2192<\/a>'
+      +'<\/div><\/div><\/div><\/div>';
+  }
 
-  // Build bio paragraphs
-  const bioParagraphs = ['1','2','3','4'].map(n => '<p>' + gRaw('f-bio'+n) + '</p>').join('');
+  var wkCards = '';
+  for (var j=0;j<3;j++) {
+    var wn = j+1;
+    var wcls = 'wk-thumb'+(wn>1?' t'+wn:'');
+    var wst = wkImgs[j] ? 'background-image:url("'+wkImgs[j]+'");background-size:cover;background-position:center' : 'background:'+wkFb[j];
+    wkCards += '<div class="wk-card"><div class="'+wcls+'" style="'+wst+'"><\/div>'
+      +'<div class="wk-body"><h4>'+gRaw('f-w'+wn+'-title')+'<\/h4>'
+      +'<p>'+gRaw('f-w'+wn+'-text')+'<\/p>'
+      +'<a class="wk-enrol" href="https:\/\/www.esteticawellnessinst.com\/contact" target="_blank">Enquire \u2192<\/a>'
+      +'<\/div><\/div>';
+  }
 
-  // Build testimonials
-  const testiTags = ['Nervous System Regulation','Mature Skin Workshop','Personal Makeup Lesson'];
-  const testiCards = ['1','2','3'].map((n,i) =>
-    '<div class="testi-card"><div class="testi-tag">'+testiTags[i]+'</div>'
-    + '<blockquote>'+gRaw('f-t'+n+'-quote')+'</blockquote>'
-    + '<cite>'+gRaw('f-t'+n+'-name')+'</cite></div>'
-  ).join('');
+  var bioPara = ['1','2','3','4'].map(function(n){return '<p>'+gRaw('f-bio'+n)+'<\/p>';}).join('');
 
-  const site = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Estetica \u2014 The Wellness Institute</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--ink:#1a1a1a;--cream:#f8f4ef;--warm:#fdfaf6;--mist:#e8e2da;--clay:#c49a7a;--clay-l:#ddb896;--sage:#8a9e89;--body:#3d3d3d;--light:#6b6b6b}
-body{font-family:'Jost',sans-serif;font-size:16px;line-height:1.75;color:var(--body);background:var(--warm)}
-nav{position:sticky;top:0;z-index:100;height:70px;padding:0 50px;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,246,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.06)}
-.nav-brand{cursor:pointer;line-height:1.2}.nav-brand-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.1em;color:var(--ink);display:block}.nav-brand-sub{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);font-family:'Jost',sans-serif;display:block}
-.nav-links{display:flex;list-style:none;gap:30px}.nav-links a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--light);cursor:pointer;text-decoration:none;transition:color .2s;padding-bottom:2px;border-bottom:1px solid transparent}.nav-links a:hover,.nav-links a.active{color:var(--ink);border-bottom-color:var(--clay)}
-.page{display:none}.page.active{display:block}
-.hero{height:100vh;min-height:560px;position:relative;display:flex;align-items:center;padding:0 72px;overflow:hidden}
-#hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 40%}
-#hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(16,12,8,.76) 0%,rgba(16,12,8,.44) 55%,rgba(16,12,8,.1) 100%),linear-gradient(to top,rgba(16,12,8,.44) 0%,transparent 52%)}
-.hero-content{position:relative;z-index:2;max-width:590px}
-.hero-eye{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:rgba(218,192,160,.78);margin-bottom:26px;display:flex;align-items:center;gap:15px}
-.hero-eye::before{content:'';display:block;width:38px;height:1px;background:rgba(218,192,160,.4)}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.6vw,50px);font-weight:300;line-height:1.22;color:#fff;letter-spacing:.015em}
-.hero-rule{width:42px;height:1px;background:rgba(218,192,160,.38);margin:24px 0}
-.hero p{font-size:17px;color:rgba(255,255,255,.66);font-weight:300;line-height:1.78;margin-bottom:40px}
-.btn-ghost{display:inline-block;padding:12px 34px;border:1px solid rgba(255,255,255,.52);color:#fff;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .3s;background:transparent}
-.btn-ghost:hover{background:rgba(255,255,255,.1);border-color:#fff}
-.intro{padding:88px 72px;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.intro-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:16px}
-.intro h2{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;line-height:1.3;color:var(--ink);margin-bottom:20px}
-.intro p{font-size:17px;color:var(--light);line-height:1.88;margin-bottom:26px}
-.intro-vis{aspect-ratio:4/5;background:linear-gradient(160deg,#c8b8a8,#a89080);position:relative}
-.intro-vis::after{content:'';position:absolute;bottom:-18px;right:-18px;width:100px;height:100px;border:1px solid var(--clay);opacity:.24}
-.btn-outline{display:inline-block;padding:11px 30px;background:transparent;border:1px solid var(--ink);color:var(--ink);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .3s}
-.btn-outline:hover{background:var(--ink);color:#fff}
-.pillars{background:var(--ink);padding:80px 72px}
-.pillars-hd{text-align:center;margin-bottom:52px}
-.pillars-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,154,122,.65);margin-bottom:12px}
-.pillars h2{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#fff}
-.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1060px;margin:0 auto}
-.pillar{background:rgba(255,255,255,.04);padding:40px 32px;border-top:1px solid rgba(255,255,255,.07)}
-.pillar-n{font-family:'Cormorant Garamond',serif;font-size:40px;color:rgba(196,154,122,.2);line-height:1;margin-bottom:16px}
-.pillar h3{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:400;color:#fff;margin-bottom:10px}
-.pillar p{font-size:14px;color:rgba(255,255,255,.42);line-height:1.82}
-.page-hd{padding:64px 72px 50px;border-bottom:1px solid var(--mist)}
-.eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:12px}
-.page-hd h1{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--ink);line-height:1.15}
-.accordion{border-top:1px solid var(--mist)}
-.ac-item{border-bottom:1px solid var(--mist)}
-.ac-trigger{width:100%;background:none;border:none;cursor:pointer;padding:26px 72px;display:flex;align-items:center;justify-content:space-between;gap:18px;text-align:left;transition:background .25s}
-.ac-trigger:hover{background:rgba(196,154,122,.04)}
-.ac-item.open .ac-trigger{background:rgba(196,154,122,.05)}
-.ac-left{display:flex;align-items:center;gap:24px;flex:1}
-.ac-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:rgba(196,154,122,.22);line-height:1;min-width:40px;flex-shrink:0;transition:color .3s}
-.ac-item.open .ac-num{color:var(--clay)}
-.ac-titles{display:flex;flex-direction:column;gap:3px}
-.ac-tag{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--clay)}
-.ac-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink);line-height:1.2}
-.ac-icon{width:38px;height:38px;border:1px solid var(--mist);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;font-weight:300;color:var(--light);transition:all .3s;line-height:1}
-.ac-item.open .ac-icon{background:var(--ink);border-color:var(--ink);color:#fff;transform:rotate(45deg)}
-.ac-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1)}
-.ac-item.open .ac-body{max-height:580px}
-.ac-inner{display:grid;grid-template-columns:320px 1fr;margin:0 72px 40px;border:1px solid var(--mist);overflow:hidden}
-.ac-img{background-size:cover;background-position:center;min-height:280px}
-.ac-content{padding:36px 40px;background:var(--cream);display:flex;flex-direction:column;justify-content:center}
-.ac-content p{font-size:15px;color:var(--body);line-height:1.9;margin-bottom:22px}
-.ac-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
-.chip{padding:3px 12px;border:1px solid var(--mist);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--light);border-radius:2px}
-.ac-enrol{display:inline-block;padding:11px 28px;background:var(--ink);color:#fff;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;align-self:flex-start;transition:background .25s}
-.ac-enrol:hover{background:var(--clay)}
-.wk-outer{background:var(--ink);padding:64px 72px 80px}
-.wk-hd .eye{color:rgba(196,154,122,.6)}
-.wk-hd h2{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#fff;margin-top:10px}
-.wk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:44px}
-.wk-card{background:rgba(255,255,255,.04);display:flex;flex-direction:column;overflow:hidden}
-.wk-thumb{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#c8c0b0,#a09080);background-size:cover;background-position:center}
-.wk-thumb.t2{background:linear-gradient(135deg,#b0c8b8,#809870);background-size:cover;background-position:center}
-.wk-thumb.t3{background:linear-gradient(135deg,#b8b0c8,#887890);background-size:cover;background-position:center}
-.wk-body{padding:28px;flex:1;display:flex;flex-direction:column}
-.wk-body h4{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:#fff;margin-bottom:10px;line-height:1.3}
-.wk-body p{font-size:14px;color:rgba(255,255,255,.42);line-height:1.82;margin-bottom:22px;flex:1}
-.wk-enrol{display:inline-block;padding:8px 20px;border:1px solid rgba(196,154,122,.32);color:var(--clay-l);font-family:'Jost',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;align-self:flex-start;transition:all .25s}
-.wk-enrol:hover{background:var(--clay);border-color:var(--clay);color:#fff}
-.about-wrap{padding:80px 72px;display:grid;grid-template-columns:1fr 400px;gap:80px;max-width:1260px;margin:0 auto;align-items:start}
-.about-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:12px}
-.about-wrap h1{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--ink);line-height:1.18;margin-bottom:28px}
-#about-bio p{font-size:16px;color:var(--body);line-height:1.9;margin-bottom:18px}
-.portrait-wrap{position:relative;margin-top:6px}
-.portrait{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#c4b4a4,#9a8878);background-size:cover;background-position:center top;position:relative;display:flex;align-items:center;justify-content:center}
-.portrait::before{content:'';position:absolute;top:-12px;left:-12px;right:12px;bottom:12px;border:1px solid var(--clay);opacity:.26;pointer-events:none}
-.portrait-lbl{margin-top:24px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--light)}
-.quote-strip{background:var(--cream);padding:64px 72px;text-align:center}
-.quote-strip blockquote{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;font-style:italic;color:var(--ink);max-width:740px;margin:0 auto 14px;line-height:1.45}
-.quote-by{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay)}
-.testi-wrap{padding:80px 72px}
-.testi-hd{margin-bottom:52px}
-.testi-hd h1{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--ink)}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
-.testi-card{border-top:1px solid var(--mist);padding-top:28px}
-.testi-tag{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--sage);margin-bottom:16px}
-.testi-card blockquote{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--ink);line-height:1.65;margin-bottom:18px}
-.testi-card cite{font-style:normal;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--clay)}
-.contact-wrap{padding:80px 72px;display:grid;grid-template-columns:1fr 440px;gap:80px;max-width:1260px;margin:0 auto}
-.contact-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:12px}
-.contact-wrap h1{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--ink);margin-bottom:24px;line-height:1.2}
-.contact-wrap>div>p{font-size:16px;color:var(--light);line-height:1.85;margin-bottom:40px}
-.cd{display:flex;flex-direction:column;gap:16px}.cd-row{display:flex;gap:14px}
-.cd-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);min-width:74px;padding-top:3px}
-.cd-val{font-size:15px;color:var(--body)}
-.contact-form{display:flex;flex-direction:column;gap:20px}
-.fg{display:flex;flex-direction:column;gap:7px}
-.fg label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--light)}
-.fg input,.fg textarea,.fg select{background:transparent;border:none;border-bottom:1px solid var(--mist);padding:10px 0;font-family:'Jost',sans-serif;font-size:15px;color:var(--body);outline:none;transition:border-color .2s;width:100%}
-.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--clay)}
-.fg textarea{min-height:100px;resize:vertical}
-.btn-dark{display:inline-block;padding:12px 38px;background:var(--ink);color:#fff;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;border:none;transition:background .3s;align-self:flex-start}
-.btn-dark:hover{background:#333}
-footer{background:var(--ink);padding:52px 72px 32px;color:rgba(255,255,255,.32)}
-.footer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;margin-bottom:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.07)}
-.fb-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:rgba(255,255,255,.8);letter-spacing:.1em;margin-bottom:4px}
-.fb-sub{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--clay);margin-bottom:16px}
-.footer-grid>div>p{font-size:13px;line-height:1.8}
-.fc h4{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.48);margin-bottom:16px}
-.fc a{display:block;font-size:13px;color:rgba(255,255,255,.3);text-decoration:none;margin-bottom:8px;transition:color .2s;cursor:pointer}
-.fc a:hover{color:rgba(255,255,255,.7)}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px}
-.socials{display:flex;gap:16px}
-.socials a{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.28);text-decoration:none;transition:color .2s}
-.socials a:hover{color:rgba(255,255,255,.6)}
-</style></head>
-<body style="overflow:auto">
-<nav>
-  <div class="nav-brand" onclick="showPage('home')"><span class="nav-brand-name">Estetica</span><span class="nav-brand-sub">The Wellness Institute</span></div>
-  <ul class="nav-links">
-    <li><a onclick="showPage('home')" data-page="home" class="active">Home</a></li>
-    <li><a onclick="showPage('services')" data-page="services">Services &amp; Workshops</a></li>
-    <li><a onclick="showPage('about')" data-page="about">About</a></li>
-    <li><a onclick="showPage('testimonials')" data-page="testimonials">Testimonials</a></li>
-    <li><a onclick="showPage('contact')" data-page="contact">Contact</a></li>
-  </ul>
-</nav>
-<div id="page-home" class="page active">
-<div class="hero"><div id="hero-bg" style="background-image:url('${heroBg}');"></div><div class="hero-content"><div class="hero-eye">Sydney, Australia</div><h1>${gRaw('f-hero-heading')}</h1><div class="hero-rule"></div><p>${gRaw('f-hero-sub')}</p><a class="btn-ghost" onclick="showPage('about')">Begin Here</a></div></div>
-<div class="intro"><div><div class="intro-eye">Supporting Mind, Body &amp; Spirit</div><h2>${gRaw('f-intro-heading')}</h2><p>${gRaw('f-intro-text')}</p><p style="font-size:16px;color:var(--light);line-height:1.88;margin-bottom:26px">Through breathwork, nervous system regulation, and transformational coaching, we work together to restore the inner conditions where lasting clarity and resilience can grow.</p><a class="btn-outline" onclick="showPage('services')">Explore Services</a></div><div class="intro-vis"></div></div>
-<div class="pillars"><div class="pillars-hd"><div class="pillars-eye">The Three Pillars</div><h2>${gRaw('f-pillars-heading')}</h2></div><div class="pillars-grid"><div class="pillar"><div class="pillar-n">01</div><h3>${gRaw('f-p1-title')}</h3><p>${gRaw('f-p1-text')}</p></div><div class="pillar"><div class="pillar-n">02</div><h3>${gRaw('f-p2-title')}</h3><p>${gRaw('f-p2-text')}</p></div><div class="pillar"><div class="pillar-n">03</div><h3>${gRaw('f-p3-title')}</h3><p>${gRaw('f-p3-text')}</p></div></div></div>
-</div>
-<div id="page-services" class="page">
-<div class="page-hd"><div class="eye">What We Offer</div><h1>Services &amp; Workshops</h1></div>
-<div class="accordion">${acItems}</div>
-<div class="wk-outer"><div class="wk-hd"><div class="eye">Also Available</div><h2>Workshops</h2></div><div class="wk-grid">${wkCards}</div></div>
-</div>
-<div id="page-about" class="page">
-<div class="about-wrap"><div><div class="about-eye">Who I Am</div><h1>${gRaw('f-about-heading')}</h1><div id="about-bio">${bioParagraphs}</div><br><br><a class="btn-dark" onclick="showPage('contact')">Work with Linda</a></div><div class="portrait-wrap">${portraitHtml}<div class="portrait-lbl">Linda Cappa &middot; Founder</div></div></div>
-<div class="quote-strip"><blockquote>${gRaw('f-quote')}</blockquote><div class="quote-by">&mdash; Linda Cappa</div></div>
-</div>
-<div id="page-testimonials" class="page">
-<div class="testi-wrap"><div class="testi-hd"><div class="eye">Client Stories</div><h1>${gRaw('f-testi-heading')}</h1></div><div class="testi-grid">${testiCards}</div></div>
-</div>
-<div id="page-contact" class="page">
-<div class="contact-wrap"><div><div class="contact-eye">Get in Touch</div><h1>${gRaw('f-contact-heading')}</h1><p>${gRaw('f-contact-intro')}</p><div class="cd"><div class="cd-row"><div class="cd-lbl">Location</div><div class="cd-val">Sydney, Australia</div></div><div class="cd-row"><div class="cd-lbl">Sessions</div><div class="cd-val">Face to face &amp; online</div></div><div class="cd-row"><div class="cd-lbl">Instagram</div><div class="cd-val"><a href="https://www.instagram.com/estetica_the_wellness_inst_" target="_blank" style="color:var(--clay);text-decoration:none;">@estetica_the_wellness_inst_</a></div></div></div></div>
-<form class="contact-form" onsubmit="return false;"><div class="fg"><label>Full name</label><input type="text" placeholder="Your name"></div><div class="fg"><label>Email</label><input type="email" placeholder="your@email.com"></div><div class="fg"><label>Service interest</label><select><option>Select a service...</option><option>Nervous System Regulation</option><option>Wellbeing Session (RTO)</option><option>Corporate Session</option><option>Breathing Reset Program</option><option>Workshop</option><option>Other</option></select></div><div class="fg"><label>Message</label><textarea placeholder="Tell me a little about what you're looking for..."></textarea></div><button type="button" class="btn-dark">Send Message</button></form>
-</div>
-<footer><div class="footer-grid"><div><div class="fb-name">Estetica</div><div class="fb-sub">The Wellness Institute</div><p>A space for nervous system repair, inner clarity and embodied living. Sydney, Australia.</p></div><div class="fc"><h4>Navigate</h4><a onclick="showPage('home')">Home</a><a onclick="showPage('services')">Services</a><a onclick="showPage('about')">About</a><a onclick="showPage('testimonials')">Testimonials</a><a onclick="showPage('contact')">Contact</a></div><div class="fc"><h4>Connect</h4><a href="https://www.instagram.com/estetica_the_wellness_inst_" target="_blank">Instagram</a><a href="https://www.facebook.com/share/17EEZ2M6gt/" target="_blank">Facebook</a><a href="https://pin.it/3Qcr9n8qh" target="_blank">Pinterest</a></div></div><div class="footer-bottom"><span>&copy; 2025 Estetica The Wellness Inst. All Rights Reserved.</span><div class="socials"><a href="https://www.instagram.com/estetica_the_wellness_inst_" target="_blank">Instagram</a><a href="https://www.facebook.com/share/17EEZ2M6gt/" target="_blank">Facebook</a></div></div></footer>
-<script>
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===n));window.scrollTo(0,0)}
-function toggleAc(n){const el=document.getElementById('ac'+n);const open=el.classList.contains('open');document.querySelectorAll('.ac-item').forEach(e=>e.classList.remove('open'));if(!open){el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'nearest'}),80)}}
-<\/script>
-</body></html>`;
+  var portraitHtml = pImg
+    ? '<div class="portrait" style="background-image:url(\''+pImg+'\');background-size:cover;background-position:center top;"><\/div>'
+    : '<div class="portrait"><svg width="60" height="60" viewBox="0 0 80 80" fill="none" style="opacity:.22"><circle cx="40" cy="30" r="16" stroke="white" stroke-width="1"\/><path d="M8 72C8 52 72 52 72 72" stroke="white" stroke-width="1"\/><\/svg><\/div>';
 
-  const blob = new Blob([site], {type:'text/html'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'estetica-wellness.html';
-  a.click();
+  var testiTags = ['Nervous System Regulation','Mature Skin Workshop','Personal Makeup Lesson'];
+  var testiCards = '';
+  for (var k=0;k<3;k++) {
+    var tn = (k+1).toString();
+    testiCards += '<div class="testi-card">'
+      +'<div class="testi-tag">'+testiTags[k]+'<\/div>'
+      +'<blockquote>'+gRaw('f-t'+tn+'-quote')+'<\/blockquote>'
+      +'<cite>'+gRaw('f-t'+tn+'-name')+'<\/cite><\/div>';
+  }
+
+  // CSS string (no template literals needed)
+  var css = '*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}'
+    +':root{--ink:#1a1a1a;--cream:#f8f4ef;--warm:#fdfaf6;--mist:#e8e2da;--clay:#c49a7a;--clay-l:#ddb896;--sage:#8a9e89;--body:#3d3d3d;--light:#6b6b6b}'
+    +'body{font-family:\'Jost\',sans-serif;font-size:16px;line-height:1.75;color:var(--body);background:var(--warm)}'
+    +'nav{position:sticky;top:0;z-index:100;height:70px;padding:0 50px;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,246,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.06)}'
+    +'.nav-brand{cursor:pointer;line-height:1.2}.nav-brand-name{font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:300;letter-spacing:.1em;color:var(--ink);display:block}.nav-brand-sub{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);font-family:\'Jost\',sans-serif;display:block}'
+    +'.nav-links{display:flex;list-style:none;gap:30px}.nav-links a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--light);cursor:pointer;text-decoration:none;transition:color .2s;padding-bottom:2px;border-bottom:1px solid transparent}.nav-links a:hover,.nav-links a.active{color:var(--ink);border-bottom-color:var(--clay)}'
+    +'.page{display:none}.page.active{display:block}'
+    +'.hero{height:100vh;min-height:560px;position:relative;display:flex;align-items:center;padding:0 72px;overflow:hidden}'
+    +'#hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 40%}'
+    +'#hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(16,12,8,.76) 0%,rgba(16,12,8,.44) 55%,rgba(16,12,8,.1) 100%),linear-gradient(to top,rgba(16,12,8,.44) 0%,transparent 52%)}'
+    +'.hero-content{position:relative;z-index:2;max-width:590px}'
+    +'.hero-eye{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:rgba(218,192,160,.78);margin-bottom:26px;display:flex;align-items:center;gap:15px}'
+    +'.hero-eye::before{content:"";display:block;width:38px;height:1px;background:rgba(218,192,160,.4)}'
+    +'.hero h1{font-family:\'Cormorant Garamond\',serif;font-size:clamp(30px,3.6vw,50px);font-weight:300;line-height:1.22;color:#fff;letter-spacing:.015em}'
+    +'.hero-rule{width:42px;height:1px;background:rgba(218,192,160,.38);margin:24px 0}'
+    +'.hero p{font-size:17px;color:rgba(255,255,255,.66);font-weight:300;line-height:1.78;margin-bottom:40px}'
+    +'.btn-ghost{display:inline-block;padding:12px 34px;border:1px solid rgba(255,255,255,.52);color:#fff;font-family:\'Jost\',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;text-decoration:none;background:transparent}'
+    +'.intro{padding:88px 72px;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}'
+    +'.intro-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:16px}'
+    +'.intro h2{font-family:\'Cormorant Garamond\',serif;font-size:36px;font-weight:300;line-height:1.3;color:var(--ink);margin-bottom:20px}'
+    +'.intro p{font-size:17px;color:var(--light);line-height:1.88;margin-bottom:26px}'
+    +'.intro-vis{aspect-ratio:4/5;background:linear-gradient(160deg,#c8b8a8,#a89080);position:relative}'
+    +'.intro-vis::after{content:"";position:absolute;bottom:-18px;right:-18px;width:100px;height:100px;border:1px solid var(--clay);opacity:.24}'
+    +'.btn-outline{display:inline-block;padding:11px 30px;background:transparent;border:1px solid var(--ink);color:var(--ink);font-family:\'Jost\',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;text-decoration:none}'
+    +'.pillars{background:var(--ink);padding:80px 72px}.pillars-hd{text-align:center;margin-bottom:52px}'
+    +'.pillars-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,154,122,.65);margin-bottom:12px}'
+    +'.pillars h2{font-family:\'Cormorant Garamond\',serif;font-size:36px;font-weight:300;color:#fff}'
+    +'.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1060px;margin:0 auto}'
+    +'.pillar{background:rgba(255,255,255,.04);padding:40px 32px;border-top:1px solid rgba(255,255,255,.07)}'
+    +'.pillar-n{font-family:\'Cormorant Garamond\',serif;font-size:40px;color:rgba(196,154,122,.2);line-height:1;margin-bottom:16px}'
+    +'.pillar h3{font-family:\'Cormorant Garamond\',serif;font-size:21px;font-weight:400;color:#fff;margin-bottom:10px}'
+    +'.pillar p{font-size:14px;color:rgba(255,255,255,.42);line-height:1.82}'
+    +'.page-hd{padding:64px 72px 50px;border-bottom:1px solid var(--mist)}.eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:12px}'
+    +'.page-hd h1{font-family:\'Cormorant Garamond\',serif;font-size:44px;font-weight:300;color:var(--ink);line-height:1.15}'
+    +'.accordion{border-top:1px solid var(--mist)}.ac-item{border-bottom:1px solid var(--mist)}'
+    +'.ac-trigger{width:100%;background:none;border:none;cursor:pointer;padding:26px 72px;display:flex;align-items:center;justify-content:space-between;gap:18px;text-align:left;transition:background .25s}'
+    +'.ac-trigger:hover{background:rgba(196,154,122,.04)}.ac-item.open .ac-trigger{background:rgba(196,154,122,.05)}'
+    +'.ac-left{display:flex;align-items:center;gap:24px;flex:1}'
+    +'.ac-num{font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:300;color:rgba(196,154,122,.22);line-height:1;min-width:40px;flex-shrink:0;transition:color .3s}'
+    +'.ac-item.open .ac-num{color:var(--clay)}.ac-titles{display:flex;flex-direction:column;gap:3px}'
+    +'.ac-tag{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--clay)}'
+    +'.ac-title{font-family:\'Cormorant Garamond\',serif;font-size:22px;font-weight:400;color:var(--ink);line-height:1.2}'
+    +'.ac-icon{width:38px;height:38px;border:1px solid var(--mist);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;font-weight:300;color:var(--light);transition:all .3s;line-height:1}'
+    +'.ac-item.open .ac-icon{background:var(--ink);border-color:var(--ink);color:#fff;transform:rotate(45deg)}'
+    +'.ac-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1)}.ac-item.open .ac-body{max-height:580px}'
+    +'.ac-inner{display:grid;grid-template-columns:320px 1fr;margin:0 72px 40px;border:1px solid var(--mist);overflow:hidden}'
+    +'.ac-img{background-size:cover;background-position:center;min-height:280px}'
+    +'.ac-content{padding:36px 40px;background:var(--cream);display:flex;flex-direction:column;justify-content:center}'
+    +'.ac-content p{font-size:15px;color:var(--body);line-height:1.9;margin-bottom:22px}'
+    +'.ac-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}.chip{padding:3px 12px;border:1px solid var(--mist);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--light);border-radius:2px}'
+    +'.ac-enrol{display:inline-block;padding:11px 28px;background:var(--ink);color:#fff;font-family:\'Jost\',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;align-self:flex-start}'
+    +'.wk-outer{background:var(--ink);padding:64px 72px 80px}.wk-hd .eye{color:rgba(196,154,122,.6)}'
+    +'.wk-hd h2{font-family:\'Cormorant Garamond\',serif;font-size:36px;font-weight:300;color:#fff;margin-top:10px}'
+    +'.wk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:44px}'
+    +'.wk-card{background:rgba(255,255,255,.04);display:flex;flex-direction:column;overflow:hidden}'
+    +'.wk-thumb{width:100%;aspect-ratio:4/3;background-size:cover;background-position:center}'
+    +'.wk-body{padding:28px;flex:1;display:flex;flex-direction:column}'
+    +'.wk-body h4{font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:400;color:#fff;margin-bottom:10px;line-height:1.3}'
+    +'.wk-body p{font-size:14px;color:rgba(255,255,255,.42);line-height:1.82;margin-bottom:22px;flex:1}'
+    +'.wk-enrol{display:inline-block;padding:8px 20px;border:1px solid rgba(196,154,122,.32);color:var(--clay-l);font-family:\'Jost\',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;align-self:flex-start}'
+    +'.about-wrap{padding:80px 72px;display:grid;grid-template-columns:1fr 400px;gap:80px;max-width:1260px;margin:0 auto;align-items:start}'
+    +'.about-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:12px}'
+    +'.about-wrap h1{font-family:\'Cormorant Garamond\',serif;font-size:40px;font-weight:300;color:var(--ink);line-height:1.18;margin-bottom:28px}'
+    +'#about-bio p{font-size:16px;color:var(--body);line-height:1.9;margin-bottom:18px}'
+    +'.portrait-wrap{position:relative;margin-top:6px}'
+    +'.portrait{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#c4b4a4,#9a8878);background-size:cover;background-position:center top;position:relative;display:flex;align-items:center;justify-content:center}'
+    +'.portrait::before{content:"";position:absolute;top:-12px;left:-12px;right:12px;bottom:12px;border:1px solid var(--clay);opacity:.26;pointer-events:none}'
+    +'.portrait-lbl{margin-top:24px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--light)}'
+    +'.quote-strip{background:var(--cream);padding:64px 72px;text-align:center}'
+    +'.quote-strip blockquote{font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:300;font-style:italic;color:var(--ink);max-width:740px;margin:0 auto 14px;line-height:1.45}'
+    +'.quote-by{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay)}'
+    +'.testi-wrap{padding:80px 72px}.testi-hd{margin-bottom:52px}'
+    +'.testi-hd h1{font-family:\'Cormorant Garamond\',serif;font-size:40px;font-weight:300;color:var(--ink)}'
+    +'.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}'
+    +'.testi-card{border-top:1px solid var(--mist);padding-top:28px}'
+    +'.testi-tag{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--sage);margin-bottom:16px}'
+    +'.testi-card blockquote{font-family:\'Cormorant Garamond\',serif;font-size:18px;font-style:italic;color:var(--ink);line-height:1.65;margin-bottom:18px}'
+    +'.testi-card cite{font-style:normal;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--clay)}'
+    +'.contact-wrap{padding:80px 72px;display:grid;grid-template-columns:1fr 440px;gap:80px;max-width:1260px;margin:0 auto}'
+    +'.contact-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:12px}'
+    +'.contact-wrap h1{font-family:\'Cormorant Garamond\',serif;font-size:40px;font-weight:300;color:var(--ink);margin-bottom:24px;line-height:1.2}'
+    +'.contact-wrap>div>p{font-size:16px;color:var(--light);line-height:1.85;margin-bottom:40px}'
+    +'.cd{display:flex;flex-direction:column;gap:16px}.cd-row{display:flex;gap:14px}'
+    +'.cd-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);min-width:74px;padding-top:3px}.cd-val{font-size:15px;color:var(--body)}'
+    +'.contact-form{display:flex;flex-direction:column;gap:20px}.fg{display:flex;flex-direction:column;gap:7px}'
+    +'.fg label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--light)}'
+    +'.fg input,.fg textarea,.fg select{background:transparent;border:none;border-bottom:1px solid var(--mist);padding:10px 0;font-family:\'Jost\',sans-serif;font-size:15px;color:var(--body);outline:none;transition:border-color .2s;width:100%}'
+    +'.fg textarea{min-height:100px;resize:vertical}'
+    +'.btn-dark{display:inline-block;padding:12px 38px;background:var(--ink);color:#fff;font-family:\'Jost\',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;border:none;align-self:flex-start}'
+    +'footer{background:var(--ink);padding:52px 72px 32px;color:rgba(255,255,255,.32)}'
+    +'.footer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;margin-bottom:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.07)}'
+    +'.fb-name{font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:300;color:rgba(255,255,255,.8);letter-spacing:.1em;margin-bottom:4px}'
+    +'.fb-sub{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--clay);margin-bottom:16px}'
+    +'.footer-grid>div>p{font-size:13px;line-height:1.8}.fc h4{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.48);margin-bottom:16px}'
+    +'.fc a{display:block;font-size:13px;color:rgba(255,255,255,.3);text-decoration:none;margin-bottom:8px;transition:color .2s;cursor:pointer}'
+    +'.footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px}'
+    +'.socials{display:flex;gap:16px}.socials a{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.28);text-decoration:none;transition:color .2s}';
+
+  // Build site JS (no HTML tags, safe)
+  var siteJs = 'function showPage(n){document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});document.getElementById("page-"+n).classList.add("active");document.querySelectorAll(".nav-links a").forEach(function(a){a.classList.toggle("active",a.dataset.page===n)});window.scrollTo(0,0)}'
+    +'function toggleAc(n){var el=document.getElementById("ac"+n);var open=el.classList.contains("open");document.querySelectorAll(".ac-item").forEach(function(e){e.classList.remove("open")});if(!open){el.classList.add("open");setTimeout(function(){el.scrollIntoView({behavior:"smooth",block:"nearest"})},80)}}';
+
+  // Build full site HTML via string concatenation - no template literals
+  var D = '<!DOCTYPE html>';
+  var site = D
+    + '\n<html lang="en">\n<head>'
+    + '\n<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">'
+    + '\n<title>Estetica \u2014 The Wellness Institute<\/title>'
+    + '\n<link href="https:\/\/fonts.googleapis.com\/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">'
+    + '\n<style>' + css + '<\/style>'
+    + '\n<\/head>'
+    + '\n<body style="overflow:auto">'
+    + '\n<nav>'
+    + '\n  <div class="nav-brand" onclick="showPage(\'home\')"><span class="nav-brand-name">Estetica<\/span><span class="nav-brand-sub">The Wellness Institute<\/span><\/div>'
+    + '\n  <ul class="nav-links">'
+    + '\n    <li><a onclick="showPage(\'home\')" data-page="home" class="active">Home<\/a><\/li>'
+    + '\n    <li><a onclick="showPage(\'services\')" data-page="services">Services &amp; Workshops<\/a><\/li>'
+    + '\n    <li><a onclick="showPage(\'about\')" data-page="about">About<\/a><\/li>'
+    + '\n    <li><a onclick="showPage(\'testimonials\')" data-page="testimonials">Testimonials<\/a><\/li>'
+    + '\n    <li><a onclick="showPage(\'contact\')" data-page="contact">Contact<\/a><\/li>'
+    + '\n  <\/ul>\n<\/nav>'
+    // HOME
+    + '\n<div id="page-home" class="page active">'
+    + '\n<div class="hero"><div id="hero-bg" style="background-image:url(\'' + heroBg + '\');"><\/div>'
+    + '\n<div class="hero-content"><div class="hero-eye">Sydney, Australia<\/div>'
+    + '\n<h1>' + gRaw('f-hero-heading') + '<\/h1>'
+    + '\n<div class="hero-rule"><\/div>'
+    + '\n<p>' + gRaw('f-hero-sub') + '<\/p>'
+    + '\n<a class="btn-ghost" onclick="showPage(\'about\')">Begin Here<\/a><\/div><\/div>'
+    + '\n<div class="intro"><div>'
+    + '\n<div class="intro-eye">Supporting Mind, Body &amp; Spirit<\/div>'
+    + '\n<h2>' + gRaw('f-intro-heading') + '<\/h2>'
+    + '\n<p>' + gRaw('f-intro-text') + '<\/p>'
+    + '\n<p style="font-size:16px;color:var(--light);line-height:1.88;margin-bottom:26px">Through breathwork, nervous system regulation, and transformational coaching, we work together to restore the inner conditions where lasting clarity and resilience can grow.<\/p>'
+    + '\n<a class="btn-outline" onclick="showPage(\'services\')">Explore Services<\/a>'
+    + '\n<\/div><div class="intro-vis"><\/div><\/div>'
+    + '\n<div class="pillars"><div class="pillars-hd"><div class="pillars-eye">The Three Pillars<\/div><h2>' + gRaw('f-pillars-heading') + '<\/h2><\/div>'
+    + '\n<div class="pillars-grid">'
+    + '\n<div class="pillar"><div class="pillar-n">01<\/div><h3>' + gRaw('f-p1-title') + '<\/h3><p>' + gRaw('f-p1-text') + '<\/p><\/div>'
+    + '\n<div class="pillar"><div class="pillar-n">02<\/div><h3>' + gRaw('f-p2-title') + '<\/h3><p>' + gRaw('f-p2-text') + '<\/p><\/div>'
+    + '\n<div class="pillar"><div class="pillar-n">03<\/div><h3>' + gRaw('f-p3-title') + '<\/h3><p>' + gRaw('f-p3-text') + '<\/p><\/div>'
+    + '\n<\/div><\/div><\/div>'
+    // SERVICES
+    + '\n<div id="page-services" class="page">'
+    + '\n<div class="page-hd"><div class="eye">What We Offer<\/div><h1>Services &amp; Workshops<\/h1><\/div>'
+    + '\n<div class="accordion">' + acItems + '<\/div>'
+    + '\n<div class="wk-outer"><div class="wk-hd"><div class="eye">Also Available<\/div><h2>Workshops<\/h2><\/div>'
+    + '\n<div class="wk-grid">' + wkCards + '<\/div><\/div>'
+    + '\n<\/div>'
+    // ABOUT
+    + '\n<div id="page-about" class="page">'
+    + '\n<div class="about-wrap"><div>'
+    + '\n<div class="about-eye">Who I Am<\/div>'
+    + '\n<h1>' + gRaw('f-about-heading') + '<\/h1>'
+    + '\n<div id="about-bio">' + bioPara + '<\/div>'
+    + '\n<br><br><a class="btn-dark" onclick="showPage(\'contact\')">Work with Linda<\/a>'
+    + '\n<\/div>'
+    + '\n<div class="portrait-wrap">' + portraitHtml + '<div class="portrait-lbl">Linda Cappa &middot; Founder<\/div><\/div>'
+    + '\n<\/div>'
+    + '\n<div class="quote-strip"><blockquote>' + gRaw('f-quote') + '<\/blockquote><div class="quote-by">&mdash; Linda Cappa<\/div><\/div>'
+    + '\n<\/div>'
+    // TESTIMONIALS
+    + '\n<div id="page-testimonials" class="page">'
+    + '\n<div class="testi-wrap"><div class="testi-hd"><div class="eye">Client Stories<\/div><h1>' + gRaw('f-testi-heading') + '<\/h1><\/div>'
+    + '\n<div class="testi-grid">' + testiCards + '<\/div><\/div>'
+    + '\n<\/div>'
+    // CONTACT
+    + '\n<div id="page-contact" class="page">'
+    + '\n<div class="contact-wrap"><div>'
+    + '\n<div class="contact-eye">Get in Touch<\/div>'
+    + '\n<h1>' + gRaw('f-contact-heading') + '<\/h1>'
+    + '\n<p>' + gRaw('f-contact-intro') + '<\/p>'
+    + '\n<div class="cd"><div class="cd-row"><div class="cd-lbl">Location<\/div><div class="cd-val">Sydney, Australia<\/div><\/div>'
+    + '\n<div class="cd-row"><div class="cd-lbl">Sessions<\/div><div class="cd-val">Face to face &amp; online<\/div><\/div>'
+    + '\n<div class="cd-row"><div class="cd-lbl">Instagram<\/div><div class="cd-val"><a href="https:\/\/www.instagram.com\/estetica_the_wellness_inst_" target="_blank" style="color:var(--clay);text-decoration:none;">@estetica_the_wellness_inst_<\/a><\/div><\/div><\/div>'
+    + '\n<\/div>'
+    + '\n<form class="contact-form" onsubmit="return false;">'
+    + '\n<div class="fg"><label>Full name<\/label><input type="text" placeholder="Your name"><\/div>'
+    + '\n<div class="fg"><label>Email<\/label><input type="email" placeholder="your@email.com"><\/div>'
+    + '\n<div class="fg"><label>Service interest<\/label><select><option>Select a service...<\/option><option>Nervous System Regulation<\/option><option>Wellbeing Session (RTO)<\/option><option>Corporate Session<\/option><option>Breathing Reset Program<\/option><option>Workshop<\/option><option>Other<\/option><\/select><\/div>'
+    + '\n<div class="fg"><label>Message<\/label><textarea placeholder="Tell me a little about what you\'re looking for..."><\/textarea><\/div>'
+    + '\n<button type="button" class="btn-dark">Send Message<\/button>'
+    + '\n<\/form><\/div><\/div>'
+    // FOOTER
+    + '\n<footer>'
+    + '\n<div class="footer-grid">'
+    + '\n<div><div class="fb-name">Estetica<\/div><div class="fb-sub">The Wellness Institute<\/div><p>A space for nervous system repair, inner clarity and embodied living. Sydney, Australia.<\/p><\/div>'
+    + '\n<div class="fc"><h4>Navigate<\/h4><a onclick="showPage(\'home\')">Home<\/a><a onclick="showPage(\'services\')">Services<\/a><a onclick="showPage(\'about\')">About<\/a><a onclick="showPage(\'testimonials\')">Testimonials<\/a><a onclick="showPage(\'contact\')">Contact<\/a><\/div>'
+    + '\n<div class="fc"><h4>Connect<\/h4><a href="https:\/\/www.instagram.com\/estetica_the_wellness_inst_" target="_blank">Instagram<\/a><a href="https:\/\/www.facebook.com\/share\/17EEZ2M6gt\/" target="_blank">Facebook<\/a><a href="https:\/\/pin.it\/3Qcr9n8qh" target="_blank">Pinterest<\/a><\/div>'
+    + '\n<\/div>'
+    + '\n<div class="footer-bottom"><span>&copy; 2025 Estetica The Wellness Inst. All Rights Reserved.<\/span>'
+    + '\n<div class="socials"><a href="https:\/\/www.instagram.com\/estetica_the_wellness_inst_" target="_blank">Instagram<\/a><a href="https:\/\/www.facebook.com\/share\/17EEZ2M6gt\/" target="_blank">Facebook<\/a><\/div><\/div>'
+    + '\n<\/footer>'
+    + '\n\x3cscript>' + siteJs + '\x3c/scr' + 'ipt>'
+    + '\n<\/body><\/html>';
+
+  var blob = new Blob([site], {type:'text/html'});
+  var aEl = document.createElement('a');
+  aEl.href = URL.createObjectURL(blob);
+  aEl.download = 'estetica-wellness.html';
+  aEl.click();
   toast('Site exported \u2713');
 }
-// ── TOAST ──
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
 
-// ── INIT ──
-loadSaved();
+
 </script>
 </body>
 </html>
