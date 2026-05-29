@@ -602,12 +602,39 @@ footer{background:var(--ink);padding:52px 72px 32px;color:rgba(255,255,255,.32)}
 
       <div class="field-group">
         <div class="field-group-label">Workshops</div>
+
         <div class="field-row"><label class="field-label">Workshop 1 Title</label><input class="field-input" id="f-w1-title" oninput="liveUpdate()" value="Timeless Mature Skin Workshop"></div>
         <div class="field-row"><label class="field-label">Workshop 1 Text</label><textarea class="field-ta" id="f-w1-text" oninput="liveUpdate()" rows="3">Discover makeup techniques designed specifically for changing, mature skin. Learn how to enhance your features and create a smooth, radiant finish. Includes a FREE professional brush set and the TIMELESS Ebook.</textarea></div>
+        <div class="field-row">
+          <label class="field-label">Workshop 1 Image</label>
+          <div class="img-uploader" onclick="triggerUpload('w1-img-file')">
+            <div id="w1-img-thumb" class="img-thumb" style="background:linear-gradient(135deg,#c8c0b0,#a09080);background-size:cover;background-position:center;border-radius:2px;"></div>
+            <div class="img-uploader-text"><strong>Click to add image</strong>JPG, PNG or WEBP</div>
+          </div>
+          <input type="file" id="w1-img-file" class="img-file-input" accept="image/*" onchange="handleWkImageUpload(this,'wk-thumb-1','w1-img-thumb')">
+        </div>
+
         <div class="field-row"><label class="field-label">Workshop 2 Title</label><input class="field-input" id="f-w2-title" oninput="liveUpdate()" value="Support Face Shape &amp; Skin Firmness"></div>
         <div class="field-row"><label class="field-label">Workshop 2 Text</label><textarea class="field-ta" id="f-w2-text" oninput="liveUpdate()" rows="3">Discover how stress affects the face and tonality of muscles. Learn KEY lymph drainage and facial exercise techniques to support your skin as it moves through different phases of life.</textarea></div>
+        <div class="field-row">
+          <label class="field-label">Workshop 2 Image</label>
+          <div class="img-uploader" onclick="triggerUpload('w2-img-file')">
+            <div id="w2-img-thumb" class="img-thumb" style="background:linear-gradient(135deg,#b0c8b8,#809870);background-size:cover;background-position:center;border-radius:2px;"></div>
+            <div class="img-uploader-text"><strong>Click to add image</strong>JPG, PNG or WEBP</div>
+          </div>
+          <input type="file" id="w2-img-file" class="img-file-input" accept="image/*" onchange="handleWkImageUpload(this,'wk-thumb-2','w2-img-thumb')">
+        </div>
+
         <div class="field-row"><label class="field-label">Workshop 3 Title</label><input class="field-input" id="f-w3-title" oninput="liveUpdate()" value="Sleep and Insomnia"></div>
         <div class="field-row"><label class="field-label">Workshop 3 Text</label><textarea class="field-ta" id="f-w3-text" oninput="liveUpdate()" rows="3">Discover breathwork techniques that will help regulate your nervous system — setting yourself up for getting to sleep and getting back to sleep with ease.</textarea></div>
+        <div class="field-row">
+          <label class="field-label">Workshop 3 Image</label>
+          <div class="img-uploader" onclick="triggerUpload('w3-img-file')">
+            <div id="w3-img-thumb" class="img-thumb" style="background:linear-gradient(135deg,#b8b0c8,#887890);background-size:cover;background-position:center;border-radius:2px;"></div>
+            <div class="img-uploader-text"><strong>Click to add image</strong>JPG, PNG or WEBP</div>
+          </div>
+          <input type="file" id="w3-img-file" class="img-file-input" accept="image/*" onchange="handleWkImageUpload(this,'wk-thumb-3','w3-img-thumb')">
+        </div>
       </div>
 
     </div><!-- /tab-services -->
@@ -622,6 +649,18 @@ footer{background:var(--ink);padding:52px 72px 32px;color:rgba(255,255,255,.32)}
         <div class="field-row"><label class="field-label">Bio Paragraph 3</label><textarea class="field-ta" id="f-bio3" oninput="liveUpdate()" rows="4">In the midst of profound grief and emotional trauma, a calling emerged — not as a choice, but as a necessity. A decade-long pilgrimage, inward. I devoted myself to healing through deep personal work, study and embodied practice. It was through this journey that I found breathwork, nervous system regulation and transformational therapy.</textarea></div>
         <div class="field-row"><label class="field-label">Bio Paragraph 4</label><textarea class="field-ta" id="f-bio4" oninput="liveUpdate()" rows="4">Today I help people feel safe enough to trust themselves again. Through embodied, nervous system informed work, I guide my clients toward real transformation — not by pushing changes, but restoring the inner conditions where change becomes possible.</textarea></div>
       </div>
+      <div class="field-group">
+        <div class="field-group-label">About Portrait Image</div>
+        <div class="field-row">
+          <label class="field-label">Portrait / Profile Photo</label>
+          <div class="img-uploader" onclick="triggerUpload('portrait-img-file')">
+            <div id="portrait-img-thumb" class="img-thumb" style="background:linear-gradient(160deg,#c4b4a4,#9a8878);background-size:cover;background-position:center top;border-radius:2px;"></div>
+            <div class="img-uploader-text"><strong>Click to add photo</strong>JPG, PNG or WEBP — best in portrait ratio</div>
+          </div>
+          <input type="file" id="portrait-img-file" class="img-file-input" accept="image/*" onchange="handlePortraitUpload(this)">
+        </div>
+      </div>
+
       <div class="field-group">
         <div class="field-group-label">Pull Quote</div>
         <div class="field-row"><label class="field-label">Quote Text</label><textarea class="field-ta" id="f-quote" oninput="liveUpdate()" rows="2">"Healing begins when we feel safe enough to return to ourselves."</textarea></div>
@@ -769,9 +808,9 @@ footer{background:var(--ink);padding:52px 72px 32px;color:rgba(255,255,255,.32)}
     <div class="wk-outer">
       <div class="wk-hd"><div class="eye">Also Available</div><h2>Workshops</h2></div>
       <div class="wk-grid">
-        <div class="wk-card"><div class="wk-thumb"></div><div class="wk-body"><h4 id="w1-title">Timeless Mature Skin Workshop</h4><p id="w1-text">Discover makeup techniques designed specifically for changing, mature skin. Learn how to enhance your features and create a smooth, radiant finish. Includes a FREE professional brush set and the TIMELESS Ebook.</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>
-        <div class="wk-card"><div class="wk-thumb t2"></div><div class="wk-body"><h4 id="w2-title">Support Face Shape &amp; Skin Firmness</h4><p id="w2-text">Discover how stress affects the face and tonality of muscles. Learn KEY lymph drainage and facial exercise techniques to support your skin as it moves through different phases of life.</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>
-        <div class="wk-card"><div class="wk-thumb t3"></div><div class="wk-body"><h4 id="w3-title">Sleep and Insomnia</h4><p id="w3-text">Discover breathwork techniques that will help regulate your nervous system — setting yourself up for getting to sleep and getting back to sleep with ease.</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>
+        <div class="wk-card"><div class="wk-thumb" id="wk-thumb-1"></div><div class="wk-body"><h4 id="w1-title">Timeless Mature Skin Workshop</h4><p id="w1-text">Discover makeup techniques designed specifically for changing, mature skin. Learn how to enhance your features and create a smooth, radiant finish. Includes a FREE professional brush set and the TIMELESS Ebook.</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>
+        <div class="wk-card"><div class="wk-thumb t2" id="wk-thumb-2"></div><div class="wk-body"><h4 id="w2-title">Support Face Shape &amp; Skin Firmness</h4><p id="w2-text">Discover how stress affects the face and tonality of muscles. Learn KEY lymph drainage and facial exercise techniques to support your skin as it moves through different phases of life.</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>
+        <div class="wk-card"><div class="wk-thumb t3" id="wk-thumb-3"></div><div class="wk-body"><h4 id="w3-title">Sleep and Insomnia</h4><p id="w3-text">Discover breathwork techniques that will help regulate your nervous system — setting yourself up for getting to sleep and getting back to sleep with ease.</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>
       </div>
     </div>
   </div>
@@ -791,7 +830,7 @@ footer{background:var(--ink);padding:52px 72px 32px;color:rgba(255,255,255,.32)}
         <br><br><a class="btn-dark" onclick="showPage('contact')">Work with Linda</a>
       </div>
       <div class="portrait-wrap">
-        <div class="portrait"><svg width="60" height="60" viewBox="0 0 80 80" fill="none" style="opacity:.22"><circle cx="40" cy="30" r="16" stroke="white" stroke-width="1"/><path d="M8 72C8 52 72 52 72 72" stroke="white" stroke-width="1"/></svg></div>
+        <div class="portrait" id="about-portrait"><svg width="60" height="60" viewBox="0 0 80 80" fill="none" style="opacity:.22" id="portrait-placeholder"><circle cx="40" cy="30" r="16" stroke="white" stroke-width="1"/><path d="M8 72C8 52 72 52 72 72" stroke="white" stroke-width="1"/></svg></div>
         <div class="portrait-lbl">Linda Cappa · Founder</div>
       </div>
     </div>
@@ -937,14 +976,62 @@ function handleImageUpload(input, targetId, thumbId) {
   const reader = new FileReader();
   reader.onload = e => {
     const dataUrl = e.target.result;
-    // Update site image
     const target = document.getElementById(targetId);
     if (target) target.style.backgroundImage = `url('${dataUrl}')`;
-    // Update thumb
     const thumb = document.getElementById(thumbId);
     if (thumb) thumb.src = dataUrl;
-    // Store for export
     imageStore[targetId] = dataUrl;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handleWkImageUpload(input, targetId, thumbId) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    // Update site workshop thumb (background-image on div)
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.style.backgroundImage = `url('${dataUrl}')`;
+      target.style.backgroundSize = 'cover';
+      target.style.backgroundPosition = 'center';
+    }
+    // Update admin thumb (also a div with background)
+    const thumb = document.getElementById(thumbId);
+    if (thumb) {
+      thumb.style.backgroundImage = `url('${dataUrl}')`;
+      thumb.style.backgroundSize = 'cover';
+      thumb.style.backgroundPosition = 'center';
+    }
+    imageStore[targetId] = dataUrl;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handlePortraitUpload(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    // Update site portrait
+    const portrait = document.getElementById('about-portrait');
+    if (portrait) {
+      portrait.style.backgroundImage = `url('${dataUrl}')`;
+      portrait.style.backgroundSize = 'cover';
+      portrait.style.backgroundPosition = 'center top';
+      // Hide the placeholder SVG
+      const svg = document.getElementById('portrait-placeholder');
+      if (svg) svg.style.display = 'none';
+    }
+    // Update admin thumb
+    const thumb = document.getElementById('portrait-img-thumb');
+    if (thumb) {
+      thumb.style.backgroundImage = `url('${dataUrl}')`;
+      thumb.style.backgroundSize = 'cover';
+      thumb.style.backgroundPosition = 'center top';
+    }
+    imageStore['about-portrait'] = dataUrl;
   };
   reader.readAsDataURL(input.files[0]);
 }
@@ -975,13 +1062,42 @@ function loadSaved() {
     });
     // Restore images
     if (data['__images__']) {
+      const thumbMap = {
+        'hero-bg':'hero-img-thumb',
+        'ac1-img':'s1-img-thumb','ac2-img':'s2-img-thumb','ac3-img':'s3-img-thumb',
+        'ac4-img':'s4-img-thumb','ac5-img':'s5-img-thumb'
+      };
+      const divThumbMap = {
+        'wk-thumb-1':'w1-img-thumb','wk-thumb-2':'w2-img-thumb','wk-thumb-3':'w3-img-thumb',
+        'about-portrait':'portrait-img-thumb'
+      };
       Object.entries(data['__images__']).forEach(([targetId, dataUrl]) => {
         const target = document.getElementById(targetId);
-        if (target) target.style.backgroundImage = `url('${dataUrl}')`;
+        if (target) {
+          target.style.backgroundImage = `url('${dataUrl}')`;
+          target.style.backgroundSize = 'cover';
+          target.style.backgroundPosition = targetId === 'about-portrait' ? 'center top' : 'center';
+        }
         imageStore[targetId] = dataUrl;
-        // Update thumbs
-        const thumbMap = {'hero-bg':'hero-img-thumb','ac1-img':'s1-img-thumb','ac2-img':'s2-img-thumb','ac3-img':'s3-img-thumb','ac4-img':'s4-img-thumb','ac5-img':'s5-img-thumb'};
-        if (thumbMap[targetId]) { const t = document.getElementById(thumbMap[targetId]); if(t) t.src = dataUrl; }
+        // Restore <img> thumbs (service images)
+        if (thumbMap[targetId]) {
+          const t = document.getElementById(thumbMap[targetId]);
+          if (t) t.src = dataUrl;
+        }
+        // Restore div thumbs (workshops + portrait)
+        if (divThumbMap[targetId]) {
+          const t = document.getElementById(divThumbMap[targetId]);
+          if (t) {
+            t.style.backgroundImage = `url('${dataUrl}')`;
+            t.style.backgroundSize = 'cover';
+            t.style.backgroundPosition = 'center';
+          }
+        }
+        // Hide portrait placeholder SVG if portrait restored
+        if (targetId === 'about-portrait') {
+          const svg = document.getElementById('portrait-placeholder');
+          if (svg) svg.style.display = 'none';
+        }
       });
     }
     liveUpdate();
@@ -1078,8 +1194,9 @@ nav{position:sticky;top:0;z-index:100;height:70px;padding:0 50px;display:flex;al
 .wk-hd h2{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#fff;margin-top:10px}
 .wk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:44px}
 .wk-card{background:rgba(255,255,255,.04);display:flex;flex-direction:column;overflow:hidden}
-.wk-thumb{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#c8c0b0,#a09080)}
-.wk-thumb.t2{background:linear-gradient(135deg,#b0c8b8,#809870)}.wk-thumb.t3{background:linear-gradient(135deg,#b8b0c8,#887890)}
+.wk-thumb{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#c8c0b0,#a09080);background-size:cover;background-position:center;transition:background-image .3s}
+.wk-thumb.t2{background:linear-gradient(135deg,#b0c8b8,#809870);background-size:cover;background-position:center}
+.wk-thumb.t3{background:linear-gradient(135deg,#b8b0c8,#887890);background-size:cover;background-position:center}
 .wk-body{padding:28px;flex:1;display:flex;flex-direction:column}
 .wk-body h4{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:#fff;margin-bottom:10px;line-height:1.3}
 .wk-body p{font-size:14px;color:rgba(255,255,255,.42);line-height:1.82;margin-bottom:22px;flex:1}
@@ -1090,7 +1207,7 @@ nav{position:sticky;top:0;z-index:100;height:70px;padding:0 50px;display:flex;al
 .about-wrap h1{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--ink);line-height:1.18;margin-bottom:28px}
 #about-bio p{font-size:16px;color:var(--body);line-height:1.9;margin-bottom:18px}
 .portrait-wrap{position:relative;margin-top:6px}
-.portrait{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#c4b4a4,#9a8878);position:relative;display:flex;align-items:center;justify-content:center}
+.portrait{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#c4b4a4,#9a8878);background-size:cover;background-position:center top;position:relative;display:flex;align-items:center;justify-content:center}
 .portrait::before{content:'';position:absolute;top:-12px;left:-12px;right:12px;bottom:12px;border:1px solid var(--clay);opacity:.26;pointer-events:none}
 .portrait-lbl{margin-top:24px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--light)}
 .quote-strip{background:var(--cream);padding:64px 72px;text-align:center}
@@ -1160,11 +1277,16 @@ ${[1,2,3,4,5].map((n,i)=>{
 }).join('')}
 </div>
 <div class="wk-outer"><div class="wk-hd"><div class="eye">Also Available</div><h2>Workshops</h2></div><div class="wk-grid">
-${[1,2,3].map(n=>`<div class="wk-card"><div class="wk-thumb${n>1?' t'+n:''}"></div><div class="wk-body"><h4>${gRaw('f-w'+n+'-title')}</h4><p>${gRaw('f-w'+n+'-text')}</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>`).join('')}
+${[1,2,3].map(n=>{
+  const wkImg = imageStore['wk-thumb-'+n];
+  const wkFallback = n===1?'linear-gradient(135deg,#c8c0b0,#a09080)':n===2?'linear-gradient(135deg,#b0c8b8,#809870)':'linear-gradient(135deg,#b8b0c8,#887890)';
+  const wkStyle = wkImg ? `background-image:url('${wkImg}');background-size:cover;background-position:center` : `background:${wkFallback}`;
+  return `<div class="wk-card"><div class="wk-thumb${n>1?' t'+n:''}" style="${wkStyle}"></div><div class="wk-body"><h4>${gRaw('f-w'+n+'-title')}</h4><p>${gRaw('f-w'+n+'-text')}</p><a class="wk-enrol" href="https://www.esteticawellnessinst.com/contact" target="_blank">Enquire →</a></div></div>`;
+}).join('')}
 </div></div>
 </div>
 <div id="page-about" class="page">
-<div class="about-wrap"><div><div class="about-eye">Who I Am</div><h1>${gRaw('f-about-heading')}</h1><div id="about-bio">${['1','2','3','4'].map(n=>`<p>${gRaw('f-bio'+n)}</p>`).join('')}</div><br><br><a class="btn-dark" onclick="showPage('contact')">Work with Linda</a></div><div class="portrait-wrap"><div class="portrait"><svg width="60" height="60" viewBox="0 0 80 80" fill="none" style="opacity:.22"><circle cx="40" cy="30" r="16" stroke="white" stroke-width="1"/><path d="M8 72C8 52 72 52 72 72" stroke="white" stroke-width="1"/></svg></div><div class="portrait-lbl">Linda Cappa · Founder</div></div></div>
+<div class="about-wrap"><div><div class="about-eye">Who I Am</div><h1>${gRaw('f-about-heading')}</h1><div id="about-bio">${['1','2','3','4'].map(n=>`<p>${gRaw('f-bio'+n)}</p>`).join('')}</div><br><br><a class="btn-dark" onclick="showPage('contact')">Work with Linda</a></div><div class="portrait-wrap">\${(()=>{const pImg=imageStore['about-portrait'];return pImg?`<div class="portrait" style="background-image:url('\${pImg}');background-size:cover;background-position:center top;"></div>`:'<div class="portrait"><svg width="60" height="60" viewBox="0 0 80 80" fill="none" style="opacity:.22"><circle cx="40" cy="30" r="16" stroke="white" stroke-width="1"/><path d="M8 72C8 52 72 52 72 72" stroke="white" stroke-width="1"/></svg></div>';})()}<div class="portrait-lbl">Linda Cappa · Founder</div></div></div>
 <div class="quote-strip"><blockquote>${gRaw('f-quote')}</blockquote><div class="quote-by">— Linda Cappa</div></div>
 </div>
 <div id="page-testimonials" class="page">
