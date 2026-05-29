@@ -1162,293 +1162,288 @@ function selectChefFromDir(id){
 })();
 
 // ═══════════════════════════════════════
-// HTML EXPORT — full standalone website
+// HTML EXPORT — SINGLE self-contained file
+// All navigation is internal (JS), no separate files = no broken links
 // ═══════════════════════════════════════
 function exportHTML(){
-  const g = globalData;
-  const gold='#c9a96e', navy='#1a2744', ivory='#f5f0e8', charcoal='#2c2c2c';
+  const data = { chefs: chefs, globalData: globalData };
+  const json = JSON.stringify(data).replace(/<\//g,'<\\/');
 
-  function e(str){ if(!str)return''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  const html = buildStandaloneSite(json);
 
-  // ── NAV HTML (shared) ──
-  function navHtml(activePage){
-    const logo = g.siteLogo
-      ? `<img src="${g.siteLogo}" style="width:100%;height:100%;object-fit:cover;">`
-      : '🍴';
-    return `<nav style="background:#111;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:36px;height:36px;background:#c9a96e;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:16px;">${logo}</div>
-        <a href="index.html" style="color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;letter-spacing:.05em;text-decoration:none;">Chefs Goutatoo Genève</a>
-      </div>
-      <div style="display:flex;gap:20px;">
-        <a href="index.html" style="color:${activePage==='home'?gold:'#888'};font-size:11px;letter-spacing:.08em;font-family:system-ui;text-decoration:none;">Accueil</a>
-        <a href="chefs.html" style="color:${activePage==='chefs'?gold:'#888'};font-size:11px;letter-spacing:.08em;font-family:system-ui;text-decoration:none;">Les Chefs</a>
-        <a href="chefs.html" style="color:#888;font-size:11px;letter-spacing:.08em;font-family:system-ui;text-decoration:none;">Recettes</a>
-        <a href="index.html#contact" style="color:#888;font-size:11px;letter-spacing:.08em;font-family:system-ui;text-decoration:none;">Contact</a>
-      </div>
-    </nav>`;
-  }
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='goutatoo-site.html';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  document.getElementById('save-status').textContent='✓ Site HTML exporté';
+}
 
-  // ── SHARED HEAD ──
-  function headHtml(title){
-    return `<!DOCTYPE html><html lang="fr"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${e(title)} – Chefs Goutatoo Genève</title>
+function buildStandaloneSite(jsonData){
+  // This template becomes a fully standalone website.
+  // It contains the data + a small runtime that renders Home / Directory / Chef pages
+  // and switches between them entirely client-side (no file navigation).
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Chefs Goutatoo Genève</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:wght@700&display=swap">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cormorant Garamond',serif;background:${ivory};color:${charcoal};min-height:100vh}
+body{font-family:'Cormorant Garamond',serif;background:#f5f0e8;color:#2c2c2c}
+a{text-decoration:none;cursor:pointer}
+img{display:block}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#c9a96e55;border-radius:3px}
-a{text-decoration:none}
+nav{background:#111;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+nav .brand{display:flex;align-items:center;gap:10px;cursor:pointer}
+nav .logo{width:36px;height:36px;background:#c9a96e;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:16px}
+nav .logo img{width:100%;height:100%;object-fit:cover}
+nav .bn{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;letter-spacing:.05em}
+nav .links{display:flex;gap:22px}
+nav .links a{color:#888;font-size:11px;letter-spacing:.08em;font-family:system-ui;transition:color .2s}
+nav .links a:hover,nav .links a.active{color:#c9a96e}
 .ornament-line{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0}
-.ornament-line .line{width:60px;height:1px;background:${gold}}
-.ornament-line .star{color:${gold};font-size:14px}
-</style></head><body>`;
-  }
+.ornament-line .line{width:60px;height:1px;background:#c9a96e}
+.ornament-line .star{color:#c9a96e;font-size:14px}
+footer{background:#111;padding:24px 40px;text-align:center}
+footer .fn{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:14px;margin-bottom:4px}
+footer .fc{color:#555;font-size:10px;font-family:system-ui;letter-spacing:.1em}
+/* HOME */
+.hero{position:relative;height:480px;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover}
+.hero .ph{width:100%;height:300px;background:linear-gradient(135deg,#1a2744,#2c3e50);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero .ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.6))}
+.hero .hc{position:absolute;bottom:0;left:0;right:0;padding:48px;text-align:center}
+.hero .hc .tl{font-size:11px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui}
+.hero .hc h1{font-family:'Playfair Display',serif;font-size:48px;color:#fff;margin:0 0 12px;font-weight:700}
+.hero .hc p{font-size:16px;color:rgba(255,255,255,.85);font-style:italic}
+.tagbar{background:#f0ebe0;border-top:2px solid #c9a96e;border-bottom:2px solid #c9a96e;padding:18px 40px;text-align:center}
+.tagbar p{font-size:15px;color:#5a4030;font-style:italic}
+.sec{padding:56px 40px;max-width:1200px;margin:0 auto}
+.sec-h{text-align:center;margin-bottom:40px}
+.sec-h .lbl{font-size:10px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui}
+.sec-h h2{font-family:'Playfair Display',serif;font-size:34px;color:#1a2744;margin:0 0 16px}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:24px}
+.home-card{text-align:center}
+.home-card .im{width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;border-radius:2px;margin-bottom:12px}
+.home-card .im img{width:100%;height:100%;object-fit:cover}
+.home-card .im .e{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:.2}
+.home-card .nm{font-family:'Cormorant Garamond',serif;font-size:16px;color:#1a2744;font-weight:600;margin-bottom:4px}
+.home-card .rs{font-size:11px;color:#9a8060}
+/* DIR */
+.dir{padding:48px 32px;max-width:1200px;margin:0 auto}
+.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px}
+.dir-card{background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04);transition:transform .2s,box-shadow .2s}
+.dir-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.dir-card .im{height:200px;background:#e8e4dc;overflow:hidden}
+.dir-card .im img{width:100%;height:100%;object-fit:cover}
+.dir-card .im .e{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.15}
+.dir-card .bd{padding:18px}
+.dir-card .ps{font-size:9px;color:#c9a96e;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;font-family:system-ui}
+.dir-card .nm{font-size:19px;font-weight:700;color:#1a2744;margin-bottom:4px}
+.dir-card .rs{font-size:12px;color:#9a8060;margin-bottom:10px}
+.dir-card .bio{font-size:12px;color:#7a6050;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.dir-card .lk{margin-top:12px;color:#c9a96e;font-size:11px;font-family:system-ui}
+/* PROFILE */
+.trip{display:grid;grid-template-columns:1fr 1fr 1fr;height:340px;border-bottom:3px solid #c9a96e}
+.trip .pt{background:#e8e4dc;overflow:hidden}
+.trip .pt img{width:100%;height:100%;object-fit:cover}
+.trip .pt .e{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#ddd9d0;font-size:64px;opacity:.25}
+.trip .ct{background:#f5f0e8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;border-left:1px solid rgba(201,169,110,.3);border-right:1px solid rgba(201,169,110,.3)}
+.trip .ct img{max-width:80%;max-height:110px;object-fit:contain;margin-bottom:20px}
+.trip .ct .rn{font-family:'Cormorant Garamond',serif;font-size:20px;color:#1a2744;font-weight:700;letter-spacing:.05em;text-align:center;margin-bottom:20px}
+.trip .ct .or{color:#c9a96e;font-size:20px}
+.trip .ct .dv{width:60px;height:1px;background:#c9a96e;margin:12px 0}
+.trip .ct .lo{font-size:10px;color:#9a8060;letter-spacing:.2em;text-transform:uppercase;font-family:system-ui}
+.trip .ph2{background:#ccc;overflow:hidden}
+.trip .ph2 img{width:100%;height:100%;object-fit:cover}
+.trip .ph2 .e{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#d5d0c8;font-size:48px;opacity:.2}
+.p-hero{text-align:center;padding:44px 40px 24px;border-bottom:1px solid rgba(201,169,110,.2)}
+.p-hero .cl{font-size:11px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui}
+.p-hero h1{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:#1a2744;letter-spacing:.04em;margin:0 0 16px}
+.qbio{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)}
+.qbio .q{padding:32px 40px;border-right:1px solid rgba(201,169,110,.2)}
+.qbio .q .qq{font-size:36px;color:#c9a96e;line-height:1;margin-bottom:8px;font-family:Georgia,serif}
+.qbio .q p{font-size:20px;font-style:italic;color:#1a2744;line-height:1.5}
+.qbio .b{padding:32px 40px}
+.qbio .b p{font-size:14px;color:#5a4030;line-height:1.8}
+.awards{padding:28px 40px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap}
+.award{flex:1 1 180px;padding:12px 20px;border-right:1px solid rgba(201,169,110,.2);text-align:center}
+.award:last-child{border-right:none}
+.award .st{color:#c9a96e;font-size:16px;margin-bottom:8px}
+.award .tx{font-size:10px;color:#9a8060;letter-spacing:.12em;text-transform:uppercase;line-height:1.4;font-family:system-ui}
+.tlsec{padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2)}
+.s-title{font-size:11px;color:#c9a96e;letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px;font-family:system-ui;font-weight:600}
+.tlwrap{position:relative;padding-left:80px}
+.tlwrap::before{content:'';position:absolute;left:60px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3)}
+.tle{display:flex;gap:20px;margin-bottom:16px;align-items:flex-start;position:relative}
+.tle .yr{position:absolute;left:-80px;width:70px;text-align:right;color:#c9a96e;font-size:12px;font-weight:700;padding-top:2px;font-family:system-ui}
+.tle .dt{width:8px;height:8px;border-radius:50%;background:#c9a96e;margin-top:5px;flex-shrink:0;position:relative;z-index:1;margin-left:-4px}
+.tle .ev{font-size:14px;color:#2c2c2c;padding-top:1px}
+.galsec{padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2)}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.gal img{width:100%;height:90px;object-fit:cover;border-radius:2px;border:1px solid rgba(201,169,110,.2)}
+.recsec{padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2)}
+.acc{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:10px;overflow:hidden;transition:background .3s}
+.acc.open{background:rgba(201,169,110,.03)}
+.acc-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:none;border:none;cursor:pointer;font-family:'Cormorant Garamond',serif;color:#2c1a0a;font-size:16px}
+.acc-btn .at{display:flex;align-items:center;gap:12px}
+.acc-btn .as{color:#c9a96e;font-size:12px}
+.acc-btn .am{font-size:10px;color:#9a8060;font-family:system-ui}
+.acc-btn .ap{color:#c9a96e;font-size:18px;transition:transform .3s}
+.acc.open .ap{transform:rotate(45deg)}
+.acc-bd{display:none;padding:0 22px 22px}
+.acc.open .acc-bd{display:block}
+.acc-img{width:100%;height:240px;object-fit:cover;border-radius:2px;margin-bottom:20px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.rst{font-size:13px;color:#c9a96e;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;font-weight:600;font-family:system-ui}
+.ingl{list-style:none}
+.ingl li{font-size:13px;color:#5a4030;padding:5px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:8px}
+.ingl li::before{content:'▪';color:#c9a96e;font-size:8px;margin-top:6px}
+.mstep{display:flex;gap:10px;margin-bottom:12px}
+.mstep .n{color:#c9a96e;font-size:16px;font-weight:700;min-width:20px}
+.mstep p{font-size:13px;color:#5a4030;line-height:1.6}
+.cnotes{margin-top:20px;padding:16px 20px;background:rgba(201,169,110,.05);border-left:3px solid #c9a96e}
+.cnotes .l{font-size:10px;color:#c9a96e;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui}
+.cnotes p{font-size:13px;color:#5a4030;line-height:1.7;font-style:italic}
+.wine{margin-top:16px;display:flex;align-items:center;gap:10px}
+.wine .l{font-size:9px;color:#c9a96e;letter-spacing:.1em;text-transform:uppercase;font-family:system-ui}
+.wine .t{font-size:13px;color:#5a4030;font-style:italic}
+.p-foot{padding:20px 40px;text-align:center;font-family:system-ui;font-size:10px;color:#9a8060;letter-spacing:.1em}
+@media(max-width:760px){
+  .trip{grid-template-columns:1fr;height:auto}
+  .trip .pt,.trip .ph2{height:280px}
+  .qbio{grid-template-columns:1fr}
+  .qbio .q{border-right:none;border-bottom:1px solid rgba(201,169,110,.2)}
+  .rgrid{grid-template-columns:1fr}
+  .hero{height:340px}
+  .hero .hc h1{font-size:32px}
+  nav .links{gap:14px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand" onclick="go('home')">
+    <div class="logo" id="navlogo">🍴</div>
+    <span class="bn">Chefs Goutatoo Genève</span>
+  </div>
+  <div class="links">
+    <a id="lk-home" onclick="go('home')">Accueil</a>
+    <a id="lk-chefs" onclick="go('chefs')">Les Chefs</a>
+    <a id="lk-rec" onclick="go('chefs')">Recettes</a>
+    <a onclick="go('home')">Contact</a>
+  </div>
+</nav>
+<div id="root"></div>
+<footer>
+  <div class="fn">Chefs Goutatoo Genève</div>
+  <div class="fc">© 2025 · Pour le bon goût</div>
+</footer>
 
-  // ── RECIPE ACCORDION JS (shared) ──
-  const accordionJS = `<script>
-document.querySelectorAll('.acc-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const item=btn.closest('.acc-item');
-    document.querySelectorAll('.acc-item.open').forEach(o=>{if(o!==item){o.classList.remove('open');o.querySelector('.acc-body').style.display='none';}});
-    const isOpen=item.classList.toggle('open');
-    item.querySelector('.acc-body').style.display=isOpen?'block':'none';
-    btn.querySelector('.aplus').style.transform=isOpen?'rotate(45deg)':'none';
-  });
-});
-<\/script>`;
+<script>
+const DATA = ${jsonData};
+const chefs = DATA.chefs;
+const g = DATA.globalData || {};
 
-  // ── BUILD RECIPE HTML ──
-  function buildRecipeHTML(r){
-    const ings=(r.ingredients||[]).filter(Boolean).map(i=>`<li style="font-size:13px;color:#5a4030;padding:5px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:8px;"><span style="color:${gold};font-size:8px;margin-top:6px;">▪</span>${e(i)}</li>`).join('');
-    const steps=(r.method||[]).filter(Boolean).map((s,i)=>`<div style="display:flex;gap:10px;margin-bottom:12px;"><span style="color:${gold};font-size:16px;font-weight:700;min-width:20px;">${i+1}</span><p style="font-size:13px;color:#5a4030;line-height:1.6;margin:0;">${e(s)}</p></div>`).join('');
-    return `<div class="acc-item" style="border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:10px;overflow:hidden;">
-      <button class="acc-btn" type="button" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:none;border:none;cursor:pointer;font-family:'Cormorant Garamond',serif;color:#2c1a0a;font-size:16px;">
-        <span style="display:flex;align-items:center;gap:12px;"><span style="color:${gold};font-size:12px;">✦</span>${e(r.title)}</span>
-        <span style="display:flex;align-items:center;gap:16px;">
-          <span style="font-size:10px;color:#9a8060;font-family:system-ui;">${e(r.prepTime)} · ${e(r.difficulty)}</span>
-          <span class="aplus" style="color:${gold};font-size:18px;transition:transform .3s;">+</span>
-        </span>
-      </button>
-      <div class="acc-body" style="display:none;padding:0 22px 22px;">
-        ${r.image?`<img src="${r.image}" style="width:100%;height:240px;object-fit:cover;border-radius:2px;margin-bottom:20px;">`:''}
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-          <div><div style="font-size:13px;color:${gold};letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;font-weight:600;font-family:system-ui;">Ingrédients</div><ul style="list-style:none;padding:0;">${ings}</ul></div>
-          <div><div style="font-size:13px;color:${gold};letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;font-weight:600;font-family:system-ui;">Préparation</div>${steps}</div>
-        </div>
-        ${r.chefNotes?`<div style="margin-top:20px;padding:16px 20px;background:rgba(201,169,110,.05);border-left:3px solid ${gold};"><div style="font-size:10px;color:${gold};letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui;">Notes du Chef</div><p style="font-size:13px;color:#5a4030;line-height:1.7;font-style:italic;">${e(r.chefNotes)}</p></div>`:''}
-        ${r.winepairing?`<div style="margin-top:16px;display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🍷</span><div><div style="font-size:9px;color:${gold};letter-spacing:.1em;text-transform:uppercase;font-family:system-ui;">Accord Mets-Vins</div><div style="font-size:13px;color:#5a4030;font-style:italic;">${e(r.winepairing)}</div></div></div>`:''}
-      </div>
-    </div>`;
-  }
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function slug(s){return (s||'chef').toLowerCase().replace(/[àáâã]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i').replace(/[ôõ]/g,'o').replace(/[ùûü]/g,'u').replace(/[ç]/g,'c').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
 
-  // ══════════════════════════════
-  // PAGE 1: INDEX (homepage)
-  // ══════════════════════════════
-  const heroSection = g.heroImage
-    ? `<div style="position:relative;height:480px;overflow:hidden;">
-        <img src="${g.heroImage}" style="width:100%;height:100%;object-fit:cover;">
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.6));"></div>
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:48px;text-align:center;">
-          <div style="font-size:11px;color:${gold};letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui;">Chefs Goutatoo Genève</div>
-          <h1 style="font-family:'Playfair Display',serif;font-size:48px;color:#fff;margin:0 0 12px;font-weight:700;">${e(g.homeTitle||'Chefs Goutatoo Genève')}</h1>
-          <p style="font-size:16px;color:rgba(255,255,255,.85);font-style:italic;">${e(g.homeSub||'Pour le bon goût')}</p>
-        </div>
-      </div>`
-    : `<div style="background:linear-gradient(135deg,#1a2744,#2c3e50);height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;">
-        <h1 style="font-family:'Playfair Display',serif;font-size:44px;color:#fff;margin:0 0 12px;">${e(g.homeTitle||'Chefs Goutatoo Genève')}</h1>
-        <p style="font-size:15px;color:rgba(255,255,255,.75);font-style:italic;">${e(g.homeSub||'Pour le bon goût')}</p>
-      </div>`;
+// set nav logo
+if(g.siteLogo){document.getElementById('navlogo').innerHTML='<img src="'+g.siteLogo+'">';}
 
-  const chefsGrid = chefs.map(c=>`
-    <a href="${slugify(c.name)}.html" style="text-align:center;text-decoration:none;display:block;">
-      <div style="width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;border-radius:2px;margin-bottom:12px;">
-        ${c.portrait?`<img src="${c.portrait}" style="width:100%;height:100%;object-fit:cover;">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:.2;">👨‍🍳</div>`}
-      </div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:${navy};font-weight:600;margin-bottom:4px;">${e(c.name)}</div>
-      <div style="font-size:11px;color:#9a8060;">${e(c.restaurant)}</div>
-    </a>`).join('');
+function setActive(page){
+  document.getElementById('lk-home').classList.toggle('active',page==='home');
+  document.getElementById('lk-chefs').classList.toggle('active',page==='chefs');
+}
 
-  const indexHTML = headHtml('Accueil') +
-    navHtml('home') +
-    heroSection +
-    `<div style="background:#f0ebe0;border-top:2px solid ${gold};border-bottom:2px solid ${gold};padding:18px 40px;text-align:center;">
-      <p style="font-size:15px;color:#5a4030;font-style:italic;">${e(g.homeTagline||'')}</p>
-    </div>
-    <div style="padding:56px 40px;">
-      <div style="text-align:center;margin-bottom:40px;">
-        <div style="font-size:10px;color:${gold};letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui;">Notre Collectif</div>
-        <h2 style="font-family:'Playfair Display',serif;font-size:34px;color:${navy};margin:0 0 16px;">Les Chefs</h2>
-        <div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:24px;">${chefsGrid}</div>
-    </div>
-    <footer style="background:#111;padding:24px 40px;text-align:center;">
-      <div style="color:${gold};font-family:'Cormorant Garamond',serif;font-size:14px;margin-bottom:4px;">Chefs Goutatoo Genève</div>
-      <div style="color:#555;font-size:10px;font-family:system-ui;letter-spacing:.1em;">© 2025 · Pour le bon goût</div>
-    </footer>
-    </body></html>`;
+function go(page,chefId){
+  setActive(page);
+  window.scrollTo(0,0);
+  if(page==='home') renderHome();
+  else if(page==='chefs') renderChefs();
+  else if(page==='chef') renderChef(chefId);
+  // update hash so back button & sharing works
+  if(page==='chef') location.hash='#chef-'+chefId;
+  else location.hash='#'+page;
+}
 
-  // ══════════════════════════════
-  // PAGE 2: CHEFS DIRECTORY
-  // ══════════════════════════════
-  const dirCards = chefs.map(c=>`
-    <a href="${slugify(c.name)}.html" style="background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;overflow:hidden;text-decoration:none;display:block;transition:transform .2s;box-shadow:0 2px 12px rgba(0,0,0,.04);">
-      <div style="height:200px;background:#e8e4dc;overflow:hidden;">
-        ${c.portrait?`<img src="${c.portrait}" style="width:100%;height:100%;object-fit:cover;">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.15;">👨‍🍳</div>`}
-      </div>
-      <div style="padding:18px;">
-        <div style="font-size:9px;color:${gold};letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;font-family:system-ui;">${e(c.position)}</div>
-        <div style="font-size:19px;font-weight:700;color:${navy};margin-bottom:4px;">${e(c.name)}</div>
-        <div style="font-size:12px;color:#9a8060;margin-bottom:10px;">${e(c.restaurant)}</div>
-        <div style="font-size:12px;color:#7a6050;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${e(c.biography)}</div>
-        <div style="margin-top:12px;color:${gold};font-size:11px;font-family:system-ui;">Voir le profil →</div>
-      </div>
-    </a>`).join('');
+function renderHome(){
+  const hero = g.heroImage
+    ? '<div class="hero"><img src="'+g.heroImage+'"><div class="ov"></div><div class="hc"><div class="tl">Chefs Goutatoo Genève</div><h1>'+esc(g.homeTitle||'Chefs Goutatoo Genève')+'</h1><p>'+esc(g.homeSub||'Pour le bon goût')+'</p></div></div>'
+    : '<div class="hero"><div class="ph"><h1 style="font-family:\\'Playfair Display\\',serif;font-size:44px;color:#fff;margin:0 0 12px">'+esc(g.homeTitle||'Chefs Goutatoo Genève')+'</h1><p style="font-size:15px;color:rgba(255,255,255,.75);font-style:italic">'+esc(g.homeSub||'Pour le bon goût')+'</p></div></div>';
+  const cards = chefs.map(function(c){
+    return '<a class="home-card" onclick="go(\\'chef\\',\\''+c.id+'\\')"><div class="im">'+(c.portrait?'<img src="'+c.portrait+'">':'<div class="e">👨‍🍳</div>')+'</div><div class="nm">'+esc(c.name)+'</div><div class="rs">'+esc(c.restaurant)+'</div></a>';
+  }).join('');
+  document.getElementById('root').innerHTML =
+    hero +
+    '<div class="tagbar"><p>'+esc(g.homeTagline||'')+'</p></div>'+
+    '<div class="sec"><div class="sec-h"><div class="lbl">Notre Collectif</div><h2>Les Chefs</h2><div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div></div><div class="home-grid">'+cards+'</div></div>';
+}
 
-  const chefsHTML = headHtml('Les Chefs') +
-    navHtml('chefs') +
-    `<div style="padding:48px 32px;max-width:1200px;margin:0 auto;">
-      <div style="text-align:center;margin-bottom:48px;">
-        <div style="font-size:10px;color:${gold};letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px;font-family:system-ui;">Chefs Goutatoo Genève</div>
-        <h1 style="font-family:'Playfair Display',serif;font-size:38px;color:${navy};margin:0 0 16px;">Notre Équipe</h1>
-        <div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
-        <p style="font-size:14px;color:#7a6050;margin-top:16px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7;font-style:italic;">Nous formons une équipe de cuisiniers liés par l'amour de la bonne cuisine, et principalement par une amitié sincère.</p>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px;">${dirCards}</div>
-    </div>
-    <footer style="background:#111;padding:24px 40px;text-align:center;">
-      <div style="color:${gold};font-family:'Cormorant Garamond',serif;font-size:14px;margin-bottom:4px;">Chefs Goutatoo Genève</div>
-      <div style="color:#555;font-size:10px;font-family:system-ui;letter-spacing:.1em;">© 2025 · Pour le bon goût</div>
-    </footer>
-    </body></html>`;
+function renderChefs(){
+  const cards = chefs.map(function(c){
+    return '<a class="dir-card" onclick="go(\\'chef\\',\\''+c.id+'\\')"><div class="im">'+(c.portrait?'<img src="'+c.portrait+'">':'<div class="e">👨‍🍳</div>')+'</div><div class="bd"><div class="ps">'+esc(c.position)+'</div><div class="nm">'+esc(c.name)+'</div><div class="rs">'+esc(c.restaurant)+'</div><div class="bio">'+esc(c.biography)+'</div><div class="lk">Voir le profil →</div></div></a>';
+  }).join('');
+  document.getElementById('root').innerHTML =
+    '<div class="dir"><div class="sec-h"><div class="lbl">Chefs Goutatoo Genève</div><h2>Notre Équipe</h2><div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div><p style="font-size:14px;color:#7a6050;margin-top:16px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7;font-style:italic">Nous formons une équipe de cuisiniers liés par l\\'amour de la bonne cuisine, et principalement par une amitié sincère.</p></div><div class="dir-grid">'+cards+'</div></div>';
+}
 
-  // ══════════════════════════════
-  // PAGE 3+: INDIVIDUAL CHEF PAGES
-  // ══════════════════════════════
-  const chefPages = chefs.map(c=>{
-    const awards=(c.awards||[]).map((a,i,arr)=>`
-      <div style="flex:1 1 180px;padding:12px 20px;border-right:${i<arr.length-1?`1px solid rgba(201,169,110,.2)`:'none'};text-align:center;">
-        <div style="color:${gold};font-size:16px;margin-bottom:8px;">✦</div>
-        <div style="font-size:10px;color:#9a8060;letter-spacing:.12em;text-transform:uppercase;line-height:1.4;font-family:system-ui;">${e(a)}</div>
-      </div>`).join('');
+function buildRecipe(r){
+  const ings=(r.ingredients||[]).filter(Boolean).map(function(i){return '<li>'+esc(i)+'</li>';}).join('');
+  const steps=(r.method||[]).filter(Boolean).map(function(s,i){return '<div class="mstep"><span class="n">'+(i+1)+'</span><p>'+esc(s)+'</p></div>';}).join('');
+  return '<div class="acc"><button class="acc-btn" type="button" onclick="toggleAcc(this)"><span class="at"><span class="as">✦</span>'+esc(r.title)+'</span><span style="display:flex;align-items:center;gap:16px"><span class="am">'+esc(r.prepTime)+' · '+esc(r.difficulty)+'</span><span class="ap">+</span></span></button><div class="acc-bd">'+
+    (r.image?'<img class="acc-img" src="'+r.image+'">':'')+
+    '<div class="rgrid"><div><div class="rst">Ingrédients</div><ul class="ingl">'+ings+'</ul></div><div><div class="rst">Préparation</div>'+steps+'</div></div>'+
+    (r.chefNotes?'<div class="cnotes"><div class="l">Notes du Chef</div><p>'+esc(r.chefNotes)+'</p></div>':'')+
+    (r.winepairing?'<div class="wine"><span style="font-size:18px">🍷</span><div><div class="l">Accord Mets-Vins</div><div class="t">'+esc(r.winepairing)+'</div></div></div>':'')+
+    '</div></div>';
+}
+function toggleAcc(btn){
+  const item=btn.parentElement;
+  document.querySelectorAll('.acc.open').forEach(function(o){if(o!==item)o.classList.remove('open');});
+  item.classList.toggle('open');
+}
 
-    const timeline=(c.timeline||[]).map(t=>`
-      <div style="display:flex;gap:20px;margin-bottom:16px;align-items:flex-start;">
-        <div style="min-width:52px;text-align:right;color:${gold};font-size:12px;font-weight:700;padding-top:2px;font-family:system-ui;">${e(t.year)}</div>
-        <div style="width:8px;height:8px;border-radius:50%;background:${gold};margin-top:5px;flex-shrink:0;position:relative;z-index:1;margin-left:-4px;"></div>
-        <div style="font-size:14px;color:${charcoal};padding-top:1px;">${e(t.event)}</div>
-      </div>`).join('');
+function renderChef(id){
+  const c = chefs.find(function(x){return String(x.id)===String(id);}) || chefs[0];
+  if(!c){renderChefs();return;}
+  const awards=(c.awards||[]).map(function(a,i,arr){return '<div class="award"'+(i===arr.length-1?' style="border-right:none"':'')+'><div class="st">✦</div><div class="tx">'+esc(a)+'</div></div>';}).join('');
+  const tl=(c.timeline||[]).map(function(t){return '<div class="tle"><span class="yr">'+esc(t.year)+'</span><div class="dt"></div><div class="ev">'+esc(t.event)+'</div></div>';}).join('');
+  const gal=(c.gallery||[]).map(function(im){return '<img src="'+im+'">';}).join('');
+  const recs=(c.recipes||[]).map(buildRecipe).join('');
 
-    const galleryImgs=(c.gallery||[]).map(img=>`<img src="${img}" style="width:100%;height:90px;object-fit:cover;border-radius:2px;border:1px solid rgba(201,169,110,.2);">`).join('');
-    const recipes=(c.recipes||[]).map(r=>buildRecipeHTML(r)).join('');
+  document.getElementById('root').innerHTML =
+    '<div class="trip">'+
+      '<div class="pt">'+(c.portrait?'<img src="'+c.portrait+'">':'<div class="e">👨‍🍳</div>')+'</div>'+
+      '<div class="ct">'+(c.restaurantLogo?'<img src="'+c.restaurantLogo+'">':'<div class="rn">'+esc(c.restaurant)+'</div>')+'<div class="or">✦</div><div class="dv"></div><div class="lo">Genève · Suisse</div></div>'+
+      '<div class="ph2">'+(c.restaurantPhoto?'<img src="'+c.restaurantPhoto+'">':'<div class="e">🏛</div>')+'</div>'+
+    '</div>'+
+    '<div class="p-hero"><div class="cl">Chef</div><h1>'+esc(c.name)+'</h1><div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div></div>'+
+    '<div class="qbio"><div class="q"><div class="qq">"</div><p>'+esc(c.philosophy)+'</p></div><div class="b"><p>'+esc(c.biography)+'</p></div></div>'+
+    (awards?'<div class="awards">'+awards+'</div>':'')+
+    (tl?'<div class="tlsec"><div class="s-title">Parcours</div><div class="tlwrap">'+tl+'</div></div>':'')+
+    (gal?'<div class="galsec"><div class="s-title">Galerie</div><div class="gal">'+gal+'</div></div>':'')+
+    (recs?'<div class="recsec"><div class="sec-h"><div class="s-title" style="margin-bottom:8px">Recettes Signatures</div><div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div></div>'+recs+'</div>':'')+
+    '<div class="p-foot">'+esc(c.restaurant)+' · Genève · Suisse</div>';
+}
 
-    return {
-      filename: slugify(c.name)+'.html',
-      content: headHtml(c.name) +
-      `<style>
-      .acc-item.open{background:rgba(201,169,110,.03);}
-      .profile-triptych{display:grid;grid-template-columns:1fr 1fr 1fr;height:340px;border-bottom:3px solid ${gold};}
-      @media(max-width:700px){.profile-triptych{grid-template-columns:1fr;height:auto;}.recipe-grid{grid-template-columns:1fr!important;}}
-      </style>` +
-      navHtml('chefs') +
-      `<div style="font-family:'Cormorant Garamond',serif;background:${ivory};min-height:100%;">
-        <!-- TRIPTYCH -->
-        <div class="profile-triptych">
-          <div style="background:#e8e4dc;overflow:hidden;">
-            ${c.portrait?`<img src="${c.portrait}" style="width:100%;height:100%;object-fit:cover;">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#ddd9d0;font-size:64px;opacity:.25;">👨‍🍳</div>`}
-          </div>
-          <div style="background:${ivory};display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;border:1px solid rgba(201,169,110,.3);border-top:none;border-bottom:none;">
-            ${c.restaurantLogo
-              ? `<img src="${c.restaurantLogo}" style="max-width:80%;max-height:110px;object-fit:contain;margin-bottom:20px;">`
-              : `<div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:${navy};font-weight:700;letter-spacing:.05em;text-align:center;margin-bottom:20px;">${e(c.restaurant)}</div>`}
-            <div style="color:${gold};font-size:20px;">✦</div>
-            <div style="width:60px;height:1px;background:${gold};margin:12px 0;"></div>
-            <div style="font-size:10px;color:#9a8060;letter-spacing:.2em;text-transform:uppercase;font-family:system-ui;">Genève · Suisse</div>
-          </div>
-          <div style="background:#ccc;overflow:hidden;">
-            ${c.restaurantPhoto?`<img src="${c.restaurantPhoto}" style="width:100%;height:100%;object-fit:cover;">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#d5d0c8;font-size:48px;opacity:.2;">🏛</div>`}
-          </div>
-        </div>
-        <!-- HERO NAME -->
-        <div style="text-align:center;padding:44px 40px 24px;border-bottom:1px solid rgba(201,169,110,.2);">
-          <div style="font-size:11px;color:${gold};letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui;">Chef</div>
-          <h1 style="font-family:'Playfair Display','Cormorant Garamond',serif;font-size:44px;font-weight:700;color:${navy};letter-spacing:.04em;margin:0 0 16px;">${e(c.name)}</h1>
-          <div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
-        </div>
-        <!-- QUOTE + BIO -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2);">
-          <div style="padding:32px 40px;border-right:1px solid rgba(201,169,110,.2);">
-            <div style="font-size:36px;color:${gold};line-height:1;margin-bottom:8px;font-family:Georgia,serif;">"</div>
-            <p style="font-size:20px;font-style:italic;color:${navy};line-height:1.5;margin:0;">${e(c.philosophy)}</p>
-          </div>
-          <div style="padding:32px 40px;">
-            <p style="font-size:14px;color:#5a4030;line-height:1.8;margin:0;">${e(c.biography)}</p>
-          </div>
-        </div>
-        <!-- AWARDS -->
-        ${awards?`<div style="padding:28px 40px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap;">${awards}</div>`:''}
-        <!-- TIMELINE -->
-        ${timeline?`<div style="padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2);">
-          <div style="font-size:11px;color:${gold};letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px;font-family:system-ui;font-weight:600;">Parcours</div>
-          <div style="position:relative;padding-left:80px;border-left:none;">
-            <div style="position:absolute;left:60px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3);"></div>
-            ${timeline}
-          </div>
-        </div>`:''}
-        <!-- GALLERY -->
-        ${galleryImgs?`<div style="padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2);">
-          <div style="font-size:11px;color:${gold};letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px;font-family:system-ui;font-weight:600;">Galerie</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">${galleryImgs}</div>
-        </div>`:''}
-        <!-- RECIPES -->
-        ${recipes?`<div style="padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2);">
-          <div style="text-align:center;margin-bottom:28px;">
-            <div style="font-size:11px;color:${gold};letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui;font-weight:600;">Recettes Signatures</div>
-            <div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
-          </div>
-          ${recipes}
-        </div>
-        ${accordionJS}`:''}
-        <!-- FOOTER -->
-        <div style="padding:20px 40px;text-align:center;font-family:system-ui;font-size:10px;color:#9a8060;letter-spacing:.1em;">${e(c.restaurant)} · Genève · Suisse</div>
-      </div>
-      <footer style="background:#111;padding:24px 40px;text-align:center;">
-        <div style="color:${gold};font-family:'Cormorant Garamond',serif;font-size:14px;margin-bottom:4px;">Chefs Goutatoo Genève</div>
-        <div style="color:#555;font-size:10px;font-family:system-ui;letter-spacing:.1em;">© 2025 · Pour le bon goût</div>
-      </footer>
-      </body></html>`
-    };
-  });
-
-  // ══════════════════════════════
-  // PACK INTO ZIP (no library — multi-file download via blob links)
-  // ══════════════════════════════
-  const allFiles = [
-    {filename:'index.html', content:indexHTML},
-    {filename:'chefs.html', content:chefsHTML},
-    ...chefPages
-  ];
-
-  // Show export summary then trigger each download with small delay
-  const names = allFiles.map(f=>f.filename).join(', ');
-  const confirmed = confirm(`Exporter ${allFiles.length} fichiers HTML ?\n\n${names}\n\nCliquez OK pour lancer les téléchargements.`);
-  if(!confirmed) return;
-
-  allFiles.forEach((file,i)=>{
-    setTimeout(()=>{
-      const blob=new Blob([file.content],{type:'text/html;charset=utf-8'});
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(blob);
-      a.download=file.filename;
-      a.click();
-      setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-    }, i*400);
-  });
-
-  document.getElementById('save-status').textContent=`✓ ${allFiles.length} fichiers exportés`;
+// Initial route from hash (supports refresh & shared links)
+function route(){
+  const h=location.hash.replace('#','');
+  if(h.indexOf('chef-')===0){ go('chef', h.slice(5)); }
+  else if(h==='chefs'){ go('chefs'); }
+  else { go('home'); }
+}
+window.addEventListener('hashchange',route);
+route();
+</script>
+</body>
+</html>`;
 }
 
 function slugify(str){
