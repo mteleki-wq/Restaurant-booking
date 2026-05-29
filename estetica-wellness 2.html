@@ -1043,10 +1043,25 @@ function saveAll() {
   try {
     const data = {};
     document.querySelectorAll('.field-input,.field-ta').forEach(el => { data[el.id] = el.value; });
-    data['__images__'] = imageStore;
+    // Only save USER-uploaded images (not pre-baked ones) to avoid storage overflow
+    const userImgs = {};
+    Object.keys(imageStore).forEach(function(k) {
+      if (imageStore[k] && imageStore[k] !== '__prebaked__') {
+        userImgs[k] = imageStore[k];
+      }
+    });
+    data['__images__'] = userImgs;
     localStorage.setItem('estetica-editor', JSON.stringify(data));
-    toast('Changes saved to browser ✓');
-  } catch(e) { toast('Could not save — storage full'); }
+    toast('Changes saved ✓');
+  } catch(e) {
+    // If still full, try saving text only
+    try {
+      const textOnly = {};
+      document.querySelectorAll('.field-input,.field-ta').forEach(el => { textOnly[el.id] = el.value; });
+      localStorage.setItem('estetica-editor', JSON.stringify(textOnly));
+      toast('Text saved (images too large for browser storage)');
+    } catch(e2) { toast('Browser storage full — try Export instead'); }
+  }
 }
 
 // ── LOAD ──
@@ -1115,10 +1130,36 @@ function resetAll() {
 function exportSite() {
   const gRaw = id => { const el = document.getElementById(id); return el ? el.value : ''; };
 
-  const heroBg  = imageStore['hero-bg']  || document.getElementById('hero-bg').style.backgroundImage.replace(/^url\(["']?/,'').replace(/["']?\)$/,'');
-  const acImgs  = [1,2,3,4,5].map(n => imageStore['ac'+n+'-img'] || document.getElementById('ac'+n+'-img').style.backgroundImage.replace(/^url\(["']?/,'').replace(/["']?\)$/,''));
-  const wkImgs  = [1,2,3].map(n => imageStore['wk-thumb-'+n] || '');
-  const pImg    = imageStore['about-portrait'] || '';
+  var heroBg = imageStore['hero-bg'] && imageStore['hero-bg'] !== '__prebaked__'
+    ? imageStore['hero-bg']
+    : document.getElementById('hero-bg').style.backgroundImage.replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'');
+  const acImgs = [1,2,3,4,5].map(function(n) {
+    if (imageStore['ac'+n+'-img'] && imageStore['ac'+n+'-img'] !== '__prebaked__') {
+      return imageStore['ac'+n+'-img'];
+    }
+    var el = document.getElementById('ac'+n+'-img');
+    return el ? el.style.backgroundImage.replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'') : '';
+  });
+  // Read workshop images directly from DOM (pre-baked or user-uploaded)
+  const wkImgs = [1,2,3].map(function(n) {
+    // Priority: user-uploaded (in imageStore) > pre-baked in element style
+    if (imageStore['wk-thumb-'+n] && imageStore['wk-thumb-'+n] !== '__prebaked__') {
+      return imageStore['wk-thumb-'+n];
+    }
+    var el = document.getElementById('wk-thumb-'+n);
+    if (el && el.style.backgroundImage) {
+      return el.style.backgroundImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+    }
+    return '';
+  });
+  // Read portrait from imageStore or DOM
+  var pImg = imageStore['about-portrait'] || '';
+  if (!pImg) {
+    var pEl = document.getElementById('about-portrait');
+    if (pEl && pEl.style.backgroundImage) {
+      pImg = pEl.style.backgroundImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+    }
+  }
 
   const wkFb = ['linear-gradient(135deg,#c8c0b0,#a09080)','linear-gradient(135deg,#b0c8b8,#809870)','linear-gradient(135deg,#b8b0c8,#887890)'];
   const acTags  = ['Individual \xb7 Face to Face or Online','Group \xb7 RTOs &amp; Vocational Education','Group \xb7 Corporate Workplace','Individual \xb7 30-Day Program','Private or Group \xb7 60\u201390 min'];
