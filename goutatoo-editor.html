@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goutatoo – Chef Portfolio Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:wght@700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:system-ui,sans-serif;background:#0e0e0e}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:#0e0e0e}
+::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#c9a96e55}
+
+/* ── LAYOUT ── */
+#app{display:flex;height:100vh;width:100%;overflow:hidden}
+#editor-col{width:38%;min-width:260px;max-width:55%;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+#drag-handle{width:5px;background:#1a1a1a;cursor:col-resize;display:flex;align-items:center;justify-content:center;border-left:1px solid #222;border-right:1px solid #222;flex-shrink:0;transition:background .2s;z-index:50}
+#drag-handle:hover{background:#c9a96e22}
+#drag-handle .pip{width:2px;height:40px;background:#333;border-radius:1px}
+#preview-col{flex:1;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── EDITOR PANEL ── */
+#editor-header{padding:16px 20px;border-bottom:1px solid #1e1e1e;background:#0a0a0a;flex-shrink:0}
+#editor-header .title{font-family:'Cormorant Garamond',serif;color:#c9a96e;font-size:16px;font-weight:700;letter-spacing:.05em}
+#editor-header .sub{font-size:10px;color:#444;margin-top:2px;letter-spacing:.1em}
+
+#chef-selector{padding:12px 20px;border-bottom:1px solid #1e1e1e;background:#0c0c0c;flex-shrink:0}
+#chef-selector .lbl{font-size:10px;color:#666;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+#chef-selector select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#e8e0d0;padding:7px 10px;border-radius:3px;font-size:12px;outline:none;margin-bottom:8px;appearance:none;cursor:pointer}
+#chef-selector .row{display:flex;gap:8px}
+
+#editor-body{flex:1;overflow-y:auto;background:#0e0e0e}
+
+.section{border-bottom:1px solid #2a2a2a}
+.section-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;padding:14px 20px;cursor:pointer;color:#c9a96e;font-size:11px;font-family:'Cormorant Garamond',serif;letter-spacing:.15em;text-transform:uppercase;font-weight:600}
+.section-toggle .arr{font-size:16px;color:#666;transition:transform .2s;display:inline-block}
+.section-toggle.open .arr{transform:rotate(90deg)}
+.section-body{padding:4px 20px 20px;display:none}
+.section-body.open{display:block}
+
+.field-group{margin-bottom:12px}
+.field-group label{font-size:10px;color:#666;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px}
+.field-group input,.field-group textarea,.field-group select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#e8e0d0;font-size:12px;padding:8px 10px;border-radius:3px;outline:none;transition:border-color .2s;font-family:inherit}
+.field-group input:focus,.field-group textarea:focus{border-color:#c9a96e}
+.field-group textarea{resize:vertical;font-family:'Cormorant Garamond',serif}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.img-uploader{margin-bottom:14px}
+.img-uploader label{font-size:10px;color:#666;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
+.img-drop{border:1px dashed #333;border-radius:4px;cursor:pointer;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90px;overflow:hidden;position:relative;transition:border-color .2s}
+.img-drop:hover{border-color:#c9a96e}
+.img-drop img{width:100%;height:100px;object-fit:cover}
+.img-drop .plus{font-size:22px;color:#444}
+.img-drop .hint{font-size:10px;color:#555;margin-top:4px}
+.img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.img-drop:hover .img-overlay{opacity:1}
+.img-overlay span{color:#c9a96e;font-size:11px}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.gallery-thumb{position:relative}
+.gallery-thumb img{width:100%;height:60px;object-fit:cover;border-radius:3px}
+.gallery-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:16px;height:16px;cursor:pointer;font-size:8px;line-height:16px;text-align:center;padding:0}
+
+.tl-row{display:flex;gap:6px;margin-bottom:8px;align-items:center}
+.tl-year{width:52px;background:#1a1a1a;border:1px solid #2a2a2a;color:#c9a96e;font-size:11px;padding:6px;border-radius:3px;outline:none;text-align:center}
+.tl-event{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;color:#e8e0d0;font-size:12px;padding:6px 8px;border-radius:3px;outline:none}
+.tl-year:focus,.tl-event:focus{border-color:#c9a96e}
+
+.award-row{display:flex;gap:6px;margin-bottom:6px}
+.award-row input{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;color:#e8e0d0;font-size:12px;padding:6px 8px;border-radius:3px;outline:none}
+.award-row input:focus{border-color:#c9a96e}
+
+.recipe-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:4px;padding:10px 12px;margin-bottom:8px}
+.recipe-card .rtitle{font-family:'Cormorant Garamond',serif;font-size:13px;color:#e8e0d0;margin-bottom:8px}
+.recipe-card .rbtns{display:flex;gap:6px}
+
+/* BUTTONS */
+.btn-gold{background:#c9a96e;border:none;color:#111;padding:7px 14px;border-radius:3px;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.05em;font-family:'Cormorant Garamond',serif;transition:opacity .2s}
+.btn-gold:hover{opacity:.85}
+.btn-dark{background:#1a1a1a;border:1px solid #2a2a2a;color:#888;padding:7px 14px;border-radius:3px;cursor:pointer;font-size:11px;transition:border-color .2s}
+.btn-dark:hover{border-color:#444}
+.btn-sm{padding:4px 10px;font-size:10px}
+.btn-danger{color:#cc4444}
+.btn-full{width:100%}
+
+#editor-footer{padding:12px 20px;border-top:1px solid #1e1e1e;background:#0a0a0a;display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;align-items:center}
+#editor-footer .autosave{flex:1;text-align:right;font-size:10px;color:#333}
+
+/* ── PREVIEW PANEL ── */
+#preview-toolbar{background:#1a1a1a;padding:8px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #222;flex-shrink:0}
+.dot{width:8px;height:8px;border-radius:50%}
+#url-bar{flex:1;background:#111;border-radius:3px;padding:4px 10px;font-size:10px;color:#555;margin-left:8px;font-family:monospace}
+.tab-btn{padding:8px 18px;background:transparent;color:#888;border:none;cursor:pointer;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-family:system-ui;transition:all .2s;border-radius:2px}
+.tab-btn.active{background:#c9a96e;color:#111}
+
+#preview-body{flex:1;overflow-y:auto;background:#f5f0e8;position:relative}
+
+/* ── SIMULATED WEBSITE NAV ── */
+#site-nav{background:#111;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:10}
+#site-nav .brand{display:flex;align-items:center;gap:10px}
+#site-nav .logo-icon{width:32px;height:32px;background:#c9a96e;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px}
+#site-nav .brand-name{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;letter-spacing:.05em}
+#site-nav .nav-links{display:flex;gap:20px}
+#site-nav .nav-links span{color:#888;font-size:11px;letter-spacing:.08em;cursor:pointer;font-family:system-ui;transition:color .2s}
+#site-nav .nav-links span.active{color:#c9a96e}
+
+/* ── CHEF STRIP ── */
+#chef-strip{background:#f0ebe0;border-bottom:1px solid rgba(201,169,110,.2);display:flex;overflow-x:auto;padding:0 16px}
+.strip-card{cursor:pointer;padding:12px 16px;border-bottom:3px solid transparent;display:flex;gap:12px;align-items:center;white-space:nowrap;transition:background .2s;flex-shrink:0}
+.strip-card:hover{background:rgba(201,169,110,.05)}
+.strip-card.active{border-bottom-color:#c9a96e;background:rgba(201,169,110,.07)}
+.strip-avatar{width:44px;height:44px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.strip-card.active .strip-avatar{border-color:#c9a96e}
+.strip-avatar img{width:100%;height:100%;object-fit:cover}
+.strip-info .sname{font-family:'Cormorant Garamond',serif;font-size:14px;color:#e8e0d0;font-weight:600}
+.strip-card.active .strip-info .sname{color:#c9a96e}
+.strip-info .srest{font-size:10px;color:#666;margin-top:1px}
+
+/* ── CHEF PROFILE ── */
+#profile-view{font-family:'Cormorant Garamond',serif;background:#f5f0e8;min-height:100%}
+.profile-triptych{display:grid;grid-template-columns:1fr 1fr 1fr;height:340px;border-bottom:3px solid #c9a96e}
+.triptych-portrait{background:#e8e4dc;overflow:hidden}
+.triptych-portrait img{width:100%;height:100%;object-fit:cover}
+.triptych-portrait .placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#ddd9d0;font-size:64px;opacity:.3}
+.triptych-center{background:#f5f0e8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;border:1px solid rgba(201,169,110,.3);border-top:none;border-bottom:none}
+.triptych-center img{max-width:80%;max-height:100px;object-fit:contain;margin-bottom:20px}
+.triptych-center .rest-name-text{font-family:'Cormorant Garamond',serif;font-size:20px;color:#1a2744;font-weight:700;letter-spacing:.05em;text-align:center;margin-bottom:20px}
+.triptych-center .ornament{color:#c9a96e;font-size:20px}
+.triptych-center .divider{width:60px;height:1px;background:#c9a96e;margin:12px 0}
+.triptych-center .locale{font-size:10px;color:#9a8060;letter-spacing:.2em;text-transform:uppercase;font-family:system-ui}
+.triptych-photo{background:#ccc;overflow:hidden}
+.triptych-photo img{width:100%;height:100%;object-fit:cover}
+.triptych-photo .placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#d5d0c8;font-size:48px;opacity:.2}
+
+.profile-hero{text-align:center;padding:40px 40px 20px;border-bottom:1px solid rgba(201,169,110,.2)}
+.profile-hero .chef-label{font-size:11px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui}
+.profile-hero h1{font-family:'Playfair Display','Cormorant Garamond',serif;font-size:40px;font-weight:700;color:#1a2744;letter-spacing:.05em;margin:0 0 16px}
+.ornament-line{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px}
+.ornament-line .line{width:60px;height:1px;background:#c9a96e}
+.ornament-line .star{color:#c9a96e;font-size:14px}
+
+.profile-quote-bio{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)}
+.profile-quote{padding:32px 40px;border-right:1px solid rgba(201,169,110,.2)}
+.profile-quote .qq{font-size:36px;color:#c9a96e;line-height:1;margin-bottom:8px;font-family:Georgia,serif}
+.profile-quote p{font-size:19px;font-style:italic;color:#1a2744;line-height:1.5;margin:0}
+.profile-bio{padding:32px 40px}
+.profile-bio p{font-size:14px;color:#5a4030;line-height:1.8;margin:0}
+
+.profile-awards{padding:28px 40px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap}
+.award-item{flex:1 1 180px;padding:12px 20px;border-right:1px solid rgba(201,169,110,.2);text-align:center}
+.award-item:last-child{border-right:none}
+.award-item .star{color:#c9a96e;font-size:16px;margin-bottom:8px}
+.award-item .text{font-size:10px;color:#9a8060;letter-spacing:.12em;text-transform:uppercase;line-height:1.4;font-family:system-ui}
+
+.profile-timeline{padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2)}
+.section-title{font-size:11px;color:#c9a96e;letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px;font-family:system-ui;font-weight:600}
+.timeline-wrap{position:relative;padding-left:80px}
+.timeline-wrap::before{content:'';position:absolute;left:60px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3)}
+.tl-entry{display:flex;gap:20px;margin-bottom:16px;align-items:flex-start;position:relative}
+.tl-entry .yr{position:absolute;left:-80px;width:70px;text-align:right;color:#c9a96e;font-size:12px;font-weight:700;padding-top:2px;font-family:system-ui}
+.tl-entry .dot{width:8px;height:8px;border-radius:50%;background:#c9a96e;margin-top:5px;flex-shrink:0;position:relative;z-index:1;margin-left:-4px}
+.tl-entry .ev{font-size:14px;color:#2c2c2c;padding-top:1px}
+
+.profile-gallery{padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2)}
+.gallery-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:0}
+.gallery-preview img{width:100%;height:90px;object-fit:cover;border-radius:2px;border:1px solid rgba(201,169,110,.2)}
+
+.profile-recipes{padding:32px 40px;border-bottom:1px solid rgba(201,169,110,.2)}
+.recipes-header{text-align:center;margin-bottom:28px}
+
+/* ACCORDION */
+.accordion-item{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:10px;overflow:hidden;transition:background .3s}
+.accordion-item.open{background:rgba(201,169,110,.03)}
+.accordion-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:none;border:none;cursor:pointer;font-family:'Cormorant Garamond',serif;color:#2c1a0a;font-size:16px}
+.accordion-btn .atitle{display:flex;align-items:center;gap:12px}
+.accordion-btn .astar{color:#c9a96e;font-size:12px}
+.accordion-btn .ameta{font-size:10px;color:#9a8060;font-family:system-ui;letter-spacing:.05em}
+.accordion-btn .aplus{color:#c9a96e;font-size:18px;transition:transform .3s}
+.accordion-item.open .aplus{transform:rotate(45deg)}
+.accordion-body{display:none;padding:0 22px 22px}
+.accordion-item.open .accordion-body{display:block}
+.accordion-img{width:100%;height:240px;object-fit:cover;border-radius:2px;margin-bottom:20px}
+.recipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.recipe-section-title{font-family:'Cormorant Garamond',serif;font-size:13px;color:#c9a96e;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;font-weight:600}
+.ing-list{list-style:none;padding:0;margin:0}
+.ing-list li{font-size:13px;color:#5a4030;padding:4px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:8px;align-items:flex-start}
+.ing-list li::before{content:'▪';color:#c9a96e;font-size:8px;margin-top:5px;flex-shrink:0}
+.method-step{margin-bottom:12px;display:flex;gap:10px}
+.method-step .num{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;min-width:20px}
+.method-step p{font-size:13px;color:#5a4030;line-height:1.6;margin:0}
+.chef-notes-box{margin-top:20px;padding:16px 20px;background:rgba(201,169,110,.05);border-left:3px solid #c9a96e}
+.chef-notes-label{font-size:10px;color:#c9a96e;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.chef-notes-box p{font-size:13px;color:#5a4030;line-height:1.7;margin:0;font-style:italic}
+.wine-row{margin-top:16px;display:flex;align-items:center;gap:10px}
+.wine-row .wine-label{font-size:9px;color:#c9a96e;letter-spacing:.1em;text-transform:uppercase}
+.wine-row .wine-text{font-size:13px;color:#5a4030;font-style:italic}
+
+.profile-footer{padding:20px 40px;text-align:center;font-family:system-ui;font-size:10px;color:#9a8060;letter-spacing:.1em}
+
+/* ── DIRECTORY ── */
+#directory-view{background:#f5f0e8;min-height:100%;padding:40px 32px;font-family:'Cormorant Garamond',serif}
+.dir-header{text-align:center;margin-bottom:40px}
+.dir-header .dlabel{font-size:10px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px;font-family:system-ui}
+.dir-header h1{font-size:36px;font-weight:700;color:#1a2744;margin:0 0 16px}
+.dir-header .tagline{font-size:14px;color:#7a6050;margin-top:16px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7;font-style:italic}
+.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.dir-card{background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;cursor:pointer;overflow:hidden;transition:transform .2s,box-shadow .2s;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.dir-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.dir-card .dimg{height:180px;background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:.2}
+.dir-card .dimg img{width:100%;height:100%;object-fit:cover;opacity:1}
+.dir-card .dinfo{padding:16px 18px}
+.dir-card .dpos{font-size:9px;color:#c9a96e;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;font-family:system-ui}
+.dir-card .dname{font-size:18px;font-weight:700;color:#1a2744;margin-bottom:4px}
+.dir-card .drest{font-size:12px;color:#9a8060;margin-bottom:10px}
+.dir-card .dbio{font-size:12px;color:#7a6050;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dir-card .dlink{margin-top:12px;display:flex;align-items:center;gap:6px;color:#c9a96e;font-size:11px;font-family:system-ui}
+
+/* ── RECIPE MODAL ── */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center}
+#modal-overlay.show{display:flex}
+#modal-box{background:#141414;border:1px solid #2a2a2a;border-radius:6px;width:min(700px,95vw);max-height:90vh;overflow-y:auto;padding:28px}
+#modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+#modal-header span{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600}
+#modal-close{background:none;border:none;color:#666;font-size:20px;cursor:pointer;line-height:1}
+.ing-edit-row,.step-edit-row{display:flex;gap:6px;margin-bottom:6px;align-items:flex-start}
+.ing-edit-row input{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;color:#e8e0d0;font-size:12px;padding:6px 8px;border-radius:3px;outline:none}
+.step-edit-row .step-num{color:#c9a96e;font-size:10px;min-width:20px;padding-top:8px;font-family:system-ui}
+.step-edit-row textarea{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;color:#e8e0d0;font-size:12px;padding:6px 8px;border-radius:3px;outline:none;resize:vertical}
+.del-btn{background:none;border:none;color:#555;cursor:pointer;font-size:14px;padding:0;flex-shrink:0;padding-top:4px}
+.del-btn:hover{color:#cc4444}
+.sub-label{font-size:10px;color:#666;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
+.add-btn-small{font-size:10px;color:#c9a96e;background:none;border:1px solid #c9a96e;border-radius:3px;padding:2px 8px;cursor:pointer}
+.list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.modal-img-drop{border:1px dashed #333;border-radius:4px;cursor:pointer;background:#111;height:120px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.modal-img-drop img{width:100%;height:100%;object-fit:cover}
+.modal-img-drop span{color:#555;font-size:11px}
+.modal-footer{display:flex;gap:10px;margin-top:20px}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══ LEFT: EDITOR ══ -->
+  <div id="editor-col">
+    <div id="editor-header">
+      <div class="title">✦ GOUTATOO EDITOR</div>
+      <div class="sub">CHEF PORTFOLIO MANAGEMENT</div>
+    </div>
+
+    <div id="chef-selector">
+      <div class="lbl">Chef Sélectionné</div>
+      <select id="chef-select"></select>
+      <div class="row">
+        <button class="btn-gold btn-sm" style="flex:1" onclick="addChef()">+ Nouveau Chef</button>
+        <button class="btn-dark btn-sm btn-danger" id="del-chef-btn" onclick="deleteChef()">Supprimer</button>
+      </div>
+    </div>
+
+    <div id="editor-body">
+
+      <!-- INFORMATIONS -->
+      <div class="section">
+        <button class="section-toggle open" onclick="toggleSection(this)">
+          Informations du Chef <span class="arr">›</span>
+        </button>
+        <div class="section-body open">
+          <div class="field-group"><label>Nom du Chef</label><input id="f-name" oninput="updateField('name',this.value)"></div>
+          <div class="field-group"><label>Poste / Titre</label><input id="f-position" oninput="updateField('position',this.value)"></div>
+          <div class="field-group"><label>Citation / Philosophie</label><textarea id="f-philosophy" rows="3" oninput="updateField('philosophy',this.value)"></textarea></div>
+          <div class="field-group"><label>Biographie</label><textarea id="f-biography" rows="4" oninput="updateField('biography',this.value)"></textarea></div>
+        </div>
+      </div>
+
+      <!-- RESTAURANT -->
+      <div class="section">
+        <button class="section-toggle open" onclick="toggleSection(this)">
+          Restaurant <span class="arr">›</span>
+        </button>
+        <div class="section-body open">
+          <div class="field-group"><label>Nom du Restaurant</label><input id="f-restaurant" oninput="updateField('restaurant',this.value)"></div>
+          <div class="field-group"><label>Description</label><textarea id="f-restaurantDesc" rows="3" oninput="updateField('restaurantDesc',this.value)"></textarea></div>
+        </div>
+      </div>
+
+      <!-- IMAGES -->
+      <div class="section">
+        <button class="section-toggle" onclick="toggleSection(this)">
+          Photos &amp; Images <span class="arr">›</span>
+        </button>
+        <div class="section-body">
+          <div class="img-uploader">
+            <label>Portrait du Chef</label>
+            <div class="img-drop" id="drop-portrait" onclick="triggerUpload('upload-portrait')">
+              <span class="plus">+</span><span class="hint">Cliquer ou glisser</span>
+              <div class="img-overlay"><span>Remplacer</span></div>
+            </div>
+            <input type="file" id="upload-portrait" accept="image/*" style="display:none" onchange="handleImage('portrait',this)">
+          </div>
+          <div class="img-uploader">
+            <label>Logo du Restaurant</label>
+            <div class="img-drop" id="drop-logo" onclick="triggerUpload('upload-logo')">
+              <span class="plus">+</span><span class="hint">Cliquer ou glisser</span>
+              <div class="img-overlay"><span>Remplacer</span></div>
+            </div>
+            <input type="file" id="upload-logo" accept="image/*" style="display:none" onchange="handleImage('restaurantLogo',this)">
+          </div>
+          <div class="img-uploader">
+            <label>Photo du Restaurant</label>
+            <div class="img-drop" id="drop-restphoto" onclick="triggerUpload('upload-restphoto')">
+              <span class="plus">+</span><span class="hint">Cliquer ou glisser</span>
+              <div class="img-overlay"><span>Remplacer</span></div>
+            </div>
+            <input type="file" id="upload-restphoto" accept="image/*" style="display:none" onchange="handleImage('restaurantPhoto',this)">
+          </div>
+          <div class="img-uploader">
+            <label>Galerie</label>
+            <button class="btn-dark btn-full" style="margin-bottom:8px" onclick="triggerUpload('upload-gallery')">+ Ajouter des photos</button>
+            <input type="file" id="upload-gallery" accept="image/*" multiple style="display:none" onchange="handleGallery(this)">
+            <div class="gallery-grid" id="gallery-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AWARDS -->
+      <div class="section">
+        <button class="section-toggle open" onclick="toggleSection(this)">
+          Récompenses &amp; Distinctions <span class="arr">›</span>
+        </button>
+        <div class="section-body open" id="awards-list"></div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="section">
+        <button class="section-toggle open" onclick="toggleSection(this)">
+          Parcours &amp; Carrière <span class="arr">›</span>
+        </button>
+        <div class="section-body open" id="timeline-list"></div>
+      </div>
+
+      <!-- RECIPES -->
+      <div class="section">
+        <button class="section-toggle open" onclick="toggleSection(this)">
+          Recettes <span class="arr">›</span>
+        </button>
+        <div class="section-body open">
+          <button class="btn-gold btn-full" style="margin-bottom:12px" onclick="openRecipeModal(null)">+ Nouvelle Recette</button>
+          <div id="recipes-list"></div>
+        </div>
+      </div>
+
+      <!-- SOCIAL -->
+      <div class="section">
+        <button class="section-toggle" onclick="toggleSection(this)">
+          Liens Sociaux <span class="arr">›</span>
+        </button>
+        <div class="section-body">
+          <div class="field-group"><label>Instagram</label><input id="f-instagram" placeholder="@handle" oninput="updateSocial('instagram',this.value)"></div>
+          <div class="field-group"><label>Facebook</label><input id="f-facebook" placeholder="URL" oninput="updateSocial('facebook',this.value)"></div>
+          <div class="field-group"><label>Site Web</label><input id="f-website" placeholder="https://" oninput="updateSocial('website',this.value)"></div>
+        </div>
+      </div>
+
+    </div><!-- /editor-body -->
+
+    <div id="editor-footer">
+      <button class="btn-dark" style="font-size:10px" onclick="exportJSON()">⬇ Export JSON</button>
+      <button class="btn-dark" style="font-size:10px" onclick="document.getElementById('import-file').click()">⬆ Import JSON</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(this)">
+      <span class="autosave" id="save-status">Auto-sauvegardé ✓</span>
+    </div>
+  </div><!-- /editor-col -->
+
+  <!-- ══ DRAG HANDLE ══ -->
+  <div id="drag-handle"><div class="pip"></div></div>
+
+  <!-- ══ RIGHT: PREVIEW ══ -->
+  <div id="preview-col">
+    <div id="preview-toolbar">
+      <div class="dot" style="background:#ff5f57"></div>
+      <div class="dot" style="background:#febc2e"></div>
+      <div class="dot" style="background:#28c840"></div>
+      <div id="url-bar">goutatoo-geneve.ch/chefs</div>
+      <button class="tab-btn" id="tab-dir" onclick="switchView('directory')">Répertoire</button>
+      <button class="tab-btn active" id="tab-prof" onclick="switchView('profile')">Profil</button>
+    </div>
+    <div id="preview-body">
+      <div id="site-nav">
+        <div class="brand">
+          <div class="logo-icon">🍴</div>
+          <span class="brand-name">Chefs Goutatoo Genève</span>
+        </div>
+        <div class="nav-links">
+          <span>Accueil</span>
+          <span class="active">Les Chefs</span>
+          <span>Recettes</span>
+          <span>Contact</span>
+        </div>
+      </div>
+
+      <!-- Chef strip -->
+      <div id="chef-strip"></div>
+
+      <!-- Profile view -->
+      <div id="profile-view"></div>
+
+      <!-- Directory view -->
+      <div id="directory-view" style="display:none"></div>
+
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ══ RECIPE MODAL ══ -->
+<div id="modal-overlay" onclick="closeModalOnBg(event)">
+  <div id="modal-box">
+    <div id="modal-header">
+      <span>Éditer la Recette</span>
+      <button id="modal-close" onclick="closeRecipeModal()">✕</button>
+    </div>
+    <div class="field-group"><label>Titre de la recette</label><input id="m-title"></div>
+    <div class="grid2">
+      <div class="field-group"><label>Temps de préparation</label><input id="m-prepTime"></div>
+      <div class="field-group"><label>Difficulté</label><input id="m-difficulty"></div>
+    </div>
+    <div class="field-group"><label>Accord Mets-Vins</label><input id="m-wine"></div>
+    <div style="margin-bottom:16px">
+      <span class="sub-label">Photo du Plat</span>
+      <div class="modal-img-drop" id="modal-img-drop" onclick="triggerUpload('m-img-file')">
+        <span>+ Ajouter une photo</span>
+      </div>
+      <input type="file" id="m-img-file" accept="image/*" style="display:none" onchange="handleModalImage(this)">
+    </div>
+    <div style="margin-bottom:16px">
+      <div class="list-header">
+        <span class="sub-label" style="margin:0">Ingrédients</span>
+        <button class="add-btn-small" onclick="addIngredient()">+ Ajouter</button>
+      </div>
+      <div id="m-ingredients"></div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div class="list-header">
+        <span class="sub-label" style="margin:0">Méthode</span>
+        <button class="add-btn-small" onclick="addStep()">+ Étape</button>
+      </div>
+      <div id="m-method"></div>
+    </div>
+    <div class="field-group"><label>Notes du Chef</label><textarea id="m-notes" rows="3"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn-gold" style="flex:1" onclick="saveRecipe()">Enregistrer la Recette</button>
+      <button class="btn-dark" onclick="closeRecipeModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+function uid(){return Math.random().toString(36).slice(2,9)}
+
+const DEFAULT_CHEF = {
+  id:'1', name:'Jean-Marc Bessire', position:'Chef de Cuisine',
+  philosophy:'Ma passion, le poisson, les épices et le goût du bon goût.',
+  biography:'Jean-Marc Bessire vous accueille au restaurant Le Cigalon, aux portes de Genève, pour vous faire découvrir les saveurs de l\'océan et les mille plaisirs d\'une cuisine de la mer raffinée, sincère et inspirée.',
+  awards:['Michelin Reconnu depuis 1997','Cuisine de la Mer Raffinée','Passionné par le Poisson et les Épices'],
+  restaurant:'Restaurant Le Cigalon',
+  restaurantDesc:'Aux portes de Genève, Le Cigalon est un écrin d\'élégance où la cuisine de la mer révèle toute sa splendeur.',
+  portrait:null, restaurantLogo:null, restaurantPhoto:null, gallery:[],
+  timeline:[
+    {year:'1985',event:'Formation à l\'École Hôtelière de Genève'},
+    {year:'1990',event:'Apprentissage Mövenpick Genève'},
+    {year:'1997',event:'Reconnaissance Michelin'},
+    {year:'2002',event:'Oriental Hotel Bangkok'},
+    {year:'2005',event:'Ouverture du Restaurant Le Cigalon'}
+  ],
+  recipes:[{
+    id:'r1', title:'Maquereau à la Straciatella et Vinaigrette de Morilles',
+    image:null, prepTime:'30 min', difficulty:'Intermédiaire',
+    winepairing:'Chablis Premier Cru, Château de Maligny 2021',
+    chefNotes:'Cette recette met en valeur le contraste entre la richesse crémeuse de la straciatella, la puissance iodée du maquereau, l\'acidité délicate des câpres et tomates, et la profondeur aromatique des morilles.',
+    ingredients:['2 filets de maquereau de 20 g chacun','1 artichaut tourné de 5 g','1 câpre à queue','2 petites câpres','1/4 de tomate cerise','30 g de straciatella','2 morceaux de tomates confites de 2 g chacun','Huile d\'olive','Sel et poivre','Pousses de shiso ou de bourrache'],
+    method:['Mettre la straciatella dans une poche à douille unie de 1 cm. Sur une assiette, dresser une ligne régulière de straciatella.','Disposer harmonieusement la câpre à queue, le quart de tomate cerise, une petite câpre, un morceau de tomate confite sur une extrémité de la ligne.','Assaisonner les deux morceaux de maquereau avec du sel et du poivre. Faire chauffer une poêle antiadhésive avec de l\'huile d\'olive. Cuire environ 3 minutes jusqu\'à obtenir une belle coloration.','Déposer délicatement les deux morceaux de maquereau au centre de la ligne de straciatella. Terminer par un léger filet d\'huile d\'olive.','Ajouter quelques pousses de shiso ou de bourrache afin d\'apporter couleur, fraîcheur et élégance.']
+  }],
+  social:{instagram:'',facebook:'',website:''}
+};
+
+let chefs = [];
+let selectedId = '1';
+let currentView = 'profile';
+let editingRecipeId = null; // null = new
+let modalRecipeData = {}; // working copy
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+function init(){
+  try{
+    const s=localStorage.getItem('goutatoo_chefs');
+    chefs=s?JSON.parse(s):[JSON.parse(JSON.stringify(DEFAULT_CHEF))];
+  }catch{chefs=[JSON.parse(JSON.stringify(DEFAULT_CHEF))];}
+  if(!chefs.length) chefs=[JSON.parse(JSON.stringify(DEFAULT_CHEF))];
+  selectedId=String(chefs[0].id);
+  renderAll();
+}
+
+function save(){
+  try{localStorage.setItem('goutatoo_chefs',JSON.stringify(chefs));}catch{}
+  const s=document.getElementById('save-status');
+  s.textContent='Auto-sauvegardé ✓';
+}
+
+function getChef(){return chefs.find(c=>String(c.id)===String(selectedId))||chefs[0];}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════════════
+function renderAll(){
+  renderChefSelector();
+  loadEditorFields();
+  renderAwards();
+  renderTimeline();
+  renderRecipesList();
+  renderGalleryGrid();
+  renderImageDrops();
+  renderPreview();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CHEF SELECTOR
+// ═══════════════════════════════════════════════════════════════
+function renderChefSelector(){
+  const sel=document.getElementById('chef-select');
+  sel.innerHTML=chefs.map(c=>`<option value="${c.id}"${String(c.id)===String(selectedId)?'selected':''}>${esc(c.name)}</option>`).join('');
+  document.getElementById('del-chef-btn').style.display=chefs.length>1?'':'none';
+}
+document.getElementById('chef-select').addEventListener('change',function(){
+  selectedId=this.value;
+  renderAll();
+});
+
+function addChef(){
+  const nc=JSON.parse(JSON.stringify(DEFAULT_CHEF));
+  nc.id=uid(); nc.name='Nouveau Chef'; nc.portrait=null; nc.restaurantLogo=null;
+  nc.restaurantPhoto=null; nc.gallery=[]; nc.timeline=[]; nc.recipes=[];
+  chefs.push(nc);
+  selectedId=String(nc.id);
+  save(); renderAll();
+}
+function deleteChef(){
+  if(chefs.length<=1) return;
+  if(!confirm('Supprimer ce chef ?')) return;
+  chefs=chefs.filter(c=>String(c.id)!==String(selectedId));
+  selectedId=String(chefs[0].id);
+  save(); renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EDITOR FIELDS
+// ═══════════════════════════════════════════════════════════════
+function loadEditorFields(){
+  const c=getChef();
+  document.getElementById('f-name').value=c.name||'';
+  document.getElementById('f-position').value=c.position||'';
+  document.getElementById('f-philosophy').value=c.philosophy||'';
+  document.getElementById('f-biography').value=c.biography||'';
+  document.getElementById('f-restaurant').value=c.restaurant||'';
+  document.getElementById('f-restaurantDesc').value=c.restaurantDesc||'';
+  document.getElementById('f-instagram').value=(c.social&&c.social.instagram)||'';
+  document.getElementById('f-facebook').value=(c.social&&c.social.facebook)||'';
+  document.getElementById('f-website').value=(c.social&&c.social.website)||'';
+}
+
+function updateField(key,val){
+  const c=getChef(); c[key]=val;
+  save(); renderPreview();
+}
+function updateSocial(key,val){
+  const c=getChef();
+  if(!c.social) c.social={};
+  c.social[key]=val;
+  save();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// IMAGES
+// ═══════════════════════════════════════════════════════════════
+function triggerUpload(id){document.getElementById(id).click();}
+
+function handleImage(field,input){
+  const f=input.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const c=getChef(); c[field]=e.target.result;
+    save(); renderImageDrops(); renderPreview();
+  };
+  r.readAsDataURL(f);
+  input.value='';
+}
+
+function renderImageDrops(){
+  const c=getChef();
+  setDrop('drop-portrait',c.portrait);
+  setDrop('drop-logo',c.restaurantLogo);
+  setDrop('drop-restphoto',c.restaurantPhoto);
+}
+
+function setDrop(id,src){
+  const el=document.getElementById(id); if(!el) return;
+  if(src){
+    el.innerHTML=`<img src="${src}"><div class="img-overlay"><span>Remplacer</span></div>`;
+  }else{
+    el.innerHTML=`<span class="plus">+</span><span class="hint">Cliquer ou glisser</span><div class="img-overlay"><span>Remplacer</span></div>`;
+  }
+}
+
+function handleGallery(input){
+  const files=Array.from(input.files); if(!files.length) return;
+  const c=getChef(); let done=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{c.gallery.push(e.target.result); done++;
+      if(done===files.length){save();renderGalleryGrid();renderPreview();}
+    };
+    r.readAsDataURL(f);
+  });
+  input.value='';
+}
+
+function renderGalleryGrid(){
+  const c=getChef();
+  const g=document.getElementById('gallery-grid');
+  g.innerHTML=(c.gallery||[]).map((img,i)=>`
+    <div class="gallery-thumb">
+      <img src="${img}">
+      <button class="gallery-del" onclick="delGallery(${i})">✕</button>
+    </div>`).join('');
+}
+
+function delGallery(i){
+  const c=getChef(); c.gallery.splice(i,1);
+  save(); renderGalleryGrid(); renderPreview();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AWARDS
+// ═══════════════════════════════════════════════════════════════
+function renderAwards(){
+  const c=getChef();
+  document.getElementById('awards-list').innerHTML=(c.awards||[]).map((a,i)=>`
+    <div class="award-row">
+      <input value="${esc(a)}" oninput="updateAward(${i},this.value)" placeholder="Distinction...">
+      <button class="del-btn" onclick="delAward(${i})">✕</button>
+    </div>`).join('')+`<button class="btn-dark btn-sm" style="margin-top:4px" onclick="addAward()">+ Ajouter</button>`;
+}
+function addAward(){const c=getChef();c.awards.push('');save();renderAwards();}
+function updateAward(i,v){const c=getChef();c.awards[i]=v;save();renderPreview();}
+function delAward(i){const c=getChef();c.awards.splice(i,1);save();renderAwards();renderPreview();}
+
+// ═══════════════════════════════════════════════════════════════
+// TIMELINE
+// ═══════════════════════════════════════════════════════════════
+function renderTimeline(){
+  const c=getChef();
+  document.getElementById('timeline-list').innerHTML=(c.timeline||[]).map((t,i)=>`
+    <div class="tl-row">
+      <input class="tl-year" value="${esc(t.year)}" oninput="updateTL(${i},'year',this.value)">
+      <input class="tl-event" value="${esc(t.event)}" oninput="updateTL(${i},'event',this.value)" placeholder="Événement...">
+      <button class="del-btn" onclick="delTL(${i})">✕</button>
+    </div>`).join('')+`<button class="btn-dark btn-sm" style="margin-top:4px" onclick="addTL()">+ Ajouter une étape</button>`;
+}
+function addTL(){const c=getChef();c.timeline.push({year:'2024',event:''});save();renderTimeline();}
+function updateTL(i,k,v){const c=getChef();c.timeline[i][k]=v;save();renderPreview();}
+function delTL(i){const c=getChef();c.timeline.splice(i,1);save();renderTimeline();renderPreview();}
+
+// ═══════════════════════════════════════════════════════════════
+// RECIPES LIST (editor)
+// ═══════════════════════════════════════════════════════════════
+function renderRecipesList(){
+  const c=getChef();
+  document.getElementById('recipes-list').innerHTML=(c.recipes||[]).map(r=>`
+    <div class="recipe-card">
+      <div class="rtitle">${esc(r.title)}</div>
+      <div class="rbtns">
+        <button class="btn-gold btn-sm" onclick="openRecipeModal('${r.id}')">Éditer</button>
+        <button class="btn-dark btn-sm" onclick="dupRecipe('${r.id}')">Dupliquer</button>
+        <button class="btn-dark btn-sm btn-danger" onclick="delRecipe('${r.id}')">Supprimer</button>
+      </div>
+    </div>`).join('');
+}
+
+function delRecipe(id){
+  const c=getChef(); c.recipes=c.recipes.filter(r=>r.id!==id);
+  save(); renderRecipesList(); renderPreview();
+}
+function dupRecipe(id){
+  const c=getChef(); const r=c.recipes.find(r=>r.id===id); if(!r) return;
+  const nr=JSON.parse(JSON.stringify(r)); nr.id=uid(); nr.title+=' (Copie)';
+  c.recipes.push(nr); save(); renderRecipesList(); renderPreview();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RECIPE MODAL
+// ═══════════════════════════════════════════════════════════════
+function openRecipeModal(id){
+  const c=getChef();
+  if(id){
+    const r=c.recipes.find(r=>r.id===id);
+    modalRecipeData=JSON.parse(JSON.stringify(r));
+    editingRecipeId=id;
+  }else{
+    modalRecipeData={id:uid(),title:'Nouvelle Recette',image:null,prepTime:'30 min',difficulty:'Intermédiaire',winepairing:'',chefNotes:'',ingredients:[''],method:['']};
+    editingRecipeId=null;
+  }
+  populateModal();
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function populateModal(){
+  const r=modalRecipeData;
+  document.getElementById('m-title').value=r.title||'';
+  document.getElementById('m-prepTime').value=r.prepTime||'';
+  document.getElementById('m-difficulty').value=r.difficulty||'';
+  document.getElementById('m-wine').value=r.winepairing||'';
+  document.getElementById('m-notes').value=r.chefNotes||'';
+  // image
+  const id=document.getElementById('modal-img-drop');
+  id.innerHTML=r.image?`<img src="${r.image}">`:`<span>+ Ajouter une photo</span>`;
+  renderModalIngredients();
+  renderModalMethod();
+}
+
+function renderModalIngredients(){
+  document.getElementById('m-ingredients').innerHTML=(modalRecipeData.ingredients||[]).map((ing,i)=>`
+    <div class="ing-edit-row">
+      <input value="${esc(ing)}" oninput="modalRecipeData.ingredients[${i}]=this.value" placeholder="Ingrédient...">
+      <button class="del-btn" onclick="delIngredient(${i})">✕</button>
+    </div>`).join('');
+}
+function addIngredient(){modalRecipeData.ingredients.push('');renderModalIngredients();}
+function delIngredient(i){modalRecipeData.ingredients.splice(i,1);renderModalIngredients();}
+
+function renderModalMethod(){
+  document.getElementById('m-method').innerHTML=(modalRecipeData.method||[]).map((step,i)=>`
+    <div class="step-edit-row">
+      <span class="step-num">${i+1}.</span>
+      <textarea rows="2" oninput="modalRecipeData.method[${i}]=this.value" placeholder="Étape...">${esc(step)}</textarea>
+      <button class="del-btn" onclick="delStep(${i})">✕</button>
+    </div>`).join('');
+}
+function addStep(){modalRecipeData.method.push('');renderModalMethod();}
+function delStep(i){modalRecipeData.method.splice(i,1);renderModalMethod();}
+
+function handleModalImage(input){
+  const f=input.files[0]; if(!f) return;
+  const r2=new FileReader();
+  r2.onload=e=>{
+    modalRecipeData.image=e.target.result;
+    document.getElementById('modal-img-drop').innerHTML=`<img src="${e.target.result}">`;
+  };
+  r2.readAsDataURL(f);
+  input.value='';
+}
+
+function saveRecipe(){
+  // collect current field values
+  modalRecipeData.title=document.getElementById('m-title').value;
+  modalRecipeData.prepTime=document.getElementById('m-prepTime').value;
+  modalRecipeData.difficulty=document.getElementById('m-difficulty').value;
+  modalRecipeData.winepairing=document.getElementById('m-wine').value;
+  modalRecipeData.chefNotes=document.getElementById('m-notes').value;
+  // collect ingredients & method from DOM inputs
+  const ingInputs=document.querySelectorAll('#m-ingredients input');
+  modalRecipeData.ingredients=Array.from(ingInputs).map(i=>i.value).filter(Boolean);
+  const stepInputs=document.querySelectorAll('#m-method textarea');
+  modalRecipeData.method=Array.from(stepInputs).map(t=>t.value).filter(Boolean);
+
+  const c=getChef();
+  if(editingRecipeId){
+    const idx=c.recipes.findIndex(r=>r.id===editingRecipeId);
+    if(idx>=0) c.recipes[idx]=modalRecipeData;
+  }else{
+    c.recipes.push(modalRecipeData);
+  }
+  save(); renderRecipesList(); renderPreview();
+  closeRecipeModal();
+}
+
+function closeRecipeModal(){document.getElementById('modal-overlay').classList.remove('show');}
+function closeModalOnBg(e){if(e.target===document.getElementById('modal-overlay')) closeRecipeModal();}
+
+// ═══════════════════════════════════════════════════════════════
+// SECTIONS TOGGLE
+// ═══════════════════════════════════════════════════════════════
+function toggleSection(btn){
+  btn.classList.toggle('open');
+  const body=btn.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIEW SWITCH
+// ═══════════════════════════════════════════════════════════════
+function switchView(v){
+  currentView=v;
+  document.getElementById('tab-dir').classList.toggle('active',v==='directory');
+  document.getElementById('tab-prof').classList.toggle('active',v==='profile');
+  document.getElementById('profile-view').style.display=v==='profile'?'':'none';
+  document.getElementById('chef-strip').style.display=v==='profile'?'':'none';
+  document.getElementById('directory-view').style.display=v==='directory'?'':'none';
+  renderPreview();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PREVIEW RENDER
+// ═══════════════════════════════════════════════════════════════
+function renderPreview(){
+  updateUrlBar();
+  renderChefStrip();
+  if(currentView==='profile') renderProfile();
+  else renderDirectory();
+}
+
+function updateUrlBar(){
+  const c=getChef();
+  const slug=currentView==='directory'?'chefs':(c.name||'chef').toLowerCase().replace(/\s+/g,'-');
+  document.getElementById('url-bar').textContent='goutatoo-geneve.ch/'+slug;
+}
+
+// ── CHEF STRIP ──
+function renderChefStrip(){
+  document.getElementById('chef-strip').innerHTML=chefs.map(c=>`
+    <div class="strip-card${String(c.id)===String(selectedId)?' active':''}" onclick="selectChefPreview('${c.id}')">
+      <div class="strip-avatar">${c.portrait?`<img src="${c.portrait}">`:'👨‍🍳'}</div>
+      <div class="strip-info">
+        <div class="sname">${esc(c.name)}</div>
+        <div class="srest">${esc(c.restaurant)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function selectChefPreview(id){
+  selectedId=String(id);
+  renderChefSelector();
+  loadEditorFields();
+  renderAwards();
+  renderTimeline();
+  renderRecipesList();
+  renderGalleryGrid();
+  renderImageDrops();
+  renderPreview();
+}
+
+// ── PROFILE ──
+function renderProfile(){
+  const c=getChef();
+  const pv=document.getElementById('profile-view');
+
+  const awardsHtml=(c.awards||[]).map((a,i,arr)=>`
+    <div class="award-item" ${i===arr.length-1?'style="border-right:none"':''}>
+      <div class="star">✦</div>
+      <div class="text">${esc(a)}</div>
+    </div>`).join('');
+
+  const tlHtml=(c.timeline||[]).map(t=>`
+    <div class="tl-entry">
+      <span class="yr">${esc(t.year)}</span>
+      <div class="dot"></div>
+      <div class="ev">${esc(t.event)}</div>
+    </div>`).join('');
+
+  const galleryHtml=(c.gallery||[]).length?`
+    <div class="profile-gallery">
+      <div class="section-title">Galerie</div>
+      <div class="gallery-preview">${(c.gallery||[]).map(img=>`<img src="${img}">`).join('')}</div>
+    </div>`:'';
+
+  const recipesHtml=(c.recipes||[]).length?`
+    <div class="profile-recipes">
+      <div class="recipes-header">
+        <div class="section-title" style="margin-bottom:8px">Recettes Signatures</div>
+        <div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
+      </div>
+      ${(c.recipes||[]).map(r=>buildAccordion(r)).join('')}
+    </div>`:'';
+
+  pv.innerHTML=`
+    <div class="profile-triptych">
+      <div class="triptych-portrait">${c.portrait?`<img src="${c.portrait}" alt="${esc(c.name)}">`:`<div class="placeholder">👨‍🍳</div>`}</div>
+      <div class="triptych-center">
+        ${c.restaurantLogo?`<img src="${c.restaurantLogo}" alt="${esc(c.restaurant)}">`:`<div class="rest-name-text">${esc(c.restaurant)}</div>`}
+        <div class="ornament">✦</div>
+        <div class="divider"></div>
+        <div class="locale">Genève · Suisse</div>
+      </div>
+      <div class="triptych-photo">${c.restaurantPhoto?`<img src="${c.restaurantPhoto}" alt="${esc(c.restaurant)}">`:`<div class="placeholder">🏛</div>`}</div>
+    </div>
+
+    <div class="profile-hero">
+      <div class="chef-label">Chef</div>
+      <h1>${esc(c.name)}</h1>
+      <div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
+    </div>
+
+    <div class="profile-quote-bio">
+      <div class="profile-quote">
+        <div class="qq">"</div>
+        <p>${esc(c.philosophy)}</p>
+      </div>
+      <div class="profile-bio">
+        <p>${esc(c.biography)}</p>
+      </div>
+    </div>
+
+    ${awardsHtml?`<div class="profile-awards">${awardsHtml}</div>`:''}
+
+    ${tlHtml?`<div class="profile-timeline"><div class="section-title">Parcours</div><div class="timeline-wrap">${tlHtml}</div></div>`:''}
+
+    ${galleryHtml}
+    ${recipesHtml}
+
+    <div class="profile-footer">${esc(c.restaurant)} · Genève · Suisse</div>
+  `;
+
+  // bind accordion toggles
+  pv.querySelectorAll('.accordion-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const item=btn.closest('.accordion-item');
+      // close others
+      pv.querySelectorAll('.accordion-item.open').forEach(o=>{if(o!==item){o.classList.remove('open');}});
+      item.classList.toggle('open');
+    });
+  });
+}
+
+function buildAccordion(r){
+  return `
+    <div class="accordion-item" id="acc-${r.id}">
+      <button class="accordion-btn" type="button">
+        <span class="atitle"><span class="astar">✦</span>${esc(r.title)}</span>
+        <span style="display:flex;align-items:center;gap:16px">
+          <span class="ameta">${esc(r.prepTime)} · ${esc(r.difficulty)}</span>
+          <span class="aplus">+</span>
+        </span>
+      </button>
+      <div class="accordion-body">
+        ${r.image?`<img class="accordion-img" src="${r.image}" alt="${esc(r.title)}">`:''}
+        <div class="recipe-grid">
+          <div>
+            <div class="recipe-section-title">Ingrédients</div>
+            <ul class="ing-list">${(r.ingredients||[]).filter(Boolean).map(ing=>`<li>${esc(ing)}</li>`).join('')}</ul>
+          </div>
+          <div>
+            <div class="recipe-section-title">Préparation</div>
+            ${(r.method||[]).filter(Boolean).map((s,i)=>`<div class="method-step"><span class="num">${i+1}</span><p>${esc(s)}</p></div>`).join('')}
+          </div>
+        </div>
+        ${r.chefNotes?`<div class="chef-notes-box"><div class="chef-notes-label">Notes du Chef</div><p>${esc(r.chefNotes)}</p></div>`:''}
+        ${r.winepairing?`<div class="wine-row"><span style="font-size:16px">🍷</span><div><div class="wine-label">Accord Mets-Vins</div><div class="wine-text">${esc(r.winepairing)}</div></div></div>`:''}
+      </div>
+    </div>`;
+}
+
+// ── DIRECTORY ──
+function renderDirectory(){
+  document.getElementById('directory-view').innerHTML=`
+    <div class="dir-header">
+      <div class="dlabel">Chefs Goutatoo Genève</div>
+      <h1>Notre Équipe</h1>
+      <div class="ornament-line"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
+      <p class="tagline">Nous formons une équipe de cuisiniers liés par l'amour de la bonne cuisine, et principalement par une amitié sincère.</p>
+    </div>
+    <div class="dir-grid">
+      ${chefs.map(c=>`
+        <div class="dir-card" onclick="selectChefFromDir('${c.id}')">
+          <div class="dimg">${c.portrait?`<img src="${c.portrait}" alt="${esc(c.name)}">`:'👨‍🍳'}</div>
+          <div class="dinfo">
+            <div class="dpos">${esc(c.position)}</div>
+            <div class="dname">${esc(c.name)}</div>
+            <div class="drest">${esc(c.restaurant)}</div>
+            <div class="dbio">${esc(c.biography)}</div>
+            <div class="dlink"><span>Voir le profil</span><span>→</span></div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function selectChefFromDir(id){
+  selectedId=String(id);
+  switchView('profile');
+  renderChefSelector();
+  loadEditorFields();
+  renderAwards();
+  renderTimeline();
+  renderRecipesList();
+  renderGalleryGrid();
+  renderImageDrops();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DRAG SPLIT
+// ═══════════════════════════════════════════════════════════════
+(function(){
+  const handle=document.getElementById('drag-handle');
+  const edCol=document.getElementById('editor-col');
+  let dragging=false;
+  handle.addEventListener('mousedown',e=>{dragging=true;e.preventDefault();});
+  document.addEventListener('mousemove',e=>{
+    if(!dragging) return;
+    const pct=(e.clientX/window.innerWidth)*100;
+    const clamped=Math.max(25,Math.min(55,pct));
+    edCol.style.width=clamped+'%';
+  });
+  document.addEventListener('mouseup',()=>{dragging=false;});
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ═══════════════════════════════════════════════════════════════
+function exportJSON(){
+  const blob=new Blob([JSON.stringify(chefs,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='goutatoo-chefs.json'; a.click();
+}
+function importJSON(input){
+  const f=input.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{chefs=JSON.parse(e.target.result);selectedId=String(chefs[0].id);}catch{}
+    save(); renderAll();
+  };
+  r.readAsText(f);
+  input.value='';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════════════════════════
+function esc(str){
+  if(!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
