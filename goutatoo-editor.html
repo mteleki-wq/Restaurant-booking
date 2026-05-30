@@ -10,15 +10,15 @@
 html,body{height:100%;overflow:hidden;background:#0e0e0e;font-family:system-ui,sans-serif}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
 #app{display:flex;height:100vh;overflow:hidden}
-#ed{width:38%;min-width:240px;display:flex;flex-direction:column;overflow:hidden;background:#0e0e0e}
+#ed{width:38%;min-width:240px;display:flex;flex-direction:column;overflow:hidden;background:#0e0e0e;flex-shrink:0}
 #drg{width:5px;background:#1a1a1a;cursor:col-resize;flex-shrink:0}
-#drg:hover{background:#c9a96e33}
-#pv{flex:1;overflow:hidden;display:flex;flex-direction:column}
+#drg:hover{background:#c9a96e44}
+#pv{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 #ehd{padding:14px 18px;background:#0a0a0a;border-bottom:1px solid #1e1e1e;flex-shrink:0}
 #ehd .t{font-family:'Cormorant Garamond',serif;color:#c9a96e;font-size:15px;font-weight:700;letter-spacing:.05em}
 #ehd .s{font-size:9px;color:#444;letter-spacing:.1em;margin-top:2px}
 #ptabs{display:flex;background:#0b0b0b;border-bottom:1px solid #1e1e1e;flex-shrink:0}
-.ptab{flex:1;padding:9px 4px;background:none;border:none;border-bottom:2px solid transparent;color:#555;font-size:9px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.ptab{flex:1;padding:9px 4px;background:none;border:none;border-bottom:2px solid transparent;color:#555;font-size:9px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
 .ptab.on{color:#c9a96e;border-bottom-color:#c9a96e}
 #csel{padding:10px 16px;background:#0c0c0c;border-bottom:1px solid #1e1e1e;flex-shrink:0}
 #csel .lb{font-size:9px;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
@@ -27,7 +27,7 @@ html,body{height:100%;overflow:hidden;background:#0e0e0e;font-family:system-ui,s
 #ebody{flex:1;overflow-y:auto}
 .epage{display:none}.epage.on{display:block}
 .sec{border-bottom:1px solid #222}
-.stog{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;padding:12px 16px;cursor:pointer;color:#c9a96e;font-size:10px;font-family:'Cormorant Garamond',serif;letter-spacing:.15em;text-transform:uppercase;font-weight:600}
+.stog{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;padding:12px 16px;cursor:pointer;color:#c9a96e;font-size:10px;font-family:'Cormorant Garamond',serif;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
 .stog .ar{color:#555;transition:transform .2s}
 .stog.on .ar{transform:rotate(90deg)}
 .sbody{padding:0 16px 16px;display:none}.sbody.on{display:block}
@@ -41,57 +41,37 @@ html,body{height:100%;overflow:hidden;background:#0e0e0e;font-family:system-ui,s
 .idrop{border:1px dashed #2a2a2a;border-radius:4px;cursor:pointer;background:#111;min-height:80px;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:12px;transition:border-color .2s}
 .idrop:hover{border-color:#c9a96e}
 .idrop img{width:100%;height:90px;object-fit:cover;pointer-events:none}
-.idrop .ph{text-align:center;pointer-events:none}
-.idrop .ph .ic{font-size:20px;color:#333}
-.idrop .ph .tx{font-size:9px;color:#444;margin-top:3px}
-.idrop .ov{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;opacity:0;transition:opacity .2s}
+.idrop .ph .ic{font-size:20px;color:#333;text-align:center}
+.idrop .ph .tx{font-size:9px;color:#444;margin-top:3px;text-align:center}
+.idrop .ov{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;opacity:0;transition:opacity .2s}
 .idrop:hover .ov{opacity:1}
-.ov span{font-size:10px;color:#c9a96e;letter-spacing:.05em}
-.ov .dx{font-size:9px;color:#ff7777;background:rgba(0,0,0,.4);border:1px solid #ff777744;border-radius:2px;padding:2px 7px;cursor:pointer}
+.ov .oc{font-size:10px;color:#c9a96e}
+.ov .dx{font-size:9px;color:#ff7777;background:rgba(0,0,0,.5);border:1px solid #ff777744;border-radius:2px;padding:2px 8px;cursor:pointer}
 .gg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:6px}
 .gt{position:relative}.gt img{width:100%;height:55px;object-fit:cover;border-radius:2px}
 .gt button{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:15px;height:15px;font-size:8px;cursor:pointer;line-height:15px;text-align:center;padding:0}
 .tlrow,.awrow{display:flex;gap:5px;margin-bottom:6px;align-items:center}
 .tly{width:48px;background:#1a1a1a;border:1px solid #222;color:#c9a96e;font-size:10px;padding:5px;border-radius:3px;outline:none;text-align:center}
 .tly:focus{border-color:#c9a96e}
-.tli{flex:1;background:#1a1a1a;border:1px solid #222;color:#e8e0d0;font-size:11px;padding:5px 7px;border-radius:3px;outline:none}
+.tli,.awrow input{flex:1;background:#1a1a1a;border:1px solid #222;color:#e8e0d0;font-size:11px;padding:5px 7px;border-radius:3px;outline:none}
 .tli:focus,.awrow input:focus{border-color:#c9a96e}
-.awrow input{flex:1;background:#1a1a1a;border:1px solid #222;color:#e8e0d0;font-size:11px;padding:5px 7px;border-radius:3px;outline:none}
 .xb{background:none;border:none;color:#444;cursor:pointer;font-size:13px;padding:0 2px}.xb:hover{color:#cc4444}
 .rc{background:#1a1a1a;border:1px solid #222;border-radius:3px;padding:9px 11px;margin-bottom:7px}
 .rc .rt{font-family:'Cormorant Garamond',serif;font-size:12px;color:#e8e0d0;margin-bottom:6px}
 .rc .rb{display:flex;gap:5px}
-.bg{background:#c9a96e;border:none;color:#111;padding:6px 12px;border-radius:3px;cursor:pointer;font-size:10px;font-weight:700;font-family:'Cormorant Garamond',serif;letter-spacing:.05em}
+.bg{background:#c9a96e;border:none;color:#111;padding:6px 12px;border-radius:3px;cursor:pointer;font-size:10px;font-weight:700;font-family:'Cormorant Garamond',serif}
 .bg:hover{opacity:.85}
 .bd{background:#1a1a1a;border:1px solid #222;color:#888;padding:6px 12px;border-radius:3px;cursor:pointer;font-size:10px}
 .bd:hover{border-color:#444;color:#aaa}
 .bfull{width:100%}.bred{color:#c44}
 #efoot{padding:10px 16px;border-top:1px solid #1e1e1e;background:#0a0a0a;display:flex;gap:6px;flex-wrap:wrap;align-items:center;flex-shrink:0}
-#sst{flex:1;text-align:right;font-size:9px;color:#333}
+#sst{flex:1;text-align:right;font-size:9px;color:#555}
 #pvtb{background:#1a1a1a;padding:7px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #222;flex-shrink:0}
 .dot{width:8px;height:8px;border-radius:50%}
-#ubar{flex:1;background:#111;border-radius:3px;padding:3px 9px;font-size:9px;color:#444;font-family:monospace;margin-left:6px}
-.vbtn{padding:6px 14px;background:transparent;color:#777;border:none;cursor:pointer;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-radius:2px}
-.vbtn.on{background:#c9a96e;color:#111}
-#pvb{flex:1;overflow-y:auto;background:#f5f0e8}
-#snav{background:#111;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:50px;position:sticky;top:0;z-index:50}
-#snav .br{display:flex;align-items:center;gap:8px;cursor:pointer}
-#snav .li{width:32px;height:32px;background:#c9a96e;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px}
-#snav .li img{width:100%;height:100%;object-fit:cover}
-#snav .bn{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700}
-#snav .nk{display:flex;gap:16px}
-#snav .nk a{color:#777;font-size:10px;letter-spacing:.06em;cursor:pointer;font-family:system-ui}
-#snav .nk a:hover,#snav .nk a.on{color:#c9a96e}
-#cstrip{background:#f0ebe0;border-bottom:1px solid rgba(201,169,110,.2);display:flex;overflow-x:auto;padding:0 12px}
-.sc{cursor:pointer;padding:10px 14px;border-bottom:3px solid transparent;display:flex;gap:10px;align-items:center;white-space:nowrap;flex-shrink:0;transition:background .2s}
-.sc:hover{background:rgba(201,169,110,.05)}
-.sc.on{border-bottom-color:#c9a96e;background:rgba(201,169,110,.07)}
-.sc .av{width:40px;height:40px;border-radius:50%;background:#222;border:2px solid #2a2a2a;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
-.sc.on .av{border-color:#c9a96e}
-.sc .av img{width:100%;height:100%;object-fit:cover}
-.sc .sn{font-family:'Cormorant Garamond',serif;font-size:13px;color:#5a4030;font-weight:600}
-.sc.on .sn{color:#c9a96e}
-.sc .sr{font-size:9px;color:#9a8060;margin-top:1px}
+#ubar{flex:1;background:#111;border-radius:3px;padding:3px 9px;font-size:9px;color:#555;font-family:monospace;margin:0 6px}
+.vbtn{padding:5px 12px;background:transparent;color:#666;border:1px solid #2a2a2a;cursor:pointer;font-size:9px;letter-spacing:.08em;text-transform:uppercase;border-radius:2px}
+.vbtn.on{background:#c9a96e;color:#111;border-color:#c9a96e}
+#pvframe{flex:1;border:none;background:#f5f0e8;width:100%}
 #moverlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;align-items:center;justify-content:center}
 #moverlay.on{display:flex}
 #mbox{background:#141414;border:1px solid #2a2a2a;border-radius:5px;width:min(680px,95vw);max-height:90vh;overflow-y:auto;padding:24px}
@@ -103,150 +83,33 @@ html,body{height:100%;overflow:hidden;background:#0e0e0e;font-family:system-ui,s
 .mrow textarea{flex:1;background:#1a1a1a;border:1px solid #222;color:#e8e0d0;font-size:11px;padding:5px 7px;border-radius:3px;outline:none;resize:vertical}
 .mn{font-size:9px;color:#c9a96e;min-width:18px;padding-top:7px}
 .mfooter{display:flex;gap:8px;margin-top:18px}
-.acci{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:9px;overflow:hidden}
-.accb{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:none;border:none;cursor:pointer;font-family:'Cormorant Garamond',serif;color:#2c1a0a;font-size:15px}
-.acci.open{background:rgba(201,169,110,.03)}.acbb{display:none;padding:0 18px 18px}
-.ap{color:#c9a96e;font-size:16px;transition:transform .3s}
 </style>
 </head>
 <body>
-
-<!-- EXPORT TEMPLATE stored outside script to keep script small -->
-<textarea id="SITE_TPL" style="display:none"><!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Chefs Goutatoo Gen&egrave;ve</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:wght@700&display=swap">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cormorant Garamond',serif;background:#f5f0e8;color:#2c2c2c}
-a,button{cursor:pointer;text-decoration:none}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c9a96e44;border-radius:3px}
-nav{background:#111;height:52px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.nl{display:flex;align-items:center;gap:8px}
-.logo{width:32px;height:32px;background:#c9a96e;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px}
-.logo img{width:100%;height:100%;object-fit:cover}
-.bn{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700}
-.nk{display:flex;gap:18px}
-.nk a{color:#777;font-size:10px;letter-spacing:.06em}
-.nk a:hover,.nk a.on{color:#c9a96e}
-.acci{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:9px;overflow:hidden}
-.accb{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:none;border:none;cursor:pointer;font-family:'Cormorant Garamond',serif;color:#2c1a0a;font-size:15px}
-.acci.open{background:rgba(201,169,110,.03)}
-.acbb{display:none;padding:0 18px 18px}
-.ap{color:#c9a96e;font-size:16px;transition:transform .3s}
-.trip{display:grid;grid-template-columns:1fr 1fr 1fr;height:300px;border-bottom:3px solid #c9a96e}
-.qbio{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)}
-.rgrd{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:700px){.trip{grid-template-columns:1fr;height:auto}.qbio,.rgrd{grid-template-columns:1fr}}
-footer{background:#111;padding:20px 32px;text-align:center}
-.fn{color:#c9a96e;font-family:'Cormorant Garamond',serif;font-size:14px;margin-bottom:4px}
-.fc{color:#555;font-size:9px;font-family:system-ui;letter-spacing:.1em}
-</style>
-</head>
-<body>
-<nav>
-  <div class="nl">
-    <div class="logo" id="SITELOGO">&#x1F374;</div>
-    <a class="bn" onclick="go('home')">Chefs Goutatoo Gen&egrave;ve</a>
-  </div>
-  <div class="nk">
-    <a id="lh" onclick="go('home')">Accueil</a>
-    <a id="lc" onclick="go('chefs')">Les Chefs</a>
-    <a onclick="go('chefs')">Recettes</a>
-    <a onclick="go('home')">Contact</a>
-  </div>
-</nav>
-<div id="root"></div>
-<footer><div class="fn">Chefs Goutatoo Gen&egrave;ve</div><div class="fc">&copy; 2025 &middot; Pour le bon go&ucirc;t</div></footer>
-<script>
-var _D=/*DATA_PLACEHOLDER*/null;
-var chefs=_D.chefs||[],G=_D.globalData||{};
-(function(){var lo=document.getElementById('SITELOGO');if(lo&&G.siteLogo)lo.innerHTML='<img src="'+G.siteLogo+'">';}());
-function e(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function setNav(p){var lh=document.getElementById('lh'),lc=document.getElementById('lc');if(lh)lh.className=p==='home'?'on':'';if(lc)lc.className=(p==='chefs'||p==='chef')?'on':'';}
-function go(p,id){setNav(p);window.scrollTo(0,0);if(p==='home')rHome();else if(p==='chefs')rChefs();else rChef(id);location.hash=p==='chef'?'chef-'+id:p;}
-function rHome(){
-  var root=document.getElementById('root');if(!root)return;
-  var hero=G.heroImage
-    ?'<div style="position:relative;height:420px;overflow:hidden"><img src="'+G.heroImage+'" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.6))"></div><div style="position:absolute;bottom:0;left:0;right:0;padding:40px;text-align:center"><div style="font-size:10px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui">Chefs Goutatoo Gen\u00e8ve</div><h1 style="font-family:\'Playfair Display\',serif;font-size:42px;color:#fff;margin:0 0 10px">'+e(G.homeTitle)+'</h1><p style="font-size:15px;color:rgba(255,255,255,.85);font-style:italic">'+e(G.homeSub)+'</p></div></div>'
-    :'<div style="background:linear-gradient(135deg,#1a2744,#2c3e50);height:280px;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px"><h1 style="font-family:\'Playfair Display\',serif;font-size:38px;color:#fff">'+e(G.homeTitle||'Chefs Goutatoo Gen\u00e8ve')+'</h1></div>';
-  var cards=chefs.map(function(c){return'<a onclick="go(\'chef\',\''+c.id+'\')" style="display:block;text-align:center"><div style="width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;border-radius:2px;margin-bottom:8px;display:flex;align-items:center;justify-content:center">'+( c.portrait?'<img src="'+c.portrait+'" style="width:100%;height:100%;object-fit:cover">':'<span style="font-size:40px;opacity:.2">\ud83d\udc68\u200d\ud83c\udf73</span>')+'</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:#1a2744;font-weight:600;margin-bottom:3px">'+e(c.name)+'</div><div style="font-size:10px;color:#9a8060">'+e(c.restaurant)+'</div></a>';}).join('');
-  root.innerHTML=hero
-    +'<div style="background:#f0ebe0;border-top:2px solid #c9a96e;border-bottom:2px solid #c9a96e;padding:16px 32px;text-align:center"><p style="font-size:14px;color:#5a4030;font-style:italic">'+e(G.homeTagline||'')+'</p></div>'
-    +'<div style="padding:48px 32px"><div style="text-align:center;margin-bottom:32px"><div style="font-size:9px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Notre Collectif</div><h2 style="font-family:\'Playfair Display\',serif;font-size:30px;color:#1a2744;margin:0 0 14px">Les Chefs</h2><div style="display:flex;align-items:center;justify-content:center;gap:14px"><div style="width:50px;height:1px;background:#c9a96e"></div><span style="color:#c9a96e">\u2726</span><div style="width:50px;height:1px;background:#c9a96e"></div></div></div>'
-    +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px">'+cards+'</div></div>';
-}
-function rChefs(){
-  var root=document.getElementById('root');if(!root)return;
-  var cards=chefs.map(function(c){return'<a onclick="go(\'chef\',\''+c.id+'\')" style="display:block;background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04)"><div style="height:200px;background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center">'+( c.portrait?'<img src="'+c.portrait+'" style="width:100%;height:100%;object-fit:cover">':'<span style="font-size:52px;opacity:.15">\ud83d\udc68\u200d\ud83c\udf73</span>')+'</div><div style="padding:16px"><div style="font-size:8px;color:#c9a96e;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;font-family:system-ui">'+e(c.position)+'</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-weight:700;color:#1a2744;margin-bottom:2px">'+e(c.name)+'</div><div style="font-size:11px;color:#9a8060;margin-bottom:8px">'+e(c.restaurant)+'</div><div style="font-size:11px;color:#c9a96e;font-family:system-ui">Voir le profil \u2192</div></div></a>';}).join('');
-  root.innerHTML='<div style="padding:48px 28px"><div style="text-align:center;margin-bottom:40px"><div style="font-size:9px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Chefs Goutatoo Gen\u00e8ve</div><h1 style="font-family:\'Playfair Display\',serif;font-size:34px;color:#1a2744;margin:0 0 14px">Notre \u00c9quipe</h1><div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px"><div style="width:50px;height:1px;background:#c9a96e"></div><span style="color:#c9a96e">\u2726</span><div style="width:50px;height:1px;background:#c9a96e"></div></div><p style="font-size:13px;color:#7a6050;font-style:italic;max-width:460px;margin:0 auto;line-height:1.7">Nous formons une \u00e9quipe de cuisiniers li\u00e9s par l\u2019amour de la bonne cuisine, et principalement par une amiti\u00e9 sinc\u00e8re.</p></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px">'+cards+'</div></div>';
-}
-function rChef(id){
-  var root=document.getElementById('root');if(!root)return;
-  var c=chefs.find(function(x){return String(x.id)===String(id);})||chefs[0];if(!c)return;
-  var g='#c9a96e',nv='#1a2744';
-  var aw=(c.awards||[]).map(function(a,i,ar){return'<div style="flex:1 1 140px;padding:10px 16px;border-right:'+(i<ar.length-1?'1px solid rgba(201,169,110,.2)':'none')+';text-align:center"><div style="color:'+g+';font-size:13px;margin-bottom:6px">\u2726</div><div style="font-size:8px;color:#9a8060;letter-spacing:.1em;text-transform:uppercase;line-height:1.4;font-family:system-ui">'+e(a)+'</div></div>';}).join('');
-  var tl=(c.timeline||[]).map(function(t){return'<div style="display:flex;gap:14px;margin-bottom:12px;align-items:flex-start"><div style="min-width:44px;text-align:right;color:'+g+';font-size:11px;font-weight:700;font-family:system-ui;padding-top:2px">'+e(t.year)+'</div><div style="width:7px;height:7px;border-radius:50%;background:'+g+';margin-top:5px;flex-shrink:0;margin-left:-4px;position:relative;z-index:1"></div><div style="font-size:13px;color:#2c2c2c">'+e(t.event)+'</div></div>';}).join('');
-  var gal=(c.gallery||[]).map(function(img){return'<img src="'+img+'" style="width:100%;height:90px;object-fit:cover;border-radius:2px">';}).join('');
-  var recs=(c.recipes||[]).map(function(r){
-    var ing=(r.ingredients||[]).filter(Boolean).map(function(x){return'<li style="font-size:12px;color:#5a4030;padding:4px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:6px"><span style="color:'+g+';font-size:7px;margin-top:6px">&#9642;</span>'+e(x)+'</li>';}).join('');
-    var stp=(r.method||[]).filter(Boolean).map(function(s,i){return'<div style="display:flex;gap:8px;margin-bottom:10px"><span style="color:'+g+';font-size:14px;font-weight:700;min-width:18px;font-family:\'Cormorant Garamond\',serif">'+(i+1)+'</span><p style="font-size:12px;color:#5a4030;line-height:1.6;margin:0">'+e(s)+'</p></div>';}).join('');
-    return'<div class="acci"><button class="accb" onclick="ta(this)"><span style="display:flex;align-items:center;gap:10px"><span style="color:'+g+';font-size:11px">\u2726</span>'+e(r.title)+'</span><span style="display:flex;align-items:center;gap:12px"><span style="font-size:9px;color:#9a8060;font-family:system-ui">'+e(r.prepTime)+' &middot; '+e(r.difficulty)+'</span><span class="ap">+</span></span></button><div class="acbb">'
-      +(r.image?'<img src="'+r.image+'" style="width:100%;height:220px;object-fit:cover;border-radius:2px;margin-bottom:16px">':'')
-      +'<div class="rgrd"><div><div style="font-size:10px;color:'+g+';letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Ingr&eacute;dients</div><ul style="list-style:none">'+ing+'</ul></div>'
-      +'<div><div style="font-size:10px;color:'+g+';letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Pr&eacute;paration</div>'+stp+'</div></div>'
-      +(r.chefNotes?'<div style="margin-top:16px;padding:14px 18px;background:rgba(201,169,110,.05);border-left:3px solid '+g+'"><div style="font-size:9px;color:'+g+';letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-family:system-ui">Notes du Chef</div><p style="font-size:12px;color:#5a4030;line-height:1.7;font-style:italic">'+e(r.chefNotes)+'</p></div>':'')
-      +(r.winepairing?'<div style="margin-top:12px;display:flex;align-items:center;gap:8px"><span style="font-size:16px">&#127863;</span><div><div style="font-size:9px;color:'+g+';letter-spacing:.1em;text-transform:uppercase;font-family:system-ui">Accord Mets-Vins</div><div style="font-size:12px;color:#5a4030;font-style:italic">'+e(r.winepairing)+'</div></div></div>':'')
-      +'</div></div>';
-  }).join('');
-  root.innerHTML='<div style="font-family:\'Cormorant Garamond\',serif;background:#f5f0e8">'
-    +'<div class="trip"><div style="background:#e8e4dc;overflow:hidden">'+(c.portrait?'<img src="'+c.portrait+'" style="width:100%;height:100%;object-fit:cover">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.2">\ud83d\udc68\u200d\ud83c\udf73</div>')+'</div>'
-    +'<div style="background:#f5f0e8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-left:1px solid rgba(201,169,110,.3);border-right:1px solid rgba(201,169,110,.3)">'+(c.restaurantLogo?'<img src="'+c.restaurantLogo+'" style="max-width:80%;max-height:100px;object-fit:contain;margin-bottom:16px">':'<div style="font-size:18px;color:'+nv+';font-weight:700;text-align:center;margin-bottom:16px">'+e(c.restaurant)+'</div>')+'<div style="color:'+g+';font-size:18px">\u2726</div><div style="width:50px;height:1px;background:'+g+';margin:10px 0"></div><div style="font-size:9px;color:#9a8060;letter-spacing:.2em;text-transform:uppercase;font-family:system-ui">Gen&egrave;ve &middot; Suisse</div></div>'
-    +'<div style="background:#ccc;overflow:hidden">'+(c.restaurantPhoto?'<img src="'+c.restaurantPhoto+'" style="width:100%;height:100%;object-fit:cover">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#d5d0c8;font-size:40px;opacity:.2">&#127963;</div>')+'</div></div>'
-    +'<div style="text-align:center;padding:36px 32px 18px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:'+g+';letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui">Chef</div><h1 style="font-family:\'Playfair Display\',serif;font-size:38px;font-weight:700;color:'+nv+';margin:0 0 14px">'+e(c.name)+'</h1><div style="display:flex;align-items:center;justify-content:center;gap:14px"><div style="width:50px;height:1px;background:'+g+'"></div><span style="color:'+g+'">\u2726</span><div style="width:50px;height:1px;background:'+g+'"></div></div></div>'
-    +'<div class="qbio"><div style="padding:28px 32px;border-right:1px solid rgba(201,169,110,.2)"><div style="font-size:34px;color:'+g+';line-height:1;margin-bottom:6px;font-family:Georgia,serif">&ldquo;</div><p style="font-size:17px;font-style:italic;color:'+nv+';line-height:1.5">'+e(c.philosophy)+'</p></div><div style="padding:28px 32px"><p style="font-size:13px;color:#5a4030;line-height:1.8">'+e(c.biography)+'</p></div></div>'
-    +(aw?'<div style="padding:24px 32px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap">'+aw+'</div>':'')
-    +(tl?'<div style="padding:28px 32px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:'+g+';letter-spacing:.2em;text-transform:uppercase;margin-bottom:18px;font-family:system-ui;font-weight:600">Parcours</div><div style="position:relative;padding-left:66px"><div style="position:absolute;left:50px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3)"></div>'+tl+'</div></div>':'')
-    +(gal?'<div style="padding:28px 32px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:'+g+';letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;font-family:system-ui;font-weight:600">Galerie</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px">'+gal+'</div></div>':'')
-    +(recs?'<div style="padding:28px 32px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="text-align:center;margin-bottom:22px"><div style="font-size:9px;color:'+g+';letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;font-family:system-ui;font-weight:600">Recettes Signatures</div><div style="display:flex;align-items:center;justify-content:center;gap:12px"><div style="width:40px;height:1px;background:'+g+'"></div><span style="color:'+g+'">\u2726</span><div style="width:40px;height:1px;background:'+g+'"></div></div></div>'+recs+'</div>':'')
-    +'<div style="padding:16px 32px;text-align:center;font-size:9px;color:#9a8060;font-family:system-ui;letter-spacing:.1em">'+e(c.restaurant)+' &middot; Gen&egrave;ve &middot; Suisse</div></div>';
-  setTimeout(function(){document.querySelectorAll('.acci').forEach(function(x){var b=x.querySelector('.acbb');if(b)b.style.display='none';});},0);
-}
-function ta(btn){var item=btn.parentElement;document.querySelectorAll('.acci.open').forEach(function(o){if(o!==item){o.classList.remove('open');var b=o.querySelector('.acbb');if(b)b.style.display='none';var p=o.querySelector('.ap');if(p)p.style.transform='none';}});var op=item.classList.toggle('open');var bd=item.querySelector('.acbb');if(bd)bd.style.display=op?'block':'none';var pl=item.querySelector('.ap');if(pl)pl.style.transform=op?'rotate(45deg)':'none';}
-window.addEventListener('hashchange',function(){var h=location.hash.slice(1);if(h.indexOf('chef-')===0)go('chef',h.slice(5));else if(h==='chefs')go('chefs');else go('home');});
-go('home');
-</script>
-</body>
-</html></textarea>
-
 <div id="app">
 <div id="ed">
-  <div id="ehd"><div class="t">✦ GOUTATOO EDITOR</div><div class="s">CHEF PORTFOLIO MANAGEMENT</div></div>
+  <div id="ehd"><div class="t">&#10022; GOUTATOO EDITOR</div><div class="s">CHEF PORTFOLIO MANAGEMENT</div></div>
   <div id="ptabs">
     <button class="ptab" onclick="epage('home')">Accueil</button>
     <button class="ptab on" onclick="epage('chef')">Chef</button>
-    <button class="ptab" onclick="epage('dir')">Répertoire</button>
+    <button class="ptab" onclick="epage('dir')">R&eacute;pertoire</button>
   </div>
   <div id="ep-home" class="epage" style="overflow-y:auto;padding:16px">
-    <div class="iup"><label>Image Héros</label>
-      <div class="idrop" id="d-hero" onclick="upld('u-hero')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer pour ajouter</div></div><div class="ov"><span>✎ Changer</span><span class="dx" onclick="event.stopPropagation();clrG('heroImage','d-hero')">✕ Supprimer</span></div></div>
+    <div class="iup"><label>Image H&eacute;ros</label>
+      <div class="idrop" id="d-hero" onclick="upld('u-hero')"><div class="ph"><div class="ic">+</div><div class="tx">Image principale du site</div></div><div class="ov"><span class="oc">&#9998; Changer</span><span class="dx" onclick="event.stopPropagation();clrG('heroImage','d-hero')">&#10005; Supprimer</span></div></div>
       <input type="file" id="u-hero" accept="image/*" style="display:none" onchange="hgImg('heroImage','d-hero',this)">
     </div>
     <div class="fg"><label>Titre</label><input id="f-ht" oninput="updG('homeTitle',this.value)"></div>
     <div class="fg"><label>Sous-titre</label><input id="f-hs" oninput="updG('homeSub',this.value)"></div>
     <div class="fg"><label>Tagline</label><textarea id="f-hq" rows="2" oninput="updG('homeTagline',this.value)"></textarea></div>
     <div class="iup"><label>Logo du site</label>
-      <div class="idrop" id="d-slogo" onclick="upld('u-slogo')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer pour ajouter</div></div><div class="ov"><span>✎ Changer</span><span class="dx" onclick="event.stopPropagation();clrG('siteLogo','d-slogo')">✕ Supprimer</span></div></div>
+      <div class="idrop" id="d-slogo" onclick="upld('u-slogo')"><div class="ph"><div class="ic">+</div><div class="tx">Logo navigation</div></div><div class="ov"><span class="oc">&#9998; Changer</span><span class="dx" onclick="event.stopPropagation();clrG('siteLogo','d-slogo')">&#10005; Supprimer</span></div></div>
       <input type="file" id="u-slogo" accept="image/*" style="display:none" onchange="hgImg('siteLogo','d-slogo',this)">
     </div>
   </div>
   <div id="ep-chef" class="epage on" style="display:flex;flex-direction:column;overflow:hidden">
     <div id="csel">
-      <div class="lb">Chef sélectionné</div>
+      <div class="lb">Chef s&eacute;lectionn&eacute;</div>
       <select id="cselect"></select>
       <div class="row">
         <button class="bg" style="flex:1;font-size:9px" onclick="addChef()">+ Nouveau Chef</button>
@@ -254,57 +117,57 @@ go('home');
       </div>
     </div>
     <div id="ebody">
-      <div class="sec"><button class="stog on" onclick="tog(this)">Informations du Chef<span class="ar">›</span></button><div class="sbody on">
+      <div class="sec"><button class="stog on" onclick="tog(this)">Informations du Chef<span class="ar">&#8250;</span></button><div class="sbody on">
         <div class="fg"><label>Nom du Chef</label><input id="f-nm" oninput="upd('name',this.value)"></div>
         <div class="fg"><label>Poste / Titre</label><input id="f-ps" oninput="upd('position',this.value)"></div>
-        <div class="fg"><label>Citation</label><textarea id="f-ph" rows="2" oninput="upd('philosophy',this.value)"></textarea></div>
+        <div class="fg"><label>Citation / Philosophie</label><textarea id="f-ph" rows="2" oninput="upd('philosophy',this.value)"></textarea></div>
         <div class="fg"><label>Biographie</label><textarea id="f-bi" rows="3" oninput="upd('biography',this.value)"></textarea></div>
       </div></div>
-      <div class="sec"><button class="stog on" onclick="tog(this)">Restaurant<span class="ar">›</span></button><div class="sbody on">
+      <div class="sec"><button class="stog on" onclick="tog(this)">Restaurant<span class="ar">&#8250;</span></button><div class="sbody on">
         <div class="fg"><label>Nom du Restaurant</label><input id="f-rn" oninput="upd('restaurant',this.value)"></div>
         <div class="fg"><label>Description</label><textarea id="f-rd" rows="2" oninput="upd('restaurantDesc',this.value)"></textarea></div>
       </div></div>
-      <div class="sec"><button class="stog on" onclick="tog(this)">Photos &amp; Images<span class="ar">›</span></button><div class="sbody on">
+      <div class="sec"><button class="stog on" onclick="tog(this)">Photos &amp; Images<span class="ar">&#8250;</span></button><div class="sbody on">
         <div class="iup"><label>Portrait du Chef</label>
-          <div class="idrop" id="d-pt" onclick="upld('u-pt')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer</div></div><div class="ov"><span>✎ Changer</span><span class="dx" onclick="event.stopPropagation();clrC('portrait','d-pt')">✕</span></div></div>
+          <div class="idrop" id="d-pt" onclick="upld('u-pt')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer</div></div><div class="ov"><span class="oc">&#9998; Changer</span><span class="dx" onclick="event.stopPropagation();clrC('portrait','d-pt')">&#10005;</span></div></div>
           <input type="file" id="u-pt" accept="image/*" style="display:none" onchange="hcImg('portrait','d-pt',this)">
         </div>
         <div class="iup"><label>Logo du Restaurant</label>
-          <div class="idrop" id="d-lg" onclick="upld('u-lg')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer</div></div><div class="ov"><span>✎ Changer</span><span class="dx" onclick="event.stopPropagation();clrC('restaurantLogo','d-lg')">✕</span></div></div>
+          <div class="idrop" id="d-lg" onclick="upld('u-lg')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer</div></div><div class="ov"><span class="oc">&#9998; Changer</span><span class="dx" onclick="event.stopPropagation();clrC('restaurantLogo','d-lg')">&#10005;</span></div></div>
           <input type="file" id="u-lg" accept="image/*" style="display:none" onchange="hcImg('restaurantLogo','d-lg',this)">
         </div>
         <div class="iup"><label>Photo du Restaurant</label>
-          <div class="idrop" id="d-rp" onclick="upld('u-rp')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer</div></div><div class="ov"><span>✎ Changer</span><span class="dx" onclick="event.stopPropagation();clrC('restaurantPhoto','d-rp')">✕</span></div></div>
+          <div class="idrop" id="d-rp" onclick="upld('u-rp')"><div class="ph"><div class="ic">+</div><div class="tx">Cliquer</div></div><div class="ov"><span class="oc">&#9998; Changer</span><span class="dx" onclick="event.stopPropagation();clrC('restaurantPhoto','d-rp')">&#10005;</span></div></div>
           <input type="file" id="u-rp" accept="image/*" style="display:none" onchange="hcImg('restaurantPhoto','d-rp',this)">
         </div>
         <div class="iup">
-          <label>Galerie (<span id="gcnt">0</span>)</label>
+          <label>Galerie (<span id="gcnt">0</span> photos)</label>
           <button class="bd bfull" style="margin-bottom:6px;font-size:9px" onclick="upld('u-gal')">+ Ajouter des photos</button>
           <input type="file" id="u-gal" accept="image/*" multiple style="display:none" onchange="hGal(this)">
           <div class="gg" id="ggrid"></div>
         </div>
       </div></div>
-      <div class="sec"><button class="stog on" onclick="tog(this)">Récompenses<span class="ar">›</span></button><div class="sbody on" id="awlist"></div></div>
-      <div class="sec"><button class="stog on" onclick="tog(this)">Parcours &amp; Carrière<span class="ar">›</span></button><div class="sbody on" id="tllist"></div></div>
-      <div class="sec"><button class="stog on" onclick="tog(this)">Recettes<span class="ar">›</span></button><div class="sbody on">
+      <div class="sec"><button class="stog on" onclick="tog(this)">R&eacute;compenses<span class="ar">&#8250;</span></button><div class="sbody on" id="awlist"></div></div>
+      <div class="sec"><button class="stog on" onclick="tog(this)">Parcours &amp; Carri&egrave;re<span class="ar">&#8250;</span></button><div class="sbody on" id="tllist"></div></div>
+      <div class="sec"><button class="stog on" onclick="tog(this)">Recettes<span class="ar">&#8250;</span></button><div class="sbody on">
         <button class="bg bfull" style="margin-bottom:10px;font-size:10px" onclick="openRM(null)">+ Nouvelle Recette</button>
         <div id="rlist"></div>
       </div></div>
-      <div class="sec"><button class="stog" onclick="tog(this)">Liens Sociaux<span class="ar">›</span></button><div class="sbody">
+      <div class="sec"><button class="stog" onclick="tog(this)">Liens Sociaux<span class="ar">&#8250;</span></button><div class="sbody">
         <div class="fg"><label>Instagram</label><input id="f-ig" placeholder="@handle" oninput="updSoc('instagram',this.value)"></div>
         <div class="fg"><label>Facebook</label><input id="f-fb" placeholder="URL" oninput="updSoc('facebook',this.value)"></div>
         <div class="fg"><label>Site Web</label><input id="f-wb" placeholder="https://" oninput="updSoc('website',this.value)"></div>
       </div></div>
     </div>
   </div>
-  <div id="ep-dir" class="epage" style="padding:16px"><p style="color:#555;font-size:11px;line-height:1.6">Le répertoire affiche tous les chefs. Modifiez-les dans l'onglet <strong style="color:#c9a96e">Chef</strong>.</p></div>
+  <div id="ep-dir" class="epage" style="padding:16px"><p style="color:#555;font-size:11px;line-height:1.6">Le r&eacute;pertoire affiche tous les chefs. Modifiez-les dans l'onglet <strong style="color:#c9a96e">Chef</strong>.</p></div>
   <div id="efoot">
-    <button class="bg" style="font-size:10px;padding:7px 14px" onclick="expHTML()">⬇ Exporter HTML</button>
-    <button class="bd" style="font-size:9px" onclick="expJSON()">💾 Sauvegarde</button>
-    <button class="bd" style="font-size:9px" onclick="document.getElementById('uimp').click()">⬆ Import</button>
-    <button class="bd bred" style="font-size:9px" onclick="resetAll()">↺ Reset</button>
+    <button class="bg" style="font-size:10px;padding:7px 14px" onclick="expHTML()">&#11015; Exporter HTML</button>
+    <button class="bd" style="font-size:9px" onclick="expJSON()">&#128190; Sauvegarde</button>
+    <button class="bd" style="font-size:9px" onclick="document.getElementById('uimp').click()">&#11014; Import</button>
+    <button class="bd bred" style="font-size:9px" onclick="resetAll()">&#8635; Reset</button>
     <input type="file" id="uimp" accept=".json" style="display:none" onchange="impJSON(this)">
-    <span id="sst">✓ Sauvegardé</span>
+    <span id="sst">&#10003; Sauvegard&eacute;</span>
   </div>
 </div>
 <div id="drg"></div>
@@ -314,52 +177,37 @@ go('home');
     <div class="dot" style="background:#febc2e"></div>
     <div class="dot" style="background:#28c840"></div>
     <div id="ubar">goutatoo-geneve.ch</div>
-    <button class="vbtn" onclick="swv('home')">Accueil</button>
-    <button class="vbtn" onclick="swv('dir')">Répertoire</button>
-    <button class="vbtn on" onclick="swv('prof')">Profil</button>
+    <button class="vbtn on" id="vb-home" onclick="setView('home')">Accueil</button>
+    <button class="vbtn" id="vb-chefs" onclick="setView('chefs')">R&eacute;pertoire</button>
+    <button class="vbtn" id="vb-chef" onclick="setView('chef')">Profil</button>
   </div>
-  <div id="pvb">
-    <div id="snav">
-      <div class="br" onclick="swv('home')"><div class="li" id="nli">🍴</div><span class="bn">Chefs Goutatoo Genève</span></div>
-      <div class="nk">
-        <a onclick="swv('home')">Accueil</a>
-        <a onclick="swv('prof')" class="on">Les Chefs</a>
-        <a onclick="swv('prof')">Recettes</a>
-        <a onclick="swv('home')">Contact</a>
-      </div>
-    </div>
-    <div id="cstrip"></div>
-    <div id="vhome" style="display:none"></div>
-    <div id="vprof"></div>
-    <div id="vdir" style="display:none"></div>
-  </div>
+  <iframe id="pvframe" src="about:blank" sandbox="allow-scripts allow-same-origin"></iframe>
 </div>
 </div>
-
 <div id="moverlay" onclick="if(event.target===this)closeRM()">
   <div id="mbox">
-    <div id="mhd"><span>Éditer la Recette</span><button id="mcl" onclick="closeRM()">✕</button></div>
+    <div id="mhd"><span>&Eacute;diter la Recette</span><button id="mcl" onclick="closeRM()">&#10005;</button></div>
     <div class="fg"><label>Titre</label><input id="m-ti"></div>
     <div class="g2">
-      <div class="fg"><label>Temps de préparation</label><input id="m-pr"></div>
-      <div class="fg"><label>Difficulté</label><input id="m-df"></div>
+      <div class="fg"><label>Temps de pr&eacute;paration</label><input id="m-pr"></div>
+      <div class="fg"><label>Difficult&eacute;</label><input id="m-df"></div>
     </div>
     <div class="fg"><label>Accord Mets-Vins</label><input id="m-wp"></div>
     <div class="iup" style="margin-bottom:14px"><label>Photo du Plat</label>
-      <div class="idrop" id="m-idrop" onclick="upld('m-ifile')" style="min-height:100px"><div class="ph"><div class="ic">+</div><div class="tx">Photo du plat</div></div><div class="ov"><span>✎ Changer</span></div></div>
+      <div class="idrop" id="m-idrop" onclick="upld('m-ifile')" style="min-height:100px"><div class="ph"><div class="ic">+</div><div class="tx">Photo du plat</div></div><div class="ov"><span class="oc">&#9998; Changer</span></div></div>
       <input type="file" id="m-ifile" accept="image/*" style="display:none" onchange="hMImg(this)">
     </div>
     <div style="margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <label style="font-size:9px;color:#555;letter-spacing:.1em;text-transform:uppercase">Ingrédients</label>
+        <label style="font-size:9px;color:#555;letter-spacing:.1em;text-transform:uppercase">Ingr&eacute;dients</label>
         <button class="bd" style="font-size:9px;padding:3px 8px" onclick="addIng()">+ Ajouter</button>
       </div>
       <div id="mingr"></div>
     </div>
     <div style="margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <label style="font-size:9px;color:#555;letter-spacing:.1em;text-transform:uppercase">Méthode</label>
-        <button class="bd" style="font-size:9px;padding:3px 8px" onclick="addStp()">+ Étape</button>
+        <label style="font-size:9px;color:#555;letter-spacing:.1em;text-transform:uppercase">M&eacute;thode</label>
+        <button class="bd" style="font-size:9px;padding:3px 8px" onclick="addStp()">+ &Eacute;tape</button>
       </div>
       <div id="mstps"></div>
     </div>
@@ -370,108 +218,100 @@ go('home');
     </div>
   </div>
 </div>
-
 <script>
+function buildSite(dataJSON){
+  var CSS='*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'Cormorant Garamond\',serif;background:#f5f0e8;color:#2c2c2c}a,button{cursor:pointer;text-decoration:none}::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c9a96e44;border-radius:3px}nav{background:#111;height:52px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.nl{display:flex;align-items:center;gap:8px}.logo{width:32px;height:32px;background:#c9a96e;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px}.logo img{width:100%;height:100%;object-fit:cover}.bn{color:#c9a96e;font-family:\'Cormorant Garamond\',serif;font-size:14px;font-weight:700}.nk{display:flex;gap:18px}.nk a{color:#777;font-size:10px;letter-spacing:.06em}.nk a:hover,.nk a.on{color:#c9a96e}.acci{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:9px;overflow:hidden}.accb{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:none;border:none;cursor:pointer;font-family:\'Cormorant Garamond\',serif;color:#2c1a0a;font-size:15px}.acci.open{background:rgba(201,169,110,.03)}.acbb{display:none;padding:0 18px 18px}.ap{color:#c9a96e;font-size:16px;transition:transform .3s}@media(max-width:700px){.tg{grid-template-columns:1fr!important;height:auto!important}.qb,.rg{grid-template-columns:1fr!important}}footer{background:#111;padding:20px 32px;text-align:center}.fn{color:#c9a96e;font-family:\'Cormorant Garamond\',serif;font-size:14px;margin-bottom:4px}.fc{color:#555;font-size:9px;font-family:system-ui;letter-spacing:.1em}';
+  var JS='var _D=/*D*/null,chefs,G;\nfunction init(){chefs=_D.chefs||[];G=_D.globalData||{};var lo=document.getElementById(\'SL\');if(lo&&G.siteLogo)lo.innerHTML=\'<img src="\'+G.siteLogo+\'">\';}\nfunction e(s){if(!s)return\'\';return String(s).replace(/&/g,\'&amp;\').replace(/</g,\'&lt;\').replace(/>/g,\'&gt;\');}\nfunction sa(p){var lh=document.getElementById(\'lh\'),lc=document.getElementById(\'lc\');if(lh)lh.className=p===\'home\'?\'on\':\'\';if(lc)lc.className=(p===\'chefs\'||p===\'chef\')?\'on\':\'\';}\nfunction go(p,id){sa(p);window.scrollTo(0,0);if(p===\'home\')rH();else if(p===\'chefs\')rC();else rP(id);location.hash=p===\'chef\'?\'chef-\'+id:p;}\nfunction rH(){\n  var r=document.getElementById(\'root\');if(!r)return;\n  var hero=G.heroImage?\'<div style="position:relative;height:420px;overflow:hidden"><img src="\'+G.heroImage+\'" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.6))"></div><div style="position:absolute;bottom:0;left:0;right:0;padding:40px;text-align:center"><div style="font-size:10px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui">Chefs Goutatoo Gen\\u00e8ve</div><h1 style="font-family:Playfair Display,serif;font-size:42px;color:#fff;margin:0 0 10px">\'+e(G.homeTitle)+\'</h1><p style="font-size:15px;color:rgba(255,255,255,.85);font-style:italic">\'+e(G.homeSub)+\'</p></div></div>\':\'<div style="background:linear-gradient(135deg,#1a2744,#2c3e50);height:280px;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px"><h1 style="font-family:Playfair Display,serif;font-size:38px;color:#fff">\'+e(G.homeTitle||\'Chefs Goutatoo Gen\\u00e8ve\')+\'</h1></div>\';\n  var cards=chefs.map(function(c){return\'<a onclick="go(\\\'chef\\\',\\\'\'+c.id+\'\\\')" style="display:block;text-align:center;cursor:pointer"><div style="width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;border-radius:2px;margin-bottom:8px;display:flex;align-items:center;justify-content:center">\'+(c.portrait?\'<img src="\'+c.portrait+\'" style="width:100%;height:100%;object-fit:cover">\':\'<span style="font-size:36px;opacity:.2">&#128104;&#8205;&#127859;</span>\')+\'</div><div style="font-family:Cormorant Garamond,serif;font-size:14px;color:#1a2744;font-weight:600;margin-bottom:3px">\'+e(c.name)+\'</div><div style="font-size:10px;color:#9a8060">\'+e(c.restaurant)+\'</div></a>\';}).join(\'\');\n  r.innerHTML=hero+\'<div style="background:#f0ebe0;border-top:2px solid #c9a96e;border-bottom:2px solid #c9a96e;padding:16px 32px;text-align:center"><p style="font-size:14px;color:#5a4030;font-style:italic">\'+e(G.homeTagline||\'\')+\'</p></div><div style="padding:48px 32px"><div style="text-align:center;margin-bottom:32px"><div style="font-size:9px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Notre Collectif</div><h2 style="font-family:Playfair Display,serif;font-size:30px;color:#1a2744;margin:0 0 14px">Les Chefs</h2><div style="display:flex;align-items:center;justify-content:center;gap:14px"><div style="width:50px;height:1px;background:#c9a96e"></div><span style="color:#c9a96e">&#10022;</span><div style="width:50px;height:1px;background:#c9a96e"></div></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px">\'+cards+\'</div></div>\';\n}\nfunction rC(){\n  var r=document.getElementById(\'root\');if(!r)return;\n  var cards=chefs.map(function(c){return\'<a onclick="go(\\\'chef\\\',\\\'\'+c.id+\'\\\')" style="display:block;background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04);cursor:pointer"><div style="height:200px;background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center">\'+(c.portrait?\'<img src="\'+c.portrait+\'" style="width:100%;height:100%;object-fit:cover">\':\'<span style="font-size:48px;opacity:.15">&#128104;&#8205;&#127859;</span>\')+\'</div><div style="padding:16px"><div style="font-size:8px;color:#c9a96e;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;font-family:system-ui">\'+e(c.position)+\'</div><div style="font-family:Cormorant Garamond,serif;font-size:18px;font-weight:700;color:#1a2744;margin-bottom:2px">\'+e(c.name)+\'</div><div style="font-size:11px;color:#9a8060;margin-bottom:8px">\'+e(c.restaurant)+\'</div><div style="font-size:11px;color:#c9a96e;font-family:system-ui">Voir le profil &#8594;</div></div></a>\';}).join(\'\');\n  r.innerHTML=\'<div style="padding:48px 28px"><div style="text-align:center;margin-bottom:40px"><div style="font-size:9px;color:#c9a96e;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Chefs Goutatoo Gen\\u00e8ve</div><h1 style="font-family:Playfair Display,serif;font-size:34px;color:#1a2744;margin:0 0 14px">Notre &#201;quipe</h1><div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px"><div style="width:50px;height:1px;background:#c9a96e"></div><span style="color:#c9a96e">&#10022;</span><div style="width:50px;height:1px;background:#c9a96e"></div></div><p style="font-size:13px;color:#7a6050;font-style:italic;max-width:460px;margin:0 auto;line-height:1.7">Nous formons une &#233;quipe de cuisiniers li&#233;s par l&#8217;amour de la bonne cuisine, et principalement par une amiti&#233; sinc&#232;re.</p></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px">\'+cards+\'</div></div>\';\n}\nfunction rP(id){\n  var r=document.getElementById(\'root\');if(!r)return;\n  var c=chefs.find(function(x){return String(x.id)===String(id);})||chefs[0];if(!c)return;\n  var g=\'#c9a96e\',nv=\'#1a2744\';\n  var aw=(c.awards||[]).map(function(a,i,ar){return\'<div style="flex:1 1 140px;padding:10px 16px;border-right:\'+(i<ar.length-1?\'1px solid rgba(201,169,110,.2)\':\'none\')+\';text-align:center"><div style="color:\'+g+\';font-size:13px;margin-bottom:6px">&#10022;</div><div style="font-size:8px;color:#9a8060;letter-spacing:.1em;text-transform:uppercase;line-height:1.4;font-family:system-ui">\'+e(a)+\'</div></div>\';}).join(\'\');\n  var tl=(c.timeline||[]).map(function(t){return\'<div style="display:flex;gap:14px;margin-bottom:12px;align-items:flex-start"><div style="min-width:44px;text-align:right;color:\'+g+\';font-size:11px;font-weight:700;font-family:system-ui;padding-top:2px">\'+e(t.year)+\'</div><div style="width:7px;height:7px;border-radius:50%;background:\'+g+\';margin-top:5px;flex-shrink:0;margin-left:-4px;position:relative;z-index:1"></div><div style="font-size:13px;color:#2c2c2c">\'+e(t.event)+\'</div></div>\';}).join(\'\');\n  var gal=(c.gallery||[]).map(function(img){return\'<img src="\'+img+\'" style="width:100%;height:90px;object-fit:cover;border-radius:2px">\';}).join(\'\');\n  var recs=(c.recipes||[]).map(function(rec){\n    var ing=(rec.ingredients||[]).filter(Boolean).map(function(x){return\'<li style="font-size:12px;color:#5a4030;padding:4px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:6px"><span style="color:\'+g+\';font-size:7px;margin-top:6px">&#9642;</span>\'+e(x)+\'</li>\';}).join(\'\');\n    var stp=(rec.method||[]).filter(Boolean).map(function(s,i){return\'<div style="display:flex;gap:8px;margin-bottom:10px"><span style="color:\'+g+\';font-size:14px;font-weight:700;min-width:18px;">\'+(i+1)+\'</span><p style="font-size:12px;color:#5a4030;line-height:1.6;margin:0">\'+e(s)+\'</p></div>\';}).join(\'\');\n    return\'<div class="acci"><button class="accb" onclick="ta(this)"><span style="display:flex;align-items:center;gap:10px"><span style="color:\'+g+\';font-size:11px">&#10022;</span>\'+e(rec.title)+\'</span><span style="display:flex;align-items:center;gap:12px"><span style="font-size:9px;color:#9a8060;font-family:system-ui">\'+e(rec.prepTime)+\' &middot; \'+e(rec.difficulty)+\'</span><span class="ap">+</span></span></button><div class="acbb">\'+(rec.image?\'<img src="\'+rec.image+\'" style="width:100%;height:220px;object-fit:cover;border-radius:2px;margin-bottom:16px">\':\'\')+\'<div class="rg" style="display:grid;grid-template-columns:1fr 1fr;gap:20px"><div><div style="font-size:10px;color:\'+g+\';letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Ingr&eacute;dients</div><ul style="list-style:none">\'+ing+\'</ul></div><div><div style="font-size:10px;color:\'+g+\';letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Pr&eacute;paration</div>\'+stp+\'</div></div>\'+(rec.chefNotes?\'<div style="margin-top:16px;padding:14px 18px;background:rgba(201,169,110,.05);border-left:3px solid \'+g+\'"><p style="font-size:12px;color:#5a4030;line-height:1.7;font-style:italic">\'+e(rec.chefNotes)+\'</p></div>\':\'\')+(rec.winepairing?\'<div style="margin-top:12px;display:flex;align-items:center;gap:8px"><span style="font-size:16px">&#127863;</span><div><div style="font-size:9px;color:\'+g+\';text-transform:uppercase;font-family:system-ui">Accord Mets-Vins</div><div style="font-size:12px;color:#5a4030;font-style:italic">\'+e(rec.winepairing)+\'</div></div></div>\':\'\')+\'</div></div>\';\n  }).join(\'\');\n  r.innerHTML=\'<div style="font-family:Cormorant Garamond,serif;background:#f5f0e8">\'\n    +\'<div class="tg" style="display:grid;grid-template-columns:1fr 1fr 1fr;height:300px;border-bottom:3px solid \'+g+\'">\'\n    +\'<div style="background:#e8e4dc;overflow:hidden">\'+(c.portrait?\'<img src="\'+c.portrait+\'" style="width:100%;height:100%;object-fit:cover">\':\'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.2">&#128104;&#8205;&#127859;</div>\')+\'</div>\'\n    +\'<div style="background:#f5f0e8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-left:1px solid rgba(201,169,110,.3);border-right:1px solid rgba(201,169,110,.3)">\'+(c.restaurantLogo?\'<img src="\'+c.restaurantLogo+\'" style="max-width:80%;max-height:100px;object-fit:contain;margin-bottom:16px">\':\'<div style="font-size:18px;color:\'+nv+\';font-weight:700;text-align:center;margin-bottom:16px">\'+e(c.restaurant)+\'</div>\')+\'<div style="color:\'+g+\';font-size:18px">&#10022;</div><div style="width:50px;height:1px;background:\'+g+\';margin:10px 0"></div><div style="font-size:9px;color:#9a8060;letter-spacing:.2em;text-transform:uppercase;font-family:system-ui">Gen&egrave;ve &middot; Suisse</div></div>\'\n    +\'<div style="background:#ccc;overflow:hidden">\'+(c.restaurantPhoto?\'<img src="\'+c.restaurantPhoto+\'" style="width:100%;height:100%;object-fit:cover">\':\'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#d5d0c8;font-size:40px;opacity:.2">&#127963;</div>\')+\'</div></div>\'\n    +\'<div style="text-align:center;padding:36px 32px 18px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:\'+g+\';letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui">Chef</div><h1 style="font-family:Playfair Display,serif;font-size:38px;font-weight:700;color:\'+nv+\';margin:0 0 14px">\'+e(c.name)+\'</h1><div style="display:flex;align-items:center;justify-content:center;gap:14px"><div style="width:50px;height:1px;background:\'+g+\'"></div><span style="color:\'+g+\'">&#10022;</span><div style="width:50px;height:1px;background:\'+g+\'"></div></div></div>\'\n    +\'<div class="qb" style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)"><div style="padding:28px 32px;border-right:1px solid rgba(201,169,110,.2)"><div style="font-size:34px;color:\'+g+\';line-height:1;margin-bottom:6px;font-family:Georgia,serif">&ldquo;</div><p style="font-size:17px;font-style:italic;color:\'+nv+\';line-height:1.5">\'+e(c.philosophy)+\'</p></div><div style="padding:28px 32px"><p style="font-size:13px;color:#5a4030;line-height:1.8">\'+e(c.biography)+\'</p></div></div>\'\n    +(aw?\'<div style="padding:24px 32px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap">\'+aw+\'</div>\':\'\')\n    +(tl?\'<div style="padding:28px 32px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:\'+g+\';letter-spacing:.2em;text-transform:uppercase;margin-bottom:18px;font-family:system-ui;font-weight:600">Parcours</div><div style="position:relative;padding-left:66px"><div style="position:absolute;left:50px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3)"></div>\'+tl+\'</div></div>\':\'\')\n    +(gal?\'<div style="padding:28px 32px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:\'+g+\';letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;font-family:system-ui;font-weight:600">Galerie</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px">\'+gal+\'</div></div>\':\'\')\n    +(recs?\'<div style="padding:28px 32px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="text-align:center;margin-bottom:22px"><div style="font-size:9px;color:\'+g+\';letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;font-family:system-ui;font-weight:600">Recettes Signatures</div><div style="display:flex;align-items:center;justify-content:center;gap:12px"><div style="width:40px;height:1px;background:\'+g+\'"></div><span style="color:\'+g+\'">&#10022;</span><div style="width:40px;height:1px;background:\'+g+\'"></div></div></div>\'+recs+\'</div>\':\'\')\n    +\'<div style="padding:16px 32px;text-align:center;font-size:9px;color:#9a8060;font-family:system-ui;letter-spacing:.1em">\'+e(c.restaurant)+\' &middot; Gen&egrave;ve &middot; Suisse</div></div>\';\n  setTimeout(function(){document.querySelectorAll(\'.acci\').forEach(function(x){var b=x.querySelector(\'.acbb\');if(b)b.style.display=\'none\';});},0);\n}\nfunction ta(btn){var item=btn.parentElement;document.querySelectorAll(\'.acci.open\').forEach(function(o){if(o!==item){o.classList.remove(\'open\');var b=o.querySelector(\'.acbb\');if(b)b.style.display=\'none\';var p=o.querySelector(\'.ap\');if(p)p.style.transform=\'none\';}});var op=item.classList.toggle(\'open\');var bd=item.querySelector(\'.acbb\');if(bd)bd.style.display=op?\'block\':\'none\';var pl=item.querySelector(\'.ap\');if(pl)pl.style.transform=op?\'rotate(45deg)\':\'none\';}\nwindow.addEventListener(\'hashchange\',function(){var h=location.hash.slice(1);if(h.indexOf(\'chef-\')===0)go(\'chef\',h.slice(5));else if(h===\'chefs\')go(\'chefs\');else go(\'home\');});\ninit();go(\'home\');';
+  var NAV_LOGO='&#x1F374;';
+  return '<!DOCTYPE html><html lang="fr"><head>'
+    +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">'
+    +'<title>Chefs Goutatoo Gen\u00e8ve</title>'
+    +'<link rel="preconnect" href="https://fonts.googleapis.com">'
+    +'<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:wght@700&display=swap">'
+    +'<style>'+CSS+'</style></head><body>'
+    +'<nav><div class="nl"><div class="logo" id="SL">'+NAV_LOGO+'</div>'
+    +'<a class="bn" onclick="go(\'home\')">Chefs Goutatoo Gen\u00e8ve</a></div>'
+    +'<div class="nk"><a id="lh" onclick="go(\'home\')">Accueil</a>'
+    +'<a id="lc" onclick="go(\'chefs\')">Les Chefs</a>'
+    +'<a onclick="go(\'chefs\')">Recettes</a>'
+    +'<a onclick="go(\'home\')">Contact</a></div></nav>'
+    +'<div id="root"></div>'
+    +'<footer><div class="fn">Chefs Goutatoo Gen\u00e8ve</div>'
+    +'<div class="fc">&copy; 2025 &middot; Pour le bon go\u00fbt</div></footer>'
+    +'<scr'+'ipt>var _D='+dataJSON+';'+JS+'<'+'/scr'+'ipt>'
+    +'</body></html>';
+}
+
 var G={heroImage:null,siteLogo:null,homeTitle:'Chefs Goutatoo Gen\u00e8ve',homeSub:'Pour le bon go\u00fbt',homeTagline:"Nous formons une \u00e9quipe de cuisiniers li\u00e9s par l'amour de la bonne cuisine, et principalement par une amiti\u00e9 sinc\u00e8re."};
-var DEF={id:'1',name:'Jean-Marc Bessire',position:'Chef de Cuisine',philosophy:"Ma passion, le poisson, les \u00e9pices et le go\u00fbt du bon go\u00fbt.",biography:"Jean-Marc Bessire vous accueille au restaurant Le Cigalon, aux portes de Gen\u00e8ve, pour vous faire d\u00e9couvrir les saveurs de l'oc\u00e9an et les mille plaisirs d'une cuisine de la mer raffin\u00e9e, sinc\u00e8re et inspir\u00e9e.",awards:['Michelin Reconnu depuis 1997','Cuisine de la Mer Raffin\u00e9e','Passion pour le Poisson et les \u00c9pices'],restaurant:'Restaurant Le Cigalon',restaurantDesc:"Aux portes de Gen\u00e8ve, Le Cigalon est un \u00e9crin d'\u00e9l\u00e9gance.",portrait:null,restaurantLogo:null,restaurantPhoto:null,gallery:[],timeline:[{year:'1985',event:"Formation \u00e0 l'\u00c9cole H\u00f4teli\u00e8re de Gen\u00e8ve"},{year:'1990',event:'Apprentissage M\u00f6venpick Gen\u00e8ve'},{year:'1997',event:'Reconnaissance Michelin'},{year:'2002',event:'Oriental Hotel Bangkok'},{year:'2005',event:'Ouverture du Restaurant Le Cigalon'}],recipes:[{id:'r1',title:'Maquereau \u00e0 la Straciatella et Vinaigrette de Morilles',image:null,prepTime:'30 min',difficulty:'Interm\u00e9diaire',winepairing:'Chablis Premier Cru, Ch\u00e2teau de Maligny 2021',chefNotes:"Cette recette met en valeur le contraste entre la richesse cr\u00e9meuse de la straciatella et la puissance iod\u00e9e du maquereau.",ingredients:['2 filets de maquereau de 20g','1 artichaut tourn\u00e9','1 c\u00e2pre \u00e0 queue','30g de straciatella',"Huile d'olive",'Sel et poivre'],method:['Dresser la straciatella en ligne sur une assiette.','Disposer les garnitures harmonieusement.','Assaisonner et cuire les filets 3 min \u00e0 la po\u00eale.',"D\u00e9poser le maquereau sur la straciatella, filet d'huile d'olive.",'Finir avec les pousses de shiso ou bourrache.']}],social:{instagram:'',facebook:'',website:''}};
-var chefs=[],sid='1',curV='prof',mrec={},mrecId=null;
+var DEF={id:'1',name:'Jean-Marc Bessire',position:'Chef de Cuisine',philosophy:"Ma passion, le poisson, les \u00e9pices et le go\u00fbt du bon go\u00fbt.",biography:"Jean-Marc Bessire vous accueille au restaurant Le Cigalon, aux portes de Gen\u00e8ve.",awards:['Michelin Reconnu depuis 1997','Cuisine de la Mer Raffin\u00e9e','Passion pour le Poisson et les \u00c9pices'],restaurant:'Restaurant Le Cigalon',restaurantDesc:"Aux portes de Gen\u00e8ve, Le Cigalon est un \u00e9crin d'\u00e9l\u00e9gance.",portrait:null,restaurantLogo:null,restaurantPhoto:null,gallery:[],timeline:[{year:'1990',event:'Apprentissage M\u00f6venpick Gen\u00e8ve'},{year:'1997',event:'Reconnaissance Michelin'},{year:'2005',event:'Ouverture du Restaurant Le Cigalon'}],recipes:[{id:'r1',title:'Maquereau \u00e0 la Straciatella et Vinaigrette de Morilles',image:null,prepTime:'30 min',difficulty:'Interm\u00e9diaire',winepairing:'Chablis Premier Cru 2021',chefNotes:"Cette recette met en valeur le contraste entre la richesse cr\u00e9meuse de la straciatella et la puissance iod\u00e9e du maquereau.",ingredients:['2 filets de maquereau de 20g','1 artichaut tourn\u00e9','30g de straciatella',"Huile d'olive",'Sel et poivre'],method:['Dresser la straciatella en ligne sur une assiette.','Disposer les garnitures harmonieusement.','Assaisonner et cuire les filets 3 min \u00e0 la po\u00eale.',"D\u00e9poser le maquereau sur la straciatella avec un filet d'huile d'olive."]}],social:{}};
+var chefs=[],sid='1',curView='home',mrec={},mrecId=null;
 function uid(){return Math.random().toString(36).slice(2,9)}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function gc(){return chefs.find(function(c){return String(c.id)===String(sid)})||chefs[0]}
 function valArr(a){return Array.isArray(a)&&a.length>0&&a.every(function(c){return c&&c.id&&c.name})}
-function fix(c){c.awards=Array.isArray(c.awards)?c.awards:[];c.timeline=Array.isArray(c.timeline)?c.timeline:[];c.recipes=Array.isArray(c.recipes)?c.recipes:[];c.gallery=Array.isArray(c.gallery)?c.gallery:[];if(!c.social||typeof c.social!=='object')c.social={};return c}
+function fix(c){if(!Array.isArray(c.awards))c.awards=[];if(!Array.isArray(c.timeline))c.timeline=[];if(!Array.isArray(c.recipes))c.recipes=[];if(!Array.isArray(c.gallery))c.gallery=[];if(!c.social||typeof c.social!=='object')c.social={};return c}
 function sv(){try{localStorage.setItem('gc',JSON.stringify(chefs));localStorage.setItem('gg',JSON.stringify(G));}catch{}var s=document.getElementById('sst');if(s)s.textContent='\u2713 Sauvegard\u00e9'}
 
-function boot(){
-  try{
-    var s=localStorage.getItem('gc');
-    if(s){var p=JSON.parse(s);if(valArr(p))chefs=p.map(fix);}
-    var g=localStorage.getItem('gg');
-    if(g){var pg=JSON.parse(g);if(pg&&typeof pg==='object')Object.assign(G,pg);}
-  }catch(ex){}
-  if(!valArr(chefs))chefs=[JSON.parse(JSON.stringify(DEF))];
-  sid=String(chefs[0].id);
-  sv();renderAll();
+var _pt=null;
+function schedPv(){clearTimeout(_pt);_pt=setTimeout(doPv,250);}
+function doPv(){
+  var fr=document.getElementById('pvframe');if(!fr)return;
+  var data={chefs:chefs,globalData:G};
+  var json=JSON.stringify(data).replace(/<\/script/gi,'<\\/script');
+  var html=buildSite(json);
+  // inject nav to current view
+  var c=gc();
+  var vcmd="go('home')";
+  if(curView==='chefs')vcmd="go('chefs')";
+  else if(curView==='chef'&&c)vcmd="go('chef','"+c.id+"')";
+  html=html.replace("init();go('home');","init();"+vcmd+";");
+  fr.srcdoc=html;
+  var urls={home:'goutatoo-geneve.ch',chefs:'goutatoo-geneve.ch/chefs',chef:'goutatoo-geneve.ch/'+(c?c.name:'').toLowerCase().replace(/\s+/g,'-')};
+  var ub=document.getElementById('ubar');if(ub)ub.textContent=urls[curView]||'goutatoo-geneve.ch';
 }
-function renderAll(){rdrSel();ldFields();rdrAw();rdrTL();rdrRecs();rdrGal();rdrDrops();rdrSiteNav();rdrStrip();rdrView();ldHomeF();}
-
+function setView(v){curView=v;['home','chefs','chef'].forEach(function(x){var b=document.getElementById('vb-'+x);if(b)b.classList.toggle('on',x===v);});doPv();}
 function epage(p){
   document.querySelectorAll('.ptab').forEach(function(t,i){t.classList.toggle('on',['home','chef','dir'][i]===p)});
   ['home','chef','dir'].forEach(function(x){var el=document.getElementById('ep-'+x);if(el){el.style.display='none';el.className='epage';}});
   var el=document.getElementById('ep-'+p);
   if(el){el.style.display=p==='chef'?'flex':'block';el.className='epage on';}
-  if(p==='home')swv('home');else if(p==='dir')swv('dir');else swv('prof');
+  if(p==='home')setView('home');else if(p==='dir')setView('chefs');else setView('chef');
 }
-function swv(v){
-  curV=v;
-  document.querySelectorAll('.vbtn').forEach(function(b,i){b.classList.toggle('on',['home','dir','prof'][i]===v)});
-  document.getElementById('vhome').style.display=v==='home'?'block':'none';
-  document.getElementById('vprof').style.display=v==='prof'?'block':'none';
-  document.getElementById('vdir').style.display=v==='dir'?'block':'none';
-  document.getElementById('cstrip').style.display=v==='prof'?'flex':'none';
-  var c=gc();var urls={home:'goutatoo-geneve.ch',dir:'goutatoo-geneve.ch/chefs',prof:'goutatoo-geneve.ch/'+(c?c.name:'chef').toLowerCase().replace(/\s+/g,'-')};
-  var ub=document.getElementById('ubar');if(ub)ub.textContent=urls[v]||'goutatoo-geneve.ch';
-  rdrView();
-}
-function rdrView(){if(curV==='home')rdrHome();else if(curV==='dir')rdrDir();else rdrProf();}
-
-function rdrSel(){
-  var sel=document.getElementById('cselect');if(!sel)return;
-  sel.innerHTML=chefs.map(function(c){return'<option value="'+c.id+'"'+(String(c.id)===String(sid)?' selected':'')+'>'+esc(c.name)+'</option>'}).join('');
-  var db=document.getElementById('delbtn');if(db)db.style.display=chefs.length>1?'':'none';
-}
-function onSelChange(v){sid=v;rdrSel();ldFields();rdrAw();rdrTL();rdrRecs();rdrGal();rdrDrops();rdrStrip();rdrView();}
-function addChef(){var nc=JSON.parse(JSON.stringify(DEF));nc.id=uid();nc.name='Nouveau Chef';nc.portrait=null;nc.restaurantLogo=null;nc.restaurantPhoto=null;nc.gallery=[];nc.timeline=[];nc.recipes=[];chefs.push(nc);sid=String(nc.id);sv();renderAll();}
-function delChef(){if(chefs.length<=1)return;if(!confirm('Supprimer ce chef ?'))return;chefs=chefs.filter(function(c){return String(c.id)!==String(sid)});sid=String(chefs[0].id);sv();renderAll();}
-
-function ldFields(){
-  var c=gc();if(!c)return;
-  var set=function(id,v){var el=document.getElementById(id);if(el)el.value=v||''};
-  set('f-nm',c.name);set('f-ps',c.position);set('f-ph',c.philosophy);set('f-bi',c.biography);
-  set('f-rn',c.restaurant);set('f-rd',c.restaurantDesc);
-  set('f-ig',(c.social&&c.social.instagram)||'');set('f-fb',(c.social&&c.social.facebook)||'');set('f-wb',(c.social&&c.social.website)||'');
-}
-function ldHomeF(){var set=function(id,v){var el=document.getElementById(id);if(el)el.value=v||''};set('f-ht',G.homeTitle);set('f-hs',G.homeSub);set('f-hq',G.homeTagline);}
-function upd(k,v){var c=gc();if(c){c[k]=v;sv();rdrView();}}
-function updG(k,v){G[k]=v;sv();rdrView();}
+function rdrSel(){var sel=document.getElementById('cselect');if(!sel)return;sel.innerHTML=chefs.map(function(c){return'<option value="'+c.id+'"'+(String(c.id)===String(sid)?' selected':'')+'>'+esc(c.name)+'</option>'}).join('');var db=document.getElementById('delbtn');if(db)db.style.display=chefs.length>1?'':'none';}
+function onSelChange(v){sid=v;rdrSel();ldFields();rdrAw();rdrTL();rdrRecs();rdrGal();rdrDrops();schedPv();}
+function addChef(){var nc=JSON.parse(JSON.stringify(DEF));nc.id=uid();nc.name='Nouveau Chef';nc.portrait=null;nc.restaurantLogo=null;nc.restaurantPhoto=null;nc.gallery=[];nc.timeline=[];nc.recipes=[];chefs.push(nc);sid=String(nc.id);sv();rdrSel();ldFields();rdrAw();rdrTL();rdrRecs();rdrGal();rdrDrops();schedPv();}
+function delChef(){if(chefs.length<=1)return;if(!confirm('Supprimer ce chef ?'))return;chefs=chefs.filter(function(c){return String(c.id)!==String(sid)});sid=String(chefs[0].id);sv();rdrSel();ldFields();rdrAw();rdrTL();rdrRecs();rdrGal();rdrDrops();schedPv();}
+function ldFields(){var c=gc();if(!c)return;var s=function(id,v){var el=document.getElementById(id);if(el)el.value=v||''};s('f-nm',c.name);s('f-ps',c.position);s('f-ph',c.philosophy);s('f-bi',c.biography);s('f-rn',c.restaurant);s('f-rd',c.restaurantDesc);s('f-ig',(c.social&&c.social.instagram)||'');s('f-fb',(c.social&&c.social.facebook)||'');s('f-wb',(c.social&&c.social.website)||'');}
+function ldHomeF(){var s=function(id,v){var el=document.getElementById(id);if(el)el.value=v||''};s('f-ht',G.homeTitle);s('f-hs',G.homeSub);s('f-hq',G.homeTagline);}
+function upd(k,v){var c=gc();if(c){c[k]=v;sv();schedPv();}}
+function updG(k,v){G[k]=v;sv();schedPv();}
 function updSoc(k,v){var c=gc();if(c){if(!c.social)c.social={};c.social[k]=v;sv();}}
-
 function upld(id){var el=document.getElementById(id);if(el)el.click();}
-function setDrop(id,src){
-  var el=document.getElementById(id);if(!el)return;
-  if(src){el.innerHTML='<img src="'+src+'"><div class="ov"><span>\u270e Changer</span></div>';}
-  else{el.innerHTML='<div class="ph"><div class="ic">+</div><div class="tx">Cliquer pour choisir</div></div><div class="ov"><span>+ Ajouter</span></div>';}
-}
+function setDrop(id,src){var el=document.getElementById(id);if(!el)return;if(src){el.innerHTML='<img src="'+src+'"><div class="ov"><span class="oc">&#9998; Changer</span></div>';}else{el.innerHTML='<div class="ph"><div class="ic">+</div><div class="tx">Cliquer pour choisir</div></div><div class="ov"><span class="oc">+ Ajouter</span></div>';}}
 function rdrDrops(){var c=gc();if(!c)return;setDrop('d-pt',c.portrait);setDrop('d-lg',c.restaurantLogo);setDrop('d-rp',c.restaurantPhoto);setDrop('d-hero',G.heroImage);setDrop('d-slogo',G.siteLogo);}
-function hcImg(f,d,inp){var file=inp.files[0];if(!file)return;var r=new FileReader();r.onload=function(ev){var c=gc();if(c){c[f]=ev.target.result;sv();setDrop(d,ev.target.result);rdrView();}};r.readAsDataURL(file);inp.value='';}
-function hgImg(f,d,inp){var file=inp.files[0];if(!file)return;var r=new FileReader();r.onload=function(ev){G[f]=ev.target.result;sv();setDrop(d,ev.target.result);rdrView();rdrSiteNav();};r.readAsDataURL(file);inp.value='';}
-function clrC(f,d){var c=gc();if(c){c[f]=null;sv();setDrop(d,null);rdrView();}}
-function clrG(f,d){G[f]=null;sv();setDrop(d,null);rdrView();}
-function hGal(inp){var files=Array.from(inp.files);if(!files.length)return;var c=gc();var done=0;files.forEach(function(f){var r=new FileReader();r.onload=function(ev){c.gallery.push(ev.target.result);done++;if(done===files.length){sv();rdrGal();rdrView();}};r.readAsDataURL(f);});inp.value='';}
+function hcImg(f,d,inp){var file=inp.files[0];if(!file)return;var r=new FileReader();r.onload=function(ev){var c=gc();if(c){c[f]=ev.target.result;sv();setDrop(d,ev.target.result);schedPv();}};r.readAsDataURL(file);inp.value='';}
+function hgImg(f,d,inp){var file=inp.files[0];if(!file)return;var r=new FileReader();r.onload=function(ev){G[f]=ev.target.result;sv();setDrop(d,ev.target.result);schedPv();};r.readAsDataURL(file);inp.value='';}
+function clrC(f,d){var c=gc();if(c){c[f]=null;sv();setDrop(d,null);schedPv();}}
+function clrG(f,d){G[f]=null;sv();setDrop(d,null);schedPv();}
+function hGal(inp){var files=Array.from(inp.files);if(!files.length)return;var c=gc();var done=0;files.forEach(function(f){var r=new FileReader();r.onload=function(ev){c.gallery.push(ev.target.result);done++;if(done===files.length){sv();rdrGal();schedPv();}};r.readAsDataURL(f);});inp.value='';}
 function rdrGal(){var c=gc();var g=document.getElementById('ggrid');if(!g)return;var cn=document.getElementById('gcnt');if(cn)cn.textContent=(c.gallery||[]).length;g.innerHTML=(c.gallery||[]).map(function(img,i){return'<div class="gt"><img src="'+img+'"><button onclick="delGal('+i+')">x</button></div>'}).join('');}
-function delGal(i){var c=gc();c.gallery.splice(i,1);sv();rdrGal();rdrView();}
-
-function rdrAw(){var c=gc();var el=document.getElementById('awlist');if(!el)return;el.innerHTML=(c.awards||[]).map(function(a,i){return'<div class="awrow"><input value="'+esc(a)+'" oninput="updAw('+i+',this.value)" placeholder="Distinction..."><button class="xb" onclick="delAw('+i+')">x</button></div>'}).join('')+'<button class="bd" style="font-size:9px;margin-top:3px" onclick="addAw()">+ Ajouter</button>';}
+function delGal(i){var c=gc();c.gallery.splice(i,1);sv();rdrGal();schedPv();}
+function rdrAw(){var c=gc();var el=document.getElementById('awlist');if(!el)return;el.innerHTML=(c.awards||[]).map(function(a,i){return'<div class="awrow"><input value="'+esc(a)+'" oninput="updAw('+i+',this.value)"><button class="xb" onclick="delAw('+i+')">x</button></div>'}).join('')+'<button class="bd" style="font-size:9px;margin-top:3px" onclick="addAw()">+ Ajouter</button>';}
 function addAw(){var c=gc();c.awards.push('');sv();rdrAw();}
-function updAw(i,v){var c=gc();c.awards[i]=v;sv();rdrView();}
-function delAw(i){var c=gc();c.awards.splice(i,1);sv();rdrAw();rdrView();}
-
-function rdrTL(){var c=gc();var el=document.getElementById('tllist');if(!el)return;el.innerHTML=(c.timeline||[]).map(function(t,i){return'<div class="tlrow"><input class="tly" value="'+esc(t.year)+'" oninput="updTL('+i+',\'year\',this.value)"><input class="tli" value="'+esc(t.event)+'" oninput="updTL('+i+',\'event\',this.value)" placeholder="Ev\u00e9nement..."><button class="xb" onclick="delTL('+i+')">x</button></div>'}).join('')+'<button class="bd" style="font-size:9px;margin-top:3px" onclick="addTL()">+ Ajouter</button>';}
+function updAw(i,v){var c=gc();c.awards[i]=v;sv();schedPv();}
+function delAw(i){var c=gc();c.awards.splice(i,1);sv();rdrAw();schedPv();}
+function rdrTL(){var c=gc();var el=document.getElementById('tllist');if(!el)return;el.innerHTML=(c.timeline||[]).map(function(t,i){return'<div class="tlrow"><input class="tly" value="'+esc(t.year)+'" oninput="updTL('+i+',\'year\',this.value)"><input class="tli" value="'+esc(t.event)+'" oninput="updTL('+i+',\'event\',this.value)" placeholder="\u00c9v\u00e9nement..."><button class="xb" onclick="delTL('+i+')">x</button></div>'}).join('')+'<button class="bd" style="font-size:9px;margin-top:3px" onclick="addTL()">+ Ajouter</button>';}
 function addTL(){var c=gc();c.timeline.push({year:'2024',event:''});sv();rdrTL();}
-function updTL(i,k,v){var c=gc();c.timeline[i][k]=v;sv();rdrView();}
-function delTL(i){var c=gc();c.timeline.splice(i,1);sv();rdrTL();rdrView();}
-
-function rdrRecs(){var c=gc();var el=document.getElementById('rlist');if(!el)return;el.innerHTML=(c.recipes||[]).map(function(r){return'<div class="rc"><div class="rt">'+esc(r.title)+'</div><div class="rb"><button class="bg" style="font-size:9px;padding:4px 9px" onclick="openRM(\''+r.id+'\')">Éditer</button><button class="bd" style="font-size:9px;padding:4px 9px" onclick="dupR(\''+r.id+'\')">Dupliquer</button><button class="bd bred" style="font-size:9px;padding:4px 9px" onclick="delR(\''+r.id+'\')">Supprimer</button></div></div>'}).join('');}
-function delR(id){var c=gc();c.recipes=c.recipes.filter(function(r){return r.id!==id});sv();rdrRecs();rdrView();}
-function dupR(id){var c=gc();var r=c.recipes.find(function(r){return r.id===id});if(!r)return;var nr=JSON.parse(JSON.stringify(r));nr.id=uid();nr.title+=' (Copie)';c.recipes.push(nr);sv();rdrRecs();rdrView();}
-
+function updTL(i,k,v){var c=gc();c.timeline[i][k]=v;sv();schedPv();}
+function delTL(i){var c=gc();c.timeline.splice(i,1);sv();rdrTL();schedPv();}
+function rdrRecs(){var c=gc();var el=document.getElementById('rlist');if(!el)return;el.innerHTML=(c.recipes||[]).map(function(r){return'<div class="rc"><div class="rt">'+esc(r.title)+'</div><div class="rb"><button class="bg" style="font-size:9px;padding:4px 9px" onclick="openRM(\''+r.id+'\')">&#9998; \u00c9diter</button><button class="bd" style="font-size:9px;padding:4px 9px" onclick="dupR(\''+r.id+'\')">Dupliquer</button><button class="bd bred" style="font-size:9px;padding:4px 9px" onclick="delR(\''+r.id+'\')">Supprimer</button></div></div>'}).join('');}
+function delR(id){var c=gc();c.recipes=c.recipes.filter(function(r){return r.id!==id});sv();rdrRecs();schedPv();}
+function dupR(id){var c=gc();var r=c.recipes.find(function(r){return r.id===id});if(!r)return;var nr=JSON.parse(JSON.stringify(r));nr.id=uid();nr.title+=' (Copie)';c.recipes.push(nr);sv();rdrRecs();schedPv();}
 function openRM(id){var c=gc();if(id){var r=c.recipes.find(function(r){return r.id===id});mrec=JSON.parse(JSON.stringify(r));mrecId=id;}else{mrec={id:uid(),title:'Nouvelle Recette',image:null,prepTime:'30 min',difficulty:'Interm\u00e9diaire',winepairing:'',chefNotes:'',ingredients:[''],method:['']};mrecId=null;}
-  var set=function(i,v){var el=document.getElementById(i);if(el)el.value=v||''};
-  set('m-ti',mrec.title);set('m-pr',mrec.prepTime);set('m-df',mrec.difficulty);set('m-wp',mrec.winepairing);set('m-cn',mrec.chefNotes);
-  var md=document.getElementById('m-idrop');if(md)md.innerHTML=mrec.image?'<img src="'+mrec.image+'" style="width:100%;height:100%;object-fit:cover"><div class="ov"><span>\u270e Changer</span></div>':'<div class="ph"><div class="ic">+</div><div class="tx">Photo du plat</div></div><div class="ov"><span>+ Ajouter</span></div>';
-  rdrMIng();rdrMStp();
-  document.getElementById('moverlay').classList.add('on');
-}
+  var s=function(i,v){var el=document.getElementById(i);if(el)el.value=v||''};
+  s('m-ti',mrec.title);s('m-pr',mrec.prepTime);s('m-df',mrec.difficulty);s('m-wp',mrec.winepairing);s('m-cn',mrec.chefNotes);
+  var md=document.getElementById('m-idrop');if(md)md.innerHTML=mrec.image?'<img src="'+mrec.image+'" style="width:100%;height:100%;object-fit:cover"><div class="ov"><span class="oc">&#9998; Changer</span></div>':'<div class="ph"><div class="ic">+</div><div class="tx">Photo du plat</div></div><div class="ov"><span class="oc">+ Ajouter</span></div>';
+  rdrMIng();rdrMStp();document.getElementById('moverlay').classList.add('on');}
 function closeRM(){document.getElementById('moverlay').classList.remove('on');}
 function rdrMIng(){var el=document.getElementById('mingr');if(!el)return;el.innerHTML=(mrec.ingredients||[]).map(function(v,i){return'<div class="mrow"><input value="'+esc(v)+'" oninput="mrec.ingredients['+i+']=this.value" placeholder="Ingr\u00e9dient..."><button class="xb" onclick="delIng('+i+')">x</button></div>'}).join('');}
 function addIng(){mrec.ingredients.push('');rdrMIng();}
@@ -479,55 +319,17 @@ function delIng(i){mrec.ingredients.splice(i,1);rdrMIng();}
 function rdrMStp(){var el=document.getElementById('mstps');if(!el)return;el.innerHTML=(mrec.method||[]).map(function(v,i){return'<div class="mrow"><span class="mn">'+(i+1)+'.</span><textarea rows="2" oninput="mrec.method['+i+']=this.value" placeholder="\u00c9tape...">'+esc(v)+'</textarea><button class="xb" onclick="delStp('+i+')">x</button></div>'}).join('');}
 function addStp(){mrec.method.push('');rdrMStp();}
 function delStp(i){mrec.method.splice(i,1);rdrMStp();}
-function hMImg(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){mrec.image=ev.target.result;var md=document.getElementById('m-idrop');if(md)md.innerHTML='<img src="'+ev.target.result+'" style="width:100%;height:100%;object-fit:cover"><div class="ov"><span>\u270e Changer</span></div>';};r.readAsDataURL(f);inp.value='';}
-function saveRM(){
-  mrec.title=document.getElementById('m-ti').value;mrec.prepTime=document.getElementById('m-pr').value;mrec.difficulty=document.getElementById('m-df').value;mrec.winepairing=document.getElementById('m-wp').value;mrec.chefNotes=document.getElementById('m-cn').value;
-  mrec.ingredients=Array.from(document.querySelectorAll('#mingr input')).map(function(i){return i.value}).filter(Boolean);
-  mrec.method=Array.from(document.querySelectorAll('#mstps textarea')).map(function(t){return t.value}).filter(Boolean);
-  var c=gc();if(mrecId){var idx=c.recipes.findIndex(function(r){return r.id===mrecId});if(idx>=0)c.recipes[idx]=mrec;}else c.recipes.push(mrec);
-  sv();rdrRecs();rdrView();closeRM();
-}
-
+function hMImg(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){mrec.image=ev.target.result;var md=document.getElementById('m-idrop');if(md)md.innerHTML='<img src="'+ev.target.result+'" style="width:100%;height:100%;object-fit:cover"><div class="ov"><span class="oc">&#9998; Changer</span></div>';};r.readAsDataURL(f);inp.value='';}
+function saveRM(){mrec.title=document.getElementById('m-ti').value;mrec.prepTime=document.getElementById('m-pr').value;mrec.difficulty=document.getElementById('m-df').value;mrec.winepairing=document.getElementById('m-wp').value;mrec.chefNotes=document.getElementById('m-cn').value;mrec.ingredients=Array.from(document.querySelectorAll('#mingr input')).map(function(i){return i.value}).filter(Boolean);mrec.method=Array.from(document.querySelectorAll('#mstps textarea')).map(function(t){return t.value}).filter(Boolean);var c=gc();if(mrecId){var idx=c.recipes.findIndex(function(r){return r.id===mrecId});if(idx>=0)c.recipes[idx]=mrec;}else c.recipes.push(mrec);sv();rdrRecs();schedPv();closeRM();}
 function tog(btn){btn.classList.toggle('on');var b=btn.nextElementSibling;if(b)b.classList.toggle('on');}
-function rdrSiteNav(){var li=document.getElementById('nli');if(!li)return;li.innerHTML=G.siteLogo?'<img src="'+G.siteLogo+'">':'🍴';}
-function rdrStrip(){var s=document.getElementById('cstrip');if(!s)return;s.innerHTML=chefs.map(function(c){return'<div class="sc'+(String(c.id)===String(sid)?' on':'')+'" onclick="pickChef(\''+c.id+'\')" ><div class="av">'+(c.portrait?'<img src="'+c.portrait+'">':'👨‍🍳')+'</div><div><div class="sn">'+esc(c.name)+'</div><div class="sr">'+esc(c.restaurant)+'</div></div></div>'}).join('');}
-function pickChef(id){sid=String(id);rdrSel();ldFields();rdrAw();rdrTL();rdrRecs();rdrGal();rdrDrops();rdrStrip();rdrView();}
-
-function rdrHome(){var pv=document.getElementById('vhome');if(!pv)return;var hero=G.heroImage?'<div style="position:relative;height:400px;overflow:hidden;cursor:pointer" onclick="upld(\'u-hero\')"><img src="'+G.heroImage+'" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.6))"></div><div style="position:absolute;bottom:0;left:0;right:0;padding:36px;text-align:center"><h1 style="font-family:\'Playfair Display\',serif;font-size:38px;color:#fff;margin:0 0 8px">'+esc(G.homeTitle)+'</h1><p style="font-size:14px;color:rgba(255,255,255,.85);font-style:italic">'+esc(G.homeSub)+'</p></div></div>':'<div style="height:240px;background:linear-gradient(135deg,#1a2744,#2c3e50);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:10px" onclick="upld(\'u-hero\')"><div style="font-size:11px;color:#c9a96e55;letter-spacing:.2em;text-transform:uppercase;font-family:system-ui">+ AJOUTER L\'IMAGE PRINCIPALE</div><h1 style="font-family:\'Playfair Display\',serif;font-size:32px;color:#fff;text-align:center">'+esc(G.homeTitle)+'</h1></div>';var cards=chefs.map(function(c){return'<div onclick="pickChef(\''+c.id+'\')" style="text-align:center;cursor:pointer"><div style="width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;border-radius:2px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:.2">'+(c.portrait?'<img src="'+c.portrait+'" style="width:100%;height:100%;object-fit:cover;opacity:1">':'👨‍🍳')+'</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:#1a2744;font-weight:600;margin-bottom:2px">'+esc(c.name)+'</div><div style="font-size:10px;color:#9a8060">'+esc(c.restaurant)+'</div></div>'}).join('');pv.innerHTML=hero+'<div style="background:#f0ebe0;border-top:2px solid #c9a96e;border-bottom:2px solid #c9a96e;padding:14px 28px;text-align:center"><p style="font-size:14px;color:#5a4030;font-style:italic">'+esc(G.homeTagline)+'</p></div><div style="padding:40px 28px"><div style="text-align:center;margin-bottom:28px"><h2 style="font-family:\'Playfair Display\',serif;font-size:28px;color:#1a2744;margin:0 0 12px">Les Chefs</h2><div style="display:flex;align-items:center;justify-content:center;gap:12px"><div style="width:40px;height:1px;background:#c9a96e"></div><span style="color:#c9a96e">✦</span><div style="width:40px;height:1px;background:#c9a96e"></div></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px">'+cards+'</div></div>';}
-function rdrDir(){var pv=document.getElementById('vdir');if(!pv)return;var cards=chefs.map(function(c){return'<div onclick="pickChef(\''+c.id+'\')" style="background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04)"><div style="height:170px;background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:44px;opacity:.2">'+(c.portrait?'<img src="'+c.portrait+'" style="width:100%;height:100%;object-fit:cover;opacity:1">':'👨‍🍳')+'</div><div style="padding:14px"><div style="font-size:8px;color:#c9a96e;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;font-family:system-ui">'+esc(c.position)+'</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:17px;font-weight:700;color:#1a2744;margin-bottom:2px">'+esc(c.name)+'</div><div style="font-size:11px;color:#9a8060;margin-bottom:8px">'+esc(c.restaurant)+'</div><div style="font-size:11px;color:#c9a96e;font-family:system-ui">Voir le profil →</div></div></div>'}).join('');pv.innerHTML='<div style="padding:40px 24px;font-family:\'Cormorant Garamond\',serif"><div style="text-align:center;margin-bottom:32px"><h1 style="font-family:\'Playfair Display\',serif;font-size:30px;color:#1a2744;margin:0 0 12px">Notre Équipe</h1><div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px"><div style="width:40px;height:1px;background:#c9a96e"></div><span style="color:#c9a96e">✦</span><div style="width:40px;height:1px;background:#c9a96e"></div></div><p style="font-size:13px;color:#7a6050;font-style:italic;max-width:420px;margin:0 auto;line-height:1.7">Nous formons une équipe de cuisiniers liés par l\'amour de la bonne cuisine.</p></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px">'+cards+'</div></div>';}
-function rdrProf(){var pv=document.getElementById('vprof');if(!pv)return;var c=gc();if(!c){pv.innerHTML='';return;}var gold='#c9a96e',navy='#1a2744';var awards=(c.awards||[]).map(function(a,i,arr){return'<div style="flex:1 1 140px;padding:10px 14px;border-right:'+(i<arr.length-1?'1px solid rgba(201,169,110,.2)':'none')+';text-align:center"><div style="color:'+gold+';font-size:13px;margin-bottom:5px">✦</div><div style="font-size:8px;color:#9a8060;letter-spacing:.1em;text-transform:uppercase;line-height:1.4;font-family:system-ui">'+esc(a)+'</div></div>'}).join('');var tl=(c.timeline||[]).map(function(t){return'<div style="display:flex;gap:14px;margin-bottom:12px;align-items:flex-start"><div style="min-width:44px;text-align:right;color:'+gold+';font-size:11px;font-weight:700;font-family:system-ui;padding-top:2px">'+esc(t.year)+'</div><div style="width:7px;height:7px;border-radius:50%;background:'+gold+';margin-top:5px;flex-shrink:0;margin-left:-4px;position:relative;z-index:1"></div><div style="font-size:13px;color:#2c2c2c">'+esc(t.event)+'</div></div>'}).join('');var gal=(c.gallery||[]).map(function(img){return'<img src="'+img+'" style="width:100%;height:80px;object-fit:cover;border-radius:2px">'}).join('');var recs=(c.recipes||[]).map(function(r){var ings=(r.ingredients||[]).filter(Boolean).map(function(i){return'<li style="font-size:12px;color:#5a4030;padding:4px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:6px"><span style="color:'+gold+';font-size:7px;margin-top:6px">▪</span>'+esc(i)+'</li>'}).join('');var stps=(r.method||[]).filter(Boolean).map(function(s,i){return'<div style="display:flex;gap:8px;margin-bottom:10px"><span style="color:'+gold+';font-size:14px;font-weight:700;min-width:18px;font-family:\'Cormorant Garamond\',serif">'+(i+1)+'</span><p style="font-size:12px;color:#5a4030;line-height:1.6;margin:0">'+esc(s)+'</p></div>'}).join('');return'<div class="acci"><button class="accb" type="button" onclick="tgAcc(this)"><span style="display:flex;align-items:center;gap:10px"><span style="color:'+gold+';font-size:11px">✦</span>'+esc(r.title)+'</span><span style="display:flex;align-items:center;gap:12px"><span style="font-size:9px;color:#9a8060;font-family:system-ui">'+esc(r.prepTime)+' · '+esc(r.difficulty)+'</span><span class="ap">+</span></span></button><div class="acbb">'+(r.image?'<img src="'+r.image+'" style="width:100%;height:200px;object-fit:cover;border-radius:2px;margin-bottom:16px">':'')+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px"><div><div style="font-size:10px;color:'+gold+';letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Ingrédients</div><ul style="list-style:none">'+ings+'</ul></div><div><div style="font-size:10px;color:'+gold+';letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui">Préparation</div>'+stps+'</div></div>'+(r.chefNotes?'<div style="margin-top:16px;padding:14px 18px;background:rgba(201,169,110,.05);border-left:3px solid '+gold+'"><div style="font-size:9px;color:'+gold+';letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-family:system-ui">Notes du Chef</div><p style="font-size:12px;color:#5a4030;line-height:1.7;font-style:italic">'+esc(r.chefNotes)+'</p></div>':'')+(r.winepairing?'<div style="margin-top:12px;display:flex;align-items:center;gap:8px"><span style="font-size:16px">🍷</span><div><div style="font-size:8px;color:'+gold+';letter-spacing:.1em;text-transform:uppercase;font-family:system-ui">Accord Mets-Vins</div><div style="font-size:12px;color:#5a4030;font-style:italic">'+esc(r.winepairing)+'</div></div></div>':'')+'</div></div>'}).join('');
-pv.innerHTML='<div style="font-family:\'Cormorant Garamond\',serif;background:#f5f0e8">'
-+'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;height:290px;border-bottom:3px solid '+gold+'">'
-+'<div style="background:#e8e4dc;overflow:hidden;cursor:pointer" onclick="upld(\'u-pt\')">'+(c.portrait?'<img src="'+c.portrait+'" style="width:100%;height:100%;object-fit:cover">':'<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span style="font-size:44px;opacity:.2">👨‍🍳</span><span style="font-size:9px;color:#9a8060;font-family:system-ui">+ Portrait</span></div>')+'</div>'
-+'<div style="background:#f5f0e8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-left:1px solid rgba(201,169,110,.3);border-right:1px solid rgba(201,169,110,.3);cursor:pointer" onclick="upld(\'u-lg\')">'+(c.restaurantLogo?'<img src="'+c.restaurantLogo+'" style="max-width:80%;max-height:90px;object-fit:contain;margin-bottom:14px">':'<div style="font-size:17px;color:'+navy+';font-weight:700;text-align:center;margin-bottom:14px">'+esc(c.restaurant)+'</div>')+'<div style="color:'+gold+';font-size:18px">✦</div><div style="width:50px;height:1px;background:'+gold+';margin:8px 0"></div><div style="font-size:9px;color:#9a8060;letter-spacing:.2em;text-transform:uppercase;font-family:system-ui">Genève · Suisse</div></div>'
-+'<div style="background:#ccc;overflow:hidden;cursor:pointer" onclick="upld(\'u-rp\')">'+(c.restaurantPhoto?'<img src="'+c.restaurantPhoto+'" style="width:100%;height:100%;object-fit:cover">':'<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#d5d0c8;gap:6px"><span style="font-size:40px;opacity:.2">🏛</span><span style="font-size:9px;color:#9a8060;font-family:system-ui">+ Photo</span></div>')+'</div>'
-+'</div>'
-+'<div style="text-align:center;padding:32px 28px 16px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:'+gold+';letter-spacing:.3em;text-transform:uppercase;margin-bottom:7px;font-family:system-ui">Chef</div><h1 style="font-family:\'Playfair Display\',serif;font-size:34px;font-weight:700;color:'+navy+';margin:0 0 12px">'+esc(c.name)+'</h1><div style="display:flex;align-items:center;justify-content:center;gap:12px"><div style="width:40px;height:1px;background:'+gold+'"></div><span style="color:'+gold+'">✦</span><div style="width:40px;height:1px;background:'+gold+'"></div></div></div>'
-+'<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)"><div style="padding:24px 28px;border-right:1px solid rgba(201,169,110,.2)"><div style="font-size:30px;color:'+gold+';line-height:1;margin-bottom:5px;font-family:Georgia,serif">"</div><p style="font-size:16px;font-style:italic;color:'+navy+';line-height:1.5">'+esc(c.philosophy)+'</p></div><div style="padding:24px 28px"><p style="font-size:13px;color:#5a4030;line-height:1.8">'+esc(c.biography)+'</p></div></div>'
-+(awards?'<div style="padding:20px 28px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap">'+awards+'</div>':'')
-+(tl?'<div style="padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:'+gold+';letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;font-family:system-ui;font-weight:600">Parcours</div><div style="position:relative;padding-left:66px"><div style="position:absolute;left:50px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3)"></div>'+tl+'</div></div>':'')
-+(gal?'<div style="padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="font-size:9px;color:'+gold+';letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;font-family:system-ui;font-weight:600">Galerie</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px">'+gal+'</div></div>':'')
-+(recs?'<div style="padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)"><div style="text-align:center;margin-bottom:18px"><div style="font-size:9px;color:'+gold+';letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px;font-family:system-ui;font-weight:600">Recettes Signatures</div><div style="display:flex;align-items:center;justify-content:center;gap:12px"><div style="width:36px;height:1px;background:'+gold+'"></div><span style="color:'+gold+'">✦</span><div style="width:36px;height:1px;background:'+gold+'"></div></div></div>'+recs+'</div>':'')
-+'<div style="padding:14px 28px;text-align:center;font-size:9px;color:#9a8060;font-family:system-ui;letter-spacing:.1em">'+esc(c.restaurant)+' · Genève · Suisse</div></div>';
-pv.querySelectorAll('.acci').forEach(function(item){item.querySelector('.accb').addEventListener('click',function(){pv.querySelectorAll('.acci.open').forEach(function(o){if(o!==item){o.classList.remove('open');var b=o.querySelector('.acbb');if(b)b.style.display='none';var p=o.querySelector('.ap');if(p)p.style.transform='none';}});var open=item.classList.toggle('open');var body=item.querySelector('.acbb');if(body)body.style.display=open?'block':'none';var plus=item.querySelector('.ap');if(plus)plus.style.transform=open?'rotate(45deg)':'none';});var b=item.querySelector('.acbb');if(b)b.style.display='none';});}
-function tgAcc(btn){var item=btn.closest('.acci');if(!item)return;var open=item.classList.toggle('open');var body=item.querySelector('.acbb');if(body)body.style.display=open?'block':'none';var plus=item.querySelector('.ap');if(plus)plus.style.transform=open?'rotate(45deg)':'none';}
-
-function expHTML(){
-  var dataJSON=JSON.stringify({chefs:chefs,globalData:G}).replace(/<\/script/gi,'<\\/script');
-  var tpl=document.getElementById('SITE_TPL').value;
-  var site=tpl.replace('/*DATA_PLACEHOLDER*/',dataJSON);
-  var kb=Math.round(site.length/1024);
-  var blob=new Blob([site],{type:'text/html;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='goutatoo-site.html';a.click();
-  setTimeout(function(){URL.revokeObjectURL(a.href);},8000);
-  var s=document.getElementById('sst');if(s)s.textContent='\u2713 Export\u00e9 ('+kb+' KB)';
-}
+function expHTML(){var data={chefs:chefs,globalData:G};var json=JSON.stringify(data).replace(/<\/script/gi,'<\\/script');var site=buildSite(json);var kb=Math.round(site.length/1024);var blob=new Blob([site],{type:'text/html;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='goutatoo-site.html';a.click();setTimeout(function(){URL.revokeObjectURL(a.href);},8000);var s=document.getElementById('sst');if(s)s.textContent='\u2713 Export\u00e9 ('+kb+' KB)';}
 function expJSON(){var b=new Blob([JSON.stringify({chefs:chefs,globalData:G},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='goutatoo-sauvegarde.json';a.click();}
-function impJSON(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(d&&Array.isArray(d.chefs)&&d.chefs.length){chefs=d.chefs.map(fix);if(d.globalData)Object.assign(G,d.globalData);sid=String(chefs[0].id);sv();renderAll();}else alert('Fichier JSON invalide.');}catch(ex){alert('Fichier invalide.');}};r.readAsText(f);inp.value='';}
-function resetAll(){if(!confirm('Réinitialiser avec les données par défaut ?'))return;try{localStorage.removeItem('gc');localStorage.removeItem('gg');}catch{}G={heroImage:null,siteLogo:null,homeTitle:'Chefs Goutatoo Gen\u00e8ve',homeSub:'Pour le bon go\u00fbt',homeTagline:"Nous formons une \u00e9quipe de cuisiniers li\u00e9s par l'amour de la bonne cuisine, et principalement par une amiti\u00e9 sinc\u00e8re."};chefs=[JSON.parse(JSON.stringify(DEF))];sid=String(chefs[0].id);sv();renderAll();}
-
-(function(){var h=document.getElementById('drg'),e=document.getElementById('ed'),dr=false;if(!h||!e)return;h.addEventListener('mousedown',function(ev){dr=true;ev.preventDefault();});document.addEventListener('mousemove',function(ev){if(!dr)return;e.style.width=Math.max(22,Math.min(58,ev.clientX/window.innerWidth*100))+'%';});document.addEventListener('mouseup',function(){dr=false;});})();
-
+function impJSON(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(d&&Array.isArray(d.chefs)&&d.chefs.length){chefs=d.chefs.map(fix);if(d.globalData)Object.assign(G,d.globalData);sid=String(chefs[0].id);sv();bootUI();}else alert('Fichier JSON invalide.');}catch(ex){alert('Fichier invalide.');}};r.readAsText(f);inp.value='';}
+function resetAll(){if(!confirm('R\u00e9initialiser?'))return;try{localStorage.removeItem('gc');localStorage.removeItem('gg');}catch{}G={heroImage:null,siteLogo:null,homeTitle:'Chefs Goutatoo Gen\u00e8ve',homeSub:'Pour le bon go\u00fbt',homeTagline:"Nous formons une \u00e9quipe de cuisiniers li\u00e9s par l'amour de la bonne cuisine."};chefs=[JSON.parse(JSON.stringify(DEF))];sid=String(chefs[0].id);sv();bootUI();}
+(function(){var h=document.getElementById('drg'),e=document.getElementById('ed'),dr=false;if(!h||!e)return;h.addEventListener('mousedown',function(ev){dr=true;ev.preventDefault();});document.addEventListener('mousemove',function(ev){if(!dr)return;e.style.width=Math.max(22,Math.min(60,ev.clientX/window.innerWidth*100))+'%';});document.addEventListener('mouseup',function(){dr=false;});})();
+function bootUI(){rdrSel();ldFields();ldHomeF();rdrAw();rdrTL();rdrRecs();rdrGal();rdrDrops();schedPv();}
+function boot(){try{var s=localStorage.getItem('gc');if(s){var p=JSON.parse(s);if(valArr(p))chefs=p.map(fix);}var g=localStorage.getItem('gg');if(g){var pg=JSON.parse(g);if(pg&&typeof pg==='object')Object.assign(G,pg);}
+}catch(ex){}if(!valArr(chefs))chefs=[JSON.parse(JSON.stringify(DEF))];sid=String(chefs[0].id);sv();bootUI();}
 boot();
 document.getElementById('cselect').addEventListener('change',function(){onSelChange(this.value);});
 </script>
