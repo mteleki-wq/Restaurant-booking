@@ -1141,20 +1141,28 @@ function selectChefAndShow(id) {
 }
 
 // SAVE / LOAD
+// NOTE: Images (base64) are NOT saved to localStorage — too large, causes quota errors.
+// All images live in memory. Text data (names, text, URLs) is saved.
+// To keep images permanently: use EXPORTER HTML.
+function stripImgs(arr) {
+  // Return array with image fields cleared (keep structure, lose base64)
+  return JSON.parse(JSON.stringify(arr).replace(/"data:[^"]{1,9999999}"/g, '""'));
+}
 function saveAll() {
   try {
-    localStorage.setItem('goutatoo-chefs', JSON.stringify(chefs));
-    localStorage.setItem('goutatoo-sponsors', JSON.stringify(sponsors));
-    localStorage.setItem('goutatoo-photos', JSON.stringify(photos));
+    localStorage.setItem('goutatoo-chefs', JSON.stringify(stripImgs(chefs)));
+    localStorage.setItem('goutatoo-sponsors', JSON.stringify(stripImgs(sponsors)));
+    localStorage.setItem('goutatoo-photos', JSON.stringify(stripImgs(photos)));
     localStorage.setItem('goutatoo-global', JSON.stringify({
-      heroImage: imageStore['home-hero-bg']||null,
-      siteLogo: imageStore['site-logo']||null,
       homeTitle: document.getElementById('f-home-title').value,
       homeSub: document.getElementById('f-home-sub').value,
       homeTagline: document.getElementById('f-home-tagline').value
     }));
-    toast('Sauvegardé ✓');
-  } catch(e) { toast('Stockage plein — utilisez Export HTML'); }
+    toast('\u2713 Textes sauvegard\u00e9s. Images: cliquer Export HTML pour tout conserver.');
+  } catch(e) {
+    try { localStorage.clear(); toast('Stockage nettoy\u00e9 — veuillez sauvegarder \u00e0 nouveau'); }
+    catch(e2) { toast('Erreur stockage — utilisez Export HTML pour conserver votre travail'); }
+  }
 }
 
 function loadSaved() {
@@ -1275,10 +1283,24 @@ function exportSite() {
     + '<scr'+'ipt>'+js+'<'+'/scr'+'ipt></body></html>';
 
   var kb=Math.round(html.length/1024);
-  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='goutatoo-site.html';a.click();
-  setTimeout(function(){URL.revokeObjectURL(a.href);},8000);
-  toast('Site exporté ('+kb+' KB) ✓');
+  toast('Pr\u00e9paration export '+kb+' KB...');
+  try {
+    var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download='goutatoo-site.html'; a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},3000);
+    toast('\u2713 Export\u00e9 ('+kb+' KB) \u2014 v\u00e9rifiez vos t\u00e9l\u00e9chargements');
+  } catch(e1) {
+    try {
+      var enc='data:text/html;charset=utf-8,'+encodeURIComponent(html);
+      var w=window.open(enc,'_blank');
+      if(w){ toast('\u2139 Ouvert dans un onglet \u2014 Partager > Enregistrer le fichier'); return; }
+    } catch(e2){}
+    toast('\u26a0 Export \u00e9chou\u00e9. Essayez de r\u00e9duire la taille des images.');
+  }
 }
 
 // JSON BACKUP
@@ -1423,6 +1445,16 @@ function renderPhotos() {
 }
 
 loadSaved();
+// Warn before leaving if there are unsaved changes
+window.addEventListener('beforeunload', function(e) {
+  e.preventDefault();
+  e.returnValue = 'Vos modifications non export\u00e9es seront perdues. Avez-vous export\u00e9 le HTML?';
+  return e.returnValue;
+});
+// Auto-remind every 10 minutes to export
+setInterval(function() {
+  toast('\u23f0 Rappel: cliquez Export HTML pour sauvegarder vos images et modifications.');
+}, 600000);
 </script>
 </body>
 </html>
