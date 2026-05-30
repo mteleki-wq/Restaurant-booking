@@ -1227,7 +1227,7 @@ function exportSite() {
     + '  var pg=document.getElementById("pg-"+page);if(pg)pg.classList.add("active");'
     + '  var links=document.querySelectorAll(".nav-links a");for(var i=0;i<links.length;i++)links[i].classList.remove("active");'
     + '  var nn=["home","dir","chef","sponsors","photos"];for(var i=0;i<nn.length;i++){var al=document.getElementById("lk-"+nn[i]);if(al)al.classList.remove("active");}var lk=document.getElementById("lk-"+page);if(lk)lk.classList.add("active");'
-    + '  if(page==="chef"){if(chefId)activeChef=chefId;renderChef();}else if(page==="home")renderHome();else if(page==="dir")renderDir();'
+    + '  if(page==="chef"){if(chefId)activeChef=chefId;renderChef();}else if(page==="home")renderHome();else if(page==="dir")renderDir();else if(page==="sponsors")renderSponsors();else if(page==="photos")renderPhotos();'
     + '  location.hash=page==="chef"?"chef-"+activeChef:page;'
     + '}'
     + 'function renderHome(){'
@@ -1256,7 +1256,7 @@ function exportSite() {
     + '}'
     + 'function ta(id){var item=document.getElementById(id);if(!item)return;var all=document.querySelectorAll(".acc-item.open");for(var i=0;i<all.length;i++){if(all[i]!==item){all[i].classList.remove("open");var b=all[i].querySelector(".acc-body");if(b)b.style.display="none";var p=all[i].querySelector(".acc-plus");if(p)p.style.transform="none";}}var op=item.classList.toggle("open");var bd=item.querySelector(".acc-body");if(bd)bd.style.display=op?"block":"none";var pl=item.querySelector(".acc-plus");if(pl)pl.style.transform=op?"rotate(45deg)":"none";}'
     + 'window.addEventListener("hashchange",function(){var h=location.hash.slice(1);if(h.indexOf("chef-")===0)go("chef",h.slice(5));else if(h==="dir")go("dir");else if(h==="sponsors")go("sponsors");else if(h==="photos")go("photos");else go("home");});'
-    + 'go("home");renderSponsors();renderPhotos();';
+    + 'go("home");renderDir();renderSponsors();renderPhotos();';
 
   var logoHtml = siteLogo ? '<img src="'+siteLogo+'" style="width:100%;height:100%;object-fit:cover">' : '🍴';
   var heroBgStyle = heroImg ? 'background-image:url(\''+heroImg+'\');background-size:cover;background-position:center' : 'background:linear-gradient(135deg,#1a2744,#2c3e50)';
