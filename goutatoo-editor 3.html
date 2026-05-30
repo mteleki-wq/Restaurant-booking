@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Goutatoo — Chef Portfolio Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#c9a96e;--navy:#1a2744;--ivory:#f5f0e8;
+  --charcoal:#2c2c2c;--mist:#e8e4dc;
+  --panel:#141414;--panel-b:rgba(255,255,255,.07);
+  --panel-w:340px;
+}
+body{font-family:system-ui,sans-serif;font-size:14px;background:#0d0d0d;
+  display:flex;height:100vh;overflow:hidden;color:#e8e0d0}
+
+/* ── LEFT ADMIN ── */
+#admin{width:var(--panel-w);min-width:var(--panel-w);height:100vh;
+  background:var(--panel);display:flex;flex-direction:column;
+  border-right:1px solid var(--panel-b);overflow:hidden;flex-shrink:0}
+#admin-head{padding:16px 20px;border-bottom:1px solid var(--panel-b);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+#admin-logo{font-family:'Cormorant Garamond',serif;font-size:16px;
+  color:var(--gold);letter-spacing:.05em;font-weight:700}
+#admin-logo span{display:block;font-size:9px;color:rgba(255,255,255,.25);
+  letter-spacing:.12em;text-transform:uppercase;font-family:system-ui;font-weight:400;margin-top:2px}
+#admin-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.hbtn{padding:5px 12px;border-radius:2px;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;cursor:pointer;border:none;transition:all .2s;font-family:system-ui}
+.hbtn-export{background:var(--gold);color:#111;font-weight:700}
+.hbtn-export:hover{opacity:.85}
+.hbtn-save{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);
+  border:1px solid rgba(255,255,255,.1)}
+.hbtn-save:hover{background:rgba(255,255,255,.12);color:#fff}
+.hbtn-reset{background:transparent;color:rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.08);font-size:8px}
+.hbtn-reset:hover{color:rgba(255,255,255,.6)}
+
+/* ── TAB NAV ── */
+#tab-nav{display:flex;border-bottom:1px solid var(--panel-b);flex-shrink:0}
+.tab{flex:1;padding:10px 4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);text-align:center;cursor:pointer;border:none;background:none;
+  border-bottom:2px solid transparent;transition:all .2s;font-family:system-ui}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab:hover:not(.active){color:rgba(255,255,255,.6)}
+
+/* ── CHEF SELECTOR ── */
+#chef-bar{padding:10px 20px;border-bottom:1px solid var(--panel-b);flex-shrink:0;display:none}
+#chef-bar label{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.1em;
+  text-transform:uppercase;display:block;margin-bottom:5px}
+#chef-bar .chef-row{display:flex;gap:6px}
+#chef-select{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  color:#e8e0d0;padding:6px 8px;border-radius:3px;font-size:11px;outline:none;cursor:pointer}
+.btn-add-chef{padding:5px 10px;background:rgba(201,169,110,.2);border:1px solid var(--gold);
+  color:var(--gold);border-radius:3px;cursor:pointer;font-size:10px;white-space:nowrap}
+.btn-add-chef:hover{background:var(--gold);color:#111}
+.btn-del-chef{padding:5px 8px;background:transparent;border:1px solid rgba(255,80,80,.3);
+  color:rgba(255,100,100,.6);border-radius:3px;cursor:pointer;font-size:10px}
+.btn-del-chef:hover{background:rgba(255,80,80,.1);color:#ff6060}
+
+/* ── FIELDS ── */
+#fields-wrap{flex:1;overflow-y:auto;padding:16px 20px 24px}
+#fields-wrap::-webkit-scrollbar{width:3px}
+#fields-wrap::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.field-group{margin-bottom:20px}
+.field-group-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.22);margin-bottom:10px;padding-bottom:7px;
+  border-bottom:1px solid rgba(255,255,255,.06)}
+.field-row{margin-bottom:12px}
+.field-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);margin-bottom:5px;display:block}
+.fi,.fta{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  color:rgba(255,255,255,.82);padding:8px 10px;border-radius:3px;
+  font-family:system-ui;font-size:12px;outline:none;transition:border-color .2s;line-height:1.5}
+.fi:focus,.fta:focus{border-color:rgba(201,169,110,.5)}
+.fta{resize:vertical;min-height:60px;font-family:'Cormorant Garamond',serif;font-size:13px}
+.fi::placeholder,.fta::placeholder{color:rgba(255,255,255,.18)}
+
+/* image uploader */
+.iup{width:100%;border:1px dashed rgba(255,255,255,.12);border-radius:3px;
+  padding:9px;display:flex;align-items:center;gap:9px;cursor:pointer;
+  transition:border-color .2s;background:rgba(255,255,255,.03)}
+.iup:hover{border-color:rgba(201,169,110,.4)}
+.iup-thumb{width:48px;height:36px;object-fit:cover;border-radius:2px;
+  background:#252525;flex-shrink:0}
+.iup-text{font-size:10px;color:rgba(255,255,255,.35);line-height:1.4}
+.iup-text strong{display:block;color:rgba(255,255,255,.55);font-weight:400;margin-bottom:2px}
+
+/* recipe list */
+.rec-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:3px;padding:9px 11px;margin-bottom:8px}
+.rec-item-title{font-family:'Cormorant Garamond',serif;font-size:13px;
+  color:rgba(255,255,255,.8);margin-bottom:6px}
+.rec-item-btns{display:flex;gap:5px}
+.rbtn{padding:3px 9px;font-size:9px;border-radius:2px;cursor:pointer;border:none;
+  letter-spacing:.06em;font-family:system-ui}
+.rbtn-edit{background:var(--gold);color:#111}
+.rbtn-del{background:rgba(255,80,80,.15);color:#ff8888;border:1px solid rgba(255,80,80,.25)}
+
+/* timeline / awards list */
+.list-row{display:flex;gap:5px;margin-bottom:6px;align-items:center}
+.list-year{width:46px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  color:var(--gold);font-size:10px;padding:5px 4px;border-radius:3px;outline:none;text-align:center}
+.list-year:focus{border-color:rgba(201,169,110,.5)}
+.list-ev{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  color:rgba(255,255,255,.82);font-size:11px;padding:5px 8px;border-radius:3px;outline:none}
+.list-ev:focus{border-color:rgba(201,169,110,.5)}
+.btn-sm{padding:3px 8px;font-size:9px;border-radius:2px;cursor:pointer;border:none;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);font-family:system-ui}
+.btn-sm:hover{background:rgba(255,255,255,.14);color:#fff}
+.btn-sm-del{background:rgba(255,80,80,.12);color:rgba(255,100,100,.6)}
+.btn-sm-del:hover{background:rgba(255,80,80,.22);color:#ff8888}
+.btn-sm-add{background:rgba(201,169,110,.12);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
+.btn-sm-add:hover{background:rgba(201,169,110,.22)}
+
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);
+  background:#222;color:rgba(255,255,255,.85);padding:9px 20px;border-radius:3px;
+  font-size:11px;letter-spacing:.08em;border:1px solid rgba(255,255,255,.1);
+  transition:transform .3s;z-index:9999;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── RIGHT SITE PREVIEW ── */
+#site-wrap{flex:1;height:100vh;overflow-y:auto;overflow-x:hidden;background:var(--ivory);
+  font-family:'Cormorant Garamond',serif}
+#site-wrap::-webkit-scrollbar{width:5px}
+#site-wrap::-webkit-scrollbar-thumb{background:#c9a96e55;border-radius:3px}
+
+/* ── SITE: NAV ── */
+#site-nav{position:sticky;top:0;z-index:100;height:62px;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(245,240,232,.96);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(0,0,0,.07)}
+.site-brand{display:flex;align-items:center;gap:12px;cursor:pointer}
+.site-logo-box{width:42px;height:42px;background:var(--gold);border-radius:4px;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}
+.site-logo-box img{width:100%;height:100%;object-fit:cover}
+.site-brand-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;
+  color:var(--gold);letter-spacing:.04em}
+.site-nav-links{display:flex;gap:20px;list-style:none}
+.site-nav-links a{font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:#888;cursor:pointer;text-decoration:none;transition:color .2s;
+  padding-bottom:2px;border-bottom:1px solid transparent}
+.site-nav-links a:hover,.site-nav-links a.active{color:var(--navy);border-bottom-color:var(--gold)}
+
+/* ── SITE: PAGES ── */
+.site-page{display:none}.site-page.active{display:block}
+
+/* ── HOME HERO ── */
+#home-hero{min-height:560px;position:relative;display:flex;align-items:flex-end;
+  overflow:hidden;background:linear-gradient(135deg,var(--navy),#2c3e50)}
+#home-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:background-image .3s}
+#home-hero-bg::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.65) 100%)}
+.home-hero-content{position:relative;z-index:2;padding:40px 40px;width:100%}
+.home-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px;font-family:system-ui}
+#home-hero-title{font-family:'Playfair Display',serif;font-size:31px;font-weight:700;
+  line-height:1.2;color:#fff;margin-bottom:10px}
+#home-hero-sub{font-size:17px;color:rgba(255,255,255,.78);font-style:italic;
+  font-family:'Cormorant Garamond',serif;line-height:1.6}
+.home-tagbar{background:#f0ebe0;border-top:2px solid var(--gold);
+  border-bottom:2px solid var(--gold);padding:14px 40px;text-align:center}
+#home-tagline{font-size:19px;color:#5a4030;font-style:italic;line-height:1.6}
+.home-chefs-section{padding:48px 40px}
+.home-sec-title{text-align:center;margin-bottom:32px}
+.home-sec-eyebrow{font-size:10px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;
+  margin-bottom:8px;font-family:system-ui}
+.home-sec-h{font-family:'Playfair Display',serif;font-size:31px;color:var(--navy);margin-bottom:14px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:12px}
+.ornament .line{width:40px;height:1px;background:var(--gold)}
+.ornament .star{color:var(--gold);font-size:14px}
+#home-chefs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px;margin-top:28px}
+.home-chef-card{text-align:center;cursor:pointer}
+.home-chef-card-img{width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;
+  border-radius:2px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:40px;opacity:.3}
+.home-chef-card-img img{width:100%;height:100%;object-fit:cover;display:block;opacity:1}
+.home-chef-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);
+  font-weight:600;margin-bottom:2px}
+.home-chef-rest{font-size:17px;color:#9a8060}
+
+/* ── DIRECTORY ── */
+#dir-content{padding:40px 28px;font-family:'Cormorant Garamond',serif}
+.dir-header{text-align:center;margin-bottom:36px}
+.dir-eyebrow{font-size:10px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;
+  margin-bottom:10px;font-family:system-ui}
+.dir-h1{font-family:'Playfair Display',serif;font-size:34px;color:var(--navy);margin-bottom:14px}
+.dir-tagline{font-size:14px;color:#7a6050;font-style:italic;max-width:420px;
+  margin:14px auto 0;line-height:1.7}
+#dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-top:28px}
+.dir-card{background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;
+  overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04);transition:transform .2s,box-shadow .2s}
+.dir-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.dir-card-img{width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;font-size:50px;opacity:.2}
+.dir-card-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;opacity:1}
+.dir-card-body{padding:14px}
+.dir-card-pos{font-size:9px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:3px;font-family:system-ui}
+.dir-card-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;
+  color:var(--navy);margin-bottom:2px}
+.dir-card-rest{font-size:18px;color:#9a8060;margin-bottom:8px}
+.dir-card-link{font-size:18px;color:var(--gold);font-family:system-ui}
+
+/* ── CHEF PROFILE ── */
+#chef-content{font-family:'Cormorant Garamond',serif;background:var(--ivory)}
+.profile-triptych{display:grid;grid-template-columns:1fr 1fr 1fr;height:360px;border-bottom:3px solid var(--gold)}
+.trip-portrait{background:#e8e4dc;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.trip-portrait img{width:auto;height:78%;max-width:90%;object-fit:contain;object-position:center center;display:block}
+.trip-portrait .trip-ph{width:100%;height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px}
+.trip-portrait .trip-ph span:first-child{font-size:50px;opacity:.2}
+.trip-portrait .trip-ph .add-hint{font-size:10px;color:#9a8060;font-family:system-ui}
+.trip-center{background:var(--ivory);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:20px;
+  border-left:1px solid rgba(201,169,110,.3);border-right:1px solid rgba(201,169,110,.3);cursor:pointer}
+#trip-logo-img{max-width:80%;max-height:90px;object-fit:contain;display:none;margin-bottom:14px}
+#trip-rest-name{font-size:20px;color:var(--navy);font-weight:700;text-align:center;margin-bottom:14px}
+.trip-ornament{color:var(--gold);font-size:20px}
+.trip-div{width:50px;height:1px;background:var(--gold);margin:8px 0}
+.trip-locale{font-size:14px;color:#9a8060;letter-spacing:.15em;text-transform:uppercase;font-family:system-ui}
+.trip-photo{background:#ccc;overflow:hidden;cursor:pointer}
+.trip-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.trip-photo .trip-ph{width:100%;height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:#d5d0c8;gap:6px}
+.trip-photo .trip-ph span:first-child{font-size:45px;opacity:.2}
+.trip-photo .trip-ph .add-hint{font-size:10px;color:#9a8060;font-family:system-ui}
+.profile-hero{text-align:center;padding:32px 28px 16px;border-bottom:1px solid rgba(201,169,110,.2)}
+.profile-chef-label{font-size:14px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;
+  margin-bottom:7px;font-family:system-ui}
+#profile-chef-name{font-family:'Playfair Display',serif;font-size:50px;font-weight:700;
+  color:var(--navy);margin-bottom:12px}
+.profile-qbio{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)}
+.profile-q{padding:24px 28px;border-right:1px solid rgba(201,169,110,.2)}
+.profile-qq{font-size:34px;color:var(--gold);line-height:1;margin-bottom:5px;font-family:Georgia,serif}
+#profile-philosophy{font-size:28px;font-style:italic;color:var(--navy);line-height:1.5}
+.profile-bio{padding:24px 28px}
+#profile-biography{font-size:22px;color:#5a4030;line-height:1.8}
+#profile-awards{padding:20px 28px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap}
+.award-chip{flex:1 1 140px;padding:10px 14px;border-right:1px solid rgba(201,169,110,.2);text-align:center}
+.award-chip:last-child{border-right:none}
+.award-star{color:var(--gold);font-size:14px;margin-bottom:5px}
+.award-text{font-size:14px;color:#9a8060;letter-spacing:.07em;text-transform:uppercase;line-height:1.4;font-family:system-ui}
+#profile-timeline{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}
+.tl-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:16px;font-family:system-ui;font-weight:600}
+#tl-entries{position:relative;padding-left:64px}
+#tl-entries::before{content:'';position:absolute;left:48px;top:0;bottom:0;
+  width:1px;background:rgba(201,169,110,.3)}
+.tl-entry{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
+.tl-yr{min-width:52px;text-align:right;color:var(--gold);font-size:19px;
+  font-weight:700;font-family:system-ui;padding-top:2px}
+.tl-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);
+  margin-top:5px;flex-shrink:0;margin-left:-4px;position:relative;z-index:1}
+.tl-ev{font-size:22px;color:var(--charcoal)}
+#profile-gallery{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}
+.gal-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:14px;font-family:system-ui;font-weight:600}
+#gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}
+#gal-grid img{width:100%;height:80px;object-fit:cover;border-radius:2px}
+#profile-recipes{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}
+.recs-header{text-align:center;margin-bottom:20px}
+.recs-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:6px;font-family:system-ui;font-weight:600}
+.acc-item{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:8px;overflow:hidden}
+.acc-btn{width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:13px 18px;background:none;border:none;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;color:#2c1a0a;font-size:22px}
+.acc-item.open{background:rgba(201,169,110,.03)}
+.acc-body{display:none;padding:0 18px 18px}
+.acc-item.open .acc-body{display:block}
+.acc-plus{color:var(--gold);font-size:20px;transition:transform .3s}
+.acc-item.open .acc-plus{transform:rotate(45deg)}
+.acc-rec-img{width:100%;height:200px;object-fit:cover;border-radius:2px;margin-bottom:14px}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.acc-sec-title{font-size:14px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:10px;font-family:system-ui}
+.ing-list{list-style:none}
+.ing-list li{font-size:20px;color:#5a4030;padding:6px 0;border-bottom:1px solid rgba(201,169,110,.1);
+  display:flex;gap:6px;line-height:1.5}
+.ing-list li::before{content:'▪';color:var(--gold);font-size:10px;margin-top:5px}
+.method-step{display:flex;gap:8px;margin-bottom:11px}
+.method-n{color:var(--gold);font-size:20px;font-weight:700;min-width:22px;
+  font-family:'Cormorant Garamond',serif}
+.method-p{font-size:20px;color:#5a4030;line-height:1.6;margin:0}
+.chef-notes-box{margin-top:14px;padding:12px 16px;background:rgba(201,169,110,.05);
+  border-left:3px solid var(--gold)}
+.chef-notes-p{font-size:20px;color:#5a4030;line-height:1.7;font-style:italic}
+.wine-row{margin-top:11px;display:flex;align-items:center;gap:8px}
+.wine-icon{font-size:20px}
+.wine-label{font-size:11px;color:var(--gold);text-transform:uppercase;font-family:system-ui}
+.wine-text{font-size:20px;color:#5a4030;font-style:italic}
+.profile-foot{padding:14px 28px;text-align:center;font-size:14px;color:#9a8060;
+  font-family:system-ui;letter-spacing:.08em}
+.img-file-input{display:none}
+</style>
+</head>
+<body>
+
+<!-- ═══ LEFT ADMIN PANEL ═══ -->
+<div id="admin">
+  <div id="admin-head">
+    <div id="admin-logo">✦ GOUTATOO EDITOR<span>Chef Portfolio Management</span></div>
+    <div id="admin-btns">
+      <button class="hbtn hbtn-export" onclick="exportSite()">⬇ Exporter HTML</button>
+      <button class="hbtn hbtn-save" onclick="saveAll()">💾 Sauvegarder</button>
+      <button class="hbtn hbtn-reset" onclick="resetAll()">↺ Reset</button>
+    </div>
+  </div>
+
+  <div id="tab-nav">
+    <button class="tab active" onclick="showTab('home',this)">Accueil</button>
+    <button class="tab" onclick="showTab('chef',this)">Chef</button>
+    <button class="tab" onclick="showTab('dir',this)">R&eacute;pertoire</button>
+    <button class="tab" onclick="showTab('sponsors',this)">Sponsors</button>
+    <button class="tab" onclick="showTab('photos',this)">Photos</button>
+  </div>
+
+  <!-- Chef selector bar (only visible on chef tab) -->
+  <div id="chef-bar">
+    <label>Chef sélectionné</label>
+    <div class="chef-row">
+      <select id="chef-select" onchange="switchChef(this.value)"></select>
+      <button class="btn-add-chef" onclick="addNewChef()">+ Chef</button>
+      <button class="btn-del-chef" onclick="deleteChef()">✕</button>
+    </div>
+  </div>
+
+  <div id="fields-wrap">
+
+    <!-- ── HOME TAB ── -->
+    <div id="tab-home" class="tab-content active">
+      <div class="field-group">
+        <div class="field-group-label">Image Héros</div>
+        <div class="field-row">
+          <div class="iup" onclick="triggerUpload('inp-hero')">
+            <img id="hero-thumb" class="iup-thumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <div class="iup-text"><strong>Image principale</strong>Cliquer pour changer</div>
+          </div>
+          <input type="file" id="inp-hero" class="img-file-input" accept="image/*"
+            onchange="handleImg(this,'home-hero-bg','hero-thumb')">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Textes de la page d'accueil</div>
+        <div class="field-row">
+          <label class="field-label">Titre principal</label>
+          <input id="f-home-title" class="fi" value="Chefs Goutatoo Genève"
+            oninput="lu('home-hero-title',this.value)">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Sous-titre</label>
+          <input id="f-home-sub" class="fi" value="Pour le bon goût"
+            oninput="lu('home-hero-sub',this.value)">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Tagline bar</label>
+          <textarea id="f-home-tagline" class="fta" rows="2"
+            oninput="lu('home-tagline',this.value)">Nous formons une équipe de cuisiniers liés par l'amour de la bonne cuisine, et principalement par une amitié sincère.</textarea>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Logo du site (navigation)</div>
+        <div class="field-row">
+          <div class="iup" onclick="triggerUpload('inp-sitelogo')">
+            <img id="sitelogo-thumb" class="iup-thumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <div class="iup-text"><strong>Logo Goutatoo</strong>Barre de navigation</div>
+          </div>
+          <input type="file" id="inp-sitelogo" class="img-file-input" accept="image/*"
+            onchange="handleSiteLogo(this)">
+        </div>
+      </div>
+    </div><!-- /tab-home -->
+
+    <!-- ── CHEF TAB ── -->
+    <div id="tab-chef" class="tab-content">
+      <div class="field-group">
+        <div class="field-group-label">Informations du Chef</div>
+        <div class="field-row">
+          <label class="field-label">Nom du Chef</label>
+          <input id="f-name" class="fi" oninput="updateChefField('name',this.value)">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Poste / Titre</label>
+          <input id="f-position" class="fi" oninput="updateChefField('position',this.value)">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Citation / Philosophie</label>
+          <textarea id="f-philosophy" class="fta" rows="2" oninput="updateChefField('philosophy',this.value)"></textarea>
+        </div>
+        <div class="field-row">
+          <label class="field-label">Biographie</label>
+          <textarea id="f-biography" class="fta" rows="3" oninput="updateChefField('biography',this.value)"></textarea>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Restaurant</div>
+        <div class="field-row">
+          <label class="field-label">Nom du Restaurant</label>
+          <input id="f-restaurant" class="fi" oninput="updateChefField('restaurant',this.value)">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Photos</div>
+        <div class="field-row">
+          <label class="field-label">Portrait du Chef</label>
+          <div class="iup" onclick="triggerUpload('inp-portrait')">
+            <img id="portrait-thumb" class="iup-thumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <div class="iup-text"><strong>Portrait</strong>Cliquer pour changer</div>
+          </div>
+          <input type="file" id="inp-portrait" class="img-file-input" accept="image/*" onchange="handleChefImg(this,'portrait')">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Logo du Restaurant</label>
+          <div class="iup" onclick="triggerUpload('inp-logo')">
+            <img id="logo-thumb" class="iup-thumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <div class="iup-text"><strong>Logo restaurant</strong>Cliquer pour changer</div>
+          </div>
+          <input type="file" id="inp-logo" class="img-file-input" accept="image/*" onchange="handleChefImg(this,'restaurantLogo')">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Photo du Restaurant</label>
+          <div class="iup" onclick="triggerUpload('inp-rphoto')">
+            <img id="rphoto-thumb" class="iup-thumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <div class="iup-text"><strong>Photo restaurant</strong>Cliquer pour changer</div>
+          </div>
+          <input type="file" id="inp-rphoto" class="img-file-input" accept="image/*" onchange="handleChefImg(this,'restaurantPhoto')">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Galerie</label>
+          <div class="iup" onclick="triggerUpload('inp-gallery')">
+            <img class="iup-thumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <div class="iup-text"><strong>Galerie photos</strong>Ajouter plusieurs images</div>
+          </div>
+          <input type="file" id="inp-gallery" class="img-file-input" accept="image/*" multiple onchange="handleGallery(this)">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Récompenses &amp; Distinctions</div>
+        <div id="awards-list"></div>
+        <button class="btn-sm btn-sm-add" style="margin-top:4px" onclick="addAward()">+ Ajouter</button>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Parcours &amp; Carrière</div>
+        <div id="timeline-list"></div>
+        <button class="btn-sm btn-sm-add" style="margin-top:4px" onclick="addTimeline()">+ Ajouter</button>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Recettes</div>
+        <button class="rbtn rbtn-edit" style="margin-bottom:10px;width:100%;padding:6px" onclick="openRecipeModal(null)">+ Nouvelle Recette</button>
+        <div id="recipes-list"></div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-label">Import / Export données chef</div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-sm" onclick="expJSON()">⬇ Sauvegarde JSON</button>
+          <button class="btn-sm" onclick="document.getElementById('inp-import').click()">⬆ Import JSON</button>
+        </div>
+        <input type="file" id="inp-import" class="img-file-input" accept=".json" onchange="impJSON(this)">
+      </div>
+    </div><!-- /tab-chef -->
+
+    <!-- ── DIR TAB ── -->
+    <div id="tab-dir" class="tab-content">
+      <p style="font-size:11px;color:rgba(255,255,255,.35);line-height:1.6">
+        Le répertoire affiche automatiquement tous les chefs.<br>
+        Ajoutez ou modifiez des chefs dans l'onglet <strong style="color:var(--gold)">Chef</strong>.
+      </p>
+    </div>
+
+
+    <!-- SPONSORS TAB -->
+    <div id="tab-sponsors" class="tab-content">
+      <div class="field-group">
+        <div class="field-group-label">Nos Partenaires</div>
+        <button class="btn-sm btn-sm-add" style="margin-bottom:12px;width:100%;padding:7px" onclick="addSponsor()">+ Ajouter un Sponsor</button>
+        <div id="sponsors-list"></div>
+      </div>
+    </div>
+    <!-- PHOTOS TAB -->
+    <div id="tab-photos" class="tab-content">
+      <div class="field-group">
+        <div class="field-group-label">Galerie Photos</div>
+        <button class="btn-sm btn-sm-add" style="margin-bottom:12px;width:100%;padding:7px" onclick="addPhoto()">+ Ajouter une Photo</button>
+        <div id="photos-list"></div>
+      </div>
+    </div>
+  </div><!-- /fields-wrap -->
+</div><!-- /admin -->
+
+<!-- ═══ RIGHT SITE PREVIEW ═══ -->
+<div id="site-wrap">
+
+  <!-- NAVIGATION -->
+  <nav id="site-nav">
+    <div class="site-brand" onclick="showSitePage('home')">
+      <div class="site-logo-box" id="site-logo-box">🍴</div>
+      <span class="site-brand-name">Chefs Goutatoo Genève</span>
+    </div>
+    <ul class="site-nav-links">
+      <li><a onclick="showSitePage('home')" id="nav-home" class="active">Accueil</a></li>
+      <li><a onclick="showSitePage('dir')" id="nav-dir">Les Chefs</a></li>
+      <li><a onclick="showSitePage('chef')" id="nav-chef">Profil</a></li>
+      <li><a onclick="showSitePage('sponsors')" id="nav-sponsors">Sponsors</a></li>
+      <li><a onclick="showSitePage('photos')" id="nav-photos">Photos</a></li>
+    </ul>
+  </nav>
+
+  <!-- HOME PAGE -->
+  <div id="page-home" class="site-page active">
+    <div id="home-hero">
+      <div id="home-hero-bg"></div>
+      <div class="home-hero-content">
+        <div class="home-eyebrow">Chefs Goutatoo Genève</div>
+        <div id="home-hero-title">Chefs Goutatoo Genève</div>
+        <div id="home-hero-sub">Pour le bon goût</div>
+      </div>
+    </div>
+    <div class="home-tagbar">
+      <div id="home-tagline">Nous formons une équipe de cuisiniers liés par l'amour de la bonne cuisine, et principalement par une amitié sincère.</div>
+    </div>
+    <div class="home-chefs-section">
+      <div class="home-sec-title">
+        <div class="home-sec-eyebrow">Notre Collectif</div>
+        <div class="home-sec-h">Les Chefs</div>
+        <div class="ornament"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
+      </div>
+      <div id="home-chefs-grid"></div>
+    </div>
+  </div>
+
+  <!-- DIRECTORY PAGE -->
+  <div id="page-dir" class="site-page">
+    <div id="dir-content">
+      <div class="dir-header">
+        <div class="dir-eyebrow">Chefs Goutatoo Genève</div>
+        <div class="dir-h1">Notre Équipe</div>
+        <div class="ornament"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
+        <div class="dir-tagline">Nous formons une équipe de cuisiniers liés par l'amour de la bonne cuisine, et principalement par une amitié sincère.</div>
+      </div>
+      <div id="dir-grid"></div>
+    </div>
+  </div>
+
+
+  <!-- SPONSORS PAGE -->
+  <div id="page-sponsors" class="site-page">
+    <div style="padding:40px 40px 48px">
+      <div class="dir-header">
+        <div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div>
+        <div class="dir-h1">Nos Partenaires</div>
+        <div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div>
+      </div>
+      <div id="sponsors-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:32px"></div>
+    </div>
+  </div>
+  <!-- PHOTOS PAGE -->
+  <div id="page-photos" class="site-page">
+    <div style="padding:40px 40px 48px">
+      <div class="dir-header">
+        <div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div>
+        <div class="dir-h1">Photos</div>
+        <div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div>
+      </div>
+      <div id="photos-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-top:32px"></div>
+    </div>
+  </div>
+  <!-- CHEF PROFILE PAGE -->
+  <div id="page-chef" class="site-page">
+    <div id="chef-content">
+      <!-- Triptych -->
+      <div class="profile-triptych">
+        <div class="trip-portrait" id="trip-portrait" onclick="triggerUpload('inp-portrait')">
+          <div class="trip-ph"><span>👨‍🍳</span><span class="add-hint">+ Portrait</span></div>
+        </div>
+        <div class="trip-center" onclick="triggerUpload('inp-logo')">
+          <img id="trip-logo-img" src="" alt="">
+          <div id="trip-rest-name">Restaurant</div>
+          <div class="trip-ornament">✦</div>
+          <div class="trip-div"></div>
+          <div class="trip-locale">Genève · Suisse</div>
+        </div>
+        <div class="trip-photo" id="trip-photo" onclick="triggerUpload('inp-rphoto')">
+          <div class="trip-ph"><span>🏛</span><span class="add-hint">+ Photo</span></div>
+        </div>
+      </div>
+      <!-- Hero name -->
+      <div class="profile-hero">
+        <div class="profile-chef-label">Chef</div>
+        <div id="profile-chef-name">Jean-Marc Bessire</div>
+        <div class="ornament"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
+      </div>
+      <!-- Quote + Bio -->
+      <div class="profile-qbio">
+        <div class="profile-q">
+          <div class="profile-qq">"</div>
+          <div id="profile-philosophy">Ma passion, le poisson, les épices et le goût du bon goût.</div>
+        </div>
+        <div class="profile-bio">
+          <div id="profile-biography">Jean-Marc Bessire vous accueille au restaurant Le Cigalon.</div>
+        </div>
+      </div>
+      <!-- Awards -->
+      <div id="profile-awards"></div>
+      <!-- Timeline -->
+      <div id="profile-timeline" style="display:none">
+        <div class="tl-label">Parcours</div>
+        <div id="tl-entries"></div>
+      </div>
+      <!-- Gallery -->
+      <div id="profile-gallery" style="display:none">
+        <div class="gal-label">Galerie</div>
+        <div id="gal-grid"></div>
+      </div>
+      <!-- Recipes -->
+      <div id="profile-recipes" style="display:none">
+        <div class="recs-header">
+          <div class="recs-label">Recettes Signatures</div>
+          <div class="ornament"><div class="line"></div><span class="star">✦</span><div class="line"></div></div>
+        </div>
+        <div id="acc-recipes"></div>
+      </div>
+      <div class="profile-foot" id="profile-foot">Restaurant Le Cigalon · Genève · Suisse</div>
+    </div>
+  </div>
+
+</div><!-- /site-wrap -->
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- RECIPE MODAL -->
+<div id="rec-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center">
+  <div style="background:#141414;border:1px solid rgba(255,255,255,.1);border-radius:5px;
+    width:min(680px,95vw);max-height:90vh;overflow-y:auto;padding:24px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <span style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600">Éditer la Recette</span>
+      <button onclick="closeRecipeModal()" style="background:none;border:none;color:#666;font-size:19px;cursor:pointer">✕</button>
+    </div>
+    <div class="field-row"><label class="field-label">Titre</label><input id="rm-title" class="fi"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div><label class="field-label">Temps de préparation</label><input id="rm-prep" class="fi"></div>
+      <div><label class="field-label">Difficulté</label><input id="rm-diff" class="fi"></div>
+    </div>
+    <div class="field-row"><label class="field-label">Accord Mets-Vins</label><input id="rm-wine" class="fi"></div>
+    <div class="field-row">
+      <label class="field-label">Photo du Plat</label>
+      <div class="iup" onclick="triggerUpload('rm-img-inp')">
+        <img id="rm-img-thumb" class="iup-thumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+        <div class="iup-text"><strong>Photo</strong>Cliquer pour ajouter</div>
+      </div>
+      <input type="file" id="rm-img-inp" class="img-file-input" accept="image/*" onchange="handleRecipeImg(this)">
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <label class="field-label" style="margin:0">Ingrédients</label>
+        <button class="btn-sm btn-sm-add" onclick="addIngredient()">+ Ajouter</button>
+      </div>
+      <div id="rm-ingredients"></div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <label class="field-label" style="margin:0">Méthode</label>
+        <button class="btn-sm btn-sm-add" onclick="addStep()">+ Étape</button>
+      </div>
+      <div id="rm-steps"></div>
+    </div>
+    <div class="field-row"><label class="field-label">Notes du Chef</label><textarea id="rm-notes" class="fta" rows="3"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:18px">
+      <button class="hbtn hbtn-export" style="flex:1" onclick="saveRecipe()">Enregistrer la Recette</button>
+      <button class="hbtn hbtn-save" onclick="closeRecipeModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var imageStore = {};
+var chefs = [];
+var currentChefId = null;
+var currentRecipeId = null;
+var currentRecipeImg = null;
+var modalIngredients = [];
+var modalSteps = [];
+
+function uid() { return Math.random().toString(36).slice(2,9); }
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function gc() {
+  for (var i=0; i<chefs.length; i++) { if (chefs[i].id === currentChefId) return chefs[i]; }
+  return chefs[0];
+}
+
+// TOAST
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+// TAB / PAGE NAV
+function showTab(name, el) {
+  var tcs = document.querySelectorAll('.tab-content');
+  for (var i=0; i<tcs.length; i++) tcs[i].style.display = 'none';
+  var tabs = document.querySelectorAll('.tab');
+  for (var i=0; i<tabs.length; i++) tabs[i].classList.remove('active');
+  var tc = document.getElementById('tab-'+name);
+  if (tc) { tc.style.display = 'block'; tc.classList.add('active'); }
+  if (el) el.classList.add('active');
+  document.getElementById('chef-bar').style.display = name === 'chef' ? 'block' : 'none';
+  if (name === 'home') showSitePage('home');
+  else if (name === 'dir') showSitePage('dir');
+  else if (name === 'sponsors') { showSitePage('sponsors'); renderSponsors(); }
+  else if (name === 'photos') { showSitePage('photos'); renderPhotos(); }
+  else { showSitePage('chef'); renderChefProfile(); }
+}
+
+function showSitePage(name) {
+  var pages = document.querySelectorAll('.site-page');
+  for (var i=0; i<pages.length; i++) pages[i].classList.remove('active');
+  var pg = document.getElementById('page-'+name);
+  if (pg) pg.classList.add('active');
+  var navIds = ['home','dir','chef','sponsors','photos'];
+  for (var i=0; i<navIds.length; i++) {
+    var a = document.getElementById('nav-'+navIds[i]);
+    if (a) { if (navIds[i]===name) a.classList.add('active'); else a.classList.remove('active'); }
+  }
+}
+
+function lu(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+// IMAGE HANDLING
+function triggerUpload(id) { document.getElementById(id).click(); }
+
+function handleImg(input, bgTargetId, thumbId) {
+  if (!input.files || !input.files[0]) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var url = e.target.result;
+    var target = document.getElementById(bgTargetId);
+    if (target) { target.style.backgroundImage = "url('"+url+"')"; target.style.backgroundSize='cover'; target.style.backgroundPosition='center'; }
+    var thumb = document.getElementById(thumbId);
+    if (thumb) thumb.src = url;
+    imageStore[bgTargetId] = url;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handleSiteLogo(input) {
+  if (!input.files || !input.files[0]) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var url = e.target.result;
+    var box = document.getElementById('site-logo-box');
+    if (box) box.innerHTML = '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover">';
+    var thumb = document.getElementById('sitelogo-thumb');
+    if (thumb) thumb.src = url;
+    imageStore['site-logo'] = url;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handleChefImg(input, field) {
+  if (!input.files || !input.files[0]) return;
+  var c = gc(); if (!c) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var url = e.target.result;
+    c[field] = url;
+    var thumbMap = {portrait:'portrait-thumb', restaurantLogo:'logo-thumb', restaurantPhoto:'rphoto-thumb'};
+    if (thumbMap[field]) { var t = document.getElementById(thumbMap[field]); if (t) t.src = url; }
+    renderChefProfile();
+    renderHomeChefs();
+    renderDir();
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handleGallery(input) {
+  if (!input.files) return;
+  var c = gc(); if (!c) return;
+  var files = [];
+  for (var i=0; i<input.files.length; i++) files.push(input.files[i]);
+  var done = 0;
+  for (var i=0; i<files.length; i++) {
+    (function(f) {
+      var r = new FileReader();
+      r.onload = function(e) {
+        c.gallery.push(e.target.result);
+        done++;
+        if (done === files.length) renderChefProfile();
+      };
+      r.readAsDataURL(f);
+    })(files[i]);
+  }
+  input.value = '';
+}
+
+// CHEF DATA
+function updateChefField(field, value) {
+  var c = gc(); if (!c) return;
+  c[field] = value;
+  var domMap = {name:'profile-chef-name', philosophy:'profile-philosophy', biography:'profile-biography'};
+  if (domMap[field]) lu(domMap[field], value);
+  if (field === 'restaurant') { lu('trip-rest-name', value); lu('profile-foot', value + ' · Genève · Suisse'); }
+  if (field === 'name') { renderHomeChefs(); renderDir(); }
+}
+
+function loadChefFields(c) {
+  if (!c) return;
+  var fields = [['f-name',c.name],['f-position',c.position],['f-philosophy',c.philosophy],['f-biography',c.biography],['f-restaurant',c.restaurant]];
+  for (var i=0; i<fields.length; i++) { var el=document.getElementById(fields[i][0]); if(el) el.value=fields[i][1]||''; }
+  var thumbs = [['portrait','portrait-thumb'],['restaurantLogo','logo-thumb'],['restaurantPhoto','rphoto-thumb']];
+  var blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  for (var i=0; i<thumbs.length; i++) {
+    var t = document.getElementById(thumbs[i][1]);
+    if (t) t.src = c[thumbs[i][0]] || blank;
+  }
+  renderAwardsList(c);
+  renderTimelineList(c);
+  renderRecipesList(c);
+}
+
+// CHEF SELECTOR
+function renderChefSelector() {
+  var sel = document.getElementById('chef-select'); if (!sel) return;
+  var html = '';
+  for (var i=0; i<chefs.length; i++) {
+    html += '<option value="'+chefs[i].id+'"'+(chefs[i].id===currentChefId?' selected':'')+'>'+esc(chefs[i].name)+'</option>';
+  }
+  sel.innerHTML = html;
+}
+
+function switchChef(id) {
+  currentChefId = id;
+  loadChefFields(gc());
+  renderChefProfile();
+}
+
+function addNewChef() {
+  var c = {id:uid(), name:'Nouveau Chef', position:'Chef de Cuisine', philosophy:'', biography:'', restaurant:'Restaurant', portrait:null, restaurantLogo:null, restaurantPhoto:null, gallery:[], awards:[], timeline:[], recipes:[], social:{}};
+  chefs.push(c);
+  currentChefId = c.id;
+  renderChefSelector();
+  loadChefFields(c);
+  renderChefProfile();
+  renderHomeChefs();
+  renderDir();
+  toast('Nouveau chef créé');
+}
+
+function deleteChef() {
+  if (chefs.length <= 1) { toast('Impossible de supprimer le dernier chef'); return; }
+  if (!confirm('Supprimer ce chef ?')) return;
+  var newChefs = [];
+  for (var i=0; i<chefs.length; i++) { if (chefs[i].id !== currentChefId) newChefs.push(chefs[i]); }
+  chefs = newChefs;
+  currentChefId = chefs[0].id;
+  renderChefSelector();
+  loadChefFields(chefs[0]);
+  renderChefProfile();
+  renderHomeChefs();
+  renderDir();
+  toast('Chef supprimé');
+}
+
+// AWARDS
+function renderAwardsList(c) {
+  var el = document.getElementById('awards-list'); if (!el) return;
+  var html = '';
+  for (var i=0; i<(c.awards||[]).length; i++) {
+    html += '<div class="list-row"><input class="list-ev" value="'+esc(c.awards[i])+'" oninput="updateAward('+i+',this.value)" placeholder="Distinction..."><button class="btn-sm btn-sm-del" onclick="delAward('+i+')">✕</button></div>';
+  }
+  el.innerHTML = html;
+}
+function updateAward(i,v) { var c=gc(); if(!c)return; c.awards[i]=v; renderProfileAwards(c); }
+function addAward() { var c=gc(); if(!c)return; c.awards.push(''); renderAwardsList(c); renderProfileAwards(c); }
+function delAward(i) { var c=gc(); if(!c)return; c.awards.splice(i,1); renderAwardsList(c); renderProfileAwards(c); }
+
+// TIMELINE
+function renderTimelineList(c) {
+  var el = document.getElementById('timeline-list'); if (!el) return;
+  var html = '';
+  for (var i=0; i<(c.timeline||[]).length; i++) {
+    html += '<div class="list-row"><input class="list-year" value="'+esc(c.timeline[i].year)+'" oninput="updateTL('+i+',\'year\',this.value)"><input class="list-ev" value="'+esc(c.timeline[i].event)+'" oninput="updateTL('+i+',\'event\',this.value)" placeholder="Événement..."><button class="btn-sm btn-sm-del" onclick="delTL('+i+')">✕</button></div>';
+  }
+  el.innerHTML = html;
+}
+function updateTL(i,k,v) { var c=gc(); if(!c)return; c.timeline[i][k]=v; renderProfileTimeline(c); }
+function addTimeline() { var c=gc(); if(!c)return; c.timeline.push({year:'2024',event:''}); renderTimelineList(c); renderProfileTimeline(c); }
+function delTL(i) { var c=gc(); if(!c)return; c.timeline.splice(i,1); renderTimelineList(c); renderProfileTimeline(c); }
+
+// RECIPE MODAL
+function openRecipeModal(recId) {
+  currentRecipeId = recId;
+  currentRecipeImg = null;
+  var c = gc();
+  var blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  if (recId) {
+    var r = null;
+    for (var i=0; i<c.recipes.length; i++) { if (c.recipes[i].id===recId) { r=c.recipes[i]; break; } }
+    if (!r) r = {};
+    var ids = ['rm-title','rm-prep','rm-diff','rm-wine','rm-notes'];
+    var vals = [r.title||'',r.prepTime||'',r.difficulty||'',r.winepairing||'',r.chefNotes||''];
+    for (var i=0; i<ids.length; i++) { var el=document.getElementById(ids[i]); if(el) el.value=vals[i]; }
+    currentRecipeImg = r.image || null;
+    modalIngredients = (r.ingredients||[]).slice();
+    modalSteps = (r.method||[]).slice();
+  } else {
+    var ids = ['rm-title','rm-prep','rm-diff','rm-wine','rm-notes'];
+    for (var i=0; i<ids.length; i++) { var el=document.getElementById(ids[i]); if(el) el.value=''; }
+    modalIngredients = [''];
+    modalSteps = [''];
+  }
+  var t = document.getElementById('rm-img-thumb');
+  if (t) t.src = currentRecipeImg || blank;
+  renderModalIngredients();
+  renderModalSteps();
+  document.getElementById('rec-modal').style.display = 'flex';
+}
+
+function closeRecipeModal() { document.getElementById('rec-modal').style.display = 'none'; }
+
+function renderModalIngredients() {
+  var html = '';
+  for (var i=0; i<modalIngredients.length; i++) {
+    html += '<div class="list-row"><input class="list-ev" value="'+esc(modalIngredients[i])+'" oninput="modalIngredients['+i+']=this.value" placeholder="Ingrédient..."><button class="btn-sm btn-sm-del" onclick="delIngredient('+i+')">✕</button></div>';
+  }
+  document.getElementById('rm-ingredients').innerHTML = html;
+}
+function addIngredient() { modalIngredients.push(''); renderModalIngredients(); }
+function delIngredient(i) { modalIngredients.splice(i,1); renderModalIngredients(); }
+
+function renderModalSteps() {
+  var html = '';
+  for (var i=0; i<modalSteps.length; i++) {
+    html += '<div class="list-row" style="align-items:flex-start"><span style="color:var(--gold);font-size:11px;min-width:18px;padding-top:7px">'+(i+1)+'.</span><textarea class="list-ev fta" rows="2" style="min-height:0" oninput="modalSteps['+i+']=this.value" placeholder="Étape...">'+esc(modalSteps[i])+'</textarea><button class="btn-sm btn-sm-del" style="margin-top:5px" onclick="delStep('+i+')">✕</button></div>';
+  }
+  document.getElementById('rm-steps').innerHTML = html;
+}
+function addStep() { modalSteps.push(''); renderModalSteps(); }
+function delStep(i) { modalSteps.splice(i,1); renderModalSteps(); }
+
+function handleRecipeImg(input) {
+  if (!input.files || !input.files[0]) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    currentRecipeImg = e.target.result;
+    var t = document.getElementById('rm-img-thumb');
+    if (t) t.src = currentRecipeImg;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function saveRecipe() {
+  var ingInputs = document.querySelectorAll('#rm-ingredients input');
+  var ingredients = [];
+  for (var i=0; i<ingInputs.length; i++) { if(ingInputs[i].value) ingredients.push(ingInputs[i].value); }
+  var stpInputs = document.querySelectorAll('#rm-steps textarea');
+  var method = [];
+  for (var i=0; i<stpInputs.length; i++) { if(stpInputs[i].value) method.push(stpInputs[i].value); }
+  var rec = {
+    id: currentRecipeId || uid(),
+    title: document.getElementById('rm-title').value,
+    prepTime: document.getElementById('rm-prep').value,
+    difficulty: document.getElementById('rm-diff').value,
+    winepairing: document.getElementById('rm-wine').value,
+    chefNotes: document.getElementById('rm-notes').value,
+    image: currentRecipeImg,
+    ingredients: ingredients,
+    method: method
+  };
+  var c = gc(); if (!c) return;
+  if (currentRecipeId) {
+    for (var i=0; i<c.recipes.length; i++) { if(c.recipes[i].id===currentRecipeId) { c.recipes[i]=rec; break; } }
+  } else {
+    c.recipes.push(rec);
+  }
+  closeRecipeModal();
+  renderRecipesList(c);
+  renderProfileRecipes(c);
+  toast('Recette enregistrée ✓');
+}
+
+function renderRecipesList(c) {
+  var el = document.getElementById('recipes-list'); if (!el) return;
+  var html = '';
+  for (var i=0; i<(c.recipes||[]).length; i++) {
+    var r = c.recipes[i];
+    html += '<div class="rec-item"><div class="rec-item-title">'+esc(r.title)+'</div><div class="rec-item-btns"><button class="rbtn rbtn-edit" onclick="openRecipeModal(\''+r.id+'\')">✎ Éditer</button><button class="rbtn rbtn-edit" style="background:rgba(201,169,110,.3)" onclick="dupRecipe(\''+r.id+'\')">⧉ Dupliquer</button><button class="rbtn rbtn-del" onclick="delRecipe(\''+r.id+'\')">✕</button></div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function delRecipe(id) {
+  var c=gc(); if(!c)return;
+  var nr=[]; for(var i=0;i<c.recipes.length;i++){if(c.recipes[i].id!==id)nr.push(c.recipes[i]);}
+  c.recipes=nr; renderRecipesList(c); renderProfileRecipes(c);
+}
+function dupRecipe(id) {
+  var c=gc(); if(!c)return;
+  var r=null; for(var i=0;i<c.recipes.length;i++){if(c.recipes[i].id===id){r=c.recipes[i];break;}}
+  if(!r)return;
+  var nr=JSON.parse(JSON.stringify(r)); nr.id=uid(); nr.title+=' (Copie)';
+  c.recipes.push(nr); renderRecipesList(c); renderProfileRecipes(c);
+}
+
+// PROFILE RENDERS (direct DOM)
+function renderProfileAwards(c) {
+  var el = document.getElementById('profile-awards'); if (!el) return;
+  var awards = c.awards || [];
+  el.style.display = awards.length ? '' : 'none';
+  var html = '';
+  for (var i=0; i<awards.length; i++) {
+    html += '<div class="award-chip" style="border-right:'+(i<awards.length-1?'1px solid rgba(201,169,110,.2)':'none')+'"><div class="award-star">✦</div><div class="award-text">'+esc(awards[i])+'</div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderProfileTimeline(c) {
+  var sec=document.getElementById('profile-timeline'), el=document.getElementById('tl-entries');
+  if (!sec||!el) return;
+  var tl=c.timeline||[];
+  sec.style.display = tl.length ? '' : 'none';
+  var html='';
+  for(var i=0;i<tl.length;i++) {
+    html+='<div class="tl-entry"><div class="tl-yr">'+esc(tl[i].year)+'</div><div class="tl-dot"></div><div class="tl-ev">'+esc(tl[i].event)+'</div></div>';
+  }
+  el.innerHTML=html;
+}
+
+function renderProfileGallery(c) {
+  var sec=document.getElementById('profile-gallery'), el=document.getElementById('gal-grid');
+  if (!sec||!el) return;
+  var gal=c.gallery||[];
+  sec.style.display=gal.length?'':'none';
+  var html='';
+  for(var i=0;i<gal.length;i++) html+='<img src="'+gal[i]+'" loading="lazy">';
+  el.innerHTML=html;
+}
+
+function renderProfileRecipes(c) {
+  var sec=document.getElementById('profile-recipes'), el=document.getElementById('acc-recipes');
+  if(!sec||!el) return;
+  var recs=c.recipes||[];
+  sec.style.display=recs.length?'':'none';
+  var html='';
+  for(var i=0;i<recs.length;i++) {
+    var r=recs[i];
+    var ings='';
+    for(var j=0;j<(r.ingredients||[]).length;j++) {
+      if(r.ingredients[j]) ings+='<li class="ing-list"><div style="display:flex;gap:6px;align-items:flex-start"><span style="color:var(--gold);font-size:7px;margin-top:6px">▪</span>'+esc(r.ingredients[j])+'</div></li>';
+    }
+    var stps='';
+    for(var j=0;j<(r.method||[]).length;j++) {
+      if(r.method[j]) stps+='<div class="method-step"><span class="method-n">'+(j+1)+'</span><p class="method-p">'+esc(r.method[j])+'</p></div>';
+    }
+    html+='<div class="acc-item" id="acc-'+r.id+'"><button class="acc-btn" onclick="toggleAcc(\''+r.id+'\')"><span style="display:flex;align-items:center;gap:10px"><span style="color:var(--gold);font-size:11px">✦</span>'+esc(r.title)+'</span><span style="display:flex;align-items:center;gap:12px"><span style="font-size:9px;color:#9a8060;font-family:system-ui">'+esc(r.prepTime)+' · '+esc(r.difficulty)+'</span><span class="acc-plus">+</span></span></button><div class="acc-body">'+(r.image?'<img class="acc-rec-img" src="'+r.image+'">' : '')+'<div class="acc-grid"><div><div class="acc-sec-title">Ingrédients</div><ul style="list-style:none">'+ings+'</ul></div><div><div class="acc-sec-title">Préparation</div>'+stps+'</div></div>'+(r.chefNotes?'<div class="chef-notes-box"><p class="chef-notes-p">'+esc(r.chefNotes)+'</p></div>':'')+(r.winepairing?'<div class="wine-row"><span class="wine-icon">🍷</span><div><div class="wine-label">Accord Mets-Vins</div><div class="wine-text">'+esc(r.winepairing)+'</div></div></div>':'')+'</div></div>';
+  }
+  el.innerHTML=html;
+}
+
+function toggleAcc(id) {
+  var item=document.getElementById('acc-'+id); if(!item)return;
+  var all=document.querySelectorAll('.acc-item.open');
+  for(var i=0;i<all.length;i++) {
+    if(all[i]!==item) {
+      all[i].classList.remove('open');
+      var b=all[i].querySelector('.acc-body'); if(b)b.style.display='none';
+      var p=all[i].querySelector('.acc-plus'); if(p)p.style.transform='none';
+    }
+  }
+  var open=item.classList.toggle('open');
+  var bd=item.querySelector('.acc-body'); if(bd)bd.style.display=open?'block':'none';
+  var pl=item.querySelector('.acc-plus'); if(pl)pl.style.transform=open?'rotate(45deg)':'none';
+}
+
+function renderChefProfile() {
+  var c=gc(); if(!c)return;
+  lu('profile-chef-name',c.name);
+  lu('profile-philosophy',c.philosophy);
+  lu('profile-biography',c.biography);
+  lu('trip-rest-name',c.restaurant);
+  lu('profile-foot',(c.restaurant||'')+' · Genève · Suisse');
+  var tp=document.getElementById('trip-portrait');
+  if(tp) { if(c.portrait){tp.innerHTML='<img src="'+c.portrait+'" style="width:auto;height:78%;max-width:90%;object-fit:contain;object-position:center center;display:block">';}else{tp.innerHTML='<div class="trip-ph"><span>👨‍🍳</span><span class="add-hint">+ Portrait</span></div>';} }
+  var li=document.getElementById('trip-logo-img'), rn=document.getElementById('trip-rest-name');
+  if(li&&rn) {
+    if(c.restaurantLogo){li.src=c.restaurantLogo;li.style.display='block';rn.style.display='none';}
+    else{li.style.display='none';rn.style.display='block';rn.textContent=c.restaurant||'Restaurant';}
+  }
+  var tph=document.getElementById('trip-photo');
+  if(tph) { if(c.restaurantPhoto){tph.innerHTML='<img src="'+c.restaurantPhoto+'" style="width:100%;height:100%;object-fit:cover;display:block">';}else{tph.innerHTML='<div class="trip-ph"><span>🏛</span><span class="add-hint">+ Photo</span></div>';} }
+  renderProfileAwards(c);
+  renderProfileTimeline(c);
+  renderProfileGallery(c);
+  renderProfileRecipes(c);
+}
+
+// HOME + DIR
+function renderHomeChefs() {
+  var el=document.getElementById('home-chefs-grid'); if(!el)return;
+  var html='';
+  for(var i=0;i<chefs.length;i++) {
+    var c=chefs[i];
+    html+='<div class="home-chef-card" onclick="selectChefAndShow(\''+c.id+'\')"><div class="home-chef-card-img">'+(c.portrait?'<img src="'+c.portrait+'">':'👨‍🍳')+'</div><div class="home-chef-name">'+esc(c.name)+'</div><div class="home-chef-rest">'+esc(c.restaurant)+'</div></div>';
+  }
+  el.innerHTML=html;
+}
+
+function renderDir() {
+  var el=document.getElementById('dir-grid'); if(!el)return;
+  var html='';
+  for(var i=0;i<chefs.length;i++) {
+    var c=chefs[i];
+    html+='<div class="dir-card" onclick="selectChefAndShow(\''+c.id+'\')"><div class="dir-card-img">'+(c.portrait?'<img src="'+c.portrait+'">':'👨‍🍳')+'</div><div class="dir-card-body"><div class="dir-card-pos">'+esc(c.position)+'</div><div class="dir-card-name">'+esc(c.name)+'</div><div class="dir-card-rest">'+esc(c.restaurant)+'</div><div class="dir-card-link">Voir le profil →</div></div></div>';
+  }
+  el.innerHTML=html;
+}
+
+function selectChefAndShow(id) {
+  currentChefId=id;
+  renderChefSelector();
+  loadChefFields(gc());
+  renderChefProfile();
+  showSitePage('chef');
+  var tabs=document.querySelectorAll('.tab');
+  var chefTab=null;
+  for(var i=0;i<tabs.length;i++){if(tabs[i].textContent.trim()==='Chef')chefTab=tabs[i];}
+  if(chefTab) showTab('chef',chefTab);
+}
+
+// SAVE / LOAD
+// NOTE: Images (base64) are NOT saved to localStorage — too large, causes quota errors.
+// All images live in memory. Text data (names, text, URLs) is saved.
+// To keep images permanently: use EXPORTER HTML.
+function stripImgs(arr) {
+  // Return array with image fields cleared (keep structure, lose base64)
+  return JSON.parse(JSON.stringify(arr).replace(/"data:[^"]{1,9999999}"/g, '""'));
+}
+function saveAll() {
+  try {
+    localStorage.setItem('goutatoo-chefs', JSON.stringify(stripImgs(chefs)));
+    localStorage.setItem('goutatoo-sponsors', JSON.stringify(stripImgs(sponsors)));
+    localStorage.setItem('goutatoo-photos', JSON.stringify(stripImgs(photos)));
+    localStorage.setItem('goutatoo-global', JSON.stringify({
+      homeTitle: document.getElementById('f-home-title').value,
+      homeSub: document.getElementById('f-home-sub').value,
+      homeTagline: document.getElementById('f-home-tagline').value
+    }));
+    toast('\u2713 Textes sauvegard\u00e9s. Images: cliquer Export HTML pour tout conserver.');
+  } catch(e) {
+    try { localStorage.clear(); toast('Stockage nettoy\u00e9 — veuillez sauvegarder \u00e0 nouveau'); }
+    catch(e2) { toast('Erreur stockage — utilisez Export HTML pour conserver votre travail'); }
+  }
+}
+
+function loadSaved() {
+  try {
+    var raw=localStorage.getItem('goutatoo-chefs');
+    if(raw){ var saved=JSON.parse(raw); if(Array.isArray(saved)&&saved.length) chefs=saved; }
+    var gRaw=localStorage.getItem('goutatoo-global');
+    if(gRaw) {
+      var g=JSON.parse(gRaw);
+      var blank='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+      if(g.homeTitle){var el=document.getElementById('f-home-title');if(el)el.value=g.homeTitle; lu('home-hero-title',g.homeTitle);}
+      if(g.homeSub){var el=document.getElementById('f-home-sub');if(el)el.value=g.homeSub; lu('home-hero-sub',g.homeSub);}
+      if(g.homeTagline){var el=document.getElementById('f-home-tagline');if(el)el.value=g.homeTagline; lu('home-tagline',g.homeTagline);}
+      if(g.heroImage){imageStore['home-hero-bg']=g.heroImage;var bg=document.getElementById('home-hero-bg');if(bg){bg.style.backgroundImage="url('"+g.heroImage+"')";bg.style.backgroundSize='cover';bg.style.backgroundPosition='center';}var t=document.getElementById('hero-thumb');if(t)t.src=g.heroImage;}
+      if(g.siteLogo){imageStore['site-logo']=g.siteLogo;var box=document.getElementById('site-logo-box');if(box)box.innerHTML='<img src="'+g.siteLogo+'" style="width:100%;height:100%;object-fit:cover">';var t=document.getElementById('sitelogo-thumb');if(t)t.src=g.siteLogo;}
+    }
+    var sRaw=localStorage.getItem('goutatoo-sponsors');
+    if(sRaw){try{var sp=JSON.parse(sRaw);if(Array.isArray(sp)){sponsors=sp;renderSponsorsList();renderSponsors();}}catch(ex){}}
+    var phRaw=localStorage.getItem('goutatoo-photos');
+    if(phRaw){try{var ph=JSON.parse(phRaw);if(Array.isArray(ph)){photos=ph;renderPhotosList();renderPhotos();}}catch(ex){}}
+  } catch(e){}
+  if(!chefs.length) {
+    chefs=[{id:uid(),name:'Jean-Marc Bessire',position:'Chef de Cuisine',philosophy:"Ma passion, le poisson, les épices et le goût du bon goût.",biography:"Jean-Marc Bessire vous accueille au restaurant Le Cigalon, aux portes de Genève, pour vous faire découvrir les saveurs de l'océan et les mille plaisirs d'une cuisine de la mer raffinée, sincère et inspirée.",restaurant:'Restaurant Le Cigalon',portrait:null,restaurantLogo:null,restaurantPhoto:null,gallery:[],awards:['Michelin Reconnu depuis 1997','Cuisine de la Mer Raffinée','Passionné par le Poisson et les Épices'],timeline:[{year:'1990',event:'Apprentissage Mövenpick Genève'},{year:'1997',event:'Reconnaissance Michelin'},{year:'2005',event:'Ouverture du Restaurant Le Cigalon'}],recipes:[{id:uid(),title:'Maquereau à la Straciatella et Vinaigrette de Morilles',prepTime:'30 min',difficulty:'Intermédiaire',winepairing:'Chablis Premier Cru, Château de Maligny 2021',chefNotes:"Cette recette met en valeur le contraste entre la richesse crémeuse de la straciatella et la puissance iodée du maquereau.",image:null,ingredients:['2 filets de maquereau de 20g','1 artichaut tourné','30g de straciatella',"Huile d'olive",'Sel et poivre'],method:['Dresser la straciatella en ligne sur une assiette.','Disposer les garnitures harmonieusement.','Cuire les filets 3 min à la poêle.',"Déposer sur la straciatella avec un filet d'huile d'olive.",'Finir avec les pousses de shiso.']}],social:{}}];
+  }
+  currentChefId=chefs[0].id;
+  renderChefSelector();
+  loadChefFields(chefs[0]);
+  renderChefProfile();
+  renderHomeChefs();
+  renderDir();
+}
+
+function resetAll() {
+  if(!confirm('Réinitialiser toutes les données ?')) return;
+  localStorage.removeItem('goutatoo-chefs');
+  localStorage.removeItem('goutatoo-global');
+  localStorage.removeItem('goutatoo-sponsors');
+  localStorage.removeItem('goutatoo-photos');
+  location.reload();
+}
+
+// EXPORT
+function exportSite() {
+  var gTitle=document.getElementById('f-home-title').value;
+  var gSub=document.getElementById('f-home-sub').value;
+  var gTagline=document.getElementById('f-home-tagline').value;
+  var heroImg=imageStore['home-hero-bg']||'';
+  var siteLogo=imageStore['site-logo']||'';
+
+  var css='*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{--gold:#c9a96e;--navy:#1a2744;--ivory:#f5f0e8;--charcoal:#2c2c2c}body{font-family:\'Cormorant Garamond\',serif;background:var(--ivory);color:var(--charcoal)}a,button{cursor:pointer;text-decoration:none}::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c9a96e44;border-radius:3px}nav{background:#111;height:62px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.brand{display:flex;align-items:center;gap:12px}.logo-box{width:42px;height:42px;background:var(--gold);border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}.logo-box img{width:100%;height:100%;object-fit:cover}.brand-name{font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:var(--gold)}.nav-links{display:flex;gap:20px;list-style:none}.nav-links a{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;cursor:pointer;padding-bottom:2px;border-bottom:1px solid transparent}.nav-links a:hover,.nav-links a.active{color:var(--navy);border-bottom-color:var(--gold)}.page{display:none}.page.active{display:block}.ornament{display:flex;align-items:center;justify-content:center;gap:12px}.ornament .line{width:40px;height:1px;background:var(--gold)}.ornament .star{color:var(--gold);font-size:14px}.hero{min-height:560px;position:relative;display:flex;align-items:flex-end;overflow:hidden;background:linear-gradient(135deg,var(--navy),#2c3e50)}.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center}.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.65))}.hero-inner{position:relative;z-index:2;padding:40px;width:100%}.hero-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-family:system-ui}.hero-title{font-family:\'Playfair Display\',serif;font-size:31px;font-weight:700;line-height:1.2;color:#fff;margin-bottom:10px}.hero-sub{font-size:17px;color:rgba(255,255,255,.78);font-style:italic;line-height:1.6}.tagbar{background:#f0ebe0;border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);padding:14px 40px;text-align:center}.tagbar p{font-size:19px;color:#5a4030;font-style:italic}.chefs-sec{padding:48px 40px}.sec-hd{text-align:center;margin-bottom:28px}.sec-eyebrow{font-size:10px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui}.sec-h{font-family:\'Playfair Display\',serif;font-size:31px;color:var(--navy);margin-bottom:14px}.chefs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px;margin-top:24px}.chef-card{text-align:center;cursor:pointer}.chef-img{width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;border-radius:2px;margin-bottom:8px;display:flex;align-items:center;justify-content:center}.chef-img img{width:100%;height:100%;object-fit:cover;display:block}.chef-name{font-family:\'Cormorant Garamond\',serif;font-size:20px;color:var(--navy);font-weight:600;margin-bottom:2px}.chef-rest{font-size:17px;color:#9a8060}.dir{padding:40px 28px}.dir-hd{text-align:center;margin-bottom:32px}.dir-eyebrow{font-size:10px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui}.dir-h1{font-family:\'Playfair Display\',serif;font-size:34px;color:var(--navy);margin-bottom:14px}.dir-tagline{font-size:18px;color:#7a6050;font-style:italic;max-width:480px;margin:14px auto 0;line-height:1.7}.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-top:24px}.dir-card{background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04)}.dir-card:hover{transform:translateY(-2px)}.dir-card-img{width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:50px;opacity:.2}.dir-card-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;opacity:1}.dir-card-bd{padding:14px}.dir-card-pos{font-size:9px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px;font-family:system-ui}.dir-card-name{font-family:\'Cormorant Garamond\',serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:2px}.dir-card-rest{font-size:18px;color:#9a8060;margin-bottom:8px}.dir-card-link{font-size:18px;color:var(--gold);font-family:system-ui}.trip{display:grid;grid-template-columns:1fr 1fr 1fr;height:360px;border-bottom:3px solid var(--gold)}.trip-pt,.trip-ph2{background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center}.trip-pt img{width:auto;height:78%;max-width:90%;object-fit:contain;object-position:center center;display:block}.trip-ph2 img{width:100%;height:100%;object-fit:cover;display:block;align-self:stretch}.trip-ct{background:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-left:1px solid rgba(201,169,110,.3);border-right:1px solid rgba(201,169,110,.3)}.trip-ct img{max-width:80%;max-height:90px;object-fit:contain;margin-bottom:14px}.trip-rn{font-size:20px;color:var(--navy);font-weight:700;text-align:center;margin-bottom:14px}.trip-or{color:var(--gold);font-size:20px}.trip-dv{width:50px;height:1px;background:var(--gold);margin:8px 0}.trip-loc{font-size:14px;color:#9a8060;letter-spacing:.15em;text-transform:uppercase;font-family:system-ui}.prof-hero{text-align:center;padding:32px 28px 16px;border-bottom:1px solid rgba(201,169,110,.2)}.prof-label{font-size:14px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:7px;font-family:system-ui}.prof-name{font-family:\'Playfair Display\',serif;font-size:50px;font-weight:700;color:var(--navy);margin-bottom:12px}.qbio{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)}.q{padding:24px 28px;border-right:1px solid rgba(201,169,110,.2)}.qq{font-size:34px;color:var(--gold);line-height:1;margin-bottom:5px;font-family:Georgia,serif}.phil{font-size:28px;font-style:italic;color:var(--navy);line-height:1.5}.bio{padding:24px 28px}.bio p{font-size:22px;color:#5a4030;line-height:1.8}.awards{padding:20px 28px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap}.aw{flex:1 1 140px;padding:10px 14px;border-right:1px solid rgba(201,169,110,.2);text-align:center}.aw:last-child{border-right:none}.aw-star{color:var(--gold);font-size:14px;margin-bottom:5px}.aw-text{font-size:14px;color:#9a8060;letter-spacing:.07em;text-transform:uppercase;line-height:1.4;font-family:system-ui}.tlsec{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}.tl-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;font-family:system-ui;font-weight:600}.tl-wrap{position:relative;padding-left:64px}.tl-wrap::before{content:"";position:absolute;left:48px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3)}.tl-entry{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}.tl-yr{min-width:52px;text-align:right;color:var(--gold);font-size:19px;font-weight:700;font-family:system-ui;padding-top:2px}.tl-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0;margin-left:-4px;position:relative;z-index:1}.tl-ev{font-size:22px;color:var(--charcoal)}.galsec{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}.gal-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px;font-family:system-ui;font-weight:600}.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}.gal-grid img{width:100%;height:80px;object-fit:cover;border-radius:2px}.recsec{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}.recs-hd{text-align:center;margin-bottom:20px}.recs-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;font-family:system-ui;font-weight:600}.acc-item{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:8px;overflow:hidden}.acc-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:13px 18px;background:none;border:none;cursor:pointer;font-family:\'Cormorant Garamond\',serif;color:#2c1a0a;font-size:22px}.acc-item.open{background:rgba(201,169,110,.03)}.acc-body{display:none;padding:0 18px 18px}.acc-item.open .acc-body{display:block}.acc-plus{color:var(--gold);font-size:18px;transition:transform .3s}.acc-item.open .acc-plus{transform:rotate(45deg)}.acc-rec-img{width:100%;height:200px;object-fit:cover;border-radius:2px;margin-bottom:14px}.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.acc-sec-t{font-size:14px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;font-family:system-ui}.ing-ul{list-style:none}.ing-li{font-size:20px;color:#5a4030;padding:6px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:6px;line-height:1.5}.ing-li::before{content:"▪";color:var(--gold);font-size:8px;margin-top:6px}.mstep{display:flex;gap:8px;margin-bottom:11px}.mn{color:var(--gold);font-size:20px;font-weight:700;min-width:22px}.mp{font-size:20px;color:#5a4030;line-height:1.6;margin:0}.notes-box{margin-top:14px;padding:12px 16px;background:rgba(201,169,110,.05);border-left:3px solid var(--gold)}.notes-p{font-size:20px;color:#5a4030;line-height:1.7;font-style:italic}.wine-row{margin-top:11px;display:flex;align-items:center;gap:8px}.wine-lbl{font-size:11px;color:var(--gold);text-transform:uppercase;font-family:system-ui}.wine-txt{font-size:20px;color:#5a4030;font-style:italic}.prof-foot{padding:14px 28px;text-align:center;font-size:14px;color:#9a8060;font-family:system-ui;letter-spacing:.08em}footer{background:#111;padding:20px 32px;text-align:center}.footer-name{color:var(--gold);font-family:\'Cormorant Garamond\',serif;font-size:16px;margin-bottom:4px}.footer-copy{color:#555;font-size:10px;font-family:system-ui;letter-spacing:.1em}.nav-toggle{display:none;background:none;border:none;cursor:pointer;width:34px;height:34px;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0}.nav-toggle span{display:block;width:24px;height:2px;background:var(--gold);transition:transform .3s,opacity .3s}.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}.nav-toggle.open span:nth-child(2){opacity:0}.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}.nav-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40}.nav-overlay.show{display:block}@media(max-width:768px){nav{padding:0 18px;height:58px}.brand-name{font-size:16px}.logo-box{width:36px;height:36px}.nav-toggle{display:flex}.nav-links{position:fixed;top:0;right:-280px;width:260px;height:100vh;background:#141414;flex-direction:column;gap:0;padding:80px 0 30px;z-index:45;transition:right .32s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 32px rgba(0,0,0,.4);overflow-y:auto}.nav-links.open{right:0}.nav-links li{width:100%}.nav-links a{display:block;font-size:13px;padding:16px 28px;border-bottom:1px solid rgba(201,169,110,.12);border-bottom-color:rgba(201,169,110,.12);letter-spacing:.18em;color:#bbb}.nav-links a:hover,.nav-links a.active{color:var(--gold);border-bottom-color:rgba(201,169,110,.12);background:rgba(201,169,110,.06)}.hero{min-height:380px}.hero-inner{padding:24px}.hero-title{font-size:26px}.hero-sub{font-size:15px}.tagbar{padding:14px 20px}.tagbar p{font-size:16px}.chefs-sec{padding:32px 20px}.chefs-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px}.sec-h{font-size:26px}.dir{padding:28px 18px}.dir-h1{font-size:28px}.dir-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}.trip{grid-template-columns:1fr;height:auto}.trip-pt{height:420px}.trip-pt img{height:auto;max-height:380px;width:auto;max-width:80%}.trip-ct{padding:36px 20px;border-left:none;border-right:none;border-top:1px solid rgba(201,169,110,.3);border-bottom:1px solid rgba(201,169,110,.3)}.trip-ph2{height:260px}.prof-name{font-size:36px}.prof-hero{padding:28px 20px 14px}.qbio{grid-template-columns:1fr}.q{border-right:none;border-bottom:1px solid rgba(201,169,110,.2);padding:20px}.bio{padding:20px}.phil{font-size:24px}.bio p{font-size:19px}.awards{flex-direction:column}.aw{flex:1 1 auto;border-right:none;border-bottom:1px solid rgba(201,169,110,.15);padding:12px}.aw:last-child{border-bottom:none}.tlsec,.galsec,.recsec{padding:20px 18px}.tl-wrap{padding-left:54px}.tl-wrap::before{left:42px}.tl-ev{font-size:19px}.acc-grid{grid-template-columns:1fr;gap:14px}.acc-btn{font-size:19px;padding:13px 14px}.ing-li,.mp,.notes-p,.wine-txt{font-size:18px}.gal-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}#sp-grid{grid-template-columns:1fr!important}#ph-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}}';
+
+
+  var escapedChefs = JSON.stringify(chefs).replace(/<\/script/gi,'<\\/script');
+  var escapedSponsors = JSON.stringify(sponsors).replace(/<\/script/gi,'<\\/script');
+  var escapedPhotos = JSON.stringify(photos).replace(/<\/script/gi,'<\\/script');
+
+  var dataJS = 'var chefs=' + escapedChefs + ';var sponsors=' + escapedSponsors + ';var photos=' + escapedPhotos + ';';
+  var siteJS = '\nvar activeChef = chefs[0] ? chefs[0].id : null;\n\nfunction e(s) {\n  if (!s) return \'\';\n  return String(s).replace(/&/g,\'&amp;\').replace(/</g,\'&lt;\').replace(/>/g,\'&gt;\');\n}\n\nfunction tgMenu() {\n  var l = document.getElementById(\'nav-links\');\n  var t = document.getElementById(\'nav-toggle\');\n  var o = document.getElementById(\'nav-overlay\');\n  if (!l) return;\n  var open = l.classList.toggle(\'open\');\n  if (t) t.classList.toggle(\'open\', open);\n  if (o) o.classList.toggle(\'show\', open);\n  document.body.style.overflow = open ? \'hidden\' : \'\';\n}\nfunction closeMenu() {\n  var l = document.getElementById(\'nav-links\');\n  var t = document.getElementById(\'nav-toggle\');\n  var o = document.getElementById(\'nav-overlay\');\n  if (l) l.classList.remove(\'open\');\n  if (t) t.classList.remove(\'open\');\n  if (o) o.classList.remove(\'show\');\n  document.body.style.overflow = \'\';\n}\n\nfunction go(page, chefId) {\n  closeMenu();\n  var pgs = document.querySelectorAll(\'.page\');\n  for (var i = 0; i < pgs.length; i++) pgs[i].classList.remove(\'active\');\n  var pg = document.getElementById(\'pg-\' + page);\n  if (pg) pg.classList.add(\'active\');\n  var nns = [\'home\',\'dir\',\'chef\',\'sponsors\',\'photos\'];\n  for (var i = 0; i < nns.length; i++) {\n    var al = document.getElementById(\'lk-\' + nns[i]);\n    if (al) al.classList.remove(\'active\');\n  }\n  var lk = document.getElementById(\'lk-\' + page);\n  if (lk) lk.classList.add(\'active\');\n  if (page === \'chef\') { if (chefId) activeChef = chefId; renderChef(); }\n  else if (page === \'home\') renderHome();\n  else if (page === \'dir\') renderDir();\n  else if (page === \'sponsors\') renderSponsors();\n  else if (page === \'photos\') renderPhotos();\n  location.hash = page === \'chef\' ? \'chef-\' + activeChef : page;\n}\n\nfunction renderHome() {\n  var g = document.getElementById(\'home-chefs-grid\'); if (!g) return;\n  var h = \'\';\n  for (var i = 0; i < chefs.length; i++) {\n    var c = chefs[i];\n    h += \'<div class="chef-card" onclick="go(&#39;chef&#39;,&#39;\' + c.id + \'&#39;)">\';\n    h += \'<div class="chef-img">\' + (c.portrait ? \'<img src="\' + c.portrait + \'">\' : \'<span style="font-size:36px;opacity:.2">&#128104;&#8205;&#127859;</span>\') + \'</div>\';\n    h += \'<div class="chef-name">\' + e(c.name) + \'</div>\';\n    h += \'<div class="chef-rest">\' + e(c.restaurant) + \'</div></div>\';\n  }\n  g.innerHTML = h;\n}\n\nfunction renderDir() {\n  var g = document.getElementById(\'dir-grid\'); if (!g) return;\n  var h = \'\';\n  for (var i = 0; i < chefs.length; i++) {\n    var c = chefs[i];\n    h += \'<div class="dir-card" onclick="go(&#39;chef&#39;,&#39;\' + c.id + \'&#39;)">\';\n    h += \'<div class="dir-card-img">\' + (c.portrait ? \'<img src="\' + c.portrait + \'">\' : \'<span>&#128104;&#8205;&#127859;</span>\') + \'</div>\';\n    h += \'<div class="dir-card-bd">\';\n    h += \'<div class="dir-card-pos">\' + e(c.position) + \'</div>\';\n    h += \'<div class="dir-card-name">\' + e(c.name) + \'</div>\';\n    h += \'<div class="dir-card-rest">\' + e(c.restaurant) + \'</div>\';\n    h += \'<div class="dir-card-link">Voir le profil &#8594;</div>\';\n    h += \'</div></div>\';\n  }\n  g.innerHTML = h;\n}\n\nfunction renderSponsors() {\n  var g = document.getElementById(\'sp-grid\'); if (!g) return;\n  var h = \'\';\n  for (var i = 0; i < sponsors.length; i++) {\n    var s = sponsors[i];\n    var inn = s.image ? \'<img src="\' + s.image + \'" style="max-width:88%;max-height:160px;object-fit:contain">\'\n                     : \'<span style="font-size:18px;color:#9a8060">\' + e(s.name) + \'</span>\';\n    var sty = \'display:flex;background:#fff;border:1px solid rgba(201,169,110,.25);border-radius:6px;padding:36px 44px;align-items:center;justify-content:center;min-height:220px;box-shadow:0 4px 20px rgba(0,0,0,.06);\';\n    if (s.url) {\n      h += \'<a href="\' + e(s.url) + \'" target="_blank" rel="noopener" style="\' + sty + \'text-decoration:none">\' + inn + \'</a>\';\n    } else {\n      h += \'<div style="\' + sty + \'">\' + inn + \'</div>\';\n    }\n  }\n  if (!h) h = \'<div style="color:#9a8060;font-size:16px;text-align:center;padding:40px;grid-column:1/-1">Aucun partenaire.</div>\';\n  g.innerHTML = h;\n}\n\nfunction renderPhotos() {\n  var g = document.getElementById(\'ph-grid\'); if (!g) return;\n  var h = \'\';\n  for (var i = 0; i < photos.length; i++) {\n    var p = photos[i];\n    h += \'<div style="background:#fff;border:1px solid rgba(201,169,110,.15);border-radius:4px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04)">\';\n    h += p.image ? \'<img src="\' + p.image + \'" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">\'\n                 : \'<div style="width:100%;aspect-ratio:4/3;background:#e8e4dc;display:flex;align-items:center;justify-content:center"><span style="font-size:32px;opacity:.2">&#128247;</span></div>\';\n    h += \'<div style="padding:16px">\';\n    if (p.title) h += \'<div style="font-family:Cormorant Garamond,serif;font-size:20px;font-weight:600;color:#1a2744;margin-bottom:6px">\' + e(p.title) + \'</div>\';\n    if (p.description) h += \'<div style="font-size:16px;color:#5a4030;line-height:1.6">\' + e(p.description) + \'</div>\';\n    h += \'</div></div>\';\n  }\n  if (!h) h = \'<div style="color:#9a8060;font-size:16px;text-align:center;padding:40px;grid-column:1/-1">Aucune photo.</div>\';\n  g.innerHTML = h;\n}\n\nfunction renderChef() {\n  var c = null;\n  for (var i = 0; i < chefs.length; i++) { if (chefs[i].id === activeChef) { c = chefs[i]; break; } }\n  if (!c) c = chefs[0]; if (!c) return;\n  var r = document.getElementById(\'chef-page\'); if (!r) return;\n  var aw = \'\';\n  for (var i = 0; i < (c.awards||[]).length; i++) {\n    aw += \'<div class="aw" style="border-right:\' + (i < c.awards.length-1 ? \'1px solid rgba(201,169,110,.2)\' : \'none\') + \'">\';\n    aw += \'<div class="aw-star">&#10022;</div><div class="aw-text">\' + e(c.awards[i]) + \'</div></div>\';\n  }\n  var tl = \'\';\n  for (var i = 0; i < (c.timeline||[]).length; i++) {\n    tl += \'<div class="tl-entry"><div class="tl-yr">\' + e(c.timeline[i].year) + \'</div><div class="tl-dot"></div><div class="tl-ev">\' + e(c.timeline[i].event) + \'</div></div>\';\n  }\n  var gal = \'\';\n  for (var i = 0; i < (c.gallery||[]).length; i++) {\n    gal += \'<img src="\' + c.gallery[i] + \'" style="width:100%;height:80px;object-fit:cover;border-radius:2px">\';\n  }\n  var recs = \'\';\n  for (var i = 0; i < (c.recipes||[]).length; i++) {\n    var rec = c.recipes[i];\n    var ings = \'\';\n    for (var j = 0; j < (rec.ingredients||[]).length; j++) {\n      if (rec.ingredients[j]) ings += \'<li class="ing-li">\' + e(rec.ingredients[j]) + \'</li>\';\n    }\n    var stps = \'\';\n    for (var j = 0; j < (rec.method||[]).length; j++) {\n      if (rec.method[j]) stps += \'<div class="mstep"><span class="mn">\' + (j+1) + \'</span><p class="mp">\' + e(rec.method[j]) + \'</p></div>\';\n    }\n    recs += \'<div class="acc-item" id="acc-\' + rec.id + \'">\';\n    recs += \'<button class="acc-btn" onclick="ta(&#39;acc-\' + rec.id + \'&#39;)">\';\n    recs += \'<span style="display:flex;align-items:center;gap:10px"><span style="color:var(--gold);font-size:11px">&#10022;</span>\' + e(rec.title) + \'</span>\';\n    recs += \'<span style="display:flex;align-items:center;gap:12px"><span style="font-size:9px;color:#9a8060;font-family:system-ui">\' + e(rec.prepTime) + \' &middot; \' + e(rec.difficulty) + \'</span><span class="acc-plus">+</span></span></button>\';\n    recs += \'<div class="acc-body">\' + (rec.image ? \'<img class="acc-rec-img" src="\' + rec.image + \'">\' : \'\');\n    recs += \'<div class="acc-grid"><div><div class="acc-sec-t">Ingr&eacute;dients</div><ul class="ing-ul">\' + ings + \'</ul></div>\';\n    recs += \'<div><div class="acc-sec-t">Pr&eacute;paration</div>\' + stps + \'</div></div>\';\n    recs += (rec.chefNotes ? \'<div class="notes-box"><p class="notes-p">\' + e(rec.chefNotes) + \'</p></div>\' : \'\');\n    recs += (rec.winepairing ? \'<div class="wine-row"><span style="font-size:16px">&#127863;</span><div><div class="wine-lbl">Accord Mets-Vins</div><div class="wine-txt">\' + e(rec.winepairing) + \'</div></div></div>\' : \'\');\n    recs += \'</div></div>\';\n  }\n  var portrait = c.portrait ? \'<img src="\' + c.portrait + \'" style="width:auto;height:78%;max-width:90%;object-fit:contain;object-position:center center;display:block">\'\n                             : \'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.2">&#128104;&#8205;&#127859;</div>\';\n  var cLogo = c.restaurantLogo ? \'<img src="\' + c.restaurantLogo + \'" style="max-width:80%;max-height:90px;object-fit:contain;margin-bottom:14px">\'\n                               : \'<div class="trip-rn">\' + e(c.restaurant) + \'</div>\';\n  var rPhoto = c.restaurantPhoto ? \'<img src="\' + c.restaurantPhoto + \'" style="width:100%;height:100%;object-fit:cover;display:block">\'\n                                 : \'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#d5d0c8;font-size:40px;opacity:.2">&#127963;</div>\';\n  var html = \'<div class="trip"><div class="trip-pt">\' + portrait + \'</div><div class="trip-ct">\' + cLogo + \'<div class="trip-or">&#10022;</div><div class="trip-dv"></div><div class="trip-loc">Gen&egrave;ve &middot; Suisse</div></div><div class="trip-ph2">\' + rPhoto + \'</div></div>\';\n  html += \'<div class="prof-hero"><div class="prof-label">Chef</div><div class="prof-name">\' + e(c.name) + \'</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div>\';\n  html += \'<div class="qbio"><div class="q"><div class="qq">&ldquo;</div><div class="phil">\' + e(c.philosophy) + \'</div></div><div class="bio"><p>\' + e(c.biography) + \'</p></div></div>\';\n  if (aw) html += \'<div class="awards">\' + aw + \'</div>\';\n  if (tl) html += \'<div class="tlsec"><div class="tl-label">Parcours</div><div class="tl-wrap">\' + tl + \'</div></div>\';\n  if (gal) html += \'<div class="galsec"><div class="gal-label">Galerie</div><div class="gal-grid">\' + gal + \'</div></div>\';\n  if (recs) html += \'<div class="recsec"><div class="recs-hd"><div class="recs-label">Recettes Signatures</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div>\' + recs + \'</div>\';\n  html += \'<div class="prof-foot">\' + e(c.restaurant) + \' &middot; Gen&egrave;ve &middot; Suisse</div>\';\n  r.innerHTML = html;\n  setTimeout(function() {\n    var items = document.querySelectorAll(\'.acc-item\');\n    for (var i = 0; i < items.length; i++) { var b = items[i].querySelector(\'.acc-body\'); if (b) b.style.display = \'none\'; }\n  }, 0);\n}\n\nfunction ta(id) {\n  var item = document.getElementById(id); if (!item) return;\n  var all = document.querySelectorAll(\'.acc-item.open\');\n  for (var i = 0; i < all.length; i++) {\n    if (all[i] !== item) { all[i].classList.remove(\'open\'); var b = all[i].querySelector(\'.acc-body\'); if (b) b.style.display = \'none\'; var p = all[i].querySelector(\'.acc-plus\'); if (p) p.style.transform = \'none\'; }\n  }\n  var op = item.classList.toggle(\'open\');\n  var bd = item.querySelector(\'.acc-body\'); if (bd) bd.style.display = op ? \'block\' : \'none\';\n  var pl = item.querySelector(\'.acc-plus\'); if (pl) pl.style.transform = op ? \'rotate(45deg)\' : \'none\';\n}\n\nwindow.addEventListener(\'hashchange\', function() {\n  var h = location.hash.slice(1);\n  if (h.indexOf(\'chef-\') === 0) go(\'chef\', h.slice(5));\n  else if (h === \'dir\') go(\'dir\');\n  else if (h === \'sponsors\') go(\'sponsors\');\n  else if (h === \'photos\') go(\'photos\');\n  else go(\'home\');\n});\n\ngo(\'home\'); renderDir(); renderSponsors(); renderPhotos();\n';
+  var js = dataJS + siteJS;
+
+  var logoHtml = siteLogo ? '<img src="'+siteLogo+'" style="width:100%;height:100%;object-fit:cover">' : '🍴';
+  var heroBgStyle = heroImg ? 'background-image:url(\''+heroImg+'\');background-size:cover;background-position:center' : 'background:linear-gradient(135deg,#1a2744,#2c3e50)';
+
+  var html = '<!DOCTYPE html><html lang="fr"><head>'
+    + '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">'
+    + '<title>Chefs Goutatoo Gen&egrave;ve</title>'
+    + '<link rel="preconnect" href="https://fonts.googleapis.com">'
+    + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:wght@700&display=swap">'
+    + '<style>'+css+'</style>'
+    + '</head><body>'
+    + '<nav><div class="brand" onclick="go(&apos;home&apos;)"><div class="logo-box">'+logoHtml+'</div><span class="brand-name">Chefs Goutatoo Gen&egrave;ve</span></div>'
+            + '<button class="nav-toggle" id="nav-toggle" onclick="tgMenu()" aria-label="Menu"><span></span><span></span><span></span></button>'
+            + '<ul class="nav-links" id="nav-links"><li><a id="lk-home" onclick="go(&apos;home&apos;)">Accueil</a></li><li><a id="lk-dir" onclick="go(&apos;dir&apos;)">Les Chefs</a></li><li><a id="lk-chef" onclick="go(&apos;chef&apos;)">Profil</a></li><li><a id="lk-sponsors" onclick="go(&apos;sponsors&apos;)">Sponsors</a></li><li><a id="lk-photos" onclick="go(&apos;photos&apos;)">Photos</a></li></ul></nav>'
+            + '<div class="nav-overlay" id="nav-overlay" onclick="tgMenu()"></div>'
+    + '<div id="pg-home" class="page active">'
+    + '<div class="hero"><div class="hero-bg" style="'+heroBgStyle+'"></div><div class="hero-inner"><div class="hero-eyebrow">Chefs Goutatoo Gen&egrave;ve</div><div class="hero-title">'+esc(gTitle)+'</div><div class="hero-sub">'+esc(gSub)+'</div></div></div>'
+    + '<div class="tagbar"><p>'+esc(gTagline)+'</p></div>'
+    + '<div class="chefs-sec"><div class="sec-hd"><div class="sec-eyebrow">Notre Collectif</div><div class="sec-h">Les Chefs</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div><div id="home-chefs-grid" class="chefs-grid"></div></div>'
+    + '</div>'
+    + '<div id="pg-dir" class="page"><div class="dir"><div class="dir-hd"><div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div><div class="dir-h1">Notre &Eacute;quipe</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div><div class="dir-tagline">Nous formons une &eacute;quipe de cuisiniers li&eacute;s par l&rsquo;amour de la bonne cuisine.</div></div><div id="dir-grid" class="dir-grid"></div></div></div>'
+    + '<div id="pg-chef" class="page"><div id="chef-page"></div></div>'
+    + '<div id="pg-sponsors" class="page"><div style="padding:40px"><div class="dir-hd"><div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div><div class="dir-h1">Nos Partenaires</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div><div id="sp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:28px"></div></div></div>'
+    + '<div id="pg-photos" class="page"><div style="padding:40px"><div class="dir-hd"><div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div><div class="dir-h1">Photos</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div><div id="ph-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-top:28px"></div></div></div>'
+    + '<footer><div class="footer-name">Chefs Goutatoo Gen&egrave;ve</div><div class="footer-copy">&copy; 2025 &middot; Pour le bon go&ucirc;t</div></footer>'
+    + '<scr'+'ipt>'+js+'<'+'/scr'+'ipt></body></html>';
+
+  var kb=Math.round(html.length/1024);
+  toast('Pr\u00e9paration export '+kb+' KB...');
+  try {
+    var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download='goutatoo-site.html'; a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},3000);
+    toast('\u2713 Export\u00e9 ('+kb+' KB) \u2014 v\u00e9rifiez vos t\u00e9l\u00e9chargements');
+  } catch(e1) {
+    try {
+      var enc='data:text/html;charset=utf-8,'+encodeURIComponent(html);
+      var w=window.open(enc,'_blank');
+      if(w){ toast('\u2139 Ouvert dans un onglet \u2014 Partager > Enregistrer le fichier'); return; }
+    } catch(e2){}
+    toast('\u26a0 Export \u00e9chou\u00e9. Essayez de r\u00e9duire la taille des images.');
+  }
+}
+
+// JSON BACKUP
+function expJSON() {
+  var data={chefs:chefs,global:{heroImage:imageStore['home-hero-bg']||null,siteLogo:imageStore['site-logo']||null,homeTitle:document.getElementById('f-home-title').value,homeSub:document.getElementById('f-home-sub').value,homeTagline:document.getElementById('f-home-tagline').value}};
+  var b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='goutatoo-sauvegarde.json';a.click();
+  toast('JSON sauvegardé ✓');
+}
+function impJSON(input) {
+  if(!input.files||!input.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    try{
+      var d=JSON.parse(e.target.result);
+      if(d&&Array.isArray(d.chefs)&&d.chefs.length){
+        chefs=d.chefs; currentChefId=chefs[0].id;
+        if(d.global){var g=d.global;if(g.homeTitle){var el=document.getElementById('f-home-title');if(el)el.value=g.homeTitle;lu('home-hero-title',g.homeTitle);}if(g.homeSub){var el=document.getElementById('f-home-sub');if(el)el.value=g.homeSub;lu('home-hero-sub',g.homeSub);}if(g.homeTagline){var el=document.getElementById('f-home-tagline');if(el)el.value=g.homeTagline;lu('home-tagline',g.homeTagline);}}
+        renderChefSelector();loadChefFields(chefs[0]);renderChefProfile();renderHomeChefs();renderDir();
+        toast('Import réussi ✓');
+      }else{toast('Fichier JSON invalide');}
+    }catch(ex){toast('Erreur de lecture');}
+  };
+  r.readAsText(input.files[0]);
+  input.value='';
+}
+
+
+// ══ SPONSORS ══
+var sponsors = [];
+function addSponsor() {
+  var s={id:uid(),name:'Nouveau Sponsor',url:'',image:null};
+  sponsors.push(s);renderSponsorsList();renderSponsors();toast('Sponsor ajout\u00e9');
+}
+function delSponsor(id) {
+  var n=[];for(var i=0;i<sponsors.length;i++){if(sponsors[i].id!==id)n.push(sponsors[i]);}
+  sponsors=n;renderSponsorsList();renderSponsors();
+}
+function updateSponsor(id,field,val) {
+  for(var i=0;i<sponsors.length;i++){if(sponsors[i].id===id){sponsors[i][field]=val;break;}}
+  renderSponsors();
+}
+function handleSponsorImg(input,id) {
+  if(!input.files||!input.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    for(var i=0;i<sponsors.length;i++){if(sponsors[i].id===id){sponsors[i].image=e.target.result;break;}}
+    var t=document.getElementById('sth-'+id);if(t)t.src=e.target.result;
+    renderSponsors();
+  };
+  r.readAsDataURL(input.files[0]);
+}
+var BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+function renderSponsorsList() {
+  var el=document.getElementById('sponsors-list');if(!el)return;
+  var html='';
+  for(var i=0;i<sponsors.length;i++){
+    var s=sponsors[i];
+    html+='<div class="rec-item" style="margin-bottom:14px">'
+      +'<div class="iup" onclick="document.getElementById(\'sinp-'+s.id+'\').click()" style="margin-bottom:8px">'
+      +'<img id="sth-'+s.id+'" class="iup-thumb" src="'+(s.image||BLANK)+'">'
+      +'<div class="iup-text"><strong>Logo</strong>Cliquer pour changer</div></div>'
+      +'<input type="file" id="sinp-'+s.id+'" class="img-file-input" accept="image/*" onchange="handleSponsorImg(this,\''+s.id+'\')">'
+      +'<div class="field-row" style="margin-bottom:6px"><input class="fi" value="'+esc(s.name)+'" placeholder="Nom du sponsor" oninput="updateSponsor(\''+s.id+'\',\'name\',this.value)"></div>'
+      +'<div class="field-row" style="margin-bottom:8px"><input class="fi" value="'+esc(s.url)+'" placeholder="https://website.com" oninput="updateSponsor(\''+s.id+'\',\'url\',this.value)"></div>'
+      +'<button class="btn-sm btn-sm-del" onclick="delSponsor(\''+s.id+'\')" style="font-size:9px">&#10005; Supprimer</button></div>';
+  }
+  el.innerHTML=html;
+}
+function renderSponsors() {
+  var el=document.getElementById('sponsors-grid');if(!el)return;
+  var html='';
+  for(var i=0;i<sponsors.length;i++){
+    var s=sponsors[i];
+    var inner=s.image?'<img src="'+s.image+'" style="max-width:88%;max-height:160px;object-fit:contain">'
+      :'<span style="font-family:\'Cormorant Garamond\',serif;font-size:18px;color:#9a8060">'+esc(s.name)+'</span>';
+    if(s.url){
+      html+='<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="display:flex;background:#fff;border:1px solid rgba(201,169,110,.25);border-radius:6px;padding:36px 44px;align-items:center;justify-content:center;min-height:220px;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,.06);transition:box-shadow .25s,transform .25s" onmouseover="this.style.boxShadow=\'0 10px 36px rgba(0,0,0,.13)\';this.style.transform=\'translateY(-3px)\'" onmouseout="this.style.boxShadow=\'0 4px 20px rgba(0,0,0,.06)\';this.style.transform=\'none\'">'+inner+'</a>';
+    } else {
+      html+='<div style="display:flex;background:#fff;border:1px solid rgba(201,169,110,.25);border-radius:6px;padding:36px 44px;align-items:center;justify-content:center;min-height:220px;box-shadow:0 4px 20px rgba(0,0,0,.06)">'+inner+'</div>';
+    }
+  }
+  if(!html)html='<div style="color:#9a8060;font-size:16px;text-align:center;padding:40px;grid-column:1/-1">Aucun partenaire.</div>';
+  el.innerHTML=html;
+}
+
+// ══ PHOTOS ══
+var photos = [];
+function addPhoto() {
+  var p={id:uid(),title:'',description:'',image:null};
+  photos.push(p);renderPhotosList();renderPhotos();toast('Photo ajout\u00e9e');
+}
+function delPhoto(id) {
+  var n=[];for(var i=0;i<photos.length;i++){if(photos[i].id!==id)n.push(photos[i]);}
+  photos=n;renderPhotosList();renderPhotos();
+}
+function updatePhoto(id,field,val) {
+  for(var i=0;i<photos.length;i++){if(photos[i].id===id){photos[i][field]=val;break;}}
+  renderPhotos();
+}
+function handlePhotoImg(input,id) {
+  if(!input.files||!input.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    for(var i=0;i<photos.length;i++){if(photos[i].id===id){photos[i].image=e.target.result;break;}}
+    var t=document.getElementById('pth-'+id);if(t)t.src=e.target.result;
+    renderPhotos();
+  };
+  r.readAsDataURL(input.files[0]);
+}
+function renderPhotosList() {
+  var el=document.getElementById('photos-list');if(!el)return;
+  var html='';
+  for(var i=0;i<photos.length;i++){
+    var p=photos[i];
+    html+='<div class="rec-item" style="margin-bottom:14px">'
+      +'<div class="iup" onclick="document.getElementById(\'pinp-'+p.id+'\').click()" style="margin-bottom:8px">'
+      +'<img id="pth-'+p.id+'" class="iup-thumb" style="height:48px;width:64px;object-fit:cover" src="'+(p.image||BLANK)+'">'
+      +'<div class="iup-text"><strong>Photo</strong>Cliquer pour changer</div></div>'
+      +'<input type="file" id="pinp-'+p.id+'" class="img-file-input" accept="image/*" onchange="handlePhotoImg(this,\''+p.id+'\')">'
+      +'<div class="field-row" style="margin-bottom:6px"><input class="fi" value="'+esc(p.title)+'" placeholder="Titre" oninput="updatePhoto(\''+p.id+'\',\'title\',this.value)"></div>'
+      +'<div class="field-row" style="margin-bottom:8px"><textarea class="fta" rows="2" placeholder="Description (optionnel)" oninput="updatePhoto(\''+p.id+'\',\'description\',this.value)">'+esc(p.description)+'</textarea></div>'
+      +'<button class="btn-sm btn-sm-del" onclick="delPhoto(\''+p.id+'\')" style="font-size:9px">&#10005; Supprimer</button></div>';
+  }
+  el.innerHTML=html;
+}
+function renderPhotos() {
+  var el=document.getElementById('photos-grid');if(!el)return;
+  var html='';
+  for(var i=0;i<photos.length;i++){
+    var p=photos[i];
+    html+='<div style="background:#fff;border:1px solid rgba(201,169,110,.15);border-radius:4px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04)">'
+      +(p.image?'<img src="'+p.image+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">'
+        :'<div style="width:100%;aspect-ratio:4/3;background:#e8e4dc;display:flex;align-items:center;justify-content:center"><span style="font-size:32px;opacity:.2">&#128247;</span></div>')
+      +'<div style="padding:16px">'
+      +(p.title?'<div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:600;color:#1a2744;margin-bottom:6px">'+esc(p.title)+'</div>':'')
+      +(p.description?'<div style="font-size:16px;color:#5a4030;line-height:1.6">'+esc(p.description)+'</div>':'')
+      +'</div></div>';
+  }
+  if(!html)html='<div style="color:#9a8060;font-size:16px;text-align:center;padding:40px;grid-column:1/-1">Aucune photo.</div>';
+  el.innerHTML=html;
+}
+
+loadSaved();
+// Warn before leaving if there are unsaved changes
+window.addEventListener('beforeunload', function(e) {
+  e.preventDefault();
+  e.returnValue = 'Vos modifications non export\u00e9es seront perdues. Avez-vous export\u00e9 le HTML?';
+  return e.returnValue;
+});
+// Auto-remind every 10 minutes to export
+setInterval(function() {
+  toast('\u23f0 Rappel: cliquez Export HTML pour sauvegarder vos images et modifications.');
+}, 600000);
+</script>
+</body>
+</html>
