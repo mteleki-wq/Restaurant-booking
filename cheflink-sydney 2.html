@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ChefLink Sydney — Premium Chef Staffing Platform</title>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -18,592 +15,1034 @@ input,textarea,select{font-family:'Jost',sans-serif}
 img{object-fit:cover}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-thumb{background:#C9A84C;border-radius:3px}
-.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+
+/* NAV */
+.nav{background:#1C1C1C;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-logo{cursor:pointer;display:flex;align-items:center;gap:8px}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:20px;color:#C9A84C;font-weight:700;letter-spacing:1px}
+.nav-logo-sub{font-size:9px;color:#8A8580;letter-spacing:3px;text-transform:uppercase;margin-top:3px}
+.nav-desktop{display:flex;gap:24px;align-items:center}
+.nav-link{font-size:12px;color:#CCC;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:color .2s;font-weight:400;border:none;background:none;padding:0}
+.nav-link:hover,.nav-link.active{color:#C9A84C}
+.btn-nav{padding:7px 16px;border-radius:2px;font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;border:none;cursor:pointer;background:#C9A84C;color:#1C1C1C;transition:all .2s}
+.btn-nav:hover{background:#9B7E35}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:4px;width:34px;height:34px}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:1px;transition:all .3s;transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* MOBILE MENU */
+.mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:#1C1C1C;border-top:1px solid rgba(255,255,255,.08);z-index:199;flex-direction:column;padding:8px 0 16px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.mobile-menu.open{display:flex}
+.mobile-menu-link{padding:13px 24px;font-size:13px;color:rgba(255,255,255,.65);letter-spacing:.8px;text-transform:uppercase;cursor:pointer;border:none;background:none;text-align:left;font-family:'Jost',sans-serif;transition:color .2s;width:100%;border-left:3px solid transparent}
+.mobile-menu-link:hover,.mobile-menu-link.active{color:#C9A84C;border-left-color:#C9A84C;background:rgba(255,255,255,.04)}
+.mobile-menu-hire{margin:10px 24px 0;padding:12px 0;background:#C9A84C;color:#1C1C1C;border:none;border-radius:2px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;width:calc(100% - 48px);transition:background .2s}
+.mobile-menu-hire:hover{background:#9B7E35}
+
+/* BUTTONS */
+.btn{padding:10px 22px;border-radius:2px;font-size:12px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;display:inline-block}
+.btn-dark{background:#1C1C1C;color:#fff}.btn-dark:hover{background:#C9A84C;color:#1C1C1C}
+.btn-outline{background:transparent;color:#1C1C1C;border:1px solid #1C1C1C}.btn-outline:hover{background:#1C1C1C;color:#fff}
+.btn-gold{background:#C9A84C;color:#1C1C1C}.btn-gold:hover{background:#9B7E35;color:#fff}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
 .badge-green{background:#E8F5E4;color:#3A7D2C}
 .badge-gold{background:#FBF4E2;color:#9B7E35}
 .badge-orange{background:#FDF0EA;color:#C04E1A}
-.btn{padding:10px 24px;border-radius:2px;font-size:13px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;border:none;transition:all .25s;cursor:pointer}
-.btn-primary{background:#1C1C1C;color:#fff}
-.btn-primary:hover{background:#C9A84C;color:#1C1C1C}
-.btn-outline{background:transparent;color:#1C1C1C;border:1px solid #1C1C1C}
-.btn-outline:hover{background:#1C1C1C;color:#fff}
-.btn-gold{background:#C9A84C;color:#1C1C1C}
-.btn-gold:hover{background:#9B7E35;color:#fff}
-.input{width:100%;padding:10px 14px;border:1px solid #E8E2D6;background:#fff;border-radius:2px;font-size:14px;outline:none;box-sizing:border-box}
-.input:focus{border-color:#C9A84C}
-.tag{display:inline-block;padding:4px 10px;background:#F5F1E8;border:1px solid #E8E2D6;border-radius:1px;font-size:12px;color:#8A8580;margin:2px}
-.fl{display:block;font-size:12px;font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;color:#8A8580}
+.tag{display:inline-block;padding:3px 9px;background:#F5F1E8;border:1px solid #E8E2D6;border-radius:1px;font-size:11px;color:#8A8580;margin:2px}
+.inp{width:100%;padding:10px 13px;border:1px solid #E8E2D6;background:#fff;border-radius:2px;font-size:13px;outline:none;font-family:'Jost',sans-serif;transition:border-color .2s}
+.inp:focus{border-color:#C9A84C}
+.label{display:block;font-size:11px;font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;color:#8A8580}
+
+/* HERO */
+.hero{position:relative;height:460px;overflow:hidden;background:#1C1C1C}
+.hero img{width:100%;height:100%;object-fit:cover;opacity:.42;display:block}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center}
+.hero-eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9A84C;margin-bottom:12px;font-weight:500}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(22px,5vw,42px);color:#fff;max-width:660px;margin-bottom:12px;font-weight:700;line-height:1.12}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.7);max-width:480px;margin-bottom:28px;font-weight:300;line-height:1.65}
+
+/* SEARCH BAR - stacks on mobile, inline on desktop */
+.search-bar{display:flex;flex-direction:column;gap:8px;max-width:620px;width:100%}
+.search-bar input,.search-bar select{padding:12px 16px;font-size:13px;border:none;border-radius:2px;outline:none;font-family:'Jost',sans-serif;width:100%}
+.search-bar select{color:#666;background:#fff}
+.search-bar button{border:none;background:#1C1C1C;color:#fff;padding:12px 0;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Jost',sans-serif;transition:all .2s;width:100%}
+.search-bar button:hover{background:#C9A84C;color:#1C1C1C}
+
+/* FILTERS */
+.filters-strip{background:#F5F1E8;padding:14px 20px;border-bottom:1px solid #E8E2D6;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.filter-pill{padding:5px 13px;border:1px solid #E8E2D6;border-radius:20px;font-size:10px;cursor:pointer;transition:all .2s;background:#fff;color:#8A8580;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.filter-pill:hover{background:#C9A84C;color:#1C1C1C;border-color:#C9A84C}
+
+/* LAYOUT */
+.section{padding:48px 24px;max-width:1100px;margin:0 auto}
+.section-eyebrow{letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:6px;font-weight:500}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px)}
+
+/* CHEF CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.chef-card{background:#fff;border:1px solid #E8E2D6;border-radius:2px;overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s}
+.chef-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.11)}
+.card-hero{height:148px;overflow:hidden;position:relative}
+.card-hero img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.chef-card:hover .card-hero img{transform:scale(1.04)}
+.card-hero-overlay{position:absolute;bottom:0;left:0;right:0;height:64px;background:linear-gradient(transparent,rgba(0,0,0,.58))}
+.card-body{padding:15px 17px}
+.card-top{display:flex;gap:11px;align-items:flex-start;margin-bottom:10px}
+.card-photo{width:46px;height:46px;border-radius:50%;border:2px solid #C9A84C;object-fit:cover;flex-shrink:0}
+.card-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;margin-bottom:2px}
+.card-title{font-size:11px;color:#8A8580;line-height:1.35}
+.card-meta{display:flex;justify-content:space-between;font-size:11px;color:#8A8580;margin-bottom:9px}
+.card-summary{font-size:12px;color:#6B6560;line-height:1.55;margin-bottom:13px;border-top:1px solid #E8E2D6;padding-top:10px}
+.card-footer{display:flex;justify-content:space-between;align-items:center}
+
+/* HOW IT WORKS */
+.how{background:#1C1C1C;padding:56px 24px}
+.how-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:36px;text-align:center}
+.how-num{font-family:'Playfair Display',serif;font-size:42px;color:#C9A84C;font-weight:700;line-height:1;margin-bottom:10px}
+.how-title{font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:8px}
+.how-desc{color:rgba(255,255,255,.5);font-size:13px;line-height:1.65;font-weight:300}
+
+/* CTA SPLIT */
+.cta-split{display:grid;grid-template-columns:1fr 1fr}
+.cta-gold{background:#C9A84C;padding:52px 48px;display:flex;flex-direction:column;justify-content:center}
+.cta-dark{background:#1C1C1C;padding:52px 48px;display:flex;flex-direction:column;justify-content:center}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:740px;margin:0 auto}
+
+/* DIRECTORY */
+.dir-header{background:#1C1C1C;padding:36px 24px 26px}
+.dir-filters{background:#fff;padding:14px 20px;border-bottom:1px solid #E8E2D6;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* PORTFOLIO */
+.pf-hero{position:relative;height:360px;overflow:hidden;background:#1C1C1C}
+.pf-hero img{width:100%;height:100%;object-fit:cover;opacity:.48}
+.pf-hero-content{position:absolute;inset:0;display:flex;align-items:flex-end;padding:32px 36px;background:linear-gradient(transparent 25%,rgba(0,0,0,.78))}
+.pf-body{max-width:1060px;margin:0 auto;padding:44px 24px;display:grid;grid-template-columns:2fr 1fr;gap:52px}
+.pf-section{margin-bottom:36px}
+.pf-section-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #E8E2D6}
+.dish-card{border:1px solid #E8E2D6;border-radius:2px;margin-bottom:10px;overflow:hidden}
+.dish-header{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;cursor:pointer;background:#fff;transition:background .2s}
+.dish-header:hover{background:#F5F1E8}
+.dish-body{display:grid;grid-template-columns:170px 1fr}
+.sidebar-card{background:#F5F1E8;border:1px solid #E8E2D6;border-radius:2px;padding:22px;margin-bottom:16px;position:sticky;top:72px}
+.sidebar-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #E8E2D6;font-size:13px}
+.sidebar-row:last-child{border-bottom:none}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* UPLOAD */
+.upload-wrap{max-width:680px;margin:0 auto;padding:48px 24px}
+.form-section{margin-bottom:28px}
+.form-section-title{font-family:'Playfair Display',serif;font-size:16px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E8E2D6}
+.form-row{display:flex;gap:14px;margin-bottom:12px}
+.form-row > *{flex:1;min-width:0}
+.cuisine-pill{padding:6px 12px;border:1px solid #E8E2D6;border-radius:20px;font-size:12px;cursor:pointer;transition:all .2s;background:#fff;color:#8A8580;margin:3px;display:inline-block;user-select:none}
+.cuisine-pill.selected{background:#C9A84C;color:#1C1C1C;border-color:#C9A84C}
+.cuisine-pill:hover{border-color:#C9A84C}
+
+/* ADMIN */
+.admin-wrap{display:flex;min-height:calc(100vh - 56px)}
+.admin-sidebar{width:200px;background:#1C1C1C;padding:24px 0;flex-shrink:0}
+.admin-logo-a{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+.admin-logo-a div:first-child{font-family:'Playfair Display',serif;font-size:16px;color:#C9A84C;font-weight:700}
+.admin-logo-a div:last-child{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+.admin-tab{padding:11px 20px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.5);border-left:2px solid transparent;transition:all .2s}
+.admin-tab:hover,.admin-tab.active{color:#fff;background:rgba(255,255,255,.07);border-left-color:#C9A84C}
+.admin-main{flex:1;padding:28px 32px;background:#FAF8F3;overflow-y:auto;min-width:0}
+.admin-row{background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:13px 17px;display:flex;gap:13px;align-items:center;margin-bottom:10px}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal{background:#fff;border-radius:4px;padding:30px;width:100%;max-width:540px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+
+footer{background:#1C1C1C;padding:36px 24px;text-align:center}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET (max 768px)
+══════════════════════════════════════ */
+@media(max-width:768px){
+  .pricing-grid{grid-template-columns:1fr;max-width:340px}
+  .pf-body{grid-template-columns:1fr;gap:28px}
+  .pf-hero{height:280px}
+  .pf-hero-content{padding:20px}
+  .sidebar-card{position:static}
+  .how-grid{grid-template-columns:1fr;gap:32px}
+  .cta-split{grid-template-columns:1fr}
+  .cta-gold,.cta-dark{padding:40px 32px}
+  .dish-body{grid-template-columns:1fr}
+  .dish-body img{height:160px;width:100%}
+  .admin-wrap{flex-direction:column;min-height:unset}
+  .admin-sidebar{width:100%;display:flex;flex-wrap:wrap;align-items:center;padding:10px 16px;gap:4px}
+  .admin-logo-a{display:none}
+  .admin-tab{padding:7px 14px;border-left:none;border-bottom:2px solid transparent;font-size:11px;white-space:nowrap}
+  .admin-tab.active{border-left:none;border-bottom-color:#C9A84C}
+  .admin-main{padding:20px}
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MOBILE (max 640px)
+══════════════════════════════════════ */
+@media(max-width:640px){
+  /* Show hamburger, hide desktop nav */
+  .nav-desktop{display:none}
+  .hamburger{display:flex}
+
+  /* Typography scale */
+  .hero{height:420px}
+  .hero-h1{font-size:24px}
+  .hero-sub{font-size:13px;margin-bottom:22px}
+
+  /* Search stacks vertically — already column by default */
+
+  /* Sections */
+  .section{padding:36px 16px}
+
+  /* Directory filters stack */
+  .dir-filters{flex-direction:column;align-items:stretch}
+  .dir-filters input,.dir-filters select{width:100%}
+  .dir-header{padding:28px 16px 20px}
+
+  /* Portfolio hero smaller */
+  .pf-hero{height:240px}
+  .pf-hero-content{padding:14px 16px}
+
+  /* Form rows stack */
+  .form-row{flex-direction:column;gap:10px}
+  .upload-wrap{padding:32px 16px}
+
+  /* Admin rows stack buttons */
+  .admin-row{flex-direction:column;align-items:flex-start}
+  .admin-row-actions{display:flex;flex-wrap:wrap;gap:6px;width:100%}
+
+  /* Gallery */
+  .gallery-grid{gap:6px}
+}
+
+/* ══════════════════════════════════════
+   DESKTOP — search bar inline
+══════════════════════════════════════ */
+@media(min-width:641px){
+  .search-bar{flex-direction:row;overflow:hidden;border-radius:2px;background:#fff}
+  .search-bar input{border-radius:0;flex:1}
+  .search-bar select{border-left:1px solid #E8E2D6;border-radius:0;min-width:140px;flex-shrink:0}
+  .search-bar button{border-radius:0;padding:0 28px;width:auto;flex-shrink:0}
+}
 </style>
 </head>
 <body>
-<div id="root"></div>
 
-<script type="text/babel">
-const { useState } = React;
+<!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <span class="nav-logo-text">ChefLink</span>
+    <span class="nav-logo-sub">Sydney</span>
+  </div>
+  <div class="nav-desktop">
+    <button class="nav-link active" id="nl-home" onclick="showPage('home')">Home</button>
+    <button class="nav-link" id="nl-directory" onclick="showPage('directory')">Find Chefs</button>
+    <button class="nav-link" id="nl-upload" onclick="showPage('upload')">Join as Chef</button>
+    <button class="nav-link" id="nl-admin" onclick="showPage('admin')">Admin</button>
+    <button class="btn-nav" onclick="showPage('inquiry')">Hire a Chef</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-const CUISINES = ["All","French","Italian","Modern Australian","Asian","Japanese","Thai","Korean","Indian","Mediterranean","Pastry","Bakery","Seafood","Café","Fine Dining","Catering","Events","Hotel Banquet"];
-const LOCATIONS = ["All","Sydney CBD","Surry Hills","Newtown","Glebe","Bondi","Manly","North Sydney","Parramatta","Chatswood","Darlinghurst","Paddington","Mosman","Balmain","Rozelle"];
-const WORK_TYPES = ["All","Casual","Part-Time","Contract","Events","Full-Time"];
-const AVAILABILITY = ["All","Weekdays","Weekends","Evenings","Immediate","Flexible"];
-const G = {
-  ivory:"#FAF8F3",charcoal:"#1C1C1C",gold:"#C9A84C",warmGrey:"#F0EDE6",
-  softGrey:"#8A8580",orange:"#D4622A",white:"#FFFFFF",cream:"#F5F1E8",
-  darkGold:"#9B7E35",border:"#E8E2D6",textMuted:"#6B6560"
-};
+<!-- ══ MOBILE MENU ═══════════════════════════════════════════════════════ -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-menu-link active" id="ml-home"      onclick="showPage('home');closeMenu()">Home</button>
+  <button class="mobile-menu-link"        id="ml-directory" onclick="showPage('directory');closeMenu()">Find Chefs</button>
+  <button class="mobile-menu-link"        id="ml-upload"    onclick="showPage('upload');closeMenu()">Join as Chef</button>
+  <button class="mobile-menu-link"        id="ml-admin"     onclick="showPage('admin');closeMenu()">Admin</button>
+  <button class="mobile-menu-hire" onclick="showPage('inquiry');closeMenu()">Hire a Chef</button>
+</div>
 
-const SEED_CHEFS = [
-  {id:"c1",approved:true,featured:true,plan:"premium",name:"Marc Dupont",title:"Executive Chef — French Fine Dining",location:"Sydney CBD",cuisine:["French","Fine Dining"],experience:14,rate:"$85–$120/hr",availability:"Weekends / Casual",workType:["Casual","Events"],summary:"Award-winning French chef with 14 years across Paris & Sydney.",bio:"Trained under Michelin-starred kitchens in Lyon before moving to Sydney in 2012. Specialises in classical French technique with a modern Australian twist, using local seasonal produce. Former head chef at Quay and Bennelong.",qualifications:"Advanced Diploma of Hospitality Management · Le Cordon Bleu Paris",restaurants:["Quay","Bennelong","Restaurant Leo","Aria"],photo:"https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&q=80",heroPhoto:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80",gallery:["https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80","https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80","https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80","https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80"],dishes:[{name:"Duck Confit with Orange Jus",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",category:"French",desc:"Slow-cooked duck leg, confit overnight, served with bitter orange reduction and pommes sarladaises.",chefNote:"My signature for 8 years. Works beautifully as a banquet entrée."},{name:"Bouillabaisse Marseillaise",img:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80",category:"Seafood",desc:"Traditional Provençal fish stew with local Sydney rock oysters and saffron rouille.",chefNote:"Adapted for Australian seafood — showcases the best of both worlds."}],email:"marc@cheflink.com.au",phone:"0412 000 001",instagram:"@marcdupont_chef"},
-  {id:"c2",approved:true,featured:true,plan:"premium",name:"Yuki Tanaka",title:"Sushi Master & Modern Japanese",location:"Surry Hills",cuisine:["Japanese","Asian","Fine Dining"],experience:10,rate:"$75–$110/hr",availability:"Flexible",workType:["Casual","Contract","Events"],summary:"Tokyo-trained sushi master bringing authentic Edomae technique to Sydney.",bio:"Yuki trained under a sushi master in Tsukiji, Tokyo for six years before establishing herself in Sydney's vibrant dining scene. She blends Edomae sushi traditions with local Australian ingredients.",qualifications:"Culinary Arts Diploma, Tokyo · WSET Level 2 Sake",restaurants:["Nobu Sydney","Sokyo","est.","Billy Kwong"],photo:"https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&q=80",heroPhoto:"https://images.unsplash.com/photo-1553621042-f6e147245754?w=900&q=80",gallery:["https://images.unsplash.com/photo-1563612116625-3012372fccce?w=600&q=80","https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&q=80","https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=600&q=80","https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80"],dishes:[{name:"Omakase Nigiri Selection",img:"https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80",category:"Japanese",desc:"8-piece seasonal nigiri featuring Sydney kingfish, ocean trout and Tasmanian sea urchin.",chefNote:"Changes with the season. Always sourced from trusted local fishmongers."},{name:"Wagyu Tataki with Ponzu",img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",category:"Japanese",desc:"Grade 9+ Australian wagyu, lightly seared, with house-made citrus ponzu.",chefNote:"A crowd favourite at private events."}],email:"yuki@cheflink.com.au",phone:"0412 000 002",instagram:"@yuki_sushi_sydney"},
-  {id:"c3",approved:true,featured:false,plan:"basic",name:"Sofia Ricci",title:"Pastry Chef & Chocolatier",location:"Newtown",cuisine:["Pastry","Bakery","Italian"],experience:8,rate:"$65–$90/hr",availability:"Weekends",workType:["Casual","Events"],summary:"Italian-trained pastry chef specialising in artisan desserts and chocolate work.",bio:"Sofia studied under renowned pastry chefs in Florence and Milan before bringing her skills to Sydney. Her desserts are known for their architectural beauty and precise flavour balance.",qualifications:"Diploma Pasticceria, Florence · Certificate in Chocolate Arts",restaurants:["Quay","Rockpool","Bathers' Pavilion","Aria"],photo:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",heroPhoto:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=80",gallery:["https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80","https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=600&q=80","https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&q=80","https://images.unsplash.com/photo-1559181567-c3190ca9be46?w=600&q=80"],dishes:[{name:"Tiramisu Moderno",img:"https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80",category:"Pastry",desc:"Deconstructed tiramisu with mascarpone espuma, coffee gel and house-made savoiardi.",chefNote:"My reimagined classic — always a showstopper at events."},{name:"Dark Chocolate Sphere",img:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80",category:"Pastry",desc:"70% Valrhona sphere with caramel centre, dissolved tableside with warm sauce.",chefNote:"Designed for fine dining table theatre."}],email:"sofia@cheflink.com.au",phone:"0412 000 003",instagram:"@sofiariccipatisserie"},
-  {id:"c4",approved:true,featured:false,plan:"basic",name:"James Okafor",title:"Modern Australian & Catering Specialist",location:"Parramatta",cuisine:["Modern Australian","Catering","Events"],experience:11,rate:"$70–$95/hr",availability:"Immediate",workType:["Casual","Contract","Events","Part-Time"],summary:"Versatile chef with 11 years delivering modern Australian cuisine at scale.",bio:"James has led kitchen brigades across Sydney's western suburbs, building expertise in large-scale catering and corporate events. His modern Australian cooking celebrates native ingredients.",qualifications:"Certificate IV Commercial Cookery · Food Safety Supervisor",restaurants:["Flying Fish","Aqua Dining","The Grounds of Alexandria","Merivale Events"],photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",heroPhoto:"https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=900&q=80",gallery:["https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80","https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80","https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80","https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80"],dishes:[{name:"Kangaroo Loin with Wattleseed Jus",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",category:"Modern Australian",desc:"Perfectly seared kangaroo loin, wattleseed and red wine reduction, bunya nut purée.",chefNote:"Showcases native Australian ingredients — always a conversation starter."},{name:"Barramundi with Finger Lime",img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",category:"Seafood",desc:"Crispy-skinned barramundi, native finger lime beurre blanc, samphire and sea herbs.",chefNote:"My go-to for corporate lunches."}],email:"james@cheflink.com.au",phone:"0412 000 004",instagram:"@jamesokafor_chef"}
+<!-- ══ HOME ══════════════════════════════════════════════════════════════ -->
+<div id="page-home">
+  <div class="hero">
+    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=75" alt="Professional kitchen">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Sydney's Premier Chef Staffing Platform</p>
+      <h1 class="hero-h1">Find Skilled Chefs in Sydney for Casual, Contract &amp; Event Work</h1>
+      <p class="hero-sub">A premium platform connecting restaurants with experienced chefs through professional portfolios.</p>
+      <div class="search-bar">
+        <input type="text" placeholder="Search chefs, cuisine, location...">
+        <select>
+          <option>All Cuisines</option>
+          <option>French</option><option>Japanese</option><option>Italian</option>
+          <option>Modern Australian</option><option>Pastry</option><option>Asian</option>
+          <option>Catering</option><option>Fine Dining</option><option>Seafood</option>
+        </select>
+        <button onclick="showPage('directory')">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-strip">
+    <span class="filter-pill" onclick="showPage('directory')">French</span>
+    <span class="filter-pill" onclick="showPage('directory')">Japanese</span>
+    <span class="filter-pill" onclick="showPage('directory')">Italian</span>
+    <span class="filter-pill" onclick="showPage('directory')">Modern Australian</span>
+    <span class="filter-pill" onclick="showPage('directory')">Pastry</span>
+    <span class="filter-pill" onclick="showPage('directory')">Asian</span>
+    <span class="filter-pill" onclick="showPage('directory')">Catering</span>
+    <span class="filter-pill" onclick="showPage('directory')">Fine Dining</span>
+    <span class="filter-pill" onclick="showPage('directory')">Events</span>
+  </div>
+
+  <div class="section">
+    <p class="section-eyebrow">Handpicked Talent</p>
+    <h2 class="section-title" style="margin-bottom:32px">Featured Chefs</h2>
+    <div class="grid" id="featured-grid"></div>
+    <div style="text-align:center;margin-top:36px">
+      <button class="btn btn-outline" onclick="showPage('directory')">View All Chefs</button>
+    </div>
+  </div>
+
+  <div class="how">
+    <div style="text-align:center;margin-bottom:40px">
+      <p class="section-eyebrow">Simple Process</p>
+      <h2 class="section-title" style="color:#fff">How ChefLink Works</h2>
+    </div>
+    <div class="how-grid">
+      <div><div class="how-num">01</div><div class="how-title">Search</div><p class="how-desc">Browse verified chef profiles by cuisine, availability and location.</p></div>
+      <div><div class="how-num">02</div><div class="how-title">Review</div><p class="how-desc">View full portfolios, experience, dish galleries and references.</p></div>
+      <div><div class="how-num">03</div><div class="how-title">Connect</div><p class="how-desc">Send a direct inquiry and arrange your booking easily.</p></div>
+    </div>
+  </div>
+
+  <div class="cta-split">
+    <div class="cta-gold">
+      <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#9B7E35;margin-bottom:8px;font-weight:500">For Chefs</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,30px);margin-bottom:12px;color:#1C1C1C">Showcase Your Talent</h2>
+      <p style="font-size:14px;color:#1C1C1C;opacity:.75;margin-bottom:22px;font-weight:300;line-height:1.7">Create your portfolio, upload your best work and connect with Sydney's top restaurants and venues.</p>
+      <button class="btn btn-dark" style="align-self:flex-start" onclick="showPage('upload')">Create Your Profile</button>
+    </div>
+    <div class="cta-dark">
+      <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:8px;font-weight:500">For Restaurants</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,30px);margin-bottom:12px;color:#fff">Find the Right Chef</h2>
+      <p style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:22px;font-weight:300;line-height:1.7">Search verified chefs for your specific cuisine, date and budget. Fast, easy, professional.</p>
+      <button class="btn btn-gold" style="align-self:flex-start" onclick="showPage('inquiry')">Post a Request</button>
+    </div>
+  </div>
+
+  <div class="section" style="text-align:center">
+    <p class="section-eyebrow">Chef Plans</p>
+    <h2 class="section-title" style="margin-bottom:36px">Simple, Transparent Pricing</h2>
+    <div class="pricing-grid">
+      <div style="background:#F0EDE6;border-radius:4px;padding:28px 22px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px">Free Trial</h3>
+        <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:20px">$0</div>
+        <ul style="list-style:none;font-size:13px;color:#8A8580;text-align:left;margin-bottom:20px">
+          <li style="padding:5px 0;border-bottom:1px solid #E8E2D6">✓ Basic profile</li>
+          <li style="padding:5px 0;border-bottom:1px solid #E8E2D6">✓ One photo</li>
+          <li style="padding:5px 0">✓ 7-day trial</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;padding:10px 0" onclick="showPage('upload')">Start Free</button>
+      </div>
+      <div style="background:#fff;border:1px solid #E8E2D6;border-radius:4px;padding:28px 22px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px">Basic</h3>
+        <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:20px">$29<span style="font-size:15px;font-weight:400">/mo</span></div>
+        <ul style="list-style:none;font-size:13px;color:#8A8580;text-align:left;margin-bottom:20px">
+          <li style="padding:5px 0;border-bottom:1px solid #E8E2D6">✓ Full profile page</li>
+          <li style="padding:5px 0;border-bottom:1px solid #E8E2D6">✓ Portfolio</li>
+          <li style="padding:5px 0">✓ Cuisine tags</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;padding:10px 0" onclick="showPage('upload')">Get Started</button>
+      </div>
+      <div style="background:#1C1C1C;border-radius:4px;padding:28px 22px;position:relative">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#C9A84C;color:#1C1C1C;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:4px 16px;border-radius:20px;white-space:nowrap">Most Popular</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px;color:#fff">Premium</h3>
+        <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:20px;color:#C9A84C">$59<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,.4)">/mo</span></div>
+        <ul style="list-style:none;font-size:13px;color:rgba(255,255,255,.6);text-align:left;margin-bottom:20px">
+          <li style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.1)">✓ Featured listing</li>
+          <li style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.1)">✓ Full gallery</li>
+          <li style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.1)">✓ Signature recipes</li>
+          <li style="padding:5px 0">✓ Priority placement</li>
+        </ul>
+        <button class="btn btn-gold" style="width:100%;padding:10px 0" onclick="showPage('upload')">Go Premium</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div style="font-family:'Playfair Display',serif;font-size:22px;color:#C9A84C;margin-bottom:8px">ChefLink Sydney</div>
+    <p style="color:rgba(255,255,255,.35);font-size:13px;letter-spacing:.5px">© 2025 ChefLink Sydney · Premium Chef Staffing Platform · All Rights Reserved</p>
+  </footer>
+</div>
+
+<!-- ══ DIRECTORY ══════════════════════════════════════════════════════════ -->
+<div id="page-directory" style="display:none">
+  <div class="dir-header">
+    <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:5px;font-weight:500">Chef Directory</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,36px);color:#fff;margin-bottom:3px">Find Your Chef</h1>
+    <p id="dir-count" style="color:rgba(255,255,255,.4);font-size:13px;font-weight:300"></p>
+  </div>
+  <div class="dir-filters">
+    <input class="inp" type="text" id="dir-search" placeholder="Search name or cuisine..." style="flex:1;min-width:160px" oninput="renderDirectory()">
+    <select class="inp" id="dir-cuisine" style="min-width:140px" onchange="renderDirectory()">
+      <option value="">All Cuisines</option>
+      <option>French</option><option>Japanese</option><option>Italian</option>
+      <option>Modern Australian</option><option>Pastry</option><option>Asian</option>
+      <option>Catering</option><option>Fine Dining</option><option>Seafood</option>
+    </select>
+    <select class="inp" id="dir-avail" style="min-width:130px" onchange="renderDirectory()">
+      <option value="">Any Availability</option>
+      <option>Weekdays</option><option>Weekends</option><option>Immediate</option><option>Flexible</option>
+    </select>
+    <button class="btn btn-outline" style="font-size:11px;padding:8px 14px;white-space:nowrap"
+      onclick="document.getElementById('dir-search').value='';document.getElementById('dir-cuisine').value='';document.getElementById('dir-avail').value='';renderDirectory()">Clear</button>
+  </div>
+  <div class="section" style="padding-top:30px">
+    <div class="grid" id="dir-grid"></div>
+  </div>
+</div>
+
+<!-- ══ PORTFOLIO ══════════════════════════════════════════════════════════ -->
+<div id="page-portfolio" style="display:none">
+  <div class="pf-hero">
+    <img id="pf-hero" src="" alt="Chef hero">
+    <div class="pf-hero-content">
+      <button onclick="showPage('directory')" style="position:absolute;top:16px;left:20px;background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.3);padding:7px 14px;border-radius:2px;font-size:12px;cursor:pointer;font-family:'Jost',sans-serif">← Back</button>
+      <div style="display:flex;gap:18px;align-items:flex-end">
+        <img id="pf-photo" src="" alt="" style="width:88px;height:88px;border-radius:50%;border:3px solid #C9A84C;object-fit:cover;flex-shrink:0">
+        <div>
+          <div id="pf-cuisines" style="margin-bottom:7px"></div>
+          <h1 id="pf-name" style="font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,38px);color:#fff;margin-bottom:4px"></h1>
+          <p id="pf-title-el" style="font-size:14px;color:rgba(255,255,255,.65);font-weight:300"></p>
+          <div id="pf-meta" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:12px;color:rgba(255,255,255,.5)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pf-body">
+    <div>
+      <div class="pf-section">
+        <div class="pf-section-title">About the Chef</div>
+        <p id="pf-bio" style="font-size:15px;line-height:1.85;font-weight:300"></p>
+      </div>
+      <div class="pf-section">
+        <div class="pf-section-title">Experience &amp; Restaurants</div>
+        <div id="pf-restaurants" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px"></div>
+        <p id="pf-quals" style="font-size:13px;color:#8A8580"></p>
+      </div>
+      <div class="pf-section" id="pf-dishes-section">
+        <div class="pf-section-title">Signature Dishes</div>
+        <div id="pf-dishes"></div>
+      </div>
+      <div class="pf-section" id="pf-gallery-section">
+        <div class="pf-section-title">Gallery</div>
+        <div class="gallery-grid" id="pf-gallery"></div>
+      </div>
+    </div>
+    <div>
+      <div class="sidebar-card">
+        <h3 style="font-family:'Playfair Display',serif;font-size:17px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid #E8E2D6">Availability</h3>
+        <div id="pf-sidebar"></div>
+        <button class="btn btn-dark" style="width:100%;margin-top:18px;padding:13px 0;font-size:14px" onclick="showPage('inquiry')">Send Inquiry</button>
+        <p style="font-size:12px;color:#8A8580;text-align:center;margin-top:10px">Usually responds within 24 hours</p>
+      </div>
+      <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:18px;margin-top:14px">
+        <h4 style="font-size:12px;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;color:#8A8580">Cuisine Specialties</h4>
+        <div id="pf-cuisine-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ UPLOAD ══════════════════════════════════════════════════════════════ -->
+<div id="page-upload" style="display:none">
+  <div class="upload-wrap">
+    <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:8px;font-weight:500">Chef Portal</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);margin-bottom:8px">Create Your Profile</h1>
+    <p style="font-size:14px;color:#8A8580;margin-bottom:36px;font-weight:300">Fill in your details to appear in the ChefLink Sydney directory.</p>
+
+    <div id="upload-success" style="display:none;text-align:center;padding:56px 0">
+      <div style="font-size:52px;margin-bottom:14px">✅</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:10px">Profile Submitted!</h2>
+      <p style="font-size:14px;color:#8A8580;max-width:420px;margin:0 auto 28px;line-height:1.6">Pending admin approval. Once approved it will appear in the chef directory.</p>
+      <button class="btn btn-outline" onclick="resetUpload()" style="margin-right:10px;margin-bottom:8px">Add Another</button>
+      <button class="btn btn-dark" onclick="showPage('directory')">Browse Chefs</button>
+    </div>
+
+    <div id="upload-form">
+      <div class="form-section">
+        <div class="form-section-title">Personal Details</div>
+        <div class="form-row">
+          <div><label class="label">Full Name *</label><input class="inp" id="u-name" placeholder="e.g. Marc Dupont"></div>
+          <div><label class="label">Professional Title</label><input class="inp" id="u-title" placeholder="e.g. Head Chef — French Fine Dining"></div>
+        </div>
+        <div class="form-row">
+          <div><label class="label">Email *</label><input class="inp" type="email" id="u-email"></div>
+          <div><label class="label">Phone</label><input class="inp" id="u-phone"></div>
+        </div>
+        <div class="form-row">
+          <div><label class="label">Location</label>
+            <select class="inp" id="u-location">
+              <option>Sydney CBD</option><option>Surry Hills</option><option>Newtown</option>
+              <option>Bondi</option><option>Manly</option><option>Parramatta</option>
+              <option>North Sydney</option><option>Darlinghurst</option><option>Paddington</option>
+            </select>
+          </div>
+          <div><label class="label">Hourly / Day Rate</label><input class="inp" id="u-rate" placeholder="e.g. $85–$120/hr"></div>
+        </div>
+        <div><label class="label">Years of Experience</label><input class="inp" type="number" id="u-exp" style="max-width:160px" min="0"></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Photos</div>
+        <div class="form-row">
+          <div>
+            <label class="label">Profile Photo</label>
+            <input class="inp" id="u-photo" placeholder="Paste image URL">
+            <input type="file" accept="image/*" style="margin-top:8px;font-size:12px" onchange="previewUpload(this,'u-photo','u-photo-prev')">
+            <img id="u-photo-prev" src="" alt="" style="display:none;width:62px;height:62px;border-radius:50%;object-fit:cover;border:2px solid #C9A84C;margin-top:8px">
+          </div>
+          <div>
+            <label class="label">Hero / Best Dish Photo</label>
+            <input class="inp" id="u-hero" placeholder="Paste image URL">
+            <input type="file" accept="image/*" style="margin-top:8px;font-size:12px" onchange="previewUpload(this,'u-hero','u-hero-prev')">
+            <img id="u-hero-prev" src="" alt="" style="display:none;width:100%;height:80px;object-fit:cover;border-radius:2px;margin-top:8px">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Cuisine Specialties</div>
+        <div id="cuisine-selector">
+          <span class="cuisine-pill" data-c="French" onclick="toggleCuisine(this)">French</span>
+          <span class="cuisine-pill" data-c="Italian" onclick="toggleCuisine(this)">Italian</span>
+          <span class="cuisine-pill" data-c="Japanese" onclick="toggleCuisine(this)">Japanese</span>
+          <span class="cuisine-pill" data-c="Modern Australian" onclick="toggleCuisine(this)">Modern Australian</span>
+          <span class="cuisine-pill" data-c="Asian" onclick="toggleCuisine(this)">Asian</span>
+          <span class="cuisine-pill" data-c="Pastry" onclick="toggleCuisine(this)">Pastry</span>
+          <span class="cuisine-pill" data-c="Bakery" onclick="toggleCuisine(this)">Bakery</span>
+          <span class="cuisine-pill" data-c="Seafood" onclick="toggleCuisine(this)">Seafood</span>
+          <span class="cuisine-pill" data-c="Fine Dining" onclick="toggleCuisine(this)">Fine Dining</span>
+          <span class="cuisine-pill" data-c="Catering" onclick="toggleCuisine(this)">Catering</span>
+          <span class="cuisine-pill" data-c="Events" onclick="toggleCuisine(this)">Events</span>
+          <span class="cuisine-pill" data-c="Café" onclick="toggleCuisine(this)">Café</span>
+          <span class="cuisine-pill" data-c="Hotel Banquet" onclick="toggleCuisine(this)">Hotel Banquet</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Work Details</div>
+        <div style="margin-bottom:14px">
+          <label class="label">Work Type</label>
+          <div>
+            <span class="cuisine-pill" data-w="Casual" onclick="toggleWork(this)">Casual</span>
+            <span class="cuisine-pill" data-w="Part-Time" onclick="toggleWork(this)">Part-Time</span>
+            <span class="cuisine-pill" data-w="Contract" onclick="toggleWork(this)">Contract</span>
+            <span class="cuisine-pill" data-w="Events" onclick="toggleWork(this)">Events</span>
+            <span class="cuisine-pill" data-w="Full-Time" onclick="toggleWork(this)">Full-Time</span>
+          </div>
+        </div>
+        <div><label class="label">Availability</label><input class="inp" id="u-avail" placeholder="e.g. Weekends / Casual / Immediate"></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">About You</div>
+        <div style="margin-bottom:12px"><label class="label">One-line Summary</label><input class="inp" id="u-summary" placeholder="Brief summary shown on your directory card"></div>
+        <div style="margin-bottom:12px"><label class="label">Full Bio</label><textarea class="inp" id="u-bio" rows="5" placeholder="Your background, experience and cooking philosophy..." style="resize:vertical"></textarea></div>
+        <div style="margin-bottom:12px"><label class="label">Qualifications</label><input class="inp" id="u-quals" placeholder="e.g. Advanced Diploma, Le Cordon Bleu Paris"></div>
+        <div><label class="label">Previous Restaurants (comma separated)</label><input class="inp" id="u-restaurants" placeholder="e.g. Quay, Bennelong, Aria"></div>
+      </div>
+
+      <div style="border-top:1px solid #E8E2D6;padding-top:28px;margin-top:8px">
+        <button class="btn btn-dark" onclick="submitProfile()" style="padding:13px 36px;font-size:14px;width:100%">Submit Profile for Review</button>
+        <p style="font-size:12px;color:#8A8580;margin-top:10px;text-align:center">Your profile will appear in the directory after admin approval.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INQUIRY ════════════════════════════════════════════════════════════ -->
+<div id="page-inquiry" style="display:none">
+  <div style="max-width:660px;margin:0 auto;padding:48px 24px">
+    <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:8px;font-weight:500">Restaurant Portal</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);margin-bottom:8px">Hire a Chef</h1>
+    <p style="font-size:14px;color:#8A8580;margin-bottom:32px;font-weight:300">Tell us what you need and we'll connect you with the right chef.</p>
+    <div id="inq-success" style="display:none;text-align:center;padding:48px 0">
+      <div style="font-size:52px;margin-bottom:14px">📩</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:10px">Inquiry Sent!</h2>
+      <p style="font-size:14px;color:#8A8580;line-height:1.6">We'll match you with suitable chefs and respond within 24 hours.</p>
+    </div>
+    <div id="inq-form">
+      <div class="form-row" style="margin-bottom:12px">
+        <div><label class="label">Business Name *</label><input class="inp" id="i-biz"></div>
+        <div><label class="label">Contact Person</label><input class="inp" id="i-contact"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div><label class="label">Email *</label><input class="inp" type="email" id="i-email"></div>
+        <div><label class="label">Phone</label><input class="inp" id="i-phone"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div><label class="label">Date Needed</label><input class="inp" type="date" id="i-date"></div>
+        <div><label class="label">Time</label><input class="inp" id="i-time" placeholder="e.g. 6pm–11pm"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div><label class="label">Cuisine Required</label>
+          <select class="inp" id="i-cuisine">
+            <option>French</option><option>Japanese</option><option>Italian</option>
+            <option>Modern Australian</option><option>Pastry</option><option>Catering</option><option>Events</option>
+          </select>
+        </div>
+        <div><label class="label">Work Type</label>
+          <select class="inp" id="i-work">
+            <option>Casual</option><option>Events</option><option>Contract</option><option>Part-Time</option><option>Full-Time</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:12px"><label class="label">Notes</label><textarea class="inp" id="i-notes" rows="4" placeholder="Describe the event, kitchen, number of covers, specific requirements..." style="resize:vertical"></textarea></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <input type="checkbox" id="i-urgent" style="width:16px;height:16px;cursor:pointer">
+        <label for="i-urgent" style="font-size:13px;cursor:pointer">This is an urgent request (within 48 hours)</label>
+      </div>
+      <button class="btn btn-dark" onclick="submitInquiry()" style="width:100%;padding:13px 0;font-size:14px">Send Inquiry</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN ══════════════════════════════════════════════════════════════ -->
+<div id="page-admin" style="display:none">
+  <div class="admin-wrap">
+    <div class="admin-sidebar">
+      <div class="admin-logo-a">
+        <div>ChefLink</div>
+        <div>Admin Panel</div>
+      </div>
+      <div class="admin-tab active" id="at-chefs"   onclick="adminTab('chefs')">All Chefs</div>
+      <div class="admin-tab"        id="at-pending" onclick="adminTab('pending')">Pending <span id="pending-count"></span></div>
+      <div class="admin-tab"        id="at-export"  onclick="adminTab('export')">Import / Export</div>
+    </div>
+    <div class="admin-main">
+      <div id="admin-chefs">
+        <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:22px">All Chefs</h2>
+        <div id="admin-chef-list"></div>
+      </div>
+      <div id="admin-pending" style="display:none">
+        <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:22px">Pending Approval</h2>
+        <div id="admin-pending-list"></div>
+      </div>
+      <div id="admin-export" style="display:none">
+        <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:22px">Import / Export</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
+          <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:22px">
+            <h3 style="font-size:16px;margin-bottom:8px">Export Data</h3>
+            <p style="font-size:13px;color:#8A8580;margin-bottom:18px;line-height:1.6">Download all chef data as JSON. Use to back up or migrate to Supabase/Firebase.</p>
+            <button class="btn btn-dark" id="export-btn" onclick="exportData()" style="font-size:12px">Export JSON</button>
+          </div>
+          <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:22px">
+            <h3 style="font-size:16px;margin-bottom:8px">Import Data</h3>
+            <p style="font-size:13px;color:#8A8580;margin-bottom:18px;line-height:1.6">Import chefs from a JSON file. This will replace the current database.</p>
+            <input type="file" accept=".json" onchange="importData(this)" style="font-size:13px">
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:22px">
+          <h3 style="font-size:16px;margin-bottom:10px">Backend Integration Notes</h3>
+          <p style="font-size:13px;color:#8A8580;line-height:1.8">This prototype uses <strong>localStorage</strong> as the database. To deploy to production, replace the <code style="background:#F5F1E8;padding:2px 6px;border-radius:2px">saveDB</code> / <code style="background:#F5F1E8;padding:2px 6px;border-radius:2px">defaultDB</code> functions with API calls to <strong>Supabase</strong>, <strong>Firebase Firestore</strong>, <strong>Airtable</strong>, or any REST backend. All data is structured as clean JSON — ready for migration.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EDIT MODAL ═════════════════════════════════════════════════════════ -->
+<div id="edit-modal" style="display:none">
+  <div class="modal-bg" onclick="closeEditOutside(event)">
+    <div class="modal">
+      <h3 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:18px">Edit Chef</h3>
+      <input type="hidden" id="edit-id">
+      <div style="margin-bottom:11px"><label class="label">Name</label><input class="inp" id="edit-name"></div>
+      <div style="margin-bottom:11px"><label class="label">Title</label><input class="inp" id="edit-title"></div>
+      <div style="margin-bottom:11px"><label class="label">Rate</label><input class="inp" id="edit-rate"></div>
+      <div style="margin-bottom:11px"><label class="label">Availability</label><input class="inp" id="edit-avail"></div>
+      <div style="margin-bottom:11px"><label class="label">Summary</label><textarea class="inp" id="edit-summary" rows="2" style="resize:vertical"></textarea></div>
+      <div style="margin-bottom:11px"><label class="label">Photo URL</label><input class="inp" id="edit-photo"></div>
+      <div style="margin-bottom:11px"><label class="label">Plan</label>
+        <select class="inp" id="edit-plan">
+          <option value="free">Free</option>
+          <option value="basic">Basic</option>
+          <option value="premium">Premium</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:18px">
+        <button class="btn btn-dark" onclick="saveEdit()" style="flex:1">Save Changes</button>
+        <button class="btn btn-outline" onclick="closeEdit()" style="flex:1">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   DATA — seed chefs + localStorage persistence
+══════════════════════════════════════════════════════ */
+const SEED = [
+  {id:"c1",approved:true,featured:true,plan:"premium",name:"Marc Dupont",title:"Executive Chef — French Fine Dining",location:"Sydney CBD",cuisine:["French","Fine Dining"],experience:14,rate:"$85–$120/hr",availability:"Weekends / Casual",workType:["Casual","Events"],summary:"Award-winning French chef with 14 years across Paris & Sydney.",bio:"Trained under Michelin-starred kitchens in Lyon before moving to Sydney in 2012. Specialises in classical French technique with a modern Australian twist, using local seasonal produce. Former head chef at Quay and Bennelong.",qualifications:"Advanced Diploma of Hospitality Management · Le Cordon Bleu Paris",restaurants:["Quay","Bennelong","Restaurant Leo","Aria"],photo:"https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&q=75",heroPhoto:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=75",gallery:["https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=75","https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&q=75","https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&q=75","https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=75"],dishes:[{name:"Duck Confit with Orange Jus",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&q=75",category:"French",desc:"Slow-cooked duck leg, confit overnight, served with bitter orange reduction and pommes sarladaises.",chefNote:"My signature for 8 years. Works beautifully as a banquet entrée."},{name:"Bouillabaisse Marseillaise",img:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=75",category:"Seafood",desc:"Traditional Provençal fish stew with local Sydney rock oysters and saffron rouille.",chefNote:"Adapted for Australian seafood — showcases the best of both worlds."}],email:"marc@cheflink.com.au",phone:"0412 000 001",instagram:"@marcdupont_chef"},
+  {id:"c2",approved:true,featured:true,plan:"premium",name:"Yuki Tanaka",title:"Sushi Master & Modern Japanese",location:"Surry Hills",cuisine:["Japanese","Asian","Fine Dining"],experience:10,rate:"$75–$110/hr",availability:"Flexible",workType:["Casual","Contract","Events"],summary:"Tokyo-trained sushi master bringing authentic Edomae technique to Sydney.",bio:"Yuki trained under a sushi master in Tsukiji, Tokyo for six years before establishing herself in Sydney's vibrant dining scene. She blends Edomae sushi traditions with local Australian ingredients.",qualifications:"Culinary Arts Diploma, Tokyo · WSET Level 2 Sake",restaurants:["Nobu Sydney","Sokyo","est.","Billy Kwong"],photo:"https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&q=75",heroPhoto:"https://images.unsplash.com/photo-1553621042-f6e147245754?w=900&q=75",gallery:["https://images.unsplash.com/photo-1563612116625-3012372fccce?w=500&q=75","https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=500&q=75","https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=500&q=75","https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=75"],dishes:[{name:"Omakase Nigiri Selection",img:"https://images.unsplash.com/photo-1553621042-f6e147245754?w=500&q=75",category:"Japanese",desc:"8-piece seasonal nigiri featuring Sydney kingfish, ocean trout and Tasmanian sea urchin.",chefNote:"Changes with the season. Always sourced from trusted local fishmongers."},{name:"Wagyu Tataki with Ponzu",img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=75",category:"Japanese",desc:"Grade 9+ Australian wagyu, lightly seared, with house-made citrus ponzu.",chefNote:"A crowd favourite at private events."}],email:"yuki@cheflink.com.au",phone:"0412 000 002",instagram:"@yuki_sushi_sydney"},
+  {id:"c3",approved:true,featured:false,plan:"basic",name:"Sofia Ricci",title:"Pastry Chef & Chocolatier",location:"Newtown",cuisine:["Pastry","Bakery","Italian"],experience:8,rate:"$65–$90/hr",availability:"Weekends",workType:["Casual","Events"],summary:"Italian-trained pastry chef specialising in artisan desserts and chocolate work.",bio:"Sofia studied under renowned pastry chefs in Florence and Milan before bringing her skills to Sydney. Her desserts are known for their architectural beauty and precise flavour balance.",qualifications:"Diploma Pasticceria, Florence · Certificate in Chocolate Arts",restaurants:["Quay","Rockpool","Bathers' Pavilion","Aria"],photo:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=75",heroPhoto:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=75",gallery:["https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500&q=75","https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=500&q=75","https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&q=75","https://images.unsplash.com/photo-1559181567-c3190ca9be46?w=500&q=75"],dishes:[{name:"Tiramisu Moderno",img:"https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500&q=75",category:"Pastry",desc:"Deconstructed tiramisu with mascarpone espuma, coffee gel and house-made savoiardi.",chefNote:"My reimagined classic — always a showstopper at events."},{name:"Dark Chocolate Sphere",img:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=75",category:"Pastry",desc:"70% Valrhona sphere with caramel centre, dissolved tableside with warm sauce.",chefNote:"Designed for fine dining table theatre."}],email:"sofia@cheflink.com.au",phone:"0412 000 003",instagram:"@sofiariccipatisserie"},
+  {id:"c4",approved:true,featured:false,plan:"basic",name:"James Okafor",title:"Modern Australian & Catering Specialist",location:"Parramatta",cuisine:["Modern Australian","Catering","Events"],experience:11,rate:"$70–$95/hr",availability:"Immediate",workType:["Casual","Contract","Events","Part-Time"],summary:"Versatile chef with 11 years delivering modern Australian cuisine at scale.",bio:"James has led kitchen brigades across Sydney's western suburbs, building expertise in large-scale catering and corporate events. His modern Australian cooking celebrates native ingredients.",qualifications:"Certificate IV Commercial Cookery · Food Safety Supervisor",restaurants:["Flying Fish","Aqua Dining","The Grounds of Alexandria","Merivale Events"],photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=75",heroPhoto:"https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=900&q=75",gallery:["https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&q=75","https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&q=75","https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&q=75","https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=75"],dishes:[{name:"Kangaroo Loin with Wattleseed Jus",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&q=75",category:"Modern Australian",desc:"Perfectly seared kangaroo loin, wattleseed and red wine reduction, bunya nut purée.",chefNote:"Showcases native Australian ingredients — always a conversation starter."},{name:"Barramundi with Finger Lime",img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&q=75",category:"Seafood",desc:"Crispy-skinned barramundi, native finger lime beurre blanc, samphire and sea herbs.",chefNote:"My go-to for corporate lunches."}],email:"james@cheflink.com.au",phone:"0412 000 004",instagram:"@jamesokafor_chef"}
 ];
 
-const defaultDB = () => {
-  try {
-    const stored = localStorage.getItem("cheflink_chefs");
-    if (stored) return JSON.parse(stored);
-  } catch(e){}
-  localStorage.setItem("cheflink_chefs", JSON.stringify(SEED_CHEFS));
-  return SEED_CHEFS;
-};
-const saveDB = (chefs) => { try { localStorage.setItem("cheflink_chefs", JSON.stringify(chefs)); } catch(e){} };
+let DB = [];
+function loadDB() { try { const s = localStorage.getItem('cl3_chefs'); DB = s ? JSON.parse(s) : [...SEED]; } catch(e) { DB = [...SEED]; } }
+function saveDB() { try { localStorage.setItem('cl3_chefs', JSON.stringify(DB)); } catch(e) {} }
+loadDB();
 
-function Nav({ view, setView }) {
-  return (
-    <nav style={{background:G.charcoal,padding:"0 40px",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,position:"sticky",top:0,zIndex:999}}>
-      <div onClick={()=>setView("home")} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:8}}>
-        <span style={{fontFamily:"'Playfair Display',serif",fontSize:22,color:G.gold,fontWeight:700,letterSpacing:1}}>ChefLink</span>
-        <span style={{fontFamily:"'Jost',sans-serif",fontSize:12,color:G.softGrey,letterSpacing:3,textTransform:"uppercase",marginTop:3}}>Sydney</span>
-      </div>
-      <div style={{display:"flex",gap:28,alignItems:"center"}}>
-        {[["home","Home"],["directory","Find Chefs"],["upload","Join as Chef"],["admin","Admin"]].map(([v,l])=>(
-          <span key={v} onClick={()=>setView(v)} style={{fontSize:13,color:view===v?G.gold:"#CCC",letterSpacing:.8,textTransform:"uppercase",cursor:"pointer",fontWeight:view===v?500:400}}>{l}</span>
-        ))}
-        <button onClick={()=>setView("inquiry")} className="btn btn-gold" style={{padding:"8px 18px",fontSize:12}}>Hire a Chef</button>
-      </div>
-    </nav>
-  );
+/* ══════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════ */
+const PAGES = ['home','directory','portfolio','upload','inquiry','admin'];
+
+function showPage(p) {
+  PAGES.forEach(id => {
+    const el = document.getElementById('page-'+id);
+    if (el) el.style.display = id === p ? 'block' : 'none';
+  });
+  ['home','directory','upload','admin'].forEach(id => {
+    const d = document.getElementById('nl-'+id);
+    const m = document.getElementById('ml-'+id);
+    if (d) d.classList.toggle('active', id === p);
+    if (m) m.classList.toggle('active', id === p);
+  });
+  closeMenu();
+  if (p === 'home') renderFeatured();
+  if (p === 'directory') renderDirectory();
+  if (p === 'admin') { adminTab('chefs'); renderAdmin(); }
+  window.scrollTo(0, 0);
 }
 
-function ChefCard({ chef, setView, setSelectedChef }) {
-  const open = () => { setSelectedChef(chef); setView("portfolio"); window.scrollTo(0,0); };
-  const [hov, setHov] = useState(false);
-  return (
-    <div onClick={open} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-      style={{background:"#fff",border:`1px solid ${G.border}`,borderRadius:2,overflow:"hidden",cursor:"pointer",transition:"transform .25s,box-shadow .25s",transform:hov?"translateY(-4px)":"none",boxShadow:hov?"0 16px 40px rgba(0,0,0,.12)":"none"}}>
-      {chef.heroPhoto && <div style={{height:160,overflow:"hidden",position:"relative"}}>
-        <img src={chef.heroPhoto} alt="" style={{width:"100%",height:"100%"}} />
-        <div style={{position:"absolute",bottom:0,left:0,right:0,height:80,background:"linear-gradient(transparent,rgba(0,0,0,.6))"}}/>
-        {chef.featured && <div className="badge badge-gold" style={{position:"absolute",top:10,right:10}}>Featured</div>}
-      </div>}
-      <div style={{padding:"16px 18px"}}>
-        <div style={{display:"flex",gap:12,alignItems:"flex-start",marginBottom:12}}>
-          <img src={chef.photo} alt={chef.name} style={{width:52,height:52,borderRadius:"50%",border:`2px solid ${G.gold}`,flexShrink:0}} />
-          <div style={{flex:1,minWidth:0}}>
-            <h3 style={{fontSize:17,fontWeight:600,marginBottom:2,fontFamily:"'Playfair Display',serif"}}>{chef.name}</h3>
-            <p style={{fontSize:12,color:G.softGrey,lineHeight:1.3}}>{chef.title}</p>
-          </div>
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════════════════
+   CHEF CARD HTML
+══════════════════════════════════════════════════════ */
+function cardHTML(chef, onclick) {
+  const av = chef.availability.toLowerCase().includes('immediate') ? 'badge-green' : 'badge-gold';
+  return `<div class="chef-card" onclick="${onclick}">
+    <div class="card-hero">
+      <img src="${chef.heroPhoto || chef.photo}" alt="${chef.name}" onerror="this.style.display='none'">
+      <div class="card-hero-overlay"></div>
+      ${chef.featured ? '<div class="badge badge-gold" style="position:absolute;top:9px;right:10px">Featured</div>' : ''}
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        <img class="card-photo" src="${chef.photo}" alt="${chef.name}" onerror="this.style.background='#E8E2D6'">
+        <div>
+          <div class="card-name">${chef.name}</div>
+          <div class="card-title">${chef.title}</div>
         </div>
-        <div style={{marginBottom:10}}>{chef.cuisine.slice(0,3).map(c=><span key={c} className="tag">{c}</span>)}</div>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:G.softGrey,marginBottom:10}}>
-          <span>📍 {chef.location}</span><span>⭐ {chef.experience} yrs exp</span>
-        </div>
-        <p style={{fontSize:13,color:G.textMuted,lineHeight:1.5,marginBottom:14,borderTop:`1px solid ${G.border}`,paddingTop:10}}>{chef.summary}</p>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span className={`badge ${chef.availability.toLowerCase().includes("immediate")?"badge-green":"badge-gold"}`}>{chef.availability}</span>
-          <span style={{fontSize:13,color:G.gold,fontWeight:500}}>{chef.rate}</span>
-        </div>
+      </div>
+      <div style="margin-bottom:9px">${(chef.cuisine||[]).slice(0,3).map(c=>'<span class="tag">'+c+'</span>').join('')}</div>
+      <div class="card-meta"><span>📍 ${chef.location}</span><span>⭐ ${chef.experience} yrs exp</span></div>
+      <p class="card-summary">${chef.summary}</p>
+      <div class="card-footer">
+        <span class="badge ${av}">${chef.availability}</span>
+        <span style="font-size:12px;color:#C9A84C;font-weight:600">${chef.rate}</span>
       </div>
     </div>
-  );
+  </div>`;
 }
 
-function HomePage({ chefs, setView, setSelectedChef }) {
-  const [search, setSearch] = useState("");
-  const [cuisine, setCuisine] = useState("All");
-  const featured = chefs.filter(c=>c.featured && c.approved);
-  return (
-    <div>
-      <div style={{position:"relative",height:600,overflow:"hidden"}}>
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=80" alt="hero" style={{width:"100%",height:"100%",filter:"brightness(.45)"}} />
-        <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"0 20px",textAlign:"center"}}>
-          <p style={{fontFamily:"'Jost',sans-serif",letterSpacing:4,textTransform:"uppercase",fontSize:12,color:G.gold,marginBottom:16}}>Sydney's Premier Chef Staffing Platform</p>
-          <h1 style={{fontSize:"clamp(30px,5vw,52px)",color:"#fff",maxWidth:740,marginBottom:16,fontWeight:700,lineHeight:1.1}}>Find Skilled Chefs in Sydney for Casual, Contract & Event Work</h1>
-          <p style={{fontSize:17,color:"rgba(255,255,255,.75)",maxWidth:560,marginBottom:40,fontWeight:300}}>A premium platform connecting restaurants with experienced chefs through professional portfolios.</p>
-          <div style={{display:"flex",gap:0,background:"#fff",borderRadius:2,overflow:"hidden",boxShadow:"0 8px 40px rgba(0,0,0,.4)",maxWidth:700,width:"100%"}}>
-            <input className="input" placeholder="Search chefs, cuisine, location..." value={search} onChange={e=>setSearch(e.target.value)} style={{border:"none",borderRadius:0,flex:1,fontSize:15,padding:"14px 20px"}} onKeyDown={e=>e.key==="Enter"&&setView("directory")} />
-            <select value={cuisine} onChange={e=>setCuisine(e.target.value)} style={{border:"none",borderLeft:`1px solid ${G.border}`,padding:"0 16px",fontSize:14,color:G.softGrey,background:"#fff",outline:"none",minWidth:150}}>
-              {CUISINES.map(c=><option key={c}>{c}</option>)}
-            </select>
-            <button onClick={()=>setView("directory")} className="btn btn-primary" style={{borderRadius:0,padding:"0 28px",fontSize:13}}>Search</button>
-          </div>
-        </div>
-      </div>
-      <div style={{background:G.cream,padding:"20px 40px",borderBottom:`1px solid ${G.border}`}}>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center"}}>
-          {CUISINES.slice(1).map(c=>(
-            <span key={c} onClick={()=>setView("directory")} style={{padding:"6px 16px",border:`1px solid ${G.border}`,borderRadius:20,fontSize:12,letterSpacing:.5,cursor:"pointer",transition:"all .2s",background:"#fff",color:G.softGrey,fontWeight:500,textTransform:"uppercase"}}
-              onMouseEnter={e=>{e.target.style.background=G.gold;e.target.style.color=G.charcoal;e.target.style.borderColor=G.gold}}
-              onMouseLeave={e=>{e.target.style.background="#fff";e.target.style.color=G.softGrey;e.target.style.borderColor=G.border}}>{c}</span>
-          ))}
-        </div>
-      </div>
-      <div style={{padding:"72px 40px",maxWidth:1200,margin:"0 auto"}}>
-        <div style={{textAlign:"center",marginBottom:48}}>
-          <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.gold,marginBottom:8,fontWeight:500}}>Handpicked Talent</p>
-          <h2 style={{fontSize:38}}>Featured Chefs</h2>
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:28}}>
-          {featured.map(c=><ChefCard key={c.id} chef={c} setView={setView} setSelectedChef={setSelectedChef} />)}
-        </div>
-        <div style={{textAlign:"center",marginTop:48}}><button onClick={()=>setView("directory")} className="btn btn-outline">View All Chefs</button></div>
-      </div>
-      <div style={{background:G.charcoal,padding:"72px 40px"}}>
-        <div style={{maxWidth:1100,margin:"0 auto",textAlign:"center"}}>
-          <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.gold,marginBottom:8,fontWeight:500}}>Simple Process</p>
-          <h2 style={{fontSize:38,color:"#fff",marginBottom:56}}>How ChefLink Works</h2>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:40}}>
-            {[["01","Search","Browse verified chef profiles by cuisine, availability and location."],["02","Review","View full portfolios, experience, dish galleries and references."],["03","Connect","Send a direct inquiry and arrange your booking easily."]].map(([n,t,d])=>(
-              <div key={n} style={{textAlign:"center"}}>
-                <div style={{fontSize:48,fontFamily:"'Playfair Display',serif",color:G.gold,fontWeight:700,lineHeight:1,marginBottom:16}}>{n}</div>
-                <h3 style={{fontSize:22,color:"#fff",marginBottom:12}}>{t}</h3>
-                <p style={{color:"rgba(255,255,255,.55)",fontSize:15,lineHeight:1.7,fontWeight:300}}>{d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr"}}>
-        <div style={{background:G.gold,padding:"60px 60px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
-          <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.darkGold,marginBottom:8,fontWeight:500}}>For Chefs</p>
-          <h2 style={{fontSize:34,marginBottom:16,color:G.charcoal}}>Showcase Your Talent</h2>
-          <p style={{fontSize:15,color:G.charcoal,opacity:.75,marginBottom:28,fontWeight:300,lineHeight:1.7}}>Create your portfolio, upload your best work and connect with Sydney's top restaurants and venues.</p>
-          <button onClick={()=>setView("upload")} className="btn btn-primary" style={{alignSelf:"flex-start"}}>Create Your Profile</button>
-        </div>
-        <div style={{backgroundImage:"url(https://images.unsplash.com/photo-1532980400857-e8d9d275d858?w=700&q=80)",backgroundSize:"cover",backgroundPosition:"center",position:"relative",minHeight:340}}>
-          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.6)",display:"flex",flexDirection:"column",justifyContent:"center",padding:"60px 60px"}}>
-            <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.gold,marginBottom:8,fontWeight:500}}>For Restaurants</p>
-            <h2 style={{fontSize:34,marginBottom:16,color:"#fff"}}>Find the Right Chef</h2>
-            <p style={{fontSize:15,color:"rgba(255,255,255,.7)",marginBottom:28,fontWeight:300,lineHeight:1.7}}>Search verified chefs for your specific cuisine, date and budget.</p>
-            <button onClick={()=>setView("inquiry")} className="btn btn-gold" style={{alignSelf:"flex-start"}}>Post a Request</button>
-          </div>
-        </div>
-      </div>
-      <div style={{padding:"72px 40px",maxWidth:1000,margin:"0 auto",textAlign:"center"}}>
-        <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.gold,marginBottom:8,fontWeight:500}}>Chef Plans</p>
-        <h2 style={{fontSize:38,marginBottom:48}}>Simple, Transparent Pricing</h2>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:24}}>
-          {[{name:"Free Trial",price:"$0",color:G.warmGrey,features:["Basic profile","One photo","Limited visibility","7-day trial"]},
-            {name:"Basic",price:"$29/mo",color:"#fff",features:["Full profile page","Portfolio","Cuisine tags","Availability listing","Contact form"]},
-            {name:"Premium",price:"$59/mo",color:G.charcoal,dark:true,features:["Featured placement","Full gallery","Signature recipes","Priority search ranking","Direct inquiry button","Analytics dashboard"],popular:true}].map(p=>(
-            <div key={p.name} style={{background:p.color,border:p.dark?"none":`1px solid ${G.border}`,borderRadius:4,padding:"36px 28px",position:"relative"}}>
-              {p.popular&&<div style={{position:"absolute",top:-12,left:"50%",transform:"translateX(-50%)",background:G.gold,color:G.charcoal,fontSize:11,fontWeight:600,letterSpacing:1,textTransform:"uppercase",padding:"4px 16px",borderRadius:20}}>Most Popular</div>}
-              <h3 style={{fontSize:20,color:p.dark?"#fff":G.charcoal,marginBottom:8}}>{p.name}</h3>
-              <div style={{fontSize:36,fontFamily:"'Playfair Display',serif",color:p.dark?G.gold:G.charcoal,fontWeight:700,marginBottom:24}}>{p.price}</div>
-              <ul style={{listStyle:"none",textAlign:"left",marginBottom:28}}>
-                {p.features.map(f=><li key={f} style={{padding:"6px 0",fontSize:14,color:p.dark?"rgba(255,255,255,.7)":G.softGrey,borderBottom:`1px solid ${p.dark?"rgba(255,255,255,.1)":G.border}`}}>✓ {f}</li>)}
-              </ul>
-              <button onClick={()=>setView("upload")} className={p.dark?"btn btn-gold":"btn btn-outline"} style={{width:"100%",padding:"11px 0"}}>Get Started</button>
-            </div>
-          ))}
-        </div>
-      </div>
-      <footer style={{background:G.charcoal,padding:"40px 40px",textAlign:"center"}}>
-        <div style={{fontFamily:"'Playfair Display',serif",fontSize:26,color:G.gold,marginBottom:8}}>ChefLink Sydney</div>
-        <p style={{color:"rgba(255,255,255,.4)",fontSize:13}}>© 2025 ChefLink Sydney · Premium Chef Staffing Platform</p>
-      </footer>
-    </div>
-  );
+function renderFeatured() {
+  const el = document.getElementById('featured-grid');
+  if (!el) return;
+  el.innerHTML = DB.filter(c => c.featured && c.approved).map(c => cardHTML(c, `openPortfolio('${c.id}')`)).join('');
 }
 
-function DirectoryPage({ chefs, setView, setSelectedChef }) {
-  const [filters, setFilters] = useState({search:"",cuisine:"All",location:"All",workType:"All",availability:"All"});
-  const setF = (k,v) => setFilters(p=>({...p,[k]:v}));
-  const filtered = chefs.filter(c => {
+function renderDirectory() {
+  const s  = (document.getElementById('dir-search') || {}).value || '';
+  const cu = (document.getElementById('dir-cuisine') || {}).value || '';
+  const av = (document.getElementById('dir-avail')   || {}).value || '';
+  const f  = DB.filter(c => {
     if (!c.approved) return false;
-    if (filters.search && !c.name.toLowerCase().includes(filters.search.toLowerCase()) && !c.cuisine.join(" ").toLowerCase().includes(filters.search.toLowerCase())) return false;
-    if (filters.cuisine !== "All" && !c.cuisine.includes(filters.cuisine)) return false;
-    if (filters.location !== "All" && c.location !== filters.location) return false;
-    if (filters.workType !== "All" && !c.workType.includes(filters.workType)) return false;
-    if (filters.availability !== "All" && !c.availability.toLowerCase().includes(filters.availability.toLowerCase())) return false;
+    if (s  && !c.name.toLowerCase().includes(s.toLowerCase()) && !(c.cuisine||[]).join(' ').toLowerCase().includes(s.toLowerCase())) return false;
+    if (cu && !(c.cuisine||[]).includes(cu)) return false;
+    if (av && !c.availability.toLowerCase().includes(av.toLowerCase())) return false;
     return true;
   });
-  return (
-    <div style={{minHeight:"100vh"}}>
-      <div style={{background:G.charcoal,padding:"48px 40px 32px"}}>
-        <div style={{maxWidth:1200,margin:"0 auto"}}>
-          <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.gold,marginBottom:6,fontWeight:500}}>Chef Directory</p>
-          <h1 style={{fontSize:40,color:"#fff",marginBottom:4}}>Find Your Chef</h1>
-          <p style={{color:"rgba(255,255,255,.5)",fontSize:15,fontWeight:300}}>{filtered.length} chefs available in Sydney</p>
-        </div>
-      </div>
-      <div style={{background:"#fff",padding:"20px 40px",borderBottom:`1px solid ${G.border}`,position:"sticky",top:64,zIndex:10}}>
-        <div style={{maxWidth:1200,margin:"0 auto",display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
-          <input className="input" placeholder="Search..." value={filters.search} onChange={e=>setF("search",e.target.value)} style={{flex:1,minWidth:180}} />
-          {[[CUISINES,"cuisine"],[LOCATIONS,"location"],[WORK_TYPES,"workType"],[AVAILABILITY,"availability"]].map(([opts,key])=>(
-            <select key={key} className="input" value={filters[key]} onChange={e=>setF(key,e.target.value)} style={{width:150}}>
-              {opts.map(o=><option key={o}>{o}</option>)}
-            </select>
-          ))}
-          <button onClick={()=>setFilters({search:"",cuisine:"All",location:"All",workType:"All",availability:"All"})} className="btn btn-outline" style={{fontSize:12,padding:"9px 16px"}}>Clear</button>
-        </div>
-      </div>
-      <div style={{maxWidth:1200,margin:"0 auto",padding:"40px 40px"}}>
-        {filtered.length===0 ? (
-          <div style={{textAlign:"center",padding:"80px 0",color:G.softGrey}}>
-            <div style={{fontSize:48,marginBottom:16}}>🔍</div>
-            <h3 style={{fontSize:22,marginBottom:8}}>No chefs found</h3>
-            <p>Try adjusting your search filters.</p>
-          </div>
-        ) : (
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:28}}>
-            {filtered.map(c=><ChefCard key={c.id} chef={c} setView={setView} setSelectedChef={setSelectedChef} />)}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  const cnt = document.getElementById('dir-count');
+  if (cnt) cnt.textContent = f.length + ' chefs available in Sydney';
+  const grid = document.getElementById('dir-grid');
+  if (!grid) return;
+  grid.innerHTML = f.length === 0
+    ? '<div style="grid-column:1/-1;text-align:center;padding:56px 0;color:#8A8580"><div style="font-size:44px;margin-bottom:14px">🔍</div><h3 style="font-size:20px;margin-bottom:6px">No chefs found</h3><p style="font-size:14px">Try adjusting your search filters.</p></div>'
+    : f.map(c => cardHTML(c, `openPortfolio('${c.id}')`)).join('');
 }
 
-function PortfolioPage({ chef, setView }) {
-  const [openDish, setOpenDish] = useState(null);
-  if (!chef) return null;
-  return (
-    <div style={{minHeight:"100vh"}}>
-      <div style={{position:"relative",height:480,overflow:"hidden"}}>
-        <img src={chef.heroPhoto||chef.photo} alt="" style={{width:"100%",height:"100%",filter:"brightness(.5)"}} />
-        <div style={{position:"absolute",inset:0,display:"flex",alignItems:"flex-end",padding:"48px 60px",background:"linear-gradient(transparent 30%,rgba(0,0,0,.75))"}}>
-          <div style={{display:"flex",gap:24,alignItems:"flex-end"}}>
-            <img src={chef.photo} alt={chef.name} style={{width:120,height:120,borderRadius:"50%",border:`3px solid ${G.gold}`,flexShrink:0}} />
-            <div>
-              <div style={{marginBottom:8}}>{chef.cuisine.map(c=><span key={c} style={{fontSize:11,letterSpacing:2,textTransform:"uppercase",color:G.gold,marginRight:12,fontWeight:500}}>{c}</span>)}</div>
-              <h1 style={{fontSize:"clamp(28px,4vw,44px)",color:"#fff",marginBottom:6}}>{chef.name}</h1>
-              <p style={{fontSize:17,color:"rgba(255,255,255,.7)",fontWeight:300}}>{chef.title}</p>
-              <div style={{display:"flex",gap:20,marginTop:10,fontSize:13,color:"rgba(255,255,255,.6)"}}>
-                <span>📍 {chef.location}</span><span>⭐ {chef.experience} yrs</span><span>💰 {chef.rate}</span>
-              </div>
-            </div>
+/* ══════════════════════════════════════════════════════
+   PORTFOLIO
+══════════════════════════════════════════════════════ */
+function openPortfolio(id) {
+  const chef = DB.find(c => c.id === id);
+  if (!chef) return;
+
+  document.getElementById('pf-hero').src     = chef.heroPhoto || chef.photo;
+  document.getElementById('pf-photo').src    = chef.photo;
+  document.getElementById('pf-name').textContent     = chef.name;
+  document.getElementById('pf-title-el').textContent = chef.title;
+  document.getElementById('pf-bio').textContent      = chef.bio;
+  document.getElementById('pf-quals').textContent    = chef.qualifications;
+
+  document.getElementById('pf-cuisines').innerHTML = (chef.cuisine||[]).map(c =>
+    `<span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-right:10px;font-weight:500">${c}</span>`).join('');
+
+  document.getElementById('pf-meta').innerHTML =
+    `<span>📍 ${chef.location}</span><span>⭐ ${chef.experience} yrs experience</span><span>💰 ${chef.rate}</span>`;
+
+  document.getElementById('pf-restaurants').innerHTML = (chef.restaurants||[]).map(r =>
+    `<div style="background:#F5F1E8;border:1px solid #E8E2D6;padding:9px 16px;border-radius:2px;font-size:13px;font-weight:500">${r}</div>`).join('');
+
+  const av = chef.availability.toLowerCase().includes('immediate') ? 'badge-green' : 'badge-gold';
+  document.getElementById('pf-sidebar').innerHTML = [
+    ['Status',    `<span class="badge ${av}">${chef.availability}</span>`],
+    ['Work Type', (chef.workType||[]).join(', ') || 'Flexible'],
+    ['Rate',      `<span style="color:#C9A84C;font-weight:600">${chef.rate}</span>`],
+    ['Location',  chef.location],
+    chef.instagram ? ['Instagram', chef.instagram] : null
+  ].filter(Boolean).map(([l, v]) =>
+    `<div class="sidebar-row"><span style="color:#8A8580">${l}</span><span style="font-weight:500">${v}</span></div>`).join('');
+
+  document.getElementById('pf-cuisine-list').innerHTML = (chef.cuisine||[]).map(c =>
+    `<div style="padding:7px 0;border-bottom:1px solid #E8E2D6;font-size:13px;font-weight:500">${c}</div>`).join('');
+
+  if (chef.dishes && chef.dishes.length) {
+    document.getElementById('pf-dishes-section').style.display = '';
+    document.getElementById('pf-dishes').innerHTML = chef.dishes.map((d, i) => `
+      <div class="dish-card">
+        <div class="dish-header" onclick="toggleDish(${i})">
+          <span style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600">▾ ${d.name}</span>
+          <span class="tag">${d.category}</span>
+        </div>
+        <div id="dish-body-${i}" style="display:none" class="dish-body">
+          <img src="${d.img}" alt="${d.name}" style="height:170px;width:100%;object-fit:cover">
+          <div style="padding:18px 20px">
+            <p style="font-size:14px;line-height:1.7;margin-bottom:10px">${d.desc}</p>
+            <p style="font-size:12px;color:#C9A84C;font-style:italic;border-top:1px solid #E8E2D6;padding-top:10px;margin-top:10px">Chef's Note: "${d.chefNote}"</p>
           </div>
         </div>
-        <button onClick={()=>{setView("directory");window.scrollTo(0,0);}} style={{position:"absolute",top:24,left:24,background:"rgba(0,0,0,.5)",color:"#fff",border:"1px solid rgba(255,255,255,.3)",padding:"8px 16px",borderRadius:2,fontSize:13,cursor:"pointer"}}>← Back</button>
-      </div>
-      <div style={{maxWidth:1100,margin:"0 auto",padding:"60px 40px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:60}}>
-          <div>
-            <div style={{marginBottom:48}}>
-              <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}><h2 style={{fontSize:24}}>About the Chef</h2><div style={{flex:1,height:1,background:G.border}}/></div>
-              <p style={{fontSize:16,lineHeight:1.8,color:G.charcoal,fontWeight:300}}>{chef.bio}</p>
-            </div>
-            <div style={{marginBottom:48}}>
-              <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}><h2 style={{fontSize:24}}>Experience</h2><div style={{flex:1,height:1,background:G.border}}/></div>
-              <div style={{display:"flex",flexWrap:"wrap",gap:10,marginBottom:12}}>{chef.restaurants.map(r=><div key={r} style={{background:G.cream,border:`1px solid ${G.border}`,padding:"10px 18px",borderRadius:2,fontSize:14,fontWeight:500}}>{r}</div>)}</div>
-              <p style={{fontSize:14,color:G.softGrey}}>{chef.qualifications}</p>
-            </div>
-            {chef.dishes?.length>0 && (
-              <div style={{marginBottom:48}}>
-                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}><h2 style={{fontSize:24}}>Signature Dishes</h2><div style={{flex:1,height:1,background:G.border}}/></div>
-                {chef.dishes.map((d,i)=>(
-                  <div key={i} style={{border:`1px solid ${G.border}`,borderRadius:2,marginBottom:12,overflow:"hidden"}}>
-                    <div onClick={()=>setOpenDish(openDish===i?null:i)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 20px",cursor:"pointer",background:openDish===i?G.cream:"#fff"}}>
-                      <span style={{fontSize:15,fontFamily:"'Playfair Display',serif",fontWeight:600}}>▾ {d.name}</span>
-                      <span className="tag">{d.category}</span>
-                    </div>
-                    {openDish===i && (
-                      <div style={{display:"grid",gridTemplateColumns:"200px 1fr"}}>
-                        <img src={d.img} alt={d.name} style={{height:200,width:"100%"}} />
-                        <div style={{padding:"20px 24px"}}>
-                          <p style={{fontSize:14,lineHeight:1.7,marginBottom:10}}>{d.desc}</p>
-                          <p style={{fontSize:13,color:G.gold,fontStyle:"italic",borderTop:`1px solid ${G.border}`,paddingTop:10,marginTop:10}}>Chef's Note: "{d.chefNote}"</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-            {chef.gallery?.length>0 && (
-              <div style={{marginBottom:48}}>
-                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}><h2 style={{fontSize:24}}>Gallery</h2><div style={{flex:1,height:1,background:G.border}}/></div>
-                <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:8}}>
-                  {chef.gallery.map((g,i)=><img key={i} src={g} alt="" style={{width:"100%",height:180,borderRadius:2,objectFit:"cover"}} />)}
-                </div>
-              </div>
-            )}
-          </div>
-          <div>
-            <div style={{background:G.cream,border:`1px solid ${G.border}`,borderRadius:2,padding:28,marginBottom:20,position:"sticky",top:90}}>
-              <h3 style={{fontSize:18,marginBottom:20,paddingBottom:12,borderBottom:`1px solid ${G.border}`}}>Availability</h3>
-              {[["Status",<span className={`badge ${chef.availability.toLowerCase().includes("immediate")?"badge-green":"badge-gold"}`}>{chef.availability}</span>],["Work Type",chef.workType?.join(", ")||"Flexible"],["Rate",<span style={{color:G.gold,fontWeight:600}}>{chef.rate}</span>],["Location",chef.location],chef.instagram&&["Instagram",chef.instagram]].filter(Boolean).map(([l,v])=>(
-                <div key={l} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${G.border}`,fontSize:14}}>
-                  <span style={{color:G.softGrey}}>{l}</span><span style={{fontWeight:500}}>{v}</span>
-                </div>
-              ))}
-              <button onClick={()=>setView("inquiry")} className="btn btn-primary" style={{width:"100%",marginTop:20,padding:"13px 0",fontSize:14}}>Send Inquiry</button>
-              <p style={{fontSize:12,color:G.softGrey,textAlign:"center",marginTop:10}}>Usually responds within 24 hours</p>
-            </div>
-            <div style={{background:"#fff",border:`1px solid ${G.border}`,borderRadius:2,padding:20}}>
-              <h4 style={{fontSize:14,marginBottom:12,textTransform:"uppercase",letterSpacing:1,color:G.softGrey}}>Cuisine Specialties</h4>
-              {chef.cuisine.map(c=><div key={c} style={{padding:"8px 0",borderBottom:`1px solid ${G.border}`,fontSize:14,fontWeight:500}}>{c}</div>)}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+      </div>`).join('');
+  } else {
+    document.getElementById('pf-dishes-section').style.display = 'none';
+  }
+
+  if (chef.gallery && chef.gallery.length) {
+    document.getElementById('pf-gallery-section').style.display = '';
+    document.getElementById('pf-gallery').innerHTML = chef.gallery.map(g =>
+      `<img src="${g}" alt="" style="width:100%;height:150px;object-fit:cover;border-radius:2px">`).join('');
+  } else {
+    document.getElementById('pf-gallery-section').style.display = 'none';
+  }
+
+  showPage('portfolio');
 }
 
-function UploadPage({ chefs, setChefs, setView }) {
-  const blank = {id:"",approved:false,featured:false,plan:"free",name:"",title:"",location:"Sydney CBD",cuisine:[],experience:"",rate:"",availability:"Flexible",workType:[],summary:"",bio:"",qualifications:"",restaurants:"",photo:"",heroPhoto:"",gallery:[],dishes:[{name:"",img:"",category:"",desc:"",chefNote:""}],email:"",phone:"",instagram:""};
-  const [form, setForm] = useState(blank);
-  const [saved, setSaved] = useState(false);
-  const set = (k,v) => setForm(p=>({...p,[k]:v}));
-  const toggleArr = (k,v) => set(k, form[k].includes(v) ? form[k].filter(x=>x!==v) : [...form[k],v]);
-  const handleImg = (key) => (e) => {
-    const file = e.target.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => set(key, ev.target.result);
-    reader.readAsDataURL(file);
+function toggleDish(i) {
+  const el = document.getElementById('dish-body-' + i);
+  if (el) el.style.display = el.style.display === 'none' ? 'grid' : 'none';
+}
+
+/* ══════════════════════════════════════════════════════
+   UPLOAD FORM
+══════════════════════════════════════════════════════ */
+function toggleCuisine(el) { el.classList.toggle('selected'); }
+function toggleWork(el)    { el.classList.toggle('selected'); }
+
+function previewUpload(input, urlId, prevId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById(urlId).value = ev.target.result;
+    const p = document.getElementById(prevId);
+    p.src = ev.target.result;
+    p.style.display = 'block';
   };
-  const submit = () => {
-    if (!form.name||!form.email) return alert("Name and email required.");
-    const chef = {...form,id:"c"+Date.now(),restaurants:form.restaurants.split(",").map(s=>s.trim()).filter(Boolean)};
-    const updated = [...chefs,chef]; setChefs(updated); saveDB(updated); setSaved(true);
+  reader.readAsDataURL(file);
+}
+
+function submitProfile() {
+  const name  = document.getElementById('u-name').value.trim();
+  const email = document.getElementById('u-email').value.trim();
+  if (!name || !email) { alert('Name and email are required.'); return; }
+  const chef = {
+    id: 'c' + Date.now(),
+    approved: false, featured: false, plan: 'free',
+    name, email,
+    title:         document.getElementById('u-title').value,
+    phone:         document.getElementById('u-phone').value,
+    location:      document.getElementById('u-location').value,
+    rate:          document.getElementById('u-rate').value,
+    experience:    parseInt(document.getElementById('u-exp').value) || 0,
+    availability:  document.getElementById('u-avail').value || 'Flexible',
+    cuisine:       [...document.querySelectorAll('#cuisine-selector .cuisine-pill.selected')].map(e => e.dataset.c),
+    workType:      [...document.querySelectorAll('[data-w].selected')].map(e => e.dataset.w),
+    summary:       document.getElementById('u-summary').value,
+    bio:           document.getElementById('u-bio').value,
+    qualifications:document.getElementById('u-quals').value,
+    restaurants:   document.getElementById('u-restaurants').value.split(',').map(s => s.trim()).filter(Boolean),
+    photo:         document.getElementById('u-photo').value || '',
+    heroPhoto:     document.getElementById('u-hero').value || '',
+    gallery: [], dishes: []
   };
-  if (saved) return (
-    <div style={{minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,textAlign:"center"}}>
-      <div style={{fontSize:56,marginBottom:16}}>✅</div>
-      <h2 style={{fontSize:32,marginBottom:12}}>Profile Submitted!</h2>
-      <p style={{fontSize:16,color:G.softGrey,maxWidth:480,marginBottom:32}}>Your profile is pending admin approval. Once approved it will appear in the directory.</p>
-      <div style={{display:"flex",gap:12}}>
-        <button onClick={()=>{setForm(blank);setSaved(false);}} className="btn btn-outline">Add Another</button>
-        <button onClick={()=>{setView("directory");window.scrollTo(0,0);}} className="btn btn-primary">Browse Chefs</button>
-      </div>
-    </div>
-  );
-  const FS = ({title,children}) => <div style={{marginBottom:36}}><h3 style={{fontSize:18,marginBottom:16,paddingBottom:10,borderBottom:`1px solid ${G.border}`}}>{title}</h3>{children}</div>;
-  const FR = ({children}) => <div style={{display:"flex",gap:16,marginBottom:12}}>{children}</div>;
-  return (
-    <div style={{maxWidth:800,margin:"0 auto",padding:"60px 40px"}}>
-      <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.gold,marginBottom:8,fontWeight:500}}>Chef Portal</p>
-      <h1 style={{fontSize:40,marginBottom:8}}>Create Your Profile</h1>
-      <p style={{fontSize:15,color:G.softGrey,marginBottom:40,fontWeight:300}}>Fill in your details to appear in the ChefLink Sydney directory.</p>
-      <FS title="Personal Details">
-        <FR><div style={{flex:1}}><label className="fl">Full Name *</label><input className="input" value={form.name} onChange={e=>set("name",e.target.value)} placeholder="e.g. Marc Dupont" /></div>
-        <div style={{flex:1}}><label className="fl">Professional Title</label><input className="input" value={form.title} onChange={e=>set("title",e.target.value)} placeholder="e.g. Head Chef — French Fine Dining" /></div></FR>
-        <FR><div style={{flex:1}}><label className="fl">Email *</label><input className="input" type="email" value={form.email} onChange={e=>set("email",e.target.value)} /></div>
-        <div style={{flex:1}}><label className="fl">Phone</label><input className="input" value={form.phone} onChange={e=>set("phone",e.target.value)} /></div></FR>
-        <FR><div style={{flex:1}}><label className="fl">Location</label><select className="input" value={form.location} onChange={e=>set("location",e.target.value)}>{LOCATIONS.slice(1).map(l=><option key={l}>{l}</option>)}</select></div>
-        <div style={{flex:1}}><label className="fl">Rate</label><input className="input" value={form.rate} onChange={e=>set("rate",e.target.value)} placeholder="e.g. $85–$120/hr" /></div></FR>
-        <div><label className="fl">Years of Experience</label><input className="input" type="number" value={form.experience} onChange={e=>set("experience",e.target.value)} style={{width:200}} /></div>
-      </FS>
-      <FS title="Photos">
-        <FR>
-          <div style={{flex:1}}><label className="fl">Profile Photo</label><input type="file" accept="image/*" onChange={handleImg("photo")} style={{marginBottom:8,display:"block"}} />{form.photo&&<img src={form.photo} alt="" style={{width:80,height:80,borderRadius:"50%",objectFit:"cover",border:`2px solid ${G.gold}`}} />}{!form.photo&&<input className="input" onChange={e=>set("photo",e.target.value)} placeholder="Or paste URL" style={{marginTop:8}} />}</div>
-          <div style={{flex:1}}><label className="fl">Hero / Best Dish Photo</label><input type="file" accept="image/*" onChange={handleImg("heroPhoto")} style={{marginBottom:8,display:"block"}} />{form.heroPhoto&&<img src={form.heroPhoto} alt="" style={{width:"100%",height:100,objectFit:"cover",borderRadius:2}} />}{!form.heroPhoto&&<input className="input" onChange={e=>set("heroPhoto",e.target.value)} placeholder="Or paste URL" style={{marginTop:8}} />}</div>
-        </FR>
-      </FS>
-      <FS title="Cuisine Specialties">
-        <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
-          {CUISINES.slice(1).map(c=>(
-            <span key={c} onClick={()=>toggleArr("cuisine",c)} style={{padding:"7px 14px",border:`1px solid ${form.cuisine.includes(c)?G.gold:G.border}`,background:form.cuisine.includes(c)?G.gold:"#fff",borderRadius:20,fontSize:13,cursor:"pointer",transition:"all .2s",color:form.cuisine.includes(c)?G.charcoal:G.softGrey}}>{c}</span>
-          ))}
-        </div>
-      </FS>
-      <FS title="Work Details">
-        <div style={{marginBottom:16}}><label className="fl">Work Type</label><div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{WORK_TYPES.slice(1).map(w=><span key={w} onClick={()=>toggleArr("workType",w)} style={{padding:"7px 14px",border:`1px solid ${form.workType.includes(w)?G.charcoal:G.border}`,background:form.workType.includes(w)?G.charcoal:"#fff",borderRadius:20,fontSize:13,cursor:"pointer",color:form.workType.includes(w)?"#fff":G.softGrey}}>{w}</span>)}</div></div>
-        <div><label className="fl">Availability</label><input className="input" value={form.availability} onChange={e=>set("availability",e.target.value)} placeholder="e.g. Weekends / Casual / Immediate" /></div>
-      </FS>
-      <FS title="About You">
-        <div style={{marginBottom:12}}><label className="fl">One-line Summary</label><input className="input" value={form.summary} onChange={e=>set("summary",e.target.value)} placeholder="Brief summary for your directory card" /></div>
-        <div style={{marginBottom:12}}><label className="fl">Full Bio</label><textarea className="input" rows={5} value={form.bio} onChange={e=>set("bio",e.target.value)} placeholder="Your background, experience and cooking philosophy..." style={{resize:"vertical"}} /></div>
-        <div style={{marginBottom:12}}><label className="fl">Qualifications</label><input className="input" value={form.qualifications} onChange={e=>set("qualifications",e.target.value)} placeholder="e.g. Advanced Diploma, Le Cordon Bleu Paris" /></div>
-        <div><label className="fl">Previous Restaurants (comma separated)</label><input className="input" value={form.restaurants} onChange={e=>set("restaurants",e.target.value)} placeholder="e.g. Quay, Bennelong, Aria" /></div>
-      </FS>
-      <FS title="Signature Dish">
-        <div style={{background:G.cream,border:`1px solid ${G.border}`,borderRadius:2,padding:20}}>
-          {["name","category","img","desc","chefNote"].map(f=>(
-            <div key={f} style={{marginBottom:10}}>
-              <label className="fl">{f==="img"?"Dish Image URL":f==="chefNote"?"Chef's Note":f.charAt(0).toUpperCase()+f.slice(1)}</label>
-              {f==="desc"||f==="chefNote"?<textarea className="input" rows={2} value={form.dishes[0][f]} onChange={e=>{const d=[...form.dishes];d[0]={...d[0],[f]:e.target.value};set("dishes",d);}} style={{resize:"vertical"}} />:<input className="input" value={form.dishes[0][f]} onChange={e=>{const d=[...form.dishes];d[0]={...d[0],[f]:e.target.value};set("dishes",d);}} />}
-            </div>
-          ))}
-        </div>
-      </FS>
-      <div style={{borderTop:`1px solid ${G.border}`,paddingTop:32,marginTop:32}}>
-        <button onClick={submit} className="btn btn-primary" style={{padding:"14px 40px",fontSize:15}}>Submit Profile for Review</button>
-        <p style={{fontSize:13,color:G.softGrey,marginTop:10}}>Your profile will appear after admin approval.</p>
-      </div>
-    </div>
-  );
+  DB.push(chef); saveDB();
+  document.getElementById('upload-form').style.display = 'none';
+  document.getElementById('upload-success').style.display = 'block';
 }
 
-function InquiryPage() {
-  const [form, setForm] = useState({business:"",contact:"",email:"",phone:"",date:"",time:"",cuisine:"",workType:"",notes:"",urgent:false});
-  const [sent, setSent] = useState(false);
-  const set = (k,v) => setForm(p=>({...p,[k]:v}));
-  if (sent) return (
-    <div style={{minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,textAlign:"center"}}>
-      <div style={{fontSize:56,marginBottom:16}}>📩</div>
-      <h2 style={{fontSize:32,marginBottom:12}}>Inquiry Sent!</h2>
-      <p style={{fontSize:16,color:G.softGrey,maxWidth:480}}>We'll match you with suitable chefs and respond within 24 hours.</p>
-    </div>
-  );
-  return (
-    <div style={{maxWidth:720,margin:"0 auto",padding:"60px 40px"}}>
-      <p style={{letterSpacing:3,textTransform:"uppercase",fontSize:11,color:G.gold,marginBottom:8,fontWeight:500}}>Restaurant Portal</p>
-      <h1 style={{fontSize:40,marginBottom:8}}>Hire a Chef</h1>
-      <p style={{fontSize:15,color:G.softGrey,marginBottom:40,fontWeight:300}}>Tell us what you need and we'll connect you with the right chef.</p>
-      {[["Business Name *","business","text"],["Contact Person","contact","text"],["Email *","email","email"],["Phone","phone","tel"]].map(([l,k,t])=>(
-        <div key={k} style={{marginBottom:14}}><label className="fl">{l}</label><input className="input" type={t} value={form[k]} onChange={e=>set(k,e.target.value)} /></div>
-      ))}
-      <div style={{display:"flex",gap:16,marginBottom:14}}>
-        <div style={{flex:1}}><label className="fl">Date Needed</label><input className="input" type="date" value={form.date} onChange={e=>set("date",e.target.value)} /></div>
-        <div style={{flex:1}}><label className="fl">Time</label><input className="input" value={form.time} onChange={e=>set("time",e.target.value)} placeholder="e.g. 6pm–11pm" /></div>
-      </div>
-      <div style={{display:"flex",gap:16,marginBottom:14}}>
-        <div style={{flex:1}}><label className="fl">Cuisine Required</label><select className="input" value={form.cuisine} onChange={e=>set("cuisine",e.target.value)}>{CUISINES.map(c=><option key={c}>{c}</option>)}</select></div>
-        <div style={{flex:1}}><label className="fl">Work Type</label><select className="input" value={form.workType} onChange={e=>set("workType",e.target.value)}>{WORK_TYPES.map(w=><option key={w}>{w}</option>)}</select></div>
-      </div>
-      <div style={{marginBottom:14}}><label className="fl">Notes</label><textarea className="input" rows={4} value={form.notes} onChange={e=>set("notes",e.target.value)} placeholder="Describe the event, kitchen, covers, specific requirements..." style={{resize:"vertical"}} /></div>
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:28}}><input type="checkbox" id="urg" checked={form.urgent} onChange={e=>set("urgent",e.target.checked)} style={{width:16,height:16}} /><label htmlFor="urg" style={{fontSize:14,cursor:"pointer"}}>Urgent request (within 48 hours)</label></div>
-      <button onClick={()=>{if(!form.business||!form.email)return alert("Business name and email required.");setSent(true);}} className="btn btn-primary" style={{padding:"14px 40px",fontSize:15}}>Send Inquiry</button>
-    </div>
-  );
+function resetUpload() {
+  document.getElementById('upload-form').style.display = 'block';
+  document.getElementById('upload-success').style.display = 'none';
+  document.querySelectorAll('.cuisine-pill.selected,[data-w].selected').forEach(e => e.classList.remove('selected'));
+  ['u-name','u-title','u-email','u-phone','u-rate','u-avail','u-summary','u-bio','u-quals','u-restaurants','u-photo','u-hero'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('u-exp').value = '';
+  ['u-photo-prev','u-hero-prev'].forEach(id => {
+    const el = document.getElementById(id); if (el) { el.src = ''; el.style.display = 'none'; }
+  });
 }
 
-function AdminPage({ chefs, setChefs }) {
-  const [tab, setTab] = useState("chefs");
-  const [editing, setEditing] = useState(null);
-  const [editForm, setEditForm] = useState(null);
-  const [exportMsg, setExportMsg] = useState("");
-  const update = (id,key,val) => { const u=chefs.map(c=>c.id===id?{...c,[key]:val}:c); setChefs(u); saveDB(u); };
-  const remove = (id) => { if (!window.confirm("Delete this chef?")) return; const u=chefs.filter(c=>c.id!==id); setChefs(u); saveDB(u); };
-  const startEdit = (chef) => { setEditing(chef.id); setEditForm({...chef,restaurants:chef.restaurants?.join(", ")||""}); };
-  const saveEdit = () => { const u=chefs.map(c=>c.id===editForm.id?{...editForm,restaurants:editForm.restaurants.split(",").map(s=>s.trim()).filter(Boolean)}:c); setChefs(u); saveDB(u); setEditing(null); };
-  const exportJSON = () => { const b=new Blob([JSON.stringify(chefs,null,2)],{type:"application/json"}); const u=URL.createObjectURL(b); const a=document.createElement("a"); a.href=u; a.download="cheflink_chefs.json"; a.click(); setExportMsg("Exported!"); setTimeout(()=>setExportMsg(""),2000); };
-  const importJSON = (e) => { const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{try{const d=JSON.parse(ev.target.result);setChefs(d);saveDB(d);}catch{alert("Invalid JSON");}};r.readAsText(f); };
-  const pending = chefs.filter(c=>!c.approved);
-  return (
-    <div style={{display:"flex",minHeight:"calc(100vh - 64px)"}}>
-      <div style={{width:220,background:G.charcoal,padding:"28px 0",flexShrink:0}}>
-        <div style={{padding:"0 24px 28px",borderBottom:"1px solid rgba(255,255,255,.1)"}}>
-          <div style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:G.gold,fontWeight:700}}>ChefLink</div>
-          <div style={{fontSize:11,color:"rgba(255,255,255,.4)",letterSpacing:2,textTransform:"uppercase",marginTop:2}}>Admin Panel</div>
+/* ══════════════════════════════════════════════════════
+   INQUIRY
+══════════════════════════════════════════════════════ */
+function submitInquiry() {
+  if (!document.getElementById('i-biz').value || !document.getElementById('i-email').value) {
+    alert('Business name and email are required.'); return;
+  }
+  document.getElementById('inq-form').style.display = 'none';
+  document.getElementById('inq-success').style.display = 'block';
+}
+
+/* ══════════════════════════════════════════════════════
+   ADMIN
+══════════════════════════════════════════════════════ */
+function adminTab(t) {
+  ['chefs','pending','export'].forEach(id => {
+    document.getElementById('admin-' + id).style.display = id === t ? 'block' : 'none';
+    document.getElementById('at-' + id).classList.toggle('active', id === t);
+  });
+  if (t === 'chefs')   renderAdmin();
+  if (t === 'pending') renderPending();
+}
+
+function renderAdmin() {
+  const pending = DB.filter(c => !c.approved).length;
+  const pc = document.getElementById('pending-count');
+  if (pc) pc.textContent = pending > 0 ? `(${pending})` : '';
+
+  document.getElementById('admin-chef-list').innerHTML = DB.map(c => `
+    <div class="admin-row">
+      <img src="${c.photo}" alt="" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #E8E2D6;flex-shrink:0" onerror="this.style.display='none'">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:3px">
+          <span style="font-weight:600;font-size:14px">${c.name}</span>
+          ${c.approved ? '<span class="badge badge-green">Approved</span>' : '<span class="badge badge-orange">Pending</span>'}
+          ${c.featured ? '<span class="badge badge-gold">Featured</span>' : ''}
+          <span class="badge" style="background:#F5F1E8;color:#8A8580">${c.plan}</span>
         </div>
-        {[["chefs","👨‍🍳 All Chefs"],["pending",`⏳ Pending (${pending.length})`],["export","📤 Import / Export"]].map(([t,l])=>(
-          <div key={t} onClick={()=>setTab(t)} style={{padding:"12px 24px",cursor:"pointer",fontSize:13,color:tab===t?"#fff":"rgba(255,255,255,.5)",background:tab===t?"rgba(255,255,255,.08)":"transparent",borderLeft:tab===t?`3px solid ${G.gold}`:"3px solid transparent"}}>{l}</div>
-        ))}
+        <p style="font-size:12px;color:#8A8580;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.title||''} · ${c.location||''}</p>
       </div>
-      <div style={{flex:1,padding:"36px 40px",overflowY:"auto",background:G.ivory}}>
-        {tab==="chefs" && <>
-          <h2 style={{fontSize:28,marginBottom:28}}>All Chefs <span style={{fontSize:16,color:G.softGrey,fontFamily:"'Jost',sans-serif",fontWeight:300}}>({chefs.length})</span></h2>
-          <div style={{display:"grid",gap:12}}>
-            {chefs.map(c=>(
-              <div key={c.id} style={{background:"#fff",border:`1px solid ${G.border}`,borderRadius:2,padding:"16px 20px",display:"flex",gap:14,alignItems:"center"}}>
-                <img src={c.photo} alt={c.name} style={{width:52,height:52,borderRadius:"50%",objectFit:"cover",border:`2px solid ${G.border}`}} />
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:4}}>
-                    <span style={{fontWeight:600,fontSize:16}}>{c.name}</span>
-                    {c.approved&&<span className="badge badge-green">Approved</span>}
-                    {!c.approved&&<span className="badge badge-orange">Pending</span>}
-                    {c.featured&&<span className="badge badge-gold">Featured</span>}
-                    <span className="badge" style={{background:G.cream,color:G.softGrey}}>{c.plan}</span>
-                  </div>
-                  <p style={{fontSize:13,color:G.softGrey}}>{c.title} · {c.location}</p>
-                </div>
-                <div style={{display:"flex",gap:8,flexShrink:0,flexWrap:"wrap",justifyContent:"flex-end"}}>
-                  <button onClick={()=>update(c.id,"approved",!c.approved)} className="btn btn-outline" style={{fontSize:11,padding:"6px 12px"}}>{c.approved?"Unapprove":"Approve"}</button>
-                  <button onClick={()=>update(c.id,"featured",!c.featured)} className="btn btn-outline" style={{fontSize:11,padding:"6px 12px"}}>{c.featured?"Unfeature":"Feature"}</button>
-                  <button onClick={()=>startEdit(c)} className="btn btn-gold" style={{fontSize:11,padding:"6px 12px"}}>Edit</button>
-                  <button onClick={()=>remove(c.id)} style={{fontSize:11,padding:"6px 12px",background:"#fff",color:"#C0392B",border:"1px solid #C0392B",borderRadius:2,cursor:"pointer"}}>Delete</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>}
-        {tab==="pending" && <>
-          <h2 style={{fontSize:28,marginBottom:28}}>Pending Approval</h2>
-          {pending.length===0?<p style={{color:G.softGrey}}>No chefs pending approval.</p>:(
-            <div style={{display:"grid",gap:12}}>
-              {pending.map(c=>(
-                <div key={c.id} style={{background:"#fff",border:`1px solid ${G.border}`,borderRadius:2,padding:"20px"}}>
-                  <div style={{display:"flex",gap:14,alignItems:"center",marginBottom:12}}>
-                    {c.photo&&<img src={c.photo} alt="" style={{width:56,height:56,borderRadius:"50%",objectFit:"cover"}} />}
-                    <div><div style={{fontWeight:600,fontSize:17}}>{c.name}</div><div style={{fontSize:13,color:G.softGrey}}>{c.email} · {c.location}</div></div>
-                  </div>
-                  <p style={{fontSize:14,color:G.textMuted,marginBottom:16,lineHeight:1.6}}>{c.bio||c.summary}</p>
-                  <div style={{display:"flex",gap:10}}>
-                    <button onClick={()=>update(c.id,"approved",true)} className="btn btn-primary" style={{fontSize:12}}>Approve</button>
-                    <button onClick={()=>remove(c.id)} style={{fontSize:12,padding:"9px 20px",background:"#fff",color:"#C0392B",border:"1px solid #C0392B",borderRadius:2,cursor:"pointer"}}>Reject</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </>}
-        {tab==="export" && (
+      <div class="admin-row-actions">
+        <button onclick="toggleApprove('${c.id}')" class="btn btn-outline" style="font-size:10px;padding:5px 10px">${c.approved ? 'Unapprove' : 'Approve'}</button>
+        <button onclick="toggleFeatured('${c.id}')" class="btn btn-outline" style="font-size:10px;padding:5px 10px">${c.featured ? 'Unfeature' : 'Feature'}</button>
+        <button onclick="openEdit('${c.id}')" class="btn btn-gold" style="font-size:10px;padding:5px 10px">Edit</button>
+        <button onclick="deleteChef('${c.id}')" style="font-size:10px;padding:5px 10px;background:#fff;color:#C0392B;border:1px solid #C0392B;border-radius:2px;cursor:pointer">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderPending() {
+  const pending = DB.filter(c => !c.approved);
+  document.getElementById('admin-pending-list').innerHTML = pending.length === 0
+    ? '<p style="color:#8A8580;font-size:14px">No chefs pending approval.</p>'
+    : pending.map(c => `
+      <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:18px;margin-bottom:12px">
+        <div style="display:flex;gap:13px;align-items:center;margin-bottom:10px">
+          ${c.photo ? `<img src="${c.photo}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">` : ''}
           <div>
-            <h2 style={{fontSize:28,marginBottom:28}}>Import / Export</h2>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
-              <div style={{background:"#fff",border:`1px solid ${G.border}`,borderRadius:2,padding:28}}>
-                <h3 style={{fontSize:18,marginBottom:8}}>Export Data</h3>
-                <p style={{fontSize:14,color:G.softGrey,marginBottom:20,lineHeight:1.6}}>Download all chef data as JSON. Use this to back up your database or migrate to Supabase/Firebase.</p>
-                <button onClick={exportJSON} className="btn btn-primary">{exportMsg||"Export JSON"}</button>
-              </div>
-              <div style={{background:"#fff",border:`1px solid ${G.border}`,borderRadius:2,padding:28}}>
-                <h3 style={{fontSize:18,marginBottom:8}}>Import Data</h3>
-                <p style={{fontSize:14,color:G.softGrey,marginBottom:20,lineHeight:1.6}}>Import chefs from a JSON file. This will replace the current database.</p>
-                <input type="file" accept=".json" onChange={importJSON} />
-              </div>
-            </div>
-            <div style={{background:"#fff",border:`1px solid ${G.border}`,borderRadius:2,padding:28,marginTop:20}}>
-              <h3 style={{fontSize:18,marginBottom:12}}>Backend Integration Notes</h3>
-              <p style={{fontSize:14,color:G.softGrey,lineHeight:1.8}}>This prototype uses <strong>localStorage</strong> as the database. To deploy to production, replace the <code style={{background:G.cream,padding:"1px 6px",borderRadius:2}}>saveDB</code> / <code style={{background:G.cream,padding:"1px 6px",borderRadius:2}}>defaultDB</code> functions with API calls to <strong>Supabase</strong>, <strong>Firebase Firestore</strong>, or any REST backend. All data is structured as clean JSON — ready for migration.</p>
-            </div>
-          </div>
-        )}
-      </div>
-      {editing && editForm && (
-        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000}}>
-          <div style={{background:"#fff",borderRadius:4,padding:36,width:"90%",maxWidth:600,maxHeight:"85vh",overflowY:"auto"}}>
-            <h3 style={{fontSize:22,marginBottom:20}}>Edit Chef: {editForm.name}</h3>
-            {[["name","Name"],["title","Title"],["email","Email"],["phone","Phone"],["rate","Rate"],["availability","Availability"],["summary","Summary"],["photo","Photo URL"],["heroPhoto","Hero Photo URL"]].map(([k,l])=>(
-              <div key={k} style={{marginBottom:12}}>
-                <label className="fl">{l}</label>
-                {k==="summary"?<textarea className="input" rows={2} value={editForm[k]||""} onChange={e=>setEditForm(p=>({...p,[k]:e.target.value}))} style={{resize:"vertical"}} />:<input className="input" value={editForm[k]||""} onChange={e=>setEditForm(p=>({...p,[k]:e.target.value}))} />}
-              </div>
-            ))}
-            <div style={{marginBottom:12}}><label className="fl">Plan</label><select className="input" value={editForm.plan} onChange={e=>setEditForm(p=>({...p,plan:e.target.value}))}>{["free","basic","premium"].map(p=><option key={p}>{p}</option>)}</select></div>
-            <div style={{display:"flex",gap:12,marginTop:20}}>
-              <button onClick={saveEdit} className="btn btn-primary">Save Changes</button>
-              <button onClick={()=>setEditing(null)} className="btn btn-outline">Cancel</button>
-            </div>
+            <div style="font-weight:600;font-size:16px">${c.name}</div>
+            <div style="font-size:12px;color:#8A8580">${c.email} · ${c.location}</div>
           </div>
         </div>
-      )}
-    </div>
-  );
+        <p style="font-size:13px;color:#6B6560;margin-bottom:14px;line-height:1.6">${c.bio || c.summary || ''}</p>
+        <div style="display:flex;gap:10px">
+          <button onclick="toggleApprove('${c.id}');renderPending();renderAdmin()" class="btn btn-dark" style="font-size:12px">Approve</button>
+          <button onclick="deleteChef('${c.id}');renderPending();renderAdmin()" style="font-size:12px;padding:9px 18px;background:#fff;color:#C0392B;border:1px solid #C0392B;border-radius:2px;cursor:pointer">Reject</button>
+        </div>
+      </div>`).join('');
 }
 
-function App() {
-  const [chefs, setChefs] = useState(defaultDB);
-  const [view, setView] = useState("home");
-  const [selectedChef, setSelectedChef] = useState(null);
-  return (
-    <>
-      <Nav view={view} setView={setView} />
-      {view==="home" && <HomePage chefs={chefs} setView={setView} setSelectedChef={setSelectedChef} />}
-      {view==="directory" && <DirectoryPage chefs={chefs} setView={setView} setSelectedChef={setSelectedChef} />}
-      {view==="portfolio" && <PortfolioPage chef={selectedChef} setView={setView} />}
-      {view==="upload" && <UploadPage chefs={chefs} setChefs={setChefs} setView={setView} />}
-      {view==="inquiry" && <InquiryPage />}
-      {view==="admin" && <AdminPage chefs={chefs} setChefs={setChefs} />}
-    </>
-  );
+function toggleApprove(id)  { const c = DB.find(x => x.id === id); if (c) { c.approved = !c.approved; saveDB(); renderAdmin(); } }
+function toggleFeatured(id) { const c = DB.find(x => x.id === id); if (c) { c.featured = !c.featured; saveDB(); renderAdmin(); } }
+function deleteChef(id)     { if (!confirm('Delete this chef?')) return; DB = DB.filter(c => c.id !== id); saveDB(); renderAdmin(); }
+
+function openEdit(id) {
+  const c = DB.find(x => x.id === id); if (!c) return;
+  document.getElementById('edit-id').value       = id;
+  document.getElementById('edit-name').value     = c.name || '';
+  document.getElementById('edit-title').value    = c.title || '';
+  document.getElementById('edit-rate').value     = c.rate || '';
+  document.getElementById('edit-avail').value    = c.availability || '';
+  document.getElementById('edit-summary').value  = c.summary || '';
+  document.getElementById('edit-photo').value    = c.photo || '';
+  document.getElementById('edit-plan').value     = c.plan || 'free';
+  document.getElementById('edit-modal').style.display = 'block';
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(React.createElement(App));
+function saveEdit() {
+  const id = document.getElementById('edit-id').value;
+  const c  = DB.find(x => x.id === id); if (!c) return;
+  c.name         = document.getElementById('edit-name').value;
+  c.title        = document.getElementById('edit-title').value;
+  c.rate         = document.getElementById('edit-rate').value;
+  c.availability = document.getElementById('edit-avail').value;
+  c.summary      = document.getElementById('edit-summary').value;
+  c.photo        = document.getElementById('edit-photo').value;
+  c.plan         = document.getElementById('edit-plan').value;
+  saveDB(); closeEdit(); renderAdmin();
+}
+
+function closeEdit() { document.getElementById('edit-modal').style.display = 'none'; }
+function closeEditOutside(e) { if (e.target.classList.contains('modal-bg')) closeEdit(); }
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(DB, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'cheflink_chefs.json'; a.click();
+  const btn = document.getElementById('export-btn');
+  btn.textContent = 'Exported!';
+  setTimeout(() => { btn.textContent = 'Export JSON'; }, 2000);
+}
+
+function importData(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try { DB = JSON.parse(ev.target.result); saveDB(); renderAdmin(); alert('Imported ' + DB.length + ' chefs successfully.'); }
+    catch (e) { alert('Invalid JSON file. Please check the file and try again.'); }
+  };
+  reader.readAsText(file);
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+renderFeatured();
 </script>
 </body>
 </html>
