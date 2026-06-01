@@ -2,123 +2,1799 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Unlock Code Generator — PRIVATE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
+<title>SITHKOP010 — Food Cost Calculator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-:root{--navy:#1A2F4A;--teal:#0D7A6E;--gold:#D4A017;--red:#B83232;--green:#1D7A4F;
-  --paper:#F7F4EE;--card:#FFFFFF;--ink:#1A2F4A;--muted:#5C6B7A;--line:#E2DDD2}
+:root{
+  --navy:#1A2F4A; --teal:#0D7A6E; --gold:#D4A017; --green:#1D7A4F;
+  --red:#B83232; --purple:#6B3A8E;
+  --paper:#F7F4EE; --card:#FFFFFF; --ink:#1A2F4A; --muted:#5C6B7A;
+  --line:#E2DDD2; --yellow:#FFF6D6; --yellow-bd:#E8D27A;
+  --bluecalc:#EAF1FA; --greencalc:#E6F2EA;
+  --shadow:0 1px 2px rgba(26,47,74,.06),0 8px 24px rgba(26,47,74,.07);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Archivo',sans-serif;background:linear-gradient(135deg,#1A2F4A,#0e1b2c);min-height:100vh;
-  color:var(--ink);padding:32px 16px;display:flex;align-items:flex-start;justify-content:center}
-.shell{max-width:560px;width:100%;margin:auto}
-.warn{background:#FFF6D6;border:1.5px solid var(--gold);border-radius:12px;padding:14px 18px;
-  font-size:13.5px;color:#7a5a00;font-weight:600;margin-bottom:18px;line-height:1.55}
-.warn strong{color:var(--red)}
-.card{background:var(--paper);border-radius:18px;padding:32px 30px;box-shadow:0 30px 80px rgba(0,0,0,.4);
-  border:1px solid rgba(212,160,23,.2)}
-.brand{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px;text-align:center}
-h1{font-family:'Fraunces',serif;font-weight:700;font-size:26px;color:var(--navy);text-align:center;margin-bottom:8px}
-.sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.5}
-label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
-input{font-family:'Fraunces',serif;font-weight:600;font-size:18px;letter-spacing:.05em;text-transform:uppercase;
-  text-align:center;width:100%;border:2px solid var(--line);border-radius:10px;padding:14px;background:#fff;color:var(--navy)}
-input:focus{outline:none;border-color:var(--teal)}
-button{margin-top:14px;width:100%;font-family:'Archivo';font-weight:600;font-size:15px;padding:14px;border:none;
-  border-radius:10px;background:var(--teal);color:#fff;cursor:pointer;transition:filter .12s}
-button:hover{filter:brightness(1.1)}
-.result{margin-top:24px;background:#fff;border:2px dashed var(--gold);border-radius:14px;padding:20px;text-align:center;display:none}
-.result.show{display:block}
-.result .l{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
-.result .v{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--navy);letter-spacing:.05em;word-break:break-all;margin-bottom:10px}
-.result .copy{background:var(--navy);margin-top:6px}
-.result .copy.copied{background:var(--green)}
-.err{color:var(--red);font-weight:600;text-align:center;margin-top:14px;font-size:13.5px}
-.foot{text-align:center;font-size:11px;color:rgba(255,255,255,.5);margin-top:16px}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Archivo',system-ui,sans-serif;
+  background:var(--paper);
+  background-image:radial-gradient(circle at 12% 8%,rgba(13,122,110,.05),transparent 42%),
+                   radial-gradient(circle at 88% 0%,rgba(212,160,23,.06),transparent 40%);
+  color:var(--ink); line-height:1.5; min-height:100vh;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 80px}
+
+/* ---- Header ---- */
+header{
+  background:linear-gradient(135deg,var(--navy),#24405f);
+  color:#fff;border-radius:18px;padding:24px 26px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+header::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(212,160,23,.35),transparent 70%);}
+header .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+header h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,5vw,40px);line-height:1.05;margin:6px 0 4px}
+header p{color:#cdd8e4;font-size:14px;max-width:60ch}
+header [contenteditable="true"]{outline:none;border-radius:6px;padding:1px 4px;margin-left:-4px;transition:background .15s}
+header [contenteditable="true"]:hover{background:rgba(255,255,255,.06)}
+header [contenteditable="true"]:focus{background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(212,160,23,.5)}
+.title-reset{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.1);color:#cdd8e4;border:1px solid rgba(255,255,255,.15);
+  width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;
+  font-family:inherit;transition:all .15s;z-index:2}
+.title-reset:hover{background:rgba(255,255,255,.2);color:#fff}
+
+/* ---- Tabs ---- */
+.tabs{display:flex;gap:8px;margin:20px 0 22px;flex-wrap:wrap}
+.tab{
+  appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--navy);
+  font-family:'Archivo';font-weight:600;font-size:15px;padding:11px 20px;border-radius:12px;cursor:pointer;
+  transition:transform .12s ease,border-color .12s,background .12s;
+}
+.tab:hover{transform:translateY(-1px)}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tab.active.t-list{background:var(--teal);border-color:var(--teal)}
+.tab.active.t-recipes{background:var(--gold);border-color:var(--gold);color:#fff}
+.tab-count{display:inline-block;margin-left:6px;background:rgba(0,0,0,.12);color:inherit;font-size:11px;font-weight:700;
+  padding:2px 7px;border-radius:999px;min-width:18px;text-align:center}
+.tab.active .tab-count{background:rgba(255,255,255,.25);color:#fff}
+
+/* ----- save status pill ----- */
+.save-status{font-size:12.5px;color:var(--muted);font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.save-status.saved{color:var(--green)}
+.save-status.saving{color:var(--gold)}
+.save-status .dot-s{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+/* ----- recipes panel ----- */
+.rcp-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.rcp-controls .search{flex:1;min-width:200px;position:relative}
+.rcp-controls .search input{padding-left:38px}
+.rcp-controls .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.5}
+
+.rcp-list{display:flex;flex-direction:column;gap:10px}
+.rcp-row{
+  background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:14px 16px;
+  display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+  transition:border-color .12s,transform .12s,box-shadow .12s;cursor:pointer;
+}
+.rcp-row:hover{border-color:var(--gold);transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,160,23,.12)}
+.rcp-row.active{border-color:var(--teal);background:#f7fbfa}
+.rcp-row.active::before{content:"OPEN";position:absolute;background:var(--teal);color:#fff;font-size:9px;font-weight:700;
+  letter-spacing:.1em;padding:2px 8px;border-radius:4px;margin-top:-23px;margin-left:-8px}
+.rcp-row{position:relative}
+
+.rcp-main{min-width:0}
+.rcp-name{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--navy);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rcp-name.empty{font-style:italic;color:var(--muted);font-weight:500}
+.rcp-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:5px;font-size:12.5px;color:var(--muted)}
+.rcp-meta .num{color:var(--navy);font-weight:600;font-variant-numeric:tabular-nums}
+.rcp-meta .tag{background:#fbf5e3;color:#8a6800;font-weight:600;padding:1px 8px;border-radius:6px;font-size:11px}
+
+.rcp-actions{display:flex;gap:6px}
+.rcp-act{
+  background:transparent;border:1px solid var(--line);color:var(--muted);
+  width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;
+  transition:all .12s;
+}
+.rcp-act:hover{background:var(--paper);color:var(--navy);border-color:var(--gold)}
+.rcp-act.del:hover{background:#f7e6e6;color:var(--red);border-color:var(--red)}
+
+.rcp-empty{text-align:center;padding:40px 16px 20px}
+
+@media (max-width:600px){
+  .rcp-row{grid-template-columns:1fr;gap:10px}
+  .rcp-actions{justify-self:start}
+}
+
+.panel{display:none;animation:none}
+.panel.show{display:block}
+
+/* ---- Cards ---- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+.card-h{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;background:#fcfaf5}
+.card-h .dot{width:10px;height:10px;border-radius:50%}
+.card-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px}
+.card-h .sub{font-size:12.5px;color:var(--muted);font-weight:400;margin-left:auto}
+.card-b{padding:18px 20px}
+
+/* ---- Dish info grid ---- */
+.dish-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.fld .hint{font-size:11px;color:var(--muted);font-weight:400}
+input,select,textarea{
+  font-family:'Archivo';font-size:15px;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;width:100%;
+  transition:border-color .12s,box-shadow .12s;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,122,110,.12)}
+input.yellow,select.yellow,textarea.yellow{background:var(--yellow);border-color:var(--yellow-bd)}
+textarea{resize:vertical;min-height:44px}
+
+/* ---- Ingredient table ---- */
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+thead th{
+  background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;text-align:left;
+  padding:10px 10px;white-space:nowrap;position:sticky;top:0;
+}
+thead th.num{text-align:right}
+tbody td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:nth-child(even){background:#faf8f3}
+td.calc{background:var(--bluecalc);color:#1f3864;font-variant-numeric:tabular-nums;text-align:right;font-weight:600;white-space:nowrap}
+td.calc.uom{text-align:center;font-weight:500;color:var(--teal)}
+td .ing-in,td .qty-in,td .yld-in{border-radius:8px;padding:7px 8px;font-size:14px}
+td .qty-in,td .yld-in{text-align:right}
+.notfound{color:var(--red);font-weight:600;font-size:12.5px}
+.row-del{border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:4px 6px;border-radius:6px}
+.row-del:hover{background:#f3e9e9;color:var(--red)}
+.addrow{margin-top:12px;display:inline-flex;align-items:center;gap:7px;background:var(--teal);color:#fff;border:none;
+  font-family:'Archivo';font-weight:600;font-size:14px;padding:10px 16px;border-radius:10px;cursor:pointer;transition:transform .12s,filter .12s}
+.addrow:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.addrow.secondary{background:var(--navy)}
+.addrow.secondary:hover{background:#24405f}
+.import-result{display:none;padding:11px 14px;border-radius:10px;font-size:13.5px;margin-bottom:14px;line-height:1.5}
+.import-result.show{display:block}
+.import-result.ok{background:#e6f2ea;color:var(--green);border-left:3px solid var(--green)}
+.import-result.err{background:#f7e6e6;color:var(--red);border-left:3px solid var(--red)}
+.import-result strong{font-weight:700}
+
+.total-bar{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:13px 16px;
+  background:var(--navy);color:#fff;border-radius:12px}
+.total-bar .lbl{font-weight:600;font-size:14px}
+.total-bar .val{font-family:'Fraunces',serif;font-weight:600;font-size:24px;font-variant-numeric:tabular-nums}
+
+/* ---- Summary rows ---- */
+.sumrow{display:flex;justify-content:space-between;align-items:center;padding:11px 4px;border-bottom:1px dashed var(--line);gap:14px}
+.sumrow:last-child{border-bottom:none}
+.sumrow .k{font-size:14px;color:var(--navy);font-weight:500}
+.sumrow .k small{display:block;color:var(--muted);font-weight:400;font-size:11.5px}
+.sumrow .v{font-variant-numeric:tabular-nums;font-weight:600;font-size:16px;min-width:96px;text-align:right}
+.sumrow .v.calc{background:var(--bluecalc);color:#1f3864;border-radius:8px;padding:6px 12px}
+.sumrow .v.in{padding:0}
+.sumrow .v.in input{text-align:right;width:120px;font-weight:600}
+.pill{font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;display:inline-block}
+.pill.on{background:var(--greencalc);color:var(--green)}
+.pill.under{background:#fdf2e0;color:var(--gold)}
+.pill.over{background:#f7e6e6;color:var(--red)}
+.pill.idle{background:#eef0f2;color:var(--muted)}
+
+/* target price block */
+.target-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:8px}
+.bigprice{grid-column:1 / -1;background:linear-gradient(135deg,var(--teal),#119184);color:#fff;border-radius:14px;
+  padding:18px 22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.bigprice .l{font-size:13px;letter-spacing:.04em;text-transform:uppercase;opacity:.9;font-weight:600}
+.bigprice .p{font-family:'Fraunces',serif;font-weight:700;font-size:38px;font-variant-numeric:tabular-nums}
+.bigprice .sub{font-size:13px;opacity:.92;margin-top:2px}
+.mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.mini .box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.mini .box .l{font-size:12px;color:var(--muted);font-weight:600}
+.mini .box .v{font-family:'Fraunces',serif;font-weight:600;font-size:22px;font-variant-numeric:tabular-nums;color:var(--navy);margin-top:3px}
+
+.note{font-size:12.5px;color:var(--muted);background:#fbf8f1;border-left:3px solid var(--gold);
+  padding:10px 13px;border-radius:0 8px 8px 0;margin-top:14px;line-height:1.55}
+
+/* ---- Price list ---- */
+.pl-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.pl-controls .search{flex:1;min-width:200px;position:relative}
+.pl-controls .search input{padding-left:38px}
+.pl-controls .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.5}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);
+  background:#fff;color:var(--navy);cursor:pointer;transition:all .12s}
+.chip:hover{border-color:var(--teal)}
+.chip.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.pl-table thead th{background:var(--teal)}
+.pl-table{min-width:560px}
+.pl-table td.price{font-weight:700;color:var(--navy)}
+.pl-table td.edit input{width:92px;text-align:right;padding:6px 8px;font-size:13.5px}
+.pl-del{border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:4px 8px;border-radius:6px}
+.pl-del:hover{background:#f3e9e9;color:var(--red)}
+.add-form{display:none;background:#fbf8f1;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+.add-form.show{display:block}
+.add-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.add-actions{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.add-msg{font-size:13px;font-weight:600}
+.add-msg.ok{color:var(--green)}
+.add-msg.err{color:var(--red)}
+.custom-tag{font-size:10px;font-weight:700;color:var(--gold);margin-left:6px;letter-spacing:.04em;vertical-align:middle}
+.pl-count{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.cat-tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+
+/* datalist fallback note + autocomplete */
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:26px;line-height:1.6}
+.reset{background:none;border:1.5px solid var(--line);color:var(--muted);font-family:'Archivo';font-weight:600;
+  font-size:13px;padding:8px 14px;border-radius:9px;cursor:pointer}
+.reset:hover{border-color:var(--red);color:var(--red)}
+
+@media (max-width:800px){
+  .dish-grid,.target-grid{grid-template-columns:1fr}
+  .mini{grid-template-columns:1fr}
+  .add-grid{grid-template-columns:1fr}
+  .wrap{padding:14px 11px 70px}
+  header{padding:20px}
+  .bigprice .p{font-size:32px}
+}
+
+/* ===================== TRIAL BANNER ===================== */
+.trial-banner{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  background:linear-gradient(90deg,#FFF6D6,#fbe9b3);border:1px solid var(--yellow-bd);
+  border-radius:12px;padding:10px 16px;margin-bottom:14px;font-size:13.5px;color:#7a5a00;font-weight:600;
+}
+.trial-banner.warn{background:linear-gradient(90deg,#fde2cc,#fac9a3);border-color:#e8a878;color:#a04a00}
+.trial-unlock{
+  background:var(--navy);color:#fff;border:none;font-family:'Archivo';font-weight:600;font-size:13px;
+  padding:7px 14px;border-radius:8px;cursor:pointer;
+}
+.trial-unlock:hover{filter:brightness(1.1)}
+.trial-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.trial-pay{
+  background:var(--teal);color:#fff;text-decoration:none;font-family:'Archivo';font-weight:700;font-size:13px;
+  padding:7px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;
+  box-shadow:0 2px 8px rgba(13,122,110,.3);
+}
+.trial-pay:hover{filter:brightness(1.1);transform:translateY(-1px)}
+
+/* ===================== LOCK SCREEN ===================== */
+.lock-screen{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(circle at 20% 10%,#24405f,#0e1b2c 70%);
+  align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px;
+}
+.lock-screen.show{display:flex}
+.lock-card{
+  background:var(--paper);border-radius:20px;max-width:520px;width:100%;
+  padding:36px 32px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+  position:relative;text-align:center;margin:auto;
+  border:1px solid rgba(212,160,23,.2);
+}
+.lock-brand{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:18px}
+.lock-icon{font-size:48px;margin-bottom:8px}
+.lock-title{font-family:'Fraunces',serif;font-weight:600;font-size:26px;color:var(--navy);margin-bottom:8px;line-height:1.2}
+.lock-msg{font-size:14.5px;color:var(--muted);margin-bottom:24px;line-height:1.55}
+.lock-fp{background:#fff;border:1.5px dashed var(--gold);border-radius:12px;padding:14px 16px;margin-bottom:22px;position:relative;text-align:left}
+.lock-fp-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.lock-fp-label span{font-weight:500;text-transform:none;letter-spacing:0;font-size:11.5px}
+.lock-fp-value{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:.05em;word-break:break-all}
+.lock-copy{position:absolute;top:14px;right:14px;background:var(--navy);color:#fff;border:none;font-family:'Archivo';
+  font-weight:600;font-size:12px;padding:6px 12px;border-radius:7px;cursor:pointer}
+.lock-copy:hover{filter:brightness(1.15)}
+.lock-copy.copied{background:var(--green)}
+.lock-contact{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.lock-btn{
+  width:100%;text-decoration:none;display:flex;align-items:center;justify-content:center;
+  font-family:'Archivo';font-weight:700;font-size:15px;padding:14px 18px;border-radius:10px;cursor:pointer;border:none;
+  transition:transform .1s,filter .1s;
+}
+.lock-btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.lock-btn.primary{background:var(--teal);color:#fff;box-shadow:0 4px 14px rgba(13,122,110,.3)}
+.lock-btn.primary:hover{box-shadow:0 6px 20px rgba(13,122,110,.4)}
+.lock-btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);font-weight:600}
+.lock-unlock{text-align:left;border-top:1px solid var(--line);padding-top:20px;margin-bottom:20px}
+.lock-unlock-label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px}
+.lock-unlock-row{display:flex;gap:8px}
+.lock-unlock-row input{flex:1;font-family:'Fraunces',serif;font-weight:600;letter-spacing:.05em;text-align:center;font-size:15px;text-transform:uppercase}
+.lock-unlock-msg{margin-top:10px;font-size:13px;min-height:18px;font-weight:600}
+.lock-unlock-msg.err{color:var(--red)}
+.lock-unlock-msg.ok{color:var(--green)}
+.lock-footer{font-size:11.5px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:16px}
+
+body.locked{overflow:hidden}
+body.locked .wrap > *:not(.lock-screen){filter:blur(6px);pointer-events:none;user-select:none}
 </style>
 </head>
 <body>
-<div class="shell">
-  <div class="warn"><strong>⚠ PRIVATE FILE — DO NOT UPLOAD.</strong> Keep this file on your own device only. Anyone with this file can generate unlock codes for free.</div>
-  <div class="card">
-    <div class="brand">Webescapade — Internal</div>
-    <h1>Unlock Code Generator</h1>
-    <p class="sub">Paste the buyer's <strong>device code</strong> below (looks like <em>LCH-XXXX-XXXX</em>) and you'll get their matching unlock code to send back.</p>
+<div class="wrap">
 
-    <label>Buyer's device code</label>
-    <input id="fp" placeholder="LCH-XXXX-XXXX" autocomplete="off" spellcheck="false">
-    <button id="gen">Generate unlock code</button>
-    <div class="err" id="err"></div>
+<!-- ===================== LOCK SCREEN (hidden by default; shown when trial expires) ===================== -->
+<div class="lock-screen" id="lockScreen" aria-hidden="true">
+  <div class="lock-card">
+    <div class="lock-brand" id="lockBrand">Webescapade</div>
+    <div class="lock-icon">🔒</div>
+    <h2 class="lock-title" id="lockTitle">Your 14-day trial has ended</h2>
+    <p class="lock-msg" id="lockMsg">Thanks for trying the Food Cost Calculator. To keep using it on this device, please purchase an unlock code.</p>
 
-    <div class="result" id="result">
-      <div class="l">Send this to the buyer</div>
-      <div class="v" id="out">—</div>
-      <button class="copy" id="copy">Copy unlock code</button>
+    <div class="lock-fp">
+      <div class="lock-fp-label">Your device code <span>(send this to get your unlock code)</span></div>
+      <div class="lock-fp-value" id="fpDisplay">—</div>
+      <button class="lock-copy" id="copyFp">Copy</button>
     </div>
+
+    <div class="lock-contact">
+      <a href="https://paypal.me/MarcTeleki/59AUD" id="buyLink" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:white;padding:15px 30px;border-radius:8px;text-decoration:none;font-size:18px;font-weight:bold;text-align:center;">💳 Pay $59 AUD</a>
+      <a class="lock-btn ghost" href="mailto:your-email@example.com?subject=Food%20Cost%20Calculator%20Unlock" id="emailLink">Email for unlock</a>
+    </div>
+
+    <div class="lock-unlock">
+      <label class="lock-unlock-label">Already have an unlock code?</label>
+      <div class="lock-unlock-row">
+        <input type="text" id="unlockInput" placeholder="UNLK-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+        <button class="lock-btn primary" id="unlockBtn">Unlock</button>
+      </div>
+      <div class="lock-unlock-msg" id="unlockMsg"></div>
+    </div>
+
+    <div class="lock-footer">One unlock code per device. Save your code somewhere safe — you'll need it again if you clear your browser data.</div>
   </div>
-  <div class="foot">Pepper must match the one in the public calculator file. If you change the pepper, all previously-issued codes stop working.</div>
 </div>
 
-<script>
-/* ============ Must match the calculator's licence section ============ */
-const PEPPER = 'LCH-2026-FCCv1-pep-7Q4mZ';
-const B32 = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-function h32(str){ let h=5381>>>0; for(let i=0;i<str.length;i++){ h=(((h<<5)+h) ^ str.charCodeAt(i))>>>0; } return h; }
-function payload(str, len){
-  let a=h32(str+'a'), b=h32(str+'b'), c=h32(str+'c'), d=h32(str+'d');
-  let out='';
-  for(let i=0;i<len;i++){
-    const mix=(a ^ ((b<<3)|(b>>>29)) ^ ((c<<7)|(c>>>25)) ^ ((d<<11)|(d>>>21)))>>>0;
-    out += B32[mix & 31];
-    a=(a*16807 + b)>>>0; b=(b*16807 + c)>>>0; c=(c*16807 + d)>>>0; d=(d*16807 + a)>>>0;
-  }
-  return out;
-}
-function normaliseFp(s){
-  let u = String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-  // Expect: LCH + 8 chars
-  if(!u.startsWith('LCH')) return null;
-  const rest = u.slice(3);
-  if(rest.length !== 8) return null;
-  // every char must be in B32 set
-  for(const ch of rest) if(B32.indexOf(ch)<0) return null;
-  return 'LCH-' + rest.slice(0,4) + '-' + rest.slice(4,8);
-}
-function unlockFor(fp){
-  const p = payload(PEPPER + '|' + fp, 12);
-  return 'UNLK-' + p.slice(0,4) + '-' + p.slice(4,8) + '-' + p.slice(8,12);
-}
+<!-- Trial banner (sits above header during trial) -->
+<div class="trial-banner" id="trialBanner" style="display:none">
+  <span id="trialMsg">Trial</span>
+  <div class="trial-actions">
+    <a href="https://paypal.me/MarcTeleki/59AUD" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:white;padding:10px 22px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold;">💳 Pay $59 AUD</a>
+    <button class="trial-unlock" id="trialUnlockBtn">I have an unlock code</button>
+  </div>
+</div>
+  <header>
+    <div class="eyebrow" contenteditable="true" spellcheck="false" data-store="eyebrow" title="Tap to edit">SITHKOP010 · Plan and Cost Recipes</div>
+    <h1 contenteditable="true" spellcheck="false" data-store="title" title="Tap to edit">Food Cost Calculator</h1>
+    <p contenteditable="true" spellcheck="false" data-store="subtitle" title="Tap to edit">Pick ingredients and the NSW price fills in automatically. Set a target food cost % and it works out the selling price — exactly like the Excel working template.</p>
+    <button class="title-reset" id="resetTitle" title="Reset heading text">↺</button>
+  </header>
 
-const $ = s => document.querySelector(s);
-function generate(){
-  $('#err').textContent = '';
-  $('#result').classList.remove('show');
-  const fp = normaliseFp($('#fp').value);
-  if(!fp){
-    $('#err').textContent = 'That doesn\'t look like a valid device code. It should look like LCH-XXXX-XXXX (8 letters/numbers, no I O 0 1).';
-    return;
+  <div class="tabs">
+    <button class="tab active t-calc" data-tab="calc">🧮 Food Cost Calc</button>
+    <button class="tab t-recipes" data-tab="recipes">📚 My Recipes <span class="tab-count" id="recipeCount"></span></button>
+    <button class="tab t-list" data-tab="list">📋 Price List</button>
+  </div>
+
+  <!-- ===================== CALCULATOR ===================== -->
+  <section class="panel show" id="panel-calc">
+    <div class="card">
+      <div class="card-h"><span class="dot" style="background:var(--gold)"></span><h2>Recipe Details</h2><span class="sub">Yellow = type here</span></div>
+      <div class="card-b">
+        <div class="dish-grid">
+          <div class="fld"><label>Dish Name</label><input class="yellow" id="dishName" placeholder="e.g. Chicken &amp; Mushroom Risotto"></div>
+          <div class="fld"><label>Menu Type</label>
+            <select class="yellow" id="menuType">
+              <option value="">Select…</option>
+              <option>A La Carte</option><option>Buffet</option><option>Degustation</option>
+              <option>Table d'Hote</option><option>Cyclical</option>
+            </select>
+          </div>
+          <div class="fld"><label>Number of Portions <span class="hint">(10 most menus · 40 buffet)</span></label><input class="yellow" id="portions" type="number" min="1" value="10"></div>
+          <div class="fld"><label>Dish Description</label><textarea class="yellow" id="dishDesc" placeholder="1–2 sentences for the menu"></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span class="dot" style="background:var(--teal)"></span><h2>Section A — Ingredient Costing</h2><span class="sub">Pick a name → price auto-fills</span></div>
+      <div class="card-b">
+        <div class="tbl-scroll">
+          <table id="ingTable">
+            <thead><tr>
+              <th style="min-width:190px">Ingredient Name</th>
+              <th class="num" style="width:78px">Qty</th>
+              <th style="width:70px">UoM</th>
+              <th class="num" style="width:96px">Price / Unit</th>
+              <th class="num" style="width:88px">Yield %</th>
+              <th class="num" style="width:104px">Edible / Unit</th>
+              <th class="num" style="width:108px">Total Cost</th>
+              <th style="width:34px"></th>
+            </tr></thead>
+            <tbody id="ingBody"></tbody>
+          </table>
+        </div>
+        <button class="addrow" id="addRow">＋ Add ingredient</button>
+        <div class="total-bar"><span class="lbl">Total Recipe Ingredient Cost</span><span class="val" id="totalCost">$0.00</span></div>
+        <div class="note"><strong>Yield %</strong> — only enter if the ingredient loses weight during prep (peeling, trimming, deboning). Suggested yields fill in automatically where relevant; leave blank for pre-portioned items. If an ingredient isn't in the list, type the price into the Price / Unit cell yourself.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span class="dot" style="background:var(--navy)"></span><h2>Section B — Costing Summary</h2></div>
+      <div class="card-b">
+        <div class="sumrow"><span class="k">Total Ingredient Cost</span><span class="v calc" id="sB_total">$0.00</span></div>
+        <div class="sumrow"><span class="k">Number of Portions</span><span class="v calc" id="sB_portions">10</span></div>
+        <div class="sumrow"><span class="k">Cost Per Portion <small>Total cost ÷ portions</small></span><span class="v calc" id="sB_perPortion">—</span></div>
+        <div class="sumrow"><span class="k">Selling Price inc. GST <small>Type your actual price to check the %</small></span><span class="v in"><input class="yellow" id="actualPrice" type="number" min="0" step="0.01" placeholder="0.00"></span></div>
+        <div class="sumrow"><span class="k">Selling Price ex. GST <small>Price ÷ 1.10</small></span><span class="v calc" id="sB_exgst">—</span></div>
+        <div class="sumrow"><span class="k">GST Amount</span><span class="v calc" id="sB_gst">—</span></div>
+        <div class="sumrow"><span class="k">Food Cost %  <small>Target: 28%–35%</small></span><span class="v calc" id="sB_fcpct">—</span></div>
+        <div class="sumrow"><span class="k">Status</span><span class="pill idle" id="sB_status">Enter data above</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span class="dot" style="background:var(--gold)"></span><h2>Section B2 — Selling Price from Target Food Cost %</h2></div>
+      <div class="card-b">
+        <div class="target-grid">
+          <div class="fld"><label>Number of Persons</label><input class="yellow" id="persons" type="number" min="1" value="10"><span class="hint">Defaults to portions above</span></div>
+          <div class="fld"><label>Target Food Cost %</label><input class="yellow" id="targetFC" type="number" min="1" max="100" step="1" value="30"><span class="hint">e.g. 30 (industry 28–35%)</span></div>
+        </div>
+        <div class="bigprice">
+          <div><div class="l">Rounded Menu Price (inc. GST)</div><div class="sub" id="bp_sub">Set ingredients &amp; target to see price</div></div>
+          <div class="p" id="bp_rounded">—</div>
+        </div>
+        <div class="mini">
+          <div class="box"><div class="l">Selling Price ex. GST</div><div class="v" id="t_exgst">—</div></div>
+          <div class="box"><div class="l">Selling Price inc. GST</div><div class="v" id="t_incgst">—</div></div>
+          <div class="box"><div class="l">Budgeted Sales (Persons × inc-GST)</div><div class="v" id="t_budget">—</div></div>
+          <div class="box"><div class="l">Cost Per Portion</div><div class="v" id="t_perportion">—</div></div>
+        </div>
+        <div class="note"><strong>How this works:</strong> Cost per portion ÷ target food cost % = price needed to hit the target, then 10% GST is added and rounded to the nearest $0.50 for the menu. Section B above still lets you enter an actual price to check the real % you'd achieve.</div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="reset" id="resetBtn">＋ Start new recipe</button>
+          <span class="save-status" id="saveStatus"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MY RECIPES ===================== -->
+  <section class="panel" id="panel-recipes">
+    <div class="card">
+      <div class="card-h">
+        <span class="dot" style="background:var(--gold)"></span>
+        <h2>My Saved Recipes</h2>
+        <span class="sub" id="recipesSummary">Recipes auto-save as you work</span>
+      </div>
+      <div class="card-b">
+        <div class="rcp-controls">
+          <div class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="rcpSearch" placeholder="Search your recipes…">
+          </div>
+          <button class="addrow" id="newRecipeBtn" style="margin-top:0">＋ New Recipe</button>
+          <button class="addrow secondary" id="exportAllBtn" style="margin-top:0" title="Export all recipes as a backup file">⬇ Export All</button>
+          <button class="reset" id="importRcpBtn" style="margin-top:0;padding:10px 14px" title="Import recipes from a backup file">⬆ Import</button>
+          <input type="file" id="rcpFileInput" accept=".json,.txt" style="display:none">
+        </div>
+        <div class="import-result" id="rcpImportResult"></div>
+
+        <div class="rcp-list" id="rcpList"></div>
+        <div class="rcp-empty" id="rcpEmpty" style="display:none">
+          <div style="font-size:42px;margin-bottom:10px">📋</div>
+          <h3 style="font-family:'Fraunces',serif;color:var(--navy);font-weight:600;margin-bottom:6px">No recipes saved yet</h3>
+          <p style="color:var(--muted);font-size:14px;max-width:38ch;margin:0 auto">As soon as you give a dish a name on the Food Cost Calc tab, it'll appear here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRICE LIST ===================== -->
+  <section class="panel" id="panel-list">
+    <div class="card">
+      <div class="card-h"><span class="dot" style="background:var(--teal)"></span><h2>NSW Ingredient Price List</h2><span class="sub" id="plTotal"></span></div>
+      <div class="card-b">
+        <div class="pl-controls">
+          <div class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="plSearch" placeholder="Search ingredients…">
+          </div>
+          <button class="addrow" id="toggleAdd" style="margin-top:0">＋ Add ingredient</button>
+          <button class="addrow secondary" id="importBtn" style="margin-top:0" title="Import from Excel or CSV">⬆ Import Excel</button>
+          <button class="reset" id="templateBtn" style="margin-top:0;padding:10px 14px" title="Download a blank Excel template">⬇ Template</button>
+          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none">
+        </div>
+
+        <div class="import-result" id="importResult"></div>
+
+        <div class="add-form" id="addForm">
+          <div class="add-grid">
+            <div class="fld"><label>Ingredient Name</label><input class="yellow" id="newName" placeholder="e.g. Wagyu beef"></div>
+            <div class="fld"><label>Category</label><select class="yellow" id="newCat"></select></div>
+            <div class="fld"><label>Unit (UoM)</label>
+              <input class="yellow" id="newUom" list="uomList" placeholder="kg, L, each…">
+            </div>
+            <div class="fld"><label>Price per Unit ($)</label><input class="yellow" id="newPrice" type="number" min="0" step="any" placeholder="0.00"></div>
+            <div class="fld"><label>Yield % <span class="hint">(optional)</span></label><input class="yellow" id="newYield" type="number" min="1" max="100" step="1" placeholder="blank"></div>
+          </div>
+          <div class="add-actions">
+            <button class="addrow" id="saveNew" style="margin-top:0">✓ Save ingredient</button>
+            <button class="reset" id="cancelNew">Cancel</button>
+            <span class="add-msg" id="addMsg"></span>
+          </div>
+        </div>
+
+        <div class="chips" id="catChips"></div>
+        <div class="pl-count" id="plCount"></div>
+        <div class="tbl-scroll">
+          <table class="pl-table">
+            <thead><tr>
+              <th>Ingredient</th><th>Category</th><th>UoM</th><th class="num">Price / Unit</th><th class="num">Yield %</th><th class="num">Edit Price</th><th style="width:40px"></th>
+            </tr></thead>
+            <tbody id="plBody"></tbody>
+          </table>
+        </div>
+        <div class="note">Approximate NSW (Australia) foodservice / retail prices for training use. Edit any price to match your own supplier invoices, or add and remove ingredients with the buttons above — your changes are saved on this device and the calculator uses them automatically. These are training approximations, not live market quotes.</div>
+        <div style="margin-top:12px"><button class="reset" id="restoreDefaults">↺ Restore default price list</button></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<datalist id="uomList">
+  <option value="kg"></option><option value="L"></option><option value="each"></option>
+  <option value="bunch"></option><option value="dozen"></option><option value="punnet"></option>
+  <option value="can"></option>
+</datalist>
+
+<script>
+/* ===== PRICE DATA (from the Excel workbook) ===== */
+const PRICE_LIST=[
+{n:"Apple",c:"Fruit",u:"kg",p:4.5,y:null},
+{n:"Asparagus (bunch)",c:"Vegetable",u:"bunch",p:4.5,y:null},
+{n:"Avocado (each)",c:"Vegetable",u:"each",p:2,y:null},
+{n:"Bacon (rindless)",c:"Meat",u:"kg",p:18,y:null},
+{n:"Baking powder",c:"Pantry",u:"kg",p:8,y:null},
+{n:"Balsamic vinegar",c:"Oils & Sauces",u:"L",p:10,y:null},
+{n:"Banana",c:"Fruit",u:"kg",p:4,y:null},
+{n:"Barramundi fillet",c:"Seafood",u:"kg",p:36,y:null},
+{n:"Basil (fresh, bunch)",c:"Herbs & Spices",u:"bunch",p:3,y:null},
+{n:"Bay leaves (dried)",c:"Herbs & Spices",u:"kg",p:40,y:null},
+{n:"Beef brisket",c:"Meat",u:"kg",p:19,y:null},
+{n:"Beef chuck (braising)",c:"Meat",u:"kg",p:18,y:null},
+{n:"Beef eye fillet",c:"Meat",u:"kg",p:58,y:null},
+{n:"Beef mince (premium/lean)",c:"Meat",u:"kg",p:16,y:null},
+{n:"Beef mince (regular)",c:"Meat",u:"kg",p:12,y:null},
+{n:"Beef rump",c:"Meat",u:"kg",p:24,y:null},
+{n:"Beef scotch fillet",c:"Meat",u:"kg",p:42,y:null},
+{n:"Beef short ribs",c:"Meat",u:"kg",p:22,y:null},
+{n:"Beetroot",c:"Vegetable",u:"kg",p:3.5,y:80},
+{n:"Black pepper (ground)",c:"Pantry",u:"kg",p:35,y:null},
+{n:"Blueberry (punnet 125g)",c:"Fruit",u:"punnet",p:4.5,y:null},
+{n:"Bread flour (bakers)",c:"Pantry",u:"kg",p:2.2,y:null},
+{n:"Breadcrumbs (panko)",c:"Pantry",u:"kg",p:7,y:null},
+{n:"Broccoli",c:"Vegetable",u:"kg",p:5,y:80},
+{n:"Brown sugar",c:"Pantry",u:"kg",p:3,y:null},
+{n:"Butter (salted)",c:"Dairy",u:"kg",p:11.5,y:null},
+{n:"Butter (unsalted)",c:"Dairy",u:"kg",p:12,y:null},
+{n:"Cabbage (each)",c:"Vegetable",u:"each",p:4,y:null},
+{n:"Canned chickpeas",c:"Pantry",u:"can",p:1.2,y:null},
+{n:"Canned tomatoes",c:"Pantry",u:"can",p:1.5,y:null},
+{n:"Capsicum (green)",c:"Vegetable",u:"kg",p:5,y:82},
+{n:"Capsicum (red)",c:"Vegetable",u:"kg",p:6,y:82},
+{n:"Carrot",c:"Vegetable",u:"kg",p:2.2,y:88},
+{n:"Caster sugar",c:"Pantry",u:"kg",p:2.5,y:null},
+{n:"Cauliflower (each)",c:"Vegetable",u:"each",p:4,y:null},
+{n:"Celery (bunch)",c:"Vegetable",u:"bunch",p:3.5,y:75},
+{n:"Cheddar cheese",c:"Dairy",u:"kg",p:13,y:null},
+{n:"Cherry tomato (punnet 250g)",c:"Vegetable",u:"punnet",p:3.5,y:null},
+{n:"Chicken breast (skinless)",c:"Poultry",u:"kg",p:13,y:null},
+{n:"Chicken drumsticks",c:"Poultry",u:"kg",p:7,y:70},
+{n:"Chicken Maryland",c:"Poultry",u:"kg",p:8,y:null},
+{n:"Chicken thigh (bone in)",c:"Poultry",u:"kg",p:8.5,y:75},
+{n:"Chicken thigh (boneless)",c:"Poultry",u:"kg",p:12,y:null},
+{n:"Chicken whole",c:"Poultry",u:"kg",p:7.5,y:65},
+{n:"Chicken wings",c:"Poultry",u:"kg",p:9,y:null},
+{n:"Chickpeas (dried)",c:"Pantry",u:"kg",p:4,y:null},
+{n:"Chilli (red)",c:"Vegetable",u:"kg",p:16,y:null},
+{n:"Chilli flakes",c:"Herbs & Spices",u:"kg",p:30,y:null},
+{n:"Cinnamon (ground)",c:"Herbs & Spices",u:"kg",p:32,y:null},
+{n:"Coconut cream (can)",c:"Pantry",u:"can",p:2.8,y:null},
+{n:"Coconut milk (can)",c:"Pantry",u:"can",p:2.5,y:null},
+{n:"Coriander (fresh, bunch)",c:"Herbs & Spices",u:"bunch",p:2.5,y:null},
+{n:"Corn (cob, each)",c:"Vegetable",u:"each",p:1.2,y:null},
+{n:"Cornflour",c:"Pantry",u:"kg",p:3,y:null},
+{n:"Couscous",c:"Pantry",u:"kg",p:6,y:null},
+{n:"Crab meat",c:"Seafood",u:"kg",p:60,y:null},
+{n:"Cream cheese",c:"Dairy",u:"kg",p:11,y:null},
+{n:"Cucumber (each)",c:"Vegetable",u:"each",p:2,y:null},
+{n:"Cumin (ground)",c:"Herbs & Spices",u:"kg",p:30,y:null},
+{n:"Curry powder",c:"Herbs & Spices",u:"kg",p:26,y:null},
+{n:"Dijon mustard",c:"Oils & Sauces",u:"kg",p:10,y:null},
+{n:"Duck breast",c:"Poultry",u:"kg",p:34,y:null},
+{n:"Duck whole",c:"Poultry",u:"kg",p:18,y:60},
+{n:"Eggplant",c:"Vegetable",u:"kg",p:5,y:85},
+{n:"Eggs (caged, doz)",c:"Dairy",u:"dozen",p:4.5,y:null},
+{n:"Eggs (free range, 700g doz)",c:"Dairy",u:"dozen",p:6.5,y:null},
+{n:"Feta",c:"Dairy",u:"kg",p:16,y:null},
+{n:"Fish sauce",c:"Oils & Sauces",u:"L",p:8,y:null},
+{n:"Flathead fillet",c:"Seafood",u:"kg",p:42,y:null},
+{n:"Garlic",c:"Vegetable",u:"kg",p:14,y:85},
+{n:"Ginger",c:"Vegetable",u:"kg",p:16,y:80},
+{n:"Greek yoghurt",c:"Dairy",u:"kg",p:7,y:null},
+{n:"Green beans",c:"Vegetable",u:"kg",p:8,y:90},
+{n:"Honey",c:"Oils & Sauces",u:"kg",p:12,y:null},
+{n:"Icing sugar",c:"Pantry",u:"kg",p:3.5,y:null},
+{n:"Lamb backstrap",c:"Meat",u:"kg",p:46,y:null},
+{n:"Lamb cutlets",c:"Meat",u:"kg",p:44,y:null},
+{n:"Lamb leg (bone in)",c:"Meat",u:"kg",p:18,y:60},
+{n:"Lamb leg (boneless)",c:"Meat",u:"kg",p:26,y:null},
+{n:"Lamb shanks",c:"Meat",u:"kg",p:18,y:null},
+{n:"Lamb shoulder",c:"Meat",u:"kg",p:17,y:null},
+{n:"Leek",c:"Vegetable",u:"kg",p:5.5,y:70},
+{n:"Lemon (each)",c:"Fruit",u:"each",p:0.8,y:null},
+{n:"Lentils (dried)",c:"Pantry",u:"kg",p:4.5,y:null},
+{n:"Lettuce (cos, each)",c:"Vegetable",u:"each",p:3,y:null},
+{n:"Lime (each)",c:"Fruit",u:"each",p:0.9,y:null},
+{n:"Mango (each)",c:"Fruit",u:"each",p:2.5,y:null},
+{n:"Mascarpone",c:"Dairy",u:"kg",p:18,y:null},
+{n:"Mayonnaise",c:"Oils & Sauces",u:"kg",p:7,y:null},
+{n:"Milk (full cream)",c:"Dairy",u:"L",p:1.6,y:null},
+{n:"Milk (skim)",c:"Dairy",u:"L",p:1.6,y:null},
+{n:"Mint (fresh, bunch)",c:"Herbs & Spices",u:"bunch",p:2.5,y:null},
+{n:"Mixed berries (frozen)",c:"Fruit",u:"kg",p:12,y:null},
+{n:"Mixed salad leaves",c:"Vegetable",u:"kg",p:14,y:null},
+{n:"Mozzarella",c:"Dairy",u:"kg",p:12,y:null},
+{n:"Mushroom (button)",c:"Vegetable",u:"kg",p:9,y:95},
+{n:"Mushroom (Swiss brown)",c:"Vegetable",u:"kg",p:12,y:95},
+{n:"Mussels (live)",c:"Seafood",u:"kg",p:12,y:35},
+{n:"Octopus",c:"Seafood",u:"kg",p:26,y:null},
+{n:"Olive oil (extra virgin)",c:"Oils & Sauces",u:"L",p:12,y:null},
+{n:"Onion (brown)",c:"Vegetable",u:"kg",p:2.5,y:90},
+{n:"Onion (red)",c:"Vegetable",u:"kg",p:3,y:90},
+{n:"Orange",c:"Fruit",u:"kg",p:3.5,y:null},
+{n:"Oyster sauce",c:"Oils & Sauces",u:"L",p:9,y:null},
+{n:"Oysters (dozen)",c:"Seafood",u:"dozen",p:24,y:null},
+{n:"Paprika",c:"Herbs & Spices",u:"kg",p:28,y:null},
+{n:"Parmesan (grated)",c:"Dairy",u:"kg",p:28,y:null},
+{n:"Parsley (fresh, bunch)",c:"Herbs & Spices",u:"bunch",p:2.5,y:null},
+{n:"Pasta (dried)",c:"Pantry",u:"kg",p:3.5,y:null},
+{n:"Peas (frozen)",c:"Vegetable",u:"kg",p:4.5,y:null},
+{n:"Pineapple (each)",c:"Fruit",u:"each",p:4,y:null},
+{n:"Plain flour",c:"Pantry",u:"kg",p:1.8,y:null},
+{n:"Pork belly",c:"Meat",u:"kg",p:16,y:null},
+{n:"Pork fillet",c:"Meat",u:"kg",p:24,y:null},
+{n:"Pork loin",c:"Meat",u:"kg",p:18,y:null},
+{n:"Pork shoulder",c:"Meat",u:"kg",p:13,y:null},
+{n:"Potato (brushed)",c:"Vegetable",u:"kg",p:2.5,y:85},
+{n:"Potato (washed)",c:"Vegetable",u:"kg",p:3,y:90},
+{n:"Prawns (cooked)",c:"Seafood",u:"kg",p:30,y:null},
+{n:"Prawns (green, large)",c:"Seafood",u:"kg",p:34,y:null},
+{n:"Prosciutto",c:"Meat",u:"kg",p:55,y:null},
+{n:"Pumpkin (butternut)",c:"Vegetable",u:"kg",p:2.8,y:80},
+{n:"Pure cream",c:"Dairy",u:"L",p:7.5,y:null},
+{n:"Quinoa",c:"Pantry",u:"kg",p:10,y:null},
+{n:"Rice (arborio)",c:"Pantry",u:"kg",p:6,y:null},
+{n:"Rice (jasmine)",c:"Pantry",u:"kg",p:3.5,y:null},
+{n:"Rice (long grain)",c:"Pantry",u:"kg",p:3,y:null},
+{n:"Ricotta",c:"Dairy",u:"kg",p:10,y:null},
+{n:"Rolled oats",c:"Pantry",u:"kg",p:3,y:null},
+{n:"Rosemary (fresh, bunch)",c:"Herbs & Spices",u:"bunch",p:3,y:null},
+{n:"Salmon fillet (Atlantic)",c:"Seafood",u:"kg",p:38,y:null},
+{n:"Salmon whole",c:"Seafood",u:"kg",p:24,y:55},
+{n:"Salt (cooking)",c:"Pantry",u:"kg",p:2,y:null},
+{n:"Scallops",c:"Seafood",u:"kg",p:48,y:null},
+{n:"Self-raising flour",c:"Pantry",u:"kg",p:2,y:null},
+{n:"Sesame oil",c:"Oils & Sauces",u:"L",p:16,y:null},
+{n:"Smoked salmon",c:"Seafood",u:"kg",p:58,y:null},
+{n:"Snapper whole",c:"Seafood",u:"kg",p:28,y:45},
+{n:"Sour cream",c:"Dairy",u:"kg",p:9,y:null},
+{n:"Soy sauce",c:"Oils & Sauces",u:"L",p:6,y:null},
+{n:"Spinach (baby)",c:"Vegetable",u:"kg",p:12,y:null},
+{n:"Spring onion (bunch)",c:"Vegetable",u:"bunch",p:2,y:null},
+{n:"Squid/calamari tubes",c:"Seafood",u:"kg",p:22,y:null},
+{n:"Stock (chicken/veg, L)",c:"Pantry",u:"L",p:3.5,y:null},
+{n:"Strawberry (punnet 250g)",c:"Fruit",u:"punnet",p:4,y:null},
+{n:"Sunflower oil",c:"Oils & Sauces",u:"L",p:4.5,y:null},
+{n:"Sweet potato",c:"Vegetable",u:"kg",p:3.5,y:85},
+{n:"Thickened cream",c:"Dairy",u:"L",p:6.5,y:null},
+{n:"Thyme (fresh, bunch)",c:"Herbs & Spices",u:"bunch",p:3,y:null},
+{n:"Tomato",c:"Vegetable",u:"kg",p:5,y:95},
+{n:"Tomato paste",c:"Pantry",u:"kg",p:8,y:null},
+{n:"Tomato sauce/ketchup",c:"Oils & Sauces",u:"L",p:5,y:null},
+{n:"Tuna (sashimi grade)",c:"Seafood",u:"kg",p:55,y:null},
+{n:"Turkey breast",c:"Poultry",u:"kg",p:22,y:null},
+{n:"Vanilla extract",c:"Herbs & Spices",u:"L",p:80,y:null},
+{n:"Veal scaloppine",c:"Meat",u:"kg",p:36,y:null},
+{n:"Vegetable oil",c:"Oils & Sauces",u:"L",p:4,y:null},
+{n:"White fish fillet (basa)",c:"Seafood",u:"kg",p:16,y:null},
+{n:"White sugar",c:"Pantry",u:"kg",p:2.2,y:null},
+{n:"White wine vinegar",c:"Oils & Sauces",u:"L",p:5,y:null},
+{n:"Zucchini",c:"Vegetable",u:"kg",p:4.5,y:90}
+];
+</script>
+<script>
+/* ============ App logic — mirrors the Excel formulas ============ */
+(function(){
+  "use strict";
+  const $ = s => document.querySelector(s);
+  const money = n => (n===null||n===undefined||isNaN(n)) ? "—" : "$"+Number(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const money3 = n => (n===null||isNaN(n)) ? "—" : "$"+Number(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:3});
+
+  /* ====================================================================
+     LICENCE / TRIAL  — 14-day trial, fingerprint-based unlock.
+     Medium strength: codes are deterministic from device fingerprint + pepper.
+     Same pepper lives in the private code-generator file you keep offline.
+     ==================================================================== */
+  const LIC_KEY = 'sithkop010_lic_v1';
+  const TRIAL_DAYS = 14;
+  // Pepper — must match the generator file. Change once you've shared the calculator
+  // to a few people and you want to invalidate any leaked codes.
+  const PEPPER = 'LCH-2026-FCCv1-pep-7Q4mZ';
+
+  // Tiny non-crypto hash (DJB2 variant) — fine for medium strength.
+  function h32(str){
+    let h = 5381 >>> 0;
+    for(let i=0;i<str.length;i++){ h = (((h<<5)+h) ^ str.charCodeAt(i)) >>> 0; }
+    return h;
   }
-  $('#fp').value = fp;
-  const code = unlockFor(fp);
-  $('#out').textContent = code;
-  $('#result').classList.add('show');
-}
-$('#gen').addEventListener('click', generate);
-$('#fp').addEventListener('keydown', e => { if(e.key==='Enter') generate(); });
-$('#copy').addEventListener('click', e => {
-  const btn = e.currentTarget;
-  const txt = $('#out').textContent;
-  const done = ()=>{ btn.textContent='Copied!'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copy unlock code';btn.classList.remove('copied');},1400); };
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(done).catch(()=>{});
+  // Generate a 12-char base32-ish payload from a string (deterministic).
+  const B32 = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I,O,0,1 for readability
+  function payload(str, len){
+    // Mix multiple hashes for more entropy
+    let a = h32(str+'a'), b = h32(str+'b'), c = h32(str+'c'), d = h32(str+'d');
+    let out = '';
+    for(let i=0;i<len;i++){
+      const mix = (a ^ ((b<<3)|(b>>>29)) ^ ((c<<7)|(c>>>25)) ^ ((d<<11)|(d>>>21))) >>> 0;
+      out += B32[mix & 31];
+      a = (a*16807 + b) >>> 0; b = (b*16807 + c) >>> 0; c = (c*16807 + d) >>> 0; d = (d*16807 + a) >>> 0;
+    }
+    return out;
+  }
+  function fmtGroups(s, n){ const out=[]; for(let i=0;i<s.length;i+=n) out.push(s.slice(i,i+n)); return out.join('-'); }
+
+  function makeFingerprint(){
+    // Random per device, stored. Not based on browser specs (those can change).
+    const r = new Uint8Array(8);
+    if(window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(r);
+    else for(let i=0;i<8;i++) r[i] = Math.floor(Math.random()*256);
+    let s=''; for(let i=0;i<8;i++) s += B32[r[i] & 31];
+    return 'LCH-' + s.slice(0,4) + '-' + s.slice(4,8);
+  }
+  function expectedUnlockFor(fp){
+    const p = payload(PEPPER + '|' + fp, 12);
+    return 'UNLK-' + p.slice(0,4) + '-' + p.slice(4,8) + '-' + p.slice(8,12);
+  }
+  function normaliseCode(s){ return String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,''); }
+  function codesMatch(a,b){ return normaliseCode(a) === normaliseCode(b); }
+
+  function loadLic(){
+    try{
+      const raw = localStorage.getItem(LIC_KEY);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return null;
+  }
+  function saveLic(lic){
+    try{ localStorage.setItem(LIC_KEY, JSON.stringify(lic)); }catch(e){}
+  }
+
+  // Initialise / load licence state
+  let LIC = loadLic();
+  if(!LIC){
+    LIC = { fp: makeFingerprint(), startedAt: Date.now(), unlocked: false };
+    saveLic(LIC);
+  }
+  // Make sure existing installs that lack a fingerprint get one
+  if(!LIC.fp){ LIC.fp = makeFingerprint(); saveLic(LIC); }
+
+  function daysLeft(){
+    if(LIC.unlocked) return Infinity;
+    const elapsed = (Date.now() - LIC.startedAt) / 86400000;
+    return Math.max(0, Math.ceil(TRIAL_DAYS - elapsed));
+  }
+  function isLocked(){ return !LIC.unlocked && daysLeft() <= 0; }
+
+  function showLock(){
+    document.body.classList.add('locked');
+    const ls = document.getElementById('lockScreen');
+    ls.classList.add('show'); ls.setAttribute('aria-hidden','false');
+    document.getElementById('fpDisplay').textContent = LIC.fp;
+    // Optional: customise these via globals if you want
+    if(window.LCH_BUY_URL){ document.getElementById('buyLink').href = window.LCH_BUY_URL; }
+    if(window.LCH_EMAIL){
+      const a = document.getElementById('emailLink');
+      a.href = 'mailto:'+window.LCH_EMAIL+'?subject=Food%20Cost%20Calculator%20Unlock%20-%20'+encodeURIComponent(LIC.fp);
+    }
+  }
+  function hideLock(){
+    document.body.classList.remove('locked');
+    const ls = document.getElementById('lockScreen');
+    ls.classList.remove('show'); ls.setAttribute('aria-hidden','true');
+  }
+
+  function refreshTrialBanner(){
+    const b = document.getElementById('trialBanner');
+    if(LIC.unlocked){ b.style.display='none'; return; }
+    const d = daysLeft();
+    if(d <= 0){ b.style.display='none'; return; }
+    b.style.display = 'flex';
+    b.classList.toggle('warn', d <= 3);
+    document.getElementById('trialMsg').innerHTML =
+      d === 1 ? '⏳ <strong>Last day</strong> of your free trial.'
+      : d <= 3 ? '⏳ <strong>'+d+' days</strong> left in your free trial.'
+      : '✨ Trial mode — <strong>'+d+' days</strong> left. Enjoying it? Get a permanent unlock.';
+  }
+
+  function tryUnlock(code, msgEl){
+    const expected = expectedUnlockFor(LIC.fp);
+    if(codesMatch(code, expected)){
+      LIC.unlocked = true; LIC.unlockedAt = Date.now(); saveLic(LIC);
+      if(msgEl){ msgEl.className='lock-unlock-msg ok'; msgEl.textContent='✓ Unlocked! Reloading…'; }
+      setTimeout(()=>{ hideLock(); refreshTrialBanner(); }, 600);
+      return true;
+    }
+    if(msgEl){ msgEl.className='lock-unlock-msg err'; msgEl.textContent='That unlock code doesn\'t match this device. Check that you copied it correctly.'; }
+    return false;
+  }
+
+  // Wire up the lock-screen elements (they exist in the DOM from page load)
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // gate: if locked, show immediately
+    if(isLocked()) showLock();
+    refreshTrialBanner();
+  });
+  // also gate immediately (we're inside IIFE running mid-page; DOMContentLoaded may have fired)
+  if(document.readyState !== 'loading'){
+    if(isLocked()) showLock();
+    refreshTrialBanner();
+  }
+
+  const unlockMsgEl = document.getElementById('unlockMsg');
+  document.getElementById('unlockBtn').addEventListener('click', ()=>{
+    tryUnlock(document.getElementById('unlockInput').value, unlockMsgEl);
+  });
+  document.getElementById('unlockInput').addEventListener('keydown', e=>{
+    if(e.key==='Enter') tryUnlock(e.target.value, unlockMsgEl);
+  });
+  document.getElementById('copyFp').addEventListener('click', e=>{
+    const btn = e.currentTarget;
+    const txt = LIC.fp;
+    const done = ()=>{ btn.textContent='Copied!'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done).catch(()=>{
+        const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); done(); }catch(_){}
+        ta.remove();
+      });
+    } else {
+      const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(_){}
+      ta.remove();
+    }
+  });
+  // "I have an unlock code" button on the trial banner — opens the lock screen unlock section
+  document.getElementById('trialUnlockBtn').addEventListener('click', ()=>{
+    showLock();
+    setTimeout(()=> document.getElementById('unlockInput').focus(), 100);
+  });
+
+  /* ---------- Price list with persistence ----------
+     PRICE_LIST is the built-in default. Custom edits/additions/deletions
+     are saved to this device (localStorage) and merged over the defaults. */
+  const STORE_KEY = 'sithkop010_pricelist_v1';
+  let PRICES = PRICE_LIST.map(o => ({...o}));   // working copy
+  function loadStore(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      if(raw){ const saved = JSON.parse(raw); if(Array.isArray(saved) && saved.length) PRICES = saved; }
+    }catch(e){ /* storage unavailable — stay in memory */ }
+  }
+  function saveStore(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(PRICES)); }catch(e){}
+  }
+  loadStore();
+
+  /* lookup map (lowercased name -> item) */
+  let MAP = {};
+  function rebuildMap(){ MAP = {}; PRICES.forEach(it => MAP[it.n.toLowerCase()] = it); }
+  rebuildMap();
+
+  /* shared datalist for ingredient autocomplete — kept in sync with PRICES */
+  function refreshDatalist(){
+    const dl = document.getElementById('ingredientNames');
+    if(!dl) return;
+    dl.innerHTML='';
+    PRICES.slice().sort((a,b)=>a.n.localeCompare(b.n)).forEach(it=>{
+      const o=document.createElement('option'); o.value=it.n; dl.appendChild(o);
+    });
+  }
+
+  /* ---------- Tabs ---------- */
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));
+      t.classList.add('active');
+      $('#panel-'+t.dataset.tab).classList.add('show');
+    });
+  });
+
+  /* ---------- Shared datalist for ingredient autocomplete ---------- */
+  const dl = document.createElement('datalist');
+  dl.id = 'ingredientNames';
+  document.body.appendChild(dl);
+  refreshDatalist();
+
+  /* ===================== INGREDIENT TABLE ===================== */
+  const body = $('#ingBody');
+  let rowSeq = 0;
+
+  function makeRow(){
+    const id = 'r'+(rowSeq++);
+    const tr = document.createElement('tr');
+    tr.dataset.id = id;
+    tr.innerHTML =
+      '<td><input class="ing-in" list="ingredientNames" placeholder="Type or pick…" autocomplete="off"></td>'+
+      '<td><input class="qty-in" type="number" min="0" step="any" placeholder="0"></td>'+
+      '<td class="calc uom" data-f="uom">—</td>'+
+      '<td class="calc" data-f="price">—</td>'+
+      '<td><input class="yld-in" type="number" min="1" max="100" step="1" placeholder=""></td>'+
+      '<td class="calc" data-f="edible">—</td>'+
+      '<td class="calc" data-f="total">—</td>'+
+      '<td><button class="row-del" title="Remove">×</button></td>';
+    body.appendChild(tr);
+
+    const ing = tr.querySelector('.ing-in');
+    const qty = tr.querySelector('.qty-in');
+    const yld = tr.querySelector('.yld-in');
+
+    ing.addEventListener('input', ()=>{ applyLookup(tr); recalc(); });
+    ing.addEventListener('change', ()=>{ applyLookup(tr); recalc(); });
+    qty.addEventListener('input', recalc);
+    yld.addEventListener('input', ()=>{ tr.dataset.yldManual='1'; recalc(); });
+    tr.querySelector('.row-del').addEventListener('click', ()=>{
+      tr.remove(); ensureRows(); recalc();
+    });
+    return tr;
+  }
+
+  /* VLOOKUP equivalent: fill UoM / price / suggested yield from list */
+  function applyLookup(tr){
+    const name = tr.querySelector('.ing-in').value.trim().toLowerCase();
+    const priceCell = tr.querySelector('[data-f=price]');
+    const uomCell = tr.querySelector('[data-f=uom]');
+    const yldIn = tr.querySelector('.yld-in');
+    if(!name){
+      tr.dataset.price=''; tr.dataset.uom='';
+      priceCell.textContent='—'; priceCell.classList.remove('notfound');
+      uomCell.textContent='—';
+      if(tr.dataset.yldManual!=='1') yldIn.value='';
+      return;
+    }
+    const hit = MAP[name];
+    if(hit){
+      tr.dataset.price = hit.p;
+      tr.dataset.uom = hit.u;
+      priceCell.textContent = money3(hit.p);
+      priceCell.classList.remove('notfound');
+      uomCell.textContent = hit.u;
+      if(tr.dataset.yldManual!=='1'){
+        yldIn.value = (hit.y!==null && hit.y!==undefined) ? hit.y : '';
+      }
+    } else {
+      tr.dataset.price = '';
+      tr.dataset.uom = '';
+      priceCell.innerHTML = '<span class="notfound">Not in list</span>';
+      uomCell.textContent = '—';
+    }
+  }
+
+  /* allow manual price entry when not in list: clicking the price cell opens an input */
+  body.addEventListener('click', e=>{
+    const cell = e.target.closest('td[data-f=price]');
+    if(!cell) return;
+    const tr = cell.closest('tr');
+    const hasName = tr.querySelector('.ing-in').value.trim();
+    if(MAP[ (hasName||'').toLowerCase() ]) return; // in list -> not editable
+    if(cell.querySelector('input')) return;
+    const cur = tr.dataset.price || '';
+    cell.innerHTML = '<input class="qty-in" type="number" min="0" step="any" value="'+cur+'" placeholder="0.00" style="width:88px">';
+    const inp = cell.querySelector('input'); inp.focus();
+    inp.addEventListener('input', ()=>{ tr.dataset.price = inp.value; recalc(); });
+    inp.addEventListener('blur', ()=>{
+      const v = parseFloat(inp.value);
+      cell.innerHTML = isNaN(v) ? '<span class="notfound">Not in list</span>' : money3(v);
+      tr.dataset.price = isNaN(v)?'':v;
+      recalc();
+    });
+  });
+
+  function ensureRows(){ if(body.children.length===0) makeRow(); }
+
+  $('#addRow').addEventListener('click', ()=>{ makeRow(); });
+
+  /* ===================== RECALC (Excel formula mirror) ===================== */
+  function recalc(){
+    let total = 0;
+    body.querySelectorAll('tr').forEach(tr=>{
+      const price = parseFloat(tr.dataset.price);
+      const qty = parseFloat(tr.querySelector('.qty-in').value);
+      const yldVal = parseFloat(tr.querySelector('.yld-in').value);
+      const edibleCell = tr.querySelector('[data-f=edible]');
+      const totalCell = tr.querySelector('[data-f=total]');
+      let edible = null, line = null;
+      if(!isNaN(price)){
+        // edible = price/yield if yield>0 else price   (=H formula)
+        edible = (!isNaN(yldVal) && yldVal>0) ? price/(yldVal/100) : price;
+        edibleCell.textContent = money3(edible);
+        if(!isNaN(qty)){
+          line = qty*edible;          // =I formula
+          totalCell.textContent = money(line);
+          total += line;
+        } else { totalCell.textContent='—'; }
+      } else {
+        edibleCell.textContent='—'; totalCell.textContent='—';
+      }
+    });
+
+    $('#totalCost').textContent = money(total);
+
+    const portions = parseInt($('#portions').value)||0;
+    const perPortion = portions>0 ? total/portions : null;
+
+    /* Section B */
+    $('#sB_total').textContent = money(total);
+    $('#sB_portions').textContent = portions||'—';
+    $('#sB_perPortion').textContent = money(perPortion);
+
+    const actual = parseFloat($('#actualPrice').value);
+    let exgst=null,gst=null,fcpct=null;
+    if(!isNaN(actual) && actual>0){
+      exgst = actual/1.1; gst = actual-exgst;
+      if(perPortion!==null && exgst>0) fcpct = perPortion/exgst;
+    }
+    $('#sB_exgst').textContent = money(exgst);
+    $('#sB_gst').textContent = money(gst);
+    const st=$('#sB_status'); const fp=$('#sB_fcpct');
+    if(fcpct===null){ fp.textContent='—'; st.className='pill idle'; st.textContent='Enter data above'; }
+    else{
+      fp.textContent=(fcpct*100).toFixed(1)+'%';
+      if(fcpct<0.28){ st.className='pill under'; st.textContent='Below 28% — consider raising price'; }
+      else if(fcpct<=0.35){ st.className='pill on'; st.textContent='On target (28%–35%)'; }
+      else{ st.className='pill over'; st.textContent='Above 35% — review costs or raise price'; }
+    }
+
+    /* Section B2 — target food cost -> price */
+    const persons = parseInt($('#persons').value)||0;
+    const target = parseFloat($('#targetFC').value);
+    let tEx=null,tInc=null,tRound=null,tBudget=null;
+    if(perPortion!==null && !isNaN(target) && target>0){
+      tEx = perPortion/(target/100);
+      tInc = tEx*1.1;
+      tRound = Math.round(tInc/0.5)*0.5;
+      tBudget = persons>0 ? persons*tInc : null;
+    }
+    $('#t_exgst').textContent = money(tEx);
+    $('#t_incgst').textContent = money(tInc);
+    $('#t_budget').textContent = money(tBudget);
+    $('#t_perportion').textContent = money(perPortion);
+    $('#bp_rounded').textContent = money(tRound);
+    $('#bp_sub').textContent = (tRound!==null)
+      ? 'At '+target+'% food cost · '+(persons||0)+' persons'
+      : 'Set ingredients & target to see price';
+  }
+
+  /* dish info listeners */
+  ['portions','actualPrice','persons','targetFC'].forEach(id=>{
+    $('#'+id).addEventListener('input', recalc);
+  });
+  /* keep persons synced to portions until user overrides */
+  let personsTouched=false;
+  $('#persons').addEventListener('input',()=>{personsTouched=true;});
+  $('#portions').addEventListener('input',()=>{ if(!personsTouched) $('#persons').value=$('#portions').value; recalc(); });
+
+  /* ====================================================================
+     SAVED RECIPES  — auto-save current recipe; multi-recipe list view.
+     Each recipe is a snapshot of the dish info + ingredient lines + B2 inputs.
+     ==================================================================== */
+  const RECIPES_KEY = 'sithkop010_recipes_v1';
+  const CURRENT_KEY = 'sithkop010_current_recipe_v1';
+  /** @type {Array<{id:string,name:string,menuType:string,portions:number,desc:string,
+   *               ingredients:Array<{name:string,qty:number|null,yldOverride:number|null,manualPrice:number|null}>,
+   *               actualPrice:number|null,persons:number,targetFC:number,
+   *               createdAt:number,updatedAt:number}>} */
+  let RECIPES = [];
+  let currentRecipeId = null;
+  let loadingRecipe = false;   // suppress auto-save while loading a recipe into the UI
+  let saveTimer = null;
+
+  function loadRecipes(){
+    try{
+      const raw = localStorage.getItem(RECIPES_KEY);
+      if(raw){ const arr = JSON.parse(raw); if(Array.isArray(arr)) RECIPES = arr; }
+      currentRecipeId = localStorage.getItem(CURRENT_KEY) || null;
+    }catch(e){}
+  }
+  function persistRecipes(){
+    try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(RECIPES)); }catch(e){}
+  }
+  function persistCurrent(){
+    try{
+      if(currentRecipeId) localStorage.setItem(CURRENT_KEY, currentRecipeId);
+      else localStorage.removeItem(CURRENT_KEY);
+    }catch(e){}
+  }
+  function newId(){ return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+  /* Take a snapshot of everything in the calc UI */
+  function snapshotCalc(){
+    const ingredients = [];
+    body.querySelectorAll('tr').forEach(tr=>{
+      const name = tr.querySelector('.ing-in').value.trim();
+      const qtyRaw = tr.querySelector('.qty-in').value;
+      const yldRaw = tr.querySelector('.yld-in').value;
+      const manualPrice = (MAP[name.toLowerCase()] === undefined && tr.dataset.price !== '' && tr.dataset.price !== undefined)
+        ? parseFloat(tr.dataset.price) : null;
+      // Skip purely-blank rows so the list isn't padded with empties
+      if(!name && qtyRaw==='' && yldRaw==='') return;
+      ingredients.push({
+        name,
+        qty: qtyRaw === '' ? null : parseFloat(qtyRaw),
+        yldOverride: (tr.dataset.yldManual === '1' && yldRaw !== '') ? parseFloat(yldRaw) : null,
+        manualPrice
+      });
+    });
+    return {
+      name: $('#dishName').value.trim(),
+      menuType: $('#menuType').value,
+      portions: parseInt($('#portions').value) || 0,
+      desc: $('#dishDesc').value,
+      ingredients,
+      actualPrice: $('#actualPrice').value === '' ? null : parseFloat($('#actualPrice').value),
+      persons: parseInt($('#persons').value) || 0,
+      targetFC: parseFloat($('#targetFC').value) || 30
+    };
+  }
+
+  /* Load a recipe back into the calc UI */
+  function loadRecipeIntoCalc(rcp){
+    loadingRecipe = true;
+    try{
+      $('#dishName').value = rcp.name || '';
+      $('#menuType').value = rcp.menuType || '';
+      $('#portions').value = rcp.portions || 10;
+      $('#dishDesc').value = rcp.desc || '';
+      $('#actualPrice').value = rcp.actualPrice ?? '';
+      $('#persons').value = rcp.persons || rcp.portions || 10;
+      $('#targetFC').value = rcp.targetFC ?? 30;
+      personsTouched = (rcp.persons !== rcp.portions);
+      // Rebuild ingredient rows
+      body.innerHTML = '';
+      const ings = (rcp.ingredients || []).slice();
+      while(ings.length < 4) ings.push({name:'',qty:null,yldOverride:null,manualPrice:null});
+      ings.forEach(ing=>{
+        const tr = makeRow();
+        tr.querySelector('.ing-in').value = ing.name || '';
+        tr.querySelector('.qty-in').value = ing.qty == null ? '' : ing.qty;
+        if(ing.yldOverride != null){
+          tr.querySelector('.yld-in').value = ing.yldOverride;
+          tr.dataset.yldManual = '1';
+        }
+        applyLookup(tr);
+        // Restore manual price for items not in the list
+        if(ing.manualPrice != null && !MAP[(ing.name||'').toLowerCase()]){
+          tr.dataset.price = ing.manualPrice;
+          const pc = tr.querySelector('[data-f=price]');
+          pc.textContent = money3(ing.manualPrice);
+          pc.classList.remove('notfound');
+        }
+      });
+      recalc();
+    }finally{
+      loadingRecipe = false;
+    }
+  }
+
+  /* Compute display fields from a snapshot (without touching the UI) */
+  function computeRecipeStats(rcp){
+    let total = 0;
+    (rcp.ingredients || []).forEach(ing=>{
+      const it = MAP[(ing.name||'').toLowerCase()];
+      const price = ing.manualPrice != null ? ing.manualPrice : (it ? it.p : null);
+      if(price == null || ing.qty == null) return;
+      const yldPct = ing.yldOverride != null ? ing.yldOverride : (it && it.y != null ? it.y : null);
+      const edible = (yldPct && yldPct > 0) ? price/(yldPct/100) : price;
+      total += ing.qty * edible;
+    });
+    const perPortion = rcp.portions > 0 ? total/rcp.portions : null;
+    return { total, perPortion };
+  }
+
+  /* Save current calc to its recipe (creates one if needed). Debounced. */
+  function saveStatusEl(){ return $('#saveStatus'); }
+  function setSaveStatus(state){
+    const el = saveStatusEl(); if(!el) return;
+    if(state === 'saving'){ el.className='save-status saving'; el.innerHTML='<span class="dot-s"></span> Saving…'; }
+    else if(state === 'saved'){ el.className='save-status saved'; el.innerHTML='<span class="dot-s"></span> Saved'; }
+    else { el.className='save-status'; el.textContent=''; }
+  }
+
+  function autoSave(){
+    if(loadingRecipe) return;
+    const snap = snapshotCalc();
+    // Don't create an empty recipe — wait until there's at least a name or one ingredient
+    const hasContent = snap.name || snap.ingredients.some(i=>i.name || i.qty);
+    if(!hasContent){
+      // If we had a current recipe and it's now empty, leave it alone (user is clearing fields)
+      if(!currentRecipeId) return;
+    }
+    let rcp = RECIPES.find(r=>r.id===currentRecipeId);
+    if(!rcp){
+      rcp = { id: newId(), createdAt: Date.now(), updatedAt: Date.now() };
+      RECIPES.unshift(rcp);
+      currentRecipeId = rcp.id;
+      persistCurrent();
+    }
+    Object.assign(rcp, snap, { updatedAt: Date.now() });
+    persistRecipes();
+    setSaveStatus('saved');
+    renderRecipes();
+  }
+
+  function scheduleAutoSave(){
+    if(loadingRecipe) return;
+    setSaveStatus('saving');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(autoSave, 500);
+  }
+
+  /* Hook auto-save into every input in the calc */
+  function wireAutoSave(){
+    ['dishName','menuType','portions','dishDesc','actualPrice','persons','targetFC'].forEach(id=>{
+      $('#'+id).addEventListener('input', scheduleAutoSave);
+      $('#'+id).addEventListener('change', scheduleAutoSave);
+    });
+    // Ingredient table changes — delegate
+    body.addEventListener('input', scheduleAutoSave);
+    body.addEventListener('change', scheduleAutoSave);
+  }
+
+  /* Start a new blank recipe */
+  function startNewRecipe(){
+    currentRecipeId = null;
+    persistCurrent();
+    loadRecipeIntoCalc({
+      name:'', menuType:'', portions:10, desc:'',
+      ingredients:[], actualPrice:null, persons:10, targetFC:30
+    });
+    setSaveStatus('');
+    renderRecipes();
+    // Jump to the calc tab so they can start typing
+    document.querySelector('.tab.t-calc').click();
+    setTimeout(()=>$('#dishName').focus(), 100);
+  }
+
+  /* Replace the old resetBtn handler */
+  $('#resetBtn').addEventListener('click', ()=>{
+    // If the current recipe has content, this just starts a NEW one (doesn't wipe the existing)
+    const snap = snapshotCalc();
+    const hasContent = snap.name || snap.ingredients.some(i=>i.name);
+    if(hasContent && !confirm('Start a new blank recipe? Your current recipe stays saved in My Recipes.')) return;
+    if(!hasContent && !confirm('Start a new blank recipe?')) return;
+    startNewRecipe();
+  }, true); // capture so we replace the earlier listener semantics. Actually let me just remove the old one.
+
+  /* ===== Recipes list rendering ===== */
+  let rcpSearchTerm = '';
+  $('#rcpSearch') && $('#rcpSearch').addEventListener('input', e=>{
+    rcpSearchTerm = e.target.value.trim().toLowerCase();
+    renderRecipes();
+  });
+
+  function relTime(ts){
+    if(!ts) return '';
+    const diff = Date.now() - ts;
+    const min = Math.floor(diff/60000);
+    if(min < 1) return 'just now';
+    if(min < 60) return min+' min ago';
+    const hr = Math.floor(min/60);
+    if(hr < 24) return hr+' hr ago';
+    const d = Math.floor(hr/24);
+    if(d < 7) return d+' day'+(d===1?'':'s')+' ago';
+    const wk = Math.floor(d/7);
+    if(wk < 5) return wk+' wk'+(wk===1?'':'s')+' ago';
+    return new Date(ts).toLocaleDateString('en-AU');
+  }
+
+  function renderRecipes(){
+    const list = $('#rcpList');
+    const empty = $('#rcpEmpty');
+    const countTag = $('#recipeCount');
+    countTag.textContent = RECIPES.length || '';
+
+    if(RECIPES.length === 0){
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      $('#recipesSummary').textContent = 'Recipes auto-save as you work';
+      return;
+    }
+    empty.style.display = 'none';
+    $('#recipesSummary').textContent = RECIPES.length + ' recipe' + (RECIPES.length===1?'':'s') + ' · auto-saved';
+
+    const filtered = RECIPES.filter(r=>{
+      if(!rcpSearchTerm) return true;
+      return (r.name||'').toLowerCase().includes(rcpSearchTerm) ||
+             (r.menuType||'').toLowerCase().includes(rcpSearchTerm);
+    }).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+
+    list.innerHTML = '';
+    filtered.forEach(rcp=>{
+      const stats = computeRecipeStats(rcp);
+      const row = document.createElement('div');
+      row.className = 'rcp-row' + (rcp.id === currentRecipeId ? ' active' : '');
+      row.dataset.id = rcp.id;
+      const nameHtml = rcp.name
+        ? '<div class="rcp-name">'+escapeHtml(rcp.name)+'</div>'
+        : '<div class="rcp-name empty">Untitled recipe</div>';
+      const meta = [];
+      if(rcp.menuType) meta.push('<span class="tag">'+escapeHtml(rcp.menuType)+'</span>');
+      meta.push('<span><span class="num">'+(rcp.portions||0)+'</span> portions</span>');
+      if(stats.perPortion != null) meta.push('<span><span class="num">'+money(stats.perPortion)+'</span>/portion</span>');
+      if(stats.total > 0) meta.push('<span>Total <span class="num">'+money(stats.total)+'</span></span>');
+      meta.push('<span style="opacity:.7">'+relTime(rcp.updatedAt)+'</span>');
+
+      row.innerHTML =
+        '<div class="rcp-main">'+
+          nameHtml +
+          '<div class="rcp-meta">'+meta.join('')+'</div>'+
+        '</div>'+
+        '<div class="rcp-actions">'+
+          '<button class="rcp-act dup" title="Duplicate">⎘</button>'+
+          '<button class="rcp-act del" title="Delete">🗑</button>'+
+        '</div>';
+
+      // Click row = open
+      row.addEventListener('click', e=>{
+        if(e.target.closest('.rcp-act')) return;
+        openRecipe(rcp.id);
+      });
+      row.querySelector('.dup').addEventListener('click', e=>{
+        e.stopPropagation(); duplicateRecipe(rcp.id);
+      });
+      row.querySelector('.del').addEventListener('click', e=>{
+        e.stopPropagation(); deleteRecipe(rcp.id);
+      });
+      list.appendChild(row);
+    });
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
+
+  function openRecipe(id){
+    const rcp = RECIPES.find(r=>r.id===id); if(!rcp) return;
+    currentRecipeId = id; persistCurrent();
+    loadRecipeIntoCalc(rcp);
+    setSaveStatus('saved');
+    renderRecipes();
+    document.querySelector('.tab.t-calc').click();
+  }
+
+  function duplicateRecipe(id){
+    const rcp = RECIPES.find(r=>r.id===id); if(!rcp) return;
+    const copy = JSON.parse(JSON.stringify(rcp));
+    copy.id = newId();
+    copy.name = (rcp.name || 'Untitled') + ' (copy)';
+    copy.createdAt = Date.now();
+    copy.updatedAt = Date.now();
+    RECIPES.unshift(copy);
+    persistRecipes();
+    renderRecipes();
+  }
+
+  function deleteRecipe(id){
+    const rcp = RECIPES.find(r=>r.id===id); if(!rcp) return;
+    const label = rcp.name || 'this untitled recipe';
+    if(!confirm('Delete "' + label + '"? This can\'t be undone.')) return;
+    RECIPES = RECIPES.filter(r=>r.id !== id);
+    persistRecipes();
+    if(currentRecipeId === id){
+      currentRecipeId = null; persistCurrent();
+      // Don't wipe the calc UI if user is mid-edit — just unhook from the deleted one
+      setSaveStatus('');
+    }
+    renderRecipes();
+  }
+
+  $('#newRecipeBtn').addEventListener('click', startNewRecipe);
+
+  /* Export all recipes as a JSON backup file */
+  $('#exportAllBtn').addEventListener('click', ()=>{
+    if(RECIPES.length === 0){
+      const r = $('#rcpImportResult');
+      r.className='import-result show err'; r.innerHTML='No recipes to export yet.';
+      return;
+    }
+    const data = { app:'SITHKOP010 Food Cost Calculator', exportedAt: new Date().toISOString(), recipes: RECIPES };
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'recipes-backup-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    const r = $('#rcpImportResult');
+    r.className='import-result show ok';
+    r.innerHTML = '<strong>Exported ' + RECIPES.length + ' recipe' + (RECIPES.length===1?'':'s') + '.</strong> Keep the file safe — you can import it back any time.';
+  });
+
+  /* Import recipes from a JSON backup */
+  $('#importRcpBtn').addEventListener('click', ()=>{
+    $('#rcpFileInput').value = ''; $('#rcpFileInput').click();
+  });
+  $('#rcpFileInput').addEventListener('change', e=>{
+    const file = e.target.files && e.target.files[0]; if(!file) return;
+    const r = $('#rcpImportResult');
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      try{
+        const data = JSON.parse(ev.target.result);
+        const incoming = Array.isArray(data) ? data : (data.recipes || []);
+        if(!Array.isArray(incoming) || incoming.length === 0){
+          r.className='import-result show err'; r.innerHTML='That file doesn\'t contain any recipes.'; return;
+        }
+        let added=0, merged=0;
+        incoming.forEach(rcp=>{
+          if(!rcp || typeof rcp !== 'object' || !rcp.id) return;
+          const existing = RECIPES.findIndex(x=>x.id === rcp.id);
+          if(existing >= 0){
+            // Keep whichever is newer
+            if((rcp.updatedAt||0) > (RECIPES[existing].updatedAt||0)){
+              RECIPES[existing] = rcp; merged++;
+            }
+          } else {
+            RECIPES.unshift(rcp); added++;
+          }
+        });
+        persistRecipes(); renderRecipes();
+        r.className='import-result show ok';
+        r.innerHTML = '<strong>Import complete.</strong> ' + added + ' added · ' + merged + ' updated.';
+      }catch(err){
+        r.className='import-result show err'; r.innerHTML='Couldn\'t read that file: '+(err.message||err);
+      }
+    };
+    reader.onerror = ()=>{ r.className='import-result show err'; r.innerHTML='Could not read the file.'; };
+    reader.readAsText(file);
+  });
+
+
+  /* ===================== PRICE LIST PANEL ===================== */
+  const catColors = {Meat:'#B83232',Poultry:'#C2701A',Seafood:'#0D7A6E',Dairy:'#6B3A8E',
+    Vegetable:'#1D7A4F',Fruit:'#C28A00',Pantry:'#5C6B7A',"Oils & Sauces":'#8A5A00',"Herbs & Spices":'#2E7D32'};
+  const DEFAULT_CATS = ['Meat','Poultry','Seafood','Dairy','Vegetable','Fruit','Pantry','Oils & Sauces','Herbs & Spices'];
+  let activeCat='All', searchTerm='';
+  const chipsWrap = $('#catChips');
+
+  function allCategories(){
+    return Array.from(new Set([...DEFAULT_CATS, ...PRICES.map(i=>i.c)])).sort();
+  }
+
+  function buildChips(){
+    chipsWrap.innerHTML='';
+    ['All', ...allCategories()].forEach(c=>{
+      const b=document.createElement('button');
+      b.className='chip'+(c===activeCat?' active':''); b.textContent=c;
+      b.addEventListener('click',()=>{
+        activeCat=c;
+        chipsWrap.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active'); renderPL();
+      });
+      chipsWrap.appendChild(b);
+    });
+  }
+
+  function buildCatDropdown(){
+    const sel=$('#newCat'); sel.innerHTML='';
+    allCategories().forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+  }
+
+  $('#plSearch').addEventListener('input',e=>{ searchTerm=e.target.value.trim().toLowerCase(); renderPL(); });
+
+  function syncCalcRowsFor(name){
+    body.querySelectorAll('tr').forEach(r=>{
+      if(r.querySelector('.ing-in').value.trim().toLowerCase()===name.toLowerCase()) applyLookup(r);
+    });
+  }
+
+  function renderPL(){
+    $('#plTotal').textContent = PRICES.length+' ingredients';
+    const tb=$('#plBody'); tb.innerHTML='';
+    const rows = PRICES.filter(i=>
+      (activeCat==='All'||i.c===activeCat) &&
+      (!searchTerm || i.n.toLowerCase().includes(searchTerm) || i.c.toLowerCase().includes(searchTerm))
+    ).sort((a,b)=>a.n.localeCompare(b.n));
+    $('#plCount').textContent = rows.length+' shown';
+    rows.forEach(i=>{
+      const tr=document.createElement('tr');
+      const col = catColors[i.c]||'#5C6B7A';
+      const custom = i.custom ? '<span class="custom-tag">ADDED</span>' : '';
+      tr.innerHTML =
+        '<td>'+i.n+custom+'</td>'+
+        '<td><span class="cat-tag" style="background:'+col+'1a;color:'+col+'">'+i.c+'</span></td>'+
+        '<td style="text-align:center;color:var(--teal);font-weight:600">'+i.u+'</td>'+
+        '<td class="num price">'+money(i.p)+'</td>'+
+        '<td class="num">'+(i.y!==null&&i.y!==undefined?i.y+'%':'—')+'</td>'+
+        '<td class="num edit"><input type="number" min="0" step="any" value="'+i.p+'"></td>'+
+        '<td style="text-align:center"><button class="pl-del" title="Delete ingredient">🗑</button></td>';
+      // price edit
+      const inp=tr.querySelector('.edit input');
+      inp.addEventListener('input',()=>{
+        const v=parseFloat(inp.value);
+        if(!isNaN(v)){
+          i.p=v; if(MAP[i.n.toLowerCase()]) MAP[i.n.toLowerCase()].p=v;
+          tr.querySelector('.price').textContent=money(v);
+          syncCalcRowsFor(i.n); recalc(); saveStore();
+        }
+      });
+      // delete
+      tr.querySelector('.pl-del').addEventListener('click',()=>{
+        if(!confirm('Delete "'+i.n+'" from the price list?')) return;
+        const idx = PRICES.findIndex(x=>x.n.toLowerCase()===i.n.toLowerCase());
+        if(idx>-1) PRICES.splice(idx,1);
+        rebuildMap(); refreshDatalist(); saveStore();
+        syncCalcRowsFor(i.n); recalc();
+        buildChips(); buildCatDropdown(); renderPL();
+      });
+      tb.appendChild(tr);
+    });
+  }
+
+  /* ---------- Add ingredient form ---------- */
+  const addForm = $('#addForm');
+  const addMsg = $('#addMsg');
+  function showAdd(show){
+    addForm.classList.toggle('show', show);
+    if(show){ $('#newName').focus(); addMsg.textContent=''; }
+  }
+  $('#toggleAdd').addEventListener('click',()=> showAdd(!addForm.classList.contains('show')) );
+  $('#cancelNew').addEventListener('click',()=>{ clearAddForm(); showAdd(false); });
+
+  function clearAddForm(){
+    $('#newName').value=''; $('#newUom').value=''; $('#newPrice').value=''; $('#newYield').value='';
+    $('#newCat').selectedIndex=0;
+  }
+
+  $('#saveNew').addEventListener('click',()=>{
+    const name=$('#newName').value.trim();
+    const cat=$('#newCat').value;
+    const uom=$('#newUom').value.trim();
+    const price=parseFloat($('#newPrice').value);
+    const yRaw=$('#newYield').value.trim();
+    const yld = yRaw==='' ? null : parseInt(yRaw);
+    if(!name){ addMsg.className='add-msg err'; addMsg.textContent='Enter an ingredient name.'; return; }
+    if(!uom){ addMsg.className='add-msg err'; addMsg.textContent='Enter a unit (kg, L, each…).'; return; }
+    if(isNaN(price)||price<0){ addMsg.className='add-msg err'; addMsg.textContent='Enter a valid price.'; return; }
+    if(yld!==null && (isNaN(yld)||yld<1||yld>100)){ addMsg.className='add-msg err'; addMsg.textContent='Yield must be 1–100, or blank.'; return; }
+    if(MAP[name.toLowerCase()]){ addMsg.className='add-msg err'; addMsg.textContent='"'+name+'" already exists — edit it in the table instead.'; return; }
+    PRICES.push({n:name,c:cat,u:uom,p:price,y:yld,custom:true});
+    rebuildMap(); refreshDatalist(); saveStore();
+    buildChips(); buildCatDropdown();
+    activeCat='All'; searchTerm=''; $('#plSearch').value='';
+    renderPL();
+    addMsg.className='add-msg ok'; addMsg.textContent='✓ "'+name+'" added.';
+    clearAddForm();
+  });
+
+  /* ---------- Restore defaults ---------- */
+  $('#restoreDefaults').addEventListener('click',()=>{
+    if(!confirm('Restore the original price list? This removes any ingredients you added and resets all prices.')) return;
+    PRICES = PRICE_LIST.map(o=>({...o}));
+    rebuildMap(); refreshDatalist(); saveStore();
+    activeCat='All'; searchTerm=''; $('#plSearch').value='';
+    buildChips(); buildCatDropdown(); renderPL();
+    body.querySelectorAll('tr').forEach(r=>applyLookup(r)); recalc();
+  });
+
+  /* ---------- Editable heading (persisted) ---------- */
+  const TITLE_KEY = 'sithkop010_titles_v1';
+  function loadTitles(){
+    try{
+      const raw = localStorage.getItem(TITLE_KEY);
+      if(!raw) return;
+      const t = JSON.parse(raw);
+      document.querySelectorAll('header [data-store]').forEach(el=>{
+        const k = el.dataset.store;
+        if(t[k] !== undefined && t[k] !== null) el.textContent = t[k];
+      });
+      document.title = (t.title || 'Food Cost Calculator') + ' — SITHKOP010';
+    }catch(e){}
+  }
+  function saveTitles(){
+    try{
+      const t = {};
+      document.querySelectorAll('header [data-store]').forEach(el=>{ t[el.dataset.store] = el.textContent.trim(); });
+      localStorage.setItem(TITLE_KEY, JSON.stringify(t));
+      document.title = (t.title || 'Food Cost Calculator') + ' — SITHKOP010';
+    }catch(e){}
+  }
+  document.querySelectorAll('header [data-store]').forEach(el=>{
+    el.addEventListener('input', saveTitles);
+    el.addEventListener('blur', ()=>{
+      // prevent users from accidentally leaving an element blank
+      if(!el.textContent.trim()){
+        el.textContent = el.dataset.store==='title' ? 'Food Cost Calculator'
+          : el.dataset.store==='eyebrow' ? 'SITHKOP010 · Plan and Cost Recipes'
+          : 'Pick ingredients and the NSW price fills in automatically.';
+        saveTitles();
+      }
+    });
+    // stop Enter from inserting line breaks in the title/eyebrow
+    if(el.tagName !== 'P'){
+      el.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+    }
+  });
+  $('#resetTitle').addEventListener('click', ()=>{
+    if(!confirm('Reset the heading back to the default text?')) return;
+    document.querySelector('header [data-store="eyebrow"]').textContent = 'SITHKOP010 · Plan and Cost Recipes';
+    document.querySelector('header [data-store="title"]').textContent = 'Food Cost Calculator';
+    document.querySelector('header [data-store="subtitle"]').textContent =
+      'Pick ingredients and the NSW price fills in automatically. Set a target food cost % and it works out the selling price — exactly like the Excel working template.';
+    saveTitles();
+  });
+  loadTitles();
+
+  /* ---------- Excel template download ---------- */
+  function showImportMsg(html, ok){
+    const r = $('#importResult');
+    r.className = 'import-result show ' + (ok ? 'ok' : 'err');
+    r.innerHTML = html;
+  }
+
+  $('#templateBtn').addEventListener('click', ()=>{
+    if(typeof XLSX === 'undefined'){ showImportMsg('Excel library not loaded yet — check your internet connection.', false); return; }
+    // sample rows so it's obvious how to fill it in
+    const rows = [
+      ['Ingredient Name','Category','UoM','Price per Unit','Yield %'],
+      ['Wagyu beef','Meat','kg',120,90],
+      ['Truffle oil','Oils & Sauces','L',180,''],
+      ['Saffron','Herbs & Spices','kg',8000,''],
+      ['','','','',''],
+      ['','','','',''],
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols'] = [{wch:32},{wch:18},{wch:10},{wch:14},{wch:10}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Price List');
+    XLSX.writeFile(wb, 'price-list-template.xlsx');
+  });
+
+  /* ---------- Excel import ---------- */
+  // Header aliases for auto-detection (case-insensitive, ignores spaces/punct)
+  const ALIASES = {
+    name: ['name','ingredient','ingredientname','item','product','description'],
+    cat:  ['category','cat','type','group','section'],
+    uom:  ['uom','unit','units','unitofmeasure','measure','per'],
+    price:['price','priceperunit','priceunit','unitprice','cost','costperunit','rate','$','amount'],
+    yield:['yield','yield%','yieldpercent','yieldpercentage','usableyield','edibleyield','%']
+  };
+  function norm(s){ return String(s||'').toLowerCase().replace(/[^a-z%]/g,''); }
+  function findCol(header, kind){
+    const wanted = ALIASES[kind];
+    for(let i=0;i<header.length;i++){
+      const h = norm(header[i]);
+      if(wanted.includes(h)) return i;
+    }
+    // partial contains match as fallback (e.g. "Price per Unit ($)")
+    for(let i=0;i<header.length;i++){
+      const h = norm(header[i]);
+      if(wanted.some(w => h.includes(w) && w.length>2)) return i;
+    }
+    return -1;
+  }
+
+  $('#importBtn').addEventListener('click', ()=>{
+    if(typeof XLSX === 'undefined'){ showImportMsg('Excel library not loaded yet — check your internet connection.', false); return; }
+    $('#fileInput').value = '';
+    $('#fileInput').click();
+  });
+
+  $('#fileInput').addEventListener('change', e=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onerror = ()=> showImportMsg('Could not read that file.', false);
+    reader.onload = ev => {
+      try{
+        const data = new Uint8Array(ev.target.result);
+        const wb = XLSX.read(data, {type:'array'});
+        // Find a sheet with usable data — prefer one named like "price"
+        let sheetName = wb.SheetNames.find(n=>/price/i.test(n)) || wb.SheetNames[0];
+        const ws = wb.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+        if(!rows.length){ showImportMsg('That file has no data.', false); return; }
+
+        // Detect header row (first row containing at least Name + Price-ish columns)
+        let headerIdx = -1, header = null;
+        for(let i=0;i<Math.min(rows.length,10);i++){
+          const cand = rows[i];
+          if(findCol(cand,'name')!==-1 && findCol(cand,'price')!==-1){ headerIdx=i; header=cand; break; }
+        }
+        if(headerIdx===-1){
+          showImportMsg('Could not find the header row. Make sure your sheet has columns named like <strong>Ingredient Name</strong> and <strong>Price</strong>. <a href="#" id="dlTmpl" style="color:inherit;text-decoration:underline">Download the template</a> for a working example.', false);
+          $('#dlTmpl') && $('#dlTmpl').addEventListener('click', e=>{ e.preventDefault(); $('#templateBtn').click(); });
+          return;
+        }
+        const cName = findCol(header,'name');
+        const cCat  = findCol(header,'cat');
+        const cUom  = findCol(header,'uom');
+        const cPrice= findCol(header,'price');
+        const cYield= findCol(header,'yield');
+
+        let added=0, updated=0, skipped=0;
+        const skippedRows = [];
+        for(let r=headerIdx+1; r<rows.length; r++){
+          const row = rows[r];
+          if(!row || row.every(v => v==='' || v===null || v===undefined)) continue;
+          const name = String(row[cName]||'').trim();
+          const priceRaw = row[cPrice];
+          const price = parseFloat(String(priceRaw).replace(/[^0-9.\-]/g,''));
+          if(!name || isNaN(price) || price<0){ skipped++; if(skippedRows.length<3 && name) skippedRows.push(name); continue; }
+          const cat = (cCat>-1 ? String(row[cCat]||'').trim() : '') || 'Pantry';
+          const uom = (cUom>-1 ? String(row[cUom]||'').trim() : '') || 'each';
+          let yld = null;
+          if(cYield>-1 && row[cYield] !== '' && row[cYield] !== null && row[cYield] !== undefined){
+            let yv = row[cYield];
+            if(typeof yv === 'string') yv = yv.replace(/[^0-9.\-]/g,'');
+            yv = parseFloat(yv);
+            if(!isNaN(yv) && yv>0){
+              // Excel may give 0.85 or 85 — normalise to whole-number percent
+              if(yv<=1) yv = yv*100;
+              yld = Math.round(yv);
+              if(yld<1||yld>100) yld=null;
+            }
+          }
+          const existing = MAP[name.toLowerCase()];
+          if(existing){
+            existing.p = price;
+            existing.c = cat || existing.c;
+            existing.u = uom || existing.u;
+            if(yld !== null) existing.y = yld;
+            updated++;
+          } else {
+            PRICES.push({n:name,c:cat,u:uom,p:price,y:yld,custom:true});
+            added++;
+          }
+        }
+        rebuildMap(); refreshDatalist(); saveStore();
+        buildChips(); buildCatDropdown();
+        activeCat='All'; searchTerm=''; $('#plSearch').value='';
+        renderPL();
+        body.querySelectorAll('tr').forEach(r=>applyLookup(r)); recalc();
+
+        let msg = '<strong>Import complete.</strong> ';
+        const parts = [];
+        if(added) parts.push(added+' added');
+        if(updated) parts.push(updated+' updated');
+        if(skipped) parts.push(skipped+' skipped');
+        msg += parts.join(' · ') || 'No changes.';
+        if(skippedRows.length) msg += ' <em>(skipped examples: '+skippedRows.join(', ')+')</em>';
+        msg += ' &nbsp;Sheet: <em>'+sheetName+'</em>';
+        showImportMsg(msg, true);
+      }catch(err){
+        showImportMsg('Import failed: '+(err.message||err), false);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  /* ---------- init ---------- */
+  buildChips();
+  buildCatDropdown();
+  renderPL();
+
+  // Load saved recipes & restore current one (or start with 4 blank rows)
+  loadRecipes();
+  const currentRcp = currentRecipeId ? RECIPES.find(r=>r.id===currentRecipeId) : null;
+  if(currentRcp){
+    loadRecipeIntoCalc(currentRcp);
+    setSaveStatus('saved');
   } else {
-    const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); done(); }catch(_){}; ta.remove();
+    for(let i=0;i<4;i++) makeRow();
+    recalc();
   }
-});
+  renderRecipes();
+  wireAutoSave();
+})();
+
 </script>
 </body>
 </html>
