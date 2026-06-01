@@ -305,7 +305,49 @@ td .qty-in,td .yld-in{text-align:right}
 .lock-footer{font-size:11.5px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:16px}
 
 body.locked{overflow:hidden}
-body.locked .wrap > *:not(.lock-screen){filter:blur(6px);pointer-events:none;user-select:none}
+body.locked .wrap > *:not(.lock-screen):not(.admin-overlay){filter:blur(6px);pointer-events:none;user-select:none}
+
+/* ===================== ADMIN PANEL ===================== */
+.admin-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(14,27,44,.85);
+  align-items:center;justify-content:center;padding:24px 16px;overflow-y:auto}
+.admin-overlay.show{display:flex}
+.admin-card{background:#fff;border-radius:18px;max-width:540px;width:100%;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden;
+  border:1px solid rgba(212,160,23,.4);max-height:90vh;overflow-y:auto}
+.admin-h{display:flex;justify-content:space-between;align-items:flex-start;
+  background:linear-gradient(135deg,#1A2F4A,#24405f);color:#fff;padding:20px 24px}
+.admin-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:2px 0 0}
+.admin-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.admin-close{background:rgba(255,255,255,.1);color:#fff;border:none;width:32px;height:32px;
+  border-radius:8px;font-size:22px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center}
+.admin-close:hover{background:rgba(255,255,255,.2)}
+.admin-body{padding:18px 24px 22px}
+.admin-status{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:18px}
+.admin-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:13px;gap:14px}
+.admin-row+.admin-row{border-top:1px dashed var(--line)}
+.admin-row .lbl{color:var(--muted);font-weight:600}
+.admin-row .val{color:var(--navy);font-weight:700;font-variant-numeric:tabular-nums;text-align:right;word-break:break-all}
+.admin-row .val.mono{font-family:'Fraunces',serif;letter-spacing:.04em;font-size:13.5px}
+.admin-section{margin-bottom:14px}
+.admin-section-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.admin-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.admin-btn{background:#fff;border:1.5px solid var(--line);color:var(--navy);
+  font-family:'Archivo';font-weight:600;font-size:13px;padding:11px 12px;border-radius:9px;cursor:pointer;
+  text-align:center;transition:all .12s}
+.admin-btn:hover{border-color:var(--teal);background:#f7fbfa}
+.admin-btn.ok{background:var(--green);color:#fff;border-color:var(--green)}
+.admin-btn.ok:hover{filter:brightness(1.1);background:var(--green)}
+.admin-btn.warn{background:#fdf2e0;border-color:#e8a878;color:#7a4a00}
+.admin-btn.warn:hover{background:#f9e5c4;border-color:#d88858}
+.admin-btn.danger{background:#f7e6e6;border-color:#d8a0a0;color:var(--red)}
+.admin-btn.danger:hover{background:#f0d4d4}
+.admin-note{background:#fbf8f1;border-left:3px solid var(--gold);padding:10px 13px;
+  border-radius:0 8px 8px 0;font-size:12px;color:var(--muted);line-height:1.55;margin-top:6px}
+.admin-flash{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:13px;font-weight:600;display:none}
+.admin-flash.show{display:block}
+.admin-flash.ok{background:#e6f2ea;color:var(--green)}
+.admin-flash.err{background:#f7e6e6;color:var(--red)}
+@media (max-width:500px){.admin-btn-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -349,6 +391,53 @@ body.locked .wrap > *:not(.lock-screen){filter:blur(6px);pointer-events:none;use
   <div class="trial-actions">
     <a href="https://paypal.me/MarcTeleki/59AUD" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:white;padding:10px 22px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold;">💳 Pay $59 AUD</a>
     <button class="trial-unlock" id="trialUnlockBtn">I have an unlock code</button>
+  </div>
+</div>
+
+<!-- ===================== ADMIN PANEL (hidden; opened by 5x tap on ↺ button) ===================== -->
+<div class="admin-overlay" id="adminOverlay" aria-hidden="true">
+  <div class="admin-card">
+    <div class="admin-h">
+      <div>
+        <div class="admin-eyebrow">Admin · Hidden</div>
+        <h2>Licence &amp; Trial Controls</h2>
+      </div>
+      <button class="admin-close" id="adminClose" aria-label="Close">×</button>
+    </div>
+    <div class="admin-body">
+      <div class="admin-status" id="adminStatus">
+        <div class="admin-row"><span class="lbl">Device code</span><span class="val" id="admFp">—</span></div>
+        <div class="admin-row"><span class="lbl">Trial started</span><span class="val" id="admStart">—</span></div>
+        <div class="admin-row"><span class="lbl">Days left</span><span class="val" id="admDays">—</span></div>
+        <div class="admin-row"><span class="lbl">Unlocked</span><span class="val" id="admUnlocked">—</span></div>
+        <div class="admin-row"><span class="lbl">Expected unlock code</span><span class="val mono" id="admUnlockCode">—</span></div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-title">Trial controls</div>
+        <div class="admin-btn-grid">
+          <button class="admin-btn" data-act="reset">↺ Reset trial (fresh 14 days)</button>
+          <button class="admin-btn" data-act="day1">Day 1 (full trial)</button>
+          <button class="admin-btn" data-act="day12">Day 12 (warning)</button>
+          <button class="admin-btn warn" data-act="expire">Day 15 (LOCK NOW)</button>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-title">Licence</div>
+        <div class="admin-btn-grid">
+          <button class="admin-btn ok" data-act="unlock">✓ Unlock this device</button>
+          <button class="admin-btn warn" data-act="lockNow">🔒 Re-lock this device</button>
+          <button class="admin-btn" data-act="newFp">New device code</button>
+          <button class="admin-btn danger" data-act="clearAll">⚠ Clear ALL data</button>
+        </div>
+      </div>
+
+      <div class="admin-note">
+        <strong>How to open this panel:</strong> tap the gold ↺ button in the header 5 times within 2 seconds. This panel never appears for regular users.
+      </div>
+      <div class="admin-flash" id="adminFlash"></div>
+    </div>
   </div>
 </div>
   <header>
@@ -869,6 +958,146 @@ const PRICE_LIST=[
     showLock();
     setTimeout(()=> document.getElementById('unlockInput').focus(), 100);
   });
+
+  /* ====================================================================
+     ADMIN PANEL — hidden controls. Open by tapping the ↺ header button
+     5 times within 2 seconds. Lets you reset trial / preview lock / unlock.
+     ==================================================================== */
+  let adminTaps = []; // timestamps
+  const ADMIN_TAP_COUNT = 5;
+  const ADMIN_TAP_WINDOW_MS = 2000;
+  const adminOverlay = document.getElementById('adminOverlay');
+  const adminFlash = document.getElementById('adminFlash');
+
+  function adminFlashMsg(msg, kind){
+    adminFlash.className = 'admin-flash show ' + (kind || 'ok');
+    adminFlash.textContent = msg;
+    clearTimeout(adminFlashMsg._t);
+    adminFlashMsg._t = setTimeout(()=>{ adminFlash.className = 'admin-flash'; }, 2800);
+  }
+
+  function refreshAdminStatus(){
+    const cur = loadLic() || LIC;
+    document.getElementById('admFp').textContent = cur.fp || '—';
+    document.getElementById('admStart').textContent = cur.startedAt
+      ? new Date(cur.startedAt).toLocaleString('en-AU')
+      : '—';
+    const d = cur.unlocked ? '∞' : Math.max(0, Math.ceil(TRIAL_DAYS - (Date.now() - cur.startedAt)/86400000));
+    document.getElementById('admDays').textContent = cur.unlocked ? 'Unlocked' : (d + ' day' + (d===1?'':'s'));
+    document.getElementById('admUnlocked').textContent = cur.unlocked ? '✓ Yes' : '✗ No';
+    document.getElementById('admUnlockCode').textContent = cur.fp ? expectedUnlockFor(cur.fp) : '—';
+  }
+
+  function openAdmin(){
+    refreshAdminStatus();
+    adminOverlay.classList.add('show');
+    adminOverlay.setAttribute('aria-hidden','false');
+  }
+  function closeAdmin(){
+    adminOverlay.classList.remove('show');
+    adminOverlay.setAttribute('aria-hidden','true');
+    adminFlash.className = 'admin-flash';
+  }
+
+  // 5-tap activator on the ↺ header reset button. We attach as 'capture' so it runs
+  // before the existing handler — but we don't preventDefault, so the normal reset
+  // still works when not in admin sequence.
+  document.getElementById('resetTitle').addEventListener('click', (e)=>{
+    const now = Date.now();
+    adminTaps = adminTaps.filter(t => now - t < ADMIN_TAP_WINDOW_MS);
+    adminTaps.push(now);
+    if(adminTaps.length >= ADMIN_TAP_COUNT){
+      adminTaps = [];
+      e.stopImmediatePropagation(); // suppress the title-reset confirm dialog
+      e.preventDefault();
+      openAdmin();
+    }
+  }, true);
+
+  // Close
+  document.getElementById('adminClose').addEventListener('click', closeAdmin);
+  adminOverlay.addEventListener('click', (e)=>{ if(e.target === adminOverlay) closeAdmin(); });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && adminOverlay.classList.contains('show')) closeAdmin();
+  });
+
+  // Action buttons
+  adminOverlay.querySelectorAll('.admin-btn[data-act]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const act = btn.dataset.act;
+      switch(act){
+        case 'reset': {
+          LIC = { fp: makeFingerprint(), startedAt: Date.now(), unlocked: false };
+          saveLic(LIC);
+          adminFlashMsg('✓ Trial reset — fresh 14 days', 'ok');
+          break;
+        }
+        case 'day1': {
+          LIC.startedAt = Date.now();
+          LIC.unlocked = false;
+          saveLic(LIC);
+          adminFlashMsg('Set to day 1 (14 days left)', 'ok');
+          break;
+        }
+        case 'day12': {
+          LIC.startedAt = Date.now() - 12 * 86400000;
+          LIC.unlocked = false;
+          saveLic(LIC);
+          adminFlashMsg('Set to day 12 (2 days left, warning banner)', 'ok');
+          break;
+        }
+        case 'expire': {
+          LIC.startedAt = Date.now() - 15 * 86400000;
+          LIC.unlocked = false;
+          saveLic(LIC);
+          adminFlashMsg('Trial expired — lock screen will appear', 'ok');
+          break;
+        }
+        case 'unlock': {
+          LIC.unlocked = true;
+          LIC.unlockedAt = Date.now();
+          saveLic(LIC);
+          adminFlashMsg('✓ Device unlocked', 'ok');
+          break;
+        }
+        case 'lockNow': {
+          LIC.unlocked = false;
+          delete LIC.unlockedAt;
+          // Also push the trial back so it's actually locked, not just "not unlocked"
+          LIC.startedAt = Date.now() - 15 * 86400000;
+          saveLic(LIC);
+          adminFlashMsg('Device re-locked', 'ok');
+          break;
+        }
+        case 'newFp': {
+          LIC.fp = makeFingerprint();
+          LIC.unlocked = false;
+          delete LIC.unlockedAt;
+          saveLic(LIC);
+          adminFlashMsg('New device code: ' + LIC.fp, 'ok');
+          break;
+        }
+        case 'clearAll': {
+          if(!confirm('Clear ALL local data on this device?\n\nThis wipes:\n· Trial / licence record\n· All saved recipes\n· Price list edits\n· Custom heading text\n\nCannot be undone.')) return;
+          try{
+            localStorage.removeItem('sithkop010_lic_v1');
+            localStorage.removeItem('sithkop010_recipes_v1');
+            localStorage.removeItem('sithkop010_current_recipe_v1');
+            localStorage.removeItem('sithkop010_pricelist_v1');
+            localStorage.removeItem('sithkop010_titles_v1');
+          }catch(e){}
+          adminFlashMsg('All data cleared. Reloading…', 'ok');
+          setTimeout(()=> location.reload(), 700);
+          return;
+        }
+      }
+      // Refresh visible state without a hard reload
+      refreshAdminStatus();
+      refreshTrialBanner();
+      if(isLocked()) showLock(); else hideLock();
+    });
+  });
+
 
   /* ---------- Price list with persistence ----------
      PRICE_LIST is the built-in default. Custom edits/additions/deletions
