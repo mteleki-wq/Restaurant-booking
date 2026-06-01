@@ -441,7 +441,7 @@ body.locked .wrap > *:not(.lock-screen):not(.admin-overlay){filter:blur(6px);poi
   </div>
 </div>
   <header>
-    <div class="eyebrow" contenteditable="true" spellcheck="false" data-store="eyebrow" title="Tap to edit">SITHKOP010 · Plan and Cost Recipes</div>
+    <div class="eyebrow" contenteditable="true" spellcheck="false" data-store="eyebrow" title="Tap to edit — add your restaurant name">YOUR RESTAURANT NAME · TAP TO EDIT</div>
     <h1 contenteditable="true" spellcheck="false" data-store="title" title="Tap to edit">Food Cost Calculator</h1>
     <p contenteditable="true" spellcheck="false" data-store="subtitle" title="Tap to edit">Pick ingredients and the NSW price fills in automatically. Set a target food cost % and it works out the selling price — exactly like the Excel working template.</p>
     <button class="title-reset" id="resetTitle" title="Reset heading text">↺</button>
@@ -1815,25 +1815,48 @@ const PRICE_LIST=[
 
   /* ---------- Editable heading (persisted) ---------- */
   const TITLE_KEY = 'sithkop010_titles_v1';
+  // Pull a sensible "brand" string from the eyebrow text — strips the
+  // "TAP TO EDIT" prompt and any · separator suffix so the lock screen
+  // shows just the restaurant name (or a safe fallback).
+  function brandFromEyebrow(text){
+    const raw = (text || '').trim();
+    if(!raw) return 'Food Cost Calculator';
+    if(/TAP TO EDIT/i.test(raw)) return 'Food Cost Calculator';
+    // If user typed "Joe's Bistro · A La Carte", keep just "Joe's Bistro"
+    const before = raw.split('·')[0].trim();
+    return before || raw;
+  }
+  function syncBrandedElements(){
+    const eyebrow = document.querySelector('header [data-store="eyebrow"]');
+    const title = document.querySelector('header [data-store="title"]');
+    const brand = brandFromEyebrow(eyebrow ? eyebrow.textContent : '');
+    const titleText = (title && title.textContent.trim()) || 'Food Cost Calculator';
+    const lockBrand = document.getElementById('lockBrand');
+    if(lockBrand) lockBrand.textContent = brand;
+    // Avoid "Food Cost Calculator — Food Cost Calculator" when brand isn't set
+    document.title = (brand === 'Food Cost Calculator') ? titleText : titleText + ' — ' + brand;
+  }
+
   function loadTitles(){
     try{
       const raw = localStorage.getItem(TITLE_KEY);
-      if(!raw) return;
-      const t = JSON.parse(raw);
-      document.querySelectorAll('header [data-store]').forEach(el=>{
-        const k = el.dataset.store;
-        if(t[k] !== undefined && t[k] !== null) el.textContent = t[k];
-      });
-      document.title = (t.title || 'Food Cost Calculator') + ' — SITHKOP010';
+      if(raw){
+        const t = JSON.parse(raw);
+        document.querySelectorAll('header [data-store]').forEach(el=>{
+          const k = el.dataset.store;
+          if(t[k] !== undefined && t[k] !== null) el.textContent = t[k];
+        });
+      }
     }catch(e){}
+    syncBrandedElements();
   }
   function saveTitles(){
     try{
       const t = {};
       document.querySelectorAll('header [data-store]').forEach(el=>{ t[el.dataset.store] = el.textContent.trim(); });
       localStorage.setItem(TITLE_KEY, JSON.stringify(t));
-      document.title = (t.title || 'Food Cost Calculator') + ' — SITHKOP010';
     }catch(e){}
+    syncBrandedElements();
   }
   document.querySelectorAll('header [data-store]').forEach(el=>{
     el.addEventListener('input', saveTitles);
@@ -1841,7 +1864,7 @@ const PRICE_LIST=[
       // prevent users from accidentally leaving an element blank
       if(!el.textContent.trim()){
         el.textContent = el.dataset.store==='title' ? 'Food Cost Calculator'
-          : el.dataset.store==='eyebrow' ? 'SITHKOP010 · Plan and Cost Recipes'
+          : el.dataset.store==='eyebrow' ? 'YOUR RESTAURANT NAME · TAP TO EDIT'
           : 'Pick ingredients and the NSW price fills in automatically.';
         saveTitles();
       }
@@ -1853,7 +1876,7 @@ const PRICE_LIST=[
   });
   $('#resetTitle').addEventListener('click', ()=>{
     if(!confirm('Reset the heading back to the default text?')) return;
-    document.querySelector('header [data-store="eyebrow"]').textContent = 'SITHKOP010 · Plan and Cost Recipes';
+    document.querySelector('header [data-store="eyebrow"]').textContent = 'YOUR RESTAURANT NAME · TAP TO EDIT';
     document.querySelector('header [data-store="title"]').textContent = 'Food Cost Calculator';
     document.querySelector('header [data-store="subtitle"]').textContent =
       'Pick ingredients and the NSW price fills in automatically. Set a target food cost % and it works out the selling price — exactly like the Excel working template.';
