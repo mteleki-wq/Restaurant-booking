@@ -187,10 +187,118 @@ td .qty-in,td .yld-in{text-align:right}
   header{padding:20px}
   .bigprice .p{font-size:32px}
 }
+
+/* ===================== TRIAL BANNER ===================== */
+.trial-banner{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  background:linear-gradient(90deg,#FFF6D6,#fbe9b3);border:1px solid var(--yellow-bd);
+  border-radius:12px;padding:10px 16px;margin-bottom:14px;font-size:13.5px;color:#7a5a00;font-weight:600;
+}
+.trial-banner.warn{background:linear-gradient(90deg,#fde2cc,#fac9a3);border-color:#e8a878;color:#a04a00}
+.trial-unlock{
+  background:var(--navy);color:#fff;border:none;font-family:'Archivo';font-weight:600;font-size:13px;
+  padding:7px 14px;border-radius:8px;cursor:pointer;
+}
+.trial-unlock:hover{filter:brightness(1.1)}
+.trial-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.trial-pay{
+  background:var(--teal);color:#fff;text-decoration:none;font-family:'Archivo';font-weight:700;font-size:13px;
+  padding:7px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;
+  box-shadow:0 2px 8px rgba(13,122,110,.3);
+}
+.trial-pay:hover{filter:brightness(1.1);transform:translateY(-1px)}
+
+/* ===================== LOCK SCREEN ===================== */
+.lock-screen{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(circle at 20% 10%,#24405f,#0e1b2c 70%);
+  align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px;
+}
+.lock-screen.show{display:flex}
+.lock-card{
+  background:var(--paper);border-radius:20px;max-width:520px;width:100%;
+  padding:36px 32px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+  position:relative;text-align:center;margin:auto;
+  border:1px solid rgba(212,160,23,.2);
+}
+.lock-brand{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:18px}
+.lock-icon{font-size:48px;margin-bottom:8px}
+.lock-title{font-family:'Fraunces',serif;font-weight:600;font-size:26px;color:var(--navy);margin-bottom:8px;line-height:1.2}
+.lock-msg{font-size:14.5px;color:var(--muted);margin-bottom:24px;line-height:1.55}
+.lock-fp{background:#fff;border:1.5px dashed var(--gold);border-radius:12px;padding:14px 16px;margin-bottom:22px;position:relative;text-align:left}
+.lock-fp-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.lock-fp-label span{font-weight:500;text-transform:none;letter-spacing:0;font-size:11.5px}
+.lock-fp-value{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:.05em;word-break:break-all}
+.lock-copy{position:absolute;top:14px;right:14px;background:var(--navy);color:#fff;border:none;font-family:'Archivo';
+  font-weight:600;font-size:12px;padding:6px 12px;border-radius:7px;cursor:pointer}
+.lock-copy:hover{filter:brightness(1.15)}
+.lock-copy.copied{background:var(--green)}
+.lock-contact{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.lock-btn{
+  width:100%;text-decoration:none;display:flex;align-items:center;justify-content:center;
+  font-family:'Archivo';font-weight:700;font-size:15px;padding:14px 18px;border-radius:10px;cursor:pointer;border:none;
+  transition:transform .1s,filter .1s;
+}
+.lock-btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.lock-btn.primary{background:var(--teal);color:#fff;box-shadow:0 4px 14px rgba(13,122,110,.3)}
+.lock-btn.primary:hover{box-shadow:0 6px 20px rgba(13,122,110,.4)}
+.lock-btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);font-weight:600}
+.lock-unlock{text-align:left;border-top:1px solid var(--line);padding-top:20px;margin-bottom:20px}
+.lock-unlock-label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px}
+.lock-unlock-row{display:flex;gap:8px}
+.lock-unlock-row input{flex:1;font-family:'Fraunces',serif;font-weight:600;letter-spacing:.05em;text-align:center;font-size:15px;text-transform:uppercase}
+.lock-unlock-msg{margin-top:10px;font-size:13px;min-height:18px;font-weight:600}
+.lock-unlock-msg.err{color:var(--red)}
+.lock-unlock-msg.ok{color:var(--green)}
+.lock-footer{font-size:11.5px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:16px}
+
+body.locked{overflow:hidden}
+body.locked .wrap > *:not(.lock-screen){filter:blur(6px);pointer-events:none;user-select:none}
 </style>
 </head>
 <body>
 <div class="wrap">
+
+<!-- ===================== LOCK SCREEN (hidden by default; shown when trial expires) ===================== -->
+<div class="lock-screen" id="lockScreen" aria-hidden="true">
+  <div class="lock-card">
+    <div class="lock-brand" id="lockBrand">Webescapade</div>
+    <div class="lock-icon">🔒</div>
+    <h2 class="lock-title" id="lockTitle">Your 14-day trial has ended</h2>
+    <p class="lock-msg" id="lockMsg">Thanks for trying the Food Cost Calculator. To keep using it on this device, please purchase an unlock code.</p>
+
+    <div class="lock-fp">
+      <div class="lock-fp-label">Your device code <span>(send this to get your unlock code)</span></div>
+      <div class="lock-fp-value" id="fpDisplay">—</div>
+      <button class="lock-copy" id="copyFp">Copy</button>
+    </div>
+
+    <div class="lock-contact">
+      <a href="https://paypal.me/MarcTeleki/59AUD" id="buyLink" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:white;padding:15px 30px;border-radius:8px;text-decoration:none;font-size:18px;font-weight:bold;text-align:center;">💳 Pay $59 AUD</a>
+      <a class="lock-btn ghost" href="mailto:your-email@example.com?subject=Food%20Cost%20Calculator%20Unlock" id="emailLink">Email for unlock</a>
+    </div>
+
+    <div class="lock-unlock">
+      <label class="lock-unlock-label">Already have an unlock code?</label>
+      <div class="lock-unlock-row">
+        <input type="text" id="unlockInput" placeholder="UNLK-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+        <button class="lock-btn primary" id="unlockBtn">Unlock</button>
+      </div>
+      <div class="lock-unlock-msg" id="unlockMsg"></div>
+    </div>
+
+    <div class="lock-footer">One unlock code per device. Save your code somewhere safe — you'll need it again if you clear your browser data.</div>
+  </div>
+</div>
+
+<!-- Trial banner (sits above header during trial) -->
+<div class="trial-banner" id="trialBanner" style="display:none">
+  <span id="trialMsg">Trial</span>
+  <div class="trial-actions">
+    <a href="https://paypal.me/MarcTeleki/59AUD" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:white;padding:10px 22px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold;">💳 Pay $59 AUD</a>
+    <button class="trial-unlock" id="trialUnlockBtn">I have an unlock code</button>
+  </div>
+</div>
   <header>
     <div class="eyebrow" contenteditable="true" spellcheck="false" data-store="eyebrow" title="Tap to edit">SITHKOP010 · Plan and Cost Recipes</div>
     <h1 contenteditable="true" spellcheck="false" data-store="title" title="Tap to edit">Food Cost Calculator</h1>
@@ -516,6 +624,164 @@ const PRICE_LIST=[
   const $ = s => document.querySelector(s);
   const money = n => (n===null||n===undefined||isNaN(n)) ? "—" : "$"+Number(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});
   const money3 = n => (n===null||isNaN(n)) ? "—" : "$"+Number(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:3});
+
+  /* ====================================================================
+     LICENCE / TRIAL  — 14-day trial, fingerprint-based unlock.
+     Medium strength: codes are deterministic from device fingerprint + pepper.
+     Same pepper lives in the private code-generator file you keep offline.
+     ==================================================================== */
+  const LIC_KEY = 'sithkop010_lic_v1';
+  const TRIAL_DAYS = 14;
+  // Pepper — must match the generator file. Change once you've shared the calculator
+  // to a few people and you want to invalidate any leaked codes.
+  const PEPPER = 'LCH-2026-FCCv1-pep-7Q4mZ';
+
+  // Tiny non-crypto hash (DJB2 variant) — fine for medium strength.
+  function h32(str){
+    let h = 5381 >>> 0;
+    for(let i=0;i<str.length;i++){ h = (((h<<5)+h) ^ str.charCodeAt(i)) >>> 0; }
+    return h;
+  }
+  // Generate a 12-char base32-ish payload from a string (deterministic).
+  const B32 = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I,O,0,1 for readability
+  function payload(str, len){
+    // Mix multiple hashes for more entropy
+    let a = h32(str+'a'), b = h32(str+'b'), c = h32(str+'c'), d = h32(str+'d');
+    let out = '';
+    for(let i=0;i<len;i++){
+      const mix = (a ^ ((b<<3)|(b>>>29)) ^ ((c<<7)|(c>>>25)) ^ ((d<<11)|(d>>>21))) >>> 0;
+      out += B32[mix & 31];
+      a = (a*16807 + b) >>> 0; b = (b*16807 + c) >>> 0; c = (c*16807 + d) >>> 0; d = (d*16807 + a) >>> 0;
+    }
+    return out;
+  }
+  function fmtGroups(s, n){ const out=[]; for(let i=0;i<s.length;i+=n) out.push(s.slice(i,i+n)); return out.join('-'); }
+
+  function makeFingerprint(){
+    // Random per device, stored. Not based on browser specs (those can change).
+    const r = new Uint8Array(8);
+    if(window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(r);
+    else for(let i=0;i<8;i++) r[i] = Math.floor(Math.random()*256);
+    let s=''; for(let i=0;i<8;i++) s += B32[r[i] & 31];
+    return 'LCH-' + s.slice(0,4) + '-' + s.slice(4,8);
+  }
+  function expectedUnlockFor(fp){
+    const p = payload(PEPPER + '|' + fp, 12);
+    return 'UNLK-' + p.slice(0,4) + '-' + p.slice(4,8) + '-' + p.slice(8,12);
+  }
+  function normaliseCode(s){ return String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,''); }
+  function codesMatch(a,b){ return normaliseCode(a) === normaliseCode(b); }
+
+  function loadLic(){
+    try{
+      const raw = localStorage.getItem(LIC_KEY);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return null;
+  }
+  function saveLic(lic){
+    try{ localStorage.setItem(LIC_KEY, JSON.stringify(lic)); }catch(e){}
+  }
+
+  // Initialise / load licence state
+  let LIC = loadLic();
+  if(!LIC){
+    LIC = { fp: makeFingerprint(), startedAt: Date.now(), unlocked: false };
+    saveLic(LIC);
+  }
+  // Make sure existing installs that lack a fingerprint get one
+  if(!LIC.fp){ LIC.fp = makeFingerprint(); saveLic(LIC); }
+
+  function daysLeft(){
+    if(LIC.unlocked) return Infinity;
+    const elapsed = (Date.now() - LIC.startedAt) / 86400000;
+    return Math.max(0, Math.ceil(TRIAL_DAYS - elapsed));
+  }
+  function isLocked(){ return !LIC.unlocked && daysLeft() <= 0; }
+
+  function showLock(){
+    document.body.classList.add('locked');
+    const ls = document.getElementById('lockScreen');
+    ls.classList.add('show'); ls.setAttribute('aria-hidden','false');
+    document.getElementById('fpDisplay').textContent = LIC.fp;
+    // Optional: customise these via globals if you want
+    if(window.LCH_BUY_URL){ document.getElementById('buyLink').href = window.LCH_BUY_URL; }
+    if(window.LCH_EMAIL){
+      const a = document.getElementById('emailLink');
+      a.href = 'mailto:'+window.LCH_EMAIL+'?subject=Food%20Cost%20Calculator%20Unlock%20-%20'+encodeURIComponent(LIC.fp);
+    }
+  }
+  function hideLock(){
+    document.body.classList.remove('locked');
+    const ls = document.getElementById('lockScreen');
+    ls.classList.remove('show'); ls.setAttribute('aria-hidden','true');
+  }
+
+  function refreshTrialBanner(){
+    const b = document.getElementById('trialBanner');
+    if(LIC.unlocked){ b.style.display='none'; return; }
+    const d = daysLeft();
+    if(d <= 0){ b.style.display='none'; return; }
+    b.style.display = 'flex';
+    b.classList.toggle('warn', d <= 3);
+    document.getElementById('trialMsg').innerHTML =
+      d === 1 ? '⏳ <strong>Last day</strong> of your free trial.'
+      : d <= 3 ? '⏳ <strong>'+d+' days</strong> left in your free trial.'
+      : '✨ Trial mode — <strong>'+d+' days</strong> left. Enjoying it? Get a permanent unlock.';
+  }
+
+  function tryUnlock(code, msgEl){
+    const expected = expectedUnlockFor(LIC.fp);
+    if(codesMatch(code, expected)){
+      LIC.unlocked = true; LIC.unlockedAt = Date.now(); saveLic(LIC);
+      if(msgEl){ msgEl.className='lock-unlock-msg ok'; msgEl.textContent='✓ Unlocked! Reloading…'; }
+      setTimeout(()=>{ hideLock(); refreshTrialBanner(); }, 600);
+      return true;
+    }
+    if(msgEl){ msgEl.className='lock-unlock-msg err'; msgEl.textContent='That unlock code doesn\'t match this device. Check that you copied it correctly.'; }
+    return false;
+  }
+
+  // Wire up the lock-screen elements (they exist in the DOM from page load)
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // gate: if locked, show immediately
+    if(isLocked()) showLock();
+    refreshTrialBanner();
+  });
+  // also gate immediately (we're inside IIFE running mid-page; DOMContentLoaded may have fired)
+  if(document.readyState !== 'loading'){
+    if(isLocked()) showLock();
+    refreshTrialBanner();
+  }
+
+  const unlockMsgEl = document.getElementById('unlockMsg');
+  document.getElementById('unlockBtn').addEventListener('click', ()=>{
+    tryUnlock(document.getElementById('unlockInput').value, unlockMsgEl);
+  });
+  document.getElementById('unlockInput').addEventListener('keydown', e=>{
+    if(e.key==='Enter') tryUnlock(e.target.value, unlockMsgEl);
+  });
+  document.getElementById('copyFp').addEventListener('click', e=>{
+    const btn = e.currentTarget;
+    const txt = LIC.fp;
+    const done = ()=>{ btn.textContent='Copied!'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done).catch(()=>{
+        const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); done(); }catch(_){}
+        ta.remove();
+      });
+    } else {
+      const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(_){}
+      ta.remove();
+    }
+  });
+  // "I have an unlock code" button on the trial banner — opens the lock screen unlock section
+  document.getElementById('trialUnlockBtn').addEventListener('click', ()=>{
+    showLock();
+    setTimeout(()=> document.getElementById('unlockInput').focus(), 100);
+  });
 
   /* ---------- Price list with persistence ----------
      PRICE_LIST is the built-in default. Custom edits/additions/deletions
