@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unlock Code Generator — PRIVATE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1A2F4A;--teal:#0D7A6E;--gold:#D4A017;--red:#B83232;--green:#1D7A4F;
+  --paper:#F7F4EE;--card:#FFFFFF;--ink:#1A2F4A;--muted:#5C6B7A;--line:#E2DDD2}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',sans-serif;background:linear-gradient(135deg,#1A2F4A,#0e1b2c);min-height:100vh;
+  color:var(--ink);padding:32px 16px;display:flex;align-items:flex-start;justify-content:center}
+.shell{max-width:560px;width:100%;margin:auto}
+.warn{background:#FFF6D6;border:1.5px solid var(--gold);border-radius:12px;padding:14px 18px;
+  font-size:13.5px;color:#7a5a00;font-weight:600;margin-bottom:18px;line-height:1.55}
+.warn strong{color:var(--red)}
+.card{background:var(--paper);border-radius:18px;padding:32px 30px;box-shadow:0 30px 80px rgba(0,0,0,.4);
+  border:1px solid rgba(212,160,23,.2)}
+.brand{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px;text-align:center}
+h1{font-family:'Fraunces',serif;font-weight:700;font-size:26px;color:var(--navy);text-align:center;margin-bottom:8px}
+.sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.5}
+label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+input{font-family:'Fraunces',serif;font-weight:600;font-size:18px;letter-spacing:.05em;text-transform:uppercase;
+  text-align:center;width:100%;border:2px solid var(--line);border-radius:10px;padding:14px;background:#fff;color:var(--navy)}
+input:focus{outline:none;border-color:var(--teal)}
+button{margin-top:14px;width:100%;font-family:'Archivo';font-weight:600;font-size:15px;padding:14px;border:none;
+  border-radius:10px;background:var(--teal);color:#fff;cursor:pointer;transition:filter .12s}
+button:hover{filter:brightness(1.1)}
+.result{margin-top:24px;background:#fff;border:2px dashed var(--gold);border-radius:14px;padding:20px;text-align:center;display:none}
+.result.show{display:block}
+.result .l{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+.result .v{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--navy);letter-spacing:.05em;word-break:break-all;margin-bottom:10px}
+.result .copy{background:var(--navy);margin-top:6px}
+.result .copy.copied{background:var(--green)}
+.err{color:var(--red);font-weight:600;text-align:center;margin-top:14px;font-size:13.5px}
+.foot{text-align:center;font-size:11px;color:rgba(255,255,255,.5);margin-top:16px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="warn"><strong>⚠ PRIVATE FILE — DO NOT UPLOAD.</strong> Keep this file on your own device only. Anyone with this file can generate unlock codes for free.</div>
+  <div class="card">
+    <div class="brand">Webescapade — Internal</div>
+    <h1>Unlock Code Generator</h1>
+    <p class="sub">Paste the buyer's <strong>device code</strong> below (looks like <em>LCH-XXXX-XXXX</em>) and you'll get their matching unlock code to send back.</p>
+
+    <label>Buyer's device code</label>
+    <input id="fp" placeholder="LCH-XXXX-XXXX" autocomplete="off" spellcheck="false">
+    <button id="gen">Generate unlock code</button>
+    <div class="err" id="err"></div>
+
+    <div class="result" id="result">
+      <div class="l">Send this to the buyer</div>
+      <div class="v" id="out">—</div>
+      <button class="copy" id="copy">Copy unlock code</button>
+    </div>
+  </div>
+  <div class="foot">Pepper must match the one in the public calculator file. If you change the pepper, all previously-issued codes stop working.</div>
+</div>
+
+<script>
+/* ============ Must match the calculator's licence section ============ */
+const PEPPER = 'LCH-2026-FCCv1-pep-7Q4mZ';
+const B32 = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function h32(str){ let h=5381>>>0; for(let i=0;i<str.length;i++){ h=(((h<<5)+h) ^ str.charCodeAt(i))>>>0; } return h; }
+function payload(str, len){
+  let a=h32(str+'a'), b=h32(str+'b'), c=h32(str+'c'), d=h32(str+'d');
+  let out='';
+  for(let i=0;i<len;i++){
+    const mix=(a ^ ((b<<3)|(b>>>29)) ^ ((c<<7)|(c>>>25)) ^ ((d<<11)|(d>>>21)))>>>0;
+    out += B32[mix & 31];
+    a=(a*16807 + b)>>>0; b=(b*16807 + c)>>>0; c=(c*16807 + d)>>>0; d=(d*16807 + a)>>>0;
+  }
+  return out;
+}
+function normaliseFp(s){
+  let u = String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  // Expect: LCH + 8 chars
+  if(!u.startsWith('LCH')) return null;
+  const rest = u.slice(3);
+  if(rest.length !== 8) return null;
+  // every char must be in B32 set
+  for(const ch of rest) if(B32.indexOf(ch)<0) return null;
+  return 'LCH-' + rest.slice(0,4) + '-' + rest.slice(4,8);
+}
+function unlockFor(fp){
+  const p = payload(PEPPER + '|' + fp, 12);
+  return 'UNLK-' + p.slice(0,4) + '-' + p.slice(4,8) + '-' + p.slice(8,12);
+}
+
+const $ = s => document.querySelector(s);
+function generate(){
+  $('#err').textContent = '';
+  $('#result').classList.remove('show');
+  const fp = normaliseFp($('#fp').value);
+  if(!fp){
+    $('#err').textContent = 'That doesn\'t look like a valid device code. It should look like LCH-XXXX-XXXX (8 letters/numbers, no I O 0 1).';
+    return;
+  }
+  $('#fp').value = fp;
+  const code = unlockFor(fp);
+  $('#out').textContent = code;
+  $('#result').classList.add('show');
+}
+$('#gen').addEventListener('click', generate);
+$('#fp').addEventListener('keydown', e => { if(e.key==='Enter') generate(); });
+$('#copy').addEventListener('click', e => {
+  const btn = e.currentTarget;
+  const txt = $('#out').textContent;
+  const done = ()=>{ btn.textContent='Copied!'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copy unlock code';btn.classList.remove('copied');},1400); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(()=>{});
+  } else {
+    const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(_){}; ta.remove();
+  }
+});
+</script>
+</body>
+</html>
