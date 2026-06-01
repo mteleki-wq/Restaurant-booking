@@ -561,6 +561,8 @@
   /* ---- Product detail tabs (scoped per accordion item) ---- */
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
+      // ignore clicks on the inner "remove tab" badge (edit mode only)
+      if (e.target.closest('.ed-remove-tab')) return;
       e.stopPropagation(); // don't toggle the accordion
       const scope = btn.closest('.acc-item');
       const targetId = btn.dataset.tab;
@@ -659,6 +661,25 @@
     border:0; cursor:pointer;
   }
   body.editing .ed-remove-product:hover{ background:#b91c1c; }
+
+  /* In-place "add tab" + per-tab "remove" controls (edit mode only) */
+  .ed-add-tab, .ed-remove-tab{ display:none; }
+  body.editing .ed-add-tab{
+    display:inline-flex; align-items:center; gap:4px;
+    padding:3px 12px; margin-bottom:12px;
+    border-radius:9999px; background:#16a34a; color:#fff;
+    font:700 12px 'Manrope',sans-serif; border:0; cursor:pointer;
+    align-self:center;
+  }
+  body.editing .ed-add-tab:hover{ background:#15803d; }
+  body.editing .ed-remove-tab{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; margin-left:6px; padding:0;
+    border-radius:9999px; background:#dc2626; color:#fff;
+    font:700 11px 'Manrope',sans-serif; border:0; cursor:pointer;
+    line-height:1;
+  }
+  body.editing .ed-remove-tab:hover{ background:#b91c1c; }
 </style>
 
 <!-- Toolbar -->
@@ -1018,7 +1039,112 @@
       item.scrollIntoView({behavior:'smooth', block:'center'});
       dirty = true;
       toast('Product added — edit the text and image');
+      // make sure tab controls are added on the new item too
+      addTabControls(item);
     });
+  }
+
+  /* ---------- 4e. ADD / REMOVE TABS WITHIN A PRODUCT ---------- */
+  let tabUid = Date.now();
+
+  // Activate a given tab (clear siblings, show its pane)
+  function activateTab(tabBtn){
+    const item = tabBtn.closest('.acc-item');
+    if(!item) return;
+    item.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    item.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+    tabBtn.classList.add('active');
+    const pane = item.querySelector('#' + tabBtn.dataset.tab);
+    if(pane) pane.classList.add('active');
+  }
+
+  // Add a remove "✕" badge to a tab button (if it doesn't already have one)
+  function decorateTab(tabBtn){
+    if(tabBtn.querySelector('.ed-remove-tab')) return;
+    const x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'ed-remove-tab';
+    x.title = 'Remove this tab';
+    x.textContent = '×';
+    x.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const item = tabBtn.closest('.acc-item');
+      if(!item) return;
+      const allTabs = item.querySelectorAll('.tab-btn');
+      if(allTabs.length <= 1){ toast('A product needs at least one tab'); return; }
+      if(!confirm('Remove this tab?')) return;
+      const wasActive = tabBtn.classList.contains('active');
+      const targetId = tabBtn.dataset.tab;
+      const pane = item.querySelector('#' + targetId);
+      tabBtn.remove();
+      if(pane) pane.remove();
+      if(wasActive){
+        const first = item.querySelector('.tab-btn');
+        if(first) activateTab(first);
+      }
+      dirty = true;
+      toast('Tab removed');
+    });
+    tabBtn.appendChild(x);
+  }
+
+  // Add the "+ Tab" button at the end of the tab row, and "✕" to each tab
+  function addTabControls(item){
+    const tabRow = item.querySelector('.tab-btn') && item.querySelector('.tab-btn').parentElement;
+    if(!tabRow) return;
+    // remove badges on each tab
+    item.querySelectorAll('.tab-btn').forEach(decorateTab);
+    // single "+ Tab" button at the end of the row
+    if(!tabRow.querySelector('.ed-add-tab')){
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'ed-add-tab';
+      addBtn.textContent = '+ Tab';
+      addBtn.title = 'Add another tab';
+      addBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        tabUid += 1;
+        const newId = 'tab' + tabUid;
+        // create the new tab button
+        const newTab = document.createElement('button');
+        newTab.className = 'tab-btn border-b-2 border-transparent pb-3';
+        newTab.setAttribute('data-tab', newId);
+        newTab.setAttribute('data-ed-text','');
+        newTab.textContent = 'New tab';
+        // insert it BEFORE the "+ Tab" button so the + stays last
+        tabRow.insertBefore(newTab, addBtn);
+        // create matching pane
+        const paneContainer = tabRow.nextElementSibling; // the .mt-5 wrapper holding panes
+        if(paneContainer){
+          const newPane = document.createElement('div');
+          newPane.className = 'tab-pane';
+          newPane.id = newId;
+          newPane.innerHTML = '<p data-ed-text>Write the content for this tab here.</p>';
+          paneContainer.appendChild(newPane);
+          // make new text bits editable if we're in edit mode
+          newPane.querySelectorAll('[data-ed-text]').forEach(el=>{
+            el.setAttribute('contenteditable', editing ? 'true' : 'false');
+          });
+        }
+        // tab needs its click handler and remove badge
+        newTab.addEventListener('click', (e)=>{
+          if(e.target.closest('.ed-remove-tab')) return;
+          e.stopPropagation();
+          activateTab(newTab);
+        });
+        decorateTab(newTab);
+        if(editing) newTab.setAttribute('contenteditable','true');
+        activateTab(newTab);
+        dirty = true;
+        toast('Tab added — edit the label and content');
+      });
+      tabRow.appendChild(addBtn);
+    }
+  }
+
+  // Decorate all existing products
+  if(accordion){
+    accordion.querySelectorAll('.acc-item').forEach(addTabControls);
   }
 
   /* ---------- 4b. JOTFORM LINK LOADER ---------- */
@@ -1100,6 +1226,7 @@
     clone.querySelectorAll('[data-ed-img]').forEach(el=> el.removeAttribute('data-ed-img'));
     // strip the in-place "remove product" pills (edit-only UI)
     clone.querySelectorAll('.ed-remove-product').forEach(el=> el.remove());
+    clone.querySelectorAll('.ed-add-tab, .ed-remove-tab').forEach(el=> el.remove());
     clone.classList.remove('editing');
     const b = clone.querySelector('body'); if(b) b.classList.remove('editing');
 
