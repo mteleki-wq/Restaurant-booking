@@ -57,6 +57,58 @@ header [contenteditable="true"]:focus{background:rgba(255,255,255,.12);box-shado
 .tab:hover{transform:translateY(-1px)}
 .tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 .tab.active.t-list{background:var(--teal);border-color:var(--teal)}
+.tab.active.t-recipes{background:var(--gold);border-color:var(--gold);color:#fff}
+.tab-count{display:inline-block;margin-left:6px;background:rgba(0,0,0,.12);color:inherit;font-size:11px;font-weight:700;
+  padding:2px 7px;border-radius:999px;min-width:18px;text-align:center}
+.tab.active .tab-count{background:rgba(255,255,255,.25);color:#fff}
+
+/* ----- save status pill ----- */
+.save-status{font-size:12.5px;color:var(--muted);font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.save-status.saved{color:var(--green)}
+.save-status.saving{color:var(--gold)}
+.save-status .dot-s{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+/* ----- recipes panel ----- */
+.rcp-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.rcp-controls .search{flex:1;min-width:200px;position:relative}
+.rcp-controls .search input{padding-left:38px}
+.rcp-controls .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.5}
+
+.rcp-list{display:flex;flex-direction:column;gap:10px}
+.rcp-row{
+  background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:14px 16px;
+  display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+  transition:border-color .12s,transform .12s,box-shadow .12s;cursor:pointer;
+}
+.rcp-row:hover{border-color:var(--gold);transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,160,23,.12)}
+.rcp-row.active{border-color:var(--teal);background:#f7fbfa}
+.rcp-row.active::before{content:"OPEN";position:absolute;background:var(--teal);color:#fff;font-size:9px;font-weight:700;
+  letter-spacing:.1em;padding:2px 8px;border-radius:4px;margin-top:-23px;margin-left:-8px}
+.rcp-row{position:relative}
+
+.rcp-main{min-width:0}
+.rcp-name{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--navy);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rcp-name.empty{font-style:italic;color:var(--muted);font-weight:500}
+.rcp-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:5px;font-size:12.5px;color:var(--muted)}
+.rcp-meta .num{color:var(--navy);font-weight:600;font-variant-numeric:tabular-nums}
+.rcp-meta .tag{background:#fbf5e3;color:#8a6800;font-weight:600;padding:1px 8px;border-radius:6px;font-size:11px}
+
+.rcp-actions{display:flex;gap:6px}
+.rcp-act{
+  background:transparent;border:1px solid var(--line);color:var(--muted);
+  width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;
+  transition:all .12s;
+}
+.rcp-act:hover{background:var(--paper);color:var(--navy);border-color:var(--gold)}
+.rcp-act.del:hover{background:#f7e6e6;color:var(--red);border-color:var(--red)}
+
+.rcp-empty{text-align:center;padding:40px 16px 20px}
+
+@media (max-width:600px){
+  .rcp-row{grid-template-columns:1fr;gap:10px}
+  .rcp-actions{justify-self:start}
+}
 
 .panel{display:none;animation:none}
 .panel.show{display:block}
@@ -308,6 +360,7 @@ body.locked .wrap > *:not(.lock-screen){filter:blur(6px);pointer-events:none;use
 
   <div class="tabs">
     <button class="tab active t-calc" data-tab="calc">🧮 Food Cost Calc</button>
+    <button class="tab t-recipes" data-tab="recipes">📚 My Recipes <span class="tab-count" id="recipeCount"></span></button>
     <button class="tab t-list" data-tab="list">📋 Price List</button>
   </div>
 
@@ -387,7 +440,41 @@ body.locked .wrap > *:not(.lock-screen){filter:blur(6px);pointer-events:none;use
           <div class="box"><div class="l">Cost Per Portion</div><div class="v" id="t_perportion">—</div></div>
         </div>
         <div class="note"><strong>How this works:</strong> Cost per portion ÷ target food cost % = price needed to hit the target, then 10% GST is added and rounded to the nearest $0.50 for the menu. Section B above still lets you enter an actual price to check the real % you'd achieve.</div>
-        <div style="margin-top:14px"><button class="reset" id="resetBtn">↺ Clear this recipe</button></div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="reset" id="resetBtn">＋ Start new recipe</button>
+          <span class="save-status" id="saveStatus"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MY RECIPES ===================== -->
+  <section class="panel" id="panel-recipes">
+    <div class="card">
+      <div class="card-h">
+        <span class="dot" style="background:var(--gold)"></span>
+        <h2>My Saved Recipes</h2>
+        <span class="sub" id="recipesSummary">Recipes auto-save as you work</span>
+      </div>
+      <div class="card-b">
+        <div class="rcp-controls">
+          <div class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="rcpSearch" placeholder="Search your recipes…">
+          </div>
+          <button class="addrow" id="newRecipeBtn" style="margin-top:0">＋ New Recipe</button>
+          <button class="addrow secondary" id="exportAllBtn" style="margin-top:0" title="Export all recipes as a backup file">⬇ Export All</button>
+          <button class="reset" id="importRcpBtn" style="margin-top:0;padding:10px 14px" title="Import recipes from a backup file">⬆ Import</button>
+          <input type="file" id="rcpFileInput" accept=".json,.txt" style="display:none">
+        </div>
+        <div class="import-result" id="rcpImportResult"></div>
+
+        <div class="rcp-list" id="rcpList"></div>
+        <div class="rcp-empty" id="rcpEmpty" style="display:none">
+          <div style="font-size:42px;margin-bottom:10px">📋</div>
+          <h3 style="font-family:'Fraunces',serif;color:var(--navy);font-weight:600;margin-bottom:6px">No recipes saved yet</h3>
+          <p style="color:var(--muted);font-size:14px;max-width:38ch;margin:0 auto">As soon as you give a dish a name on the Food Cost Calc tab, it'll appear here.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -998,13 +1085,377 @@ const PRICE_LIST=[
   $('#persons').addEventListener('input',()=>{personsTouched=true;});
   $('#portions').addEventListener('input',()=>{ if(!personsTouched) $('#persons').value=$('#portions').value; recalc(); });
 
+  /* ====================================================================
+     SAVED RECIPES  — auto-save current recipe; multi-recipe list view.
+     Each recipe is a snapshot of the dish info + ingredient lines + B2 inputs.
+     ==================================================================== */
+  const RECIPES_KEY = 'sithkop010_recipes_v1';
+  const CURRENT_KEY = 'sithkop010_current_recipe_v1';
+  /** @type {Array<{id:string,name:string,menuType:string,portions:number,desc:string,
+   *               ingredients:Array<{name:string,qty:number|null,yldOverride:number|null,manualPrice:number|null}>,
+   *               actualPrice:number|null,persons:number,targetFC:number,
+   *               createdAt:number,updatedAt:number}>} */
+  let RECIPES = [];
+  let currentRecipeId = null;
+  let loadingRecipe = false;   // suppress auto-save while loading a recipe into the UI
+  let saveTimer = null;
+
+  function loadRecipes(){
+    try{
+      const raw = localStorage.getItem(RECIPES_KEY);
+      if(raw){ const arr = JSON.parse(raw); if(Array.isArray(arr)) RECIPES = arr; }
+      currentRecipeId = localStorage.getItem(CURRENT_KEY) || null;
+    }catch(e){}
+  }
+  function persistRecipes(){
+    try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(RECIPES)); }catch(e){}
+  }
+  function persistCurrent(){
+    try{
+      if(currentRecipeId) localStorage.setItem(CURRENT_KEY, currentRecipeId);
+      else localStorage.removeItem(CURRENT_KEY);
+    }catch(e){}
+  }
+  function newId(){ return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+  /* Take a snapshot of everything in the calc UI */
+  function snapshotCalc(){
+    const ingredients = [];
+    body.querySelectorAll('tr').forEach(tr=>{
+      const name = tr.querySelector('.ing-in').value.trim();
+      const qtyRaw = tr.querySelector('.qty-in').value;
+      const yldRaw = tr.querySelector('.yld-in').value;
+      const manualPrice = (MAP[name.toLowerCase()] === undefined && tr.dataset.price !== '' && tr.dataset.price !== undefined)
+        ? parseFloat(tr.dataset.price) : null;
+      // Skip purely-blank rows so the list isn't padded with empties
+      if(!name && qtyRaw==='' && yldRaw==='') return;
+      ingredients.push({
+        name,
+        qty: qtyRaw === '' ? null : parseFloat(qtyRaw),
+        yldOverride: (tr.dataset.yldManual === '1' && yldRaw !== '') ? parseFloat(yldRaw) : null,
+        manualPrice
+      });
+    });
+    return {
+      name: $('#dishName').value.trim(),
+      menuType: $('#menuType').value,
+      portions: parseInt($('#portions').value) || 0,
+      desc: $('#dishDesc').value,
+      ingredients,
+      actualPrice: $('#actualPrice').value === '' ? null : parseFloat($('#actualPrice').value),
+      persons: parseInt($('#persons').value) || 0,
+      targetFC: parseFloat($('#targetFC').value) || 30
+    };
+  }
+
+  /* Load a recipe back into the calc UI */
+  function loadRecipeIntoCalc(rcp){
+    loadingRecipe = true;
+    try{
+      $('#dishName').value = rcp.name || '';
+      $('#menuType').value = rcp.menuType || '';
+      $('#portions').value = rcp.portions || 10;
+      $('#dishDesc').value = rcp.desc || '';
+      $('#actualPrice').value = rcp.actualPrice ?? '';
+      $('#persons').value = rcp.persons || rcp.portions || 10;
+      $('#targetFC').value = rcp.targetFC ?? 30;
+      personsTouched = (rcp.persons !== rcp.portions);
+      // Rebuild ingredient rows
+      body.innerHTML = '';
+      const ings = (rcp.ingredients || []).slice();
+      while(ings.length < 4) ings.push({name:'',qty:null,yldOverride:null,manualPrice:null});
+      ings.forEach(ing=>{
+        const tr = makeRow();
+        tr.querySelector('.ing-in').value = ing.name || '';
+        tr.querySelector('.qty-in').value = ing.qty == null ? '' : ing.qty;
+        if(ing.yldOverride != null){
+          tr.querySelector('.yld-in').value = ing.yldOverride;
+          tr.dataset.yldManual = '1';
+        }
+        applyLookup(tr);
+        // Restore manual price for items not in the list
+        if(ing.manualPrice != null && !MAP[(ing.name||'').toLowerCase()]){
+          tr.dataset.price = ing.manualPrice;
+          const pc = tr.querySelector('[data-f=price]');
+          pc.textContent = money3(ing.manualPrice);
+          pc.classList.remove('notfound');
+        }
+      });
+      recalc();
+    }finally{
+      loadingRecipe = false;
+    }
+  }
+
+  /* Compute display fields from a snapshot (without touching the UI) */
+  function computeRecipeStats(rcp){
+    let total = 0;
+    (rcp.ingredients || []).forEach(ing=>{
+      const it = MAP[(ing.name||'').toLowerCase()];
+      const price = ing.manualPrice != null ? ing.manualPrice : (it ? it.p : null);
+      if(price == null || ing.qty == null) return;
+      const yldPct = ing.yldOverride != null ? ing.yldOverride : (it && it.y != null ? it.y : null);
+      const edible = (yldPct && yldPct > 0) ? price/(yldPct/100) : price;
+      total += ing.qty * edible;
+    });
+    const perPortion = rcp.portions > 0 ? total/rcp.portions : null;
+    return { total, perPortion };
+  }
+
+  /* Save current calc to its recipe (creates one if needed). Debounced. */
+  function saveStatusEl(){ return $('#saveStatus'); }
+  function setSaveStatus(state){
+    const el = saveStatusEl(); if(!el) return;
+    if(state === 'saving'){ el.className='save-status saving'; el.innerHTML='<span class="dot-s"></span> Saving…'; }
+    else if(state === 'saved'){ el.className='save-status saved'; el.innerHTML='<span class="dot-s"></span> Saved'; }
+    else { el.className='save-status'; el.textContent=''; }
+  }
+
+  function autoSave(){
+    if(loadingRecipe) return;
+    const snap = snapshotCalc();
+    // Don't create an empty recipe — wait until there's at least a name or one ingredient
+    const hasContent = snap.name || snap.ingredients.some(i=>i.name || i.qty);
+    if(!hasContent){
+      // If we had a current recipe and it's now empty, leave it alone (user is clearing fields)
+      if(!currentRecipeId) return;
+    }
+    let rcp = RECIPES.find(r=>r.id===currentRecipeId);
+    if(!rcp){
+      rcp = { id: newId(), createdAt: Date.now(), updatedAt: Date.now() };
+      RECIPES.unshift(rcp);
+      currentRecipeId = rcp.id;
+      persistCurrent();
+    }
+    Object.assign(rcp, snap, { updatedAt: Date.now() });
+    persistRecipes();
+    setSaveStatus('saved');
+    renderRecipes();
+  }
+
+  function scheduleAutoSave(){
+    if(loadingRecipe) return;
+    setSaveStatus('saving');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(autoSave, 500);
+  }
+
+  /* Hook auto-save into every input in the calc */
+  function wireAutoSave(){
+    ['dishName','menuType','portions','dishDesc','actualPrice','persons','targetFC'].forEach(id=>{
+      $('#'+id).addEventListener('input', scheduleAutoSave);
+      $('#'+id).addEventListener('change', scheduleAutoSave);
+    });
+    // Ingredient table changes — delegate
+    body.addEventListener('input', scheduleAutoSave);
+    body.addEventListener('change', scheduleAutoSave);
+  }
+
+  /* Start a new blank recipe */
+  function startNewRecipe(){
+    currentRecipeId = null;
+    persistCurrent();
+    loadRecipeIntoCalc({
+      name:'', menuType:'', portions:10, desc:'',
+      ingredients:[], actualPrice:null, persons:10, targetFC:30
+    });
+    setSaveStatus('');
+    renderRecipes();
+    // Jump to the calc tab so they can start typing
+    document.querySelector('.tab.t-calc').click();
+    setTimeout(()=>$('#dishName').focus(), 100);
+  }
+
+  /* Replace the old resetBtn handler */
   $('#resetBtn').addEventListener('click', ()=>{
-    if(!confirm('Clear this recipe and start again?')) return;
-    $('#dishName').value=''; $('#menuType').value=''; $('#portions').value=10;
-    $('#dishDesc').value=''; $('#actualPrice').value=''; $('#persons').value=10;
-    $('#targetFC').value=30; personsTouched=false;
-    body.innerHTML=''; for(let i=0;i<4;i++) makeRow(); recalc();
+    // If the current recipe has content, this just starts a NEW one (doesn't wipe the existing)
+    const snap = snapshotCalc();
+    const hasContent = snap.name || snap.ingredients.some(i=>i.name);
+    if(hasContent && !confirm('Start a new blank recipe? Your current recipe stays saved in My Recipes.')) return;
+    if(!hasContent && !confirm('Start a new blank recipe?')) return;
+    startNewRecipe();
+  }, true); // capture so we replace the earlier listener semantics. Actually let me just remove the old one.
+
+  /* ===== Recipes list rendering ===== */
+  let rcpSearchTerm = '';
+  $('#rcpSearch') && $('#rcpSearch').addEventListener('input', e=>{
+    rcpSearchTerm = e.target.value.trim().toLowerCase();
+    renderRecipes();
   });
+
+  function relTime(ts){
+    if(!ts) return '';
+    const diff = Date.now() - ts;
+    const min = Math.floor(diff/60000);
+    if(min < 1) return 'just now';
+    if(min < 60) return min+' min ago';
+    const hr = Math.floor(min/60);
+    if(hr < 24) return hr+' hr ago';
+    const d = Math.floor(hr/24);
+    if(d < 7) return d+' day'+(d===1?'':'s')+' ago';
+    const wk = Math.floor(d/7);
+    if(wk < 5) return wk+' wk'+(wk===1?'':'s')+' ago';
+    return new Date(ts).toLocaleDateString('en-AU');
+  }
+
+  function renderRecipes(){
+    const list = $('#rcpList');
+    const empty = $('#rcpEmpty');
+    const countTag = $('#recipeCount');
+    countTag.textContent = RECIPES.length || '';
+
+    if(RECIPES.length === 0){
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      $('#recipesSummary').textContent = 'Recipes auto-save as you work';
+      return;
+    }
+    empty.style.display = 'none';
+    $('#recipesSummary').textContent = RECIPES.length + ' recipe' + (RECIPES.length===1?'':'s') + ' · auto-saved';
+
+    const filtered = RECIPES.filter(r=>{
+      if(!rcpSearchTerm) return true;
+      return (r.name||'').toLowerCase().includes(rcpSearchTerm) ||
+             (r.menuType||'').toLowerCase().includes(rcpSearchTerm);
+    }).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+
+    list.innerHTML = '';
+    filtered.forEach(rcp=>{
+      const stats = computeRecipeStats(rcp);
+      const row = document.createElement('div');
+      row.className = 'rcp-row' + (rcp.id === currentRecipeId ? ' active' : '');
+      row.dataset.id = rcp.id;
+      const nameHtml = rcp.name
+        ? '<div class="rcp-name">'+escapeHtml(rcp.name)+'</div>'
+        : '<div class="rcp-name empty">Untitled recipe</div>';
+      const meta = [];
+      if(rcp.menuType) meta.push('<span class="tag">'+escapeHtml(rcp.menuType)+'</span>');
+      meta.push('<span><span class="num">'+(rcp.portions||0)+'</span> portions</span>');
+      if(stats.perPortion != null) meta.push('<span><span class="num">'+money(stats.perPortion)+'</span>/portion</span>');
+      if(stats.total > 0) meta.push('<span>Total <span class="num">'+money(stats.total)+'</span></span>');
+      meta.push('<span style="opacity:.7">'+relTime(rcp.updatedAt)+'</span>');
+
+      row.innerHTML =
+        '<div class="rcp-main">'+
+          nameHtml +
+          '<div class="rcp-meta">'+meta.join('')+'</div>'+
+        '</div>'+
+        '<div class="rcp-actions">'+
+          '<button class="rcp-act dup" title="Duplicate">⎘</button>'+
+          '<button class="rcp-act del" title="Delete">🗑</button>'+
+        '</div>';
+
+      // Click row = open
+      row.addEventListener('click', e=>{
+        if(e.target.closest('.rcp-act')) return;
+        openRecipe(rcp.id);
+      });
+      row.querySelector('.dup').addEventListener('click', e=>{
+        e.stopPropagation(); duplicateRecipe(rcp.id);
+      });
+      row.querySelector('.del').addEventListener('click', e=>{
+        e.stopPropagation(); deleteRecipe(rcp.id);
+      });
+      list.appendChild(row);
+    });
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
+
+  function openRecipe(id){
+    const rcp = RECIPES.find(r=>r.id===id); if(!rcp) return;
+    currentRecipeId = id; persistCurrent();
+    loadRecipeIntoCalc(rcp);
+    setSaveStatus('saved');
+    renderRecipes();
+    document.querySelector('.tab.t-calc').click();
+  }
+
+  function duplicateRecipe(id){
+    const rcp = RECIPES.find(r=>r.id===id); if(!rcp) return;
+    const copy = JSON.parse(JSON.stringify(rcp));
+    copy.id = newId();
+    copy.name = (rcp.name || 'Untitled') + ' (copy)';
+    copy.createdAt = Date.now();
+    copy.updatedAt = Date.now();
+    RECIPES.unshift(copy);
+    persistRecipes();
+    renderRecipes();
+  }
+
+  function deleteRecipe(id){
+    const rcp = RECIPES.find(r=>r.id===id); if(!rcp) return;
+    const label = rcp.name || 'this untitled recipe';
+    if(!confirm('Delete "' + label + '"? This can\'t be undone.')) return;
+    RECIPES = RECIPES.filter(r=>r.id !== id);
+    persistRecipes();
+    if(currentRecipeId === id){
+      currentRecipeId = null; persistCurrent();
+      // Don't wipe the calc UI if user is mid-edit — just unhook from the deleted one
+      setSaveStatus('');
+    }
+    renderRecipes();
+  }
+
+  $('#newRecipeBtn').addEventListener('click', startNewRecipe);
+
+  /* Export all recipes as a JSON backup file */
+  $('#exportAllBtn').addEventListener('click', ()=>{
+    if(RECIPES.length === 0){
+      const r = $('#rcpImportResult');
+      r.className='import-result show err'; r.innerHTML='No recipes to export yet.';
+      return;
+    }
+    const data = { app:'SITHKOP010 Food Cost Calculator', exportedAt: new Date().toISOString(), recipes: RECIPES };
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'recipes-backup-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    const r = $('#rcpImportResult');
+    r.className='import-result show ok';
+    r.innerHTML = '<strong>Exported ' + RECIPES.length + ' recipe' + (RECIPES.length===1?'':'s') + '.</strong> Keep the file safe — you can import it back any time.';
+  });
+
+  /* Import recipes from a JSON backup */
+  $('#importRcpBtn').addEventListener('click', ()=>{
+    $('#rcpFileInput').value = ''; $('#rcpFileInput').click();
+  });
+  $('#rcpFileInput').addEventListener('change', e=>{
+    const file = e.target.files && e.target.files[0]; if(!file) return;
+    const r = $('#rcpImportResult');
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      try{
+        const data = JSON.parse(ev.target.result);
+        const incoming = Array.isArray(data) ? data : (data.recipes || []);
+        if(!Array.isArray(incoming) || incoming.length === 0){
+          r.className='import-result show err'; r.innerHTML='That file doesn\'t contain any recipes.'; return;
+        }
+        let added=0, merged=0;
+        incoming.forEach(rcp=>{
+          if(!rcp || typeof rcp !== 'object' || !rcp.id) return;
+          const existing = RECIPES.findIndex(x=>x.id === rcp.id);
+          if(existing >= 0){
+            // Keep whichever is newer
+            if((rcp.updatedAt||0) > (RECIPES[existing].updatedAt||0)){
+              RECIPES[existing] = rcp; merged++;
+            }
+          } else {
+            RECIPES.unshift(rcp); added++;
+          }
+        });
+        persistRecipes(); renderRecipes();
+        r.className='import-result show ok';
+        r.innerHTML = '<strong>Import complete.</strong> ' + added + ' added · ' + merged + ' updated.';
+      }catch(err){
+        r.className='import-result show err'; r.innerHTML='Couldn\'t read that file: '+(err.message||err);
+      }
+    };
+    reader.onerror = ()=>{ r.className='import-result show err'; r.innerHTML='Could not read the file.'; };
+    reader.readAsText(file);
+  });
+
 
   /* ===================== PRICE LIST PANEL ===================== */
   const catColors = {Meat:'#B83232',Poultry:'#C2701A',Seafood:'#0D7A6E',Dairy:'#6B3A8E',
@@ -1326,11 +1777,22 @@ const PRICE_LIST=[
   });
 
   /* ---------- init ---------- */
-  for(let i=0;i<4;i++) makeRow();
   buildChips();
   buildCatDropdown();
   renderPL();
-  recalc();
+
+  // Load saved recipes & restore current one (or start with 4 blank rows)
+  loadRecipes();
+  const currentRcp = currentRecipeId ? RECIPES.find(r=>r.id===currentRecipeId) : null;
+  if(currentRcp){
+    loadRecipeIntoCalc(currentRcp);
+    setSaveStatus('saved');
+  } else {
+    for(let i=0;i<4;i++) makeRow();
+    recalc();
+  }
+  renderRecipes();
+  wireAutoSave();
 })();
 
 </script>
