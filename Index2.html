@@ -1993,13 +1993,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     Array.prototype.slice.call(clone.querySelectorAll('[data-we-img]')).forEach(function(n){ n.removeAttribute('data-we-img'); n.classList.remove('we-img-slot'); });
     var b = clone.querySelector('body'); if (b){ b.classList.remove('we-editing'); }
     var out = '<!DOCTYPE html>\n' + clone.outerHTML;
-    var blob = new Blob([out], {type:'text/html'});
+    /* octet-stream forces Safari to SAVE the file instead of opening it in a tab */
+    var blob = new Blob([out], {type:'application/octet-stream'});
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url; a.download = 'index.html';
-    document.body.appendChild(a); a.click();
-    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 1000);
-    toast('Downloaded index.html \u2014 upload this to GitHub \u2713');
+    a.href = url; a.download = 'index.html'; a.rel = 'noopener'; a.style.display = 'none';
+    document.body.appendChild(a);
+    var clicked = false;
+    try { a.click(); clicked = true; } catch (err) { clicked = false; }
+    if (!clicked || typeof a.download === 'undefined'){
+      /* last-resort fallback: open in a new tab so it can be saved manually */
+      window.open(url, '_blank');
+    }
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 8000);
+    toast('Saved index.html \u2014 look in your Downloads folder \u2713');
   }
 
   /* ---- toast ---- */
