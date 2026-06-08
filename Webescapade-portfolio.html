@@ -1011,6 +1011,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .plan .btn{width:100%;justify-content:center;text-transform:uppercase;letter-spacing:.04em;}
   .plan__btn{display:block;width:100%;box-sizing:border-box;padding:13px 18px;border-radius:11px;border:1.5px solid rgba(124,92,255,.45);background:transparent;color:#5b3fd6;font-weight:700;text-decoration:none;text-align:center;text-transform:uppercase;letter-spacing:.04em;font-size:13px;transition:background .2s;}
   .plan__btn:hover{background:rgba(124,92,255,.08);}
+  .ex-canvas::before{pointer-events:none;}
+  .ex-canvas .ex-tag{pointer-events:none;}
+  .ex-canvas[style*="background-image"]::before{display:none !important;}
+  .ex-canvas[style*="background-image"] .ex-tag{display:none !important;}
   #cta .cta__wrap{text-align:center;max-width:720px;margin:0 auto;position:relative;z-index:1;}
   #cta h2{font-size:clamp(26px,4vw,40px);margin:0 0 16px;}
   #cta p{color:var(--text-on-dark-dim);font-size:17px;margin:0 auto 28px;max-width:600px;}
