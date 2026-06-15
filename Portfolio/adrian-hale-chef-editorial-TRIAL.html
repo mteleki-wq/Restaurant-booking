@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adrian Hale — Executive Chef</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body.theme-white{--bg:#ffffff;--panel:#f6f5f1;--panel2:#efede7;--ink:#1c1b19;--muted:#74716a;--line:#e8e5de;--accent:#df6336;--accent-soft:#fbeee7;--deep:#5f6149;--deep-ink:#f3f2ea;--onacc:#ffffff}
+  body.theme-orange{--bg:#f5f0e8;--panel:#fbf6ef;--panel2:#f3ece1;--ink:#241f1a;--muted:#7c7468;--line:#ece3d6;--accent:#d9551f;--accent-soft:#f8e6d8;--deep:#6a5a3e;--deep-ink:#f6f1e6;--onacc:#ffffff}
+  body.theme-blue{--bg:#f4f6f9;--panel:#ffffff;--panel2:#eef2f7;--ink:#16202b;--muted:#667281;--line:#e2e8f0;--accent:#2f6fb0;--accent-soft:#e7eff7;--deep:#314a63;--deep-ink:#eef3f8;--onacc:#ffffff}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .4s ease,color .4s ease}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 18px}
+  a{color:inherit}
+  .eyebrow{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;display:inline-block}
+
+  /* NAV */
+  #nav{position:sticky;top:0;z-index:900;background:var(--bg);border-bottom:1px solid var(--line);transition:background .4s ease}
+  .nav-in{max-width:1200px;margin:0 auto;padding:13px 18px;display:flex;align-items:center;gap:24px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+  .mono{width:42px;height:42px;border:1.5px solid var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--accent);font-size:1.05rem;flex:none}
+  .bwrap{display:flex;flex-direction:column;line-height:1.12}
+  .bname{font-family:'Playfair Display',serif;font-weight:700;font-size:1.02rem;letter-spacing:.02em}
+  .brole{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .nav-links{display:flex;gap:22px;margin-left:auto}
+  .nav-links a{text-decoration:none;color:var(--ink);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;opacity:.82}
+  .nav-links a:hover{color:var(--accent);opacity:1}
+  .nav-cta{margin-left:6px;background:var(--accent);color:var(--onacc);text-decoration:none;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:11px 18px;border-radius:999px;white-space:nowrap}
+  .nav-cta:hover{filter:brightness(1.07)}
+
+  /* HERO */
+  #hero{margin-top:22px}
+  .hero{display:grid;grid-template-columns:1.05fr 1fr;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--bg)}
+  .hero-text{padding:48px 44px;display:flex;flex-direction:column;justify-content:center}
+  .hero-title{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(2.5rem,4.8vw,4rem);line-height:1.03;letter-spacing:-.01em;margin-top:16px}
+  .hero-title span{display:block}
+  .accent-italic{font-style:italic;font-weight:600;color:var(--accent)}
+  .hero-sub{margin-top:20px;color:var(--muted);font-size:1.02rem;max-width:36ch}
+  .hero-cta{display:flex;align-items:center;gap:22px;margin-top:30px;flex-wrap:wrap}
+  .btn{background:var(--accent);color:var(--onacc);text-decoration:none;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:14px 24px;border-radius:999px;display:inline-flex;align-items:center;gap:9px}
+  .btn:hover{filter:brightness(1.07)}
+  .btn svg{width:15px;height:15px}
+  .btn-ghost{display:inline-flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+  .btn-ghost .play{width:34px;height:34px;border:1.5px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none}
+  .btn-ghost .play svg{width:11px;height:11px;margin-left:2px}
+  .featured{margin-top:40px}
+  .featured-lab{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .featured-logos{display:flex;align-items:center;gap:24px;margin-top:13px;flex-wrap:wrap}
+  .featured-logos span{font-family:'Playfair Display',serif;font-weight:700;color:var(--ink);opacity:.62;font-size:1.05rem;letter-spacing:.02em}
+  .hero-photo{min-height:440px}
+  .hero-photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* GENERIC CARDS / BENTO */
+  .section{margin-top:18px}
+  .bento3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;align-items:stretch}
+  .bento2{display:grid;grid-template-columns:1.55fr 1fr;gap:18px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:18px}
+
+  /* SIGNATURE DISHES split card */
+  .sig{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;overflow:hidden;min-height:320px}
+  .sig-text{background:var(--deep);color:var(--deep-ink);padding:30px 26px;display:flex;flex-direction:column;justify-content:flex-end}
+  .sig-text .leaf{width:26px;height:26px;opacity:.85;margin-bottom:auto}
+  .sig-title{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;line-height:1.12;margin-top:18px}
+  .sig-sub{margin-top:12px;font-size:.84rem;opacity:.82;max-width:26ch}
+  .sig-btn{margin-top:22px;align-self:flex-start;border:1px solid rgba(255,255,255,.45);color:var(--deep-ink);text-decoration:none;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px;border-radius:999px;display:inline-flex;align-items:center;gap:8px}
+  .sig-btn:hover{background:rgba(255,255,255,.12)}
+  .sig-btn svg{width:13px;height:13px}
+  .sig .photo,.sig .photo img{height:100%}
+  .sig .photo img{width:100%;object-fit:cover;display:block}
+
+  /* ABOUT card */
+  .about{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px 26px;display:flex;flex-direction:column}
+  .about h3{font-family:'Playfair Display',serif;font-weight:700;font-size:1.4rem;margin-bottom:14px}
+  .about p{color:var(--muted);font-size:.9rem}
+  .sig-name{font-family:'Dancing Script',cursive;font-weight:700;font-size:1.8rem;color:var(--ink);margin-top:18px}
+  .learn{margin-top:14px;color:var(--accent);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+  .learn svg{width:13px;height:13px}
+
+  /* STATS card */
+  .stats{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px 26px;display:flex;flex-direction:column;justify-content:center;gap:22px}
+  .stat{display:flex;align-items:center;gap:16px}
+  .stat .ico{width:40px;height:40px;color:var(--accent);flex:none}
+  .stat .num{font-family:'Playfair Display',serif;font-weight:800;font-size:1.95rem;line-height:1}
+  .stat .lab{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .view-ach{color:var(--accent);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:7px;margin-top:4px}
+  .view-ach svg{width:13px;height:13px}
+
+  /* SEASONAL wide card */
+  .seasonal{display:grid;grid-template-columns:.95fr 1.05fr;border:1px solid var(--line);border-radius:18px;overflow:hidden;min-height:280px}
+  .seasonal-text{padding:32px 28px;display:flex;flex-direction:column;justify-content:center;background:var(--panel)}
+  .seasonal-text h3{font-family:'Playfair Display',serif;font-weight:700;font-size:1.5rem}
+  .seasonal-text p{color:var(--muted);font-size:.88rem;margin-top:12px;max-width:30ch}
+  .seasonal .photo,.seasonal .photo img{height:100%}
+  .seasonal .photo img{width:100%;object-fit:cover;display:block}
+
+  /* TESTIMONIAL */
+  .testi{background:var(--accent);color:var(--onacc);border-radius:18px;padding:32px 30px;display:flex;flex-direction:column;justify-content:center;position:relative}
+  .testi .qm{font-family:'Playfair Display',serif;font-size:3.2rem;line-height:.5;opacity:.55}
+  .testi p{font-family:'Playfair Display',serif;font-size:1.22rem;line-height:1.4;margin-top:14px;font-weight:600}
+  .testi .client{display:flex;align-items:center;gap:13px;margin-top:24px}
+  .testi .avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.25);flex:none;position:relative}
+  .testi .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .testi .cname{font-weight:700;font-size:.82rem}
+  .testi .crole{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-top:2px}
+  .dots{display:flex;gap:6px;margin-top:20px}
+  .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45)}
+  .dot.on{background:#fff}
+
+  /* SECTION HEADINGS */
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-top:36px;padding:0 4px}
+  .sec-head h2{font-family:'Playfair Display',serif;font-weight:700;font-size:1.85rem}
+  .sec-head .eyebrow{margin-bottom:6px;display:block}
+
+  /* COLLECTIONS GALLERY */
+  #gallery .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .card-top{padding:22px 20px 6px}
+  .card .ico{color:var(--accent);width:26px;height:26px}
+  .cap-title{display:block;font-family:'Playfair Display',serif;font-weight:700;font-size:1.16rem;margin-top:14px;line-height:1.18}
+  .cap-sub{display:block;color:var(--muted);font-size:.82rem;margin-top:8px}
+  .explore{display:inline-flex;align-items:center;gap:7px;margin:14px 0 18px;color:var(--accent);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;text-decoration:none}
+  .explore svg{width:12px;height:12px}
+  .card .photo{margin-top:auto;height:150px}
+  .card .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-remove{position:absolute;top:9px;right:9px;z-index:6;width:26px;height:26px;border-radius:50%;border:none;background:rgba(20,18,16,.5);color:#fff;font-size:1.05rem;line-height:1;cursor:pointer;align-items:center;justify-content:center}
+  .gal-add{margin-top:16px;padding:0 4px}
+  .add-btn{background:none;border:1px dashed var(--accent);color:var(--accent);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:11px 18px;border-radius:999px;cursor:pointer}
+  .add-btn:hover{background:var(--accent-soft)}
+
+  /* PRESS */
+  .press{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr 1fr;gap:18px;margin-top:16px}
+  .press-text{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px 22px;display:flex;flex-direction:column;justify-content:center}
+  .press-text h3{font-family:'Playfair Display',serif;font-weight:700;font-size:1.3rem;margin-bottom:10px}
+  .press-text p{color:var(--muted);font-size:.84rem}
+  .cover{border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:215px}
+  .cover .photo,.cover .photo img{height:100%}
+  .cover .photo img{width:100%;object-fit:cover;display:block}
+  .michelin{background:var(--panel);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;gap:10px}
+  .michelin .flower{color:var(--accent);width:34px;height:34px}
+  .michelin span{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;line-height:1.2}
+
+  /* CONTACT */
+  #contact{background:var(--deep);color:var(--deep-ink);border-radius:22px;margin:36px 0 44px;overflow:hidden;display:grid;grid-template-columns:1.1fr .85fr 1fr}
+  .contact-left{padding:42px 34px;display:flex;flex-direction:column;justify-content:center}
+  .contact-left .leaf{width:26px;height:26px;opacity:.85;margin-bottom:16px}
+  .contact-left h2{font-family:'Playfair Display',serif;font-weight:700;font-size:1.85rem;line-height:1.18}
+  .contact-left p{opacity:.85;margin-top:14px;font-size:.9rem;max-width:30ch}
+  .get-in{margin-top:24px;align-self:flex-start;background:var(--accent);color:#fff;text-decoration:none;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:13px 22px;border-radius:999px;display:inline-flex;align-items:center;gap:8px}
+  .get-in svg{width:13px;height:13px}
+  .contact-photo{min-height:260px}
+  .contact-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .contact-right{padding:42px 30px;display:flex;flex-direction:column;justify-content:center;gap:15px;border-left:1px solid rgba(255,255,255,.14)}
+  .cdetail{display:flex;align-items:center;gap:13px;font-size:.86rem}
+  .cdetail .ci{color:var(--accent);width:18px;height:18px;flex:none}
+  .cdetail a{text-decoration:none}
+  .socials{display:flex;gap:11px;margin-top:8px}
+  .soc{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;color:var(--deep-ink);text-decoration:none}
+  .soc:hover{border-color:var(--accent);color:var(--accent)}
+  .soc svg{width:16px;height:16px}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:none}
+
+  /* EDIT SYSTEM */
+  .edit-only{display:none}
+  body.edit-mode .edit-only{display:flex}
+  .editable{outline:none}
+  body.edit-mode .editable{cursor:text;border-radius:3px;transition:box-shadow .15s}
+  body.edit-mode .editable:hover{box-shadow:0 0 0 1px var(--accent),0 0 0 5px var(--accent-soft)}
+  body.edit-mode .editable:focus{box-shadow:0 0 0 1px var(--accent),0 0 0 6px var(--accent-soft)}
+  .photo{position:relative}
+  .img-edit{position:absolute;top:12px;right:12px;z-index:5;align-items:center;gap:6px;cursor:pointer;background:rgba(255,255,255,.92);color:var(--accent);border:1px solid var(--accent);font-family:'Inter',sans-serif;font-weight:600;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:999px;backdrop-filter:blur(4px)}
+  .img-edit:hover{background:var(--accent);color:#fff}
+
+  /* TOOLBAR */
+  #toolbar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:1000;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;background:#1c1b19;border:1px solid rgba(255,255,255,.14);padding:9px 11px;border-radius:999px;box-shadow:0 14px 40px rgba(0,0,0,.28);max-width:94vw}
+  .tb-btn{font-family:'Inter',sans-serif;font-weight:500;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#f3f2ee;background:transparent;border:1px solid rgba(255,255,255,.22);padding:9px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .tb-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .tb-btn.primary{background:var(--accent);border:none;color:#fff;font-weight:700}
+  .tb-btn.primary:hover{filter:brightness(1.07)}
+  .tb-sep{width:1px;height:20px;background:rgba(255,255,255,.18)}
+  .tb-themes{display:none;align-items:center;gap:7px;padding:0 2px}
+  body.edit-mode .tb-themes{display:flex}
+  .tb-tlabel{font-family:'Inter',sans-serif;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:#9a978f;margin-right:1px}
+  .sw{width:20px;height:20px;border-radius:50%;cursor:pointer;border:1px solid rgba(255,255,255,.3);padding:0;transition:transform .2s}
+  .sw:hover{transform:scale(1.12)}
+  .sw.active{box-shadow:0 0 0 2px var(--accent);border-color:var(--accent)}
+  .sw-white{background:#ffffff}
+  .sw-orange{background:#d9551f}
+  .sw-blue{background:#2f6fb0}
+  .edit-hint{display:none;position:fixed;top:76px;left:50%;transform:translateX(-50%);z-index:950;background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:999px}
+  body.edit-mode .edit-hint{display:block}
+
+  /* LICENSE / TRIAL */
+  #licensePill{position:fixed;top:14px;right:14px;z-index:1001;display:flex;align-items:center;gap:8px;background:#1c1b19;border:1px solid rgba(255,255,255,.14);color:var(--accent);font-family:'Inter',sans-serif;font-weight:600;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border-radius:999px}
+  #licensePill .pdot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .lic-overlay{position:fixed;inset:0;z-index:1005;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(20,18,16,.55);backdrop-filter:blur(6px)}
+  .lic-overlay.show{display:flex}
+  .lic-card{background:#fff;border:1px solid var(--line);border-radius:20px;max-width:460px;width:100%;padding:36px 30px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+  .lic-eyebrow{font-family:'Inter',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:10px}
+  .lic-card h3{font-family:'Playfair Display',serif;font-weight:700;font-size:1.65rem;color:var(--ink);margin-bottom:10px;line-height:1.1}
+  .lic-card p{font-family:'Inter',sans-serif;font-weight:300;font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:18px}
+  .lic-idbox{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+  .lic-idbox .lab{font-family:'Inter',sans-serif;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+  .lic-idbox .val{font-family:'Inter',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.18em;color:var(--accent)}
+  .lic-copy{font-family:'Inter',sans-serif;margin-left:10px;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 10px;cursor:pointer}
+  .lic-copy:hover{background:var(--accent);color:#fff}
+  .lic-key{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);font-family:'Inter',sans-serif;letter-spacing:.14em;text-align:center;text-transform:uppercase;padding:14px;border-radius:12px;font-size:.95rem;margin-bottom:12px}
+  .lic-key:focus{outline:none;border-color:var(--accent)}
+  .lic-btn{display:block;width:100%;font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:14px;border-radius:999px;cursor:pointer;border:none;background:var(--accent);color:#fff;font-weight:700;text-decoration:none;transition:filter .2s}
+  .lic-btn:hover{filter:brightness(1.07)}
+  .lic-btn.alt{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500}
+  .lic-btn.alt:hover{filter:none;border-color:var(--accent)}
+  .lic-err{font-family:'Inter',sans-serif;color:#c0392b;font-size:.74rem;margin-top:10px;min-height:1em}
+  .lic-link{font-family:'Inter',sans-serif;display:inline-block;margin-top:14px;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:2px;text-decoration:none}
+  .lic-close{font-family:'Inter',sans-serif;margin-top:14px;background:none;border:none;color:var(--muted);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+  .lic-close:hover{color:var(--ink)}
+  .lic-divider,.lic-haskey{margin:16px 0 8px;font-family:'Inter',sans-serif;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  body.trial-locked{overflow:hidden}
+
+  @media(prefers-reduced-motion:reduce){.reveal{transition:none;opacity:1;transform:none}*{scroll-behavior:auto}}
+  @media print{#toolbar,.edit-only,.edit-hint{display:none!important}}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  @media(max-width:980px){.bento3{grid-template-columns:1fr 1fr}.sig{grid-column:1 / -1}.press{grid-template-columns:1fr 1fr 1fr}}
+  @media(max-width:860px){
+    .nav-links{display:none}
+    .hero{grid-template-columns:1fr}.hero-photo{order:-1;min-height:300px}.hero-text{padding:34px 24px}
+    .bento3,.bento2{grid-template-columns:1fr}
+    .sig,.seasonal{grid-template-columns:1fr}
+    #gallery .gal{grid-template-columns:1fr 1fr}
+    .press{grid-template-columns:1fr 1fr}
+    #contact{grid-template-columns:1fr}.contact-right{border-left:none;border-top:1px solid rgba(255,255,255,.14)}
+  }
+  @media(max-width:520px){#gallery .gal,.press{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="theme-white">
+
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#hero" class="brand">
+      <span class="mono editable">AH</span>
+      <span class="bwrap"><span class="bname editable">Adrian Hale</span><span class="brole editable">Executive Chef</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#menus">Menus</a>
+      <a href="#experience">Experience</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#press">Press</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta editable">Book a Table</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- HERO -->
+<header id="hero">
+  <div class="hero">
+    <div class="hero-text">
+      <span class="eyebrow editable">Passion. Precision. Flavour.</span>
+      <h1 class="hero-title">
+        <span class="editable">Culinary Art.</span>
+        <span class="editable">Crafted.</span>
+        <span class="accent-italic editable">Remembered.</span>
+      </h1>
+      <p class="hero-sub editable">Award-winning chef creating unforgettable dining experiences through creativity, precision and the finest ingredients.</p>
+      <div class="hero-cta">
+        <a href="#gallery" class="btn"><span class="editable">Explore my work</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#about" class="btn-ghost"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg></span><span class="editable">Watch my story</span></a>
+      </div>
+      <div class="featured">
+        <span class="featured-lab editable">As featured in</span>
+        <div class="featured-logos">
+          <span class="editable">VOGUE</span><span class="editable">GQ</span><span class="editable">Forbes</span><span class="editable">goodfood</span><span class="editable">delicious.</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-photo photo">
+      <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt="Adrian Hale">
+      <button class="img-edit edit-only" onclick="pickImg(this)">Replace</button>
+      <input type="file" accept="image/*" hidden onchange="loadImg(this)">
+    </div>
+  </div>
+</header>
+
+<!-- ROW A : signature / about / stats -->
+<section id="about" class="section bento3">
+  <div class="sig">
+    <div class="sig-text">
+      <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-7 8-9 1 6-1 10-1 16zM11 20c5 0 9-4 9-9"/></svg>
+      <span class="sig-title editable">Signature Dishes</span>
+      <span class="sig-sub editable">A collection of my most celebrated creations.</span>
+      <a href="#gallery" class="sig-btn"><span class="editable">View gallery</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="photo">
+      <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt="">
+      <button class="img-edit edit-only" onclick="pickImg(this)">Replace</button>
+      <input type="file" accept="image/*" hidden onchange="loadImg(this)">
+    </div>
+  </div>
+
+  <div class="about">
+    <h3 class="editable">About the Chef</h3>
+    <p class="editable">With over 15 years of experience in world-class kitchens, I blend creativity with technique to craft meaningful culinary experiences that linger long after the last course.</p>
+    <span class="sig-name editable">Adrian Hale</span>
+    <a href="#contact" class="learn"><span class="editable">Learn more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+
+  <div class="stats" id="experience">
+    <div class="stat">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0zM7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/></svg>
+      <div><div class="num editable">15+</div><div class="lab editable">Years experience</div></div>
+    </div>
+    <div class="stat">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 20v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 20v-2a4 4 0 0 0-3-3.87M16 2.13A4 4 0 0 1 16 10"/></svg>
+      <div><div class="num editable">150K+</div><div class="lab editable">Guests served</div></div>
+    </div>
+    <div class="stat">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.9 6.3L22 9.2l-5 4.7 1.2 6.9L12 17.6 5.8 20.8 7 13.9 2 9.2l7.1-.9z"/></svg>
+      <div><div class="num editable">12</div><div class="lab editable">Industry awards</div></div>
+    </div>
+    <a href="#press" class="view-ach"><span class="editable">View achievements</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</section>
+
+<!-- ROW B : seasonal / testimonial -->
+<section id="menus" class="section bento2">
+  <div class="seasonal">
+    <div class="seasonal-text">
+      <span class="eyebrow editable">Tasting</span>
+      <h3 class="editable" style="margin-top:8px">Seasonal Tasting Menu</h3>
+      <p class="editable">A journey through the finest seasonal ingredients, thoughtfully curated.</p>
+      <a href="#gallery" class="learn" style="margin-top:18px"><span class="editable">Discover menu</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="photo">
+      <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt="">
+      <button class="img-edit edit-only" onclick="pickImg(this)">Replace</button>
+      <input type="file" accept="image/*" hidden onchange="loadImg(this)">
+    </div>
+  </div>
+
+  <div class="testi">
+    <span class="qm">&ldquo;</span>
+    <p class="editable">An extraordinary culinary journey. Every dish was a masterpiece that delighted all our senses.</p>
+    <div class="client">
+      <div class="avatar photo">
+        <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt="">
+        <button class="img-edit edit-only" onclick="pickImg(this)" style="top:2px;right:2px;padding:4px 6px;font-size:.5rem">Edit</button>
+        <input type="file" accept="image/*" hidden onchange="loadImg(this)">
+      </div>
+      <div><div class="cname editable">Sarah Wilson</div><div class="crole editable">Private dining client</div></div>
+    </div>
+    <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+  </div>
+</section>
+
+<!-- COLLECTIONS -->
+<div class="sec-head">
+  <div><span class="eyebrow editable">Explore</span><h2 class="editable">Collections</h2></div>
+</div>
+<section id="gallery" class="section">
+  <div class="gal">
+    <div class="card">
+      <button class="card-remove edit-only" onclick="removeCard(this)" title="Remove">&times;</button>
+      <div class="card-top">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 16c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>
+        <span class="cap-title editable">Seafood Collection</span>
+        <span class="cap-sub editable">Fresh from ocean to plate.</span>
+        <a class="explore editable" href="#contact">Explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div>
+    </div>
+    <div class="card">
+      <button class="card-remove edit-only" onclick="removeCard(this)" title="Remove">&times;</button>
+      <div class="card-top">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a6 6 0 0 1 6 6c0 2-1 3-1 5H7c0-2-1-3-1-5a6 6 0 0 1 6-6zM7 18h10M8 21h8"/></svg>
+        <span class="cap-title editable">Dessert Collection</span>
+        <span class="cap-sub editable">Sweet creations that leave a lasting memory.</span>
+        <a class="explore editable" href="#contact">Explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div>
+    </div>
+    <div class="card">
+      <button class="card-remove edit-only" onclick="removeCard(this)" title="Remove">&times;</button>
+      <div class="card-top">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 11h14M5 11a7 7 0 0 1 14 0M12 4V2M8 21h8M12 11v10"/></svg>
+        <span class="cap-title editable">Private Dining &amp; Events</span>
+        <span class="cap-sub editable">Bespoke experiences crafted for you.</span>
+        <a class="explore editable" href="#contact">Explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div>
+    </div>
+    <div class="card">
+      <button class="card-remove edit-only" onclick="removeCard(this)" title="Remove">&times;</button>
+      <div class="card-top">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 13a6 6 0 0 1 12 0v1H6zM4 14h16M9 18h6"/></svg>
+        <span class="cap-title editable">Behind the Pass</span>
+        <span class="cap-sub editable">Leadership, passion and a commitment to excellence.</span>
+        <a class="explore editable" href="#contact">See more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div>
+    </div>
+  </div>
+  <div class="gal-add"><button class="add-btn edit-only" onclick="addGalleryCard()">+ Add collection</button></div>
+</section>
+
+<!-- PRESS -->
+<div class="sec-head">
+  <div><span class="eyebrow editable">Recognition</span><h2 class="editable">As Seen In</h2></div>
+</div>
+<section id="press" class="section">
+  <div class="press">
+    <div class="press-text">
+      <h3 class="editable">Proud to be featured</h3>
+      <p class="editable">Featured in leading publications and culinary guides.</p>
+      <a href="#contact" class="learn" style="margin-top:16px"><span class="editable">View press</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="cover"><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div></div>
+    <div class="cover"><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div></div>
+    <div class="cover"><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div></div>
+    <div class="michelin">
+      <svg class="flower" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a3 3 0 0 1 3 3 3 3 0 0 1 4.2 4.2A3 3 0 0 1 22 12a3 3 0 0 1-2.8 3 3 3 0 0 1-4.2 4.2A3 3 0 0 1 12 22a3 3 0 0 1-3-2.8 3 3 0 0 1-4.2-4.2A3 3 0 0 1 2 12a3 3 0 0 1 2.8-3A3 3 0 0 1 9 4.8 3 3 0 0 1 12 2z"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>
+      <span class="editable">Michelin Recognized</span>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<!-- CONTACT -->
+<div class="wrap">
+<footer id="contact">
+  <div class="contact-left">
+    <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-7 8-9 1 6-1 10-1 16zM11 20c5 0 9-4 9-9"/></svg>
+    <h2 class="editable">Let&rsquo;s Create Something Extraordinary</h2>
+    <p class="editable">Planning a special event or private dining experience?</p>
+    <a href="mailto:hello@adrianhale.com" class="get-in"><span class="editable">Get in touch</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  <div class="contact-photo photo">
+    <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E" alt="">
+    <button class="img-edit edit-only" onclick="pickImg(this)">Replace</button>
+    <input type="file" accept="image/*" hidden onchange="loadImg(this)">
+  </div>
+  <div class="contact-right">
+    <div class="cdetail"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="editable">Sydney, Australia</span></div>
+    <div class="cdetail"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l-1 4"/><path d="M5 4c0 8 7 15 15 15"/></svg><a class="editable" href="tel:+61412345678">+61 412 345 678</a></div>
+    <div class="cdetail"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><a class="editable" href="mailto:hello@adrianhale.com">hello@adrianhale.com</a></div>
+    <div class="socials">
+      <a class="soc" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a class="soc" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/></svg></a>
+      <a class="soc" href="#" aria-label="Website"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></a>
+    </div>
+  </div>
+</footer>
+</div>
+
+<div class="edit-hint">Edit mode — tap any text to rewrite · tap “Replace” on a photo · tap “+ Add collection” to grow the gallery</div>
+
+<div id="toolbar">
+  <button class="tb-btn" id="modeBtn" onclick="toggleMode()">Edit page</button>
+  <span class="tb-sep edit-only"></span>
+  <div class="tb-themes edit-only">
+    <span class="tb-tlabel">Theme</span>
+    <button class="sw sw-white" title="White" onclick="setTheme('white')"></button>
+    <button class="sw sw-orange" title="Orange" onclick="setTheme('orange')"></button>
+    <button class="sw sw-blue" title="Blue" onclick="setTheme('blue')"></button>
+  </div>
+  <span class="tb-sep edit-only"></span>
+  <button class="tb-btn edit-only" onclick="setPaylink()">PayPal link</button>
+  <button class="tb-btn edit-only" onclick="exportTrial()">Save trial file</button>
+  <button class="tb-btn edit-only" onclick="gateSave()">Save &amp; keep editing</button>
+  <button class="tb-btn primary edit-only" onclick="gatePublish()">Publish final</button>
+</div>
+
+<script id="bakedScript">window.BAKED_EDIT = false;</script>
+<script>
+let editMode = !!window.BAKED_EDIT;
+function applyMode(){
+  document.body.classList.toggle('edit-mode', editMode);
+  document.querySelectorAll('.editable').forEach(function(el){ editMode?el.setAttribute('contenteditable','true'):el.removeAttribute('contenteditable'); });
+  var mb=document.getElementById('modeBtn'); if(mb) mb.textContent = editMode ? 'Done' : 'Edit page';
+}
+function toggleMode(){ editMode=!editMode; applyMode(); }
+document.addEventListener('click',function(e){ if(editMode){ var a=e.target.closest('a.editable'); if(a) e.preventDefault(); } },true);
+
+function pickImg(btn){ btn.parentElement.querySelector('input[type=file]').click(); }
+function loadImg(input){ var f=input.files[0]; if(!f)return; var r=new FileReader(); r.onload=function(e){ input.parentElement.querySelector('img').src=e.target.result; }; r.readAsDataURL(f); }
+
+var PH="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23efece5%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23df6336%22%20stroke-width%3D%222.4%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2230%22/%3E%3Cline%20x1%3D%22400%22%20y1%3D%22256%22%20x2%3D%22400%22%20y2%3D%22284%22/%3E%3Cline%20x1%3D%22386%22%20y1%3D%22270%22%20x2%3D%22414%22%20y2%3D%22270%22/%3E%3C/g%3E%3Ctext%20x%3D%22400%22%20y%3D%22338%22%20fill%3D%22%23df6336%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-size%3D%2220%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C/text%3E%3C/svg%3E";
+function addGalleryCard(){
+  var gal=document.querySelector('#gallery .gal'); if(!gal) return;
+  var card=document.createElement('div'); card.className='card reveal visible';
+  card.innerHTML='<button class="card-remove edit-only" onclick="removeCard(this)" title="Remove">&times;</button>'+
+    '<div class="card-top"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M6 8c0 4 12 4 12 0"/></svg>'+
+    '<span class="cap-title editable">New Collection</span>'+
+    '<span class="cap-sub editable">Add a short description here.</span>'+
+    '<a class="explore editable" href="#contact">Explore &rarr;</a></div>'+
+    '<div class="photo"><img src="'+PH+'" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button>'+
+    '<input type="file" accept="image/*" hidden onchange="loadImg(this)"></div>';
+  gal.appendChild(card);
+  if(window.applyMode) applyMode();
+}
+function removeCard(btn){ var c=btn.closest('.card'); if(c) c.remove(); }
+
+function buildHTML(forEdit){
+  var clone=document.documentElement.cloneNode(true);
+  clone.querySelectorAll('[contenteditable]').forEach(function(e){e.removeAttribute('contenteditable');});
+  var bs=clone.querySelector('#bakedScript'); if(bs)bs.textContent='window.BAKED_EDIT = '+(forEdit?'true':'false')+';';
+  if(!forEdit){ clone.querySelectorAll('.edit-only').forEach(function(e){e.remove();}); var tb=clone.querySelector('#toolbar'); if(tb)tb.remove(); var eh=clone.querySelector('.edit-hint'); if(eh)eh.remove(); }
+  return '<!DOCTYPE html>\n'+clone.outerHTML;
+}
+function download(name,html){ var b=new Blob([html],{type:'text/html'}); var u=URL.createObjectURL(b); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800); }
+function saveEditable(){ download('chef-adrian-hale-editorial-EDITABLE.html', buildHTML(true)); }
+function publishFinal(){ download('chef-adrian-hale-editorial.html', buildHTML(false)); }
+
+var nav=document.getElementById('nav'); window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>40);});
+var io=new IntersectionObserver(function(ents){ents.forEach(function(en){if(en.isIntersecting){en.target.classList.add('visible');io.unobserve(en.target);}});},{threshold:0.08});
+document.querySelectorAll('.section,.card,.hero,#contact,.sec-head').forEach(function(el,i){el.classList.add('reveal');el.style.transitionDelay=(i%4*0.05)+'s';io.observe(el);});
+
+var THEMES=['white','orange','blue'];
+function setTheme(name){
+  var b=document.body;
+  THEMES.forEach(function(n){b.classList.remove('theme-'+n);});
+  b.classList.add('theme-'+name);
+  document.querySelectorAll('.sw').forEach(function(s){s.classList.remove('active');});
+  var el=document.querySelector('.sw-'+name); if(el) el.classList.add('active');
+  try{localStorage.setItem('eltheme_'+location.pathname, name);}catch(e){}
+}
+function initTheme(){
+  var name=null;
+  try{name=localStorage.getItem('eltheme_'+location.pathname);}catch(e){}
+  if(!name){ THEMES.forEach(function(n){ if(document.body.classList.contains('theme-'+n)) name=n; }); }
+  setTheme(name||'white');
+}
+applyMode();
+initTheme();
+</script>
+
+<!-- ===== LICENSE / TRIAL UI (stripped from client downloads) ===== -->
+<div id="licensePill" class="license-ui"><span class="pdot"></span><span id="pillText">Trial</span></div>
+
+<div id="unlockModal" class="lic-overlay license-ui">
+  <div class="lic-card">
+    <span class="lic-eyebrow">Activate</span>
+    <h3>Unlock the Full Version</h3>
+    <p>Saving and publishing are part of the full version &mdash; yours for life once activated.</p>
+    <div class="lic-idbox"><span class="lab">Your Licence ID — send this with your payment</span><span class="val licIdVal">WD2X-EVVU</span><button class="lic-copy" onclick="copyLicId(this)">Copy</button></div>
+    <a class="lic-btn paylink" href="https://www.paypal.com/paypalme/" target="_blank" rel="noopener">Pay with PayPal &rarr;</a>
+    <div class="lic-divider">then send your Licence ID</div>
+    <a class="lic-link" href="mailto:marc@webescpade.com?subject=Unlock%20key%20for%20WD2X-EVVU&body=My%20Licence%20ID%20is%20WD2X-EVVU">Email your Licence ID to marc@webescpade.com</a>
+    <div class="lic-haskey">Already have your key?</div>
+    <input id="unlockInput" class="lic-key" type="text" placeholder="UNLOCK KEY" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <button class="lic-btn alt" onclick="submitUnlock('unlockInput','unlockErr')">Unlock</button>
+    <div id="unlockErr" class="lic-err"></div>
+    <button class="lic-close" onclick="closeUnlock()">Keep trying first</button>
+  </div>
+</div>
+
+<div id="paywall" class="lic-overlay license-ui">
+  <div class="lic-card">
+    <span class="lic-eyebrow">Trial ended</span>
+    <h3>Your 7-day trial has ended</h3>
+    <p>Enter your unlock key to keep editing, saving and publishing &mdash; or get one below.</p>
+    <div class="lic-idbox"><span class="lab">Your Licence ID — send this with your payment</span><span class="val licIdVal">WD2X-EVVU</span><button class="lic-copy" onclick="copyLicId(this)">Copy</button></div>
+    <a class="lic-btn paylink" href="https://www.paypal.com/paypalme/" target="_blank" rel="noopener">Pay with PayPal &rarr;</a>
+    <div class="lic-divider">then send your Licence ID</div>
+    <a class="lic-link" href="mailto:marc@webescpade.com?subject=Unlock%20key%20for%20WD2X-EVVU&body=My%20Licence%20ID%20is%20WD2X-EVVU">Email your Licence ID to marc@webescpade.com</a>
+    <div class="lic-haskey">Already have your key?</div>
+    <input id="payInput" class="lic-key" type="text" placeholder="UNLOCK KEY" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <button class="lic-btn alt" onclick="submitUnlock('payInput','payErr')">Unlock</button>
+    <div id="payErr" class="lic-err"></div>
+  </div>
+</div>
+<script id="paylinkScript" class="license-ui">window.PAYLINK="https://www.paypal.com/paypalme/";</script>
+
+<script id="licenseScript">
+(function(){
+  var LIC_ID="WD2XEVVU", KEY_HASH="963a2e29c66bcb96ccc18eb1d18e52a5dae0bff0cce114fa0fa01465f4cafb2a", KEY_FNV="1cdcb24e";
+  var TRIAL_DAYS=7, DAY=86400000;
+  function lg(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function ls(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  window.isUnlocked=function(){return lg('unlocked_'+LIC_ID)==='1';};
+  function tStart(){var s=lg('trialStart_'+LIC_ID);if(!s){s=String(Date.now());ls('trialStart_'+LIC_ID,s);}return parseInt(s,10);}
+  function daysLeft(){return Math.max(0,Math.ceil(TRIAL_DAYS-(Date.now()-tStart())/DAY));}
+  function expired(){return !window.isUnlocked() && (Date.now()-tStart())>=TRIAL_DAYS*DAY;}
+  function fnv1a(str){var h=0x811c9dc5;for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,0x01000193);}return (h>>>0).toString(16);}
+  async function sha256hex(str){try{if(window.crypto&&crypto.subtle){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}}catch(e){}return null;}
+  async function checkKey(code){var c=(code||'').trim().toUpperCase();if(!c)return false;var sh=await sha256hex(c);if(sh!==null)return sh===KEY_HASH;return fnv1a(c)===KEY_FNV;}
+
+  window.copyLicId=function(btn){var v=document.querySelector('.licIdVal').textContent.trim();try{navigator.clipboard.writeText(v);}catch(e){}if(btn){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o;},1400);}};
+  window.applyLicense=function(){
+    var pt=document.getElementById('pillText'),pay=document.getElementById('paywall');
+    if(window.isUnlocked()){ if(pt)pt.textContent='Licensed'; if(pay)pay.classList.remove('show'); document.body.classList.remove('trial-locked'); return; }
+    if(expired()){ document.body.classList.add('trial-locked'); if(pay)pay.classList.add('show'); if(pt)pt.textContent='Trial ended'; }
+    else { var d=daysLeft(); if(pt)pt.textContent='Trial \u00b7 '+d+(d===1?' day left':' days left'); if(pay)pay.classList.remove('show'); document.body.classList.remove('trial-locked'); }
+  };
+  window.submitUnlock=async function(inId,errId){
+    var v=document.getElementById(inId).value, err=document.getElementById(errId);
+    if(await checkKey(v)){ ls('unlocked_'+LIC_ID,'1');
+      document.getElementById('unlockModal').classList.remove('show');
+      document.getElementById('paywall').classList.remove('show');
+      window.applyLicense();
+    } else { if(err) err.textContent="That key wasn't recognised \u2014 check it and try again."; }
+  };
+  window.closeUnlock=function(){ document.getElementById('unlockModal').classList.remove('show'); };
+  function openUnlock(){ if(expired()){ document.getElementById('paywall').classList.add('show'); return; } document.getElementById('unlockModal').classList.add('show'); var i=document.getElementById('unlockInput'); if(i){i.value='';i.focus();} }
+  window.gateSave=function(){ if(window.isUnlocked()) saveEditable(); else openUnlock(); };
+  window.gatePublish=function(){ if(window.isUnlocked()) publishFinal(); else openUnlock(); };
+
+  /* editable PayPal link */
+  function initPaylink(){ var v=null; try{v=lg('paylink_'+location.pathname);}catch(e){} if(v) window.PAYLINK=v; document.querySelectorAll('a.paylink').forEach(function(a){a.href=window.PAYLINK;}); }
+  window.setPaylink=function(){ var cur=window.PAYLINK||''; var v=prompt('Paste your PayPal payment link (e.g. https://paypal.me/yourname):',cur); if(v===null)return; v=v.trim(); if(!v)return; if(!/^https?:\/\//i.test(v))v='https://'+v; window.PAYLINK=v; document.querySelectorAll('a.paylink').forEach(function(a){a.href=v;}); ls('paylink_'+location.pathname,v); alert('PayPal link set. Use "Save trial file" to bake it into a file you can share.'); };
+  window.exportTrial=function(){
+    var clone=document.documentElement.cloneNode(true);
+    clone.querySelectorAll('[contenteditable]').forEach(function(e){e.removeAttribute('contenteditable');});
+    var bs=clone.querySelector('#bakedScript'); if(bs)bs.textContent='window.BAKED_EDIT = false;';
+    clone.querySelectorAll('a.paylink').forEach(function(a){a.setAttribute('href',window.PAYLINK);});
+    var ps=clone.querySelector('#paylinkScript'); if(ps)ps.textContent='window.PAYLINK="'+(window.PAYLINK||'').replace(/"/g,'')+'";';
+    download('trial-ready.html','<!DOCTYPE html>\n'+clone.outerHTML);
+  };
+
+  var _toggle=window.toggleMode;
+  window.toggleMode=function(){ if(expired()&&!window.isUnlocked()){ document.getElementById('paywall').classList.add('show'); return; } _toggle(); };
+
+  /* client downloads: strip all licence UI + neutralise this script */
+  window.buildHTML=function(forEdit){
+    var clone=document.documentElement.cloneNode(true);
+    clone.querySelectorAll('[contenteditable]').forEach(function(e){e.removeAttribute('contenteditable');});
+    var bs=clone.querySelector('#bakedScript'); if(bs)bs.textContent='window.BAKED_EDIT = '+(forEdit?'true':'false')+';';
+    clone.querySelectorAll('.license-ui').forEach(function(e){e.remove();});
+    var lsx=clone.querySelector('#licenseScript'); if(lsx)lsx.textContent='window.isUnlocked=function(){return true;};window.gateSave=function(){saveEditable();};window.gatePublish=function(){publishFinal();};window.applyLicense=function(){};window.setPaylink=function(){};window.exportTrial=function(){};';
+    if(!forEdit){ clone.querySelectorAll('.edit-only').forEach(function(e){e.remove();}); var tb=clone.querySelector('#toolbar'); if(tb)tb.remove(); var eh=clone.querySelector('.edit-hint'); if(eh)eh.remove(); }
+    return '<!DOCTYPE html>\n'+clone.outerHTML;
+  };
+  window.applyLicense();
+  initPaylink();
+})();
+</script>
+
+</body>
+</html>
