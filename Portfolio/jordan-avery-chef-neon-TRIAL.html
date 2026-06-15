@@ -211,6 +211,11 @@
   .lic-btn.alt{background:transparent!important;border:1px solid rgba(255,255,255,.24)!important;color:#f1f1f0!important;font-weight:500!important}
   .lic-btn.alt:hover{filter:none!important;border-color:#fff!important;background:rgba(255,255,255,.06)!important}
   .lic-btn+.lic-divider{margin-top:1.1rem}
+
+  /* admin-only controls (revealed with ?setup=1) */
+  .setup-only{display:none!important}
+  body.edit-mode .edit-only.setup-only{display:none!important}
+  body.edit-mode.setup-mode .edit-only.setup-only{display:flex!important}
 </style>
 </head>
 <body class="theme-plum">
@@ -373,8 +378,8 @@
     <button class="sw sw-ivory" title="Ivory (light)" onclick="setTheme('ivory')"></button>
   </div>
   <span class="tb-sep edit-only"></span>
-    <button class="tb-btn edit-only" onclick="setPaylink()">PayPal link</button>
-  <button class="tb-btn edit-only" onclick="exportTrial()">Save trial file</button>
+    <button class="tb-btn edit-only setup-only" onclick="setPaylink()">PayPal link</button>
+  <button class="tb-btn edit-only setup-only" onclick="exportTrial()">Save trial file</button>
   <button class="tb-btn edit-only" onclick="gateSave()">Save &amp; keep editing</button>
   <button class="tb-btn primary edit-only" onclick="gatePublish()">Publish final</button>
 </div>
@@ -524,7 +529,7 @@ initTheme();
     clone.querySelectorAll('[contenteditable]').forEach(function(e){e.removeAttribute('contenteditable');});
     var dimEl=document.getElementById('dimRange'),dimC=clone.querySelector('#dimRange'); if(dimEl&&dimC)dimC.setAttribute('value',dimEl.value);
     var bs=clone.querySelector('#bakedScript'); if(bs)bs.textContent='window.BAKED_EDIT = false;';
-    clone.querySelectorAll('a.paylink').forEach(function(a){a.setAttribute('href',window.PAYLINK);});
+    clone.querySelectorAll('a.paylink').forEach(function(a){a.setAttribute('href',window.PAYLINK);});var _eb=clone.querySelector('body');if(_eb)_eb.classList.remove('setup-mode');
     var ps=clone.querySelector('#paylinkScript'); if(ps)ps.textContent='window.PAYLINK="'+(window.PAYLINK||'').replace(/"/g,'')+'";';
     download('trial-ready.html','<!DOCTYPE html>\n'+clone.outerHTML);
   };
@@ -548,5 +553,6 @@ initTheme();
 })();
 </script>
 
+<script id="setupScript">(function(){try{if(new URLSearchParams(location.search).get('setup')==='1')document.body.classList.add('setup-mode');}catch(e){}})();</script>
 </body>
 </html>
