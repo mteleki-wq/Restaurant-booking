@@ -211,6 +211,10 @@
   .lic-btn.alt{background:transparent!important;border:1px solid rgba(255,255,255,.24)!important;color:#f1f1f0!important;font-weight:500!important}
   .lic-btn.alt:hover{filter:none!important;border-color:#fff!important;background:rgba(255,255,255,.06)!important}
   .lic-btn+.lic-divider{margin-top:1.1rem}
+
+.buy-fab{position:fixed;right:18px;bottom:18px;z-index:5000;border:none;cursor:pointer;padding:13px 22px;border-radius:999px;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;font-size:14px;color:#fff;background:linear-gradient(100deg,#ff2e88,#ff7a18);box-shadow:0 14px 34px -8px rgba(255,46,136,.6);transition:transform .2s}
+.buy-fab:hover{transform:translateY(-2px)}
+body.trial-locked .buy-fab{display:none}
 </style>
 </head>
 <body class="theme-plum">
@@ -535,6 +539,7 @@ var WE_HASH=(function(){
 
   window.copyLicId=function(btn){var v=document.querySelector('.licIdVal').textContent.trim();try{navigator.clipboard.writeText(v);}catch(e){}if(btn){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o;},1400);}};
   window.applyLicense=function(){
+    var _bf=document.getElementById("buyFab");if(_bf)_bf.style.display=window.isUnlocked()?"none":"";
     var pt=document.getElementById('pillText'),pay=document.getElementById('paywall');
     if(window.isUnlocked()){ if(pt)pt.textContent='Licensed'; if(pay)pay.classList.remove('show'); document.body.classList.remove('trial-locked'); return; }
     if(expired()){ document.body.classList.add('trial-locked'); if(pay)pay.classList.add('show'); if(pt)pt.textContent='Trial ended'; }
@@ -558,12 +563,16 @@ var WE_HASH=(function(){
   window.setPaylink=function(){ var cur=window.PAYLINK||''; var v=prompt('Paste your PayPal payment link (e.g. https://paypal.me/yourname):',cur); if(v===null)return; v=v.trim(); if(!v)return; if(!/^https?:\/\//i.test(v))v='https://'+v; window.PAYLINK=v; document.querySelectorAll('a.paylink').forEach(function(a){a.href=v;}); ls('paylink_'+location.pathname,v); alert('PayPal link set. Use "Save trial file" to bake it into a file you can share.'); };
   window.exportTrial=function(){
     var clone=document.documentElement.cloneNode(true);
-    clone.querySelectorAll('[contenteditable]').forEach(function(e){e.removeAttribute('contenteditable');});
-    var dimEl=document.getElementById('dimRange'),dimC=clone.querySelector('#dimRange'); if(dimEl&&dimC)dimC.setAttribute('value',dimEl.value);
-    var bs=clone.querySelector('#bakedScript'); if(bs)bs.textContent='window.BAKED_EDIT = false;';
-    clone.querySelectorAll('a.paylink').forEach(function(a){a.setAttribute('href',window.PAYLINK);});
-    var ps=clone.querySelector('#paylinkScript'); if(ps)ps.textContent='window.PAYLINK="'+(window.PAYLINK||'').replace(/"/g,'')+'";';
-    download('trial-ready.html','<!DOCTYPE html>\n'+clone.outerHTML);
+    clone.querySelectorAll("[contenteditable]").forEach(function(e){e.removeAttribute("contenteditable");});
+    var dimEl=document.getElementById("dimRange"),dimC=clone.querySelector("#dimRange"); if(dimEl&&dimC)dimC.setAttribute("value",dimEl.value);
+    var bs=clone.querySelector("#bakedScript"); if(bs)bs.textContent="window.BAKED_EDIT = false;";
+    clone.querySelectorAll("a.paylink").forEach(function(a){a.setAttribute("href",window.PAYLINK);});
+    var ps=clone.querySelector("#paylinkScript"); if(ps)ps.textContent='window.PAYLINK="'+(window.PAYLINK||"").replace(/"/g,"")+'";';
+    /* CUSTOMER COPY: keep editing + gated Save/Publish; remove ONLY private owner buttons */
+    clone.querySelectorAll("#toolbar button").forEach(function(b){var oc=b.getAttribute("onclick")||""; if(oc.indexOf("setPaylink")>-1||oc.indexOf("exportTrial")>-1){b.remove();}});
+    var bd=clone.querySelector("body");
+    if(bd && !clone.querySelector("#buyFab")){ var fab=document.createElement("button"); fab.id="buyFab"; fab.className="buy-fab"; fab.type="button"; fab.setAttribute("onclick","var m=document.getElementById(\u0027unlockModal\u0027);if(m)m.classList.add(\u0027show\u0027);"); fab.textContent="Unlock full version"; bd.appendChild(fab); }
+    download("jordan-avery-chef-neon-BASIC-TRIAL.html","<!DOCTYPE html>\n"+clone.outerHTML);
   };
 
   var _toggle=window.toggleMode;
