@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Jordan Avery — Premium Portfolio</title>
+<title>Chef Jordan Avery — Culinary Art</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,13 +15,10 @@
     --grad:linear-gradient(100deg,#ff2e88,#ff7a18);
     --line:rgba(255,255,255,.08);
   }
-body.theme-midnight{--bg:#070b14;--bg2:#0c1322;--bg3:#121d33;--ink:#eef2fa;--ink2:#c4cdde;--muted:#93a0b8;--line:rgba(255,255,255,.08)}
-body.theme-espresso{--bg:#100b08;--bg2:#1a110c;--bg3:#241711;--ink:#f6efe8;--ink2:#d8ccc0;--muted:#b0a596;--line:rgba(255,255,255,.08)}
-body.theme-slate{--bg:#2b3340;--bg2:#333c4b;--bg3:#3d4757;--ink:#f3f6fb;--ink2:#d2dae6;--muted:#aab6c8;--line:rgba(255,255,255,.13)}
-body.theme-mocha{--bg:#3a302b;--bg2:#453a33;--bg3:#52453d;--ink:#f7efe8;--ink2:#e3d7cd;--muted:#c2b2a4;--line:rgba(255,255,255,.13)}
-body.theme-ivory{--bg:#f4f1ea;--bg2:#ece7db;--bg3:#ffffff;--ink:#1a1622;--ink2:#4a4452;--muted:#7a7385;--line:rgba(20,16,30,.12)}
-body.theme-mist{--bg:#eef1f6;--bg2:#e4e9f1;--bg3:#ffffff;--ink:#161a22;--ink2:#444b57;--muted:#737d8c;--line:rgba(20,24,34,.12)}
-
+  body.theme-midnight{--bg:#070b14;--bg2:#0c1322;--bg3:#121d33;--ink:#eef2fa;--ink2:#c4cdde;--muted:#93a0b8;--line:rgba(255,255,255,.08)}
+  body.theme-charcoal{--bg:#0d0d0f;--bg2:#151517;--bg3:#1e1e22;--ink:#f3f1ee;--ink2:#cfccc8;--muted:#a3a09a;--line:rgba(255,255,255,.08)}
+  body.theme-espresso{--bg:#100b08;--bg2:#1a110c;--bg3:#241711;--ink:#f6efe8;--ink2:#d8ccc0;--muted:#b0a596;--line:rgba(255,255,255,.08)}
+  body.theme-ivory{--bg:#f4f1ea;--bg2:#ece7db;--bg3:#ffffff;--ink:#1a1622;--ink2:#4a4452;--muted:#7a7385;--line:rgba(20,16,30,.12)}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -177,12 +174,12 @@ body.theme-mist{--bg:#eef1f6;--bg2:#e4e9f1;--bg3:#ffffff;--ink:#161a22;--ink2:#4
   .tb-tlabel{font-family:'Space Grotesk',sans-serif;font-size:.54rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-right:.1rem}
   .sw{width:21px;height:21px;border-radius:50%;cursor:pointer;border:1px solid rgba(255,255,255,.28);padding:0;transition:.2s}
   .sw:hover{transform:scale(1.14)}
-  .sw.active{box-shadow:0 0 0 2px var(--magenta);border-color:var(--magenta)}.sw-midnight{background:#0d1730}.sw-espresso{background:#241711}.sw-slate{background:#3d4757}.sw-mocha{background:#52453d}.sw-ivory{background:#f4f1ea;border-color:rgba(0,0,0,.25)}.sw-mist{background:#e4e9f1;border-color:rgba(0,0,0,.25)}
-  
-  
-  
-  
-  
+  .sw.active{box-shadow:0 0 0 2px var(--magenta);border-color:var(--magenta)}
+  .sw-plum{background:#140e1c}
+  .sw-midnight{background:#0d1730}
+  .sw-charcoal{background:#1b1b1f}
+  .sw-espresso{background:#241711}
+  .sw-ivory{background:#f4f1ea;border-color:rgba(0,0,0,.2)}
 
   /* ===== LICENSE / TRIAL (neon theme) ===== */
   #licensePill{position:fixed;top:1rem;right:1rem;z-index:10001;display:flex;align-items:center;gap:.5rem;background:rgba(16,11,24,.92);border:1px solid var(--line);color:var(--magenta);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;padding:.5rem .9rem;border-radius:999px;backdrop-filter:blur(10px)}
@@ -214,41 +211,6 @@ body.theme-mist{--bg:#eef1f6;--bg2:#e4e9f1;--bg3:#ffffff;--ink:#161a22;--ink2:#4
   .lic-btn.alt{background:transparent!important;border:1px solid rgba(255,255,255,.24)!important;color:#f1f1f0!important;font-weight:500!important}
   .lic-btn.alt:hover{filter:none!important;border-color:#fff!important;background:rgba(255,255,255,.06)!important}
   .lic-btn+.lic-divider{margin-top:1.1rem}
-
-/* ===== PREMIUM ADDITIONS ===== */
-.pg-filters{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.9rem}
-.pg-chip{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line);padding:.55rem 1rem;border-radius:999px;cursor:pointer;transition:.25s}
-.pg-chip:hover{color:var(--ink);border-color:var(--magenta)}
-.pg-chip.active{color:#fff;background:var(--grad);border-color:transparent}
-.pgal{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
-@media(max-width:820px){.pgal{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.pgal{grid-template-columns:1fr}}
-.pg-item{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--line);background:var(--bg3);cursor:pointer}
-.pg-item .photo{height:100%}
-.pg-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
-.pg-item:hover img{transform:scale(1.05)}
-.pg-cap{position:absolute;inset:auto 0 0 0;padding:1.1rem;z-index:3;background:linear-gradient(transparent,rgba(9,6,12,.92))}
-.pg-cat{display:inline-block;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--magenta);font-weight:600;margin-bottom:.35rem}
-.pg-title{display:block;font-family:'Anton',sans-serif;font-size:1.15rem;text-transform:uppercase;color:#f6f1ee;line-height:1}
-#pgLightbox{position:fixed;inset:0;z-index:11000;display:none;align-items:center;justify-content:center;padding:2rem;background:rgba(5,3,8,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-#pgLightbox.open{display:flex}
-#pgLightbox img{max-width:92vw;max-height:88vh;border-radius:14px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
-#pgLightbox .lb-close{position:absolute;top:1.3rem;right:1.5rem;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:22px;line-height:1;cursor:pointer}
-.press-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem}
-@media(max-width:680px){.press-grid{grid-template-columns:1fr}}
-.press-item,.review-item{position:relative;border:1px solid var(--line);background:var(--bg2);border-radius:18px;padding:1.6rem 1.7rem}
-.press-year{display:block;font-family:'Space Grotesk',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;font-weight:600}
-.press-title{display:block;font-family:'Anton',sans-serif;font-size:1.5rem;text-transform:uppercase;line-height:1.02;color:var(--ink);margin-bottom:.5rem}
-.press-sub{display:block;font-size:.9rem;color:var(--muted);line-height:1.55}
-.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
-@media(max-width:880px){.review-grid{grid-template-columns:1fr}}
-.review-quote{display:block;font-size:1.02rem;line-height:1.6;color:var(--ink2);margin-bottom:1.1rem}
-.review-name{display:block;font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1rem;color:var(--ink)}
-.review-role{display:block;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--magenta);margin-top:.25rem}
-.we-remove{position:absolute;top:.7rem;right:.7rem;z-index:20;width:30px;height:30px;border-radius:50%;background:rgba(9,6,12,.82);color:var(--magenta);border:1px solid var(--magenta);cursor:pointer;font-size:17px;line-height:1;align-items:center;justify-content:center}
-.we-addrow{margin-top:1.5rem}
-.we-addbtn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--magenta);background:transparent;border:1px dashed var(--magenta);padding:.7rem 1.2rem;border-radius:999px;cursor:pointer}
-
 </style>
 </head>
 <body class="theme-plum">
@@ -260,9 +222,6 @@ body.theme-mist{--bg:#eef1f6;--bg2:#e4e9f1;--bg3:#ffffff;--ink:#161a22;--ink2:#4
     <a href="#about">About</a>
     <a href="#highlights">Highlights</a>
     <a href="#dishes">Dishes</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#press">Press</a>
-    <a href="#reviews">Reviews</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
@@ -377,44 +336,6 @@ body.theme-mist{--bg:#eef1f6;--bg2:#e4e9f1;--bg3:#ffffff;--ink:#161a22;--ink2:#4
   </div>
 </section>
 
-
-<!-- GALLERY (Premium) -->
-<section id="gallery">
-  <div class="sec-head">
-    <span class="kicker"><span class="editable">The Full Collection</span></span>
-    <h2 class="h2"><span class="editable">The</span> <span class="grad editable">Gallery</span></h2>
-  </div>
-  <div class="pg-filters">
-    <button class="pg-chip active" type="button" data-filter="all" onclick="weFilter('all')">All</button>
-    <button class="pg-chip" type="button" data-filter="plating" onclick="weFilter('plating')">Plating</button>
-    <button class="pg-chip" type="button" data-filter="events" onclick="weFilter('events')">Events</button>
-    <button class="pg-chip" type="button" data-filter="behind the scenes" onclick="weFilter('behind the scenes')">Behind the Scenes</button>
-    <button class="pg-chip" type="button" data-filter="desserts" onclick="weFilter('desserts')">Desserts</button>
-  </div>
-  <div class="pgal"><figure class="pg-item"><button class="we-remove edit-only" title="Remove">&times;</button><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231b1326%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ff2e88%22%20stroke-width%3D%222.5%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2234%22%2F%3E%3Cline%20x1%3D%22400%22%20y1%3D%22253%22%20x2%3D%22400%22%20y2%3D%22287%22%2F%3E%3Cline%20x1%3D%22383%22%20y1%3D%22270%22%20x2%3D%22417%22%20y2%3D%22270%22%2F%3E%3C%2Fg%3E%3Ctext%20x%3D%22400%22%20y%3D%22345%22%20fill%3D%22%23ff2e88%22%20font-family%3D%22Space%20Grotesk%2CArial%2Csans-serif%22%20font-size%3D%2222%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div><figcaption class="pg-cap"><span class="pg-cat editable">Plating</span><span class="pg-title editable">Plated Artistry</span></figcaption></figure><figure class="pg-item"><button class="we-remove edit-only" title="Remove">&times;</button><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231b1326%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ff2e88%22%20stroke-width%3D%222.5%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2234%22%2F%3E%3Cline%20x1%3D%22400%22%20y1%3D%22253%22%20x2%3D%22400%22%20y2%3D%22287%22%2F%3E%3Cline%20x1%3D%22383%22%20y1%3D%22270%22%20x2%3D%22417%22%20y2%3D%22270%22%2F%3E%3C%2Fg%3E%3Ctext%20x%3D%22400%22%20y%3D%22345%22%20fill%3D%22%23ff2e88%22%20font-family%3D%22Space%20Grotesk%2CArial%2Csans-serif%22%20font-size%3D%2222%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div><figcaption class="pg-cap"><span class="pg-cat editable">Plating</span><span class="pg-title editable">Seasonal Course</span></figcaption></figure><figure class="pg-item"><button class="we-remove edit-only" title="Remove">&times;</button><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231b1326%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ff2e88%22%20stroke-width%3D%222.5%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2234%22%2F%3E%3Cline%20x1%3D%22400%22%20y1%3D%22253%22%20x2%3D%22400%22%20y2%3D%22287%22%2F%3E%3Cline%20x1%3D%22383%22%20y1%3D%22270%22%20x2%3D%22417%22%20y2%3D%22270%22%2F%3E%3C%2Fg%3E%3Ctext%20x%3D%22400%22%20y%3D%22345%22%20fill%3D%22%23ff2e88%22%20font-family%3D%22Space%20Grotesk%2CArial%2Csans-serif%22%20font-size%3D%2222%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div><figcaption class="pg-cap"><span class="pg-cat editable">Events</span><span class="pg-title editable">Private Event</span></figcaption></figure><figure class="pg-item"><button class="we-remove edit-only" title="Remove">&times;</button><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231b1326%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ff2e88%22%20stroke-width%3D%222.5%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2234%22%2F%3E%3Cline%20x1%3D%22400%22%20y1%3D%22253%22%20x2%3D%22400%22%20y2%3D%22287%22%2F%3E%3Cline%20x1%3D%22383%22%20y1%3D%22270%22%20x2%3D%22417%22%20y2%3D%22270%22%2F%3E%3C%2Fg%3E%3Ctext%20x%3D%22400%22%20y%3D%22345%22%20fill%3D%22%23ff2e88%22%20font-family%3D%22Space%20Grotesk%2CArial%2Csans-serif%22%20font-size%3D%2222%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div><figcaption class="pg-cap"><span class="pg-cat editable">Events</span><span class="pg-title editable">Chef’s Table</span></figcaption></figure><figure class="pg-item"><button class="we-remove edit-only" title="Remove">&times;</button><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231b1326%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ff2e88%22%20stroke-width%3D%222.5%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2234%22%2F%3E%3Cline%20x1%3D%22400%22%20y1%3D%22253%22%20x2%3D%22400%22%20y2%3D%22287%22%2F%3E%3Cline%20x1%3D%22383%22%20y1%3D%22270%22%20x2%3D%22417%22%20y2%3D%22270%22%2F%3E%3C%2Fg%3E%3Ctext%20x%3D%22400%22%20y%3D%22345%22%20fill%3D%22%23ff2e88%22%20font-family%3D%22Space%20Grotesk%2CArial%2Csans-serif%22%20font-size%3D%2222%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div><figcaption class="pg-cap"><span class="pg-cat editable">Behind the Scenes</span><span class="pg-title editable">In the Kitchen</span></figcaption></figure><figure class="pg-item"><button class="we-remove edit-only" title="Remove">&times;</button><div class="photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231b1326%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ff2e88%22%20stroke-width%3D%222.5%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2234%22%2F%3E%3Cline%20x1%3D%22400%22%20y1%3D%22253%22%20x2%3D%22400%22%20y2%3D%22287%22%2F%3E%3Cline%20x1%3D%22383%22%20y1%3D%22270%22%20x2%3D%22417%22%20y2%3D%22270%22%2F%3E%3C%2Fg%3E%3Ctext%20x%3D%22400%22%20y%3D%22345%22%20fill%3D%22%23ff2e88%22%20font-family%3D%22Space%20Grotesk%2CArial%2Csans-serif%22%20font-size%3D%2222%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div><figcaption class="pg-cap"><span class="pg-cat editable">Desserts</span><span class="pg-title editable">Sweet Finish</span></figcaption></figure></div>
-  <div class="we-addrow edit-only"><button class="we-addbtn" type="button" onclick="weAddPg()">+ Add gallery photo</button></div>
-</section>
-
-<!-- PRESS & AWARDS (Premium) -->
-<section id="press">
-  <div class="sec-head">
-    <span class="kicker"><span class="editable">Recognition</span></span>
-    <h2 class="h2"><span class="editable">Press &amp;</span> <span class="grad editable">Awards</span></h2>
-  </div>
-  <div class="press-grid"><div class="press-item"><button class="we-remove edit-only" title="Remove">&times;</button><span class="press-year editable">2024</span><span class="press-title editable">Good Food Guide — Chef of the Year</span><span class="press-sub editable">Recognised for innovation and excellence in contemporary fine dining.</span></div><div class="press-item"><button class="we-remove edit-only" title="Remove">&times;</button><span class="press-year editable">2023</span><span class="press-title editable">Featured — Gourmet Traveller</span><span class="press-sub editable">A profile on modern plating and seasonal Australian produce.</span></div><div class="press-item"><button class="we-remove edit-only" title="Remove">&times;</button><span class="press-year editable">2023</span><span class="press-title editable">Two Hats — Awarded</span><span class="press-sub editable">Acknowledged for consistency, technique and refined presentation.</span></div><div class="press-item"><button class="we-remove edit-only" title="Remove">&times;</button><span class="press-year editable">2022</span><span class="press-title editable">Guest Chef — Sydney Food Festival</span><span class="press-sub editable">Invited to design and present a signature tasting experience.</span></div></div>
-  <div class="we-addrow edit-only"><button class="we-addbtn" type="button" onclick="weAddPress()">+ Add press item</button></div>
-</section>
-
-<!-- TESTIMONIALS (Premium) -->
-<section id="reviews">
-  <div class="sec-head">
-    <span class="kicker"><span class="editable">Kind Words</span></span>
-    <h2 class="h2"><span class="editable">Guest</span> <span class="grad editable">Testimonials</span></h2>
-  </div>
-  <div class="review-grid"><div class="review-item"><button class="we-remove edit-only" title="Remove">&times;</button><span class="review-quote editable">An unforgettable evening — every course was a work of art, and the flavours were extraordinary.</span><span class="review-name editable">Sophie L.</span><span class="review-role editable">Private event host</span></div><div class="review-item"><button class="we-remove edit-only" title="Remove">&times;</button><span class="review-quote editable">Jordan brings creativity and precision to everything. Our guests are still talking about it.</span><span class="review-name editable">Marcus T.</span><span class="review-role editable">Corporate client</span></div><div class="review-item"><button class="we-remove edit-only" title="Remove">&times;</button><span class="review-quote editable">The most memorable dining experience we’ve had. Beautiful presentation, faultless service.</span><span class="review-name editable">Elena R.</span><span class="review-role editable">Wedding client</span></div></div>
-  <div class="we-addrow edit-only"><button class="we-addbtn" type="button" onclick="weAddReview()">+ Add testimonial</button></div>
-</section>
-
 <!-- PHILOSOPHY -->
 <section id="philosophy">
   <div class="phi">
@@ -445,12 +366,11 @@ body.theme-mist{--bg:#eef1f6;--bg2:#e4e9f1;--bg3:#ffffff;--ink:#161a22;--ink2:#4
   <span class="tb-sep edit-only"></span>
   <div class="tb-themes edit-only">
     <span class="tb-tlabel">BG</span>
-    <button class="sw sw-midnight" title="Midnight (dark)" onclick="setTheme('midnight')"></button>
-    <button class="sw sw-espresso" title="Espresso (dark)" onclick="setTheme('espresso')"></button>
-    <button class="sw sw-slate" title="Slate (mid)" onclick="setTheme('slate')"></button>
-    <button class="sw sw-mocha" title="Mocha (mid)" onclick="setTheme('mocha')"></button>
+    <button class="sw sw-plum" title="Plum Noir" onclick="setTheme('plum')"></button>
+    <button class="sw sw-midnight" title="Midnight" onclick="setTheme('midnight')"></button>
+    <button class="sw sw-charcoal" title="Charcoal" onclick="setTheme('charcoal')"></button>
+    <button class="sw sw-espresso" title="Espresso" onclick="setTheme('espresso')"></button>
     <button class="sw sw-ivory" title="Ivory (light)" onclick="setTheme('ivory')"></button>
-    <button class="sw sw-mist" title="Mist (light)" onclick="setTheme('mist')"></button>
   </div>
   <span class="tb-sep edit-only"></span>
     <button class="tb-btn edit-only" onclick="setPaylink()">PayPal link</button>
@@ -500,13 +420,13 @@ function buildHTML(forEdit){
   return '<!DOCTYPE html>\n'+clone.outerHTML;
 }
 function download(name,html){ var b=new Blob([html],{type:'text/html'}); var u=URL.createObjectURL(b); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800); }
-function saveEditable(){ download('jordan-avery-chef-neon-PREMIUM-EDITABLE.html', buildHTML(true)); }
-function publishFinal(){ download('jordan-avery-chef-neon-PREMIUM.html', buildHTML(false)); }
+function saveEditable(){ download('chef-jordan-avery-neon-EDITABLE.html', buildHTML(true)); }
+function publishFinal(){ download('chef-jordan-avery-neon.html', buildHTML(false)); }
 
 var nav=document.getElementById('nav'); window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>50);});
 var io=new IntersectionObserver(function(ents){ents.forEach(function(en){if(en.isIntersecting){en.target.classList.add('visible');io.unobserve(en.target);}});},{threshold:0.1});
 document.querySelectorAll('section,.hl,.card,.about-grid').forEach(function(el,i){el.classList.add('reveal');el.style.transitionDelay=(i%4*0.06)+'s';io.observe(el);});
-var THEMES=['midnight','espresso','slate','mocha','ivory','mist'];
+var THEMES=['plum','midnight','charcoal','espresso','ivory'];
 function setTheme(name){
   var b=document.body;
   THEMES.forEach(function(n){b.classList.remove('theme-'+n);});
@@ -519,8 +439,7 @@ function initTheme(){
   var name=null;
   try{name=localStorage.getItem('bgtheme_'+location.pathname);}catch(e){}
   if(!name){ THEMES.forEach(function(n){ if(document.body.classList.contains('theme-'+n)) name=n; }); }
-  if(name&&THEMES.indexOf(name)<0)name=null;
-  setTheme(name||'midnight');
+  setTheme(name||'plum');
 }
 applyMode();
 initTheme();
@@ -565,7 +484,7 @@ initTheme();
 
 <script id="licenseScript">
 (function(){
-  var LIC_ID="XMYAR9B7", KEY_HASH="321a0ac2ebcfd1103848f9c94b217dc21765b65360643237dbe4a14f02bea76b", KEY_FNV="c28d6589";
+  var LIC_ID="XMYAR9B7", KEY_HASH="9fdff889ef159427ae1863718c366cba3a6aae672578b21e87302e718abedf41", KEY_FNV="f1752c4c";
   var TRIAL_DAYS=7, DAY=86400000;
   function lg(k){try{return localStorage.getItem(k);}catch(e){return null;}}
   function ls(k,v){try{localStorage.setItem(k,v);}catch(e){}}
@@ -628,30 +547,6 @@ initTheme();
   try{var _q=new URLSearchParams(location.search||'');var _c=_q.get('unlock');if(!_c){var _h=(location.hash||'').match(/unlock=([^&]+)/);if(_h)_c=_h[1];}if(_c){_c=decodeURIComponent(_c);Promise.resolve(checkKey(_c)).then(function(ok){if(ok){ls('unlocked_'+LIC_ID,'1');var um=document.getElementById('unlockModal');if(um)um.classList.remove('show');var pw=document.getElementById('paywall');if(pw)pw.classList.remove('show');try{window.applyLicense&&window.applyLicense();}catch(e){}}});}}catch(e){}
   window.applyLicense();
   initPaylink();
-})();
-</script>
-
-
-<div id="pgLightbox"><button class="lb-close" type="button" aria-label="Close">&times;</button><img src="" alt=""></div>
-<script id="we-premium-script">
-var WE_PH="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231b1326%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ff2e88%22%20stroke-width%3D%222.5%22%20opacity%3D%220.85%22%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22270%22%20r%3D%2234%22%2F%3E%3Cline%20x1%3D%22400%22%20y1%3D%22253%22%20x2%3D%22400%22%20y2%3D%22287%22%2F%3E%3Cline%20x1%3D%22383%22%20y1%3D%22270%22%20x2%3D%22417%22%20y2%3D%22270%22%2F%3E%3C%2Fg%3E%3Ctext%20x%3D%22400%22%20y%3D%22345%22%20fill%3D%22%23ff2e88%22%20font-family%3D%22Space%20Grotesk%2CArial%2Csans-serif%22%20font-size%3D%2222%22%20letter-spacing%3D%224%22%20text-anchor%3D%22middle%22%3EADD%20PHOTO%3C%2Ftext%3E%3C%2Fsvg%3E";
-function weFilter(cat){cat=(cat||'all').toLowerCase().replace(/\s+/g,' ');
-  document.querySelectorAll('#gallery .pg-chip').forEach(function(c){c.classList.toggle('active',(c.getAttribute('data-filter')||'').toLowerCase()===cat);});
-  document.querySelectorAll('#gallery .pg-item').forEach(function(it){var el=it.querySelector('.pg-cat');var c=(el?el.textContent:'').trim().toLowerCase().replace(/\s+/g,' ');it.style.display=(cat==='all'||c===cat)?'':'none';});}
-function weAddPg(){var g=document.querySelector('#gallery .pgal');if(!g)return;var f=document.createElement('figure');f.className='pg-item';f.innerHTML='<button class="we-remove edit-only" title="Remove">&times;</button><div class="photo"><img src="'+WE_PH+'" alt=""><button class="img-edit edit-only" onclick="pickImg(this)">Replace</button><input type="file" accept="image/*" hidden onchange="loadImg(this)"></div><figcaption class="pg-cap"><span class="pg-cat editable">Plating</span><span class="pg-title editable">New Photo</span></figcaption>';g.appendChild(f);if(window.applyMode)applyMode();}
-function weAddPress(){var g=document.querySelector('#press .press-grid');if(!g)return;var d=document.createElement('div');d.className='press-item';d.innerHTML='<button class="we-remove edit-only" title="Remove">&times;</button><span class="press-year editable">2025</span><span class="press-title editable">Award or Publication</span><span class="press-sub editable">Add a short description here.</span>';g.appendChild(d);if(window.applyMode)applyMode();}
-function weAddReview(){var g=document.querySelector('#reviews .review-grid');if(!g)return;var d=document.createElement('div');d.className='review-item';d.innerHTML='<button class="we-remove edit-only" title="Remove">&times;</button><span class="review-quote editable">Add the testimonial text here.</span><span class="review-name editable">Guest name</span><span class="review-role editable">Role / event</span>';g.appendChild(d);if(window.applyMode)applyMode();}
-(function(){
-  document.addEventListener('click',function(e){
-    var rm=e.target.closest('.we-remove');
-    if(rm){ if(document.body.classList.contains('edit-mode')){var it=rm.closest('.pg-item,.press-item,.review-item');if(it)it.remove();} e.preventDefault(); return; }
-    if(document.body.classList.contains('edit-mode')) return;
-    var img=e.target.closest('#gallery .photo img');
-    if(img){var lb=document.getElementById('pgLightbox');if(lb){lb.querySelector('img').src=img.getAttribute('src');lb.classList.add('open');}}
-  });
-  var lb=document.getElementById('pgLightbox');
-  if(lb){lb.addEventListener('click',function(e){if(e.target===lb||e.target.closest('.lb-close'))lb.classList.remove('open');});}
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){var l=document.getElementById('pgLightbox');if(l)l.classList.remove('open');}});
 })();
 </script>
 
