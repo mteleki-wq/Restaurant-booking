@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChefLink Sydney — Premium Chef Staffing Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body,html{font-family:'Jost',sans-serif;background:#FAF8F3;color:#1C1C1C;line-height:1.6;scroll-behavior:smooth}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;line-height:1.2}
+button{cursor:pointer;font-family:'Jost',sans-serif}
+input,textarea,select{font-family:'Jost',sans-serif}
+img{object-fit:cover}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:#C9A84C;border-radius:3px}
+.nav{background:#1C1C1C;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-logo{cursor:pointer;display:flex;align-items:center;gap:8px}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:20px;color:#C9A84C;font-weight:700;letter-spacing:1px}
+.nav-logo-sub{font-size:9px;color:#8A8580;letter-spacing:3px;text-transform:uppercase;margin-top:3px}
+.nav-desktop{display:flex;gap:24px;align-items:center}
+.nav-link{font-size:12px;color:#CCC;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:color .2s;font-weight:400;border:none;background:none;padding:0}
+.nav-link:hover,.nav-link.active{color:#C9A84C}
+.btn-nav{padding:7px 16px;border-radius:2px;font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;border:none;cursor:pointer;background:#C9A84C;color:#1C1C1C;transition:all .2s}
+.btn-nav:hover{background:#9B7E35}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:4px;width:34px;height:34px}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:1px;transition:all .3s;transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:#1C1C1C;border-top:1px solid rgba(255,255,255,.08);z-index:199;flex-direction:column;padding:8px 0 16px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.mobile-menu.open{display:flex}
+.mobile-menu-link{padding:13px 24px;font-size:13px;color:rgba(255,255,255,.65);letter-spacing:.8px;text-transform:uppercase;cursor:pointer;border:none;background:none;text-align:left;font-family:'Jost',sans-serif;transition:color .2s;width:100%;border-left:3px solid transparent}
+.mobile-menu-link:hover,.mobile-menu-link.active{color:#C9A84C;border-left-color:#C9A84C;background:rgba(255,255,255,.04)}
+.mobile-menu-hire{margin:10px 24px 0;padding:12px 0;background:#C9A84C;color:#1C1C1C;border:none;border-radius:2px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;width:calc(100% - 48px)}
+.btn{padding:10px 22px;border-radius:2px;font-size:12px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;display:inline-block}
+.btn-dark{background:#1C1C1C;color:#fff}.btn-dark:hover{background:#C9A84C;color:#1C1C1C}
+.btn-outline{background:transparent;color:#1C1C1C;border:1px solid #1C1C1C}.btn-outline:hover{background:#1C1C1C;color:#fff}
+.btn-gold{background:#C9A84C;color:#1C1C1C}.btn-gold:hover{background:#9B7E35;color:#fff}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+.badge-green{background:#E8F5E4;color:#3A7D2C}
+.badge-gold{background:#FBF4E2;color:#9B7E35}
+.badge-orange{background:#FDF0EA;color:#C04E1A}
+.tag{display:inline-block;padding:3px 9px;background:#F5F1E8;border:1px solid #E8E2D6;border-radius:1px;font-size:11px;color:#8A8580;margin:2px}
+.inp{width:100%;padding:10px 13px;border:1px solid #E8E2D6;background:#fff;border-radius:2px;font-size:13px;outline:none;font-family:'Jost',sans-serif;transition:border-color .2s}
+.inp:focus{border-color:#C9A84C}
+.label{display:block;font-size:11px;font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;color:#8A8580}
+.hero{position:relative;height:460px;overflow:hidden;background:#1C1C1C}
+.hero img{width:100%;height:100%;object-fit:cover;opacity:.42;display:block}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center}
+.hero-eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9A84C;margin-bottom:12px;font-weight:500}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(22px,5vw,42px);color:#fff;max-width:660px;margin-bottom:12px;font-weight:700;line-height:1.12}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.7);max-width:480px;margin-bottom:28px;font-weight:300;line-height:1.65}
+.search-bar{display:flex;flex-direction:column;gap:8px;max-width:620px;width:100%}
+.search-bar input,.search-bar select{padding:12px 16px;font-size:13px;border:none;border-radius:2px;outline:none;font-family:'Jost',sans-serif;width:100%}
+.search-bar select{color:#666;background:#fff}
+.search-bar button{border:none;background:#1C1C1C;color:#fff;padding:12px 0;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Jost',sans-serif;transition:all .2s;width:100%}
+.search-bar button:hover{background:#C9A84C;color:#1C1C1C}
+.filters-strip{background:#F5F1E8;padding:14px 20px;border-bottom:1px solid #E8E2D6;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.filter-pill{padding:5px 13px;border:1px solid #E8E2D6;border-radius:20px;font-size:10px;cursor:pointer;transition:all .2s;background:#fff;color:#8A8580;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.filter-pill:hover{background:#C9A84C;color:#1C1C1C;border-color:#C9A84C}
+.section{padding:48px 24px;max-width:1100px;margin:0 auto}
+.section-eyebrow{letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:6px;font-weight:500}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.chef-card{background:#fff;border:1px solid #E8E2D6;border-radius:2px;overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s}
+.chef-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.11)}
+.card-hero{height:148px;overflow:hidden;position:relative;background:#F0EDE6}
+.card-hero img{width:100%;height:100%;object-fit:cover}
+.card-hero-overlay{position:absolute;bottom:0;left:0;right:0;height:64px;background:linear-gradient(transparent,rgba(0,0,0,.58))}
+.card-body{padding:15px 17px}
+.card-top{display:flex;gap:11px;align-items:flex-start;margin-bottom:10px}
+.card-photo{width:46px;height:46px;border-radius:50%;border:2px solid #C9A84C;object-fit:cover;flex-shrink:0;background:#E8E2D6}
+.card-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;margin-bottom:2px}
+.card-title{font-size:11px;color:#8A8580;line-height:1.35}
+.card-meta{display:flex;justify-content:space-between;font-size:11px;color:#8A8580;margin-bottom:9px}
+.card-summary{font-size:12px;color:#6B6560;line-height:1.55;margin-bottom:13px;border-top:1px solid #E8E2D6;padding-top:10px}
+.card-footer{display:flex;justify-content:space-between;align-items:center}
+.how{background:#1C1C1C;padding:56px 24px}
+.how-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:36px;text-align:center}
+.how-num{font-family:'Playfair Display',serif;font-size:42px;color:#C9A84C;font-weight:700;line-height:1;margin-bottom:10px}
+.how-title{font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:8px}
+.how-desc{color:rgba(255,255,255,.5);font-size:13px;line-height:1.65;font-weight:300}
+.cta-split{display:grid;grid-template-columns:1fr 1fr}
+.cta-gold{background:#C9A84C;padding:52px 48px;display:flex;flex-direction:column;justify-content:center}
+.cta-dark{background:#1C1C1C;padding:52px 48px;display:flex;flex-direction:column;justify-content:center}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:740px;margin:0 auto}
+.dir-header{background:#1C1C1C;padding:36px 24px 26px}
+.dir-filters{background:#fff;padding:14px 20px;border-bottom:1px solid #E8E2D6;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pf-hero{position:relative;height:360px;overflow:hidden;background:#1C1C1C}
+.pf-hero img{width:100%;height:100%;object-fit:cover;opacity:.48}
+.pf-hero-content{position:absolute;inset:0;display:flex;align-items:flex-end;padding:32px 36px;background:linear-gradient(transparent 25%,rgba(0,0,0,.78))}
+.pf-body{max-width:1060px;margin:0 auto;padding:44px 24px;display:grid;grid-template-columns:2fr 1fr;gap:52px}
+.pf-section{margin-bottom:36px}
+.pf-section-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #E8E2D6}
+.dish-card{border:1px solid #E8E2D6;border-radius:2px;margin-bottom:10px;overflow:hidden}
+.dish-header{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;cursor:pointer;background:#fff;transition:background .2s}
+.dish-header:hover{background:#F5F1E8}
+.dish-body{display:grid;grid-template-columns:170px 1fr}
+.sidebar-card{background:#F5F1E8;border:1px solid #E8E2D6;border-radius:2px;padding:22px;margin-bottom:16px;position:sticky;top:72px}
+.sidebar-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #E8E2D6;font-size:13px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.upload-wrap{max-width:680px;margin:0 auto;padding:48px 24px}
+.form-section{margin-bottom:28px}
+.form-section-title{font-family:'Playfair Display',serif;font-size:16px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E8E2D6}
+.form-row{display:flex;gap:14px;margin-bottom:12px}
+.form-row>*{flex:1;min-width:0}
+.cuisine-pill{padding:6px 12px;border:1px solid #E8E2D6;border-radius:20px;font-size:12px;cursor:pointer;transition:all .2s;background:#fff;color:#8A8580;margin:3px;display:inline-block;user-select:none}
+.cuisine-pill.selected{background:#C9A84C;color:#1C1C1C;border-color:#C9A84C}
+.img-upload-box{display:flex;align-items:center;justify-content:center;border:2px dashed #E8E2D6;border-radius:8px;cursor:pointer;transition:border-color .2s,background .2s;overflow:hidden;position:relative;background:#FAFAF7;width:100%;height:130px}
+.img-upload-box:hover{border-color:#C9A84C;background:#FBF8F0}
+.img-upload-box-gallery{height:110px}
+.img-upload-box-dish{height:120px;margin-bottom:10px}
+.admin-wrap{display:flex;min-height:calc(100vh - 56px)}
+.admin-sidebar{width:200px;background:#1C1C1C;padding:24px 0;flex-shrink:0}
+.admin-logo-a{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+.admin-logo-a div:first-child{font-family:'Playfair Display',serif;font-size:16px;color:#C9A84C;font-weight:700}
+.admin-logo-a div:last-child{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+.admin-tab{padding:11px 20px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.5);border-left:2px solid transparent;transition:all .2s}
+.admin-tab:hover,.admin-tab.active{color:#fff;background:rgba(255,255,255,.07);border-left-color:#C9A84C}
+.admin-main{flex:1;padding:28px 32px;background:#FAF8F3;overflow-y:auto;min-width:0}
+.admin-row{background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:13px 17px;display:flex;gap:13px;align-items:center;margin-bottom:10px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal{background:#fff;border-radius:4px;padding:30px;width:100%;max-width:540px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1C1C1C;color:#fff;padding:12px 24px;border-radius:4px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:12px}
+.spinner{width:36px;height:36px;border:3px solid #E8E2D6;border-top-color:#C9A84C;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{background:#1C1C1C;padding:36px 24px;text-align:center}
+@media(max-width:768px){
+  .pf-body{grid-template-columns:1fr;gap:28px}
+  .pf-hero{height:280px}
+  .sidebar-card{position:static}
+  .how-grid{grid-template-columns:1fr;gap:32px}
+  .cta-split{grid-template-columns:1fr}
+  .cta-gold,.cta-dark{padding:40px 32px}
+  .dish-body{grid-template-columns:1fr}
+  .dish-body img{height:160px;width:100%}
+  .admin-wrap{flex-direction:column;min-height:unset}
+  .admin-sidebar{width:100%;display:flex;flex-wrap:wrap;align-items:center;padding:10px 16px;gap:4px}
+  .admin-logo-a{display:none}
+  .admin-tab{padding:7px 14px;border-left:none;border-bottom:2px solid transparent;font-size:11px;white-space:nowrap}
+  .admin-tab.active{border-left:none;border-bottom-color:#C9A84C}
+  .admin-main{padding:20px}
+  .pricing-grid{grid-template-columns:1fr;max-width:320px}
+  .dir-filters{flex-direction:column;align-items:stretch}
+  .dir-filters input,.dir-filters select{width:100%}
+}
+@media(max-width:640px){
+  .nav-desktop{display:none}
+  .hamburger{display:flex}
+  .hero{height:420px}
+  .search-bar{flex-direction:column}
+  .form-row{flex-direction:column;gap:10px}
+  .upload-wrap{padding:32px 16px}
+  .admin-row{flex-direction:column;align-items:flex-start}
+  .admin-row-actions{display:flex;flex-wrap:wrap;gap:6px;width:100%}
+}
+@media(min-width:641px){
+  .search-bar{flex-direction:row;overflow:hidden;border-radius:2px;background:#fff}
+  .search-bar input{border-radius:0;flex:1}
+  .search-bar select{border-left:1px solid #E8E2D6;border-radius:0;min-width:140px;flex-shrink:0}
+  .search-bar button{border-radius:0;padding:0 28px;width:auto;flex-shrink:0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <span class="nav-logo-text">ChefLink</span>
+    <span class="nav-logo-sub">Sydney</span>
+  </div>
+  <div class="nav-desktop">
+    <button class="nav-link active" id="nl-home" onclick="showPage('home')">Home</button>
+    <button class="nav-link" id="nl-directory" onclick="showPage('directory')">Find Chefs</button>
+    <button class="nav-link" id="nl-upload" onclick="showPage('upload')">Join as Chef</button>
+    <button class="btn-nav" onclick="showPage('inquiry')">Hire a Chef</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-menu-link active" id="ml-home" onclick="showPage('home');closeMenu()">Home</button>
+  <button class="mobile-menu-link" id="ml-directory" onclick="showPage('directory');closeMenu()">Find Chefs</button>
+  <button class="mobile-menu-link" id="ml-upload" onclick="showPage('upload');closeMenu()">Join as Chef</button>
+  <button class="mobile-menu-hire" onclick="showPage('inquiry');closeMenu()">Hire a Chef</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading" style="display:none">
+  <div class="spinner"></div>
+  <p style="font-size:13px;color:#8A8580" id="loading-msg">Loading...</p>
+</div>
+
+<!-- HOME -->
+<div id="page-home">
+  <div class="hero">
+    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=75" alt="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Sydney's Premier Chef Staffing Platform</p>
+      <h1 class="hero-h1">Find Skilled Chefs in Sydney for Casual, Contract &amp; Event Work</h1>
+      <p class="hero-sub">Connecting restaurants with experienced chefs through professional portfolios.</p>
+      <div class="search-bar">
+        <input type="text" id="hero-search" placeholder="Search chefs or cuisine...">
+        <select id="hero-cuisine">
+          <option value="">All Cuisines</option>
+          <option>French</option><option>Japanese</option><option>Italian</option>
+          <option>Modern Australian</option><option>Pastry</option><option>Asian</option>
+          <option>Catering</option><option>Fine Dining</option><option>Seafood</option>
+        </select>
+        <button onclick="showPage('directory')">Search</button>
+      </div>
+    </div>
+  </div>
+  <div class="filters-strip">
+    <span class="filter-pill" onclick="filterByCuisine('French')">French</span>
+    <span class="filter-pill" onclick="filterByCuisine('Japanese')">Japanese</span>
+    <span class="filter-pill" onclick="filterByCuisine('Italian')">Italian</span>
+    <span class="filter-pill" onclick="filterByCuisine('Modern Australian')">Modern Australian</span>
+    <span class="filter-pill" onclick="filterByCuisine('Pastry')">Pastry</span>
+    <span class="filter-pill" onclick="filterByCuisine('Asian')">Asian</span>
+    <span class="filter-pill" onclick="filterByCuisine('Catering')">Catering</span>
+    <span class="filter-pill" onclick="filterByCuisine('Fine Dining')">Fine Dining</span>
+  </div>
+  <div class="section">
+    <p class="section-eyebrow">Handpicked Talent</p>
+    <h2 class="section-title" style="margin-bottom:24px">Featured Chefs</h2>
+    <div class="grid" id="featured-grid"><p style="color:#8A8580;font-size:14px">Loading chefs...</p></div>
+    <div style="text-align:center;margin-top:28px">
+      <button class="btn btn-outline" onclick="showPage('directory')">View All Chefs</button>
+    </div>
+  </div>
+  <div class="how">
+    <div style="text-align:center;margin-bottom:32px">
+      <p class="section-eyebrow">Simple Process</p>
+      <h2 class="section-title" style="color:#fff">How ChefLink Works</h2>
+    </div>
+    <div class="how-grid">
+      <div><div class="how-num">01</div><div class="how-title">Search</div><p class="how-desc">Browse verified chef profiles by cuisine, availability and location.</p></div>
+      <div><div class="how-num">02</div><div class="how-title">Review</div><p class="how-desc">View full portfolios, experience, dish galleries and references.</p></div>
+      <div><div class="how-num">03</div><div class="how-title">Connect</div><p class="how-desc">Send a direct inquiry and arrange your booking easily.</p></div>
+    </div>
+  </div>
+  <div class="cta-split">
+    <div class="cta-gold">
+      <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#9B7E35;margin-bottom:6px;font-weight:500">For Chefs</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,28px);margin-bottom:10px;color:#1C1C1C">Showcase Your Talent</h2>
+      <p style="font-size:13px;color:#1C1C1C;opacity:.75;margin-bottom:18px;font-weight:300;line-height:1.6">Create your portfolio and connect with Sydney's top restaurants.</p>
+      <button class="btn btn-dark" onclick="showPage('upload')">Create Profile</button>
+    </div>
+    <div class="cta-dark">
+      <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:6px;font-weight:500">For Restaurants</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,28px);margin-bottom:10px;color:#fff">Find the Right Chef</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:18px;font-weight:300;line-height:1.6">Search verified chefs for your cuisine, date and budget.</p>
+      <button class="btn btn-gold" onclick="showPage('inquiry')">Post a Request</button>
+    </div>
+  </div>
+  <div class="section" style="text-align:center">
+    <p class="section-eyebrow">Chef Plans</p>
+    <h2 class="section-title" style="margin-bottom:24px">Transparent Pricing</h2>
+    <div class="pricing-grid">
+      <div style="background:#F0EDE6;border-radius:4px;padding:22px 16px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:4px">Free Trial</h3>
+        <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:14px">$0</div>
+        <ul style="list-style:none;font-size:12px;color:#8A8580;text-align:left;margin-bottom:14px">
+          <li style="padding:3px 0;border-bottom:1px solid #E8E2D6">✓ Basic profile</li>
+          <li style="padding:3px 0;border-bottom:1px solid #E8E2D6">✓ One photo</li>
+          <li style="padding:3px 0">✓ 7-day trial</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;padding:8px 0;font-size:11px" onclick="showPage('upload')">Start Free</button>
+      </div>
+      <div style="background:#fff;border:1px solid #E8E2D6;border-radius:4px;padding:22px 16px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:4px">Basic</h3>
+        <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:14px">$29<span style="font-size:13px;font-weight:400">/mo</span></div>
+        <ul style="list-style:none;font-size:12px;color:#8A8580;text-align:left;margin-bottom:14px">
+          <li style="padding:3px 0;border-bottom:1px solid #E8E2D6">✓ Full profile</li>
+          <li style="padding:3px 0;border-bottom:1px solid #E8E2D6">✓ Portfolio</li>
+          <li style="padding:3px 0">✓ Cuisine tags</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;padding:8px 0;font-size:11px" onclick="goToCheckout('basic')">Get Started</button>
+      </div>
+      <div style="background:#1C1C1C;border-radius:4px;padding:22px 16px;position:relative">
+        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#C9A84C;color:#1C1C1C;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 12px;border-radius:20px;white-space:nowrap">Most Popular</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:4px;color:#fff">Premium</h3>
+        <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:14px;color:#C9A84C">$59<span style="font-size:13px;font-weight:400;color:rgba(255,255,255,.4)">/mo</span></div>
+        <ul style="list-style:none;font-size:12px;color:rgba(255,255,255,.6);text-align:left;margin-bottom:14px">
+          <li style="padding:3px 0;border-bottom:1px solid rgba(255,255,255,.1)">✓ Featured listing</li>
+          <li style="padding:3px 0;border-bottom:1px solid rgba(255,255,255,.1)">✓ Full gallery</li>
+          <li style="padding:3px 0;border-bottom:1px solid rgba(255,255,255,.1)">✓ Signature recipes</li>
+          <li style="padding:3px 0">✓ Priority placement</li>
+        </ul>
+        <button class="btn btn-gold" style="width:100%;padding:8px 0;font-size:11px" onclick="goToCheckout('premium')">Go Premium</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:#C9A84C;margin-bottom:6px">ChefLink Sydney</div>
+    <p ondblclick="showPage('admin')" style="color:rgba(255,255,255,.3);font-size:12px;cursor:default">© 2025 ChefLink Sydney · Premium Chef Staffing Platform · All Rights Reserved</p>
+  </footer>
+</div>
+
+<!-- DIRECTORY -->
+<div id="page-directory" style="display:none">
+  <div class="dir-header">
+    <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:4px;font-weight:500">Chef Directory</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,32px);color:#fff;margin-bottom:2px">Find Your Chef</h1>
+    <p id="dir-count" style="color:rgba(255,255,255,.4);font-size:12px;font-weight:300"></p>
+  </div>
+  <div class="dir-filters">
+    <input class="inp" type="text" id="dir-search" placeholder="Search name or cuisine..." style="flex:1;min-width:140px" oninput="renderDirectory()">
+    <select class="inp" id="dir-cuisine" style="min-width:130px" onchange="renderDirectory()">
+      <option value="">All Cuisines</option>
+      <option>French</option><option>Japanese</option><option>Italian</option>
+      <option>Modern Australian</option><option>Pastry</option><option>Asian</option>
+      <option>Catering</option><option>Fine Dining</option><option>Seafood</option>
+    </select>
+    <select class="inp" id="dir-avail" style="min-width:120px" onchange="renderDirectory()">
+      <option value="">Any Availability</option>
+      <option>Weekdays</option><option>Weekends</option><option>Immediate</option><option>Flexible</option>
+    </select>
+    <button class="btn btn-outline" style="font-size:11px;padding:7px 12px;white-space:nowrap"
+      onclick="document.getElementById('dir-search').value='';document.getElementById('dir-cuisine').value='';document.getElementById('dir-avail').value='';renderDirectory()">Clear</button>
+  </div>
+  <div class="section" style="padding-top:24px">
+    <div class="grid" id="dir-grid"></div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<div id="page-portfolio" style="display:none">
+  <div class="pf-hero">
+    <img id="pf-hero" src="" alt="">
+    <div class="pf-hero-content">
+      <button onclick="showPage('directory')" style="position:absolute;top:16px;left:20px;background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.3);padding:7px 14px;border-radius:2px;font-size:12px;cursor:pointer;font-family:'Jost',sans-serif">← Back</button>
+      <div style="display:flex;gap:14px;align-items:flex-end">
+        <img id="pf-photo" src="" alt="" style="width:80px;height:80px;border-radius:50%;border:3px solid #C9A84C;object-fit:cover;flex-shrink:0;background:#E8E2D6">
+        <div>
+          <div id="pf-cuisines" style="margin-bottom:4px"></div>
+          <h1 id="pf-name" style="font-family:'Playfair Display',serif;font-size:clamp(18px,3vw,34px);color:#fff;margin-bottom:2px"></h1>
+          <p id="pf-title-el" style="font-size:13px;color:rgba(255,255,255,.65);font-weight:300"></p>
+          <div id="pf-meta" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-size:11px;color:rgba(255,255,255,.5)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pf-body">
+    <div>
+      <div class="pf-section"><div class="pf-section-title">About the Chef</div><p id="pf-bio" style="font-size:14px;line-height:1.85;font-weight:300"></p></div>
+      <div class="pf-section"><div class="pf-section-title">Experience &amp; Restaurants</div><div id="pf-restaurants" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px"></div><p id="pf-quals" style="font-size:12px;color:#8A8580"></p></div>
+      <div class="pf-section" id="pf-dishes-section"><div class="pf-section-title">Signature Dishes</div><div id="pf-dishes"></div></div>
+      <div class="pf-section" id="pf-gallery-section"><div class="pf-section-title">Gallery</div><div class="gallery-grid" id="pf-gallery"></div></div>
+    </div>
+    <div>
+      <div class="sidebar-card">
+        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #E8E2D6">Availability</h3>
+        <div id="pf-sidebar"></div>
+        <button class="btn btn-dark" style="width:100%;margin-top:14px;padding:11px 0;font-size:13px" onclick="showPage('inquiry')">Send Inquiry</button>
+        <p style="font-size:11px;color:#8A8580;text-align:center;margin-top:8px">Usually responds within 24 hours</p>
+      </div>
+      <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:14px;margin-top:12px">
+        <h4 style="font-size:11px;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;color:#8A8580">Cuisine Specialties</h4>
+        <div id="pf-cuisine-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD -->
+<div id="page-upload" style="display:none">
+  <div class="upload-wrap">
+    <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:6px;font-weight:500">Chef Portal</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);margin-bottom:6px">Create Your Profile</h1>
+    <p style="font-size:14px;color:#8A8580;margin-bottom:28px;font-weight:300">Fill in your details to appear in the ChefLink Sydney directory.</p>
+    <div id="upload-success" style="display:none;text-align:center;padding:48px 0">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:26px;margin-bottom:8px">Profile Submitted!</h2>
+      <p style="font-size:13px;color:#8A8580;max-width:380px;margin:0 auto 20px;line-height:1.6">Your profile is pending approval. Once approved it will appear in the directory for all restaurants to find you.</p>
+      <button class="btn btn-outline" onclick="resetUpload()" style="margin-right:8px;margin-bottom:8px">Add Another</button>
+      <button class="btn btn-dark" onclick="showPage('directory')">Browse Chefs</button>
+    </div>
+    <div id="upload-form">
+      <div class="form-section">
+        <div class="form-section-title">1. Personal Details</div>
+        <div class="form-row">
+          <div><label class="label">Full Name *</label><input class="inp" id="u-name" placeholder="e.g. Marc Dupont"></div>
+          <div><label class="label">Professional Title</label><input class="inp" id="u-title" placeholder="e.g. Head Chef — French Fine Dining"></div>
+        </div>
+        <div class="form-row">
+          <div><label class="label">Email *</label><input class="inp" type="email" id="u-email"></div>
+          <div><label class="label">Phone</label><input class="inp" id="u-phone"></div>
+        </div>
+        <div class="form-row">
+          <div><label class="label">Location</label>
+            <select class="inp" id="u-location">
+              <option>Sydney CBD</option><option>Surry Hills</option><option>Newtown</option>
+              <option>Bondi</option><option>Manly</option><option>Parramatta</option>
+              <option>North Sydney</option><option>Darlinghurst</option><option>Paddington</option>
+            </select>
+          </div>
+          <div><label class="label">Hourly / Day Rate</label><input class="inp" id="u-rate" placeholder="e.g. $85–$120/hr"></div>
+        </div>
+        <div class="form-row">
+          <div><label class="label">Years of Experience</label><input class="inp" type="number" id="u-exp" min="0"></div>
+          <div><label class="label">Instagram</label><input class="inp" id="u-instagram" placeholder="@yourhandle"></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">2. Your Photos</div>
+        <p style="font-size:12px;color:#8A8580;margin-bottom:14px">Upload from your phone or computer — photos go directly to secure cloud storage.</p>
+        <div class="form-row">
+          <div>
+            <label class="label">Profile Photo (your face) *</label>
+            <label class="img-upload-box" onclick="document.getElementById('u-photo-file').click()">
+              <img id="u-photo-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%">
+              <div id="u-photo-ph" style="text-align:center"><div style="font-size:26px;margin-bottom:4px">🤳</div><div style="font-size:11px;color:#8A8580;font-weight:500">Tap to upload</div></div>
+            </label>
+            <input type="file" id="u-photo-file" accept="image/*" capture="user" style="display:none" onchange="previewFile(this,'u-photo-prev','u-photo-ph')">
+          </div>
+          <div>
+            <label class="label">Hero / Best Dish Photo *</label>
+            <label class="img-upload-box" onclick="document.getElementById('u-hero-file').click()">
+              <img id="u-hero-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
+              <div id="u-hero-ph" style="text-align:center"><div style="font-size:26px;margin-bottom:4px">🍽️</div><div style="font-size:11px;color:#8A8580;font-weight:500">Tap to upload</div></div>
+            </label>
+            <input type="file" id="u-hero-file" accept="image/*" style="display:none" onchange="previewFile(this,'u-hero-prev','u-hero-ph')">
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">3. Gallery Photos</div>
+        <p style="font-size:12px;color:#8A8580;margin-bottom:14px">Upload up to 4 photos of your food and kitchen work.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><label class="label" style="margin-bottom:6px">Photo 1</label>
+            <label class="img-upload-box img-upload-box-gallery" onclick="document.getElementById('u-g0').click()">
+              <img id="u-g0-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
+              <div id="u-g0-ph" style="text-align:center"><div style="font-size:20px;margin-bottom:3px">📷</div><div style="font-size:11px;color:#8A8580">Add photo</div></div>
+            </label>
+            <input type="file" id="u-g0" accept="image/*" style="display:none" onchange="previewFile(this,'u-g0-prev','u-g0-ph')">
+          </div>
+          <div><label class="label" style="margin-bottom:6px">Photo 2</label>
+            <label class="img-upload-box img-upload-box-gallery" onclick="document.getElementById('u-g1').click()">
+              <img id="u-g1-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
+              <div id="u-g1-ph" style="text-align:center"><div style="font-size:20px;margin-bottom:3px">📷</div><div style="font-size:11px;color:#8A8580">Add photo</div></div>
+            </label>
+            <input type="file" id="u-g1" accept="image/*" style="display:none" onchange="previewFile(this,'u-g1-prev','u-g1-ph')">
+          </div>
+          <div><label class="label" style="margin-bottom:6px">Photo 3</label>
+            <label class="img-upload-box img-upload-box-gallery" onclick="document.getElementById('u-g2').click()">
+              <img id="u-g2-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
+              <div id="u-g2-ph" style="text-align:center"><div style="font-size:20px;margin-bottom:3px">📷</div><div style="font-size:11px;color:#8A8580">Add photo</div></div>
+            </label>
+            <input type="file" id="u-g2" accept="image/*" style="display:none" onchange="previewFile(this,'u-g2-prev','u-g2-ph')">
+          </div>
+          <div><label class="label" style="margin-bottom:6px">Photo 4</label>
+            <label class="img-upload-box img-upload-box-gallery" onclick="document.getElementById('u-g3').click()">
+              <img id="u-g3-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
+              <div id="u-g3-ph" style="text-align:center"><div style="font-size:20px;margin-bottom:3px">📷</div><div style="font-size:11px;color:#8A8580">Add photo</div></div>
+            </label>
+            <input type="file" id="u-g3" accept="image/*" style="display:none" onchange="previewFile(this,'u-g3-prev','u-g3-ph')">
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">4. Signature Dishes</div>
+        <p style="font-size:12px;color:#8A8580;margin-bottom:14px">Add up to 2 signature dishes with photos.</p>
+        <div style="background:#F5F1E8;border:1px solid #E8E2D6;border-radius:4px;padding:16px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:500;margin-bottom:12px">Dish 1</div>
+          <div class="form-row">
+            <div><label class="label">Dish Name</label><input class="inp" id="d0-name" placeholder="e.g. Duck Confit"></div>
+            <div><label class="label">Cuisine Category</label><input class="inp" id="d0-cat" placeholder="e.g. French"></div>
+          </div>
+          <div style="margin-bottom:10px">
+            <label class="label">Dish Photo</label>
+            <label class="img-upload-box img-upload-box-dish" onclick="document.getElementById('d0-file').click()">
+              <img id="d0-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
+              <div id="d0-ph" style="text-align:center"><div style="font-size:20px;margin-bottom:3px">🥘</div><div style="font-size:11px;color:#8A8580">Upload dish photo</div></div>
+            </label>
+            <input type="file" id="d0-file" accept="image/*" style="display:none" onchange="previewFile(this,'d0-prev','d0-ph')">
+          </div>
+          <div style="margin-bottom:8px"><label class="label">Description</label><textarea class="inp" id="d0-desc" rows="2" style="resize:vertical" placeholder="Describe the dish..."></textarea></div>
+          <div><label class="label">Chef's Note</label><textarea class="inp" id="d0-note" rows="2" style="resize:vertical" placeholder="Why it's special..."></textarea></div>
+        </div>
+        <div style="background:#F5F1E8;border:1px solid #E8E2D6;border-radius:4px;padding:16px">
+          <div style="font-size:13px;font-weight:500;margin-bottom:12px">Dish 2 <span style="color:#8A8580;font-weight:400;font-size:12px">(optional)</span></div>
+          <div class="form-row">
+            <div><label class="label">Dish Name</label><input class="inp" id="d1-name" placeholder="e.g. Bouillabaisse"></div>
+            <div><label class="label">Cuisine Category</label><input class="inp" id="d1-cat" placeholder="e.g. Seafood"></div>
+          </div>
+          <div style="margin-bottom:10px">
+            <label class="label">Dish Photo</label>
+            <label class="img-upload-box img-upload-box-dish" onclick="document.getElementById('d1-file').click()">
+              <img id="d1-prev" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
+              <div id="d1-ph" style="text-align:center"><div style="font-size:20px;margin-bottom:3px">🥘</div><div style="font-size:11px;color:#8A8580">Upload dish photo</div></div>
+            </label>
+            <input type="file" id="d1-file" accept="image/*" style="display:none" onchange="previewFile(this,'d1-prev','d1-ph')">
+          </div>
+          <div style="margin-bottom:8px"><label class="label">Description</label><textarea class="inp" id="d1-desc" rows="2" style="resize:vertical" placeholder="Describe the dish..."></textarea></div>
+          <div><label class="label">Chef's Note</label><textarea class="inp" id="d1-note" rows="2" style="resize:vertical" placeholder="Why it's special..."></textarea></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">5. Cuisine Specialties</div>
+        <p style="font-size:12px;color:#8A8580;margin-bottom:10px">Tap all that apply.</p>
+        <div id="cuisine-selector">
+          <span class="cuisine-pill" data-c="French" onclick="toggleCuisine(this)">French</span>
+          <span class="cuisine-pill" data-c="Italian" onclick="toggleCuisine(this)">Italian</span>
+          <span class="cuisine-pill" data-c="Japanese" onclick="toggleCuisine(this)">Japanese</span>
+          <span class="cuisine-pill" data-c="Modern Australian" onclick="toggleCuisine(this)">Modern Australian</span>
+          <span class="cuisine-pill" data-c="Asian" onclick="toggleCuisine(this)">Asian</span>
+          <span class="cuisine-pill" data-c="Pastry" onclick="toggleCuisine(this)">Pastry</span>
+          <span class="cuisine-pill" data-c="Bakery" onclick="toggleCuisine(this)">Bakery</span>
+          <span class="cuisine-pill" data-c="Seafood" onclick="toggleCuisine(this)">Seafood</span>
+          <span class="cuisine-pill" data-c="Fine Dining" onclick="toggleCuisine(this)">Fine Dining</span>
+          <span class="cuisine-pill" data-c="Catering" onclick="toggleCuisine(this)">Catering</span>
+          <span class="cuisine-pill" data-c="Events" onclick="toggleCuisine(this)">Events</span>
+          <span class="cuisine-pill" data-c="Café" onclick="toggleCuisine(this)">Café</span>
+          <span class="cuisine-pill" data-c="Hotel Banquet" onclick="toggleCuisine(this)">Hotel Banquet</span>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">6. Work Details</div>
+        <div style="margin-bottom:12px">
+          <label class="label">Work Type</label>
+          <div>
+            <span class="cuisine-pill" data-w="Casual" onclick="toggleWork(this)">Casual</span>
+            <span class="cuisine-pill" data-w="Part-Time" onclick="toggleWork(this)">Part-Time</span>
+            <span class="cuisine-pill" data-w="Contract" onclick="toggleWork(this)">Contract</span>
+            <span class="cuisine-pill" data-w="Events" onclick="toggleWork(this)">Events</span>
+            <span class="cuisine-pill" data-w="Full-Time" onclick="toggleWork(this)">Full-Time</span>
+          </div>
+        </div>
+        <div><label class="label">Availability</label><input class="inp" id="u-avail" placeholder="e.g. Weekends / Casual / Immediate"></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">7. About You</div>
+        <div style="margin-bottom:10px"><label class="label">One-line Summary</label><input class="inp" id="u-summary" placeholder="One sentence for your directory card"></div>
+        <div style="margin-bottom:10px"><label class="label">Full Bio</label><textarea class="inp" id="u-bio" rows="4" style="resize:vertical" placeholder="Your background, experience and cooking philosophy..."></textarea></div>
+        <div style="margin-bottom:10px"><label class="label">Qualifications</label><input class="inp" id="u-quals" placeholder="e.g. Advanced Diploma, Le Cordon Bleu Paris"></div>
+        <div><label class="label">Previous Restaurants (comma separated)</label><input class="inp" id="u-restaurants" placeholder="e.g. Quay, Bennelong, Aria"></div>
+      </div>
+      <div style="border-top:1px solid #E8E2D6;padding-top:24px">
+        <button class="btn btn-dark" onclick="submitProfile()" style="width:100%;padding:13px 0;font-size:14px">Submit Profile for Review</button>
+        <p style="font-size:12px;color:#8A8580;margin-top:8px;text-align:center">Your profile appears in the directory after admin approval.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INQUIRY -->
+<div id="page-inquiry" style="display:none">
+  <div style="max-width:580px;margin:0 auto;padding:40px 24px">
+    <p style="letter-spacing:3px;text-transform:uppercase;font-size:10px;color:#C9A84C;margin-bottom:6px;font-weight:500">Restaurant Portal</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,36px);margin-bottom:6px">Hire a Chef</h1>
+    <p style="font-size:13px;color:#8A8580;margin-bottom:24px;font-weight:300">Tell us what you need and we'll connect you with the right chef.</p>
+    <div id="inq-success" style="display:none;text-align:center;padding:40px 0">
+      <div style="font-size:44px;margin-bottom:12px">📩</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px">Inquiry Sent!</h2>
+      <p style="font-size:13px;color:#8A8580">We'll match you with suitable chefs within 24 hours.</p>
+    </div>
+    <div id="inq-form">
+      <div class="form-row" style="margin-bottom:10px">
+        <div><label class="label">Business Name *</label><input class="inp" id="i-biz"></div>
+        <div><label class="label">Contact Person</label><input class="inp" id="i-contact"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div><label class="label">Email *</label><input class="inp" type="email" id="i-email"></div>
+        <div><label class="label">Phone</label><input class="inp" id="i-phone"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div><label class="label">Date Needed</label><input class="inp" type="date" id="i-date"></div>
+        <div><label class="label">Time</label><input class="inp" id="i-time" placeholder="e.g. 6pm–11pm"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div><label class="label">Cuisine Required</label>
+          <select class="inp" id="i-cuisine"><option>French</option><option>Japanese</option><option>Italian</option><option>Modern Australian</option><option>Pastry</option><option>Catering</option></select>
+        </div>
+        <div><label class="label">Work Type</label>
+          <select class="inp" id="i-work"><option>Casual</option><option>Events</option><option>Contract</option><option>Part-Time</option></select>
+        </div>
+      </div>
+      <div style="margin-bottom:10px"><label class="label">Notes</label><textarea class="inp" id="i-notes" rows="3" style="resize:vertical" placeholder="Describe the event, covers, requirements..."></textarea></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px">
+        <input type="checkbox" id="i-urgent" style="width:15px;height:15px">
+        <label for="i-urgent" style="font-size:13px;cursor:pointer">Urgent request (within 48 hours)</label>
+      </div>
+      <button class="btn btn-dark" onclick="submitInquiry()" style="width:100%;padding:12px 0;font-size:13px">Send Inquiry</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" style="display:none">
+  <div id="admin-lock" style="min-height:70vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;background:#1C1C1C">
+    <div style="max-width:320px;width:100%;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;color:#C9A84C;margin-bottom:4px">ChefLink</div>
+      <p style="color:rgba(255,255,255,.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px">Admin Access</p>
+      <input type="password" id="admin-pw-input" class="inp" placeholder="Enter admin password" style="margin-bottom:12px;text-align:center" onkeydown="if(event.key==='Enter')checkAdminPassword()">
+      <button class="btn btn-gold" style="width:100%;padding:11px 0" onclick="checkAdminPassword()">Unlock</button>
+      <p id="admin-pw-error" style="display:none;color:#E07856;font-size:12px;margin-top:10px">Incorrect password. Try again.</p>
+      <p style="margin-top:24px"><a href="#" onclick="showPage('home');return false" style="color:rgba(255,255,255,.35);font-size:12px;text-decoration:none">← Back to site</a></p>
+    </div>
+  </div>
+  <div id="admin-panel" style="display:none">
+    <div class="admin-wrap">
+      <div class="admin-sidebar">
+        <div class="admin-logo-a"><div>ChefLink</div><div>Admin Panel</div></div>
+        <div class="admin-tab active" id="at-chefs" onclick="adminTab('chefs')">All Chefs</div>
+        <div class="admin-tab" id="at-pending" onclick="adminTab('pending')">Pending <span id="pending-count"></span></div>
+        <div class="admin-tab" id="at-export" onclick="adminTab('export')">Export Data</div>
+        <div class="admin-tab" onclick="lockAdmin()" style="margin-top:16px;color:rgba(255,255,255,.3)">🔒 Lock &amp; Exit</div>
+      </div>
+      <div class="admin-main">
+        <div id="admin-chefs">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+            <h2 style="font-family:'Playfair Display',serif;font-size:22px">All Chefs</h2>
+            <button class="btn btn-gold" style="font-size:11px;padding:7px 14px" onclick="loadAdminChefs()">↻ Refresh</button>
+          </div>
+          <div id="admin-chef-list"><p style="color:#8A8580;font-size:13px">Loading...</p></div>
+        </div>
+        <div id="admin-pending" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+            <h2 style="font-family:'Playfair Display',serif;font-size:22px">Pending Approval</h2>
+            <button class="btn btn-gold" style="font-size:11px;padding:7px 14px" onclick="loadAdminPending()">↻ Refresh</button>
+          </div>
+          <div id="admin-pending-list"></div>
+        </div>
+        <div id="admin-export" style="display:none">
+          <h2 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:20px">Export Data</h2>
+          <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:20px">
+            <h3 style="font-size:15px;margin-bottom:8px">Download All Chef Data</h3>
+            <p style="font-size:13px;color:#8A8580;margin-bottom:16px;line-height:1.6">Downloads all chef profiles from Supabase as a JSON backup file.</p>
+            <button class="btn btn-dark" id="export-btn" onclick="exportData()" style="font-size:12px">Export JSON</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="edit-modal" style="display:none">
+  <div class="modal-bg" onclick="if(event.target===this)closeEdit()">
+    <div class="modal">
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:16px">Edit Chef</h3>
+      <input type="hidden" id="edit-id">
+      <div style="margin-bottom:10px"><label class="label">Name</label><input class="inp" id="edit-name"></div>
+      <div style="margin-bottom:10px"><label class="label">Title</label><input class="inp" id="edit-title"></div>
+      <div style="margin-bottom:10px"><label class="label">Rate</label><input class="inp" id="edit-rate"></div>
+      <div style="margin-bottom:10px"><label class="label">Availability</label><input class="inp" id="edit-avail"></div>
+      <div style="margin-bottom:10px"><label class="label">Summary</label><textarea class="inp" id="edit-summary" rows="2" style="resize:vertical"></textarea></div>
+      <div style="margin-bottom:10px"><label class="label">Plan</label>
+        <select class="inp" id="edit-plan"><option value="free">Free</option><option value="basic">Basic</option><option value="premium">Premium</option></select>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="btn btn-dark" onclick="saveEdit()" style="flex:1;font-size:12px">Save Changes</button>
+        <button class="btn btn-outline" onclick="closeEdit()" style="flex:1;font-size:12px">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   SUPABASE REST API — pure fetch, no library
+   Works on any server, no CDN dependencies
+═══════════════════════════════════════════════ */
+const SUPABASE_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE';
+const BUCKET = 'chef-images';
+const TABLE  = 'Chefs';
+const HEADERS = {
+  'Content-Type':  'application/json',
+  'apikey':        SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Prefer':        'return=representation'
+};
+
+/* Core DB helpers using Supabase REST API */
+async function dbSelect(filter) {
+  const url = `${SUPABASE_URL}/rest/v1/${TABLE}?${filter||''}&order=created_at.desc`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) { const e = await r.text(); throw new Error(e); }
+  return (await r.json()).map(parseChef);
+}
+
+async function dbInsert(data) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
+    method: 'POST', headers: HEADERS, body: JSON.stringify(data)
+  });
+  if (!r.ok) { const e = await r.json(); throw new Error(e.message || JSON.stringify(e)); }
+  return r.json();
+}
+
+async function dbUpdate(id, data) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${id}`, {
+    method: 'PATCH', headers: HEADERS, body: JSON.stringify(data)
+  });
+  if (!r.ok) { const e = await r.json(); throw new Error(e.message || JSON.stringify(e)); }
+  return true;
+}
+
+async function dbDelete(id) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${id}`, {
+    method: 'DELETE', headers: HEADERS
+  });
+  if (!r.ok) { const e = await r.json(); throw new Error(e.message || JSON.stringify(e)); }
+  return true;
+}
+
+async function storageUpload(file, folder) {
+  if (!file) return null;
+  const ext  = file.name.split('.').pop();
+  const path = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+  const r = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY },
+    body: file
+  });
+  if (!r.ok) { console.error('Storage upload failed:', await r.text()); return null; }
+  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+}
+
+console.log('ChefLink ready — using Supabase REST API ✓');
+
+const BUCKET_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}`;
+
+const STRIPE_LINKS = {
+  basic:   'https://buy.stripe.com/test_aFa7sL9PDeuM2dJgB29MY02',
+  premium: 'https://buy.stripe.com/test_28E8wP3rf5Yg4lR0C49MY01'
+};
+function goToCheckout(plan) {
+  const url = STRIPE_LINKS[plan];
+  if (!url || url.includes('REPLACE_WITH')) { alert('Stripe payment link not set up yet for ' + plan + ' plan.'); return; }
+  window.location.href = url;
+}
+
+/* ═══════════════════════════════════════════════
+   ADMIN PASSWORD
+   ⚠️ Change this before going live
+═══════════════════════════════════════════════ */
+const ADMIN_PASSWORD = 'cheflink2025';
+let adminUnlocked = false;
+let allChefs = [];
+
+/* ═══════════════════════════════════════════════
+   UI HELPERS
+═══════════════════════════════════════════════ */
+function showLoading(msg) {
+  document.getElementById('loading').style.display = 'flex';
+  document.getElementById('loading-msg').textContent = msg || 'Loading...';
+}
+function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+function showToast(msg, dur) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur || 3000);
+}
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+const PAGES = ['home','directory','portfolio','upload','inquiry','admin'];
+
+function showPage(p) {
+  PAGES.forEach(id => {
+    const el = document.getElementById('page-'+id);
+    if (el) el.style.display = id === p ? 'block' : 'none';
+  });
+  ['home','directory','upload'].forEach(id => {
+    const d = document.getElementById('nl-'+id);
+    const m = document.getElementById('ml-'+id);
+    if (d) d.classList.toggle('active', id === p);
+    if (m) m.classList.toggle('active', id === p);
+  });
+  closeMenu();
+  if (p === 'home') loadFeatured();
+  if (p === 'directory') loadDirectory();
+  if (p === 'admin') {
+    if (adminUnlocked) {
+      document.getElementById('admin-lock').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      adminTab('chefs');
+    } else {
+      document.getElementById('admin-lock').style.display = 'flex';
+      document.getElementById('admin-panel').style.display = 'none';
+      setTimeout(() => { const i = document.getElementById('admin-pw-input'); if(i) i.focus(); }, 50);
+    }
+  }
+  window.scrollTo(0, 0);
+}
+
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+function checkSecretURL() {
+  if (window.location.hash === '#admin-cheflink') showPage('admin');
+}
+window.addEventListener('hashchange', checkSecretURL);
+document.addEventListener('DOMContentLoaded', checkSecretURL);
+window.addEventListener('load', checkSecretURL);
+
+function filterByCuisine(c) {
+  showPage('directory');
+  setTimeout(() => {
+    document.getElementById('dir-cuisine').value = c;
+    renderDirectory();
+  }, 100);
+}
+
+/* ═══════════════════════════════════════════════
+   SUPABASE DATA FUNCTIONS
+═══════════════════════════════════════════════ */
+async function fetchApprovedChefs() {
+  try { return await dbSelect('approved=eq.true'); }
+  catch(e) { console.error('fetchApprovedChefs:', e); return []; }
+}
+
+async function fetchAllChefs() {
+  try { return await dbSelect(); }
+  catch(e) { console.error('fetchAllChefs:', e); return []; }
+}
+
+function parseChef(row) {
+  return {
+    ...row,
+    cuisine:   tryParse(row.cuisine,   []),
+    work_type: tryParse(row.work_type, []),
+    gallery_urls: tryParse(row.gallery_urls, []),
+    dishes:    tryParse(row.dishes,    []),
+    restaurants: tryParse(row.restaurants, [])
+  };
+}
+function tryParse(val, fallback) {
+  if (!val) return fallback;
+  if (Array.isArray(val)) return val;
+  try { return JSON.parse(val); } catch { return fallback; }
+}
+
+/* ═══════════════════════════════════════════════
+   IMAGE UPLOAD TO SUPABASE STORAGE
+═══════════════════════════════════════════════ */
+async function uploadImage(file, folder) {
+  if (!file) return null;
+  return await storageUpload(file, folder);
+}
+
+function previewFile(input, prevId, phId) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const prev = document.getElementById(prevId);
+    const ph   = document.getElementById(phId);
+    if (prev) { prev.src = ev.target.result; prev.style.display = 'block'; }
+    if (ph)   ph.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ═══════════════════════════════════════════════
+   CHEF CARD HTML
+═══════════════════════════════════════════════ */
+function cardHTML(chef, onclickFn) {
+  const av = (chef.availability||'').toLowerCase().includes('immediate') ? 'badge-green' : 'badge-gold';
+  const cuisines = (chef.cuisine||[]).slice(0,3).map(c => `<span class="tag">${c}</span>`).join('');
+  return `<div class="chef-card" onclick="${onclickFn}">
+    <div class="card-hero">
+      ${chef.hero_url ? `<img src="${chef.hero_url}" alt="${chef.name}" onerror="this.style.display='none'">` : ''}
+      <div class="card-hero-overlay"></div>
+      ${chef.featured ? '<div class="badge badge-gold" style="position:absolute;top:9px;right:10px">Featured</div>' : ''}
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        ${chef.photo_url ? `<img class="card-photo" src="${chef.photo_url}" alt="${chef.name}">` : '<div class="card-photo" style="background:#E8E2D6;display:flex;align-items:center;justify-content:center;font-size:18px">👨‍🍳</div>'}
+        <div><div class="card-name">${chef.name}</div><div class="card-title">${chef.title||''}</div></div>
+      </div>
+      <div style="margin-bottom:8px">${cuisines}</div>
+      <div class="card-meta"><span>📍 ${chef.location||''}</span><span>⭐ ${chef.experience||0} yrs</span></div>
+      <p class="card-summary">${chef.summary||''}</p>
+      <div class="card-footer">
+        <span class="badge ${av}">${chef.availability||'Flexible'}</span>
+        <span style="font-size:12px;color:#C9A84C;font-weight:600">${chef.rate||''}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════
+   HOME — FEATURED CHEFS
+═══════════════════════════════════════════════ */
+async function loadFeatured() {
+  const grid = document.getElementById('featured-grid');
+  grid.innerHTML = '<p style="color:#8A8580;font-size:14px">Loading...</p>';
+  const chefs = await fetchApprovedChefs();
+  allChefs = chefs;
+  const featured = chefs.filter(c => c.featured);
+  if (featured.length === 0) {
+    grid.innerHTML = '<p style="color:#8A8580;font-size:14px">No featured chefs yet.</p>';
+    return;
+  }
+  grid.innerHTML = featured.map(c => cardHTML(c, `openPortfolio(${c.id})`)).join('');
+}
+
+/* ═══════════════════════════════════════════════
+   DIRECTORY
+═══════════════════════════════════════════════ */
+async function loadDirectory() {
+  showLoading('Finding chefs...');
+  const chefs = await fetchApprovedChefs();
+  allChefs = chefs;
+  hideLoading();
+  renderDirectory();
+}
+
+function renderDirectory() {
+  const s  = (document.getElementById('dir-search')||{}).value||'';
+  const cu = (document.getElementById('dir-cuisine')||{}).value||'';
+  const av = (document.getElementById('dir-avail')||{}).value||'';
+  const f  = allChefs.filter(c => {
+    if (s  && !c.name.toLowerCase().includes(s.toLowerCase()) && !(c.cuisine||[]).join(' ').toLowerCase().includes(s.toLowerCase())) return false;
+    if (cu && !(c.cuisine||[]).includes(cu)) return false;
+    if (av && !(c.availability||'').toLowerCase().includes(av.toLowerCase())) return false;
+    return true;
+  });
+  const cnt = document.getElementById('dir-count');
+  if (cnt) cnt.textContent = f.length + ' chefs available in Sydney';
+  const grid = document.getElementById('dir-grid');
+  if (!grid) return;
+  grid.innerHTML = f.length === 0
+    ? '<div style="grid-column:1/-1;text-align:center;padding:48px 0;color:#8A8580"><div style="font-size:36px;margin-bottom:10px">🔍</div><h3 style="font-size:18px;margin-bottom:4px">No chefs found</h3><p>Try adjusting your filters.</p></div>'
+    : f.map(c => cardHTML(c, `openPortfolio(${c.id})`)).join('');
+}
+
+/* ═══════════════════════════════════════════════
+   PORTFOLIO
+═══════════════════════════════════════════════ */
+async function openPortfolio(id) {
+  showLoading('Loading profile...');
+  let chef = allChefs.find(c => c.id === id);
+  if (!chef) {
+    try {
+      const rows = await dbSelect(`id=eq.${id}&limit=1`);
+      if (rows.length) chef = rows[0];
+    } catch(e) { console.error(e); }
+  }
+  hideLoading();
+  if (!chef) return;
+
+  document.getElementById('pf-hero').src   = chef.hero_url || '';
+  document.getElementById('pf-photo').src  = chef.photo_url || '';
+  document.getElementById('pf-name').textContent     = chef.name;
+  document.getElementById('pf-title-el').textContent = chef.title || '';
+  document.getElementById('pf-bio').textContent      = chef.bio || '';
+  document.getElementById('pf-quals').textContent    = chef.qualifications || '';
+
+  document.getElementById('pf-cuisines').innerHTML = (chef.cuisine||[]).map(c =>
+    `<span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-right:8px;font-weight:500">${c}</span>`).join('');
+  document.getElementById('pf-meta').innerHTML =
+    `<span>📍 ${chef.location||''}</span><span>⭐ ${chef.experience||0} yrs</span><span>💰 ${chef.rate||''}</span>`;
+  document.getElementById('pf-restaurants').innerHTML = (chef.restaurants||[]).map(r =>
+    `<div style="background:#F5F1E8;border:1px solid #E8E2D6;padding:7px 12px;border-radius:2px;font-size:13px;font-weight:500">${r}</div>`).join('');
+
+  const av = (chef.availability||'').toLowerCase().includes('immediate') ? 'badge-green' : 'badge-gold';
+  document.getElementById('pf-sidebar').innerHTML = [
+    ['Status',    `<span class="badge ${av}">${chef.availability||'Flexible'}</span>`],
+    ['Work Type', (chef.work_type||[]).join(', ')||'Flexible'],
+    ['Rate',      `<span style="color:#C9A84C;font-weight:600">${chef.rate||''}</span>`],
+    ['Location',  chef.location||''],
+    chef.instagram ? ['Instagram', chef.instagram] : null
+  ].filter(Boolean).map(([l,v]) =>
+    `<div class="sidebar-row"><span style="color:#8A8580;font-size:12px">${l}</span><span style="font-weight:500;font-size:12px">${v}</span></div>`).join('');
+
+  document.getElementById('pf-cuisine-list').innerHTML = (chef.cuisine||[]).map(c =>
+    `<div style="padding:6px 0;border-bottom:1px solid #E8E2D6;font-size:13px;font-weight:500">${c}</div>`).join('');
+
+  const dishes = chef.dishes || [];
+  if (dishes.length) {
+    document.getElementById('pf-dishes-section').style.display = '';
+    document.getElementById('pf-dishes').innerHTML = dishes.map((d, i) => `
+      <div class="dish-card">
+        <div class="dish-header" onclick="toggleDish(${i})">
+          <span style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600">▾ ${d.name}</span>
+          <span class="tag">${d.category||''}</span>
+        </div>
+        <div id="dish-body-${i}" style="display:none" class="dish-body">
+          ${d.img ? `<img src="${d.img}" alt="${d.name}" style="height:160px;width:100%;object-fit:cover">` : ''}
+          <div style="padding:16px">
+            <p style="font-size:13px;line-height:1.6;margin-bottom:8px">${d.desc||''}</p>
+            <p style="font-size:12px;color:#C9A84C;font-style:italic;border-top:1px solid #E8E2D6;padding-top:8px">"${d.chefNote||''}"</p>
+          </div>
+        </div>
+      </div>`).join('');
+  } else {
+    document.getElementById('pf-dishes-section').style.display = 'none';
+  }
+
+  const gallery = chef.gallery_urls || [];
+  if (gallery.length) {
+    document.getElementById('pf-gallery-section').style.display = '';
+    document.getElementById('pf-gallery').innerHTML = gallery.map(g =>
+      `<img src="${g}" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:2px">`).join('');
+  } else {
+    document.getElementById('pf-gallery-section').style.display = 'none';
+  }
+
+  showPage('portfolio');
+}
+
+function toggleDish(i) {
+  const el = document.getElementById('dish-body-' + i);
+  if (el) el.style.display = el.style.display === 'none' ? 'grid' : 'none';
+}
+
+/* ═══════════════════════════════════════════════
+   UPLOAD FORM — SUBMIT TO SUPABASE
+═══════════════════════════════════════════════ */
+function toggleCuisine(el) { el.classList.toggle('selected'); }
+function toggleWork(el)    { el.classList.toggle('selected'); }
+
+async function submitProfile() {
+  const name  = document.getElementById('u-name').value.trim();
+  const email = document.getElementById('u-email').value.trim();
+  if (!name || !email) { alert('Name and email are required.'); return; }
+
+  showLoading('Uploading your profile...');
+
+  try {
+    const photoFile = document.getElementById('u-photo-file').files[0];
+    const heroFile  = document.getElementById('u-hero-file').files[0];
+    const gFiles    = [0,1,2,3].map(i => document.getElementById('u-g'+i).files[0]).filter(Boolean);
+    const d0File    = document.getElementById('d0-file').files[0];
+    const d1File    = document.getElementById('d1-file').files[0];
+
+    showLoading('Uploading profile photo...');
+    const photoUrl = await uploadImage(photoFile, 'profiles');
+
+    showLoading('Uploading hero photo...');
+    const heroUrl = await uploadImage(heroFile, 'heroes');
+
+    showLoading('Uploading gallery photos...');
+    const galleryUrls = [];
+    for (const f of gFiles) {
+      const url = await uploadImage(f, 'gallery');
+      if (url) galleryUrls.push(url);
+    }
+
+    showLoading('Uploading dish photos...');
+    const d0Url = await uploadImage(d0File, 'dishes');
+    const d1Url = await uploadImage(d1File, 'dishes');
+
+    const dishes = [];
+    const d0name = document.getElementById('d0-name').value.trim();
+    if (d0name) dishes.push({
+      name: d0name,
+      category: document.getElementById('d0-cat').value.trim(),
+      img: d0Url || '',
+      desc: document.getElementById('d0-desc').value.trim(),
+      chefNote: document.getElementById('d0-note').value.trim()
+    });
+    const d1name = document.getElementById('d1-name').value.trim();
+    if (d1name) dishes.push({
+      name: d1name,
+      category: document.getElementById('d1-cat').value.trim(),
+      img: d1Url || '',
+      desc: document.getElementById('d1-desc').value.trim(),
+      chefNote: document.getElementById('d1-note').value.trim()
+    });
+
+    const restaurants = document.getElementById('u-restaurants').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const cuisine     = [...document.querySelectorAll('#cuisine-selector .cuisine-pill.selected')].map(e=>e.dataset.c);
+    const work_type   = [...document.querySelectorAll('[data-w].selected')].map(e=>e.dataset.w);
+
+    showLoading('Saving your profile...');
+
+    const insertData = {
+      name, email,
+      title:          document.getElementById('u-title').value,
+      phone:          document.getElementById('u-phone').value,
+      location:       document.getElementById('u-location').value,
+      rate:           document.getElementById('u-rate').value,
+      experience:     parseInt(document.getElementById('u-exp').value)||0,
+      availability:   document.getElementById('u-avail').value||'Flexible',
+      instagram:      document.getElementById('u-instagram').value,
+      summary:        document.getElementById('u-summary').value,
+      bio:            document.getElementById('u-bio').value,
+      qualifications: document.getElementById('u-quals').value,
+      restaurants:    JSON.stringify(restaurants),
+      cuisine:        JSON.stringify(cuisine),
+      work_type:      JSON.stringify(work_type),
+      photo_url:      photoUrl || '',
+      hero_url:       heroUrl  || '',
+      gallery_urls:   JSON.stringify(galleryUrls),
+      dishes:         JSON.stringify(dishes),
+      approved:       false,
+      featured:       false,
+      plan:           'free'
+    };
+
+    console.log('Inserting chef:', insertData);
+    await dbInsert(insertData);
+
+    hideLoading();
+    document.getElementById('upload-form').style.display = 'none';
+    document.getElementById('upload-success').style.display = 'block';
+
+  } catch(err) {
+    hideLoading();
+    console.error('Submit failed:', err);
+    alert('Upload failed: ' + err.message + '\n\nPlease check your internet connection and try again.');
+  }
+}
+
+function resetUpload() {
+  document.getElementById('upload-form').style.display = 'block';
+  document.getElementById('upload-success').style.display = 'none';
+  document.querySelectorAll('.cuisine-pill.selected,[data-w].selected').forEach(e => e.classList.remove('selected'));
+  ['u-name','u-title','u-email','u-phone','u-rate','u-avail','u-summary','u-bio','u-quals','u-restaurants','u-instagram'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('u-exp').value = '';
+  ['u-photo-prev','u-hero-prev','u-g0-prev','u-g1-prev','u-g2-prev','u-g3-prev','d0-prev','d1-prev'].forEach(id => {
+    const el = document.getElementById(id); if (el) { el.src=''; el.style.display='none'; }
+  });
+  ['u-photo-ph','u-hero-ph','u-g0-ph','u-g1-ph','u-g2-ph','u-g3-ph','d0-ph','d1-ph'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.display='';
+  });
+  ['u-photo-file','u-hero-file','u-g0','u-g1','u-g2','u-g3','d0-file','d1-file'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value='';
+  });
+  ['d0-name','d0-cat','d0-desc','d0-note','d1-name','d1-cat','d1-desc','d1-note'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value='';
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   INQUIRY
+═══════════════════════════════════════════════ */
+function submitInquiry() {
+  if (!document.getElementById('i-biz').value || !document.getElementById('i-email').value) {
+    alert('Business name and email are required.'); return;
+  }
+  document.getElementById('inq-form').style.display = 'none';
+  document.getElementById('inq-success').style.display = 'block';
+}
+
+/* ═══════════════════════════════════════════════
+   ADMIN — PASSWORD
+═══════════════════════════════════════════════ */
+function checkAdminPassword() {
+  const input = document.getElementById('admin-pw-input');
+  const error = document.getElementById('admin-pw-error');
+  if (input.value === ADMIN_PASSWORD) {
+    adminUnlocked = true;
+    document.getElementById('admin-lock').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    input.value = ''; error.style.display = 'none';
+    adminTab('chefs');
+  } else {
+    error.style.display = 'block';
+    input.value = ''; input.focus();
+  }
+}
+function lockAdmin() {
+  adminUnlocked = false;
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-lock').style.display = 'flex';
+  showPage('home');
+}
+
+/* ═══════════════════════════════════════════════
+   ADMIN — TABS & DATA
+═══════════════════════════════════════════════ */
+function adminTab(t) {
+  ['chefs','pending','export'].forEach(id => {
+    document.getElementById('admin-'+id).style.display = id === t ? 'block' : 'none';
+    document.getElementById('at-'+id).classList.toggle('active', id === t);
+  });
+  if (t === 'chefs')   loadAdminChefs();
+  if (t === 'pending') loadAdminPending();
+}
+
+async function loadAdminChefs() {
+  const list = document.getElementById('admin-chef-list');
+  list.innerHTML = '<p style="color:#8A8580;font-size:13px">Loading...</p>';
+  const chefs = await fetchAllChefs();
+  const pending = chefs.filter(c => !c.approved).length;
+  const pc = document.getElementById('pending-count');
+  if (pc) pc.textContent = pending > 0 ? `(${pending})` : '';
+
+  list.innerHTML = chefs.length === 0
+    ? '<p style="color:#8A8580;font-size:13px">No chefs yet.</p>'
+    : chefs.map(c => `
+    <div class="admin-row">
+      ${c.photo_url ? `<img src="${c.photo_url}" alt="" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #E8E2D6;flex-shrink:0">` : '<div style="width:42px;height:42px;border-radius:50%;background:#E8E2D6;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">👨‍🍳</div>'}
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:3px">
+          <span style="font-weight:600;font-size:14px">${c.name}</span>
+          ${c.approved ? '<span class="badge badge-green">Approved</span>' : '<span class="badge badge-orange">Pending</span>'}
+          ${c.featured ? '<span class="badge badge-gold">Featured</span>' : ''}
+          <span class="badge" style="background:#F5F1E8;color:#8A8580">${c.plan||'free'}</span>
+        </div>
+        <p style="font-size:12px;color:#8A8580;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.title||''} · ${c.location||''} · ${c.email||''}</p>
+      </div>
+      <div class="admin-row-actions">
+        <button onclick="toggleApprove(${c.id},${c.approved})" class="btn btn-outline" style="font-size:10px;padding:4px 9px">${c.approved ? 'Unapprove' : 'Approve'}</button>
+        <button onclick="toggleFeatured(${c.id},${c.featured})" class="btn btn-outline" style="font-size:10px;padding:4px 9px">${c.featured ? 'Unfeature' : 'Feature'}</button>
+        <button onclick="openEdit(${c.id})" class="btn btn-gold" style="font-size:10px;padding:4px 9px">Edit</button>
+        <button onclick="deleteChef(${c.id})" style="font-size:10px;padding:4px 9px;background:#fff;color:#C0392B;border:1px solid #C0392B;border-radius:2px;cursor:pointer">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function loadAdminPending() {
+  const list = document.getElementById('admin-pending-list');
+  list.innerHTML = '<p style="color:#8A8580;font-size:13px">Loading...</p>';
+  let chefs = [];
+  try { chefs = await dbSelect('approved=eq.false'); } catch(e) { console.error(e); }
+  if (!chefs.length) {
+    list.innerHTML = '<p style="color:#8A8580;font-size:13px">No chefs pending approval. 🎉</p>';
+    return;
+  }
+  list.innerHTML = chefs.map(c => `
+    <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:16px;margin-bottom:10px">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:10px">
+        ${c.photo_url ? `<img src="${c.photo_url}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">` : '<div style="width:50px;height:50px;border-radius:50%;background:#E8E2D6;display:flex;align-items:center;justify-content:center;font-size:20px">👨‍🍳</div>'}
+        <div>
+          <div style="font-weight:600;font-size:15px">${c.name}</div>
+          <div style="font-size:12px;color:#8A8580">${c.email||''} · ${c.location||''}</div>
+          <div style="font-size:12px;color:#8A8580">${(c.cuisine||[]).join(', ')}</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#6B6560;margin-bottom:12px;line-height:1.5">${c.bio||c.summary||''}</p>
+      <div style="display:flex;gap:8px">
+        <button onclick="toggleApprove(${c.id},false);loadAdminPending();loadAdminChefs()" class="btn btn-dark" style="font-size:11px">✓ Approve</button>
+        <button onclick="deleteChef(${c.id});loadAdminPending()" style="font-size:11px;padding:9px 16px;background:#fff;color:#C0392B;border:1px solid #C0392B;border-radius:2px;cursor:pointer">✕ Reject</button>
+      </div>
+    </div>`).join('');
+}
+
+async function toggleApprove(id, current) {
+  try { await dbUpdate(id, { approved: !current }); } catch(e) { alert('Error: ' + e.message); return; }
+  showToast(!current ? '✓ Chef approved — now visible in directory' : 'Chef unapproved');
+  loadAdminChefs();
+}
+async function toggleFeatured(id, current) {
+  try { await dbUpdate(id, { featured: !current }); } catch(e) { alert('Error: ' + e.message); return; }
+  showToast(!current ? '⭐ Chef featured on homepage' : 'Chef unfeatured');
+  loadAdminChefs();
+}
+async function deleteChef(id) {
+  if (!confirm('Delete this chef permanently? This cannot be undone.')) return;
+  try { await dbDelete(id); } catch(e) { alert('Error: ' + e.message); return; }
+  showToast('Chef deleted');
+  loadAdminChefs();
+}
+
+async function openEdit(id) {
+  let c = allChefs.find(x => x.id === id);
+  if (!c) {
+    try { const rows = await dbSelect(`id=eq.${id}&limit=1`); c = rows[0]; } catch(e) {}
+  }
+  if (!c) return;
+  document.getElementById('edit-id').value      = id;
+  document.getElementById('edit-name').value    = c.name || '';
+  document.getElementById('edit-title').value   = c.title || '';
+  document.getElementById('edit-rate').value    = c.rate || '';
+  document.getElementById('edit-avail').value   = c.availability || '';
+  document.getElementById('edit-summary').value = c.summary || '';
+  document.getElementById('edit-plan').value    = c.plan || 'free';
+  document.getElementById('edit-modal').style.display = 'block';
+}
+async function saveEdit() {
+  const id = document.getElementById('edit-id').value;
+  try {
+    await dbUpdate(id, {
+      name:         document.getElementById('edit-name').value,
+      title:        document.getElementById('edit-title').value,
+      rate:         document.getElementById('edit-rate').value,
+      availability: document.getElementById('edit-avail').value,
+      summary:      document.getElementById('edit-summary').value,
+      plan:         document.getElementById('edit-plan').value
+    });
+  } catch(e) { alert('Error saving: ' + e.message); return; }
+  showToast('Chef updated successfully');
+  closeEdit();
+  loadAdminChefs();
+}
+function closeEdit() { document.getElementById('edit-modal').style.display = 'none'; }
+
+async function exportData() {
+  showLoading('Exporting...');
+  let chefs = [];
+  try { chefs = await fetchAllChefs(); } catch(e) { console.error(e); }
+  hideLoading();
+  const blob = new Blob([JSON.stringify(chefs, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'cheflink_chefs.json'; a.click();
+  showToast('Exported successfully!');
+}
+
+/* INIT */
+loadFeatured();
+checkSecretURL();
+</script>
+</body>
+</html>
