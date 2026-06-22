@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChefLink Payment Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Jost',sans-serif;background:#FAF8F3;color:#1C1C1C;min-height:100vh}
+h1,h2,h3{font-family:'Playfair Display',serif}
+
+/* TOP BAR */
+.topbar{background:#1C1C1C;padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Playfair Display',serif;font-size:18px;color:#C9A84C;font-weight:700}
+.logo span{font-size:10px;color:#8A8580;letter-spacing:3px;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+.topbar-actions{display:flex;gap:10px;align-items:center}
+
+/* BUTTONS */
+.btn{padding:8px 18px;border-radius:2px;font-size:12px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;font-family:'Jost',sans-serif}
+.btn-gold{background:#C9A84C;color:#1C1C1C}.btn-gold:hover{background:#9B7E35;color:#fff}
+.btn-dark{background:#1C1C1C;color:#fff}.btn-dark:hover{background:#C9A84C;color:#1C1C1C}
+.btn-outline{background:transparent;color:#1C1C1C;border:1px solid #1C1C1C}.btn-outline:hover{background:#1C1C1C;color:#fff}
+.btn-sm{padding:5px 12px;font-size:10px}
+.btn-green{background:#2ECC71;color:#fff;border:none}.btn-green:hover{background:#27AE60}
+.btn-red{background:#E74C3C;color:#fff;border:none}.btn-red:hover{background:#C0392B}
+.btn-blue{background:#3498DB;color:#fff;border:none}.btn-blue:hover{background:#2980B9}
+
+/* UPLOAD ZONE */
+.upload-zone{max-width:600px;margin:60px auto;background:#fff;border:2px dashed #E8E2D6;border-radius:8px;padding:48px;text-align:center;cursor:pointer;transition:all .2s}
+.upload-zone:hover{border-color:#C9A84C;background:#FBF8F0}
+.upload-icon{font-size:48px;margin-bottom:16px}
+.upload-zone h2{font-size:24px;margin-bottom:8px}
+.upload-zone p{font-size:14px;color:#8A8580;line-height:1.6;margin-bottom:20px}
+.upload-zone .steps{text-align:left;background:#F5F1E8;border-radius:4px;padding:16px 20px;margin-bottom:20px;font-size:13px;line-height:1.9;color:#6B6560}
+.upload-zone .steps strong{color:#1C1C1C}
+
+/* DASHBOARD */
+#dashboard{display:none}
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding:24px 32px;background:#fff;border-bottom:1px solid #E8E2D6}
+.stat{text-align:center;padding:16px;border-radius:4px}
+.stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#8A8580;margin-top:4px}
+.stat-total{background:#F5F1E8}.stat-total .stat-num{color:#1C1C1C}
+.stat-trial{background:#EBF5FB}.stat-trial .stat-num{color:#2980B9}
+.stat-due{background:#FEF9E7}.stat-due .stat-num{color:#F39C12}
+.stat-overdue{background:#FDEDEC}.stat-overdue .stat-num{color:#E74C3C}
+.stat-paid{background:#EAFAF1}.stat-paid .stat-num{color:#27AE60}
+
+/* FILTERS */
+.filters{padding:16px 32px;background:#fff;border-bottom:1px solid #E8E2D6;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.filter-btn{padding:6px 16px;border:1px solid #E8E2D6;border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:#8A8580;font-family:'Jost',sans-serif;font-weight:500;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{background:#C9A84C;color:#1C1C1C;border-color:#C9A84C}
+.filters-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.search-inp{padding:7px 12px;border:1px solid #E8E2D6;border-radius:2px;font-size:13px;outline:none;font-family:'Jost',sans-serif;min-width:200px}
+.search-inp:focus{border-color:#C9A84C}
+
+/* TABLE */
+.table-wrap{padding:24px 32px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #E8E2D6;border-radius:2px;overflow:hidden}
+th{background:#1C1C1C;color:#C9A84C;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;padding:12px 14px;text-align:left;white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid #E8E2D6;font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAF7}
+.chef-name{font-weight:600;font-size:14px;margin-bottom:2px}
+.chef-email{font-size:11px;color:#8A8580}
+.plan-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.plan-free{background:#F5F1E8;color:#8A8580}
+.plan-basic{background:#EBF5FB;color:#2471A3}
+.plan-premium{background:#FBF4E2;color:#9B7E35}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.status-trial{background:#EBF5FB;color:#2980B9}
+.status-due{background:#FEF9E7;color:#D68910}
+.status-overdue{background:#FDEDEC;color:#E74C3C;font-weight:600}
+.status-paid{background:#EAFAF1;color:#27AE60}
+.status-unapproved{background:#F5F1E8;color:#8A8580}
+.days-left{font-size:11px;color:#8A8580;margin-top:2px}
+.days-overdue{color:#E74C3C;font-weight:500}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.revenue-amount{font-family:'Playfair Display',serif;font-size:15px;font-weight:600}
+
+/* EMAIL MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal{background:#fff;border-radius:4px;padding:28px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto}
+.modal h3{font-size:18px;margin-bottom:4px}
+.modal-sub{font-size:12px;color:#8A8580;margin-bottom:16px}
+.email-preview{background:#F5F1E8;border:1px solid #E8E2D6;border-radius:4px;padding:16px;font-size:13px;line-height:1.8;color:#1C1C1C;white-space:pre-wrap;margin-bottom:16px;font-family:'Jost',sans-serif}
+.modal-actions{display:flex;gap:10px}
+
+/* NOTES */
+.note-inp{width:100%;padding:6px 10px;border:1px solid #E8E2D6;border-radius:2px;font-size:12px;font-family:'Jost',sans-serif;outline:none;background:#FAFAF7}
+.note-inp:focus{border-color:#C9A84C;background:#fff}
+
+/* EMPTY */
+.empty{text-align:center;padding:56px;color:#8A8580}
+.empty-icon{font-size:40px;margin-bottom:12px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1C1C1C;color:#fff;padding:10px 22px;border-radius:4px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+
+/* LAST UPDATED */
+.last-updated{padding:10px 32px;font-size:11px;color:#8A8580;background:#fff;border-bottom:1px solid #E8E2D6;display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <span class="logo">ChefLink <span>Payment Tracker</span></span>
+  </div>
+  <div class="topbar-actions">
+    <span id="chef-count" style="font-size:12px;color:#8A8580"></span>
+    <button class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);font-size:11px" onclick="document.getElementById('file-reload').click()">↑ Load New JSON</button>
+    <input type="file" id="file-reload" accept=".json" style="display:none" onchange="loadJSON(this)">
+    <button class="btn btn-gold" onclick="exportCSV()">Export CSV</button>
+  </div>
+</div>
+
+<!-- UPLOAD SCREEN -->
+<div id="upload-screen">
+  <div class="upload-zone" onclick="document.getElementById('json-file').click()">
+    <div class="upload-icon">📊</div>
+    <h2>ChefLink Payment Tracker</h2>
+    <p>Load your chef data exported from the ChefLink admin panel to track trials, payments and outstanding invoices.</p>
+    <div class="steps">
+      <strong>How to use:</strong><br>
+      1. Go to your ChefLink admin panel<br>
+      2. Click <strong>Export Data</strong> → <strong>Export JSON</strong><br>
+      3. Come back here and click below to load that file<br>
+      4. Your payment tracker updates instantly — no data leaves your device
+    </div>
+    <button class="btn btn-gold" style="padding:12px 32px;font-size:13px">Load Chef Data (JSON)</button>
+    <input type="file" id="json-file" accept=".json" style="display:none" onchange="loadJSON(this)">
+    <p style="margin-top:12px;font-size:11px;color:#B0ACA6">Your data stays on your device — nothing is uploaded anywhere</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="last-updated">
+    <span id="last-updated-text"></span>
+    <span style="font-size:11px;color:#C9A84C;cursor:pointer" onclick="document.getElementById('file-reload').click()">Load updated JSON →</span>
+  </div>
+  <div class="stats-row">
+    <div class="stat stat-total"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total Chefs</div></div>
+    <div class="stat stat-trial"><div class="stat-num" id="s-trial">0</div><div class="stat-label">In Trial</div></div>
+    <div class="stat stat-due"><div class="stat-num" id="s-due">0</div><div class="stat-label">Invoice Due</div></div>
+    <div class="stat stat-overdue"><div class="stat-num" id="s-overdue">0</div><div class="stat-label">Overdue</div></div>
+    <div class="stat stat-paid"><div class="stat-num" id="s-paid">0</div><div class="stat-label">Paid This Month</div></div>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('trial',this)">🔵 In Trial</button>
+    <button class="filter-btn" onclick="setFilter('due',this)">🟡 Invoice Due</button>
+    <button class="filter-btn" onclick="setFilter('overdue',this)">🔴 Overdue</button>
+    <button class="filter-btn" onclick="setFilter('paid',this)">🟢 Paid</button>
+    <div class="filters-right">
+      <input class="search-inp" type="text" placeholder="Search chef name or email..." oninput="renderTable()" id="search-inp">
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Chef</th>
+          <th>Plan</th>
+          <th>Status</th>
+          <th>Trial End / Next Due</th>
+          <th>Monthly $</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div id="empty-state" class="empty" style="display:none">
+      <div class="empty-icon">🔍</div>
+      <p>No chefs match this filter.</p>
+    </div>
+  </div>
+
+  <!-- REVENUE SUMMARY -->
+  <div style="padding:0 32px 32px">
+    <div style="background:#fff;border:1px solid #E8E2D6;border-radius:2px;padding:20px 24px;display:flex;gap:40px;align-items:center">
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#8A8580;margin-bottom:4px">Confirmed Monthly Revenue</div>
+        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#27AE60" id="rev-confirmed">$0</div>
+      </div>
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#8A8580;margin-bottom:4px">Pending (Due + Overdue)</div>
+        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#E67E22" id="rev-pending">$0</div>
+      </div>
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#8A8580;margin-bottom:4px">Potential (All Active)</div>
+        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#C9A84C" id="rev-potential">$0</div>
+      </div>
+      <div style="margin-left:auto;font-size:12px;color:#8A8580;line-height:1.8">
+        Basic = $29/mo &nbsp;|&nbsp; Premium = $59/mo<br>
+        Free Trial = $0 &nbsp;|&nbsp; Unpaid after 14 days = chase up
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL MODAL -->
+<div class="modal-bg" id="email-modal" style="display:none">
+  <div class="modal">
+    <h3>PayPal Invoice Reminder</h3>
+    <p class="modal-sub">Copy this and send via PayPal invoicing or email</p>
+    <div class="email-preview" id="email-text"></div>
+    <div class="modal-actions">
+      <button class="btn btn-gold" onclick="copyEmail()">Copy to Clipboard</button>
+      <button class="btn btn-outline" onclick="closeEmailModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────
+let chefs = [];
+let paymentData = {}; // { id: { status, paidDate, notes, trialStart } }
+let currentFilter = 'all';
+
+const PLAN_PRICES = { free: 0, basic: 29, premium: 59 };
+const TRIAL_DAYS  = 7;
+const DUE_DAYS    = 7;  // invoice overdue after 7 days unpaid
+
+// Load saved payment data from localStorage
+function loadPaymentData() {
+  try { paymentData = JSON.parse(localStorage.getItem('cl_payments') || '{}'); } catch(e) { paymentData = {}; }
+}
+function savePaymentData() {
+  localStorage.setItem('cl_payments', JSON.stringify(paymentData));
+}
+
+// ─── LOAD JSON ────────────────────────────────────────
+function loadJSON(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      chefs = Array.isArray(data) ? data : [];
+      // Init payment records for new chefs
+      chefs.forEach(c => {
+        if (!paymentData[c.id]) {
+          paymentData[c.id] = {
+            status:     'trial',    // trial | due | paid | overdue | unapproved
+            trialStart: c.created_at || new Date().toISOString(),
+            paidDate:   null,
+            notes:      ''
+          };
+        }
+      });
+      savePaymentData();
+      document.getElementById('upload-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display    = 'block';
+      document.getElementById('last-updated-text').textContent = 'Loaded: ' + file.name + ' · ' + chefs.length + ' chefs · ' + new Date().toLocaleString('en-AU');
+      document.getElementById('chef-count').textContent = chefs.length + ' chefs loaded';
+      autoUpdateStatuses();
+      renderStats();
+      renderTable();
+    } catch(e) {
+      alert('Could not read that file. Make sure it\'s the JSON exported from your ChefLink admin.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ─── AUTO-UPDATE STATUSES ─────────────────────────────
+function autoUpdateStatuses() {
+  const now = new Date();
+  chefs.forEach(c => {
+    const pd  = paymentData[c.id];
+    if (!pd) return;
+    if (!c.approved) { pd.status = 'unapproved'; return; }
+    if (pd.status === 'paid') return; // don't auto-change paid status
+
+    const trialStart = new Date(pd.trialStart);
+    const trialEnd   = new Date(trialStart);
+    trialEnd.setDate(trialEnd.getDate() + TRIAL_DAYS);
+    const daysSinceTrial = Math.floor((now - trialEnd) / 86400000);
+
+    if (now < trialEnd) {
+      pd.status = 'trial';
+    } else if (daysSinceTrial <= DUE_DAYS) {
+      pd.status = 'due';
+    } else {
+      pd.status = 'overdue';
+    }
+  });
+  savePaymentData();
+}
+
+// ─── STATS ────────────────────────────────────────────
+function renderStats() {
+  const approved = chefs.filter(c => c.approved);
+  const counts   = { trial:0, due:0, overdue:0, paid:0 };
+  let confirmed = 0, pending = 0, potential = 0;
+
+  approved.forEach(c => {
+    const pd     = paymentData[c.id] || {};
+    const status = pd.status || 'trial';
+    const price  = PLAN_PRICES[c.plan||'free'] || 0;
+    if (counts[status] !== undefined) counts[status]++;
+    if (status === 'paid')    confirmed += price;
+    if (status === 'due' || status === 'overdue') pending += price;
+    potential += price;
+  });
+
+  document.getElementById('s-total').textContent    = approved.length;
+  document.getElementById('s-trial').textContent    = counts.trial;
+  document.getElementById('s-due').textContent      = counts.due;
+  document.getElementById('s-overdue').textContent  = counts.overdue;
+  document.getElementById('s-paid').textContent     = counts.paid;
+  document.getElementById('rev-confirmed').textContent = '$' + confirmed;
+  document.getElementById('rev-pending').textContent   = '$' + pending;
+  document.getElementById('rev-potential').textContent = '$' + potential;
+}
+
+// ─── TABLE ────────────────────────────────────────────
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function renderTable() {
+  const search = (document.getElementById('search-inp').value || '').toLowerCase();
+  const now    = new Date();
+
+  let rows = chefs.filter(c => {
+    if (search && !c.name.toLowerCase().includes(search) && !(c.email||'').toLowerCase().includes(search)) return false;
+    const pd     = paymentData[c.id] || {};
+    const status = pd.status || 'trial';
+    if (currentFilter === 'all') return true;
+    return status === currentFilter;
+  });
+
+  const tbody = document.getElementById('table-body');
+  const empty = document.getElementById('empty-state');
+
+  if (rows.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = rows.map(c => {
+    const pd        = paymentData[c.id] || {};
+    const status    = pd.status || 'trial';
+    const plan      = c.plan || 'free';
+    const price     = PLAN_PRICES[plan] || 0;
+    const trialStart = new Date(pd.trialStart || c.created_at || Date.now());
+    const trialEnd   = new Date(trialStart);
+    trialEnd.setDate(trialEnd.getDate() + TRIAL_DAYS);
+    const daysLeft   = Math.ceil((trialEnd - now) / 86400000);
+    const daysPast   = Math.floor((now - trialEnd) / 86400000);
+
+    const planBadge = `<span class="plan-badge plan-${plan}">${plan}</span>`;
+
+    let statusBadge = '';
+    let dateInfo    = '';
+    if (status === 'trial') {
+      statusBadge = `<span class="status-badge status-trial">🔵 In Trial</span>`;
+      dateInfo    = `<div class="days-left">${daysLeft > 0 ? daysLeft + ' days left' : 'Ends today'}</div><div class="days-left">Ends ${trialEnd.toLocaleDateString('en-AU')}</div>`;
+    } else if (status === 'due') {
+      statusBadge = `<span class="status-badge status-due">🟡 Invoice Due</span>`;
+      dateInfo    = `<div class="days-left">Trial ended ${daysPast}d ago</div><div class="days-left" style="color:#D68910">Send invoice now</div>`;
+    } else if (status === 'overdue') {
+      statusBadge = `<span class="status-badge status-overdue">🔴 Overdue</span>`;
+      dateInfo    = `<div class="days-left days-overdue">${daysPast} days overdue — chase up!</div>`;
+    } else if (status === 'paid') {
+      statusBadge = `<span class="status-badge status-paid">🟢 Paid</span>`;
+      dateInfo    = pd.paidDate ? `<div class="days-left">Paid ${new Date(pd.paidDate).toLocaleDateString('en-AU')}</div>` : '';
+    } else if (status === 'unapproved') {
+      statusBadge = `<span class="status-badge status-unapproved">⚪ Unapproved</span>`;
+    }
+
+    const priceDisplay = price > 0 ? `<span class="revenue-amount">$${price}</span><div style="font-size:10px;color:#8A8580">/month</div>` : '<span style="color:#8A8580;font-size:12px">Free</span>';
+
+    const noteVal = (pd.notes || '').replace(/"/g, '&quot;');
+
+    let actions = '';
+    if (status === 'due' || status === 'overdue') {
+      actions += `<button class="btn btn-sm btn-green" onclick="markPaid('${c.id}')">✓ Mark Paid</button>`;
+      actions += `<button class="btn btn-sm btn-blue" onclick="showEmail('${c.id}')">📧 Send Reminder</button>`;
+    } else if (status === 'paid') {
+      actions += `<button class="btn btn-sm btn-outline" onclick="markDue('${c.id}')">↩ Unpaid</button>`;
+      actions += `<button class="btn btn-sm btn-blue" onclick="showEmail('${c.id}')">📧 Email</button>`;
+    } else if (status === 'trial') {
+      actions += `<button class="btn btn-sm btn-gold" onclick="showEmail('${c.id}')">📧 Welcome</button>`;
+    }
+
+    return `<tr>
+      <td>
+        <div class="chef-name">${c.name||'—'}</div>
+        <div class="chef-email">${c.email||'—'}</div>
+        <div class="chef-email">${c.location||''}</div>
+      </td>
+      <td>${planBadge}</td>
+      <td>${statusBadge}</td>
+      <td>${dateInfo}</td>
+      <td>${priceDisplay}</td>
+      <td><input class="note-inp" placeholder="Add note..." value="${noteVal}" onchange="saveNote('${c.id}',this.value)" style="width:140px"></td>
+      <td><div class="actions">${actions}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── ACTIONS ──────────────────────────────────────────
+function markPaid(id) {
+  if (!paymentData[id]) paymentData[id] = {};
+  paymentData[id].status   = 'paid';
+  paymentData[id].paidDate = new Date().toISOString();
+  savePaymentData();
+  renderStats();
+  renderTable();
+  showToast('✓ Marked as paid');
+}
+
+function markDue(id) {
+  if (!paymentData[id]) paymentData[id] = {};
+  paymentData[id].status   = 'overdue';
+  paymentData[id].paidDate = null;
+  savePaymentData();
+  renderStats();
+  renderTable();
+  showToast('Marked as unpaid');
+}
+
+function saveNote(id, val) {
+  if (!paymentData[id]) paymentData[id] = {};
+  paymentData[id].notes = val;
+  savePaymentData();
+}
+
+// ─── EMAIL TEMPLATES ──────────────────────────────────
+function showEmail(id) {
+  const c      = chefs.find(x => x.id === id || x.id === parseInt(id));
+  if (!c) return;
+  const pd     = paymentData[id] || {};
+  const plan   = c.plan || 'free';
+  const price  = PLAN_PRICES[plan] || 29;
+  const status = pd.status || 'trial';
+  const planName = plan.charAt(0).toUpperCase() + plan.slice(1);
+
+  let subject, body;
+
+  if (status === 'trial') {
+    subject = `Welcome to ChefLink Sydney, ${c.name}!`;
+    body = `Hi ${c.name},
+
+Welcome to ChefLink Sydney! 🎉
+
+Your profile is now live and visible to restaurants, cafés and venues across Sydney.
+
+Your 7-day free trial has started. After your trial ends, your ${planName} plan will be $${price} AUD per month to keep your listing active.
+
+We'll send you an invoice before your trial ends. If you have any questions, just reply to this email.
+
+Best regards,
+ChefLink Sydney
+webescapade.com/Cheflink`;
+  } else if (status === 'due') {
+    subject = `ChefLink Sydney — Invoice Ready: $${price} AUD`;
+    body = `Hi ${c.name},
+
+Your 7-day free trial on ChefLink Sydney has ended — thank you for being part of our platform!
+
+To keep your profile active and visible to Sydney restaurants, please pay your monthly subscription:
+
+Plan: ${planName}
+Amount: $${price} AUD / month
+
+You can pay securely via PayPal invoice — please check your email for the invoice, or reply to this message if you need it resent.
+
+Your profile will remain active while we await payment.
+
+Best regards,
+ChefLink Sydney`;
+  } else if (status === 'overdue') {
+    subject = `REMINDER — ChefLink Sydney Payment Overdue: $${price} AUD`;
+    body = `Hi ${c.name},
+
+This is a reminder that your ChefLink Sydney subscription payment is overdue.
+
+Plan: ${planName}
+Amount Due: $${price} AUD
+
+Please pay as soon as possible to keep your profile visible to restaurants and venues.
+
+If you no longer wish to continue, please let us know and we will remove your listing.
+
+Best regards,
+ChefLink Sydney`;
+  } else {
+    subject = `ChefLink Sydney — Monthly Invoice: $${price} AUD`;
+    body = `Hi ${c.name},
+
+Your monthly ChefLink Sydney subscription is due for renewal.
+
+Plan: ${planName}
+Amount: $${price} AUD
+
+Please pay via the PayPal invoice being sent to ${c.email}.
+
+Thank you for being part of ChefLink Sydney!
+
+Best regards,
+ChefLink Sydney`;
+  }
+
+  document.getElementById('email-text').textContent = `TO: ${c.email}\nSUBJECT: ${subject}\n\n${body}`;
+  document.getElementById('email-modal').style.display = 'flex';
+}
+
+function copyEmail() {
+  const text = document.getElementById('email-text').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!')).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+    showToast('Copied!');
+  });
+}
+
+function closeEmailModal() {
+  document.getElementById('email-modal').style.display = 'none';
+}
+
+// Close modal on background click
+document.getElementById('email-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('email-modal')) closeEmailModal();
+});
+
+// ─── CSV EXPORT ───────────────────────────────────────
+function exportCSV() {
+  if (!chefs.length) { alert('Load your JSON file first.'); return; }
+  const now   = new Date();
+  const rows  = [['Name','Email','Location','Plan','Monthly $','Status','Trial Start','Trial End','Paid Date','Notes']];
+  chefs.forEach(c => {
+    const pd        = paymentData[c.id] || {};
+    const plan      = c.plan || 'free';
+    const price     = PLAN_PRICES[plan] || 0;
+    const trialStart = new Date(pd.trialStart || c.created_at || Date.now());
+    const trialEnd   = new Date(trialStart); trialEnd.setDate(trialEnd.getDate() + TRIAL_DAYS);
+    const fmt = d => d ? new Date(d).toLocaleDateString('en-AU') : '';
+    rows.push([
+      c.name||'',c.email||'',c.location||'',plan,'$'+price,
+      pd.status||'trial',fmt(pd.trialStart),fmt(trialEnd),fmt(pd.paidDate),
+      (pd.notes||'').replace(/,/g,' ')
+    ]);
+  });
+  const csv  = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `cheflink-payments-${now.toISOString().slice(0,10)}.csv`;
+  a.click();
+  showToast('CSV exported — open in Excel or Google Sheets');
+}
+
+// ─── TOAST ────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────
+loadPaymentData();
+</script>
+</body>
+</html>
