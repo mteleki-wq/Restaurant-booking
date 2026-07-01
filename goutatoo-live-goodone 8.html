@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chefs Goutatoo Genève</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{--gold:#c9a96e;--navy:#1a2744;--ivory:#f5f0e8;--charcoal:#2c2c2c}body{font-family:'Cormorant Garamond',serif;background:var(--ivory);color:var(--charcoal)}a,button{cursor:pointer;text-decoration:none}::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c9a96e44;border-radius:3px}nav{background:#111;height:62px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.brand{display:flex;align-items:center;gap:12px}.logo-box{width:42px;height:42px;background:var(--gold);border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}.logo-box img{width:100%;height:100%;object-fit:cover}.brand-name{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:700;color:var(--gold)}.nav-links{display:flex;gap:24px;list-style:none}.nav-links a{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#888;cursor:pointer;padding-bottom:2px;border-bottom:1px solid transparent}.nav-links a:hover,.nav-links a.active{color:var(--navy);border-bottom-color:var(--gold)}.page{display:none}.page.active{display:block}.ornament{display:flex;align-items:center;justify-content:center;gap:12px}.ornament .line{width:40px;height:1px;background:var(--gold)}.ornament .star{color:var(--gold);font-size:14px}.hero{min-height:560px;position:relative;display:flex;align-items:flex-end;overflow:hidden;background:#1a2230}.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(to top,rgba(10,14,22,.85),transparent);z-index:1}.hero-bg{position:absolute;inset:0;background-size:contain;background-position:center top;background-repeat:no-repeat}.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.65))}.hero-inner{position:relative;z-index:2;padding:40px;width:100%}.hero-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-family:system-ui}.hero-title{font-family:'Playfair Display',serif;font-size:31px;font-weight:700;line-height:1.2;color:#fff;margin-bottom:10px}.hero-sub{font-size:17px;color:rgba(255,255,255,.78);font-style:italic;line-height:1.6}.tagbar{background:#f0ebe0;border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);padding:14px 40px;text-align:center}.tagbar p{font-size:19px;color:#5a4030;font-style:italic}.chefs-sec{padding:48px 40px}.sec-hd{text-align:center;margin-bottom:28px}.sec-eyebrow{font-size:10px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px;font-family:system-ui}.sec-h{font-family:'Playfair Display',serif;font-size:31px;color:var(--navy);margin-bottom:14px}.chefs-carousel-wrap{overflow:hidden;width:100%;margin-top:24px;position:relative;touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.chefs-nav-btn{display:none;position:absolute;top:42%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(26,39,68,.78);color:var(--gold);align-items:center;justify-content:center;font-size:13px;border:1px solid rgba(201,169,110,.45);z-index:3;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}.chefs-nav-btn:active{background:rgba(26,39,68,.95)}.chefs-nav-prev{left:2px}.chefs-nav-next{right:2px}@media(pointer:coarse){.chefs-nav-btn{display:flex}}.chefs-grid{display:flex;gap:18px;margin-top:0;will-change:transform}.chef-card{text-align:center;cursor:pointer;flex:0 0 150px}.chef-img{width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;border-radius:2px;margin-bottom:8px;display:flex;align-items:center;justify-content:center}.chef-img img{width:100%;height:100%;object-fit:cover;display:block}.chef-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);font-weight:600;margin-bottom:2px}.chef-rest{font-size:17px;color:#9a8060}.dir{padding:40px 28px}.dir-hd{text-align:center;margin-bottom:32px}.dir-eyebrow{font-size:10px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;font-family:system-ui}.dir-h1{font-family:'Playfair Display',serif;font-size:34px;color:var(--navy);margin-bottom:14px}.dir-tagline{font-size:18px;color:#7a6050;font-style:italic;max-width:480px;margin:14px auto 0;line-height:1.7}.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-top:24px}.dir-card{background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:3px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04)}.dir-filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 40px 28px;padding-bottom:4px}.dir-filter{background:none;border:1px solid rgba(201,169,110,.4);color:#9a8060;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.05em;padding:7px 18px;border-radius:2px;cursor:pointer;transition:all .2s;text-transform:uppercase}.dir-filter:hover{border-color:var(--gold);color:var(--navy)}.dir-filter.active{background:var(--gold);border-color:var(--gold);color:#1a1a1a;font-weight:600}.dir-card{position:relative}.dir-card-banner{position:relative;height:90px;background:#e8e4dc;overflow:hidden}.dir-card-banner img{width:100%;height:100%;object-fit:cover;display:block}.dir-card-banner-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05),rgba(255,255,255,.4))}.dir-card .dir-card-img{margin-top:-48px;position:relative;z-index:2;width:96px;height:96px;border-radius:50%;margin-left:auto;margin-right:auto;border:4px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,.12);aspect-ratio:auto}.dir-card .dir-card-bd{text-align:center;padding:14px 18px 22px}.dir-tags{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:8px 0}.dir-tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,169,110,.3);border-radius:2px;padding:3px 8px;font-family:system-ui}.dir-card:hover{transform:translateY(-2px)}.dir-card-img{width:100%;aspect-ratio:3/4;background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:50px}.dir-card-img>span{opacity:.2}.dir-card-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}.dir-card-bd{padding:14px}.dir-card-pos{font-size:9px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px;font-family:system-ui}.dir-card-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:2px}.dir-card-rest{font-size:18px;color:#9a8060;margin-bottom:8px}.dir-card-link{font-size:18px;color:var(--gold);font-family:system-ui}.trip{display:grid;grid-template-columns:1fr 1fr 1fr;height:360px;border-bottom:3px solid var(--gold)}.trip-pt,.trip-ph2{background:#e8e4dc;overflow:hidden;display:flex;align-items:center;justify-content:center}.trip-pt img{width:auto;height:78%;max-width:90%;object-fit:contain;object-position:center center;display:block}.trip-ph2 img{width:100%;height:100%;object-fit:cover;display:block;align-self:stretch}.trip-ct{background:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-left:1px solid rgba(201,169,110,.3);border-right:1px solid rgba(201,169,110,.3)}.trip-ct img{max-width:80%;max-height:90px;object-fit:contain;margin-bottom:14px}.trip-rn{font-size:20px;color:var(--navy);font-weight:700;text-align:center;margin-bottom:14px}.trip-or{color:var(--gold);font-size:20px}.trip-dv{width:50px;height:1px;background:var(--gold);margin:8px 0}.trip-loc{font-size:14px;color:#9a8060;letter-spacing:.15em;text-transform:uppercase;font-family:system-ui}.prof-hero{text-align:center;padding:32px 28px 16px;border-bottom:1px solid rgba(201,169,110,.2)}.prof-label{font-size:14px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:7px;font-family:system-ui}.prof-name{font-family:'Playfair Display',serif;font-size:50px;font-weight:700;color:var(--navy);margin-bottom:12px}.qbio{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(201,169,110,.2)}.q{padding:24px 28px;border-right:1px solid rgba(201,169,110,.2)}.qq{font-size:34px;color:var(--gold);line-height:1;margin-bottom:5px;font-family:Georgia,serif}.phil{font-size:28px;font-style:italic;color:var(--navy);line-height:1.5}.bio{padding:24px 28px}.bio p{font-size:22px;color:#5a4030;line-height:1.8}.awards{padding:20px 28px;border-bottom:1px solid rgba(201,169,110,.2);display:flex;flex-wrap:wrap}.aw{flex:1 1 140px;padding:10px 14px;border-right:1px solid rgba(201,169,110,.2);text-align:center}.aw:last-child{border-right:none}.aw-star{color:var(--gold);font-size:14px;margin-bottom:5px}.aw-text{font-size:14px;color:#9a8060;letter-spacing:.07em;text-transform:uppercase;line-height:1.4;font-family:system-ui}.tlsec{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}.tl-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;font-family:system-ui;font-weight:600}.tl-wrap{position:relative;padding-left:64px}.tl-wrap::before{content:"";position:absolute;left:48px;top:0;bottom:0;width:1px;background:rgba(201,169,110,.3)}.tl-entry{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}.tl-yr{min-width:52px;text-align:right;color:var(--gold);font-size:19px;font-weight:700;font-family:system-ui;padding-top:2px}.tl-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0;margin-left:-4px;position:relative;z-index:1}.tl-ev{font-size:22px;color:var(--charcoal)}.galsec{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}.gal-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px;font-family:system-ui;font-weight:600}.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}.gal-grid img{width:100%;height:80px;object-fit:cover;border-radius:2px}.recsec{padding:24px 28px;border-bottom:1px solid rgba(201,169,110,.2)}.recs-hd{text-align:center;margin-bottom:20px}.recs-label{font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;font-family:system-ui;font-weight:600}.acc-item{border:1px solid rgba(201,169,110,.2);border-radius:2px;margin-bottom:8px;overflow:hidden}.acc-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:13px 18px;background:none;border:none;cursor:pointer;font-family:'Cormorant Garamond',serif;color:#2c1a0a;font-size:22px}.acc-item.open{background:rgba(201,169,110,.03)}.acc-body{display:none;padding:0 18px 18px}.acc-item.open .acc-body{display:block}.acc-plus{color:var(--gold);font-size:18px;transition:transform .3s}.acc-item.open .acc-plus{transform:rotate(45deg)}.acc-rec-img{width:100%;height:200px;object-fit:cover;border-radius:2px;margin-bottom:14px}.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.acc-sec-t{font-size:14px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;font-family:system-ui}.ing-ul{list-style:none}.ing-li{font-size:20px;color:#5a4030;padding:6px 0;border-bottom:1px solid rgba(201,169,110,.1);display:flex;gap:6px;line-height:1.5}.ing-li::before{content:"▪";color:var(--gold);font-size:8px;margin-top:6px}.mstep{display:flex;gap:8px;margin-bottom:11px}.mn{color:var(--gold);font-size:20px;font-weight:700;min-width:22px}.mp{font-size:20px;color:#5a4030;line-height:1.6;margin:0}.notes-box{margin-top:14px;padding:12px 16px;background:rgba(201,169,110,.05);border-left:3px solid var(--gold)}.notes-p{font-size:20px;color:#5a4030;line-height:1.7;font-style:italic}.wine-row{margin-top:11px;display:flex;align-items:center;gap:8px}.wine-lbl{font-size:11px;color:var(--gold);text-transform:uppercase;font-family:system-ui}.wine-txt{font-size:20px;color:#5a4030;font-style:italic}.prof-foot{padding:14px 28px;text-align:center;font-size:14px;color:#9a8060;font-family:system-ui;letter-spacing:.08em}footer{background:#111;padding:20px 32px;text-align:center}.footer-name{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:4px}.footer-copy{color:#555;font-size:10px;font-family:system-ui;letter-spacing:.1em}.nav-toggle{display:none;background:none;border:none;cursor:pointer;width:34px;height:34px;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0}.nav-toggle span{display:block;width:24px;height:2px;background:var(--gold);transition:transform .3s,opacity .3s}.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}.nav-toggle.open span:nth-child(2){opacity:0}.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}.nav-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40}.nav-overlay.show{display:block}@media(max-width:768px){.dir-filters{margin:0 18px 20px}.dir-filter{font-size:12px;padding:6px 13px}nav{padding:0 18px;height:58px}.brand-name{font-size:16px}.logo-box{width:36px;height:36px}.nav-toggle{display:flex}.nav-links{position:fixed;top:0;right:-280px;width:260px;height:100vh;background:#141414;flex-direction:column;gap:0;padding:80px 0 30px;z-index:45;transition:right .32s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 32px rgba(0,0,0,.4);overflow-y:auto}.nav-links.open{right:0}.nav-links li{width:100%}.nav-links a{display:block;font-size:13px;padding:16px 28px;border-bottom:1px solid rgba(201,169,110,.12);border-bottom-color:rgba(201,169,110,.12);letter-spacing:.18em;color:#bbb}.nav-links a:hover,.nav-links a.active{color:var(--gold);border-bottom-color:rgba(201,169,110,.12);background:rgba(201,169,110,.06)}.hero{min-height:380px}.hero-inner{padding:24px}.hero-title{font-size:26px}.hero-sub{font-size:15px}.tagbar{padding:14px 20px}.tagbar p{font-size:16px}.chefs-sec{padding:32px 20px}.chefs-carousel-wrap{margin-top:14px}.chefs-grid{gap:14px}.chef-card{flex:0 0 120px}.chefs-nav-btn{display:flex}.sec-h{font-size:26px}.dir{padding:28px 18px}.dir-h1{font-size:28px}.dir-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}.trip{grid-template-columns:1fr;height:auto}.trip-pt{height:420px}.trip-pt img{height:auto;max-height:380px;width:auto;max-width:80%}.trip-ct{padding:36px 20px;border-left:none;border-right:none;border-top:1px solid rgba(201,169,110,.3);border-bottom:1px solid rgba(201,169,110,.3)}.trip-ph2{height:260px}.prof-name{font-size:36px}.prof-hero{padding:28px 20px 14px}.qbio{grid-template-columns:1fr}.q{border-right:none;border-bottom:1px solid rgba(201,169,110,.2);padding:20px}.bio{padding:20px}.phil{font-size:24px}.bio p{font-size:19px}.awards{flex-direction:column}.aw{flex:1 1 auto;border-right:none;border-bottom:1px solid rgba(201,169,110,.15);padding:12px}.aw:last-child{border-bottom:none}.tlsec,.galsec,.recsec{padding:20px 18px}.tl-wrap{padding-left:54px}.tl-wrap::before{left:42px}.tl-ev{font-size:19px}.acc-grid{grid-template-columns:1fr;gap:14px}.acc-btn{font-size:19px;padding:13px 14px}.ing-li,.mp,.notes-p,.wine-txt{font-size:18px}.gal-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}#sp-grid{grid-template-columns:1fr!important}#ph-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}}
+/* ===== ADMIN & LOGIN ===== */
+.admin-gate{position:fixed;inset:0;background:#0d0d0d;z-index:1000;display:none;align-items:center;justify-content:center}
+.admin-gate.show{display:flex}
+.admin-box{background:#1a1a1a;border:1px solid rgba(201,169,110,.3);border-radius:6px;padding:44px 40px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.admin-box h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:26px;margin-bottom:6px}
+.admin-box p.sub{color:#888;font-size:13px;margin-bottom:24px;font-family:system-ui}
+.admin-box input{width:100%;padding:12px 14px;background:#0d0d0d;border:1px solid rgba(201,169,110,.3);border-radius:3px;color:#fff;font-size:14px;margin-bottom:14px;font-family:system-ui}
+.admin-box input:focus{outline:none;border-color:var(--gold)}
+.admin-btn{width:100%;padding:12px;background:var(--gold);color:#1a1a1a;border:none;border-radius:3px;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:system-ui}
+.admin-btn:hover{background:#b89860}
+.admin-err{color:#e07856;font-size:12px;margin-top:10px;display:none;font-family:system-ui}
+.admin-panel{position:fixed;inset:0;background:#141414;z-index:999;display:none;overflow-y:auto}
+.admin-panel.show{display:block}
+.admin-top{background:#0d0d0d;border-bottom:1px solid rgba(201,169,110,.2);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.admin-top h1{font-family:'Playfair Display',serif;color:var(--gold);font-size:20px}
+.admin-top .right{display:flex;gap:10px;align-items:center}
+.admin-tabs{display:flex;gap:4px;padding:16px 24px 0;flex-wrap:wrap}
+.admin-tab{padding:9px 18px;background:none;border:none;color:#888;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;font-family:system-ui}
+.admin-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.admin-content{padding:24px;max-width:1100px;margin:0 auto}
+.admin-card{background:#1e1e1e;border:1px solid rgba(201,169,110,.15);border-radius:6px;padding:20px;margin-bottom:16px}
+.admin-card h3{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:14px}
+.admin-field{margin-bottom:14px}
+.admin-field label{display:block;color:#aaa;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-family:system-ui}
+.admin-field input,.admin-field textarea{width:100%;padding:10px 12px;background:#0d0d0d;border:1px solid rgba(255,255,255,.12);border-radius:3px;color:#fff;font-size:14px;font-family:system-ui}
+.admin-field input:focus,.admin-field textarea:focus{outline:none;border-color:var(--gold)}
+.admin-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.admin-imgbtn{display:flex;align-items:center;gap:12px;padding:10px;background:#0d0d0d;border:1px dashed rgba(201,169,110,.3);border-radius:4px;cursor:pointer}
+.admin-imgbtn img{width:54px;height:54px;object-fit:cover;border-radius:3px;background:#333}
+.admin-imgbtn span{color:#888;font-size:12px;font-family:system-ui}
+.gbtn{padding:9px 16px;border:none;border-radius:3px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:system-ui;font-weight:600}
+.gbtn-gold{background:var(--gold);color:#1a1a1a}
+.gbtn-ghost{background:none;border:1px solid rgba(201,169,110,.4);color:var(--gold)}
+.gbtn-del{background:none;border:1px solid rgba(224,120,86,.4);color:#e07856}
+.admin-list-item{background:#1e1e1e;border:1px solid rgba(201,169,110,.15);border-radius:5px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+.admin-list-item img{width:50px;height:50px;object-fit:cover;border-radius:50%;background:#333}
+.admin-list-item .info{flex:1}
+.admin-list-item .info strong{color:#fff;font-size:15px;display:block;font-family:'Cormorant Garamond',serif}
+.admin-list-item .info small{color:#888;font-size:12px;font-family:system-ui}
+.admin-edit-bar{position:fixed;bottom:0;left:0;right:0;background:#0d0d0d;border-top:1px solid var(--gold);padding:14px 24px;display:flex;gap:12px;justify-content:flex-end;z-index:20}
+.sync-status{font-size:11px;color:#7a9a6a;font-family:system-ui}
+.sync-status.saving{color:var(--gold)}
+.sync-status.error{color:#e07856}
+.edit-pencil{position:fixed;bottom:24px;right:24px;width:54px;height:54px;border-radius:50%;background:var(--gold);color:#1a1a1a;border:none;font-size:22px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:90;display:flex;align-items:center;justify-content:center}
+.toast-live{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:var(--gold);padding:12px 24px;border-radius:4px;font-size:13px;font-family:system-ui;z-index:2000;opacity:0;transition:opacity .3s;border:1px solid rgba(201,169,110,.3);pointer-events:none}
+.toast-live.show{opacity:1}
+@media(max-width:768px){.admin-row{grid-template-columns:1fr}.admin-content{padding:16px}}
+
+
+.ph-folder{background:#fff;border:1px solid rgba(201,169,110,.2);border-radius:4px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04);transition:box-shadow .2s,transform .2s}
+.ph-folder:hover{box-shadow:0 8px 26px rgba(0,0,0,.12);transform:translateY(-2px)}
+.ph-folder-img{height:150px;background:#e8e4dc;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph-folder-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ph-folder-img span{font-size:38px;opacity:.2}
+.ph-folder-bd{padding:16px;text-align:center}
+.ph-folder-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:4px}
+.ph-folder-sub{font-size:13px;color:#9a8060;letter-spacing:.08em;text-transform:uppercase;font-family:system-ui}
+.ph-back{background:none;border:1px solid rgba(201,169,110,.4);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:15px;padding:6px 16px;border-radius:2px;cursor:pointer;margin-right:14px}
+.ph-back:hover{border-color:var(--gold);background:rgba(201,169,110,.06)}
+.ph-crumb{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy)}
+</style>
+</head>
+<body>
+
+<!-- ===== PUBLIC SITE ===== -->
+<div id="site-root">
+  <nav>
+    <div class="brand" onclick="go('home')">
+      <div class="logo-box" id="brand-logo">&#127860;</div>
+      <span class="brand-name">Chefs Goutatoo Gen&egrave;ve</span>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" onclick="tgMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a id="lk-home" onclick="go('home')">Accueil</a></li>
+      <li><a id="lk-dir" onclick="go('dir')">Les Chefs</a></li>
+      <li><a id="lk-chef" onclick="go('chef')">Profil</a></li>
+      <li><a id="lk-sponsors" onclick="go('sponsors')">Sponsors</a></li>
+      <li><a id="lk-photos" onclick="go('photos')">Photos</a></li>
+    </ul>
+  </nav>
+  <div class="nav-overlay" id="nav-overlay" onclick="tgMenu()"></div>
+
+  <div id="pg-home" class="page active">
+    <div class="hero"><div class="hero-bg" id="hero-bg-main"></div>
+      <div class="hero-inner">
+        <div class="hero-eyebrow">Chefs Goutatoo Gen&egrave;ve</div>
+        <div class="hero-title" id="hero-title">Chefs Goutatoo Gen&egrave;ve</div>
+        <div class="hero-sub" id="hero-sub">Pour le bon go&ucirc;t</div>
+      </div>
+    </div>
+    <div class="tagbar"><p id="hero-tagline">Nous formons une &eacute;quipe de cuisiniers li&eacute;s par l&rsquo;amour de la bonne cuisine.</p></div>
+    <div class="chefs-sec">
+      <div class="sec-hd"><div class="sec-eyebrow">Notre Collectif</div><div class="sec-h">Les Chefs</div>
+        <div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div>
+      </div>
+      <div class="chefs-carousel-wrap" id="chefs-carousel-wrap"><button class="chefs-nav-btn chefs-nav-prev" onclick="chefsNav(-1)" aria-label="Chefs précédents">&#10094;</button><div id="home-chefs-grid" class="chefs-grid"></div><button class="chefs-nav-btn chefs-nav-next" onclick="chefsNav(1)" aria-label="Chefs suivants">&#10095;</button></div>
+    </div>
+  </div>
+
+  <div id="pg-dir" class="page">
+    <div class="dir">
+      <div class="dir-hd"><div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div><div class="dir-h1">Notre &Eacute;quipe</div>
+        <div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div>
+        <div class="dir-tagline">Nous formons une &eacute;quipe de cuisiniers li&eacute;s par l&rsquo;amour de la bonne cuisine.</div>
+      </div>
+      <div id="dir-filters" class="dir-filters"></div>
+      <div id="dir-grid" class="dir-grid"></div>
+    </div>
+  </div>
+
+  <div id="pg-chef" class="page"><div id="chef-page"></div></div>
+
+  <div id="pg-sponsors" class="page"><div style="padding:40px">
+    <div class="dir-hd"><div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div><div class="dir-h1">Nos Partenaires</div>
+      <div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div>
+    <div id="sp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:28px"></div>
+  </div></div>
+
+  <div id="pg-photos" class="page"><div style="padding:40px">
+    <div class="dir-hd"><div class="dir-eyebrow">Chefs Goutatoo Gen&egrave;ve</div><div class="dir-h1">Photos</div>
+      <div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div>
+    <div id="ph-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-top:28px"></div>
+  </div></div>
+
+  <footer><div class="footer-name">Chefs Goutatoo Gen&egrave;ve</div><div class="footer-copy">&copy; 2025 &middot; Pour le bon go&ucirc;t</div></footer>
+</div>
+
+<!-- Floating admin pencil (only the owner uses this; visitors can ignore) -->
+<button class="edit-pencil" onclick="openGate()" title="Admin">&#9998;</button>
+
+<!-- ===== ADMIN LOGIN GATE ===== -->
+<div class="admin-gate" id="admin-gate">
+  <div class="admin-box">
+    <h2>Espace Admin</h2>
+    <p class="sub">Goutatoo Gen&egrave;ve</p>
+    <input type="password" id="admin-pw" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="admin-btn" onclick="checkPw()">Se connecter</button>
+    <p class="admin-err" id="admin-err">Mot de passe incorrect.</p>
+    <p style="margin-top:20px"><a onclick="closeGate()" style="color:rgba(255,255,255,.35);font-size:12px;cursor:pointer">&larr; Retour au site</a></p>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="admin-panel" id="admin-panel">
+  <div class="admin-top">
+    <h1>Goutatoo &mdash; Administration</h1>
+    <div class="right">
+      <span class="sync-status" id="sync-status">Synchronis&eacute;</span>
+      <button class="gbtn gbtn-ghost" onclick="closeAdmin()">Voir le site</button>
+      <button class="gbtn gbtn-del" onclick="logoutAdmin()">D&eacute;connexion</button>
+    </div>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="adminTab('accueil',this)">Accueil</button>
+    <button class="admin-tab" onclick="adminTab('chefs',this)">Chefs</button>
+    <button class="admin-tab" onclick="adminTab('sponsors',this)">Sponsors</button>
+    <button class="admin-tab" onclick="adminTab('photos',this)">Photos</button>
+    <button class="admin-tab" onclick="adminTab('data',this)">Export / Import</button>
+  </div>
+  <div class="admin-content" id="admin-content"></div>
+</div>
+
+<div class="toast-live" id="toast-live"></div>
+<script>
+/* ============================================================
+   GOUTATOO — LIVE EDITION (Supabase backend, French)
+   ============================================================ */
+
+/* ---- 1. SUPABASE CONFIG — REPLACE THESE TWO VALUES ---- */
+var SUPABASE_URL = 'https://spfpxtmjkfkknzibmrmp.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwZnB4dG1qa2Zra256aWJtcm1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTE4ODAsImV4cCI6MjA5Nzk2Nzg4MH0.Exg4T0_2PYdIo-hkdCpdzOXgwHQ0slmqwahonZa0H-o';
+var BUCKET = 'goutatoo-images';
+
+/* ---- Admin password (change this!) ---- */
+var ADMIN_PASSWORD = 'goutatoo2025';
+
+/* Normalize the base URL: strip a trailing /rest/v1 and any trailing slashes,
+   so the REST path is always built cleanly as BASE + '/rest/v1/' + table
+   (prevents /rest/v1//chefs or /rest/v1/rest/v1/chefs). */
+function sbBase(){
+  var u = (SUPABASE_URL||'').replace(/\s+/g,'');
+  u = u.replace(/\/+$/,'');           // drop trailing slashes
+  u = u.replace(/\/rest\/v1$/i,'');   // drop trailing /rest/v1 if present
+  return u;
+}
+function sbRest(table){ return sbBase()+'/rest/v1/'+table; }
+
+/* Build auth headers fresh each call from the current key.
+   Works with BOTH key formats:
+   - old anon JWT key:  eyJ...   -> sent as apikey + Bearer
+   - new publishable:   sb_publishable_... -> sent as apikey + Bearer (Supabase accepts it) */
+function sbHeaders(extra){
+  var k = (SUPABASE_KEY||'').replace(/\s+/g,'');
+  var hh = {
+    'apikey': k,
+    'Authorization': 'Bearer ' + k
+  };
+  if(extra){ for(var p in extra){ if(extra.hasOwnProperty(p)) hh[p]=extra[p]; } }
+  return hh;
+}
+/* Kept for compatibility — points at the function result */
+var HEADERS = null;
+
+/* Detailed error helper — surfaces the REAL Supabase error so it can be screenshotted */
+function sbError(where, status, statusText, bodyText){
+  var msg = 'Erreur Supabase ('+where+')\n'
+          + 'Status: '+status+' '+statusText+'\n'
+          + 'D\u00e9tails: '+(bodyText||'(vide)');
+  console.error(msg);
+  try{ alert(msg); }catch(e){}
+  return msg;
+}
+
+/* ---- 2. DATA STATE ---- */
+var chefs = [];
+var sponsors = [];
+var photos = [];
+var G = { homeTitle:'Chefs Goutatoo Genève', homeSub:'Pour le bon goût',
+          homeTagline:'Nous formons une équipe de cuisiniers liés par l\u2019amour de la bonne cuisine.',
+          heroImage:null, siteLogo:null };
+var activeChef = null;
+var isAdmin = false;
+
+/* ---- 3. SUPABASE REST HELPERS (same pattern as cheflink) ---- */
+function sbConfigured(){ return SUPABASE_URL.indexOf('http')===0 && SUPABASE_KEY.length>20; }
+
+function sbSelect(table){
+  return fetch(sbRest(table)+'?select=*&order=sort.asc', {headers:sbHeaders()})
+    .then(function(r){ if(!r.ok) throw new Error('select '+table); return r.json(); });
+}
+function sbInsert(table,data){
+  return fetch(sbRest(table), {method:'POST',headers:sbHeaders({'Content-Type':'application/json','Prefer':'return=representation'}),body:JSON.stringify(data)})
+    .then(function(r){
+      if(!r.ok) return r.text().then(function(t){ var e=new Error(t); e.status=r.status; e.statusText=r.statusText; e.body=t; throw e; });
+      return r.json();
+    });
+}
+function sbUpdate(table,id,data){
+  return fetch(sbRest(table)+'?id=eq.'+id, {method:'PATCH',headers:sbHeaders({'Content-Type':'application/json','Prefer':'return=representation'}),body:JSON.stringify(data)})
+    .then(function(r){
+      if(!r.ok) return r.text().then(function(t){ var e=new Error(t); e.status=r.status; e.statusText=r.statusText; e.body=t; throw e; });
+      return true;
+    });
+}
+function sbDelete(table,id){
+  return fetch(sbRest(table)+'?id=eq.'+id, {method:'DELETE',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'}})
+    .then(function(r){
+      if(!r.ok) return r.text().then(function(t){ var e=new Error(t); e.status=r.status; e.statusText=r.statusText; e.body=t; throw e; });
+      return true;
+    });
+}
+function sbUpload(file){
+  if(!file) return Promise.resolve(null);
+  var ext = (file.name||'img.jpg').split('.').pop();
+  var path = 'uploads/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'.'+ext;
+  return fetch(sbBase()+'/storage/v1/object/'+BUCKET+'/'+path, {
+    method:'POST', headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}, body:file
+  }).then(function(r){
+    if(!r.ok){ console.error('upload failed'); return null; }
+    return sbBase()+'/storage/v1/object/public/'+BUCKET+'/'+path;
+  });
+}
+
+function setSync(state,msg){
+  var el=document.getElementById('sync-status'); if(!el) return;
+  el.className='sync-status'+(state==='saving'?' saving':state==='error'?' error':'');
+  el.innerHTML=msg||(state==='saving'?'Enregistrement\u2026':state==='error'?'Erreur':'Synchronis\u00e9 \u2713');
+}
+function toast(msg){
+  var t=document.getElementById('toast-live'); if(!t) return;
+  t.innerHTML=msg; t.classList.add('show');
+  clearTimeout(window._tt); window._tt=setTimeout(function(){t.classList.remove('show');},2600);
+}
+
+/* ---- 4. LOAD DATA FROM SUPABASE (live on every page load) ---- */
+function loadAll(){
+  if(!sbConfigured()){
+    // Fallback demo data so the page isn't empty before you add your keys
+    chefs=[{id:'demo1',name:'Jean-Marc Bessire',position:'Chef de Cuisine',restaurant:'Restaurant Le Cigalon',cuisine:['Cuisine de la Mer','Fran\u00e7aise'],philosophy:'Ma passion, le poisson et le go\u00fbt du bon go\u00fbt.',biography:'',portrait:null,restaurantLogo:null,restaurantPhoto:null,gallery:[],awards:[],timeline:[],recipes:[],sort:0}];
+    applyGlobal(); renderAll();
+    toast('Mode d\u00e9mo \u2014 ajoutez vos cl\u00e9s Supabase pour le mode live');
+    return;
+  }
+  Promise.all([
+    sbSelect('chefs').catch(function(){return[]}),
+    sbSelect('sponsors').catch(function(){return[]}),
+    sbSelect('photos').catch(function(){return[]}),
+    fetch(sbBase()+'/rest/v1/settings?select=*&limit=1',{headers:sbHeaders()}).then(function(r){return r.ok?r.json():[]}).catch(function(){return[]})
+  ]).then(function(res){
+    chefs = (res[0]||[]).map(parseChef);
+    sponsors = res[1]||[];
+    photos = res[2]||[];
+    if(res[3] && res[3][0]){ var s=res[3][0]; G.homeTitle=s.home_title||G.homeTitle; G.homeSub=s.home_sub||G.homeSub; G.homeTagline=s.home_tagline||G.homeTagline; G.heroImage=s.hero_image||null; G.siteLogo=s.site_logo||null; }
+    if(!activeChef && chefs[0]) activeChef=chefs[0].id;
+    applyGlobal(); renderAll();
+  }).catch(function(err){ console.error(err); toast('Erreur de chargement'); });
+}
+
+function parseChef(c){
+  // JSON columns may come back as strings — parse safely
+  function pj(v,def){ if(v==null) return def; if(typeof v==='object') return v; try{return JSON.parse(v)}catch(e){return def} }
+  return {
+    id:c.id, name:c.name||'', position:c.position||'', restaurant:c.restaurant||'', restaurantUrl:c.restaurant_url||'',
+    philosophy:c.philosophy||'', biography:c.biography||'',
+    cuisine:pj(c.cuisine,[]), portrait:c.portrait||null, restaurantLogo:c.restaurant_logo||null,
+    restaurantPhoto:c.restaurant_photo||null, gallery:pj(c.gallery,[]),
+    awards:pj(c.awards,[]), timeline:pj(c.timeline,[]), recipes:pj(c.recipes,[]),
+    sort:c.sort||0
+  };
+}
+
+function applyGlobal(){
+  var ht=document.getElementById('hero-title'); if(ht) ht.textContent=G.homeTitle;
+  var hs=document.getElementById('hero-sub'); if(hs) hs.textContent=G.homeSub;
+  var tg=document.getElementById('hero-tagline'); if(tg) tg.textContent=G.homeTagline;
+  var bg=document.getElementById('hero-bg-main'); if(bg && G.heroImage) bg.style.backgroundImage='url('+G.heroImage+')';
+  var bl=document.getElementById('brand-logo'); if(bl && G.siteLogo) bl.innerHTML='<img src="'+G.siteLogo+'" style="width:100%;height:100%;object-fit:cover">';
+}
+
+function renderAll(){ photoView.year=null; photoView.month=null; renderHome(); renderDir(); renderSponsors(); renderPhotos(); if(activeChef) renderChef(); }
+
+/* ---- 5. RENDER FUNCTIONS (reused from your Goutatoo site) ---- */
+
+/* activeChef is declared once in the data-state section above */
+
+function e(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function tgMenu() {
+  var l = document.getElementById('nav-links');
+  var t = document.getElementById('nav-toggle');
+  var o = document.getElementById('nav-overlay');
+  if (!l) return;
+  var open = l.classList.toggle('open');
+  if (t) t.classList.toggle('open', open);
+  if (o) o.classList.toggle('show', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeMenu() {
+  var l = document.getElementById('nav-links');
+  var t = document.getElementById('nav-toggle');
+  var o = document.getElementById('nav-overlay');
+  if (l) l.classList.remove('open');
+  if (t) t.classList.remove('open');
+  if (o) o.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+/* Navigation is handled by go() defined later in this script. */
+
+function renderHome() {
+  var g = document.getElementById('home-chefs-grid'); if (!g) return;
+  var h = '';
+  for (var i = 0; i < chefs.length; i++) {
+    var c = chefs[i];
+    h += '<div class="chef-card" onclick="go(&#39;chef&#39;,&#39;' + c.id + '&#39;)">';
+    h += '<div class="chef-img">' + (c.portrait ? '<img src="' + c.portrait + '">' : '<span style="font-size:36px;opacity:.2">&#128104;&#8205;&#127859;</span>') + '</div>';
+    h += '<div class="chef-name">' + e(c.name) + '</div>';
+    h += '<div class="chef-rest">' + e(c.restaurant) + '</div></div>';
+  }
+  g.innerHTML = h;
+}
+
+var dirFilter = 'all';
+
+function allCuisines() {
+  var set = {}; var list = [];
+  for (var i = 0; i < chefs.length; i++) {
+    var cz = chefs[i].cuisine || [];
+    for (var j = 0; j < cz.length; j++) {
+      var key = cz[j];
+      if (key && !set[key]) { set[key] = true; list.push(key); }
+    }
+  }
+  return list;
+}
+
+function setDirFilter(cuisine) {
+  dirFilter = cuisine;
+  renderDir();
+}
+
+function renderDirFilters() {
+  var bar = document.getElementById('dir-filters'); if (!bar) return;
+  var cuisines = allCuisines();
+  if (!cuisines.length) { bar.innerHTML = ''; return; }
+  var h = '<button class="dir-filter' + (dirFilter === 'all' ? ' active' : '') + '" onclick="setDirFilter(&#39;all&#39;)">Tous</button>';
+  for (var i = 0; i < cuisines.length; i++) {
+    h += '<button class="dir-filter' + (dirFilter === cuisines[i] ? ' active' : '') + '" onclick="setDirFilter(&#39;' + cuisines[i].replace(/'/g,'') + '&#39;)">' + e(cuisines[i]) + '</button>';
+  }
+  bar.innerHTML = h;
+}
+
+function renderDir() {
+  renderDirFilters();
+  var g = document.getElementById('dir-grid'); if (!g) return;
+  var h = '';
+  for (var i = 0; i < chefs.length; i++) {
+    var c = chefs[i];
+    var cz = c.cuisine || [];
+    if (dirFilter !== 'all' && cz.indexOf(dirFilter) === -1) continue;
+    var tags = '';
+    for (var j = 0; j < cz.length && j < 3; j++) {
+      tags += '<span class="dir-tag">' + e(cz[j]) + '</span>';
+    }
+    var banner = (c.gallery && c.gallery[0]) ? c.gallery[0] : (c.restaurantPhoto || '');
+    h += '<div class="dir-card" onclick="go(&#39;chef&#39;,&#39;' + c.id + '&#39;)">';
+    h += '<div class="dir-card-banner">' + (banner ? '<img src="' + banner + '">' : '') + '<div class="dir-card-banner-ov"></div></div>';
+    h += '<div class="dir-card-img">' + (c.portrait ? '<img src="' + c.portrait + '">' : '<span>&#128104;&#8205;&#127859;</span>') + '</div>';
+    h += '<div class="dir-card-bd">';
+    h += '<div class="dir-card-pos">' + e(c.position) + '</div>';
+    h += '<div class="dir-card-name">' + e(c.name) + '</div>';
+    h += '<div class="dir-card-rest">' + e(c.restaurant) + '</div>';
+    if (tags) h += '<div class="dir-tags">' + tags + '</div>';
+    h += '<div class="dir-card-link">Voir le profil &#8594;</div>';
+    h += '</div></div>';
+  }
+  if (!h) h = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9a8060;font-size:16px">Aucun chef dans cette catégorie.</div>';
+  g.innerHTML = h;
+}
+
+function renderSponsors() {
+  var g = document.getElementById('sp-grid'); if (!g) return;
+  var h = '';
+  for (var i = 0; i < sponsors.length; i++) {
+    var s = sponsors[i];
+    var inn = s.image ? '<img src="' + s.image + '" style="max-width:88%;max-height:160px;object-fit:contain">'
+                     : '<span style="font-size:18px;color:#9a8060">' + e(s.name) + '</span>';
+    var sty = 'display:flex;background:#fff;border:1px solid rgba(201,169,110,.25);border-radius:6px;padding:36px 44px;align-items:center;justify-content:center;min-height:220px;box-shadow:0 4px 20px rgba(0,0,0,.06);';
+    if (s.url) {
+      h += '<a href="' + e(s.url) + '" target="_blank" rel="noopener" style="' + sty + 'text-decoration:none">' + inn + '</a>';
+    } else {
+      h += '<div style="' + sty + '">' + inn + '</div>';
+    }
+  }
+  if (!h) h = '<div style="color:#9a8060;font-size:16px;text-align:center;padding:40px;grid-column:1/-1">Aucun partenaire.</div>';
+  g.innerHTML = h;
+}
+
+var photoView = { year:null, month:null };
+var MONTHS_FR = ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
+
+function renderPhotos() {
+  var g = document.getElementById('ph-grid'); if (!g) return;
+  // Group photos by year then month
+  var byYear = {};
+  for (var i = 0; i < photos.length; i++) {
+    var p = photos[i];
+    var y = (p.year != null && p.year !== '') ? String(p.year) : 'Sans date';
+    var m = (p.month != null && p.month !== '') ? parseInt(p.month,10) : -1;
+    if (!byYear[y]) byYear[y] = {};
+    if (!byYear[y][m]) byYear[y][m] = [];
+    byYear[y][m].push(p);
+  }
+  var years = Object.keys(byYear).sort(function(a,b){ return b<a?-1:1; });
+
+  // LEVEL 1 — pick a year
+  if (photoView.year === null) {
+    if (!years.length) { g.innerHTML = '<div style="color:#9a8060;font-size:16px;text-align:center;padding:40px;grid-column:1/-1">Aucune photo.</div>'; return; }
+    var h = '';
+    for (var yi = 0; yi < years.length; yi++) {
+      var y = years[yi];
+      var count = 0; for (var mk in byYear[y]) count += byYear[y][mk].length;
+      var cover = null;
+      for (var mk in byYear[y]) { for (var pi=0; pi<byYear[y][mk].length; pi++){ if(byYear[y][mk][pi].image){cover=byYear[y][mk][pi].image;break;} } if(cover)break; }
+      h += '<div class="ph-folder" onclick="openPhotoYear(\'' + y + '\')">';
+      h += '<div class="ph-folder-img">' + (cover ? '<img src="' + cover + '">' : '<span>&#128247;</span>') + '</div>';
+      h += '<div class="ph-folder-bd"><div class="ph-folder-title">' + e(y) + '</div><div class="ph-folder-sub">' + count + ' photo' + (count>1?'s':'') + '</div></div></div>';
+    }
+    g.innerHTML = h;
+    return;
+  }
+
+  // LEVEL 2 — pick a month within the year
+  if (photoView.month === null) {
+    var months = Object.keys(byYear[photoView.year] || {}).map(function(x){return parseInt(x,10);}).sort(function(a,b){return b-a;});
+    var h = '<div style="grid-column:1/-1;margin-bottom:8px"><button class="ph-back" onclick="photoBack()">&#8592; Toutes les ann\u00e9es</button>'
+          + '<span class="ph-crumb">' + e(photoView.year) + '</span></div>';
+    for (var mi = 0; mi < months.length; mi++) {
+      var m = months[mi];
+      var arr = byYear[photoView.year][m];
+      var label = (m >= 0 && m <= 11) ? MONTHS_FR[m] : 'Sans mois';
+      var cover2 = null; for (var pi=0; pi<arr.length; pi++){ if(arr[pi].image){cover2=arr[pi].image;break;} }
+      h += '<div class="ph-folder" onclick="openPhotoMonth(' + m + ')">';
+      h += '<div class="ph-folder-img">' + (cover2 ? '<img src="' + cover2 + '">' : '<span>&#128247;</span>') + '</div>';
+      h += '<div class="ph-folder-bd"><div class="ph-folder-title">' + label + '</div><div class="ph-folder-sub">' + arr.length + ' photo' + (arr.length>1?'s':'') + '</div></div></div>';
+    }
+    g.innerHTML = h;
+    return;
+  }
+
+  // LEVEL 3 — show photos in the selected year/month
+  var list = (byYear[photoView.year] && byYear[photoView.year][photoView.month]) || [];
+  var monthLabel = (photoView.month >= 0 && photoView.month <= 11) ? MONTHS_FR[photoView.month] : 'Sans mois';
+  var h = '<div style="grid-column:1/-1;margin-bottom:8px"><button class="ph-back" onclick="photoBackMonth()">&#8592; ' + e(photoView.year) + '</button>'
+        + '<span class="ph-crumb">' + monthLabel + ' ' + e(photoView.year) + '</span></div>';
+  for (var i = 0; i < list.length; i++) {
+    var p = list[i];
+    h += '<div style="background:#fff;border:1px solid rgba(201,169,110,.15);border-radius:4px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04)">';
+    h += p.image ? '<img src="' + p.image + '" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">'
+                 : '<div style="width:100%;aspect-ratio:4/3;background:#e8e4dc;display:flex;align-items:center;justify-content:center"><span style="font-size:32px;opacity:.2">&#128247;</span></div>';
+    h += '<div style="padding:16px">';
+    if (p.title) h += '<div style="font-family:Cormorant Garamond,serif;font-size:20px;font-weight:600;color:#1a2744;margin-bottom:6px">' + e(p.title) + '</div>';
+    if (p.description) h += '<div style="font-size:16px;color:#5a4030;line-height:1.6">' + e(p.description) + '</div>';
+    h += '</div></div>';
+  }
+  g.innerHTML = h;
+}
+function openPhotoYear(y){ photoView.year = y; photoView.month = null; renderPhotos(); window.scrollTo(0,0); }
+function openPhotoMonth(m){ photoView.month = m; renderPhotos(); window.scrollTo(0,0); }
+function photoBack(){ photoView.year = null; photoView.month = null; renderPhotos(); }
+function photoBackMonth(){ photoView.month = null; renderPhotos(); }
+
+function renderChef() {
+  var c = null;
+  for (var i = 0; i < chefs.length; i++) { if (String(chefs[i].id) === String(activeChef)) { c = chefs[i]; break; } }
+  if (!c) c = chefs[0]; if (!c) return;
+  var r = document.getElementById('chef-page'); if (!r) return;
+  var aw = '';
+  for (var i = 0; i < (c.awards||[]).length; i++) {
+    aw += '<div class="aw" style="border-right:' + (i < c.awards.length-1 ? '1px solid rgba(201,169,110,.2)' : 'none') + '">';
+    aw += '<div class="aw-star">&#10022;</div><div class="aw-text">' + e(c.awards[i]) + '</div></div>';
+  }
+  var tl = '';
+  for (var i = 0; i < (c.timeline||[]).length; i++) {
+    tl += '<div class="tl-entry"><div class="tl-yr">' + e(c.timeline[i].year) + '</div><div class="tl-dot"></div><div class="tl-ev">' + e(c.timeline[i].event) + '</div></div>';
+  }
+  var gal = '';
+  for (var i = 0; i < (c.gallery||[]).length; i++) {
+    gal += '<img src="' + c.gallery[i] + '" style="width:100%;height:80px;object-fit:cover;border-radius:2px">';
+  }
+  var recs = '';
+  for (var i = 0; i < (c.recipes||[]).length; i++) {
+    var rec = c.recipes[i];
+    var ings = '';
+    for (var j = 0; j < (rec.ingredients||[]).length; j++) {
+      if (rec.ingredients[j]) ings += '<li class="ing-li">' + e(rec.ingredients[j]) + '</li>';
+    }
+    var stps = '';
+    for (var j = 0; j < (rec.method||[]).length; j++) {
+      if (rec.method[j]) stps += '<div class="mstep"><span class="mn">' + (j+1) + '</span><p class="mp">' + e(rec.method[j]) + '</p></div>';
+    }
+    recs += '<div class="acc-item" id="acc-' + rec.id + '">';
+    recs += '<button class="acc-btn" onclick="ta(&#39;acc-' + rec.id + '&#39;)">';
+    recs += '<span style="display:flex;align-items:center;gap:10px"><span style="color:var(--gold);font-size:11px">&#10022;</span>' + e(rec.title) + '</span>';
+    recs += '<span style="display:flex;align-items:center;gap:12px"><span style="font-size:9px;color:#9a8060;font-family:system-ui">' + e(rec.prepTime) + ' &middot; ' + e(rec.difficulty) + '</span><span class="acc-plus">+</span></span></button>';
+    recs += '<div class="acc-body">' + (rec.image ? '<img class="acc-rec-img" src="' + rec.image + '">' : '');
+    recs += '<div class="acc-grid"><div><div class="acc-sec-t">Ingr&eacute;dients</div><ul class="ing-ul">' + ings + '</ul></div>';
+    recs += '<div><div class="acc-sec-t">Pr&eacute;paration</div>' + stps + '</div></div>';
+    recs += (rec.chefNotes ? '<div class="notes-box"><p class="notes-p">' + e(rec.chefNotes) + '</p></div>' : '');
+    recs += (rec.winepairing ? '<div class="wine-row"><span style="font-size:16px">&#127863;</span><div><div class="wine-lbl">Accord Mets-Vins</div><div class="wine-txt">' + e(rec.winepairing) + '</div></div></div>' : '');
+    recs += '</div></div>';
+  }
+  var portrait = c.portrait ? '<img src="' + c.portrait + '" style="width:auto;height:78%;max-width:90%;object-fit:contain;object-position:center center;display:block">'
+                             : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.2">&#128104;&#8205;&#127859;</div>';
+  var cLogo = c.restaurantLogo ? '<img src="' + c.restaurantLogo + '" style="max-width:80%;max-height:90px;object-fit:contain;margin-bottom:14px">'
+                               : '<div class="trip-rn">' + e(c.restaurant) + '</div>';
+  var rPhoto = c.restaurantPhoto ? '<img src="' + c.restaurantPhoto + '" style="width:100%;height:100%;object-fit:cover;display:block">'
+                                 : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#d5d0c8;font-size:40px;opacity:.2">&#127963;</div>';
+  var rlink = c.restaurantUrl ? '<a href="' + e(c.restaurantUrl) + '" target="_blank" rel="noopener" style="margin-top:12px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:7px 16px;border-radius:2px;font-family:system-ui;display:inline-block;text-decoration:none">Visiter le site &#8594;</a>' : '';
+  var html = '<div class="trip"><div class="trip-pt">' + portrait + '</div><div class="trip-ct">' + cLogo + '<div class="trip-or">&#10022;</div><div class="trip-dv"></div><div class="trip-loc">Gen&egrave;ve &middot; Suisse</div>' + rlink + '</div><div class="trip-ph2">' + rPhoto + '</div></div>';
+  html += '<div class="prof-hero"><div class="prof-label">Chef</div><div class="prof-name">' + e(c.name) + '</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div>';
+  html += '<div class="qbio"><div class="q"><div class="qq">&ldquo;</div><div class="phil">' + e(c.philosophy) + '</div></div><div class="bio"><p>' + e(c.biography) + '</p></div></div>';
+  if (aw) html += '<div class="awards">' + aw + '</div>';
+  if (tl) html += '<div class="tlsec"><div class="tl-label">Parcours</div><div class="tl-wrap">' + tl + '</div></div>';
+  if (gal) html += '<div class="galsec"><div class="gal-label">Galerie</div><div class="gal-grid">' + gal + '</div></div>';
+  if (recs) html += '<div class="recsec"><div class="recs-hd"><div class="recs-label">Recettes Signatures</div><div class="ornament"><div class="line"></div><span class="star">&#10022;</span><div class="line"></div></div></div>' + recs + '</div>';
+  html += '<div class="prof-foot">' + e(c.restaurant) + ' &middot; Gen&egrave;ve &middot; Suisse</div>';
+  r.innerHTML = html;
+  setTimeout(function() {
+    var items = document.querySelectorAll('.acc-item');
+    for (var i = 0; i < items.length; i++) { var b = items[i].querySelector('.acc-body'); if (b) b.style.display = 'none'; }
+  }, 0);
+}
+
+function ta(id) {
+  var item = document.getElementById(id); if (!item) return;
+  var all = document.querySelectorAll('.acc-item.open');
+  for (var i = 0; i < all.length; i++) {
+    if (all[i] !== item) { all[i].classList.remove('open'); var b = all[i].querySelector('.acc-body'); if (b) b.style.display = 'none'; var p = all[i].querySelector('.acc-plus'); if (p) p.style.transform = 'none'; }
+  }
+  var op = item.classList.toggle('open');
+  var bd = item.querySelector('.acc-body'); if (bd) bd.style.display = op ? 'block' : 'none';
+  var pl = item.querySelector('.acc-plus'); if (pl) pl.style.transform = op ? 'rotate(45deg)' : 'none';
+}
+
+window.addEventListener('hashchange', function() {
+  var h = location.hash.slice(1);
+  if (h.indexOf('chef-') === 0) go('chef', h.slice(5));
+  else if (h === 'dir') go('dir');
+  else if (h === 'sponsors') go('sponsors');
+  else if (h === 'photos') go('photos');
+  else if (h === 'admin' || h === '') { /* do nothing — admin handles itself */ }
+  else go('home');
+});
+
+/* ---- 6. NAVIGATION ---- */
+function go(page, chefId){
+  closeMenu();
+  var pgs=document.querySelectorAll('.page');
+  for(var i=0;i<pgs.length;i++) pgs[i].classList.remove('active');
+  var pg=document.getElementById('pg-'+page); if(pg) pg.classList.add('active');
+  var nns=['home','dir','chef','sponsors','photos'];
+  for(var i=0;i<nns.length;i++){var al=document.getElementById('lk-'+nns[i]); if(al) al.classList.remove('active');}
+  var lk=document.getElementById('lk-'+page); if(lk) lk.classList.add('active');
+  if(page==='chef'){ if(chefId) activeChef=chefId; renderChef(); }
+  else if(page==='home') renderHome();
+  else if(page==='dir') renderDir();
+  else if(page==='sponsors') renderSponsors();
+  else if(page==='photos'){ photoView.year=null; photoView.month=null; renderPhotos(); }
+  /* Only update hash if it actually changed to avoid triggering hashchange loop */
+  var newHash = page==='chef' ? 'chef-'+activeChef : page;
+  if(location.hash.slice(1) !== newHash) location.hash = newHash;
+  window.scrollTo(0,0);
+}
+function tgMenu(){
+  var l=document.getElementById('nav-links'),t=document.getElementById('nav-toggle'),o=document.getElementById('nav-overlay');
+  if(!l) return; var open=l.classList.toggle('open');
+  if(t) t.classList.toggle('open',open); if(o) o.classList.toggle('show',open);
+  document.body.style.overflow=open?'hidden':'';
+}
+function closeMenu(){
+  var l=document.getElementById('nav-links'),t=document.getElementById('nav-toggle'),o=document.getElementById('nav-overlay');
+  if(l) l.classList.remove('open'); if(t) t.classList.remove('open'); if(o) o.classList.remove('show');
+  document.body.style.overflow='';
+}
+/* Second hashchange listener removed — was causing navigation loop */
+
+</script><script>
+/* ============================================================
+   ADMIN PANEL — login, edit, save to Supabase (goes live)
+   ============================================================ */
+function openGate(){
+  if(isAdmin){ openAdmin(); return; }
+  document.getElementById('admin-gate').classList.add('show');
+  setTimeout(function(){var p=document.getElementById('admin-pw'); if(p) p.focus();},100);
+}
+function closeGate(){ document.getElementById('admin-gate').classList.remove('show'); }
+function checkPw(){
+  var v=document.getElementById('admin-pw').value;
+  if(v===ADMIN_PASSWORD){
+    isAdmin=true;
+    try{ sessionStorage.setItem('gtadmin','1'); }catch(e){}
+    closeGate(); openAdmin();
+  } else {
+    document.getElementById('admin-err').style.display='block';
+  }
+}
+function logoutAdmin(){
+  isAdmin=false; try{ sessionStorage.removeItem('gtadmin'); }catch(e){}
+  closeAdmin();
+}
+function openAdmin(){
+  if(!sbConfigured()){ toast('Ajoutez vos cl\u00e9s Supabase dans le code pour activer le mode live'); }
+  document.getElementById('admin-panel').classList.add('show');
+  document.body.style.overflow='hidden';
+  adminTab('accueil', document.querySelector('.admin-tab'));
+}
+function closeAdmin(){
+  document.getElementById('admin-panel').classList.remove('show');
+  document.body.style.overflow='';
+  loadAll(); // refresh public site with latest
+}
+
+var curTab='accueil';
+function adminTab(tab, btn){
+  curTab=tab;
+  var tabs=document.querySelectorAll('.admin-tab');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
+  if(btn) btn.classList.add('active');
+  var c=document.getElementById('admin-content');
+  if(tab==='accueil') c.innerHTML=adminAccueil();
+  else if(tab==='chefs') c.innerHTML=adminChefs();
+  else if(tab==='sponsors') c.innerHTML=adminSponsors();
+  else if(tab==='photos') c.innerHTML=adminPhotos();
+  else if(tab==='data') c.innerHTML=adminData();
+}
+
+/* ---------- ACCUEIL (home settings) ---------- */
+function adminAccueil(){
+  return '<div class="admin-card"><h3>Page d\u2019accueil</h3>'
+    +'<div class="admin-field"><label>Titre principal</label><input id="g-title" value="'+att(G.homeTitle)+'"></div>'
+    +'<div class="admin-field"><label>Sous-titre</label><input id="g-sub" value="'+att(G.homeSub)+'"></div>'
+    +'<div class="admin-field"><label>Texte banni\u00e8re</label><textarea id="g-tag" rows="2">'+ee(G.homeTagline)+'</textarea></div>'
+    +'<div class="admin-field"><label>Image h\u00e9ros (banni\u00e8re)</label>'
+      +'<div class="admin-imgbtn" onclick="document.getElementById(\'g-hero-file\').click()"><img id="g-hero-thumb" src="'+(G.heroImage||BLANKPX)+'"><span>Cliquer pour changer</span></div>'
+      +'<input type="file" id="g-hero-file" accept="image/*" style="display:none" onchange="upHero(this)"></div>'
+    +'<div class="admin-field"><label>Logo du site</label>'
+      +'<div class="admin-imgbtn" onclick="document.getElementById(\'g-logo-file\').click()"><img id="g-logo-thumb" src="'+(G.siteLogo||BLANKPX)+'"><span>Cliquer pour changer</span></div>'
+      +'<input type="file" id="g-logo-file" accept="image/*" style="display:none" onchange="upLogo(this)"></div>'
+    +'<button class="gbtn gbtn-gold" onclick="saveGlobal()">Enregistrer &amp; publier</button>'
+    +'</div>';
+}
+function upHero(inp){ if(!inp.files[0])return; setSync('saving'); sbUpload(inp.files[0]).then(function(u){ if(u){G.heroImage=u; document.getElementById('g-hero-thumb').src=u; setSync('ok');} else setSync('error'); }); }
+function upLogo(inp){ if(!inp.files[0])return; setSync('saving'); sbUpload(inp.files[0]).then(function(u){ if(u){G.siteLogo=u; document.getElementById('g-logo-thumb').src=u; setSync('ok');} else setSync('error'); }); }
+function saveGlobal(){
+  G.homeTitle=document.getElementById('g-title').value;
+  G.homeSub=document.getElementById('g-sub').value;
+  G.homeTagline=document.getElementById('g-tag').value;
+  setSync('saving');
+  var row={id:1, home_title:G.homeTitle, home_sub:G.homeSub, home_tagline:G.homeTagline, hero_image:G.heroImage, site_logo:G.siteLogo};
+  // True UPSERT: POST with merge-duplicates resolves on the primary key (id=1),
+  // so it inserts the row the first time and updates it every time after.
+  // (A plain PATCH returns 200 even when 0 rows match, so the first save was silently lost.)
+  fetch(sbRest('settings'), {
+    method:'POST',
+    headers:sbHeaders({'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=representation'}),
+    body:JSON.stringify(row)
+  })
+    .then(function(r){
+      if(!r.ok) return r.text().then(function(t){ var e=new Error(t); e.status=r.status; e.statusText=r.statusText; e.body=t; throw e; });
+      return r.json();
+    })
+    .then(function(){ setSync('ok'); toast('Accueil publi\u00e9 \u2713'); applyGlobal(); return loadAll(); })
+    .catch(function(e){ setSync('error'); sbError('enregistrement de l\u2019accueil', e&&e.status, e&&e.statusText, (e&&(e.body||e.message))||''); });
+}
+
+/* ---------- CHEFS ---------- */
+var editingChef=null;
+function adminChefs(){
+  var h='<div class="admin-card"><h3>Chefs</h3>'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">'
+    +'<button class="gbtn gbtn-gold" onclick="newChef()">+ Ajouter un chef</button>'
+    +'<button class="gbtn gbtn-del" onclick="deleteAllChefs()" style="font-size:12px">🗑 Supprimer tous les chefs</button>'
+    +'</div></div>';
+  for(var i=0;i<chefs.length;i++){ var c=chefs[i];
+    h+='<div class="admin-list-item"><img src="'+(c.portrait||BLANKPX)+'"><div class="info"><strong>'+ee(c.name)+'</strong><small>'+ee(c.restaurant)+'</small></div>'
+      +'<button class="gbtn gbtn-ghost" onclick="editChef(\''+c.id+'\')">Modifier</button>'
+      +'<button class="gbtn gbtn-del" onclick="delChef(\''+c.id+'\')">Suppr.</button></div>';
+  }
+  return h;
+}
+
+function deleteAllChefs(){
+  if(!confirm('⚠️ Supprimer TOUS les chefs (' + chefs.length + ') ? Cette action est irréversible.')) return;
+  if(!confirm('Dernière confirmation — supprimer tous les chefs ?')) return;
+  setSync('saving');
+  var ids = chefs.map(function(c){ return c.id; });
+  var done = 0;
+  if(!ids.length){ toast('Aucun chef à supprimer'); return; }
+  ids.forEach(function(id){
+    sbDelete('chefs', id).then(function(){
+      done++;
+      if(done === ids.length){
+        setSync('ok');
+        toast('Tous les chefs supprimés ✓');
+        loadAll().then(function(){
+          adminTab('chefs', null);
+          document.querySelectorAll('.admin-tab')[1].classList.add('active');
+        });
+      }
+    }).catch(function(){ done++; setSync('error'); });
+  });
+}
+function newChef(){
+  editingChef={id:null,name:'Nouveau Chef',position:'Chef de Cuisine',restaurant:'',restaurantUrl:'',cuisine:[],philosophy:'',biography:'',portrait:null,restaurantLogo:null,restaurantPhoto:null,gallery:[],awards:[],timeline:[],recipes:[],sort:chefs.length};
+  renderChefEditor();
+}
+function editChef(id){
+  var found = null;
+  for(var i=0;i<chefs.length;i++){
+    if(String(chefs[i].id) === String(id)){ found = chefs[i]; break; }
+  }
+  if(!found){
+    toast('Chef introuvable — veuillez rafraîchir la page');
+    return;
+  }
+  // Deep clone so edits don't mutate the live array
+  editingChef = JSON.parse(JSON.stringify(found));
+  renderChefEditor();
+}
+function renderChefEditor(){
+  var c=editingChef;
+  var h='<div class="admin-card"><h3>'+(c.id?'Modifier le chef':'Nouveau chef')+'</h3>'
+    +'<div class="admin-row"><div class="admin-field"><label>Nom</label><input id="c-name" value="'+att(c.name)+'"></div>'
+    +'<div class="admin-field"><label>Poste</label><input id="c-pos" value="'+att(c.position)+'"></div></div>'
+    +'<div class="admin-row"><div class="admin-field"><label>Restaurant</label><input id="c-rest" value="'+att(c.restaurant)+'"></div>'
+    +'<div class="admin-field"><label>Site web du restaurant</label><input id="c-resturl" placeholder="https://..." value="'+att(c.restaurantUrl)+'"></div></div>'
+    +'<div class="admin-field"><label>Sp\u00e9cialit\u00e9s / Cuisine (s\u00e9par\u00e9es par virgules)</label><input id="c-cuisine" value="'+att((c.cuisine||[]).join(', '))+'"></div>'
+    +'<div class="admin-field"><label>Citation / Philosophie</label><textarea id="c-phil" rows="2">'+ee(c.philosophy)+'</textarea></div>'
+    +'<div class="admin-field"><label>Biographie</label><textarea id="c-bio" rows="4">'+ee(c.biography)+'</textarea></div>'
+    +'<div class="admin-row">'
+      +imgField('Portrait','c-portrait',c.portrait)
+      +imgField('Logo restaurant','c-rlogo',c.restaurantLogo)+'</div>'
+    +'<div class="admin-field">'+imgField('Photo restaurant','c-rphoto',c.restaurantPhoto)+'</div>'
+    +'<div class="admin-field"><label>R\u00e9compenses (une par ligne)</label><textarea id="c-awards" rows="3">'+ee((c.awards||[]).map(function(a){ return typeof a === 'object' ? (a.star||'')+(a.star?' ':'')+( a.text||'') : a; }).join('\n'))+'</textarea></div>'
+    +'<div class="admin-field"><label>Parcours (format: ann\u00e9e | \u00e9v\u00e9nement, une par ligne)</label><textarea id="c-timeline" rows="3">'+ee((c.timeline||[]).map(function(t){ return typeof t === 'object' ? (t.year||'')+' | '+(t.event||'') : t; }).join('\n'))+'</textarea></div>'
+    +'<div class="admin-field"><label>Galerie (plusieurs images)</label><div id="c-gallery-wrap"></div>'
+      +'<button class="gbtn gbtn-ghost" style="margin-top:8px" onclick="document.getElementById(\'c-gallery-file\').click()">+ Ajouter des images</button>'
+      +'<input type="file" id="c-gallery-file" accept="image/*" multiple style="display:none" onchange="upGallery(this)"></div>'
+    +'<div class="admin-field"><label>Recettes Signatures</label><div id="c-recipes-wrap"></div>'
+      +'<button class="gbtn gbtn-ghost" style="margin-top:8px" onclick="addRecipe()">+ Ajouter une recette</button></div>'
+    +'<div class="admin-edit-bar" style="position:sticky;bottom:0;margin:0 -24px -24px;border-radius:0"><button class="gbtn gbtn-ghost" onclick="adminTab(\'chefs\',null);document.querySelectorAll(\'.admin-tab\')[1].classList.add(\'active\')">Annuler</button><button class="gbtn gbtn-gold" onclick="saveChef()">Enregistrer &amp; publier</button></div>'
+    +'</div>';
+  document.getElementById('admin-content').innerHTML=h;
+  renderGalleryEditor();
+  renderRecipesEditor();
+}
+
+/* ---- Gallery editor ---- */
+function renderGalleryEditor(){
+  var wrap=document.getElementById('c-gallery-wrap'); if(!wrap) return;
+  var g=editingChef.gallery||[];
+  var html='<div style="display:flex;flex-wrap:wrap;gap:8px">';
+  for(var i=0;i<g.length;i++){
+    html+='<div style="position:relative;width:72px;height:72px"><img src="'+g[i]+'" style="width:72px;height:72px;object-fit:cover;border-radius:4px">'
+      +'<button onclick="delGalleryImg('+i+')" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#e07856;color:#fff;border:none;cursor:pointer;font-size:12px;line-height:1">&times;</button></div>';
+  }
+  html+='</div>';
+  if(!g.length) html='<div style="color:#777;font-size:12px;font-family:system-ui">Aucune image.</div>';
+  wrap.innerHTML=html;
+}
+function upGallery(inp){
+  if(!inp.files||!inp.files.length) return;
+  setSync('saving');
+  var files=[]; for(var i=0;i<inp.files.length;i++) files.push(inp.files[i]);
+  if(!editingChef.gallery) editingChef.gallery=[];
+  var done=0;
+  files.forEach(function(f){
+    sbUpload(f).then(function(u){
+      if(u) editingChef.gallery.push(u);
+      done++;
+      if(done===files.length){ setSync('ok'); renderGalleryEditor(); }
+    });
+  });
+}
+function delGalleryImg(i){
+  editingChef.gallery.splice(i,1);
+  renderGalleryEditor();
+}
+
+/* ---- Recipes editor ---- */
+function renderRecipesEditor(){
+  var wrap=document.getElementById('c-recipes-wrap'); if(!wrap) return;
+  var recs=editingChef.recipes||[];
+  var html='';
+  for(var i=0;i<recs.length;i++){ var r=recs[i];
+    html+='<div class="admin-card" style="background:#161616;margin-bottom:10px">'
+      +'<div class="admin-row"><div class="admin-field"><label>Titre</label><input value="'+att(r.title)+'" onchange="recField('+i+',\'title\',this.value)"></div>'
+      +'<div class="admin-field"><label>Temps de pr\u00e9paration</label><input value="'+att(r.prepTime)+'" onchange="recField('+i+',\'prepTime\',this.value)"></div></div>'
+      +'<div class="admin-row"><div class="admin-field"><label>Difficult\u00e9</label><input value="'+att(r.difficulty)+'" onchange="recField('+i+',\'difficulty\',this.value)"></div>'
+      +'<div class="admin-field"><label>Accord mets-vins</label><input value="'+att(r.winepairing)+'" onchange="recField('+i+',\'winepairing\',this.value)"></div></div>'
+      +imgField2('Photo de la recette','rec-img-'+i,r.image,'recImg('+i+',this)')
+      +'<div class="admin-row"><div class="admin-field"><label>Ingr\u00e9dients (un par ligne)</label><textarea rows="8" onchange="recField('+i+',\'ingredients\',this.value.split(String.fromCharCode(10)))">'+ee((r.ingredients||[]).join('\n'))+'</textarea></div>'
+      +'<div class="admin-field"><label>Pr\u00e9paration (une \u00e9tape par ligne)</label><textarea rows="8" onchange="recField('+i+',\'method\',this.value.split(String.fromCharCode(10)))">'+ee((r.method||[]).join('\n'))+'</textarea></div></div>'
+      +'<div class="admin-field"><label>Notes du chef</label><textarea rows="2" onchange="recField('+i+',\'chefNotes\',this.value)">'+ee(r.chefNotes)+'</textarea></div>'
+      +'<button class="gbtn gbtn-del" onclick="delRecipe('+i+')">Supprimer la recette</button>'
+      +'</div>';
+  }
+  if(!recs.length) html='<div style="color:#777;font-size:12px;font-family:system-ui">Aucune recette.</div>';
+  wrap.innerHTML=html;
+}
+function addRecipe(){
+  if(!editingChef.recipes) editingChef.recipes=[];
+  editingChef.recipes.push({id:'r'+Date.now(),title:'Nouvelle Recette',prepTime:'',difficulty:'',winepairing:'',chefNotes:'',image:null,ingredients:[],method:[]});
+  renderRecipesEditor();
+}
+function recField(i,f,v){
+  if(f==='ingredients'||f==='method'){
+    v=v.map(function(s){return s.replace(/^\s+|\s+$/g,'')}).filter(function(s){return s});
+  }
+  editingChef.recipes[i][f]=v;
+}
+function recImg(i,inp){
+  if(!inp.files[0])return; setSync('saving');
+  sbUpload(inp.files[0]).then(function(u){
+    if(u){ editingChef.recipes[i].image=u; document.getElementById('rec-img-'+i+'-thumb').src=u; setSync('ok'); }
+    else setSync('error');
+  });
+}
+function delRecipe(i){
+  editingChef.recipes.splice(i,1);
+  renderRecipesEditor();
+}
+function imgField(label,key,val){
+  return '<div class="admin-field"><label>'+label+'</label>'
+    +'<div class="admin-imgbtn" onclick="document.getElementById(\''+key+'-file\').click()"><img id="'+key+'-thumb" src="'+(val||BLANKPX)+'"><span>Cliquer pour changer</span></div>'
+    +'<input type="file" id="'+key+'-file" accept="image/*" style="display:none" onchange="upChefImg(this,\''+key+'\')"></div>';
+}
+function upChefImg(inp,key){
+  if(!inp.files[0])return; setSync('saving');
+  sbUpload(inp.files[0]).then(function(u){
+    if(!u){setSync('error');return;}
+    document.getElementById(key+'-thumb').src=u;
+    if(key==='c-portrait') editingChef.portrait=u;
+    else if(key==='c-rlogo') editingChef.restaurantLogo=u;
+    else if(key==='c-rphoto') editingChef.restaurantPhoto=u;
+    setSync('ok');
+  });
+}
+function saveChef(){
+  var c=editingChef;
+  c.name=document.getElementById('c-name').value;
+  c.position=document.getElementById('c-pos').value;
+  c.restaurant=document.getElementById('c-rest').value;
+  c.restaurantUrl=document.getElementById('c-resturl').value;
+  c.cuisine=document.getElementById('c-cuisine').value.split(',').map(function(s){return s.replace(/^\s+|\s+$/g,'')}).filter(function(s){return s});
+  c.philosophy=document.getElementById('c-phil').value;
+  c.biography=document.getElementById('c-bio').value;
+  c.awards=document.getElementById('c-awards').value.split('\n').map(function(s){return s.replace(/^\s+|\s+$/g,'')}).filter(function(s){return s});
+  c.timeline=document.getElementById('c-timeline').value.split('\n').map(function(line){var p=line.split('|');return p.length>1?{year:p[0].replace(/^\s+|\s+$/g,''),event:p[1].replace(/^\s+|\s+$/g,'')}:null}).filter(function(t){return t});
+  setSync('saving');
+  // Build the full row. NOTE: never send id or created_at — Supabase generates them.
+  var row={ name:c.name, position:c.position, restaurant:c.restaurant, restaurant_url:c.restaurantUrl, cuisine:JSON.stringify(c.cuisine),
+    philosophy:c.philosophy, biography:c.biography, portrait:c.portrait, restaurant_logo:c.restaurantLogo,
+    restaurant_photo:c.restaurantPhoto, gallery:JSON.stringify(c.gallery||[]), awards:JSON.stringify(c.awards),
+    timeline:JSON.stringify(c.timeline), recipes:JSON.stringify(c.recipes||[]), sort:c.sort||0 };
+  saveChefRow(c.id, row);
+}
+
+/* Saves the chef row. If Supabase reports an unknown column (PGRST204 / "column ... does not exist"),
+   it automatically removes that column and retries — so a table missing optional columns still works.
+   On any other error it shows the full Supabase status + body. */
+function saveChefRow(id, row){
+  var attempt = function(){
+    var p = id ? sbUpdate('chefs',id,row) : sbInsert('chefs',row);
+    p.then(function(){ setSync('ok'); toast('Chef publi\u00e9 \u2713'); return loadAll(); })
+     .then(function(){ adminTab('chefs',null); document.querySelectorAll('.admin-tab')[1].classList.add('active'); })
+     .catch(function(e){
+       var body = (e && (e.body || e.message)) || '';
+       // Detect "column X does not exist" or schema-cache messages and drop that column, then retry.
+       var m = body.match(/column \"?([a-zA-Z_]+)\"?/i) || body.match(/'([a-zA-Z_]+)' column/i);
+       var dropped = null;
+       if(m && m[1] && row.hasOwnProperty(m[1])){ dropped = m[1]; delete row[m[1]]; }
+       else {
+         // PostgREST schema-cache style: "Could not find the 'recipes' column"
+         var m2 = body.match(/find the '([a-zA-Z_]+)' column/i);
+         if(m2 && m2[1] && row.hasOwnProperty(m2[1])){ dropped = m2[1]; delete row[m2[1]]; }
+       }
+       if(dropped){
+         console.warn('Colonne absente ignor\u00e9e: '+dropped+' — nouvelle tentative\u2026');
+         attempt(); // retry without the missing column
+         return;
+       }
+       setSync('error');
+       sbError('enregistrement du chef', e&&e.status, e&&e.statusText, body);
+     });
+  };
+  attempt();
+}
+function delChef(id){
+  if(!confirm('Supprimer ce chef ?')) return;
+  setSync('saving');
+  sbDelete('chefs',id).then(function(){ toast('Supprim\u00e9'); setSync('ok'); return loadAll(); })
+    .then(function(){ adminTab('chefs',null); document.querySelectorAll('.admin-tab')[1].classList.add('active'); })
+    .catch(function(){ setSync('error'); });
+}
+
+/* ---------- SPONSORS ---------- */
+function adminSponsors(){
+  var h='<div class="admin-card"><h3>Sponsors</h3><button class="gbtn gbtn-gold" onclick="newSponsor()">+ Ajouter</button></div>';
+  for(var i=0;i<sponsors.length;i++){ var s=sponsors[i];
+    h+='<div class="admin-card"><div class="admin-row">'
+      +'<div class="admin-field"><label>Nom</label><input value="'+att(s.name)+'" onchange="sponsorField('+i+',\'name\',this.value)"></div>'
+      +'<div class="admin-field"><label>Lien web</label><input value="'+att(s.url)+'" onchange="sponsorField('+i+',\'url\',this.value)"></div></div>'
+      +imgField2('Logo','sp-img-'+i,s.image,'spImg('+i+',this)')
+      +'<div style="margin-top:10px;display:flex;gap:10px"><button class="gbtn gbtn-gold" onclick="saveSponsor('+i+')">Enregistrer</button>'
+      +'<button class="gbtn gbtn-del" onclick="delSponsor('+i+')">Supprimer</button></div></div>';
+  }
+  return h;
+}
+function imgField2(label,id,val,fn){
+  return '<div class="admin-field"><label>'+label+'</label>'
+    +'<div class="admin-imgbtn" onclick="document.getElementById(\''+id+'-file\').click()"><img id="'+id+'-thumb" src="'+(val||BLANKPX)+'"><span>Cliquer pour changer</span></div>'
+    +'<input type="file" id="'+id+'-file" accept="image/*" style="display:none" onchange="'+fn+'"></div>';
+}
+function sponsorField(i,f,v){ sponsors[i][f]=v; }
+function spImg(i,inp){ if(!inp.files[0])return; setSync('saving'); sbUpload(inp.files[0]).then(function(u){ if(u){sponsors[i].image=u; document.getElementById('sp-img-'+i+'-thumb').src=u; setSync('ok');}else setSync('error'); }); }
+function newSponsor(){ setSync('saving'); sbInsert('sponsors',{name:'Nouveau Sponsor',url:'',image:null,sort:sponsors.length}).then(function(){toast('Ajout\u00e9');return loadAll();}).then(function(){adminTab('sponsors',null);document.querySelectorAll('.admin-tab')[2].classList.add('active');}).catch(function(){setSync('error');}); }
+function saveSponsor(i){ var s=sponsors[i]; setSync('saving'); sbUpdate('sponsors',s.id,{name:s.name,url:s.url,image:s.image,sort:s.sort||0}).then(function(){setSync('ok');toast('Sponsor publi\u00e9 \u2713');renderSponsors();}).catch(function(){setSync('error');}); }
+function delSponsor(i){ if(!confirm('Supprimer ?'))return; setSync('saving'); sbDelete('sponsors',sponsors[i].id).then(function(){toast('Supprim\u00e9');return loadAll();}).then(function(){adminTab('sponsors',null);document.querySelectorAll('.admin-tab')[2].classList.add('active');}).catch(function(){setSync('error');}); }
+
+/* ---------- PHOTOS ---------- */
+function yearOptions(sel){
+  var now=new Date().getFullYear();
+  var h='';
+  for(var y=now+1; y>=now-15; y--){ h+='<option value="'+y+'"'+(String(sel)===String(y)?' selected':'')+'>'+y+'</option>'; }
+  return h;
+}
+function monthOptions(sel){
+  var names=['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
+  var h='';
+  for(var m=0;m<12;m++){ h+='<option value="'+m+'"'+(String(sel)===String(m)?' selected':'')+'>'+names[m]+'</option>'; }
+  return h;
+}
+function adminPhotos(){
+  var now=new Date();
+  var h='<div class="admin-card"><h3>Photos</h3><p style="color:#888;font-size:12px;font-family:system-ui;margin-bottom:12px">Les photos sont rang\u00e9es par ann\u00e9e et par mois sur le site.</p><button class="gbtn gbtn-gold" onclick="newPhoto()">+ Ajouter une photo</button></div>';
+  // Sort newest first for the admin list
+  var sorted = photos.slice().sort(function(a,b){
+    var ay=(a.year||0)*100+(a.month!=null?parseInt(a.month,10):0);
+    var by=(b.year||0)*100+(b.month!=null?parseInt(b.month,10):0);
+    return by-ay;
+  });
+  for(var k=0;k<sorted.length;k++){ var p=sorted[k]; var id=p.id;
+    h+='<div class="admin-card">'
+      +imgField2('Image','ph-img-'+id,p.image,'phImg(\''+id+'\',this)')
+      +'<div class="admin-row"><div class="admin-field"><label>Ann\u00e9e</label><select onchange="photoField(\''+id+'\',\'year\',this.value)" style="width:100%;padding:10px 12px;background:#0d0d0d;border:1px solid rgba(255,255,255,.12);border-radius:3px;color:#fff;font-family:system-ui">'+yearOptions(p.year||now.getFullYear())+'</select></div>'
+      +'<div class="admin-field"><label>Mois</label><select onchange="photoField(\''+id+'\',\'month\',this.value)" style="width:100%;padding:10px 12px;background:#0d0d0d;border:1px solid rgba(255,255,255,.12);border-radius:3px;color:#fff;font-family:system-ui">'+monthOptions(p.month!=null?p.month:now.getMonth())+'</select></div></div>'
+      +'<div class="admin-field"><label>Titre</label><input value="'+att(p.title)+'" onchange="photoField(\''+id+'\',\'title\',this.value)"></div>'
+      +'<div class="admin-field"><label>Description</label><textarea rows="2" onchange="photoField(\''+id+'\',\'description\',this.value)">'+ee(p.description)+'</textarea></div>'
+      +'<div style="display:flex;gap:10px"><button class="gbtn gbtn-gold" onclick="savePhoto(\''+id+'\')">Enregistrer &amp; publier</button>'
+      +'<button class="gbtn gbtn-del" onclick="delPhoto(\''+id+'\')">Supprimer</button></div></div>';
+  }
+  return h;
+}
+/* All photo functions now work by the photo's stable id, not its array index,
+   because loadAll() rebuilds the photos array and any index would become stale. */
+function photoById(id){ for(var i=0;i<photos.length;i++){ if(String(photos[i].id)===String(id)) return photos[i]; } return null; }
+function photoField(id,f,v){ var p=photoById(id); if(p) p[f]=v; }
+function phImg(id,inp){
+  if(!inp.files[0])return; setSync('saving');
+  sbUpload(inp.files[0]).then(function(u){
+    if(!u){ setSync('error'); sbError('t\u00e9l\u00e9versement de la photo','upload','','Le fichier n\u2019a pas pu \u00eatre envoy\u00e9 au bucket. V\u00e9rifiez le bucket goutatoo-images et ses policies.'); return; }
+    var p=photoById(id);
+    if(!p){ setSync('error'); return; }
+    p.image=u;
+    var th=document.getElementById('ph-img-'+id+'-thumb'); if(th) th.src=u;
+    setSync('ok');
+    savePhoto(id); // auto-save so the image persists immediately (by id, survives reload)
+  });
+}
+function newPhoto(){ var now=new Date(); setSync('saving'); sbInsert('photos',{title:'',description:'',image:null,year:now.getFullYear(),month:now.getMonth(),sort:photos.length}).then(function(){toast('Ajout\u00e9');return loadAll();}).then(function(){ if(curTab==='photos'){ document.getElementById('admin-content').innerHTML=adminPhotos(); } }).catch(function(e){setSync('error');sbError('ajout d\u2019une photo', e&&e.status, e&&e.statusText, (e&&(e.body||e.message))||'');}); }
+function savePhoto(id){ var p=photoById(id); if(!p){ setSync('error'); return; } setSync('saving'); sbUpdate('photos',p.id,{title:p.title,description:p.description,image:p.image,year:parseInt(p.year,10)||null,month:(p.month!=null&&p.month!=='')?parseInt(p.month,10):null,sort:p.sort||0}).then(function(){setSync('ok');toast('Photo publi\u00e9e \u2713');return loadAll();}).then(function(){ if(curTab==='photos'){ document.getElementById('admin-content').innerHTML=adminPhotos(); } }).catch(function(e){setSync('error');sbError('enregistrement d\u2019une photo', e&&e.status, e&&e.statusText, (e&&(e.body||e.message))||'');}); }
+function delPhoto(id){ if(!confirm('Supprimer cette photo ?'))return; var p=photoById(id); if(!p){ setSync('error'); return; } setSync('saving'); sbDelete('photos',p.id).then(function(){toast('Photo supprim\u00e9e');return loadAll();}).then(function(){ if(curTab==='photos'){ document.getElementById('admin-content').innerHTML=adminPhotos(); } }).catch(function(e){setSync('error');sbError('suppression d\u2019une photo', e&&e.status, e&&e.statusText, (e&&(e.body||e.message))||'');}); }
+
+/* ---------- helpers ---------- */
+var BLANKPX='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+function ee(s){ if(s==null)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function att(s){ if(s==null)return''; return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+
+/* ─────────────────────────────────────────
+   EXPORT / IMPORT JSON
+───────────────────────────────────────── */
+function adminData(){
+  return '<h2 style="color:var(--gold);font-family:\'Cormorant Garamond\',serif;font-size:24px;margin-bottom:20px">Export &amp; Import des Données</h2>'
+
+  /* EXPORT */
+  +'<div class="admin-card" style="margin-bottom:16px">'
+  +'<h3>📤 Exporter les Chefs (JSON)</h3>'
+  +'<p style="color:#aaa;font-size:13px;font-family:system-ui;line-height:1.6;margin-bottom:14px">Télécharge tous les profils de chefs en fichier JSON. Utilisez ce fichier comme sauvegarde ou pour importer dans un autre environnement.</p>'
+  +'<button class="gbtn gbtn-gold" onclick="exportChefsJSON()" style="font-size:12px">Exporter JSON</button>'
+  +'</div>'
+
+  /* IMPORT */
+  +'<div class="admin-card">'
+  +'<h3>📥 Importer des Chefs (JSON)</h3>'
+  +'<p style="color:#aaa;font-size:13px;font-family:system-ui;line-height:1.6;margin-bottom:6px">Importez des chefs depuis un fichier JSON directement dans votre base de données. Chaque chef sera ajouté comme un nouvel enregistrement.</p>'
+  +'<p style="color:#e07856;font-size:12px;font-family:system-ui;margin-bottom:14px">⚠️ Ceci ajoute de nouveaux enregistrements — il ne remplace pas les chefs existants. Des doublons peuvent apparaître si importé deux fois.</p>'
+  +'<div id="gt-import-zone" onclick="document.getElementById(\'gt-import-input\').click()" '
+  +'style="border:2px dashed rgba(201,169,110,.4);border-radius:4px;padding:28px;text-align:center;cursor:pointer;margin-bottom:14px;transition:border-color .2s" '
+  +'onmouseover="this.style.borderColor=\'var(--gold)\'" onmouseout="this.style.borderColor=\'rgba(201,169,110,.4)\'">'
+  +'<div style="font-size:32px;margin-bottom:8px">📂</div>'
+  +'<div style="color:#ccc;font-size:14px;font-family:system-ui;margin-bottom:4px">Cliquez pour sélectionner un fichier JSON</div>'
+  +'<div style="color:#666;font-size:12px;font-family:system-ui">Doit être un fichier export JSON de Goutatoo</div>'
+  +'<input type="file" id="gt-import-input" accept=".json,application/json" style="display:none" onchange="handleGTImport(this)">'
+  +'</div>'
+  +'<div id="gt-import-preview" style="display:none;margin-bottom:14px">'
+  +'<div id="gt-import-summary" style="background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);border-radius:4px;padding:14px;margin-bottom:10px">'
+  +'<div id="gt-import-title" style="color:var(--gold);font-size:14px;font-weight:600;font-family:system-ui;margin-bottom:8px"></div>'
+  +'<div id="gt-import-list" style="font-size:12px;color:#aaa;font-family:system-ui;max-height:130px;overflow-y:auto;line-height:1.9"></div>'
+  +'</div>'
+  +'<div style="display:flex;gap:10px">'
+  +'<button class="gbtn gbtn-gold" onclick="confirmGTImport()" style="font-size:12px">✓ Importer tous les chefs</button>'
+  +'<button class="gbtn gbtn-ghost" onclick="cancelGTImport()" style="font-size:12px">Annuler</button>'
+  +'</div>'
+  +'</div>'
+  +'<div id="gt-import-result" style="display:none;padding:12px 16px;border-radius:4px;font-size:13px;font-family:system-ui"></div>'
+  +'</div>';
+}
+
+/* Export */
+function exportChefsJSON(){
+  var data = chefs.map(function(c){
+    return {
+      name: c.name||'',
+      position: c.position||'',
+      restaurant: c.restaurant||'',
+      restaurantUrl: c.restaurantUrl||'',
+      cuisine: c.cuisine||[],
+      philosophy: c.philosophy||'',
+      biography: c.biography||'',
+      portrait: c.portrait||null,
+      restaurantLogo: c.restaurantLogo||null,
+      restaurantPhoto: c.restaurantPhoto||null,
+      gallery: c.gallery||[],
+      awards: c.awards||[],
+      timeline: c.timeline||[],
+      recipes: c.recipes||[],
+      sort: c.sort||0
+    };
+  });
+  var blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url;
+  a.download = 'goutatoo-chefs-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  toast('Export téléchargé ✓');
+}
+
+/* Import */
+var gtPendingImport = null;
+
+function handleGTImport(input){
+  var file = input.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      var data = JSON.parse(ev.target.result);
+      if(!Array.isArray(data)){ alert('Fichier invalide — doit être un tableau de chefs.'); return; }
+      gtPendingImport = data;
+      document.getElementById('gt-import-preview').style.display = 'block';
+      document.getElementById('gt-import-result').style.display  = 'none';
+      document.getElementById('gt-import-title').textContent = data.length+' chef'+(data.length!==1?'s':'')+' prêt'+(data.length!==1?'s':'')+' à importer :';
+      document.getElementById('gt-import-list').innerHTML = data.map(function(c,i){
+        return '<div>'+(i+1)+'. '+(c.name||'Sans nom')+' — '+(c.restaurant||'—')+'</div>';
+      }).join('');
+    }catch(e){
+      alert('Impossible de lire ce fichier. Assurez-vous que c\'est un fichier JSON valide.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function cancelGTImport(){
+  gtPendingImport = null;
+  document.getElementById('gt-import-preview').style.display = 'none';
+  document.getElementById('gt-import-result').style.display  = 'none';
+  document.getElementById('gt-import-input').value = '';
+}
+
+function confirmGTImport(){
+  if(!gtPendingImport||!gtPendingImport.length) return;
+  setSync('saving');
+  var ok=0, fail=0, errors=[], total=gtPendingImport.length;
+
+  function doNext(i){
+    if(i>=total){
+      setSync(fail===0?'ok':'error');
+      gtPendingImport=null;
+      document.getElementById('gt-import-preview').style.display='none';
+      document.getElementById('gt-import-input').value='';
+      var res=document.getElementById('gt-import-result');
+      res.style.display='block';
+      if(fail===0){
+        res.style.cssText='display:block;padding:12px 16px;border-radius:4px;font-size:13px;font-family:system-ui;background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);color:#2ecc71';
+        res.innerHTML='✅ '+ok+' chef'+(ok!==1?'s':'')+' importé'+(ok!==1?'s':'')+' avec succès ! Actualisez l\'onglet Chefs pour les voir.';
+        toast(ok+' chef'+(ok!==1?'s':'')+' importé'+(ok!==1?'s':'')+' ✓');
+      } else {
+        res.style.cssText='display:block;padding:12px 16px;border-radius:4px;font-size:13px;font-family:system-ui;background:rgba(224,120,86,.1);border:1px solid rgba(224,120,86,.3);color:#e07856';
+        res.innerHTML='⚠️ Importé : '+ok+', Échoué : '+fail+'.<br><small>'+errors.join('<br>')+'</small>';
+      }
+      loadAll();
+      return;
+    }
+    var chef = gtPendingImport[i];
+    var row = {
+      name:             chef.name||'',
+      position:         chef.position||'',
+      restaurant:       chef.restaurant||'',
+      restaurant_url:   chef.restaurantUrl||chef.restaurant_url||'',
+      cuisine:          JSON.stringify(Array.isArray(chef.cuisine)?chef.cuisine:(chef.cuisine?[chef.cuisine]:[])),
+      philosophy:       chef.philosophy||'',
+      biography:        chef.biography||'',
+      portrait:         chef.portrait||null,
+      restaurant_logo:  chef.restaurantLogo||chef.restaurant_logo||null,
+      restaurant_photo: chef.restaurantPhoto||chef.restaurant_photo||null,
+      gallery:          JSON.stringify(chef.gallery||[]),
+      awards:           JSON.stringify(chef.awards||[]),
+      timeline:         JSON.stringify(chef.timeline||[]),
+      recipes:          JSON.stringify((chef.recipes||[]).map(function(r){
+        return {
+          id:          r.id||('r'+Date.now()+Math.random()),
+          title:       r.title||'',
+          prepTime:    r.prepTime||r.prep_time||'',
+          difficulty:  r.difficulty||'',
+          winepairing: r.winepairing||r.winePairing||'',
+          chefNotes:   r.chefNotes||r.notes||'',
+          image:       r.image||r.photoUrl||null,
+          ingredients: Array.isArray(r.ingredients)?r.ingredients:[],
+          method:      Array.isArray(r.method)?r.method:(Array.isArray(r.steps)?r.steps:[])
+        };
+      })),
+      sort:             chef.sort||i
+    };
+    sbInsert('chefs', row)
+      .then(function(){ ok++; doNext(i+1); })
+      .catch(function(e){ fail++; errors.push((chef.name||'Chef '+(i+1))+': '+(e.message||'Erreur')); doNext(i+1); });
+  }
+  doNext(0);
+}
+
+/* ─────────────────────────────────────────
+   HERO PARALLAX + CHEFS CAROUSEL
+   Uses Pointer Events so mouse and touch/trackpad both work correctly
+   on hybrid devices (e.g. iPad reports as a coarse pointer even when
+   a mouse/trackpad is attached, so we react per-event instead of
+   guessing the device type once at load).
+───────────────────────────────────────── */
+(function(){
+  var mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
+  var isMouseActive = false;
+  var curCarousel=0, targetCarousel=0, curHeroX=0, curHeroY=0, curInnerX=0, curInnerY=0;
+  var maxScroll = 0;
+  var dragging=false, dragPointerId=null, dragStartX=0, dragStartOffset=0, lastX=0, lastT=0, velocity=0;
+  var track = document.getElementById('home-chefs-grid');
+  var wrap  = document.getElementById('chefs-carousel-wrap');
+  var heroBg = document.getElementById('hero-bg-main');
+  var heroInner = document.querySelector('#pg-home .hero-inner');
+
+  function computeMaxScroll(){
+    if(!track||!wrap) return;
+    maxScroll = Math.max(0, track.scrollWidth - wrap.clientWidth);
+    targetCarousel = Math.max(-maxScroll, Math.min(0, targetCarousel));
+  }
+  window.addEventListener('resize', computeMaxScroll);
+
+  document.addEventListener('pointermove', function(ev){
+    if(ev.pointerType !== 'mouse') return; // real mouse or trackpad cursor only
+    isMouseActive = true;
+    mouseX = ev.clientX; mouseY = ev.clientY;
+  });
+
+  /* ---- finger / pen drag on the chefs row ---- */
+  if(wrap){
+    wrap.addEventListener('pointerdown', function(ev){
+      if(ev.pointerType === 'mouse') return; // let mouse use the hover-glide instead
+      dragging = true;
+      dragPointerId = ev.pointerId;
+      dragStartX = ev.clientX;
+      dragStartOffset = curCarousel;
+      lastX = dragStartX; lastT = Date.now(); velocity = 0;
+      try{ wrap.setPointerCapture(ev.pointerId); }catch(e){}
+    });
+
+    wrap.addEventListener('pointermove', function(ev){
+      if(!dragging || ev.pointerId !== dragPointerId) return;
+      var x = ev.clientX;
+      var now = Date.now();
+      var dt = now - lastT;
+      if(dt>0) velocity = (x-lastX)/dt;
+      lastX=x; lastT=now;
+      var next = dragStartOffset + (x - dragStartX);
+      next = Math.max(-maxScroll, Math.min(0, next));
+      curCarousel = next; targetCarousel = next;
+      track.style.transform = 'translateX(' + curCarousel.toFixed(2) + 'px)';
+    });
+
+    function endDrag(ev){
+      if(!dragging || (ev && ev.pointerId !== dragPointerId)) return;
+      dragging=false; dragPointerId=null;
+      var momentum = velocity * 180;
+      targetCarousel = Math.max(-maxScroll, Math.min(0, curCarousel + momentum));
+    }
+    wrap.addEventListener('pointerup', endDrag);
+    wrap.addEventListener('pointercancel', endDrag);
+  }
+
+  /* ---- tap-arrow navigation (works with mouse clicks too) ---- */
+  window.chefsNav = function(dir){
+    if(!wrap) return;
+    var step = wrap.clientWidth * 0.6;
+    dragging = false;
+    targetCarousel = Math.max(-maxScroll, Math.min(0, targetCarousel - dir*step));
+  };
+
+  function homeActive(){
+    var p = document.getElementById('pg-home');
+    return p && p.classList.contains('active');
+  }
+
+  function tick(){
+    requestAnimationFrame(tick);
+    if(!homeActive()) return;
+    if(!track||!wrap) return;
+    computeMaxScroll();
+
+    if(isMouseActive && !dragging){
+      var fx = mouseX / Math.max(1, window.innerWidth);   // 0..1 across viewport
+      var cx = fx - 0.5;
+      var fy = mouseY / Math.max(1, window.innerHeight);
+      var cy = fy - 0.5;
+
+      targetCarousel = -fx * maxScroll;
+
+      var targetHeroX = -cx * 40;
+      var targetHeroY = -cy * 18;
+      var targetInnerX = cx * 14;
+      var targetInnerY = cy * 8;
+
+      curHeroX  += (targetHeroX  - curHeroX)  * 0.06;
+      curHeroY  += (targetHeroY  - curHeroY)  * 0.06;
+      curInnerX += (targetInnerX - curInnerX) * 0.06;
+      curInnerY += (targetInnerY - curInnerY) * 0.06;
+
+      if(heroBg) heroBg.style.transform = 'scale(1.08) translate(' + curHeroX.toFixed(2) + 'px,' + curHeroY.toFixed(2) + 'px)';
+      if(heroInner) heroInner.style.transform = 'translate(' + curInnerX.toFixed(2) + 'px,' + curInnerY.toFixed(2) + 'px)';
+    }
+
+    if(!dragging){
+      curCarousel += (targetCarousel - curCarousel) * 0.14;
+      track.style.transform = 'translateX(' + curCarousel.toFixed(2) + 'px)';
+    }
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ─────────────────────────────────────────
+   BOOT
+───────────────────────────────────────── */
+try{ if(sessionStorage.getItem('gtadmin')==='1') isAdmin=true; }catch(e){}
+loadAll();
+</script>
+</body>
+</html>
