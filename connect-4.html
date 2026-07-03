@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Connect with Marc — Webescapade &amp; ChefLink Sydney</title>
+<meta name="description" content="Connect with Marc Teleki — Sydney web designer behind Webescapade and ChefLink Sydney. Call, email or WhatsApp to start a conversation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060714;
+  --panel:#0C0E1F;
+  --panel-2:#10132A;
+  --line:rgba(148,163,255,.14);
+  --text:#EDF0FF;
+  --muted:#8B93B8;
+  --purple:#A855F7;
+  --blue:#6366F1;
+  --teal:#2DD4BF;
+  --chef:#D9B36A;
+  --grad:linear-gradient(96deg,var(--purple) 0%,var(--blue) 48%,var(--teal) 100%);
+  --radius:22px;
+  --ease:cubic-bezier(.22,.61,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:340;line-height:1.6;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+/* faint square-grid texture, matching the live site */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(148,163,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(148,163,255,.055) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(85% 75% at 50% 30%,#000 30%,transparent 100%);
+  -webkit-mask-image:radial-gradient(85% 75% at 50% 30%,#000 30%,transparent 100%);
+}
+::selection{background:var(--blue);color:#fff}
+
+h1,h2,h3{font-weight:700;line-height:1.06;letter-spacing:-.025em}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mono{font-family:"JetBrains Mono",monospace}
+
+.pill{
+  display:inline-flex;align-items:center;gap:.6em;
+  border:1px solid var(--line);border-radius:999px;
+  padding:.55em 1.3em;font-family:"JetBrains Mono",monospace;
+  font-size:.76rem;letter-spacing:.12em;color:var(--muted);
+  background:rgba(148,163,255,.05);
+}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--teal);
+  box-shadow:0 0 10px var(--teal)}
+
+.wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
+section{position:relative;z-index:1}
+
+/* ---------- nav ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(6,7,20,.55);
+  border-bottom:1px solid rgba(148,163,255,.08);
+}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;
+  min-height:60px;gap:14px}
+nav .brandmark{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+nav .mark{
+  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+  background:var(--grad);color:#fff;font-weight:800;font-size:.82rem;letter-spacing:.02em;
+  box-shadow:0 4px 16px rgba(99,102,241,.4);
+}
+nav .wordmark{font-weight:600;font-size:1.02rem;letter-spacing:.01em;color:var(--muted)}
+nav .navlinks{display:flex;gap:8px;align-items:center}
+nav .tab{
+  font-family:"JetBrains Mono",monospace;font-size:.74rem;letter-spacing:.08em;
+  color:var(--muted);text-decoration:none;padding:.55em 1.1em;border-radius:999px;
+  border:1px solid transparent;transition:all .3s var(--ease);
+  -webkit-tap-highlight-color:transparent;white-space:nowrap;
+}
+nav .tab:hover{color:var(--text)}
+nav .tab.site{border:none;background:var(--grad);color:#fff;font-weight:600;
+  box-shadow:0 4px 18px rgba(99,102,241,.35)}
+nav .tab.site:hover{box-shadow:0 6px 24px rgba(99,102,241,.55);color:#fff}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translate3d(0,34px,0);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:translate3d(0,0,0)}
+.reveal[data-d="1"]{transition-delay:.08s}
+.reveal[data-d="2"]{transition-delay:.16s}
+.reveal[data-d="3"]{transition-delay:.24s}
+.reveal[data-d="4"]{transition-delay:.32s}
+
+/* ================= HERO ================= */
+.hero{
+  min-height:100svh;display:grid;place-items:center;
+  position:relative;overflow:hidden;padding-top:76px;
+}
+/* glows matching the live site: purple wash left, teal wash right */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.6;
+  pointer-events:none;will-change:transform;z-index:0}
+.orb.a{width:70vmax;height:70vmax;left:-24vmax;top:-16vmax;
+  background:radial-gradient(circle at 40% 40%,rgba(168,85,247,.42),rgba(99,102,241,.16) 48%,transparent 68%)}
+.orb.b{width:64vmax;height:64vmax;right:-20vmax;top:6%;
+  background:radial-gradient(circle at 45% 45%,rgba(45,212,191,.32),rgba(45,212,191,.08) 50%,transparent 68%)}
+.orb.c{width:46vmax;height:46vmax;left:26%;bottom:-22vmax;
+  background:radial-gradient(circle,rgba(99,102,241,.26),transparent 65%)}
+
+.hero-inner{
+  position:relative;z-index:2;will-change:transform,opacity;
+  width:min(1120px,calc(100% - 48px));
+  display:grid;grid-template-columns:1.05fr .95fr;
+  align-items:center;gap:clamp(24px,5vw,60px);
+  padding:40px 0;
+}
+.hero-copy{display:grid;gap:22px;justify-items:start;text-align:left}
+.hero h1{font-size:clamp(2.9rem,7.8vw,6rem)}
+.hero p.lede{max-width:30em;font-size:clamp(1.02rem,2.1vw,1.25rem);color:var(--muted)}
+.hero p.lede b{color:var(--text);font-weight:600}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+
+/* --- logo stage: orbit ring + floating feature chips, like the live hero --- */
+.logo-stage{position:relative;display:grid;place-items:center;min-height:min(52vw,520px)}
+.orbit{
+  position:absolute;width:min(34vw,420px);height:min(34vw,420px);border-radius:50%;
+  border:1.5px dashed rgba(148,163,255,.28);
+  animation:spin 70s linear infinite;
+}
+.orbit::before{content:"";position:absolute;top:-4px;left:50%;width:7px;height:7px;
+  border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-logo{width:min(26vw,320px);height:auto;position:relative;z-index:2;
+  animation:bob 7s var(--ease) infinite;
+  filter:drop-shadow(0 18px 50px rgba(99,102,241,.35))}
+.chipfloat{
+  position:absolute;z-index:3;
+  display:inline-flex;align-items:center;gap:.55em;
+  font-family:"JetBrains Mono",monospace;font-size:.74rem;letter-spacing:.06em;
+  color:var(--text);background:rgba(12,14,31,.85);
+  border:1px solid rgba(148,163,255,.25);border-radius:12px;
+  padding:.6em 1em;white-space:nowrap;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 8px 28px rgba(0,0,0,.35);
+  animation:bob 6s var(--ease) infinite;
+}
+.chipfloat.c1{top:8%;left:-2%;animation-delay:.4s}
+.chipfloat.c2{top:46%;right:-4%;animation-duration:7.5s}
+.chipfloat.c3{bottom:6%;left:6%;animation-delay:1.1s;animation-duration:6.8s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55em;
+  min-height:52px;padding:.85em 1.8em;border-radius:999px;
+  font-family:inherit;font-weight:600;font-size:1rem;
+  text-decoration:none;border:1px solid var(--line);color:var(--text);
+  background:rgba(148,163,255,.06);
+  transition:transform .35s var(--ease),background .35s var(--ease),
+             border-color .35s var(--ease),box-shadow .35s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:hover{transform:translateY(-2px);background:rgba(148,163,255,.12)}
+.btn.grad{background:var(--grad);border:none;color:#fff;
+  box-shadow:0 8px 30px rgba(99,102,241,.35)}
+.btn.grad:hover{box-shadow:0 12px 38px rgba(99,102,241,.5)}
+.btn.gold{border-color:rgba(217,179,106,.5);color:var(--chef)}
+.btn.gold:hover{background:rgba(217,179,106,.1)}
+
+.scroll-cue{
+  position:absolute;left:50%;bottom:max(26px,env(safe-area-inset-bottom));
+  transform:translateX(-50%);z-index:2;color:var(--muted);
+  font-family:"JetBrains Mono",monospace;font-size:.66rem;letter-spacing:.3em;
+  text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.scroll-cue::after{content:"";width:1px;height:42px;
+  background:linear-gradient(var(--blue),transparent);
+  animation:drip 2.2s var(--ease) infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ============ DUO SCENE — two-chapter scroll story ============ */
+.duo-scene{height:320svh}
+.duo-sticky{position:sticky;top:0;height:100svh;overflow:hidden;
+  display:grid;place-items:center}
+.bgword{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-weight:800;letter-spacing:-.03em;white-space:nowrap;
+  font-size:clamp(4.5rem,17vw,15rem);line-height:1;
+  opacity:0;will-change:transform,opacity;pointer-events:none;z-index:1;
+}
+.bgword.web{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bgword.chef{color:var(--chef)}
+.duo-card{
+  position:absolute;z-index:2;
+  width:min(720px,calc(100% - 48px));
+  border:1px solid var(--line);border-radius:calc(var(--radius) + 6px);
+  background:linear-gradient(180deg,rgba(16,19,42,.92),rgba(12,14,31,.96));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:clamp(28px,4.5vw,52px);
+  display:flex;flex-direction:column;gap:18px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  opacity:0;will-change:transform,opacity;
+}
+.duo-card::before{content:"";position:absolute;inset:0 0 auto 0;height:2.5px;
+  border-radius:inherit}
+.duo-card.web::before{background:var(--grad)}
+.duo-card.chef::before{background:linear-gradient(90deg,transparent,var(--chef),transparent)}
+.duo-card .kicker{font-family:"JetBrains Mono",monospace;font-size:.68rem;
+  letter-spacing:.3em;text-transform:uppercase}
+.duo-card.web .kicker{color:var(--blue)}
+.duo-card.chef .kicker{color:var(--chef)}
+.duo-card h3{font-size:clamp(1.9rem,4.2vw,3rem)}
+.duo-card p{color:var(--muted);font-size:clamp(1rem,2vw,1.14rem);max-width:34em}
+.duo-card .links{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.duo-card .domain{font-family:"JetBrains Mono",monospace;font-size:.78rem;
+  color:var(--muted);letter-spacing:.08em}
+.duo-dots{position:absolute;right:max(22px,env(safe-area-inset-right));top:50%;
+  transform:translateY(-50%);z-index:3;display:grid;gap:12px}
+.duo-dots span{width:8px;height:8px;border-radius:50%;
+  background:rgba(148,163,255,.25);transition:background .4s var(--ease),box-shadow .4s var(--ease)}
+.duo-dots span.on{background:var(--teal);box-shadow:0 0 12px var(--teal)}
+
+/* ============ SERVICES RIBBON ============ */
+.ribbon{padding:clamp(90px,14vh,150px) 0}
+.ribbon .wrap{display:grid;gap:34px}
+.ribbon h2{font-size:clamp(1.9rem,4.6vw,3.2rem);max-width:16em}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid var(--line);border-radius:999px;
+  padding:.6em 1.15em;font-size:.92rem;color:var(--muted);
+  background:rgba(148,163,255,.04)}
+.ribbon .aside{color:var(--muted);max-width:38em}
+.ribbon .aside a{color:var(--text);font-weight:600;text-decoration:none;
+  border-bottom:1px solid var(--teal)}
+.ribbon .aside a:hover{color:var(--teal)}
+
+/* ============ CONTACT ============ */
+.contact{
+  padding:clamp(90px,14vh,150px) 0 clamp(70px,10vh,110px);
+  background:
+    radial-gradient(70% 55% at 15% 0%,rgba(168,85,247,.12),transparent 70%),
+    radial-gradient(70% 55% at 88% 100%,rgba(45,212,191,.10),transparent 70%);
+}
+.contact h2{font-size:clamp(2.2rem,6vw,4.2rem);margin:16px 0 12px}
+.contact .sub{color:var(--muted);max-width:36em;font-size:1.08rem}
+.tap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:14px;margin-top:40px}
+.tap{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  padding:24px;min-height:132px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:14px;
+  text-decoration:none;color:var(--text);
+  transition:transform .35s var(--ease),border-color .35s var(--ease),box-shadow .35s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+}
+.tap:hover{transform:translateY(-4px);border-color:rgba(148,163,255,.4);
+  box-shadow:0 10px 34px rgba(99,102,241,.18)}
+.tap .ic{font-size:1.5rem}
+.tap .lbl{font-weight:700;font-size:1.06rem}
+.tap .val{color:var(--muted);font-size:.88rem;letter-spacing:.02em}
+.tap.primary{background:var(--grad);border:none;color:#fff;
+  box-shadow:0 8px 30px rgba(99,102,241,.3)}
+.tap.primary .val{color:rgba(255,255,255,.8)}
+.tap.primary:hover{box-shadow:0 14px 40px rgba(99,102,241,.45)}
+.person{margin-top:44px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+  color:var(--muted);font-size:.95rem}
+.person .name{color:var(--text);font-weight:700}
+.person .sep{opacity:.4}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);position:relative;z-index:1;
+  padding:34px 0 max(34px,env(safe-area-inset-bottom));
+  color:var(--muted);font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text)}
+
+/* ============ ADMIN / EDIT MODE ============ */
+#adminBar{
+  position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));
+  transform:translateX(-50%);z-index:100;display:none;
+  align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;
+  background:rgba(12,14,31,.92);border:1px solid rgba(148,163,255,.35);
+  border-radius:999px;padding:8px 12px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+}
+#adminBar.on{display:flex}
+#adminBar .alabel{font-family:"JetBrains Mono",monospace;font-size:.68rem;
+  letter-spacing:.14em;color:var(--teal);padding:0 6px}
+#adminBar button{
+  font-family:inherit;font-weight:600;font-size:.84rem;color:var(--text);
+  background:rgba(148,163,255,.08);border:1px solid var(--line);
+  border-radius:999px;padding:.55em 1.1em;cursor:pointer;
+  min-height:40px;transition:background .3s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+}
+#adminBar button:hover{background:rgba(148,163,255,.16)}
+#adminBar button.active{background:var(--grad);border:none;color:#fff}
+body.editing [data-edit]{outline:1.5px dashed rgba(45,212,191,.65);outline-offset:4px;
+  border-radius:4px;cursor:text}
+body.editing [data-edit]:focus{outline-color:var(--teal)}
+body.editing .hero-logo{cursor:pointer;outline:1.5px dashed rgba(168,85,247,.7);outline-offset:6px}
+#logoInput{display:none}
+#adminHint{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);
+  z-index:99;display:none;font-family:"JetBrains Mono",monospace;font-size:.66rem;
+  letter-spacing:.1em;color:var(--muted);background:rgba(6,7,20,.85);
+  border:1px solid var(--line);border-radius:8px;padding:6px 12px;white-space:nowrap}
+body.editing #adminHint{display:block}
+
+/* ---------- focus / motion / small screens ---------- */
+a:focus-visible,.btn:focus-visible,.tap:focus-visible,button:focus-visible{
+  outline:2px solid var(--teal);outline-offset:3px;border-radius:8px}
+@media (max-width:860px){
+  .hero-inner{grid-template-columns:1fr;gap:14px;padding-bottom:70px}
+  .hero-copy{justify-items:center;text-align:center}
+  .hero-ctas{justify-content:center}
+  .logo-stage{min-height:min(78vw,380px);order:-1;margin-top:6px}
+  .hero-logo{width:min(52vw,240px)}
+  .orbit{width:min(66vw,320px);height:min(66vw,320px)}
+  .chipfloat{font-size:.64rem;padding:.5em .8em}
+  .chipfloat.c1{left:0}
+  .chipfloat.c2{right:0}
+}
+@media (max-width:760px){
+  nav .tab.contact-link{display:none}
+  .duo-scene{height:auto}
+  .duo-sticky{position:static;height:auto;display:grid;gap:26px;
+    padding:90px 24px 40px;place-items:stretch}
+  .bgword{position:static;transform:none;opacity:.9!important;
+    font-size:clamp(2.2rem,11vw,4rem);text-align:center;white-space:normal}
+  .bgword.chef{order:3}
+  .duo-card{position:static;opacity:1!important;transform:none!important;width:100%}
+  .duo-card.web{order:2}
+  .duo-card.chef{order:4}
+  .duo-dots{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .orb,.hero-inner{transform:none!important;opacity:1!important}
+  .scroll-cue::after{animation:none}
+  .orbit,.hero-logo,.chipfloat{animation:none}
+  .btn,.tap{transition:none}
+  .duo-scene{height:auto}
+  .duo-sticky{position:static;height:auto;display:grid;gap:26px;
+    padding:90px 24px 40px;place-items:stretch}
+  .bgword{position:static;transform:none;opacity:.9!important;
+    font-size:clamp(2.2rem,11vw,4rem);text-align:center;white-space:normal}
+  .bgword.chef{order:3}
+  .duo-card{position:static;opacity:1!important;transform:none!important;width:100%}
+  .duo-card.web{order:2}
+  .duo-card.chef{order:4}
+  .duo-dots{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav>
+  <div class="wrap">
+    <a class="brandmark" href="#top" aria-label="Webescapade home">
+      <span class="mark">WE</span>
+      <span class="wordmark" data-edit>Webescapade</span>
+    </a>
+    <div class="navlinks">
+      <a class="tab contact-link" href="#platforms">Platforms</a>
+      <a class="tab contact-link" href="#contact">Contact</a>
+      <a class="tab site" href="https://webescapade.com">webescapade.com ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="orb a" data-px="0.22"></div>
+  <div class="orb b" data-px="0.14"></div>
+  <div class="orb c" data-px="0.08"></div>
+
+  <div class="hero-inner" id="heroInner">
+    <div class="hero-copy">
+      <span class="pill" data-edit>Connect with Marc · Sydney, Australia</span>
+      <h1 data-edit>Let’s <span class="grad">connect.</span></h1>
+      <p class="lede" data-edit>Web designer, hospitality trainer, and the person behind
+        <b>Webescapade</b> and <b>ChefLink Sydney</b>.
+        One conversation is all it takes to start.</p>
+      <div class="hero-ctas">
+        <a class="btn grad" href="#contact" data-edit>Get in touch</a>
+        <a class="btn" href="#platforms" data-edit>Explore the platforms</a>
+      </div>
+    </div>
+
+    <div class="logo-stage">
+      <div class="orbit" aria-hidden="true"></div>
+      <img class="hero-logo" id="heroLogo" src="" alt="Webescapade — AI-powered web experiences">
+      <span class="chipfloat c1" data-edit>🤖 AI chat online</span>
+      <span class="chipfloat c2" data-edit>🎙 Voice ready</span>
+      <span class="chipfloat c3" data-edit>⚙️ Automated forms</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Scroll</div>
+</section>
+
+<!-- ============ DUO SCENE — Webescapade ⇢ ChefLink ============ -->
+<section class="duo-scene" id="platforms">
+  <div class="duo-sticky">
+    <div class="bgword web" id="bgWeb" aria-hidden="true">WEBESCAPADE</div>
+    <div class="bgword chef" id="bgChef" aria-hidden="true">CHEFLINK</div>
+
+    <article class="duo-card web" id="cardWeb">
+      <span class="kicker" data-edit>01 · Design studio</span>
+      <h3 data-edit>Websites that work as hard as you do.</h3>
+      <p data-edit>Webescapade builds modern, editable websites supercharged with AI —
+         portfolio and business sites for chefs, trainers, consultants and creatives,
+         hand-built in Sydney and designed so you can update them yourself.</p>
+      <span class="domain" data-edit>webescapade.com</span>
+      <div class="links">
+        <a class="btn grad" href="https://webescapade.com" data-edit>Visit Webescapade</a>
+        <a class="btn" href="portfolio.html" data-edit>Examples &amp; pricing</a>
+      </div>
+    </article>
+
+    <article class="duo-card chef" id="cardChef">
+      <span class="kicker" data-edit>02 · Hospitality platform</span>
+      <h3 data-edit>Where Sydney’s chefs are discovered.</h3>
+      <p data-edit>ChefLink Sydney is a chef staffing and portfolio platform — discover
+         working chefs, browse cinematic portfolios, spotlight graduate talent,
+         or list yourself and let the work speak.</p>
+      <span class="domain" data-edit>cheflinksydney.com</span>
+      <div class="links">
+        <a class="btn gold" href="https://cheflinksydney.com" data-edit>Visit ChefLink Sydney</a>
+      </div>
+    </article>
+
+    <div class="duo-dots" aria-hidden="true"><span id="dot1"></span><span id="dot2"></span></div>
+  </div>
+</section>
+
+<!-- ============ SERVICES RIBBON ============ -->
+<section class="ribbon">
+  <div class="wrap">
+    <span class="pill reveal" data-edit>What I help with</span>
+    <h2 class="reveal" data-d="1" data-edit>From a single page to a <span class="grad">full platform.</span></h2>
+    <div class="chips reveal" data-d="2">
+      <span class="chip" data-edit>Portfolio websites</span>
+      <span class="chip" data-edit>Business websites</span>
+      <span class="chip" data-edit>Website refreshes</span>
+      <span class="chip" data-edit>Custom design</span>
+      <span class="chip" data-edit>Mobile optimisation</span>
+      <span class="chip" data-edit>Hosting assistance</span>
+      <span class="chip" data-edit>QR &amp; NFC cards</span>
+      <span class="chip" data-edit>Booking &amp; automation</span>
+    </div>
+    <p class="aside reveal" data-d="3" data-edit>
+      Thinking about a portfolio of your own? Browse
+      <a href="portfolio.html">examples and simple monthly pricing</a> —
+      then let’s talk about what yours could look like.
+    </p>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <span class="pill reveal" data-edit>Get in touch</span>
+    <h2 class="reveal" data-d="1" data-edit>One tap <span class="grad">away.</span></h2>
+    <p class="sub reveal" data-d="2" data-edit>Tell me about your work and what you’d like to build or showcase.
+       I’ll come back with ideas, options and next steps — usually within a day.</p>
+
+    <div class="tap-grid">
+      <a class="tap primary reveal" data-d="1" href="tel:+61413872994">
+        <span class="ic">📞</span>
+        <span><span class="lbl" data-edit>Call Marc</span><br><span class="val" data-edit>0413 872 994</span></span>
+      </a>
+      <a class="tap reveal" data-d="2" href="mailto:marc@webescapade.com">
+        <span class="ic">✉️</span>
+        <span><span class="lbl" data-edit>Email</span><br><span class="val" data-edit>marc@webescapade.com</span></span>
+      </a>
+      <a class="tap reveal" data-d="3" href="https://wa.me/61413872994">
+        <span class="ic">💬</span>
+        <span><span class="lbl" data-edit>WhatsApp</span><br><span class="val" data-edit>Message directly</span></span>
+      </a>
+      <a class="tap reveal" data-d="4" href="mailto:marc@webescapade.com?subject=Consultation%20booking">
+        <span class="ic">📅</span>
+        <span><span class="lbl" data-edit>Book a consultation</span><br><span class="val" data-edit>Free, no obligation</span></span>
+      </a>
+      <a class="tap reveal" data-d="4" href="https://webescapade.com">
+        <span class="ic">🌐</span>
+        <span><span class="lbl" data-edit>Visit the studio</span><br><span class="val" data-edit>webescapade.com</span></span>
+      </a>
+    </div>
+
+    <p class="person reveal" data-d="2">
+      <span class="name" data-edit>Marc Teleki</span>
+      <span class="sep">·</span> <span data-edit>Webescapade</span>
+      <span class="sep">·</span> <span data-edit>Sydney, Australia</span>
+      <span class="sep">·</span> <a href="https://webescapade.com" style="color:inherit">webescapade.com</a>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span data-edit>© 2026 Webescapade · Marc Teleki · Sydney</span>
+    <span>
+      <a href="https://webescapade.com">webescapade.com</a> &nbsp;·&nbsp;
+      <a href="https://cheflinksydney.com">cheflinksydney.com</a> &nbsp;·&nbsp;
+      <a href="portfolio.html">Portfolio examples</a>
+    </span>
+  </div>
+</footer>
+
+<!-- ============ ADMIN BAR (visible only with ?setup=1) ============ -->
+<div id="adminHint">Tap any dashed text to edit · tap the logo to replace it</div>
+<div id="adminBar" role="toolbar" aria-label="Page admin">
+  <span class="alabel">ADMIN</span>
+  <button id="btnEdit" type="button">✏️ Edit content</button>
+  <button id="btnLogo" type="button">🖼 Change logo</button>
+  <button id="btnAgent" type="button">🤖 AI agent</button>
+  <button id="btnSave" type="button">⬇️ Download page</button>
+  <button id="btnExit" type="button">Exit</button>
+</div>
+<input type="file" id="logoInput" accept="image/*">
+
+<script id="agentScript">
+/* ============================================================
+   JOTFORM AI AGENT — same setup as cheflinksydney.
+   Paste your agent ID via Admin › 🤖 AI agent (?setup=1),
+   or set it here directly. Find it in JotForm:
+   your Agent › Publish › Embed (the long ID in the embed URL).
+   ============================================================ */
+var JOTFORM_AGENT_ID = "";
+window.loadJotformAgent = function(){
+  if(!JOTFORM_AGENT_ID) return;
+  var old = document.getElementById('jfAgentEmbed');
+  if(old) old.remove();
+  var s = document.createElement('script');
+  s.id = 'jfAgentEmbed';
+  s.src = 'https://cdn.jotfor.ms/agent/embedjs/' + JOTFORM_AGENT_ID +
+          '/embed.js?skipWelcome=1&maximizable=1';
+  document.body.appendChild(s);
+};
+window.loadJotformAgent();
+</script>
+
+<script>
+/* ============================================================
+   DEFAULT LOGO — replace via Admin › Change logo (?setup=1).
+   Stored as a data URI so the page stays fully self-contained.
+   ============================================================ */
+var IMG_LOGO = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Webescapade">' +
+'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0">' +
+'<stop offset="0" stop-color="#A855F7"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#2DD4BF"/>' +
+'</linearGradient></defs>' +
+'<circle cx="320" cy="170" r="130" fill="none" stroke="url(#g)" stroke-width="9" stroke-linecap="round" stroke-dasharray="620 200" transform="rotate(-50 320 170)"/>' +
+'<text x="320" y="216" text-anchor="middle" font-family="Hanken Grotesk, Arial Black, sans-serif" font-weight="800" font-style="italic" font-size="140" fill="url(#g)">WE</text>' +
+'<g stroke="url(#g)" stroke-width="5" fill="none" stroke-linecap="round">' +
+'<path d="M120 150 h58 M120 178 h44 M132 206 h46"/>' +
+'<path d="M462 150 h58 M476 178 h44 M462 206 h46"/></g>' +
+'<g fill="#A855F7"><circle cx="112" cy="150" r="6"/><circle cx="112" cy="178" r="6"/><circle cx="124" cy="206" r="6"/></g>' +
+'<g fill="#2DD4BF"><circle cx="528" cy="150" r="6"/><circle cx="528" cy="178" r="6"/><circle cx="516" cy="206" r="6"/></g>' +
+'<g fill="#2DD4BF"><rect x="418" y="52" width="16" height="16" rx="3"/><rect x="442" y="36" width="12" height="12" rx="3"/><rect x="444" y="62" width="10" height="10" rx="2"/></g>' +
+'<text x="320" y="352" text-anchor="middle" font-family="Hanken Grotesk, Arial, sans-serif" font-weight="600" font-size="42" letter-spacing="16" fill="url(#g)">WEBESCAPADE</text>' +
+'<text x="320" y="396" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="17" letter-spacing="6" fill="#8B93B8">— AI-POWERED WEB EXPERIENCES —</text>' +
+'</svg>');
+
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- logo bootstrap ---------- */
+  var heroLogo = document.getElementById('heroLogo');
+  if(!heroLogo.getAttribute('src')) heroLogo.src = IMG_LOGO;
+
+  /* ---------- reveal on scroll ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:0.15, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  /* ================= ADMIN / EDIT ENGINE ================= */
+  var isSetup = /(\?|&)setup=1/.test(location.search);
+  var bar = document.getElementById('adminBar');
+  var editing = false;
+
+  if(isSetup){
+    bar.classList.add('on');
+
+    var btnEdit = document.getElementById('btnEdit');
+    var btnLogo = document.getElementById('btnLogo');
+    var btnSave = document.getElementById('btnSave');
+    var btnExit = document.getElementById('btnExit');
+    var logoInput = document.getElementById('logoInput');
+
+    function setEditing(on){
+      editing = on;
+      document.body.classList.toggle('editing', on);
+      btnEdit.classList.toggle('active', on);
+      document.querySelectorAll('[data-edit]').forEach(function(el){
+        if(on){ el.setAttribute('contenteditable','true'); }
+        else  { el.removeAttribute('contenteditable'); }
+      });
+    }
+
+    btnEdit.addEventListener('click', function(){ setEditing(!editing); });
+
+    /* Prevent links/buttons navigating while their text is being edited */
+    document.addEventListener('click', function(e){
+      if(editing && e.target.closest('a')){ e.preventDefault(); }
+    }, true);
+
+    /* --- logo replacement (tap logo in edit mode, or Admin button) --- */
+    function pickLogo(){ logoInput.click(); }
+    btnLogo.addEventListener('click', pickLogo);
+    heroLogo.addEventListener('click', function(){ if(editing) pickLogo(); });
+    logoInput.addEventListener('change', function(){
+      var f = logoInput.files && logoInput.files[0];
+      if(!f) return;
+      var r = new FileReader();
+      r.onload = function(){
+        IMG_LOGO = r.result;
+        heroLogo.src = r.result;
+      };
+      r.readAsDataURL(f);
+    });
+
+    /* --- JotForm AI agent: set the ID from the admin bar --- */
+    document.getElementById('btnAgent').addEventListener('click', function(){
+      var id = prompt('JotForm AI agent ID\n(from your agent\u2019s Publish \u203A Embed URL):', JOTFORM_AGENT_ID);
+      if(id === null) return;
+      JOTFORM_AGENT_ID = id.trim();
+      window.loadJotformAgent();
+    });
+
+    /* --- download the page with edits baked in --- */
+    btnSave.addEventListener('click', function(){
+      var clone = document.documentElement.cloneNode(true);
+      /* strip runtime state so the saved file boots clean */
+      clone.querySelectorAll('[contenteditable]').forEach(function(el){ el.removeAttribute('contenteditable'); });
+      clone.querySelectorAll('.reveal.in').forEach(function(el){ el.classList.remove('in'); });
+      ['#heroInner','.orb','.bgword','.duo-card'].forEach(function(sel){
+        clone.querySelectorAll(sel).forEach(function(el){ el.removeAttribute('style'); });
+      });
+      clone.querySelectorAll('.duo-dots span').forEach(function(el){ el.classList.remove('on'); });
+      var body = clone.querySelector('body');
+      if(body) body.classList.remove('editing');
+      var barEl = clone.querySelector('#adminBar');
+      if(barEl) barEl.classList.remove('on');
+      /* bake the current logo into the saved file's IMG_LOGO + img tag */
+      clone.querySelectorAll('#heroLogo').forEach(function(el){ el.setAttribute('src', IMG_LOGO); });
+      clone.querySelectorAll('script').forEach(function(s){
+        if(s.textContent.indexOf('DEFAULT LOGO') !== -1){
+          s.textContent = s.textContent.replace(
+            /var IMG_LOGO = [\s\S]*?;\n/,
+            'var IMG_LOGO = ' + JSON.stringify(IMG_LOGO) + ';\n'
+          );
+        }
+      });
+      var jfEmbed = clone.querySelector('#jfAgentEmbed');
+      if(jfEmbed) jfEmbed.remove();
+      var agentScript = clone.querySelector('#agentScript');
+      if(agentScript){
+        agentScript.textContent = agentScript.textContent.replace(
+          /var JOTFORM_AGENT_ID = [^;]*;/,
+          'var JOTFORM_AGENT_ID = ' + JSON.stringify(JOTFORM_AGENT_ID) + ';'
+        );
+      }
+      var html = '<!DOCTYPE html>\n' + clone.outerHTML;
+      var blob = new Blob([html], {type:'text/html'});
+      var url  = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'connect.html';
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 800);
+    });
+
+    btnExit.addEventListener('click', function(){
+      setEditing(false);
+      location.href = location.pathname; /* drop ?setup=1 */
+    });
+  }
+
+  if(reduced) return; /* no parallax for reduced-motion users */
+
+  /* ---------- scroll-driven parallax (iPad-Safari safe) ---------- */
+  var orbs      = Array.prototype.slice.call(document.querySelectorAll('.orb'));
+  var heroInner = document.getElementById('heroInner');
+  var scene     = document.querySelector('.duo-scene');
+  var bgWeb     = document.getElementById('bgWeb');
+  var bgChef    = document.getElementById('bgChef');
+  var cardWeb   = document.getElementById('cardWeb');
+  var cardChef  = document.getElementById('cardChef');
+  var dot1      = document.getElementById('dot1');
+  var dot2      = document.getElementById('dot2');
+  function isNarrow(){ return window.innerWidth <= 760; }
+  function ramp(p,a,b){ return Math.min(1, Math.max(0, (p - a) / (b - a))); }
+
+  var ticking = false;
+
+  function frame(){
+    ticking = false;
+    var y  = window.scrollY || window.pageYOffset;
+    var vh = window.innerHeight;
+
+    /* hero: orbs drift, content scales & fades — Apple product-page style */
+    orbs.forEach(function(o){
+      var s = parseFloat(o.dataset.px || 0.1);
+      o.style.transform = 'translate3d(0,' + (y * s) + 'px,0)';
+    });
+    var hp = Math.min(1, y / (vh * 0.9));
+    heroInner.style.transform = 'translate3d(0,' + (y * 0.28) + 'px,0) scale(' + (1 - hp * 0.08) + ')';
+    heroInner.style.opacity   = String(1 - hp * 1.05);
+
+    /* duo scene: chapter 1 Webescapade ⇢ chapter 2 ChefLink */
+    if(!isNarrow() && scene){
+      var r = scene.getBoundingClientRect();
+      var total = r.height - vh;
+      var p = Math.min(1, Math.max(0, -r.top / total));
+
+      /* watermark words: drift across, crossfade at the handover */
+      var wIn  = ramp(p, 0.00, 0.08), wOut = ramp(p, 0.40, 0.52);
+      bgWeb.style.opacity   = String(0.22 * wIn * (1 - wOut));
+      bgWeb.style.transform = 'translate(-50%,-50%) translate3d(' + ((0.5 - p) * vh * 0.35) + 'px,0,0)';
+      var cIn  = ramp(p, 0.48, 0.60);
+      bgChef.style.opacity   = String(0.20 * cIn);
+      bgChef.style.transform = 'translate(-50%,-50%) translate3d(' + ((1 - p) * vh * 0.5) + 'px,0,0)';
+
+      /* cards: rise, hold, hand over */
+      var aIn = ramp(p, 0.04, 0.20), aOut = ramp(p, 0.40, 0.52);
+      cardWeb.style.opacity   = String(aIn * (1 - aOut));
+      cardWeb.style.transform = 'translate3d(0,' + ((1 - aIn) * vh * 0.4 - aOut * vh * 0.28) + 'px,0)' +
+                                ' scale(' + (0.94 + aIn * 0.06 - aOut * 0.04) + ')';
+      cardWeb.style.pointerEvents = (aIn > 0.5 && aOut < 0.5) ? 'auto' : 'none';
+
+      var bIn = ramp(p, 0.52, 0.70);
+      cardChef.style.opacity   = String(bIn);
+      cardChef.style.transform = 'translate3d(0,' + ((1 - bIn) * vh * 0.4) + 'px,0)' +
+                                 ' scale(' + (0.94 + bIn * 0.06) + ')';
+      cardChef.style.pointerEvents = bIn > 0.5 ? 'auto' : 'none';
+
+      /* chapter dots */
+      dot1.classList.toggle('on', p > 0.02 && p <= 0.5);
+      dot2.classList.toggle('on', p > 0.5);
+    } else if (cardWeb){
+      [bgWeb,bgChef,cardWeb,cardChef].forEach(function(el){
+        el.style.opacity=''; el.style.transform=''; el.style.pointerEvents='';
+      });
+    }
+  }
+
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(frame); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  frame();
+})();
+</script>
+</body>
+</html>
