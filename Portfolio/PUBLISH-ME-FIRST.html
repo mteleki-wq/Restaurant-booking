@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publish your portfolio — WebEscapade guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+  :root{
+    --bg:#070b18;--card:#0d1226;--ink:#eef1fb;--muted:#9aa3c7;
+    --line:rgba(154,163,199,.18);
+    --grad:linear-gradient(100deg,#a855f7 0%,#4f7cff 55%,#39d0c3 100%);
+    --teal:#39d0c3;--violet:#8b5cf6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Sora',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.65}
+  .wrap{max-width:760px;margin:0 auto;padding:72px 24px 110px}
+
+  .eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:14px;margin-bottom:20px}
+  .eyebrow::before{content:"";width:36px;height:1px;background:var(--grad)}
+  h1{font-size:clamp(30px,6vw,46px);font-weight:800;line-height:1.1;letter-spacing:-.02em}
+  h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--muted);font-size:17px;margin:18px 0 12px;max-width:56ch}
+  .time{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);border:1px solid var(--line);border-radius:100px;padding:8px 16px;margin-top:8px}
+  .time::before{content:"◷";font-size:14px}
+
+  .step{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;margin-top:22px;position:relative;overflow:hidden}
+  .step::before{
+    content:attr(data-n);position:absolute;top:-14px;right:6px;
+    font-family:'Space Mono',monospace;font-weight:700;font-size:96px;line-height:1;
+    color:transparent;-webkit-text-stroke:1px rgba(139,92,246,.28);pointer-events:none;
+  }
+  .step h2{font-size:20px;font-weight:800;margin-bottom:10px;padding-right:70px}
+  .step p{color:var(--muted);font-size:15px;margin-bottom:10px}
+  .step p b{color:var(--ink);font-weight:600}
+  .step p:last-child{margin-bottom:0}
+  .chip{
+    display:inline-block;font-family:'Space Mono',monospace;font-size:13px;
+    background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.35);
+    color:#bcd0ff;border-radius:8px;padding:3px 10px;word-break:break-all;
+  }
+  .note{
+    margin-top:14px;padding:14px 16px;border-radius:12px;font-size:13.5px;color:#c6cde8;
+    background:rgba(57,208,195,.07);border:1px solid rgba(57,208,195,.25);
+  }
+  .note b{color:var(--teal)}
+
+  .copybar{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .copybar input{
+    flex:1;min-width:200px;background:#0a0f22;border:1px solid var(--line);border-radius:12px;
+    color:var(--ink);font-family:'Space Mono',monospace;font-size:14px;padding:13px 16px;outline:none;
+  }
+  .copybar input:focus{border-color:var(--violet)}
+  .copybtn{
+    background:var(--grad);border:none;color:#fff;font-family:'Sora',sans-serif;font-weight:700;
+    font-size:14px;border-radius:12px;padding:13px 22px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  }
+  .copybtn:active{transform:scale(.97)}
+
+  .divider{margin:56px 0 8px;display:flex;align-items:center;gap:16px}
+  .divider span{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .divider::before,.divider::after{content:"";height:1px;flex:1;background:var(--line)}
+
+  .optional{border-style:dashed}
+  .help{
+    margin-top:26px;background:linear-gradient(120deg,rgba(168,85,247,.12),rgba(57,208,195,.10));
+    border:1px solid rgba(139,92,246,.35);border-radius:20px;padding:26px;
+  }
+  .help h3{font-size:18px;font-weight:800;margin-bottom:8px}
+  .help p{color:var(--muted);font-size:14.5px}
+  .help a{color:var(--teal);font-weight:700;text-decoration:none}
+  .check{list-style:none;margin-top:10px}
+  .check li{font-size:14.5px;color:#c6cde8;display:flex;gap:10px;margin-bottom:7px}
+  .check li::before{content:"✓";color:var(--teal);font-weight:700}
+  footer{margin-top:64px;text-align:center;color:var(--muted);font-size:12.5px}
+  footer b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">You're one page away</div>
+  <h1>Put your portfolio <span class="g">live on the web.</span></h1>
+  <p class="lede">Your portfolio is a single file — that means you can host it yourself, for free, forever, with no monthly hosting fees and no lock-in. Here's the whole process, right from your iPad or any browser. No coding, no apps to install.</p>
+  <span class="time">About 10 minutes, once</span>
+
+  <div class="step" data-n="1">
+    <h2>Create a free GitHub account</h2>
+    <p>GitHub is a trusted platform (owned by Microsoft) that hosts websites for free. Go to <span class="chip">github.com/signup</span> and sign up with your email — just like any other account.</p>
+    <p><b>Tip:</b> choose a username you're happy to have in your web address, e.g. <span class="chip">jordanavery</span> becomes <span class="chip">jordanavery.github.io</span>.</p>
+  </div>
+
+  <div class="step" data-n="2">
+    <h2>Create your website's home</h2>
+    <p>Once signed in, tap the <b>+</b> at the top right and choose <b>New repository</b>. A repository is simply the folder that holds your website.</p>
+    <p>Name it exactly: <span class="chip">yourusername.github.io</span> — replacing <b>yourusername</b> with your actual GitHub username. This exact name is what switches on free hosting.</p>
+    <p>Leave everything else as it is, tick <b>Add a README file</b>, and tap <b>Create repository</b>.</p>
+  </div>
+
+  <div class="step" data-n="3">
+    <h2>Upload your portfolio file</h2>
+    <p>On your new repository page, tap <b>Add file → Upload files</b>.</p>
+    <p>Choose your downloaded portfolio (the file ending in <span class="chip">.html</span>) from your Files app, then tap <b>Commit changes</b> at the bottom.</p>
+    <div class="note"><b>Important:</b> your file must be named <b>index.html</b> to load automatically. If it isn't, tap the file on GitHub, tap the pencil icon, and rename it to <span class="chip">index.html</span> before saving.</div>
+  </div>
+
+  <div class="step" data-n="4">
+    <h2>Wait two minutes, then visit your site</h2>
+    <p>GitHub builds your site the first time — grab a coffee. Then open:</p>
+    <div class="copybar">
+      <input id="siteUrl" value="https://yourusername.github.io" aria-label="Your website address">
+      <button class="copybtn" onclick="copyUrl()">Copy link</button>
+    </div>
+    <p style="margin-top:12px">Replace <b>yourusername</b> with yours, and that's it — your portfolio is live. Share this link on your CV, LinkedIn, email signature, anywhere.</p>
+  </div>
+
+  <div class="step" data-n="5">
+    <h2>Updating your portfolio later</h2>
+    <p>Edited your portfolio and downloaded a new version? Just repeat step 3 — upload the new <span class="chip">index.html</span> and commit. The new version replaces the old one within a couple of minutes.</p>
+  </div>
+
+  <div class="divider"><span>Optional level-up</span></div>
+
+  <div class="step optional" data-n="+">
+    <h2>Want yourname.com instead?</h2>
+    <p>Your free <span class="chip">.github.io</span> address works forever. If you'd like a custom domain (around <b>$15–20/year</b>):</p>
+    <ul class="check">
+      <li>Buy a domain from any registrar (Namecheap, GoDaddy, VentraIP…)</li>
+      <li>In your repository: <b>Settings → Pages → Custom domain</b> — type your domain</li>
+      <li>At your registrar, add the DNS records GitHub shows you (they give exact values)</li>
+      <li>Tick <b>Enforce HTTPS</b> once it's verified</li>
+    </ul>
+    <p style="margin-top:10px">This step is completely optional and can be done any time later.</p>
+  </div>
+
+  <div class="help">
+    <h3>Prefer it done for you?</h3>
+    <p>If you'd rather skip the setup entirely, Marc offers a done-for-you publishing service — your portfolio live on your own address, usually within 24 hours. Reply to your welcome email or visit <a href="https://webescapade.com">webescapade.com</a> and tap <b>Contact Marc</b>.</p>
+  </div>
+
+  <footer>Made with <b>WebEscapade</b> — your professional story, beautifully presented.</footer>
+</div>
+
+<script>
+function copyUrl(){
+  const inp = document.getElementById('siteUrl');
+  inp.select(); inp.setSelectionRange(0, 99999);
+  try { navigator.clipboard.writeText(inp.value); } catch(e) { document.execCommand('copy'); }
+  const btn = document.querySelector('.copybtn');
+  const t = btn.textContent; btn.textContent = 'Copied ✓';
+  setTimeout(()=>btn.textContent=t, 1600);
+}
+</script>
+</body>
+</html>

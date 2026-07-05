@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jordan Avery — Portfolio</title>
+<style>
+  :root{
+    --paper:#fdfdfb;
+    --ink:#12151f;
+    --grey:#5a6072;
+    --faint:#e9eaef;
+    --accent:#2f6bff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.65;
+  }
+  img{display:block;width:100%;height:100%;object-fit:cover}
+  a{color:inherit}
+
+  .wrap{max-width:1060px;margin:0 auto;padding:0 26px}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;background:rgba(253,253,251,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--faint);z-index:50}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:18px 26px;max-width:1060px;margin:0 auto}
+  .logo{font-weight:800;letter-spacing:-.01em;font-size:17px;display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo::before{content:"";width:10px;height:10px;background:var(--accent);border-radius:2px}
+  .nav-links{display:flex;gap:28px;font-size:14px;font-weight:600}
+  .nav-links a{text-decoration:none;color:var(--grey);transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  @media(max-width:640px){.nav-links{gap:18px;font-size:13px}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:110px 0 90px;border-bottom:1px solid var(--faint)}
+  .rule{width:44px;height:4px;background:var(--accent);margin-bottom:28px}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
+  h1{font-size:clamp(40px,7vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1.04}
+  .statement{font-size:clamp(17px,2.4vw,21px);color:var(--grey);max-width:52ch;margin-top:26px}
+  .hero-cta{display:inline-block;margin-top:38px;background:var(--ink);color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:16px 32px;border-radius:6px;transition:background .2s}
+  .hero-cta:hover{background:var(--accent)}
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:88px 0;border-bottom:1px solid var(--faint)}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:44px;flex-wrap:wrap}
+  h2{font-size:clamp(26px,4vw,36px);font-weight:800;letter-spacing:-.02em}
+  .sec-note{font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid;grid-template-columns:380px 1fr;gap:56px;align-items:start}
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr}}
+  .about-photo{aspect-ratio:4/5;background:var(--faint);border-radius:8px;overflow:hidden;position:relative}
+  .about-copy p{color:var(--grey);font-size:16.5px;margin-bottom:18px}
+  .about-copy p:first-child{color:var(--ink);font-size:19px;font-weight:600}
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:34px;background:var(--faint);border-radius:8px;overflow:hidden}
+  @media(max-width:520px){.facts{grid-template-columns:1fr}}
+  .fact{background:var(--paper);padding:20px}
+  .fact b{display:block;font-size:15px;font-weight:800}
+  .fact span{font-size:13px;color:var(--grey)}
+
+  /* ---------- gallery ---------- */
+  .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:800px){.gal{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.gal{grid-template-columns:1fr}}
+  .gal-item{aspect-ratio:1/1;background:var(--faint);border-radius:8px;overflow:hidden;position:relative}
+  .gal-cap{font-size:13.5px;color:var(--grey);margin-top:10px}
+  .gal-cell{display:flex;flex-direction:column}
+
+  /* ---------- services ---------- */
+  .svc{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:800px){.svc{grid-template-columns:1fr}}
+  .svc-card{border:1px solid var(--faint);border-radius:8px;padding:28px;transition:border-color .2s}
+  .svc-card:hover{border-color:var(--accent)}
+  .svc-card h3{font-size:17px;font-weight:800;margin-bottom:10px}
+  .svc-card h3::before{content:"—";color:var(--accent);margin-right:10px}
+  .svc-card p{font-size:14.5px;color:var(--grey)}
+
+  /* ---------- contact ---------- */
+  .contact{border-bottom:none;text-align:left}
+  .contact .big{font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:-.02em;max-width:20ch;line-height:1.15}
+  .contact-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+  .c-btn{text-decoration:none;font-weight:700;font-size:15px;padding:15px 30px;border-radius:6px}
+  .c-fill{background:var(--accent);color:#fff}
+  .c-line{border:1.5px solid var(--ink);color:var(--ink)}
+  .c-fill:hover{opacity:.9}.c-line:hover{border-color:var(--accent);color:var(--accent)}
+
+  footer{padding:34px 0 44px;color:var(--grey);font-size:13px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+  /* ================= EDITING ENGINE (stripped on publish) ================= */
+  body.editing [data-edit]{outline:1.5px dashed rgba(47,107,255,.45);outline-offset:4px;border-radius:2px;cursor:text}
+  body.editing [data-edit]:focus{outline:2px solid var(--accent)}
+  body.editing .img-slot::after{
+    content:"Tap to replace photo";position:absolute;inset:auto 10px 10px 10px;
+    background:rgba(18,21,31,.82);color:#fff;font-size:12px;font-weight:700;
+    text-align:center;padding:9px;border-radius:6px;pointer-events:none;
+  }
+  body.editing .img-slot{cursor:pointer}
+  #editBanner{
+    display:none;position:sticky;top:64px;z-index:49;margin:14px auto 0;max-width:820px;
+    text-align:center;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--accent);
+    border:1px solid rgba(47,107,255,.4);border-radius:100px;padding:10px 18px;background:rgba(253,253,251,.92);
+  }
+  body.editing #editBanner{display:block}
+  #toolbar{
+    display:none;position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;
+    background:var(--ink);border-radius:100px;padding:10px 12px;
+    align-items:center;gap:10px;box-shadow:0 14px 44px rgba(18,21,31,.35);
+    max-width:calc(100vw - 24px);flex-wrap:wrap;justify-content:center;
+  }
+  body.editing #toolbar{display:flex}
+  .tb-btn{
+    border:none;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;
+    padding:11px 18px;border-radius:100px;-webkit-tap-highlight-color:transparent;
+  }
+  .tb-done{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}
+  .tb-save{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}
+  .tb-pub{background:var(--accent);color:#fff}
+  .tb-label{color:#9aa0b4;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:0 4px}
+  .swatch{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,.4);cursor:pointer;padding:0}
+  .swatch.on{border-color:#fff;transform:scale(1.12)}
+  #fileIn{display:none}
+  @media(max-width:560px){.tb-label{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="#top" data-edit>Jordan Avery</a>
+    <div class="nav-links">
+      <a href="#about">About</a><a href="#work">Work</a><a href="#services">Services</a><a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div id="editBanner" data-engine>EDIT MODE — tap any text to rewrite · tap a photo to replace it</div>
+
+<header class="hero wrap" id="top">
+  <div class="rule"></div>
+  <div class="kicker" data-edit>Executive Chef · Sydney</div>
+  <h1 data-edit>Precise technique.<br>Honest flavours.</h1>
+  <p class="statement" data-edit>Fifteen years across fine dining and modern Australian kitchens, crafting seasonal menus that respect the produce and delight the guest.</p>
+  <a class="hero-cta" href="#work" data-edit>View my work</a>
+</header>
+
+<section class="wrap" id="about">
+  <div class="sec-head"><h2 data-edit>About</h2><span class="sec-note" data-edit>The short version</span></div>
+  <div class="about-grid">
+    <div class="about-photo img-slot" data-img>
+      <img alt="Portrait" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect width='400' height='500' fill='%23e9eaef'/%3E%3Ccircle cx='200' cy='190' r='70' fill='%23c7cbd6'/%3E%3Cpath d='M80 430c14-88 66-130 120-130s106 42 120 130z' fill='%23c7cbd6'/%3E%3Ctext x='200' y='470' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%235a6072'%3EYour photo here%3C/text%3E%3C/svg%3E">
+    </div>
+    <div class="about-copy">
+      <p data-edit>I believe great food tells a story — of the season, the producer, and the person behind the pass.</p>
+      <p data-edit>My career spans hatted restaurants, boutique hotels and large-scale events across Australia. Whether leading a brigade of twenty or designing an intimate tasting menu, my focus is the same: quality, precision and a plate you'll remember.</p>
+      <p data-edit>Today I consult on menu development, lead kitchen teams and mentor the next generation of chefs.</p>
+      <div class="facts">
+        <div class="fact"><b data-edit>15+ years</b><span data-edit>Professional kitchens</span></div>
+        <div class="fact"><b data-edit>2 hats</b><span data-edit>Awarded venues led</span></div>
+        <div class="fact"><b data-edit>40+ menus</b><span data-edit>Designed &amp; launched</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="work">
+  <div class="sec-head"><h2 data-edit>Selected work</h2><span class="sec-note" data-edit>Six highlights</span></div>
+  <div class="gal">
+    <div class="gal-cell"><div class="gal-item img-slot" data-img><img alt="Work 1" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23e9eaef'/%3E%3Ctext x='200' y='205' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%235a6072'%3EPhoto 1%3C/text%3E%3C/svg%3E"></div><div class="gal-cap" data-edit>Spring tasting menu — course three</div></div>
+    <div class="gal-cell"><div class="gal-item img-slot" data-img><img alt="Work 2" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23e9eaef'/%3E%3Ctext x='200' y='205' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%235a6072'%3EPhoto 2%3C/text%3E%3C/svg%3E"></div><div class="gal-cap" data-edit>Signature dish — market fish, native citrus</div></div>
+    <div class="gal-cell"><div class="gal-item img-slot" data-img><img alt="Work 3" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23e9eaef'/%3E%3Ctext x='200' y='205' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%235a6072'%3EPhoto 3%3C/text%3E%3C/svg%3E"></div><div class="gal-cap" data-edit>Private dining, harbour event</div></div>
+    <div class="gal-cell"><div class="gal-item img-slot" data-img><img alt="Work 4" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23e9eaef'/%3E%3Ctext x='200' y='205' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%235a6072'%3EPhoto 4%3C/text%3E%3C/svg%3E"></div><div class="gal-cap" data-edit>Dessert — chocolate, wattleseed, cherry</div></div>
+    <div class="gal-cell"><div class="gal-item img-slot" data-img><img alt="Work 5" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23e9eaef'/%3E%3Ctext x='200' y='205' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%235a6072'%3EPhoto 5%3C/text%3E%3C/svg%3E"></div><div class="gal-cap" data-edit>The team, service night</div></div>
+    <div class="gal-cell"><div class="gal-item img-slot" data-img><img alt="Work 6" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23e9eaef'/%3E%3Ctext x='200' y='205' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%235a6072'%3EPhoto 6%3C/text%3E%3C/svg%3E"></div><div class="gal-cap" data-edit>Menu development session</div></div>
+  </div>
+</section>
+
+<section class="wrap" id="services">
+  <div class="sec-head"><h2 data-edit>What I offer</h2><span class="sec-note" data-edit>Three ways to work together</span></div>
+  <div class="svc">
+    <div class="svc-card"><h3 data-edit>Menu development</h3><p data-edit>Seasonal menus designed for your venue, your kitchen and your margins — from concept to costed recipes.</p></div>
+    <div class="svc-card"><h3 data-edit>Kitchen leadership</h3><p data-edit>Interim head chef and brigade leadership for openings, transitions and peak seasons.</p></div>
+    <div class="svc-card"><h3 data-edit>Private events</h3><p data-edit>Bespoke dining experiences for private clients, from intimate dinners to milestone celebrations.</p></div>
+  </div>
+</section>
+
+<section class="wrap contact" id="contact">
+  <div class="rule"></div>
+  <p class="big" data-edit>Let's make something memorable together.</p>
+  <div class="contact-row">
+    <a class="c-btn c-fill" href="mailto:hello@example.com" data-edit>Email me</a>
+    <a class="c-btn c-line" href="tel:+61400000000" data-edit>Call +61 400 000 000</a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span data-edit>© 2026 Jordan Avery. All rights reserved.</span>
+  <span>Made with WebEscapade</span>
+</footer>
+
+<!-- ================= ENGINE UI (removed on publish) ================= -->
+<div id="toolbar" data-engine>
+  <button class="tb-btn tb-done" id="btnDone">Done</button>
+  <span class="tb-label">Accent</span>
+  <button class="swatch on" data-accent="#2f6bff" style="background:#2f6bff" aria-label="Blue accent"></button>
+  <button class="swatch" data-accent="#1f7a5c" style="background:#1f7a5c" aria-label="Forest accent"></button>
+  <button class="swatch" data-accent="#6d28d9" style="background:#6d28d9" aria-label="Plum accent"></button>
+  <button class="swatch" data-accent="#c2263f" style="background:#c2263f" aria-label="Crimson accent"></button>
+  <button class="swatch" data-accent="#12151f" style="background:#12151f" aria-label="Ink accent"></button>
+  <button class="tb-btn tb-save" id="btnSave">Save &amp; keep editing</button>
+  <button class="tb-btn tb-pub" id="btnPublish">Publish final</button>
+</div>
+<input type="file" id="fileIn" accept="image/*" data-engine>
+
+<script id="engine" data-engine>
+(function(){
+  var qs = new URLSearchParams(location.search);
+  var EDIT = qs.get('setup') === '1' || location.protocol === 'file:';
+  if(!EDIT) return;
+
+  document.body.classList.add('editing');
+
+  /* --- text editing --- */
+  document.querySelectorAll('[data-edit]').forEach(function(el){
+    el.setAttribute('contenteditable','true');
+    el.setAttribute('spellcheck','false');
+    if(el.tagName === 'A'){ el.addEventListener('click', function(e){ e.preventDefault(); }); }
+  });
+
+  /* --- image replacement --- */
+  var fileIn = document.getElementById('fileIn'), target = null;
+  document.querySelectorAll('.img-slot').forEach(function(slot){
+    slot.addEventListener('click', function(){ target = slot.querySelector('img'); fileIn.click(); });
+  });
+  fileIn.addEventListener('change', function(){
+    var f = fileIn.files[0];
+    if(!f || !target) return;
+    var r = new FileReader();
+    r.onload = function(){ target.src = r.result; };
+    r.readAsDataURL(f);
+    fileIn.value = '';
+  });
+
+  /* --- accent swatches --- */
+  document.querySelectorAll('.swatch').forEach(function(sw){
+    sw.addEventListener('click', function(){
+      document.querySelectorAll('.swatch').forEach(function(x){ x.classList.remove('on'); });
+      sw.classList.add('on');
+      document.documentElement.style.setProperty('--accent', sw.dataset.accent);
+    });
+  });
+
+  /* --- done: preview without edit chrome --- */
+  document.getElementById('btnDone').addEventListener('click', function(){
+    document.body.classList.toggle('editing');
+    this.textContent = document.body.classList.contains('editing') ? 'Done' : 'Edit';
+    if(!document.body.classList.contains('editing')) document.body.appendChild(document.getElementById('toolbar')), document.getElementById('toolbar').style.display='flex';
+  });
+
+  /* --- serialisation helpers --- */
+  function currentAccent(){
+    return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2f6bff';
+  }
+  function snapshot(stripEngine){
+    var doc = document.documentElement.cloneNode(true);
+    /* bake accent into the stylesheet */
+    var style = doc.querySelector('style');
+    style.textContent = style.textContent.replace(/--accent:#[0-9a-fA-F]{3,8};/, '--accent:'+currentAccent()+';');
+    /* clean editing state */
+    doc.querySelector('body').classList.remove('editing');
+    doc.querySelectorAll('[contenteditable]').forEach(function(el){
+      el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck');
+    });
+    if(stripEngine){
+      doc.querySelectorAll('[data-engine]').forEach(function(el){ el.remove(); });
+      doc.querySelectorAll('[data-edit]').forEach(function(el){ el.removeAttribute('data-edit'); });
+      doc.querySelectorAll('[data-img]').forEach(function(el){ el.removeAttribute('data-img'); el.classList.remove('img-slot'); });
+      /* strip engine CSS block */
+      style.textContent = style.textContent.split('/* ================= EDITING ENGINE')[0];
+    }
+    return '<!DOCTYPE html>\n<html lang="en">' + doc.innerHTML + '</html>';
+  }
+  function download(html, name){
+    var blob = new Blob([html], {type:'text/html'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 800);
+  }
+
+  document.getElementById('btnSave').addEventListener('click', function(){
+    download(snapshot(false), 'my-portfolio-editable.html');
+    alert('Saved! Keep this file to continue editing later.\nOpen it and add ?setup=1 to the address (or just open the file directly) to edit again.');
+  });
+  document.getElementById('btnPublish').addEventListener('click', function(){
+    download(snapshot(true), 'index.html');
+    alert('Published version downloaded as index.html — ready for GitHub Pages.\nSee PUBLISH-ME-FIRST.html for the 10-minute publishing guide.');
+  });
+})();
+</script>
+</body>
+</html>
