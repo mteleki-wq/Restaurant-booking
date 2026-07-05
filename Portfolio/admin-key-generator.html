@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Key Generator — WebEscapade</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+  :root{
+    --bg:#070b18;--card:#0d1226;--ink:#eef1fb;--muted:#9aa3c7;
+    --line:rgba(154,163,199,.18);
+    --grad:linear-gradient(100deg,#a855f7 0%,#4f7cff 55%,#39d0c3 100%);
+    --teal:#39d0c3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Sora',-apple-system,sans-serif;line-height:1.6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{max-width:520px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+  h1{font-size:24px;font-weight:800;margin-bottom:10px;letter-spacing:-.01em}
+  p{color:var(--muted);font-size:14px;margin-bottom:22px}
+  label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+  input{
+    width:100%;background:#0a0f22;border:1px solid var(--line);border-radius:10px;color:var(--ink);
+    font-family:'Space Mono',monospace;font-size:15px;padding:14px 16px;outline:none;margin-bottom:18px;
+  }
+  input:focus{border-color:#4f7cff}
+  button{
+    width:100%;background:var(--grad);border:none;color:#fff;font-family:'Sora',sans-serif;
+    font-weight:700;font-size:15px;padding:15px;border-radius:12px;cursor:pointer;margin-bottom:22px;
+  }
+  button:active{transform:scale(.98)}
+  .result{display:none;background:#0a0f22;border:1px solid rgba(57,208,195,.35);border-radius:12px;padding:16px;margin-bottom:18px}
+  .result.show{display:block}
+  .result label{color:var(--teal)}
+  .hashval{
+    font-family:'Space Mono',monospace;font-size:13px;word-break:break-all;color:var(--ink);
+    background:rgba(0,0,0,.25);padding:12px;border-radius:8px;line-height:1.5;
+  }
+  .copybtn{
+    margin-top:12px;width:auto;display:inline-block;background:transparent;border:1px solid var(--line);
+    color:var(--ink);font-size:13px;padding:9px 18px;border-radius:100px;
+  }
+  .steps{border-top:1px solid var(--line);padding-top:20px;margin-top:4px}
+  .steps ol{padding-left:20px;color:var(--muted);font-size:13.5px}
+  .steps li{margin-bottom:8px}
+  .steps b{color:var(--ink)}
+  code{background:rgba(79,124,255,.12);color:#bcd0ff;padding:2px 6px;border-radius:5px;font-family:'Space Mono',monospace;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Admin key generator</div>
+  <h1>Set your own admin password</h1>
+  <p>Type a new password below to generate its secure hash. This never leaves your device — everything happens right here on the page.</p>
+
+  <label for="pw">New admin password</label>
+  <input id="pw" type="text" placeholder="e.g. a memorable phrase" autocomplete="off" autocapitalize="off" autocorrect="off">
+  <button id="genBtn">Generate hash</button>
+
+  <div class="result" id="result">
+    <label>Your hash — paste this into the file</label>
+    <div class="hashval" id="hashval"></div>
+    <button class="copybtn" id="copyBtn">Copy hash</button>
+  </div>
+
+  <div class="steps">
+    <ol>
+      <li>Type your new password above and tap <b>Generate hash</b>.</li>
+      <li>Tap <b>Copy hash</b>.</li>
+      <li>Open <code>tier-selection-section.html</code> in a text editor (or the Files app "Open in" a code editor).</li>
+      <li>Find the line starting with <code>const ADMIN_KEY_HASH =</code> near the top of the admin script.</li>
+      <li>Replace the long text between the quotes with your copied hash, then save.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+const ADMIN_SALT = 'WEBESCAPADE-2026-SALT'; // must match the salt in tier-selection-section.html
+
+async function sha256(text){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+document.getElementById('genBtn').addEventListener('click', async () => {
+  const pw = document.getElementById('pw').value.trim();
+  if(!pw){ return; }
+  const hash = await sha256(ADMIN_SALT + pw);
+  document.getElementById('hashval').textContent = hash;
+  document.getElementById('result').classList.add('show');
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const val = document.getElementById('hashval').textContent;
+  navigator.clipboard.writeText(val).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const t = btn.textContent;
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = t, 1500);
+  });
+});
+</script>
+</body>
+</html>
