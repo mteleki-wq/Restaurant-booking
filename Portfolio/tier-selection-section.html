@@ -574,7 +574,7 @@ if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches){
     current value. Keep ADMIN_SALT identical in both files.
   */
   const ADMIN_SALT = 'WEBESCAPADE-2026-SALT';
-  const ADMIN_KEY_HASH = 'bcd24e041a6f244b84600d7c793bce21a3781b8d16ae68a3c86995a0dd63e65e'; // default password: webescapade2026 — CHANGE THIS
+  const ADMIN_KEY_HASH = 'b1b5485fb1a95cfe09123533eef9a1815a5757b82a1fe4621b1c62701d422d3f'; // default password: webescapade2026 — CHANGE THIS
 
   async function sha256(text){
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
