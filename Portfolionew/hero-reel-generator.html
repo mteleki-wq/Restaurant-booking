@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Reel Generator — WebEscapade</title>
+<!--
+  ============================================================
+  HERO REEL GENERATOR
+  ============================================================
+  Drop 3–6 photos → get a cinematic hero video (Ken Burns
+  motion, crossfades, colour grade, vignette, fade in/out).
+  Everything happens on your device — nothing is uploaded.
+
+  USING THE RESULT:
+  1. Download the video.
+  2. Upload it to your GitHub repository.
+  3. In the Signature portfolio: toolbar → "Set hero video"
+     → paste the file's raw address.
+  ============================================================
+-->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+  :root{
+    --bg:#070b18;--card:#0d1226;--ink:#eef1fb;--muted:#9aa3c7;
+    --line:rgba(154,163,199,.18);
+    --grad:linear-gradient(100deg,#a855f7 0%,#4f7cff 55%,#39d0c3 100%);
+    --teal:#39d0c3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Sora',-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto;padding:44px 22px 90px}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--grad)}
+  h1{font-size:clamp(26px,5vw,36px);font-weight:800;letter-spacing:-.01em;line-height:1.15}
+  h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--muted);font-size:15px;margin-top:12px;max-width:56ch}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:22px}
+  .card h2{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .num{width:24px;height:24px;border-radius:50%;background:var(--grad);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+
+  /* drop zone */
+  #drop{
+    border:2px dashed rgba(79,124,255,.45);border-radius:14px;padding:34px 20px;text-align:center;
+    cursor:pointer;transition:border-color .25s,background .25s;
+  }
+  #drop.over{border-color:var(--teal);background:rgba(57,208,195,.06)}
+  #drop p{color:var(--muted);font-size:14px}
+  #drop b{color:var(--ink)}
+  #fileIn{display:none}
+
+  .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin-top:16px}
+  .thumb{position:relative;aspect-ratio:16/10;border-radius:9px;overflow:hidden;border:1px solid var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb button{
+    position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;
+    background:rgba(4,4,10,.8);color:#ff8fa0;font-size:13px;line-height:1;
+  }
+  .thumb .ord{position:absolute;left:5px;top:5px;background:rgba(4,4,10,.8);color:var(--teal);font-family:'Space Mono',monospace;font-size:10px;padding:2px 7px;border-radius:100px}
+
+  /* settings */
+  .settings{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end}
+  .set{flex:1;min-width:170px}
+  .set label{display:block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .set output{color:var(--teal);font-weight:700}
+  input[type="range"]{width:100%;accent-color:#4f7cff}
+  select{
+    width:100%;background:#0a0f22;border:1px solid var(--line);border-radius:10px;color:var(--ink);
+    font-family:'Sora',sans-serif;font-size:14px;padding:11px 12px;outline:none;
+  }
+
+  .go{
+    width:100%;margin-top:18px;background:var(--grad);border:none;border-radius:100px;color:#fff;
+    font-family:'Sora',sans-serif;font-weight:800;font-size:16px;padding:17px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .go:disabled{opacity:.4;cursor:not-allowed}
+  .go:active{transform:scale(.99)}
+
+  /* progress + result */
+  #stage{display:none;text-align:center}
+  #stage.show{display:block}
+  canvas{width:100%;border-radius:12px;background:#000;display:block}
+  .bar{height:6px;background:rgba(255,255,255,.1);border-radius:100px;overflow:hidden;margin-top:14px}
+  .bar i{display:block;height:100%;width:0%;background:var(--grad);transition:width .2s}
+  .stage-note{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+  #result{display:none}
+  #result.show{display:block}
+  #result video{width:100%;border-radius:12px;background:#000;display:block}
+  .dl{
+    display:inline-block;margin-top:16px;background:var(--grad);color:#fff;text-decoration:none;
+    font-weight:800;font-size:15px;border-radius:100px;padding:15px 34px;
+  }
+  .after{margin-top:16px;font-size:13px;color:var(--muted);text-align:left}
+  .after code{background:rgba(79,124,255,.12);color:#bcd0ff;padding:2px 7px;border-radius:5px;font-family:'Space Mono',monospace;font-size:12px}
+  .warn{margin-top:14px;font-size:12.5px;color:#ffd479;display:none}
+  .warn.show{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Hero reel generator</div>
+  <h1>Drop your photos.<br><span class="g">Get an epic hero video.</span></h1>
+  <p class="lede">Cinematic Ken Burns motion, soft crossfades, a gentle colour grade and vignette — rendered entirely on your device. Nothing is uploaded anywhere.</p>
+
+  <!-- 1. photos -->
+  <div class="card">
+    <h2><span class="num">1</span> Add 3–6 photos</h2>
+    <div id="drop">
+      <p><b>Tap to choose photos</b><br>or drag them here · landscape works best</p>
+    </div>
+    <input type="file" id="fileIn" accept="image/*" multiple>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <!-- 2. settings -->
+  <div class="card">
+    <h2><span class="num">2</span> Tune the feel</h2>
+    <div class="settings">
+      <div class="set">
+        <label>Seconds per photo — <output id="secOut">3.5</output>s</label>
+        <input type="range" id="secIn" min="2.5" max="5" step="0.5" value="3.5">
+      </div>
+      <div class="set">
+        <label>Video size</label>
+        <select id="sizeIn">
+          <option value="1280x720" selected>720p — small file, great for heroes</option>
+          <option value="1920x1080">1080p — larger file, extra crisp</option>
+        </select>
+      </div>
+    </div>
+    <button class="go" id="goBtn" disabled>Generate hero reel</button>
+    <div class="warn" id="recWarn">Your browser doesn't support in-page video recording. Try Safari 16+ on iPad/iPhone or any recent Chrome.</div>
+  </div>
+
+  <!-- 3. rendering -->
+  <div class="card" id="stage">
+    <h2 style="justify-content:center"><span class="num">3</span> Filming…</h2>
+    <canvas id="cv"></canvas>
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="stage-note" id="stageNote">Rendering in real time — keep this tab open</div>
+  </div>
+
+  <!-- 4. result -->
+  <div class="card" id="result">
+    <h2><span class="num">✓</span> Your hero reel</h2>
+    <video id="outVid" controls playsinline muted loop></video>
+    <a class="dl" id="dlBtn" download="hero-reel.mp4" href="#">Download video</a>
+    <div class="after">
+      <b>Next:</b> upload the file to your GitHub repository, open it there, tap <b>Raw</b>, copy that address, then in your Signature portfolio use <code>Set hero video</code> and paste it in.
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- photo intake ---------- */
+var photos = []; // {img: HTMLImageElement, name}
+var drop = document.getElementById('drop');
+var fileIn = document.getElementById('fileIn');
+var MAX = 6;
+
+drop.addEventListener('click', function(){ fileIn.click(); });
+drop.addEventListener('dragover', function(e){ e.preventDefault(); drop.classList.add('over'); });
+drop.addEventListener('dragleave', function(){ drop.classList.remove('over'); });
+drop.addEventListener('drop', function(e){
+  e.preventDefault(); drop.classList.remove('over');
+  addFiles(e.dataTransfer.files);
+});
+fileIn.addEventListener('change', function(){ addFiles(fileIn.files); fileIn.value = ''; });
+
+function addFiles(list){
+  Array.prototype.forEach.call(list, function(f){
+    if (!f.type.match(/^image\//) || photos.length >= MAX) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      var img = new Image();
+      img.onload = function(){ photos.push({ img: img, name: f.name }); renderThumbs(); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function renderThumbs(){
+  var t = document.getElementById('thumbs');
+  t.innerHTML = '';
+  photos.forEach(function(p, i){
+    var d = document.createElement('div');
+    d.className = 'thumb';
+    d.innerHTML = '<img alt="" src="' + p.img.src + '"><span class="ord">' + (i+1) + '</span><button aria-label="Remove">×</button>';
+    d.querySelector('button').addEventListener('click', function(){ photos.splice(i,1); renderThumbs(); });
+    t.appendChild(d);
+  });
+  document.getElementById('goBtn').disabled = photos.length < 2;
+}
+
+document.getElementById('secIn').addEventListener('input', function(){
+  document.getElementById('secOut').textContent = this.value;
+});
+
+/* ---------- recording support check ---------- */
+function pickMime(){
+  var options = ['video/mp4;codecs=avc1.42E01E','video/mp4','video/webm;codecs=vp9','video/webm'];
+  for (var i = 0; i < options.length; i++){
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(options[i])) return options[i];
+  }
+  return null;
+}
+if (!pickMime()) document.getElementById('recWarn').classList.add('show');
+
+/* ---------- Ken Burns presets (rotate per photo) ----------
+   Each returns {z, px, py}: zoom factor and pan position
+   (-1..1 across the slack created by the zoom).            */
+var MOVES = [
+  function(p){ return { z: 1 + .10*p, px: 0,        py: 0 }; },   // slow push in
+  function(p){ return { z: 1.06,      px: -1 + 2*p, py: 0 }; },   // glide left → right
+  function(p){ return { z: 1.10 - .10*p, px: 0,     py: 0 }; },   // gentle pull back
+  function(p){ return { z: 1 + .08*p, px: 0,        py: -.5 }; }  // push toward upper third
+];
+
+/* draw one photo cover-cropped with its move applied */
+function drawFrame(ctx, cw, ch, img, move, p, alpha){
+  var m = move(p);
+  var s0 = Math.max(cw / img.width, ch / img.height);
+  var s = s0 * m.z;
+  var w = img.width * s, h = img.height * s;
+  var slackX = (w - cw) / 2, slackY = (h - ch) / 2;
+  var dx = (cw - w) / 2 + m.px * slackX;
+  var dy = (ch - h) / 2 + m.py * slackY;
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(img, dx, dy, w, h);
+  ctx.globalAlpha = 1;
+}
+
+/* cinematic finish: vignette + fades */
+function finishFrame(ctx, cw, ch, t, total){
+  var g = ctx.createRadialGradient(cw/2, ch/2, ch*.42, cw/2, ch/2, ch*.95);
+  g.addColorStop(0, 'rgba(0,0,0,0)');
+  g.addColorStop(1, 'rgba(0,0,0,.34)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,cw,ch);
+  var fade = 0;
+  if (t < .6) fade = 1 - t/.6;
+  if (t > total - .6) fade = (t - (total - .6))/.6;
+  if (fade > 0){
+    ctx.fillStyle = 'rgba(0,0,0,' + Math.min(1, fade) + ')';
+    ctx.fillRect(0,0,cw,ch);
+  }
+}
+
+/* ---------- generate ---------- */
+document.getElementById('goBtn').addEventListener('click', function(){
+  var mime = pickMime();
+  if (!mime || photos.length < 2) return;
+
+  var per = parseFloat(document.getElementById('secIn').value);
+  var XF = 0.6; // crossfade seconds
+  var size = document.getElementById('sizeIn').value.split('x');
+  var cw = +size[0], ch = +size[1];
+  var total = per * photos.length - XF * (photos.length - 1);
+
+  var cv = document.getElementById('cv');
+  cv.width = cw; cv.height = ch;
+  var ctx = cv.getContext('2d');
+
+  document.getElementById('stage').classList.add('show');
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('goBtn').disabled = true;
+  cv.scrollIntoView({behavior:'smooth', block:'center'});
+
+  var stream = cv.captureStream(30);
+  var chunks = [];
+  var rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: cw >= 1920 ? 8000000 : 5000000 });
+  rec.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+  rec.onstop = function(){
+    var ext = mime.indexOf('mp4') !== -1 ? 'mp4' : 'webm';
+    var blob = new Blob(chunks, { type: mime.split(';')[0] });
+    var url = URL.createObjectURL(blob);
+    var vid = document.getElementById('outVid');
+    vid.src = url;
+    var dl = document.getElementById('dlBtn');
+    dl.href = url;
+    dl.setAttribute('download', 'hero-reel.' + ext);
+    document.getElementById('stage').classList.remove('show');
+    document.getElementById('result').classList.add('show');
+    document.getElementById('goBtn').disabled = false;
+    vid.play().catch(function(){});
+  };
+
+  var t0 = null;
+  function frame(now){
+    if (t0 === null) t0 = now;
+    var t = (now - t0) / 1000;
+    if (t >= total){ rec.stop(); return; }
+
+    /* which photo(s) are on screen at time t */
+    var step = per - XF;
+    var i = Math.min(photos.length - 1, Math.floor(t / step));
+    var localT = t - i * step;
+    var moveA = MOVES[i % MOVES.length];
+
+    ctx.fillStyle = '#000'; ctx.fillRect(0,0,cw,ch);
+    drawFrame(ctx, cw, ch, photos[i].img, moveA, Math.min(1, localT / per), 1);
+
+    /* crossfade into the next photo during the final XF seconds */
+    if (i < photos.length - 1 && localT > step){
+      var xp = (localT - step) / XF;                 // 0 → 1 across the fade
+      var moveB = MOVES[(i+1) % MOVES.length];
+      drawFrame(ctx, cw, ch, photos[i+1].img, moveB, (localT - step) / per, Math.min(1, xp));
+    }
+
+    finishFrame(ctx, cw, ch, t, total);
+    document.getElementById('barFill').style.width = (t / total * 100) + '%';
+    requestAnimationFrame(frame);
+  }
+  rec.start(250);
+  requestAnimationFrame(frame);
+});
+</script>
+</body>
+</html>
