@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Marc Teleki — Web Portfolio</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"><style>
+  :root{
+    --bg:#f4efe7; --card:#fbf8f2; --ink:#211c17; --muted:#6f655a;
+    --accent:#5c3a21; --accent-2:#9c6b3f; --rule:#d9cab2;
+    --shadow:0 1px 2px rgba(33,28,23,.05), 0 14px 30px -18px rgba(33,28,23,.28);
+    --ok:#3c7d4d; --danger:#b0492f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Outfit',sans-serif;
+    background:
+      radial-gradient(1100px 520px at 12% -8%, #fcf8f0 0%, transparent 60%),
+      radial-gradient(900px 500px at 102% 4%, #efe6d6 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---- TOOLBAR ---- */
+  .toolbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(251,248,242,.86); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px;
+    padding:12px 24px;
+  }
+  .toolbar .brand{font-family:'Fraunces',serif;font-weight:600;color:var(--accent);font-size:1.05rem;margin-right:auto}
+  .toolbar label{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .toolbar input.base{
+    font-family:'Outfit';font-size:.82rem;color:var(--ink);
+    border:1px solid var(--rule);border-radius:8px;padding:7px 10px;
+    width:min(420px,52vw);background:#fff;
+  }
+  .btn{
+    font-family:'Outfit';font-weight:600;font-size:.8rem;letter-spacing:.02em;
+    border:1px solid var(--accent);background:var(--accent);color:#fff;
+    border-radius:9px;padding:8px 14px;cursor:pointer;transition:opacity .2s,transform .1s;
+  }
+  .btn:hover{opacity:.9} .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:transparent;color:var(--accent)}
+  .btn.tiny{padding:5px 10px;font-size:.72rem;border-radius:7px}
+  .edit-toggle{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted)}
+  .switch{position:relative;width:42px;height:23px;border-radius:999px;background:#d9cab2;cursor:pointer;transition:background .2s;flex:none}
+  .switch.on{background:var(--accent)}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:left .2s}
+  .switch.on::after{left:21px}
+
+  /* ---- HEADER ---- */
+  header{max-width:1180px;margin:0 auto;padding:54px 32px 26px}
+  .eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent-2);font-weight:600;margin-bottom:16px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.03;letter-spacing:-.01em}
+  h1 .light{font-weight:400;font-style:italic;color:var(--accent)}
+  .tagline{margin-top:16px;font-size:clamp(1rem,1.6vw,1.15rem);color:var(--muted);max-width:640px}
+  .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.9rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:20px}
+  .meta a{color:var(--accent);text-decoration:none}
+
+  /* ---- SECTION ---- */
+  .section{max-width:1180px;margin:0 auto;padding:22px 32px 6px}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin:28px 0 18px}
+  .section-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;color:var(--accent);white-space:nowrap}
+  .section-head h2[contenteditable="true"]{outline:none;border-bottom:1px dashed var(--accent-2);cursor:text}
+  .section-head .line{flex:1;height:1px;background:var(--rule)}
+  .section-head .count{font-size:.78rem;color:var(--muted);letter-spacing:.05em}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px;padding-bottom:10px}
+
+  /* ---- CARD ---- */
+  .card{
+    position:relative;display:flex;flex-direction:column;background:var(--card);
+    border:1px solid var(--rule);border-radius:16px;overflow:hidden;
+    box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s,border-color .25s;
+  }
+  .card:hover{transform:translateY(-5px);box-shadow:0 1px 2px rgba(33,28,23,.06),0 24px 44px -20px rgba(33,28,23,.4);border-color:var(--accent-2)}
+  .thumb{position:relative;aspect-ratio:16/10;width:100%;background:linear-gradient(135deg,#efe6d6,#e3d6c0);display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid var(--rule)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--accent);background-image:repeating-linear-gradient(45deg,rgba(92,58,33,.05) 0 12px,transparent 12px 24px)}
+  .thumb .ph svg{width:34px;height:34px;opacity:.5}
+  .thumb .ph span{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2)}
+  .tag{position:absolute;top:12px;left:12px;z-index:2;background:rgba(251,248,242,.92);border:1px solid var(--rule);border-radius:999px;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;color:var(--accent);font-weight:600}
+
+  .card-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+  .card-body h3{font-family:'Fraunces',serif;font-size:1.12rem;font-weight:600;line-height:1.25}
+  .card-body p{margin-top:6px;font-size:.88rem;color:var(--muted);flex:1}
+  .card-foot{margin-top:14px;display:flex;align-items:center;gap:7px;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .card-foot .arrow{transition:transform .25s}
+  .card:hover .card-foot .arrow{transform:translateX(4px)}
+
+  /* clickable wrapper only active when NOT editing */
+  .card .link-cover{position:absolute;inset:0;z-index:3;cursor:pointer}
+  body.editing .card .link-cover{display:none}
+
+  /* ---- EDIT CONTROLS (shown only in edit mode) ---- */
+  .card .edit-fields{display:none;padding:0 18px 16px;flex-direction:column;gap:8px}
+  body.editing .card .edit-fields{display:flex}
+  body.editing .card .card-foot{display:none}
+  .card .edit-fields label{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2);font-weight:600;margin-bottom:-4px}
+  .card .edit-fields input{font-family:'Outfit';font-size:.82rem;border:1px solid var(--rule);border-radius:7px;padding:6px 9px;background:#fff;color:var(--ink);width:100%}
+  .card .row{display:flex;gap:8px}
+  .card .row .btn{flex:1}
+  .card-actions{position:absolute;top:10px;right:10px;z-index:4;display:none;gap:6px}
+  body.editing .card-actions{display:flex}
+  .card-actions .ico{
+    width:30px;height:30px;border-radius:8px;border:1px solid var(--rule);
+    background:rgba(251,248,242,.95);color:var(--accent);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;
+  }
+  .card-actions .ico.del{color:var(--danger);border-color:#e3b9ac}
+
+  .add-card{
+    display:none;align-items:center;justify-content:center;min-height:200px;
+    border:2px dashed var(--accent-2);border-radius:16px;background:transparent;
+    color:var(--accent);font-weight:600;cursor:pointer;font-size:.9rem;
+  }
+  body.editing .add-card{display:flex}
+  .add-card:hover{background:rgba(156,107,63,.06)}
+
+  .section-tools{display:none;gap:8px;margin:6px 0 0}
+  body.editing .section-tools{display:flex}
+
+  footer{max-width:1180px;margin:36px auto 0;padding:28px 32px 70px;border-top:1px solid var(--rule);color:var(--muted);font-size:.85rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px}
+
+  .hint{max-width:1180px;margin:0 auto;padding:0 32px}
+  .hint .box{background:rgba(156,107,63,.08);border:1px solid var(--rule);border-radius:12px;padding:14px 18px;font-size:.85rem;color:var(--accent);display:none}
+  body.editing .hint .box{display:block}
+
+  @media (max-width:560px){
+    header{padding:42px 20px 20px} .section{padding:18px 20px 4px}
+    .grid{grid-template-columns:1fr} .toolbar{padding:10px 16px}
+    .toolbar input.base{width:100%}
+  }
+</style></head><body><header><div class="eyebrow">Web · Marketing · AI Automation</div><h1>Marc Teleki <span class='light'>— Portfolio</span></h1><p class="tagline">A selection of websites, tools and digital projects designed and built through Webescapade — from hospitality booking systems to AI-powered training utilities.</p><div class="meta"><span>Webescapade · est. 2001</span><a href="mailto:marc@webescapade.net">marc@webescapade.net</a><span>0413 872 994</span><span>Eastwood, NSW 2122</span></div></header><main><section class="section"><div class="section-head"><h2>Webescapade website</h2><span class="line"></span><span class="count">7 projects</span></div><div class="grid"><a class="card" href="https://cheflinksydney.com" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fcheflinksydney.com?w=640&h=400" alt="Chef link Sydney preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Chef link Sydney</h3><p>Restaurant and chef network</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://youtrac.com.au/" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fyoutrac.com.au%2F?w=640&h=400" alt="Youtrac Australia preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Youtrac Australia</h3><p>Consultancy &amp; agency homepage.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/index.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Findex.html?w=640&h=400" alt="Home / Index preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Home / Index</h3><p>Main landing page.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://webescapade.com/portfolio" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwebescapade.com%2Fportfolio?w=640&h=400" alt="Webescapade Portfolio  preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Webescapade Portfolio </h3><p>Description…</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2F?w=640&h=400" alt="Webescapade Intro preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Webescapade Intro</h3><p>Description…</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://webescapade.com/connect.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwebescapade.com%2Fconnect.html?w=640&h=400" alt="Webescapade connect  preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Webescapade connect </h3><p>Let’s connect.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://cheflinksydney.com/Propretylink/" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fcheflinksydney.com%2FPropretylink%2F?w=640&h=400" alt="Property link preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Property link</h3><p>Real state concept </p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a></div></section><section class="section"><div class="section-head"><h2>Portfolios</h2><span class="line"></span><span class="count">3 projects</span></div><div class="grid"><a class="card" href="https://webescapade.com/Portfolionew/#work" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwebescapade.com%2FPortfolionew%2F%23work?w=640&h=400" alt="Portfolio preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Portfolio</span><div class="card-body"><h3>Portfolio</h3><p>This portfolio page.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/james%20collins%20portfolio%202.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Fjames%2520collins%2520portfolio%25202.html?w=640&h=400" alt="James Collins Portfolio — v2 preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Portfolio</span><div class="card-body"><h3>James Collins Portfolio — v2</h3><p>Refined build.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/robin_bessege_portfolio%203.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Frobin_bessege_portfolio%25203.html?w=640&h=400" alt="Robin Bessege — v3 preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Portfolio</span><div class="card-body"><h3>Robin Bessege — v3</h3><p>Latest iteration.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a></div></section><section class="section"><div class="section-head"><h2>AI Tools &amp; Utilities</h2><span class="line"></span><span class="count">4 projects</span></div><div class="grid"><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/food-cost-calculator.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Ffood-cost-calculator.html?w=640&h=400" alt="Food Cost Calculator preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Tool</span><div class="card-body"><h3>Food Cost Calculator</h3><p>Dish &amp; menu costing tool.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/recipe-converter.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Frecipe-converter.html?w=640&h=400" alt="Recipe Converter preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Tool</span><div class="card-body"><h3>Recipe Converter</h3><p>Scale &amp; convert recipes.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://webescapade.com/Portfolionew/catering-proposal-generator5.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwebescapade.com%2FPortfolionew%2Fcatering-proposal-generator5.html?w=640&h=400" alt="Catering Proposal Generator preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Tool</span><div class="card-body"><h3>Catering Proposal Generator</h3><p>AI catering proposal builder.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/rsa%20team%20manager.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Frsa%2520team%2520manager.html?w=640&h=400" alt="RSA Team Manager preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Tool</span><div class="card-body"><h3>RSA Team Manager</h3><p>Staff / compliance manager.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a></div></section><section class="section"><div class="section-head"><h2>Concept &amp; Other Projects</h2><span class="line"></span><span class="count">6 projects</span></div><div class="grid"><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/rightway-security.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Frightway-security.html?w=640&h=400" alt="Rightway Security preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Rightway Security</h3><p>Security company website.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://webescapade.com/Portfolionew/index-30.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwebescapade.com%2FPortfolionew%2Findex-30.html?w=640&h=400" alt="Restaurant with booking online  preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Restaurant with booking online </h3><p>Restaurant with booking concept </p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://mteleki-wq.github.io/Restaurant-booking/breath-for-life-html.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmteleki-wq.github.io%2FRestaurant-booking%2Fbreath-for-life-html.html?w=640&h=400" alt="Breath for Life preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Breath for Life</h3><p>Health / wellbeing site.</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://cheflinksydney.com/newcheflink/logo-animation-generator-green.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fcheflinksydney.com%2Fnewcheflink%2Flogo-animation-generator-green.html?w=640&h=400" alt="Logo animation tool preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Logo animation tool</h3><p>Drop your logo and animate</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://webescapade.com/Portfolionew/restaurant-booking-supabase.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwebescapade.com%2FPortfolionew%2Frestaurant-booking-supabase.html?w=640&h=400" alt="Restaurant booking system preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Restaurant booking system</h3><p>Booking system </p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a><a class="card" href="https://webescapade.com/Portfolionew/hero-reel-generator-4.html" target="_blank" rel="noopener"><div class="thumb"><img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwebescapade.com%2FPortfolionew%2Fhero-reel-generator-4.html?w=640&h=400" alt="Image Hero page generator preview" loading="lazy"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Preview</span></div></div><span class="tag">Website</span><div class="card-body"><h3>Image Hero page generator</h3><p>Generate animations on home page tool</p><div class="card-foot">Visit site <span class="arrow">&rarr;</span></div></div></a></div></section></main><footer><span>© 2026 Marc Teleki · Webescapade</span><span>Built &amp; deployed via GitHub Pages</span></footer><script>document.querySelectorAll(".thumb img").forEach(function(im){var t=0;im.addEventListener("error",function(){if(t<3){t++;setTimeout(function(){im.src=im.src.split("&retry=")[0]+"&retry="+t;},2500);}else{im.style.display="none";var p=im.parentNode.querySelector(".ph");if(p)p.style.display="flex";}});});</script></body></html>
