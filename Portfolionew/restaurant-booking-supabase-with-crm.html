@@ -807,9 +807,15 @@ $("confirmBtn").addEventListener("click", async function(){
           body: JSON.stringify({ booking_id: result.booking_id })
         }).then(function(r){ return r.json(); });
         if (sess && sess.url){
-          window.location.href = sess.url;   // redirect to Stripe Checkout (setup mode)
-          return;
-        }
+  // Stripe's card page cannot load inside an iframe (banks block framing).
+  // If we're embedded in a modal/iframe, redirect the WHOLE tab instead.
+  if (window.top && window.top !== window.self){
+    window.top.location.href = sess.url;   // break out of the iframe
+  } else {
+    window.location.href = sess.url;       // normal full-page redirect
+  }
+  return;
+}
         showMsg("msg2","err","We couldn't open the secure card page. Please try again or call us on <b>" + CONFIG.contactPhone + "</b>.");
       } catch(e){
         showMsg("msg2","err","We couldn't reach the secure card page. Please try again or call us on <b>" + CONFIG.contactPhone + "</b>.");
