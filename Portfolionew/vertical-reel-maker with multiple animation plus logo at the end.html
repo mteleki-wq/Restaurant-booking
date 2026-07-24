@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertical Reel Maker — WebEscapade</title>
+<!--
+  ============================================================
+  VERTICAL REEL MAKER · 9:16
+  ============================================================
+  Drop 4–8 photos (+ optionally your logo) → get a punchy
+  vertical promo reel as a real video file. 1080×1920, 30fps,
+  rendered entirely on your device — nothing is uploaded.
+
+  · Optional logo sting: the logo animates in (four intro
+    styles from the Logo Animation Generator), gleams, then
+    exits — and the images take over.
+  · Four vibes: Hype ⚡ / Smooth 🌊 / Swipe 🃏 / Funky 🎈
+  · Silent video — add music in CapCut after (Add audio →
+    Sounds, or Extract audio from another clip).
+  ============================================================
+-->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+  :root{
+    --bg:#070b18;--card:#0d1226;--ink:#eef1fb;--muted:#9aa3c7;
+    --line:rgba(154,163,199,.18);
+    --grad:linear-gradient(100deg,#a855f7 0%,#4f7cff 55%,#39d0c3 100%);
+    --teal:#39d0c3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Sora',-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto;padding:44px 22px 90px}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--grad)}
+  h1{font-size:clamp(26px,5vw,36px);font-weight:800;letter-spacing:-.01em;line-height:1.15}
+  h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--muted);font-size:15px;margin-top:12px;max-width:56ch}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:22px}
+  .card h2{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .card h2 .opt{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:2px 9px;margin-left:2px}
+  .num{width:24px;height:24px;border-radius:50%;background:var(--grad);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+
+  /* drop zones */
+  .dropzone{
+    border:2px dashed rgba(79,124,255,.45);border-radius:14px;padding:30px 20px;text-align:center;
+    cursor:pointer;transition:border-color .25s,background .25s;
+  }
+  .dropzone.over{border-color:var(--teal);background:rgba(57,208,195,.06)}
+  .dropzone p{color:var(--muted);font-size:14px}
+  .dropzone b{color:var(--ink)}
+  input[type="file"]{display:none}
+
+  .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;margin-top:14px}
+  .thumb{position:relative;aspect-ratio:9/16;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .rm{
+    position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;border:none;
+    background:rgba(0,0,0,.65);color:#fff;font-size:12px;cursor:pointer;line-height:1;
+  }
+  .thumb .ord{
+    position:absolute;bottom:5px;left:5px;font-family:'Space Mono',monospace;font-size:10px;
+    background:rgba(0,0,0,.65);color:var(--teal);border-radius:100px;padding:1px 7px;
+  }
+  .count{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--teal);margin-top:10px;display:none}
+  .count.show{display:block}
+
+  #logoPrev{
+    display:none;margin:14px auto 0;max-width:130px;max-height:130px;border-radius:12px;
+    background:
+      linear-gradient(45deg,rgba(255,255,255,.06) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.06) 75%),
+      linear-gradient(45deg,rgba(255,255,255,.06) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.06) 75%);
+    background-size:18px 18px;background-position:0 0,9px 9px;
+    padding:8px;border:1px solid var(--line);
+  }
+  #logoPrev.show{display:block}
+  #introRow{display:none;margin-top:14px}
+  #introRow.show{display:block}
+
+  /* settings */
+  .settings{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;margin-top:4px}
+  .set{flex:1;min-width:170px}
+  .set label{display:block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .set output{color:var(--teal);font-weight:700}
+  input[type="range"]{width:100%;accent-color:#4f7cff}
+  select{
+    width:100%;background:#0a0f22;border:1px solid var(--line);border-radius:10px;color:var(--ink);
+    font-family:'Sora',sans-serif;font-size:14px;padding:11px 12px;outline:none;
+  }
+  .total{
+    margin-top:14px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .total b{color:var(--teal)}
+
+  .go{
+    width:100%;margin-top:18px;background:var(--grad);border:none;border-radius:100px;color:#fff;
+    font-family:'Sora',sans-serif;font-weight:800;font-size:16px;padding:17px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .go:disabled{opacity:.4;cursor:not-allowed}
+  .go:active{transform:scale(.99)}
+
+  /* progress + result */
+  #stage{display:none;text-align:center}
+  #stage.show{display:block}
+  #cv{width:auto;max-width:min(100%,320px);margin:0 auto;border-radius:12px;background:#000;display:block}
+  .bar{height:6px;background:rgba(255,255,255,.1);border-radius:100px;overflow:hidden;margin-top:14px}
+  .bar i{display:block;height:100%;width:0%;background:var(--grad);transition:width .2s}
+  .stage-note{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+  #result{display:none}
+  #result.show{display:block}
+  #result video{width:auto;max-width:min(100%,320px);margin:0 auto;border-radius:12px;background:#000;display:block;max-height:70vh}
+  .dl{
+    display:inline-block;margin-top:16px;background:var(--grad);color:#fff;text-decoration:none;
+    font-weight:800;font-size:15px;border-radius:100px;padding:15px 34px;
+  }
+  .again{
+    display:inline-block;margin-top:16px;margin-left:10px;color:var(--muted);text-decoration:none;
+    font-weight:700;font-size:14px;border:1px solid var(--line);border-radius:100px;padding:14px 26px;cursor:pointer;
+    background:none;font-family:'Sora',sans-serif;
+  }
+  .after{margin-top:16px;font-size:13px;color:var(--muted);text-align:left}
+  .after code{background:rgba(79,124,255,.12);color:#bcd0ff;padding:2px 7px;border-radius:5px;font-family:'Space Mono',monospace;font-size:12px}
+  .warn{margin-top:14px;font-size:12.5px;color:#ffd479;display:none}
+  .warn.show{display:block}
+
+  /* vibe selector */
+  .styles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media(max-width:560px){.styles{grid-template-columns:1fr}}
+  .style-btn{
+    text-align:left;background:#0a0f22;border:1.5px solid var(--line);border-radius:14px;
+    padding:16px;cursor:pointer;font-family:'Sora',sans-serif;color:var(--ink);
+    transition:border-color .2s,transform .2s;-webkit-tap-highlight-color:transparent;
+  }
+  .style-btn:hover{transform:translateY(-2px)}
+  .style-btn.on{border-color:transparent;background:linear-gradient(#0a0f22,#0a0f22) padding-box,var(--grad) border-box}
+  .style-btn .s-ico{font-size:20px}
+  .style-btn b{display:block;font-size:14px;margin:8px 0 4px}
+  .style-btn small{color:var(--muted);font-size:11.5px;line-height:1.5;display:block}
+  .style-btn .s-tag{
+    display:inline-block;margin-top:8px;font-family:'Space Mono',monospace;font-size:9px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--teal);
+    border:1px solid rgba(57,208,195,.35);border-radius:100px;padding:3px 9px;
+  }
+  .sec-split{
+    font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted);grid-column:1/-1;margin:6px 2px -2px;display:flex;align-items:center;gap:10px;
+  }
+  .sec-split::after{content:"";flex:1;height:1px;background:var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Vertical reel maker · 9:16</div>
+  <h1>Drop your photos.<br><span class="g">Get a scroll-stopping vertical reel.</span></h1>
+  <p class="lede">Up to sixteen images, an optional animated logo sting up front, twelve energy levels from elegant to full TikTok chaos — exported as a real 1080×1920 video file for Reels, Stories and TikTok. Rendered entirely on your device; add your music in CapCut after.</p>
+
+  <!-- 1. images -->
+  <div class="card">
+    <h2><span class="num">1</span> Add your images <span class="opt">4–16 · more images = longer clip</span></h2>
+    <div class="dropzone" id="imgDrop">
+      <p><b>Tap to choose your photos</b><br>or drag them here · they play in the order you add them</p>
+    </div>
+    <input type="file" id="imgIn" accept="image/*" multiple>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="count" id="imgCount"></div>
+  </div>
+
+  <!-- 2. logo -->
+  <div class="card">
+    <h2><span class="num">2</span> Add your logo <span class="opt">optional</span></h2>
+    <div class="dropzone" id="logoDrop">
+      <p><b>Tap to add a logo sting</b><br>it animates in, gleams, then exits before your images roll · PNG with transparency works best</p>
+    </div>
+    <input type="file" id="logoIn" accept="image/*">
+    <img id="logoPrev" alt="Logo preview">
+    <div id="introRow">
+      <div class="set">
+        <label>Logo animation style</label>
+        <select id="introIn">
+          <option value="quads" selected>🌸 Quad Bloom — four quarters drift together</option>
+          <option value="shards">🧩 Shard Assemble — pieces fly in and lock</option>
+          <option value="orbit">💫 Orbit Seal — gold rings draw around it</option>
+          <option value="luxe">🌟 Luxe Reveal — cinematic iris + glow</option>
+        </select>
+      </div>
+      <div class="set" style="margin-top:12px">
+        <label>Logo placement</label>
+        <select id="placeIn">
+          <option value="start" selected>▶ Start — sting first, then the images</option>
+          <option value="end">⏹ End — images first, logo closes the clip</option>
+          <option value="both">🔁 Both — sting at the start and outro at the end</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. vibe -->
+  <div class="card">
+    <h2><span class="num">3</span> Pick the vibe</h2>
+    <div class="styles" id="vibeGrid">
+      <div class="sec-split">Core</div>
+      <button class="style-btn on" data-vibe="hype" type="button">
+        <span class="s-ico">⚡</span><b>Hype</b>
+        <small>Punch-in zooms, whip-pan cuts and flash frames. Fast, loud, made for thumbs that scroll quickly.</small>
+        <span class="s-tag">Fast · energetic</span>
+      </button>
+      <button class="style-btn" data-vibe="swipe" type="button">
+        <span class="s-ico">🃏</span><b>Swipe</b>
+        <small>Each image springs up over the last like flicking through stories — with a soft bounce as it lands.</small>
+        <span class="s-tag">Young · playful</span>
+      </button>
+      <button class="style-btn" data-vibe="funky" type="button">
+        <span class="s-ico">🎈</span><b>Funky</b>
+        <small>Images pop in with a spring and a twist, and reveal each other through expanding gold-ringed circles.</small>
+        <span class="s-tag">Bold · fun</span>
+      </button>
+      <button class="style-btn" data-vibe="smooth" type="button">
+        <span class="s-ico">🌊</span><b>Smooth</b>
+        <small>Slow drifting zooms and gentle crossfades. The calm, elegant one — beautiful for food and venue shots.</small>
+        <span class="s-tag">Elegant · cinematic</span>
+      </button>
+      <div class="sec-split">TikTok energy</div>
+      <button class="style-btn" data-vibe="strobe" type="button">
+        <span class="s-ico">💥</span><b>Strobe Pop</b>
+        <small>Flash-frame strobes hit between shots and every image pulses to an invisible beat. Club-poster energy.</small>
+        <span class="s-tag">Flashy · loud</span>
+      </button>
+      <button class="style-btn" data-vibe="spin" type="button">
+        <span class="s-ico">🌀</span><b>Spin Zoom</b>
+        <small>Shots swirl and zoom into each other with a flash at the whip — the classic CapCut spin transition.</small>
+        <span class="s-tag">Transition · dynamic</span>
+      </button>
+      <button class="style-btn" data-vibe="shake" type="button">
+        <span class="s-ico">🫨</span><b>Shake It</b>
+        <small>Every cut lands with a camera-shake hit that settles, plus punchy pulse zooms. Raw handheld energy.</small>
+        <span class="s-tag">Kinetic · raw</span>
+      </button>
+      <button class="style-btn" data-vibe="glitch" type="button">
+        <span class="s-ico">📼</span><b>Glitch</b>
+        <small>Cuts explode into sliced glitch bursts, ghost doubles and neon scan bars — digital, edgy, very TikTok.</small>
+        <span class="s-tag">Digital · edgy</span>
+      </button>
+      <div class="sec-split">Mix &amp; speed</div>
+      <button class="style-btn" data-vibe="shuffle" type="button">
+        <span class="s-ico">🎲</span><b>Shuffle Mix</b>
+        <small>Every cut is a different transition — whips, spins, strobes, glitches, circles — auto-mixed like a CapCut template.</small>
+        <span class="s-tag">Auto-mix · varied</span>
+      </button>
+      <button class="style-btn" data-vibe="speedramp" type="button">
+        <span class="s-ico">🚀</span><b>Speed Ramp</b>
+        <small>Quick-quick-slow rhythm: two rapid flash cuts, then a long drifting hold. The classic edit pacing that feels cut to a beat.</small>
+        <span class="s-tag">Speed ramps · rhythm</span>
+      </button>
+      <button class="style-btn" data-vibe="montage" type="button">
+        <span class="s-ico">🎬</span><b>Montage</b>
+        <small>Starts calm and accelerates — smooth drifts building into spins, ending on a run of strobe hits. A story arc in pacing.</small>
+        <span class="s-tag">Build-up · cinematic</span>
+      </button>
+      <button class="style-btn" data-vibe="chaos" type="button">
+        <span class="s-ico">🔥</span><b>Chaos Mode</b>
+        <small>Short cuts only, every loud transition in the deck, pulse zooms and shake hits everywhere. Maximum TikTok.</small>
+        <span class="s-tag">Fast · unhinged</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. settings -->
+  <div class="card">
+    <h2><span class="num">4</span> Tune the pace</h2>
+    <div class="settings">
+      <div class="set">
+        <label>Seconds per image — <output id="perOut">1.5</output>s</label>
+        <input type="range" id="perIn" min="1" max="3" step="0.1" value="1.5">
+      </div>
+      <div class="set">
+        <label>Background</label>
+        <select id="bgIn">
+          <option value="#000000" selected>Black — cinematic</option>
+          <option value="#101014">Soft charcoal</option>
+          <option value="#12100b">Espresso — warm dark</option>
+          <option value="#0b1524">Deep navy</option>
+        </select>
+      </div>
+    </div>
+    <div class="total" id="totalOut">Total length: —</div>
+    <button class="go" id="goBtn" disabled>Generate reel (1080×1920 video)</button>
+    <div class="warn" id="recWarn">Your browser doesn't support in-page video recording. Try Safari 16+ on iPad/iPhone or any recent Chrome.</div>
+  </div>
+
+  <!-- 5. rendering -->
+  <div class="card" id="stage">
+    <h2 style="justify-content:center"><span class="num">5</span> Filming…</h2>
+    <canvas id="cv"></canvas>
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="stage-note">Rendering in real time — keep this tab open</div>
+  </div>
+
+  <!-- 5. result -->
+  <div class="card" id="result">
+    <h2><span class="num">✓</span> Your reel</h2>
+    <video id="outVid" controls playsinline muted loop></video>
+    <a class="dl" id="dlBtn" download="reel.mp4" href="#">Download video</a>
+    <button class="again" id="againBtn" type="button">Change the vibe</button>
+    <div class="after">
+      <b>Next:</b> open it in <code>CapCut</code> and add music — <code>Audio → Sounds</code> has trending tracks, and
+      cutting your images to the beat is what makes reels feel professional. The video is silent on purpose so the
+      music choice stays yours. Generate a couple of vibes from the same photos and see which gets more replies.
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================ helpers */
+function clamp01(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
+function easeOutCubic(p){ return 1 - Math.pow(1 - p, 3); }
+function easeOutQuint(p){ return 1 - Math.pow(1 - p, 5); }
+function easeInOut(p){ return p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2; }
+function easeOutBack(p){ var c = 1.5; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); }
+function easeInCubic(p){ return p*p*p; }
+function mulberry(seed){
+  return function(){
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* ============================================================ intake */
+var imgs = [];
+var logoImg = null;
+
+function wireDrop(zone, input, multi, onFile){
+  zone.addEventListener('click', function(){ input.click(); });
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', function(){ zone.classList.remove('over'); });
+  zone.addEventListener('drop', function(e){
+    e.preventDefault(); zone.classList.remove('over');
+    var fs = e.dataTransfer.files;
+    for (var i = 0; i < fs.length; i++){ onFile(fs[i]); if (!multi) break; }
+  });
+  input.addEventListener('change', function(){
+    for (var i = 0; i < input.files.length; i++){ onFile(input.files[i]); if (!multi) break; }
+    input.value = '';
+  });
+}
+
+wireDrop(document.getElementById('imgDrop'), document.getElementById('imgIn'), true, function(f){
+  if (!f.type.match(/^image\//)) return;
+  if (imgs.length >= 16) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      imgs.push({ img: img, name: f.name });
+      renderThumbs();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+});
+
+wireDrop(document.getElementById('logoDrop'), document.getElementById('logoIn'), false, function(f){
+  if (!f.type.match(/^image\//)) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      logoImg = img;
+      var prev = document.getElementById('logoPrev');
+      prev.src = img.src;
+      prev.classList.add('show');
+      document.getElementById('introRow').classList.add('show');
+      document.getElementById('logoDrop').querySelector('p').innerHTML = '<b>Logo loaded</b> — tap to replace it';
+      refreshMeta();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+});
+
+function renderThumbs(){
+  var box = document.getElementById('thumbs');
+  box.innerHTML = '';
+  imgs.forEach(function(it, i){
+    var d = document.createElement('div');
+    d.className = 'thumb';
+    var im = document.createElement('img');
+    im.src = it.img.src;
+    var rm = document.createElement('button');
+    rm.className = 'rm'; rm.textContent = '\u2715'; rm.type = 'button';
+    rm.addEventListener('click', function(e){ e.stopPropagation(); imgs.splice(i,1); renderThumbs(); });
+    var ord = document.createElement('span');
+    ord.className = 'ord'; ord.textContent = (i+1);
+    d.appendChild(im); d.appendChild(rm); d.appendChild(ord);
+    box.appendChild(d);
+  });
+  var c = document.getElementById('imgCount');
+  c.textContent = imgs.length + ' image' + (imgs.length === 1 ? '' : 's') + ' \u00b7 tap \u2715 to remove';
+  c.classList.toggle('show', imgs.length > 0);
+  refreshMeta();
+}
+
+/* ============================================================ timeline model
+   Each image gets a segment: {start, dur, m (motion), tr (transition OUT of it),
+   inTR (duration of the transition it arrived through)}.
+   Single vibes use one motion+transition; mix vibes vary them per cut. */
+var TRD = { whip:0.3, fade:0.55, cardup:0.45, circle:0.45, strobe:0.28, spinT:0.5, fadeshake:0.3, glitchT:0.4 };
+var MOT = { hype:'punch', smooth:'kenburns', swipe:'drift', funky:'pop', strobe:'pulse', spin:'plain', shake:'shakem', glitch:'plain' };
+var TRN = { hype:'whip', smooth:'fade', swipe:'cardup', funky:'circle', strobe:'strobe', spin:'spinT', shake:'fadeshake', glitch:'glitchT' };
+
+function buildSegs(N, per, vb){
+  var rand = mulberry(4242 + N * 13);
+  var segs = [], t = 0;
+  for (var i = 0; i < N; i++){
+    var d = per, m, tr;
+    if (MOT[vb]){ m = MOT[vb]; tr = TRN[vb]; }
+    else if (vb === 'shuffle'){
+      d = per * (0.8 + rand() * 0.5);
+      m = ['punch','kenburns','pop','pulse','drift'][i % 5];
+      tr = ['whip','spinT','strobe','glitchT','circle','cardup'][Math.floor(rand() * 6)];
+    } else if (vb === 'speedramp'){
+      var ph = i % 3;
+      d = per * (ph === 2 ? 1.7 : 0.55);
+      m = ph === 2 ? 'kenburns' : 'pulse';
+      tr = ph === 1 ? 'spinT' : (ph === 2 ? 'strobe' : 'whip');
+    } else if (vb === 'montage'){
+      var f = 1.5 - 0.9 * (i / Math.max(1, N - 1));
+      d = per * f;
+      m = (i % 3 === 2) ? 'punch' : 'kenburns';
+      tr = (i >= N - 3) ? 'strobe' : ((i % 3 === 2) ? 'spinT' : 'fade');
+    } else { /* chaos */
+      d = per * (0.5 + rand() * 0.4);
+      m = ['pulse','shakem','pop'][i % 3];
+      tr = ['strobe','glitchT','spinT','whip'][Math.floor(rand() * 4)];
+    }
+    segs.push({ start: t, dur: d, m: m, tr: tr, inTR: 0.3 });
+    t += d;
+  }
+  for (var j = 1; j < N; j++){
+    segs[j].inTR = Math.min(TRD[segs[j-1].tr], segs[j-1].dur * 0.6);
+  }
+  return { segs: segs, total: t };
+}
+
+/* ============================================================ settings */
+var vibe = 'hype';
+document.querySelectorAll('.style-btn').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.style-btn').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    vibe = b.dataset.vibe;
+    refreshMeta();
+  });
+});
+document.getElementById('perIn').addEventListener('input', function(){
+  document.getElementById('perOut').textContent = this.value;
+  refreshMeta();
+});
+document.getElementById('placeIn').addEventListener('change', refreshMeta);
+
+var INTRO = 2.4, INTRO_EXIT = 0.45, TAIL = 0.8, OUTRO = 2.5, OUTRO_OVERLAP = 0.35;
+
+function placements(){
+  var place = logoImg ? document.getElementById('placeIn').value : 'none';
+  return {
+    hasIntro: !!logoImg && place !== 'end',
+    hasOutro: !!logoImg && place !== 'start'
+  };
+}
+function timings(){
+  var per = parseFloat(document.getElementById('perIn').value);
+  var pl = placements();
+  var SG = buildSegs(Math.max(imgs.length, 2), per, vibe);
+  var imagesStart = pl.hasIntro ? INTRO - INTRO_EXIT : 0;
+  var imagesEnd = imagesStart + SG.total;
+  var total = pl.hasOutro ? (imagesEnd - OUTRO_OVERLAP + OUTRO) : (imagesEnd + TAIL);
+  return { per: per, imagesStart: imagesStart, segsTotal: SG.total, total: total, hasIntro: pl.hasIntro, hasOutro: pl.hasOutro };
+}
+function refreshMeta(){
+  var T = timings();
+  var msg;
+  if (imgs.length < 2){
+    msg = 'Add at least 2 images to generate';
+  } else {
+    msg = 'Total length: <b>' + T.total.toFixed(1) + 's</b>' + (logoImg ? ' (incl. logo)' : '');
+    if (T.total < 20) msg += ' \u00b7 <span style="color:#ffd479">under 20s \u2014 add images or seconds per image for TikTok</span>';
+  }
+  document.getElementById('totalOut').innerHTML = msg;
+  document.getElementById('goBtn').disabled = imgs.length < 2;
+}
+refreshMeta();
+
+/* ============================================================ recording support */
+function pickMime(){
+  var options = ['video/mp4;codecs=avc1.42E01E','video/mp4','video/webm;codecs=vp9','video/webm'];
+  for (var i = 0; i < options.length; i++){
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(options[i])) return options[i];
+  }
+  return null;
+}
+if (!pickMime()) document.getElementById('recWarn').classList.add('show');
+
+/* ============================================================ generate */
+document.getElementById('goBtn').addEventListener('click', function(){
+  if (imgs.length < 2) return;
+  var mime = pickMime();
+  if (!mime) return;
+
+  var cw = 1080, ch = 1920;
+  var bg = document.getElementById('bgIn').value;
+  var introStyle = document.getElementById('introIn').value;
+  var T = timings();
+  var per = T.per, imagesStart = T.imagesStart, total = T.total;
+  var hasIntro = T.hasIntro, hasOutro = T.hasOutro;
+  var SEGS = buildSegs(imgs.length, per, vibe);
+  var SG = SEGS.segs;
+  var imagesEnd = imagesStart + SEGS.total;
+  var outroStart = imagesEnd - OUTRO_OVERLAP;
+
+  var cv = document.getElementById('cv');
+  cv.width = cw; cv.height = ch;
+  var ctx = cv.getContext('2d');
+
+  /* ---- per-image params ---- */
+  var P = imgs.map(function(it, i){
+    var rand = mulberry(9160 + i * 77);
+    var s = Math.max(cw / it.img.width, ch / it.img.height);
+    return {
+      dw: it.img.width * s, dh: it.img.height * s,
+      zin: i % 2 === 0,
+      panX: (rand() - 0.5) * cw * 0.10,
+      panY: (rand() - 0.5) * ch * 0.06,
+      rot: (rand() - 0.5) * 0.05,
+      rot2: (rand() - 0.5) * 0.2,
+      dir: i % 2 === 0 ? 1 : -1,
+      ccx: cw * (0.3 + rand() * 0.4),
+      ccy: ch * (0.3 + rand() * 0.4)
+    };
+  });
+
+  /* ---- logo animation setup (shared by intro and outro) ---- */
+  var L = null;
+  if (logoImg){
+    var maxSide = Math.min(cw, ch) * 0.62;
+    var ls = maxSide / Math.max(logoImg.width, logoImg.height);
+    L = { lw: Math.round(logoImg.width * ls), lh: Math.round(logoImg.height * ls) };
+    L.lx = Math.round((cw - L.lw) / 2); L.ly = Math.round((ch - L.lh) / 2);
+    L.cv = document.createElement('canvas');
+    L.cv.width = L.lw; L.cv.height = L.lh;
+    L.cv.getContext('2d').drawImage(logoImg, 0, 0, L.lw, L.lh);
+    L.shine = document.createElement('canvas');
+    L.shine.width = L.lw; L.shine.height = L.lh;
+    L.shineCtx = L.shine.getContext('2d');
+    L.build = 1.35;
+    var lrand = mulberry(20260718);
+    L.shards = []; L.quads = [];
+    if (introStyle === 'shards'){
+      var G = 6, cwc = L.lw / G, chc = L.lh / G;
+      for (var gy = 0; gy < G; gy++) for (var gx = 0; gx < G; gx++){
+        var cxr = (gx + 0.5)/G - 0.5, cyr = (gy + 0.5)/G - 0.5;
+        var ang = Math.atan2(cyr, cxr) + (lrand() - 0.5) * 1.2;
+        var fly = Math.min(cw, ch) * (0.5 + lrand() * 0.5);
+        L.shards.push({
+          sx: gx*cwc, sy: gy*chc, sw: cwc, sh: chc,
+          dx: Math.cos(ang)*fly, dy: Math.sin(ang)*fly,
+          rot: (lrand() - 0.5) * 2.2,
+          delay: (Math.sqrt(cxr*cxr + cyr*cyr)/0.707) * 0.4 + lrand() * 0.1
+        });
+      }
+    }
+    if (introStyle === 'quads'){
+      var off = Math.min(cw, ch) * 0.16;
+      [[0,0,-off,-off,-0.10],[1,0,off,-off,0.10],[0,1,-off,off,0.08],[1,1,off,off,-0.08]]
+        .forEach(function(d, qi){ L.quads.push({ gx:d[0], gy:d[1], dx:d[2], dy:d[3], rot:d[4], delay: qi*0.06 }); });
+    }
+  }
+
+  function logoShine(prog, strength){
+    if (prog <= 0 || prog >= 1) return;
+    var sx = L.shineCtx;
+    sx.clearRect(0, 0, L.lw, L.lh);
+    var x0 = (-0.35 + prog * 1.7) * L.lw;
+    var g = sx.createLinearGradient(x0, 0, x0 + L.lw * 0.34, L.lh * 0.85);
+    g.addColorStop(0, 'rgba(255,244,204,0)');
+    g.addColorStop(0.5, 'rgba(255,246,214,' + (0.85 * strength) + ')');
+    g.addColorStop(1, 'rgba(255,244,204,0)');
+    sx.fillStyle = g;
+    sx.fillRect(0, 0, L.lw, L.lh);
+    sx.globalCompositeOperation = 'destination-in';
+    sx.drawImage(L.cv, 0, 0);
+    sx.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.drawImage(L.shine, L.lx, L.ly);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  /* draw the logo's build state at progress p (0..1+), alpha-multiplied */
+  function drawLogoState(p, ea, tAbs){
+    if (p >= 1){
+      ctx.save();
+      ctx.translate(cw/2, ch/2);
+      ctx.shadowColor = 'rgba(224,184,90,.55)';
+      ctx.shadowBlur = 20 + 10 * Math.sin(tAbs * 1.8);
+      ctx.globalAlpha = ea;
+      ctx.drawImage(L.cv, -L.lw/2, -L.lh/2);
+      ctx.restore();
+    } else if (introStyle === 'shards'){
+      ctx.save();
+      ctx.translate(L.lx, L.ly);
+      for (var i = 0; i < L.shards.length; i++){
+        var sh = L.shards[i];
+        var e = easeOutBack(clamp01((p - sh.delay) / 0.48));
+        if (e <= 0) continue;
+        ctx.save();
+        ctx.translate(sh.sx + sh.sw/2 + sh.dx*(1-e), sh.sy + sh.sh/2 + sh.dy*(1-e));
+        ctx.rotate(sh.rot * (1-e));
+        ctx.globalAlpha = ea * clamp01(e * 2.2);
+        ctx.drawImage(L.cv, sh.sx, sh.sy, sh.sw, sh.sh, -sh.sw/2, -sh.sh/2, sh.sw, sh.sh);
+        ctx.restore();
+      }
+      ctx.restore();
+    } else if (introStyle === 'quads'){
+      var qw = L.lw/2, qh = L.lh/2;
+      for (var q = 0; q < L.quads.length; q++){
+        var Q = L.quads[q];
+        var e2 = easeOutCubic(clamp01((p - Q.delay) / 0.7));
+        if (e2 <= 0) continue;
+        var sx0 = Q.gx*qw, sy0 = Q.gy*qh;
+        ctx.save();
+        ctx.translate(L.lx + sx0 + qw/2 + Q.dx*(1-e2), L.ly + sy0 + qh/2 + Q.dy*(1-e2));
+        ctx.rotate(Q.rot * (1-e2));
+        ctx.globalAlpha = ea * clamp01(e2 * 1.8);
+        ctx.drawImage(L.cv, sx0, sy0, qw, qh, -qw/2, -qh/2, qw, qh);
+        ctx.restore();
+      }
+    } else if (introStyle === 'orbit'){
+      var e3 = easeOutCubic(p);
+      ctx.save();
+      ctx.translate(cw/2, ch/2);
+      ctx.scale(1.08 - 0.08*e3, 1.08 - 0.08*e3);
+      ctx.globalAlpha = ea * clamp01(p * 2.2);
+      ctx.shadowColor = 'rgba(224,184,90,.45)';
+      ctx.shadowBlur = 20;
+      ctx.drawImage(L.cv, -L.lw/2, -L.lh/2);
+      ctx.restore();
+      var ra = p < 0.82 ? 1 : (1 - clamp01((p - 0.82)/0.18));
+      if (ra > 0){
+        var R1 = Math.min(Math.min(cw,ch)*0.44, Math.max(L.lw,L.lh)*0.60);
+        ctx.lineWidth = Math.max(1.5, L.lw*0.005);
+        ctx.globalAlpha = ea;
+        ctx.strokeStyle = 'rgba(224,184,90,' + (0.9*ra) + ')';
+        ctx.beginPath();
+        ctx.arc(cw/2, ch/2, R1, -Math.PI/2, -Math.PI/2 + Math.PI*2*easeOutCubic(clamp01(p/0.72)));
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(224,184,90,' + (0.55*ra) + ')';
+        ctx.beginPath();
+        ctx.arc(cw/2, ch/2, R1*1.055, Math.PI/2, Math.PI/2 - Math.PI*2*easeOutCubic(clamp01((p-0.1)/0.72)), true);
+        ctx.stroke();
+      }
+    } else { /* luxe */
+      var iris = easeOutCubic(clamp01(p / 0.55));
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cw/2, ch/2, Math.max(1, iris * Math.max(L.lw, L.lh) * 0.78), 0, Math.PI*2);
+      ctx.clip();
+      ctx.translate(cw/2, ch/2);
+      var zi = 1.12 - 0.12 * easeOutCubic(p);
+      ctx.scale(zi, zi);
+      ctx.globalAlpha = ea * clamp01(p * 3);
+      ctx.shadowColor = 'rgba(224,184,90,.5)';
+      ctx.shadowBlur = 26;
+      ctx.drawImage(L.cv, -L.lw/2, -L.lh/2);
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawBackdrop(alpha){
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, cw, ch);
+    var amb = ctx.createRadialGradient(cw/2, ch/2, 0, cw/2, ch/2, Math.min(cw, ch) * 0.62);
+    amb.addColorStop(0, 'rgba(216,178,88,.10)');
+    amb.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = amb;
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.globalAlpha = 1;
+  }
+
+  function drawIntro(t){
+    var exitP = clamp01((t - (INTRO - INTRO_EXIT)) / INTRO_EXIT);
+    if (exitP < 1) drawBackdrop(1 - exitP);
+    var ea = 1 - easeInCubic(exitP);
+    if (ea <= 0) return;
+    var ez = 1 + easeInCubic(exitP) * 0.6;
+    ctx.save();
+    ctx.translate(cw/2, ch/2);
+    ctx.scale(ez, ez);
+    ctx.translate(-cw/2, -ch/2);
+    drawLogoState(clamp01(t / L.build), ea, t);
+    ctx.globalAlpha = ea;
+    logoShine((t - (L.build + 0.1)) / 0.7, 1);
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawOutro(t2){
+    drawBackdrop(clamp01(t2 / 0.45));
+    var p = clamp01((t2 - 0.25) / L.build);
+    drawLogoState(p, 1, t2);
+    logoShine((t2 - (0.25 + L.build + 0.1)) / 0.7, 1);
+  }
+
+  /* ---- image drawing ---- */
+  function drawCover(j, z, px, py, rot, alpha){
+    var p = P[j];
+    ctx.save();
+    ctx.translate(cw/2, ch/2);
+    if (rot) ctx.rotate(rot);
+    ctx.scale(z, z);
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(imgs[j].img, -p.dw/2 + px, -p.dh/2 + py, p.dw, p.dh);
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+
+  /* motion for image j at clock mt, by motion type m */
+  function drawMotion(j, mt, alpha, m, segDur){
+    var p = P[j];
+    var life = clamp01(mt / (segDur + 0.4));
+    if (m === 'punch'){
+      var landed = easeOutCubic(clamp01(mt / 0.4));
+      drawCover(j, 1.16 - 0.10 * landed + 0.06 * life, p.panX * life, p.panY * life, p.rot * (1 - landed), alpha);
+    } else if (m === 'kenburns'){
+      var z2 = p.zin ? 1.03 + 0.10 * life : 1.13 - 0.10 * life;
+      drawCover(j, z2, p.panX * life, p.panY * life, 0, alpha);
+    } else if (m === 'drift'){
+      drawCover(j, 1.04 + 0.05 * life, p.panX * life * 0.6, 0, 0, alpha);
+    } else if (m === 'pop'){
+      var pop = easeOutBack(clamp01(mt / 0.55));
+      drawCover(j, 0.8 + 0.24 * Math.min(1.08, pop) + 0.05 * life, 0, 0, p.rot2 * (1 - Math.min(1, pop)), alpha);
+    } else if (m === 'pulse' || m === 'shakem'){
+      var pulse = 0.045 * Math.exp(-(mt % 0.55) * 6);
+      var sxo = 0, syo = 0;
+      if (m === 'shakem'){
+        var amp = 26 * Math.exp(-mt * 6) + 2.5;
+        sxo = Math.sin(mt * 93) * amp;
+        syo = Math.cos(mt * 77) * amp * 0.7;
+      }
+      drawCover(j, 1.06 + 0.05 * life + pulse, p.panX * life + sxo, p.panY * life + syo, 0, alpha);
+    } else { /* plain */
+      drawCover(j, 1.06 + 0.08 * life, p.panX * life, p.panY * life, 0, alpha);
+    }
+  }
+
+  function spinWrap(ang, zoom, fn){
+    ctx.save();
+    ctx.translate(cw/2, ch/2);
+    ctx.rotate(ang);
+    ctx.scale(zoom, zoom);
+    ctx.translate(-cw/2, -ch/2);
+    fn();
+    ctx.restore();
+  }
+
+  function applyGlitch(g, seedT){
+    if (g <= 0) return;
+    var grand = mulberry(Math.floor(seedT * 30) * 997 + 13);
+    var n = 3 + Math.floor(g * 5);
+    for (var k = 0; k < n; k++){
+      var sy = Math.floor(grand() * ch * 0.95);
+      var sh = Math.max(6, Math.floor((0.01 + grand() * 0.05) * ch));
+      var dx = (grand() - 0.5) * cw * 0.18 * g;
+      ctx.drawImage(cv, 0, sy, cw, sh, dx, sy, cw, sh);
+    }
+    var d = cw * 0.012 * g;
+    ctx.globalAlpha = 0.3 * g;
+    ctx.drawImage(cv, d, 0);
+    ctx.drawImage(cv, -d, 0);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = 'rgba(255,0,90,' + (0.28 * g) + ')';
+    ctx.fillRect(0, grand() * ch, cw, 3 + grand() * 7);
+    ctx.fillStyle = 'rgba(0,255,240,' + (0.28 * g) + ')';
+    ctx.fillRect(0, grand() * ch, cw, 3 + grand() * 7);
+  }
+
+  function drawImages(ts){
+    var N = SG.length;
+    var i = N - 1;
+    for (var k = 0; k < N; k++){
+      if (ts < SG[k].start + SG[k].dur){ i = k; break; }
+    }
+    var seg = SG[i];
+    var local = ts - seg.start;
+    var TRi = i < N - 1 ? Math.min(TRD[seg.tr], seg.dur * 0.6) : 0;
+    var q = (i < N - 1 && local > seg.dur - TRi) ? clamp01((local - (seg.dur - TRi)) / TRi) : 0;
+    var nx = i + 1;
+    var mt2 = q * TRi;
+    var curClock = local + seg.inTR;
+    var tr = seg.tr;
+
+    if (q > 0 && tr === 'spinT'){
+      if (q < 0.5){
+        var qo = q * 2;
+        spinWrap(-0.5 * easeInCubic(qo), 1 + 0.75 * easeInCubic(qo), function(){ drawMotion(i, curClock, 1, seg.m, seg.dur); });
+      } else {
+        var qi2 = (q - 0.5) * 2;
+        spinWrap(0.5 * (1 - easeOutCubic(qi2)), 1.75 - 0.75 * easeOutCubic(qi2), function(){ drawMotion(nx, mt2, 1, SG[nx].m, SG[nx].dur); });
+      }
+      var fa = 1 - Math.abs(q - 0.5) * 2;
+      if (fa > 0){
+        ctx.fillStyle = 'rgba(255,255,255,' + (0.7 * fa * fa) + ')';
+        ctx.fillRect(0, 0, cw, ch);
+      }
+    } else if (q > 0 && tr === 'strobe'){
+      if (q < 0.5) drawMotion(i, curClock, 1, seg.m, seg.dur);
+      else drawMotion(nx, mt2, 1, SG[nx].m, SG[nx].dur);
+      var f = Math.floor(q * 6);
+      if (f % 2 === 0){
+        ctx.fillStyle = 'rgba(255,255,255,' + (0.8 * (1 - q * 0.4)) + ')';
+        ctx.fillRect(0, 0, cw, ch);
+      } else if (f === 3){
+        ctx.fillStyle = 'rgba(0,0,0,.85)';
+        ctx.fillRect(0, 0, cw, ch);
+      }
+    } else if (q > 0 && tr === 'glitchT'){
+      if (q < 0.5) drawMotion(i, curClock, 1, seg.m, seg.dur);
+      else drawMotion(nx, mt2, 1, SG[nx].m, SG[nx].dur);
+      applyGlitch(1 - Math.abs(q - 0.5) * 2, ts);
+    } else {
+      /* layered transitions: current first */
+      if (tr === 'cardup' && q > 0){
+        ctx.save();
+        ctx.translate(cw/2, ch/2);
+        ctx.scale(1 - 0.06 * easeOutCubic(q), 1 - 0.06 * easeOutCubic(q));
+        ctx.translate(-cw/2, -ch/2);
+        drawMotion(i, curClock, 1, seg.m, seg.dur);
+        ctx.fillStyle = 'rgba(0,0,0,' + (0.45 * easeOutCubic(q)) + ')';
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.restore();
+      } else if (tr === 'whip' && q > 0){
+        ctx.save();
+        ctx.translate(-P[i].dir * cw * 0.28 * easeOutQuint(q), 0);
+        drawMotion(i, curClock, 1, seg.m, seg.dur);
+        ctx.restore();
+      } else {
+        drawMotion(i, curClock, 1, seg.m, seg.dur);
+      }
+
+      /* incoming on top */
+      if (q > 0){
+        if (tr === 'whip'){
+          ctx.save();
+          ctx.translate(P[nx].dir * cw * (1 - easeOutQuint(q)), 0);
+          drawMotion(nx, mt2, 1, SG[nx].m, SG[nx].dur);
+          ctx.restore();
+        } else if (tr === 'fade' || tr === 'fadeshake'){
+          drawMotion(nx, mt2, easeInOut(q), SG[nx].m, SG[nx].dur);
+        } else if (tr === 'cardup'){
+          ctx.save();
+          ctx.translate(0, ch * (1 - easeOutBack(q)));
+          drawMotion(nx, mt2, 1, SG[nx].m, SG[nx].dur);
+          ctx.restore();
+        } else { /* circle */
+          var diag = Math.sqrt(cw*cw + ch*ch);
+          var r = easeOutCubic(q) * diag * 0.75;
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(P[nx].ccx, P[nx].ccy, Math.max(1, r), 0, Math.PI * 2);
+          ctx.clip();
+          drawMotion(nx, mt2, 1, SG[nx].m, SG[nx].dur);
+          ctx.restore();
+          if (q < 0.97){
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = 'rgba(224,184,90,' + (0.9 * (1 - q)) + ')';
+            ctx.beginPath();
+            ctx.arc(P[nx].ccx, P[nx].ccy, Math.max(1, r), 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    /* flash frame each time an image lands, driven by the transition it arrived through */
+    if (i > 0 || hasIntro === false){
+      var inTr = i > 0 ? SG[i-1].tr : null;
+      var flashA = inTr === 'whip' ? 0.75 : (inTr === 'fadeshake' ? 0.45 : 0);
+      if (flashA > 0 && local < 0.14){
+        ctx.fillStyle = 'rgba(255,255,255,' + (flashA * (1 - local / 0.14)) + ')';
+        ctx.fillRect(0, 0, cw, ch);
+      }
+    }
+  }
+
+  function drawScene(t){
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, cw, ch);
+
+    var ts = t - imagesStart;
+    if (ts > 0) drawImages(Math.min(ts, SEGS.total - 0.001));
+
+    if (L && hasIntro && t < INTRO) drawIntro(t);
+    if (L && hasOutro && t > outroStart) drawOutro(t - outroStart);
+
+    /* vignette */
+    var g = ctx.createRadialGradient(cw/2, ch/2, Math.min(cw,ch)*0.5, cw/2, ch/2, Math.max(cw,ch)*0.75);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, 'rgba(0,0,0,.32)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, cw, ch);
+
+    /* end fade */
+    if (t > total - 0.5){
+      ctx.globalAlpha = clamp01((t - (total - 0.5)) / 0.5);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /* ---- record ---- */
+  document.getElementById('stage').classList.add('show');
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('goBtn').disabled = true;
+  cv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  var stream = cv.captureStream(30);
+  var chunks = [];
+  var rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 8000000 });
+  rec.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+  rec.onstop = function(){
+    var ext = mime.indexOf('mp4') !== -1 ? 'mp4' : 'webm';
+    var blob = new Blob(chunks, { type: mime.split(';')[0] });
+    var url = URL.createObjectURL(blob);
+    var vid = document.getElementById('outVid');
+    vid.src = url;
+    var dl = document.getElementById('dlBtn');
+    dl.href = url;
+    dl.setAttribute('download', 'reel-' + vibe + '.' + ext);
+    document.getElementById('stage').classList.remove('show');
+    document.getElementById('result').classList.add('show');
+    document.getElementById('goBtn').disabled = false;
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    vid.play().catch(function(){});
+  };
+
+  var t0 = null;
+  function frameLoop(now){
+    if (t0 === null) t0 = now;
+    var t = (now - t0) / 1000;
+    if (t >= total){ rec.stop(); return; }
+    drawScene(t);
+    document.getElementById('barFill').style.width = (t / total * 100) + '%';
+    requestAnimationFrame(frameLoop);
+  }
+  rec.start(250);
+  requestAnimationFrame(frameLoop);
+});
+
+document.getElementById('againBtn').addEventListener('click', function(){
+  document.getElementById('vibeGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+</script>
+</body>
+</html>
