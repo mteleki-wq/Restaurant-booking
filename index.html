@@ -962,59 +962,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 </style>
 
-<style id="we-editor-style">
-  /* === Webescapade in-page editor (stripped on Download) === */
-  #we-bar{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:8px;align-items:center;padding:8px;border-radius:14px;background:rgba(10,15,31,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(160,180,255,.18);box-shadow:0 18px 50px -20px rgba(0,0,0,.6);font-family:'Space Mono',ui-monospace,monospace;}
-  .we-btn{appearance:none;-webkit-appearance:none;border:1px solid rgba(160,180,255,.2);background:rgba(255,255,255,.05);color:#eef2ff;font:inherit;font-size:13px;line-height:1;padding:10px 13px;border-radius:9px;cursor:pointer;white-space:nowrap;transition:background .2s,transform .15s;}
-  .we-btn:hover{background:rgba(255,255,255,.12);transform:translateY(-1px);}
-  .we-btn--primary{background:linear-gradient(100deg,#b14dff,#3b82f6,#2dd4bf);border-color:transparent;color:#fff;font-weight:700;}
-  #we-bar .we-sep{width:1px;height:22px;background:rgba(160,180,255,.2);margin:0 2px;}
-  #we-bar .we-hint{font-size:11px;color:#aeb8d8;padding:0 4px;}
-  body.we-editing [data-we-key]{outline:1px dashed rgba(124,140,255,.55);outline-offset:3px;border-radius:4px;cursor:text;transition:outline-color .15s,background .15s;}
-  body.we-editing [data-we-key]:hover{outline:1.5px solid #22d3ee;background:rgba(34,211,238,.07);}
-  body.we-editing [data-we-key]:focus{outline:1.5px solid #22d3ee;outline-style:solid;}
-  body.we-editing .we-img-slot{cursor:pointer;position:relative;outline:2px dashed rgba(124,140,255,.5);outline-offset:-2px;}
-  body.we-editing .we-img-slot:hover{outline-color:#22d3ee;}
-  body.we-editing .we-img-slot::after{content:"\1F4F7  Click to replace image";position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:6;font-family:'Space Mono',ui-monospace,monospace;font-size:11px;color:#fff;background:rgba(7,11,22,.82);padding:6px 10px;border-radius:7px;border:1px solid rgba(160,180,255,.3);pointer-events:none;white-space:nowrap;}
-  #we-toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,16px);z-index:9999;background:rgba(10,15,31,.94);color:#eef2ff;font-family:'Space Mono',ui-monospace,monospace;font-size:13px;padding:11px 18px;border-radius:10px;border:1px solid rgba(45,212,191,.4);box-shadow:0 18px 50px -20px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;}
-  #we-toast.show{opacity:1;transform:translate(-50%,0);}
-  @media(max-width:640px){#we-bar{flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 20px);} #we-bar .we-hint{display:none;}}
 
-#we-deploy-modal{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;background:rgba(3,5,17,.72)}
-#we-deploy-modal.show{display:flex}
-#we-deploy-modal .we-dep-card{width:min(440px,92vw);background:#0b1020;border:1px solid rgba(160,180,255,.2);border-radius:18px;padding:22px;color:#eef2ff;font-family:inherit;box-shadow:0 40px 90px -30px rgba(0,0,0,.7);max-height:90vh;overflow:auto}
-#we-deploy-modal h3{margin:0 0 4px;font-size:19px;color:#fff}
-#we-deploy-modal p{margin:0 0 14px;font-size:12.5px;color:#aeb8d8;line-height:1.5}
-#we-deploy-modal label{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#aeb8d8;margin:0 0 12px}
-#we-deploy-modal input{width:100%;margin-top:6px;padding:10px 12px;border-radius:10px;border:1px solid rgba(160,180,255,.25);background:rgba(7,11,22,.7);color:#fff;font-size:14px;font-family:inherit;box-sizing:border-box}
-#we-deploy-modal .we-dep-row{display:flex;gap:12px}
-#we-deploy-modal .we-dep-row label{flex:1}
-#we-deploy-modal .we-dep-hint{font-size:11px;color:#8b96bd;margin:0 0 16px;text-transform:none;letter-spacing:0}
-#we-deploy-modal .we-dep-actions{display:flex;gap:10px;justify-content:flex-end}
-#we-deploy-modal .we-dep-status{margin-top:12px;font-size:12.5px;min-height:16px}
-</style>
-<style id="we-showcase-css">.project__link{display:block;text-decoration:none;color:inherit}.project__body .project__cta{display:inline-block;margin-top:14px;font-weight:600;font-size:.92rem;text-decoration:none;color:#a9b6ff}.project__body .project__cta:hover{color:#c9d3ff}</style><style>.project[data-link]:not([data-link=""]){cursor:pointer;}.project[data-link]:not([data-link=""]) .browser-bar{position:relative;}.project[data-link]:not([data-link=""]) .browser-bar::after{content:"Visit ↗";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#8ea2c7;font-family:ui-monospace,monospace;letter-spacing:.04em;}</style><style>.project[data-link]:not([data-link=""]){cursor:pointer;}.project[data-link]:not([data-link=""]) .browser-bar{position:relative;}.project[data-link]:not([data-link=""]) .browser-bar::after{content:"Visit ↗";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#8ea2c7;font-family:ui-monospace,monospace;letter-spacing:.04em;}</style><style>.project[data-link]:not([data-link=""]){cursor:pointer;}.project[data-link]:not([data-link=""]) .browser-bar{position:relative;}.project[data-link]:not([data-link=""]) .browser-bar::after{content:"Visit ↗";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#8ea2c7;font-family:ui-monospace,monospace;letter-spacing:.04em;}</style><style>.project[data-link]:not([data-link=""]){cursor:pointer;}.project[data-link]:not([data-link=""]) .browser-bar{position:relative;}.project[data-link]:not([data-link=""]) .browser-bar::after{content:"Visit ↗";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#8ea2c7;font-family:ui-monospace,monospace;letter-spacing:.04em;}</style></head>
-<body class="">
+<style id="we-showcase-css">.project__link{display:block;text-decoration:none;color:inherit}.project__body .project__cta{display:inline-block;margin-top:14px;font-weight:600;font-size:.92rem;text-decoration:none;color:#a9b6ff}.project__body .project__cta:hover{color:#c9d3ff}</style><style>.project[data-link]:not([data-link=""]){cursor:pointer;}.project[data-link]:not([data-link=""]) .browser-bar{position:relative;}.project[data-link]:not([data-link=""]) .browser-bar::after{content:"Visit ↗";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#8ea2c7;font-family:ui-monospace,monospace;letter-spacing:.04em;}</style></head>
+<body>
 
 <!-- Webescapade in-page editor (stripped on Download) -->
-<div id="we-bar" aria-label="Webescapade editor">
-  <button class="we-btn we-btn--primary" id="we-edit">✏️ Edit</button>
-  <span class="we-sep"></span>
-  <button class="we-btn" id="we-save">💾 Save</button>
-  <button class="we-btn" id="we-savefile">📄 Save editable file</button>
-  <button class="we-btn" id="we-download">⬇ Download index.html</button>
-  <button class="we-btn" id="we-deploy">🚀 Deploy to GitHub</button>
-  <button class="we-btn" id="we-reset">↺ Reset</button>
-  <span class="we-hint">edits saved in this browser</span>
-</div>
-<div id="we-toast" role="status" aria-live="polite" class="">Saved ✓</div>
+
+
 <script type="application/json" id="we-knowledge">[]</script>
 
 
   <!-- =================================================================
        NAVIGATION
   ================================================================== -->
-  <header class="nav" id="nav">
+  <header class="nav nav--scrolled" id="nav">
     <div class="container nav__inner">
       <a class="brand" href="#top" aria-label="Webescapade home">
         <span class="brand__mark">WE</span>
@@ -1298,29 +1259,29 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   ================================================================== -->
   <section class="section section--tint" id="why">
     <div class="container">
-      <div class="section-head reveal in">
+      <div class="section-head reveal">
         <span class="kicker">Why Webescapade</span>
         <h2>Experience, taste &amp; an <span class="grad-text">AI-first</span> mindset.</h2>
       </div>
 
       <div class="why__grid">
         <div class="why__list">
-          <div class="why-item reveal in" data-d="1"><span class="check">✓</span><div><h4>Two decades of experience</h4><p>Building websites since 2004 — from Flash to HTML5 to AI.</p></div></div>
-          <div class="why-item reveal in" data-d="2"><span class="check">✓</span><div><h4>A real creative background</h4><p>Design-led thinking, not just templates dropped into a builder.</p></div></div>
-          <div class="why-item reveal in" data-d="3"><span class="check">✓</span><div><h4>Practical, client-focused sites</h4><p>Websites that solve real problems for real businesses.</p></div></div>
-          <div class="why-item reveal in" data-d="1"><span class="check">✓</span><div><h4>AI-first thinking</h4><p>Chat, voice and automation considered from day one.</p></div></div>
-          <div class="why-item reveal in" data-d="2"><span class="check">✓</span><div><h4>Editable &amp; in your control</h4><p>Manage your own content without waiting on a developer.</p></div></div>
-          <div class="why-item reveal in" data-d="3"><span class="check">✓</span><div><h4>Modern, deploy-ready code</h4><p>Clean builds ready to ship — including GitHub Pages.</p></div></div>
+          <div class="why-item reveal" data-d="1"><span class="check">✓</span><div><h4>Two decades of experience</h4><p>Building websites since 2004 — from Flash to HTML5 to AI.</p></div></div>
+          <div class="why-item reveal" data-d="2"><span class="check">✓</span><div><h4>A real creative background</h4><p>Design-led thinking, not just templates dropped into a builder.</p></div></div>
+          <div class="why-item reveal" data-d="3"><span class="check">✓</span><div><h4>Practical, client-focused sites</h4><p>Websites that solve real problems for real businesses.</p></div></div>
+          <div class="why-item reveal" data-d="1"><span class="check">✓</span><div><h4>AI-first thinking</h4><p>Chat, voice and automation considered from day one.</p></div></div>
+          <div class="why-item reveal" data-d="2"><span class="check">✓</span><div><h4>Editable &amp; in your control</h4><p>Manage your own content without waiting on a developer.</p></div></div>
+          <div class="why-item reveal" data-d="3"><span class="check">✓</span><div><h4>Modern, deploy-ready code</h4><p>Clean builds ready to ship — including GitHub Pages.</p></div></div>
         </div>
 
-        <aside class="why__panel reveal in" data-d="2">
+        <aside class="why__panel reveal" data-d="2">
           <span class="blob blob--p1" aria-hidden="true"></span>
           <span class="blob blob--p2" aria-hidden="true"></span>
           <div class="why__stats">
             <div class="stat"><b data-count="2004" data-suffix="">2004</b><span>Designing the web since</span></div>
-            <div class="stat"><b data-count="20" data-suffix="+">20+</b><span>Years of experience</span></div>
-            <div class="stat"><b data-count="4" data-suffix="">4</b><span>Featured client concepts</span></div>
-            <div class="stat"><b data-count="100" data-suffix="%">100%</b><span>Editable &amp; future-ready</span></div>
+            <div class="stat"><b data-count="20" data-suffix="+">0</b><span>Years of experience</span></div>
+            <div class="stat"><b data-count="4" data-suffix="">0</b><span>Featured client concepts</span></div>
+            <div class="stat"><b data-count="100" data-suffix="%">0</b><span>Editable &amp; future-ready</span></div>
           </div>
           <p class="quote">"A website should look beautiful, work smoothly, be easy to update — and be ready for the future of AI."</p>
         </aside>
@@ -1339,11 +1300,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <div class="contact__grid">
         <!-- left -->
         <div class="contact__intro">
-          <span class="kicker reveal in">Get in touch</span>
-          <h2 class="reveal in" data-d="1">Let's build your <span class="grad-text">AI-powered website</span>.</h2>
-          <p class="contact__sub reveal in" data-d="2">Tell me about your business and what you'd like to create. I'll get back to you with ideas, options and next steps.</p>
+          <span class="kicker reveal">Get in touch</span>
+          <h2 class="reveal" data-d="1">Let's build your <span class="grad-text">AI-powered website</span>.</h2>
+          <p class="contact__sub reveal" data-d="2">Tell me about your business and what you'd like to create. I'll get back to you with ideas, options and next steps.</p>
 
-          <div class="contact__details reveal in" data-d="3">
+          <div class="contact__details reveal" data-d="3">
             <div class="contact-row">
               <span class="ci">✉️</span>
               <div><b>Email</b><a href="mailto:marcteleki@me.com">marcteleki@me.com</a></div>
@@ -1360,7 +1321,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </div>
 
         <!-- form -->
-        <form class="form reveal in sent" data-d="2" id="contactForm" data-send-to="marc@webescapade.com" data-formspree="" novalidate="">
+        <form class="form reveal" data-d="2" id="contactForm" data-send-to="marc@webescapade.com" data-formspree="" novalidate="">
           <div class="form__row">
             <div class="field">
               <label for="f-name">Name</label>
@@ -1777,531 +1738,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   </template>
 
 
-<script id="we-editor-script">
-(function(){
-  'use strict';
-  var LS_KEY = 'we-edits-v2';      /* legacy localStorage (fallback / migration) */
-  var body = document.body;
-  var editing = false;
 
-  /* ---- editable TEXT nodes (innermost matches only) ---- */
-  var TEXT_SEL = [
-    'h1','h2','h3','h4','h5','p','.kicker','.tag','.strip__logo','.tl-year',
-    '.stat span','.quote','.about__lead','.form__note','.contact-row b',
-    '.contact-row a','.contact-row span','.footer__col a','.footer__col h5',
-    '.footer__brand p','.footer__bottom span','.pill','.btn','label'
-  ].join(',');
-  var all = Array.prototype.slice.call(document.querySelectorAll(TEXT_SEL))
-            .filter(function(n){ return !n.closest('#we-bar') && !n.closest('.projects__grid'); });
-  var setAll = new Set(all);
-  var textNodes = all.filter(function(n){
-    var inner = n.querySelectorAll(TEXT_SEL);
-    for (var i=0;i<inner.length;i++){ if (setAll.has(inner[i])) return false; }
-    return true;
-  });
-  textNodes.forEach(function(n,i){ n.setAttribute('data-we-key','t'+i); });
-
-  /* ---- project browser-bar URL labels ---- */
-  var urlNodes = Array.prototype.slice.call(document.querySelectorAll('.browser-bar .url'))
-                 .filter(function(n){ return !n.closest('#we-bar') && !n.closest('.projects__grid'); });
-  urlNodes.forEach(function(n,i){ n.setAttribute('data-we-key','u'+i); });
-  var editNodes = textNodes.concat(urlNodes);
-
-  /* ---- replaceable IMAGE slots ---- */
-  var slots = [];
-  var heroWrap = document.querySelector('.hero__logo-wrap');
-  if (heroWrap) slots.push({el:heroWrap, type:'img', sel:'.hero__logo'});
-  var aboutPh = document.querySelector('.about__portrait .placeholder');
-  if (aboutPh) slots.push({el:aboutPh, type:'bg'});
-  slots.forEach(function(s,i){ s.key='img'+i; s.el.setAttribute('data-we-img', s.key); s.el.classList.add('we-img-slot'); });
-  var imgData = {};
-
-  /* ---- editor setting: where the contact form emails go ---- */
-  var formEl = document.getElementById('contactForm');
-  var setWrap = document.createElement('div');
-  setWrap.id = 'we-setting-email';
-  setWrap.style.cssText = 'display:none;margin:0 0 18px;padding:14px 16px;border:1px dashed rgba(124,140,255,.55);border-radius:12px;background:rgba(124,140,255,.07);font-family:\'Space Mono\',ui-monospace,monospace;';
-  setWrap.innerHTML =
-      '<div style="font-size:12px;letter-spacing:.06em;color:#cdd6ff;margin-bottom:8px;font-weight:bold;">WHERE YOUR MESSAGES GO</div>'
-    + '<div style="font-size:11px;color:#9aa6cf;margin:0 0 12px;line-height:1.5;">Best option: paste a free Formspree link below \u2014 then you can log in and see every message. Leave it blank and the button just opens an email to the address below.</div>'
-    + '<label style="display:block;font-size:11px;color:#cdd6ff;margin-bottom:4px;">\uD83D\uDCE9 Formspree form link</label>'
-    + '<input type="url" id="we-formspree" placeholder="https://formspree.io/f/xxxxxxxx" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid rgba(160,180,255,.3);background:rgba(7,11,22,.6);color:#eef2ff;font:inherit;font-size:13px;margin-bottom:12px;">'
-    + '<label style="display:block;font-size:11px;color:#cdd6ff;margin-bottom:4px;">\u2709\uFE0F Your email (used if no Formspree link)</label>'
-    + '<input type="email" id="we-send-to" placeholder="you@business.com" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid rgba(160,180,255,.3);background:rgba(7,11,22,.6);color:#eef2ff;font:inherit;font-size:13px;">';
-  if (formEl && formEl.parentNode){ formEl.parentNode.insertBefore(setWrap, formEl); }
-  var sendToInput = document.getElementById('we-send-to');
-  var fsInput = document.getElementById('we-formspree');
-  if (sendToInput){
-    sendToInput.value = (formEl && formEl.getAttribute('data-send-to')) || '';
-    sendToInput.addEventListener('input', function(){ if (formEl){ formEl.setAttribute('data-send-to', sendToInput.value.trim()); } });
-  }
-  if (fsInput){
-    fsInput.value = (formEl && formEl.getAttribute('data-formspree')) || '';
-    fsInput.addEventListener('input', function(){ if (formEl){ formEl.setAttribute('data-formspree', fsInput.value.trim()); } });
-  }
-
-  function applyImage(s, data){
-    imgData[s.key] = data;
-    if (s.type==='img'){
-      var img = s.el.querySelector(s.sel) || s.el.querySelector('img');
-      if (img) img.src = data;
-    } else {
-      s.el.style.backgroundImage = 'url('+data+')';
-      s.el.style.backgroundSize = 'cover';
-      s.el.style.backgroundPosition = 'center';
-      s.el.style.backgroundRepeat = 'no-repeat';
-      var tag = s.el.querySelector('.placeholder__tag');
-      if (tag) tag.style.display = 'none';
-    }
-  }
-
-  /* ---- compress images on upload (keeps storage + download lean) ---- */
-  function compressImage(file, slotType, cb){
-    var rd = new FileReader();
-    rd.onload = function(){
-      var img = new Image();
-      img.onload = function(){
-        try {
-          var isLogo = (slotType === 'img');
-          var max = isLogo ? 1024 : 1600;
-          var w = img.width, h = img.height;
-          if (w > max || h > max){ var sc = Math.min(max/w, max/h); w = Math.round(w*sc); h = Math.round(h*sc); }
-          var c = document.createElement('canvas'); c.width = w; c.height = h;
-          c.getContext('2d').drawImage(img, 0, 0, w, h);
-          /* logo -> PNG (keep transparency); photos -> JPEG (small) */
-          var out = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', 0.82);
-          cb(out);
-        } catch(e){ cb(rd.result); }
-      };
-      img.onerror = function(){ cb(rd.result); };
-      img.src = rd.result;
-    };
-    rd.readAsDataURL(file);
-  }
-
-  var fileInput = document.createElement('input');
-  fileInput.type='file'; fileInput.accept='image/*'; fileInput.id='we-file'; fileInput.style.display='none';
-  document.body.appendChild(fileInput);
-  var pending = null;
-  fileInput.addEventListener('change', function(){
-    var f = fileInput.files && fileInput.files[0];
-    if (!f || !pending){ return; }
-    var slot = pending; pending = null;
-    compressImage(f, slot.type, function(data){ applyImage(slot, data); fileInput.value=''; toast('Image updated \u2713'); });
-  });
-  slots.forEach(function(s){
-    s.el.addEventListener('click', function(e){
-      if (!editing){ return; }
-      e.preventDefault(); e.stopPropagation();
-      pending = s; fileInput.click();
-    });
-  });
-
-  document.addEventListener('click', function(e){
-    if (!editing){ return; }
-    var a = e.target.closest('a,button');
-    if (a && !a.closest('#we-bar')){ e.preventDefault(); }
-  }, true);
-
-  /* ===================== PROJECT CARDS: link + add/remove ===================== */
-  var grid = document.querySelector('.projects__grid');
-  var CARD_HTML =
-    '<article class="project reveal in" data-link="">' +
-      '<div class="project__shot">' +
-        '<div class="browser-bar"><i></i><i></i><i></i><span class="url">yoursite.example</span></div>' +
-        '<div class="project__canvas"><span class="placeholder__tag">project shot</span></div>' +
-      '</div>' +
-      '<div class="project__body">' +
-        '<h3>New project</h3>' +
-        '<p>Describe this project in a sentence or two.</p>' +
-        '<div class="project__tags"><span class="tag">Tag</span><span class="tag">Tag</span></div>' +
-      '</div>' +
-    '</article>';
-
-  var pendingCanvas = null;
-  var cardFile = document.createElement('input');
-  cardFile.type='file'; cardFile.accept='image/*'; cardFile.id='we-card-file'; cardFile.style.display='none';
-  document.body.appendChild(cardFile);
-  cardFile.addEventListener('change', function(){
-    var f = cardFile.files && cardFile.files[0];
-    if (!f || !pendingCanvas){ return; }
-    var canvas = pendingCanvas; pendingCanvas = null;
-    compressImage(f, 'bg', function(data){
-      canvas.style.backgroundImage = 'url(' + data + ')';
-      canvas.style.backgroundSize = 'cover';
-      canvas.style.backgroundPosition = 'center';
-      canvas.style.backgroundRepeat = 'no-repeat';
-      var tag = canvas.querySelector('.placeholder__tag');
-      if (tag){ tag.style.display = 'none'; }
-      cardFile.value = '';
-      toast('Image updated \u2713');
-    });
-  });
-
-  function bindCardImage(card){
-    var canvas = card.querySelector('.project__canvas');
-    if (!canvas || canvas.__weBound){ return; }
-    canvas.__weBound = true;
-    canvas.classList.add('we-img-slot');
-    canvas.addEventListener('click', function(e){
-      if (!editing){ return; }
-      e.preventDefault(); e.stopPropagation();
-      pendingCanvas = canvas; cardFile.click();
-    });
-  }
-
-  function decorateCard(card){
-    bindCardImage(card);
-    if (card.querySelector('.we-card-ui')){ return; }
-    var ui = document.createElement('div');
-    ui.className = 'we-card-ui';
-    ui.style.cssText = 'display:none;margin:14px 0 0;padding:11px 13px;border:1px dashed rgba(124,140,255,.5);border-radius:10px;background:rgba(124,140,255,.06);font-family:\'Space Mono\',ui-monospace,monospace;';
-    ui.innerHTML =
-        '<div style="font-size:11px;color:#cdd6ff;margin-bottom:6px;">\uD83D\uDD17 Link this card to a website</div>' +
-        '<input type="url" class="we-card-link" placeholder="https://example.com" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:7px;border:1px solid rgba(160,180,255,.3);background:rgba(7,11,22,.6);color:#eef2ff;font:inherit;font-size:13px;">' +
-        '<button type="button" class="we-card-remove" style="margin-top:9px;border:1px solid rgba(255,120,120,.4);background:rgba(255,80,80,.12);color:#ffc9c9;font:inherit;font-size:12px;padding:7px 11px;border-radius:7px;cursor:pointer;">\u2715 Remove this card</button>';
-    (card.querySelector('.project__body') || card).appendChild(ui);
-    var link = ui.querySelector('.we-card-link');
-    link.value = card.getAttribute('data-link') || '';
-    link.addEventListener('input', function(){ card.setAttribute('data-link', link.value.trim()); });
-    ui.querySelector('.we-card-remove').addEventListener('click', function(){
-      if (confirm('Remove this project card?')){ card.remove(); toast('Card removed \u2713'); }
-    });
-  }
-
-  function decorateAllCards(){
-    if (!grid){ return; }
-    Array.prototype.slice.call(grid.querySelectorAll('.project')).forEach(decorateCard);
-  }
-
-  function setGridEdit(on){
-    if (!grid){ return; }
-    Array.prototype.slice.call(grid.querySelectorAll('h3,p,.tag,.url')).forEach(function(n){
-      if (on){ n.setAttribute('contenteditable','true'); } else { n.removeAttribute('contenteditable'); }
-    });
-    Array.prototype.slice.call(grid.querySelectorAll('.we-card-ui')).forEach(function(n){ n.style.display = on ? 'block' : 'none'; });
-    if (addBtn){ addBtn.style.display = on ? 'block' : 'none'; }
-  }
-
-  function cleanGridHTML(){
-    if (!grid){ return ''; }
-    var c = grid.cloneNode(true);
-    Array.prototype.slice.call(c.querySelectorAll('.we-card-ui')).forEach(function(n){ n.remove(); });
-    Array.prototype.slice.call(c.querySelectorAll('[contenteditable]')).forEach(function(n){ n.removeAttribute('contenteditable'); });
-    Array.prototype.slice.call(c.querySelectorAll('.we-img-slot')).forEach(function(n){ n.classList.remove('we-img-slot'); });
-    return c.innerHTML;
-  }
-
-  function addCard(){
-    if (!grid){ return; }
-    var tmp = document.createElement('div');
-    tmp.innerHTML = CARD_HTML;
-    var card = tmp.firstChild;
-    grid.appendChild(card);
-    decorateCard(card);
-    setGridEdit(editing);
-    toast('Card added \u2014 click its image and text to edit \u2713');
-  }
-
-  var addBtn = null;
-  if (grid){
-    addBtn = document.createElement('button');
-    addBtn.type = 'button'; addBtn.id = 'we-add-card';
-    addBtn.textContent = '\u2795 Add project card';
-    addBtn.style.cssText = 'display:none;margin:28px auto 0;padding:13px 22px;border-radius:10px;border:1px dashed rgba(124,140,255,.6);background:rgba(124,140,255,.1);color:#dfe6ff;font-family:\'Space Mono\',ui-monospace,monospace;font-size:14px;cursor:pointer;';
-    addBtn.addEventListener('click', addCard);
-    grid.parentNode.insertBefore(addBtn, grid.nextSibling);
-  }
-
-  decorateAllCards();
-
-  /* ===================== AI ASSISTANT KNOWLEDGE EDITOR ===================== */
-  var kbEl = document.getElementById('we-knowledge');
-  function kbRead(){ if(!kbEl){ return []; } try{ var a=JSON.parse(kbEl.textContent||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
-  function kbWrite(arr){ if(kbEl){ kbEl.textContent = JSON.stringify(arr); } }
-  function esc(t){ return ('' + (t==null?'':t)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
-
-  var kbPanel = document.createElement('div');
-  kbPanel.id = 'we-knowledge-editor';
-  kbPanel.style.cssText = 'display:none;margin:0 0 18px;padding:18px;border:1px dashed rgba(124,140,255,.55);border-radius:14px;background:rgba(124,140,255,.07);font-family:\'Space Mono\',ui-monospace,monospace;';
-  function kbRender(){
-    var arr = kbRead();
-    var rows = '';
-    for (var i=0;i<arr.length;i++){
-      rows += '<div class="we-kb-row" data-i="'+i+'" style="margin-bottom:12px;padding:12px;border:1px solid rgba(160,180,255,.18);border-radius:10px;background:rgba(7,11,22,.45);">'
-        + '<label style="display:block;font-size:11px;color:#cdd6ff;margin-bottom:4px;">When a visitor mentions (separate words with commas):</label>'
-        + '<input class="we-kb-k" value="'+ esc((arr[i].k||[]).join(', ')) +'" placeholder="e.g. seo, google, ranking" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:7px;border:1px solid rgba(160,180,255,.3);background:rgba(7,11,22,.6);color:#eef2ff;font:inherit;font-size:13px;margin-bottom:9px;">'
-        + '<label style="display:block;font-size:11px;color:#cdd6ff;margin-bottom:4px;">The assistant replies with:</label>'
-        + '<textarea class="we-kb-a" rows="2" placeholder="Type the answer you want the assistant to give." style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:7px;border:1px solid rgba(160,180,255,.3);background:rgba(7,11,22,.6);color:#eef2ff;font:inherit;font-size:13px;resize:vertical;">'+ esc(arr[i].a||'') +'</textarea>'
-        + '<button type="button" class="we-kb-del" style="margin-top:8px;border:1px solid rgba(255,120,120,.4);background:rgba(255,80,80,.12);color:#ffc9c9;font:inherit;font-size:12px;padding:6px 10px;border-radius:7px;cursor:pointer;">\u2715 Remove</button>'
-        + '</div>';
-    }
-    kbPanel.innerHTML =
-        '<div style="font-size:13px;letter-spacing:.04em;color:#dfe6ff;font-weight:bold;margin-bottom:6px;">\uD83E\uDD16 TRAIN YOUR AI ASSISTANT</div>'
-      + '<div style="font-size:11px;color:#9aa6cf;margin-bottom:14px;line-height:1.5;">Add things your assistant should know. When a visitor\'s message contains one of your words, it replies with your answer. Your answers are used before the built-in ones.</div>'
-      + rows
-      + '<button type="button" id="we-kb-add" style="margin-top:6px;padding:11px 18px;border-radius:9px;border:1px dashed rgba(124,140,255,.6);background:rgba(124,140,255,.1);color:#dfe6ff;font:inherit;font-size:13px;cursor:pointer;">\u2795 Add knowledge</button>';
-    kbPanel.querySelector('#we-kb-add').addEventListener('click', function(){ var a=kbRead(); a.push({k:[],a:''}); kbWrite(a); kbRender(); });
-    Array.prototype.slice.call(kbPanel.querySelectorAll('.we-kb-row')).forEach(function(row){
-      var idx = parseInt(row.getAttribute('data-i'),10);
-      var kIn = row.querySelector('.we-kb-k');
-      var aIn = row.querySelector('.we-kb-a');
-      function commit(){
-        var a = kbRead();
-        a[idx] = { k: kIn.value.split(',').map(function(x){ return x.trim(); }).filter(Boolean), a: aIn.value };
-        kbWrite(a);
-      }
-      kIn.addEventListener('input', commit);
-      aIn.addEventListener('input', commit);
-      row.querySelector('.we-kb-del').addEventListener('click', function(){ var a=kbRead(); a.splice(idx,1); kbWrite(a); kbRender(); });
-    });
-  }
-  if (setWrap && setWrap.parentNode){ setWrap.parentNode.insertBefore(kbPanel, setWrap); }
-  else { var mainEl = document.querySelector('main') || document.body; mainEl.insertBefore(kbPanel, mainEl.firstChild); }
-  kbRender();
-
-  /* ---- IndexedDB store (large quota) ---- */
-  var DB_NAME='we-db-v2', STORE='kv', DB_KEY='edits';
-  function idbOpen(){
-    return new Promise(function(res, rej){
-      if (!window.indexedDB){ rej(new Error('no-idb')); return; }
-      var r = indexedDB.open(DB_NAME, 1);
-      r.onupgradeneeded = function(){ r.result.createObjectStore(STORE); };
-      r.onsuccess = function(){ res(r.result); };
-      r.onerror   = function(){ rej(r.error || new Error('idb-open')); };
-    });
-  }
-  function idbSet(val){
-    return idbOpen().then(function(db){ return new Promise(function(res, rej){
-      var tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).put(val, DB_KEY);
-      tx.oncomplete = function(){ res(true); };
-      tx.onerror = function(){ rej(tx.error); };
-    }); });
-  }
-  function idbGet(){
-    return idbOpen().then(function(db){ return new Promise(function(res, rej){
-      var tx = db.transaction(STORE, 'readonly');
-      var g = tx.objectStore(STORE).get(DB_KEY);
-      g.onsuccess = function(){ res(g.result || null); };
-      g.onerror = function(){ rej(g.error); };
-    }); });
-  }
-  function idbDel(){
-    return idbOpen().then(function(db){ return new Promise(function(res, rej){
-      var tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).delete(DB_KEY);
-      tx.oncomplete = function(){ res(true); };
-      tx.onerror = function(){ rej(tx.error); };
-    }); });
-  }
-
-  /* ---- collect / apply ---- */
-  function collect(){
-    var data = { v:2, texts:{}, images:imgData };
-    editNodes.forEach(function(n){ data.texts[n.getAttribute('data-we-key')] = n.innerHTML; });
-    data.sendTo = formEl ? (formEl.getAttribute('data-send-to') || '') : '';
-    data.formspree = formEl ? (formEl.getAttribute('data-formspree') || '') : '';
-    data.gridHTML = cleanGridHTML();
-    data.knowledge = kbRead();
-    return data;
-  }
-  function apply(data){
-    if (!data) return;
-    if (data.texts){ editNodes.forEach(function(n){ var k=n.getAttribute('data-we-key'); if (data.texts[k]!=null){ n.innerHTML = data.texts[k]; } }); }
-    if (data.images){ slots.forEach(function(s){ if (data.images[s.key]){ applyImage(s, data.images[s.key]); } }); }
-    if (data.sendTo && formEl){ formEl.setAttribute('data-send-to', data.sendTo); if (sendToInput){ sendToInput.value = data.sendTo; } }
-    if (data.formspree && formEl){ formEl.setAttribute('data-formspree', data.formspree); if (fsInput){ fsInput.value = data.formspree; } }
-    if (data.gridHTML && grid){ grid.innerHTML = data.gridHTML; decorateAllCards(); }
-    if (data.knowledge){ kbWrite(data.knowledge); kbRender(); }
-  }
-
-  /* ---- save / load / reset ---- */
-  function save(){
-    var data = collect();
-    idbSet(data).then(function(){ toast('Saved \u2713'); }).catch(function(){
-      try { localStorage.setItem(LS_KEY, JSON.stringify(data)); toast('Saved \u2713'); }
-      catch(e){ toast('This browser blocks saving for local files \u2014 use Download to keep changes'); }
-    });
-  }
-  function load(){
-    idbGet().then(function(data){
-      if (!data){ try { var raw = localStorage.getItem(LS_KEY); if (raw){ data = JSON.parse(raw); } } catch(e){} }
-      apply(data);
-    }).catch(function(){
-      try { var raw = localStorage.getItem(LS_KEY); if (raw){ apply(JSON.parse(raw)); } } catch(e){}
-    });
-  }
-  function reset(){
-    idbDel().catch(function(){}).then(function(){
-      try { localStorage.removeItem(LS_KEY); } catch(e){}
-      location.reload();
-    });
-  }
-
-  /* ---- edit toggle ---- */
-  function setEdit(on){
-    editing = on;
-    body.classList.toggle('we-editing', on);
-    editNodes.forEach(function(n){ if (on){ n.setAttribute('contenteditable','true'); } else { n.removeAttribute('contenteditable'); } });
-    setGridEdit(on);
-    if (setWrap){ setWrap.style.display = on ? 'block' : 'none'; }
-    if (kbPanel){ kbPanel.style.display = on ? 'block' : 'none'; }
-    document.getElementById('we-edit').innerHTML = on ? '\u2713 Done' : '\u270F\uFE0F Edit';
-    if (!on){ save(); }
-  }
-
-  /* ---- download clean final site ---- */
-  function download(){
-    var clone = document.documentElement.cloneNode(true);
-    ['#we-bar','#we-file','#we-editor-style','#we-editor-script','#we-toast','#we-setting-email','#we-add-card','#we-card-file','#we-knowledge-editor','#we-deploy-modal'].forEach(function(sel){
-      var el = clone.querySelector(sel); if (el){ el.remove(); }
-    });
-    Array.prototype.slice.call(clone.querySelectorAll('[contenteditable]')).forEach(function(n){ n.removeAttribute('contenteditable'); });
-    Array.prototype.slice.call(clone.querySelectorAll('[data-we-key]')).forEach(function(n){ n.removeAttribute('data-we-key'); });
-    Array.prototype.slice.call(clone.querySelectorAll('[data-we-img]')).forEach(function(n){ n.removeAttribute('data-we-img'); n.classList.remove('we-img-slot'); });
-    Array.prototype.slice.call(clone.querySelectorAll('.we-card-ui')).forEach(function(n){ n.remove(); });
-    Array.prototype.slice.call(clone.querySelectorAll('.we-img-slot')).forEach(function(n){ n.classList.remove('we-img-slot'); });
-    var b = clone.querySelector('body'); if (b){ b.classList.remove('we-editing'); }
-    var out = '<!DOCTYPE html>\n' + clone.outerHTML;
-    /* octet-stream forces Safari to SAVE the file instead of opening it in a tab */
-    var blob = new Blob([out], {type:'application/octet-stream'});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url; a.download = 'index.html'; a.rel = 'noopener'; a.style.display = 'none';
-    document.body.appendChild(a);
-    var clicked = false;
-    try { a.click(); clicked = true; } catch (err) { clicked = false; }
-    if (!clicked || typeof a.download === 'undefined'){
-      /* last-resort fallback: open in a new tab so it can be saved manually */
-      window.open(url, '_blank');
-    }
-    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 8000);
-    toast('Saved index.html \u2014 look in your Downloads folder \u2713');
-  }
-
-  /* ---- download a re-openable EDITABLE copy (keeps the editing tools) ---- */
-  function downloadEditable(){
-    var clone = document.documentElement.cloneNode(true);
-    /* remove only the editor pieces that get re-created when the file is opened */
-    ['#we-file','#we-card-file','#we-setting-email','#we-knowledge-editor','#we-add-card','#we-deploy-modal'].forEach(function(sel){
-      var el = clone.querySelector(sel); if (el){ el.remove(); }
-    });
-    Array.prototype.slice.call(clone.querySelectorAll('.we-card-ui')).forEach(function(n){ n.remove(); });
-    Array.prototype.slice.call(clone.querySelectorAll('[contenteditable]')).forEach(function(n){ n.removeAttribute('contenteditable'); });
-    Array.prototype.slice.call(clone.querySelectorAll('[data-we-key]')).forEach(function(n){ n.removeAttribute('data-we-key'); });
-    Array.prototype.slice.call(clone.querySelectorAll('[data-we-img]')).forEach(function(n){ n.removeAttribute('data-we-img'); n.classList.remove('we-img-slot'); });
-    Array.prototype.slice.call(clone.querySelectorAll('.we-img-slot')).forEach(function(n){ n.classList.remove('we-img-slot'); });
-    var b = clone.querySelector('body'); if (b){ b.classList.remove('we-editing'); }
-    /* keeps: editor toolbar, editor style, editor script, and the saved knowledge data */
-    var out = '<!DOCTYPE html>\n' + clone.outerHTML;
-    var blob = new Blob([out], {type:'application/octet-stream'});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url; a.download = 'Webescapade-editable.html'; a.rel = 'noopener'; a.style.display = 'none';
-    document.body.appendChild(a);
-    try { a.click(); } catch (err) { window.open(url, '_blank'); }
-    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 8000);
-    toast('Saved editable file \u2014 reopen it any time to keep editing \u2713');
-  }
-
-  /* ---- toast ---- */
-  var toastEl;
-  function toast(msg){
-    if (!toastEl){ toastEl = document.getElementById('we-toast'); }
-    toastEl.textContent = msg; toastEl.classList.add('show');
-    clearTimeout(toastEl._t);
-    toastEl._t = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
-  }
-
-  document.getElementById('we-edit').addEventListener('click', function(){ setEdit(!editing); });
-  document.getElementById('we-save').addEventListener('click', save);
-  document.getElementById('we-download').addEventListener('click', download);
-
-  /* ---- Deploy to GitHub ---- */
-  function weGhCfg(){ try{ return JSON.parse(localStorage.getItem('we-gh-cfg')||'{}'); }catch(e){ return {}; } }
-  function weB64u(str){ var bytes=new TextEncoder().encode(str); var bin='',CH=0x8000; for(var i=0;i<bytes.length;i+=CH){ bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+CH)); } return btoa(bin); }
-  function weBuildEditable(){
-    var clone=document.documentElement.cloneNode(true);
-    ['#we-file','#we-card-file','#we-setting-email','#we-knowledge-editor','#we-add-card','#we-deploy-modal'].forEach(function(sel){ var el=clone.querySelector(sel); if(el){ el.remove(); } });
-    Array.prototype.slice.call(clone.querySelectorAll('.we-card-ui')).forEach(function(n){ n.remove(); });
-    Array.prototype.slice.call(clone.querySelectorAll('[contenteditable]')).forEach(function(n){ n.removeAttribute('contenteditable'); });
-    Array.prototype.slice.call(clone.querySelectorAll('[data-we-key]')).forEach(function(n){ n.removeAttribute('data-we-key'); });
-    Array.prototype.slice.call(clone.querySelectorAll('[data-we-img]')).forEach(function(n){ n.removeAttribute('data-we-img'); n.classList.remove('we-img-slot'); });
-    Array.prototype.slice.call(clone.querySelectorAll('.we-img-slot')).forEach(function(n){ n.classList.remove('we-img-slot'); });
-    var b=clone.querySelector('body'); if(b){ b.classList.remove('we-editing'); }
-    return '<!DOCTYPE html>\n'+clone.outerHTML;
-  }
-  var weDepModal=document.createElement('div'); weDepModal.id='we-deploy-modal';
-  weDepModal.innerHTML='<div class="we-dep-card">'
-   +'<h3>Deploy to GitHub</h3>'
-   +'<p>Publishes your current site straight to your GitHub Pages repository.</p>'
-   +'<label>GitHub username<input id="we-dep-owner" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="your-username"></label>'
-   +'<label>Repository<input id="we-dep-repo" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="your-repo"></label>'
-   +'<div class="we-dep-row"><label>Branch<input id="we-dep-branch" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="main"></label><label>File path<input id="we-dep-path" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="index.html"></label></div>'
-   +'<label>Personal access token<input id="we-dep-token" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="ghp_\u2026"></label>'
-   +'<p class="we-dep-hint">Stored only in this browser. Create one at GitHub \u2192 Settings \u2192 Developer settings \u2192 Personal access tokens, with repository access.</p>'
-   +'<div class="we-dep-actions"><button type="button" id="we-dep-cancel" class="we-btn">Cancel</button><button type="button" id="we-dep-go" class="we-btn we-btn--primary">Deploy now</button></div>'
-   +'<div id="we-dep-status" class="we-dep-status"></div>'
-   +'</div>';
-  document.body.appendChild(weDepModal);
-  function weDepShow(){ var c=weGhCfg(); document.getElementById('we-dep-owner').value=c.owner||''; document.getElementById('we-dep-repo').value=c.repo||''; document.getElementById('we-dep-branch').value=c.branch||'main'; document.getElementById('we-dep-path').value=c.path||'index.html'; document.getElementById('we-dep-token').value=c.token||''; document.getElementById('we-dep-status').textContent=''; weDepModal.classList.add('show'); }
-  function weDepHide(){ weDepModal.classList.remove('show'); }
-  async function weGhCommit(cfg, path, contentB64, message){
-    var api='https://api.github.com/repos/'+encodeURIComponent(cfg.owner)+'/'+encodeURIComponent(cfg.repo);
-    var H={'Authorization':'token '+cfg.token,'Accept':'application/vnd.github+json'};
-    function J(res){ return res.json().catch(function(){ return {}; }); }
-    var refRes=await fetch(api+'/git/ref/heads/'+encodeURIComponent(cfg.branch),{headers:H});
-    if(!refRes.ok){ var e0=await J(refRes); throw new Error('branch "'+cfg.branch+'": '+(e0.message||refRes.status)); }
-    var ref=await refRes.json(); var latest=ref.object.sha;
-    var coRes=await fetch(api+'/git/commits/'+latest,{headers:H}); var co=await J(coRes); var baseTree=co.tree&&co.tree.sha;
-    var blRes=await fetch(api+'/git/blobs',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify({content:contentB64,encoding:'base64'})});
-    if(!blRes.ok){ var e1=await J(blRes); throw new Error('upload: '+(e1.message||blRes.status)); }
-    var blob=await blRes.json();
-    var trRes=await fetch(api+'/git/trees',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify({base_tree:baseTree,tree:[{path:path,mode:'100644',type:'blob',sha:blob.sha}]})});
-    if(!trRes.ok){ var e2=await J(trRes); throw new Error('tree: '+(e2.message||trRes.status)); }
-    var tree=await trRes.json();
-    var cmRes=await fetch(api+'/git/commits',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify({message:message,tree:tree.sha,parents:[latest]})});
-    if(!cmRes.ok){ var e3=await J(cmRes); throw new Error('commit: '+(e3.message||cmRes.status)); }
-    var nc=await cmRes.json();
-    var upRes=await fetch(api+'/git/refs/heads/'+encodeURIComponent(cfg.branch),{method:'PATCH',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify({sha:nc.sha})});
-    if(!upRes.ok){ var e4=await J(upRes); throw new Error('publish: '+(e4.message||upRes.status)); }
-    return true;
-  }
-  async function weDepGo(){
-    var owner=document.getElementById('we-dep-owner').value.trim();
-    var repo=document.getElementById('we-dep-repo').value.trim();
-    var branch=(document.getElementById('we-dep-branch').value.trim()||'main');
-    var path=(document.getElementById('we-dep-path').value.trim()||'index.html').replace(/^\/+/,'');
-    var token=document.getElementById('we-dep-token').value.trim();
-    var st=document.getElementById('we-dep-status');
-    if(!owner||!repo||!token){ st.style.color='#ff9db5'; st.textContent='Please fill in username, repository and token.'; return; }
-    var cfg={owner:owner,repo:repo,branch:branch,path:path,token:token};
-    try{ localStorage.setItem('we-gh-cfg', JSON.stringify(cfg)); }catch(e){}
-    var go=document.getElementById('we-dep-go'); go.disabled=true;
-    st.style.color='#aeb8d8'; st.textContent='Building and deploying\u2026';
-    try{
-      var out=weBuildEditable(); var content=weB64u(out);
-      await weGhCommit(cfg, path, content, 'Update site via Webescapade editor');
-      st.style.color='#7ee0c0'; st.textContent='Deployed \u2713 Your live site updates in about a minute.';
-      if(typeof toast==='function'){ toast('Deployed to GitHub \u2713'); }
-      setTimeout(weDepHide, 1800);
-    }catch(err){ st.style.color='#ff9db5'; st.textContent='Failed \u2014 '+err.message; }
-    go.disabled=false;
-  }
-  (function(){
-    var db=document.getElementById('we-deploy'); if(db){ db.addEventListener('click', weDepShow); }
-    var dc=document.getElementById('we-dep-cancel'); if(dc){ dc.addEventListener('click', weDepHide); }
-    var dg=document.getElementById('we-dep-go'); if(dg){ dg.addEventListener('click', weDepGo); }
-    weDepModal.addEventListener('click', function(e){ if(e.target===weDepModal){ weDepHide(); } });
-  })();
-
-  document.getElementById('we-savefile').addEventListener('click', downloadEditable);
-  document.getElementById('we-reset').addEventListener('click', function(){ if (confirm('Reset all edits back to the original?')){ reset(); } });
-
-  load();
-})();
-</script>
 
 
 
