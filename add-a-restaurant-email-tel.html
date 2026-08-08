@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add a restaurant — WebEscapade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b1a; --panel:#111327; --panel2:#161936;
+    --ink:#eef1ff; --muted:#98a2c8; --faint:#6a739b;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.055);
+    --violet:#8b5cf6; --blue:#4f7cff; --cyan:#22d3ee; --teal:#2dd4bf;
+    --amber:#f0b45e; --danger:#ff8a8a;
+    --grad:linear-gradient(100deg,#8b5cf6,#4f7cff 52%,#22d3ee);
+    --fdisp:'Sora',-apple-system,BlinkMacSystemFont,sans-serif;
+    --fmono:'Space Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--fdisp); line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-1;
+    background:
+      radial-gradient(60% 40% at 15% 0%, rgba(139,92,246,.18), transparent 60%),
+      radial-gradient(50% 40% at 90% 15%, rgba(34,211,238,.10), transparent 60%);
+  }
+  .wrap{ max-width:900px; margin:0 auto; padding:56px 24px 96px }
+  .eyebrow{ font-family:var(--fmono); font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--teal) }
+  h1{ font-size:clamp(38px,7vw,64px); font-weight:800; letter-spacing:-.03em; line-height:1; margin:14px 0 0 }
+  h1 em{ font-style:normal; background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent }
+  .lede{ color:var(--muted); font-size:17px; max-width:620px; margin:18px 0 0 }
+
+  /* form card */
+  .card{ border:1px solid var(--line); border-radius:20px; background:var(--panel); padding:28px; margin:38px 0 0 }
+  label{ display:block; font-family:var(--fmono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 8px }
+  input{
+    width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--line);
+    background:#0c0e20; color:var(--ink); font-family:var(--fdisp); font-size:16px;
+  }
+  input:focus{ outline:2px solid var(--blue); outline-offset:1px; border-color:transparent }
+  input.mono{ font-family:var(--fmono); font-size:15px }
+  .hint{ font-size:13px; color:var(--faint); margin:8px 0 0 }
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:20px }
+  .field + .field{ margin-top:22px }
+
+  /* steps */
+  .step{ border-top:1px solid var(--line2); padding:44px 0 0; margin:44px 0 0 }
+  .step-head{ display:flex; gap:18px; align-items:baseline }
+  .num{ font-family:var(--fmono); font-size:13px; color:var(--faint); letter-spacing:.1em; flex:none; padding-top:6px }
+  h2{ font-size:26px; font-weight:700; letter-spacing:-.02em; margin:0 }
+  .step p{ color:var(--muted); margin:14px 0 0 }
+  .step .body{ padding-left:44px }
+  @media (max-width:640px){ .step .body{ padding-left:0 } .row{ grid-template-columns:1fr } }
+
+  /* code */
+  .code{ position:relative; border:1px solid var(--line); border-radius:14px; background:#0c0e20; margin:18px 0 0 }
+  .code pre{
+    margin:0; padding:20px 92px 20px 20px; overflow-x:auto;
+    font-family:var(--fmono); font-size:13.5px; line-height:1.75; color:#dbe2ff; white-space:pre;
+  }
+  .copy{
+    position:absolute; top:12px; right:12px; font-family:var(--fdisp); font-weight:700; font-size:13px;
+    padding:8px 16px; border-radius:9px; border:1px solid var(--line);
+    background:rgba(255,255,255,.06); color:var(--ink); cursor:pointer;
+  }
+  .copy:hover{ background:rgba(255,255,255,.12) }
+  .copy.done{ background:var(--teal); color:#05221d; border-color:transparent }
+
+  /* value rows */
+  .val{ display:flex; align-items:center; gap:16px; border:1px solid var(--line); border-radius:12px; background:#0c0e20; padding:14px 16px; margin:12px 0 0 }
+  .val .k{ font-family:var(--fmono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); width:132px; flex:none }
+  .val .v{ font-family:var(--fmono); font-size:13px; color:#dbe2ff; word-break:break-all; flex:1 }
+  .val .copy{ position:static; flex:none }
+
+  ol.plain{ margin:14px 0 0; padding-left:20px; color:var(--muted) }
+  ol.plain li{ margin:6px 0 }
+  b, strong{ color:var(--ink); font-weight:600 }
+
+  .note{ border-left:3px solid var(--violet); padding:2px 0 2px 16px; margin:18px 0 0; color:var(--muted); font-size:15px }
+  .note.warn{ border-color:var(--amber) }
+  .note.stop{ border-color:var(--danger) }
+
+  .done-row{ display:flex; align-items:center; gap:12px; margin:22px 0 0; cursor:pointer; user-select:none; width:fit-content }
+  .done-row input{ width:20px; height:20px; accent-color:var(--teal); cursor:pointer }
+  .done-row span{ font-family:var(--fmono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint) }
+  .done-row input:checked + span{ color:var(--teal) }
+
+  .banner{
+    display:none; border:1px solid rgba(240,180,94,.4); background:rgba(240,180,94,.08);
+    border-radius:14px; padding:16px 18px; margin:24px 0 0; color:#f3d9ae; font-size:15px;
+  }
+  .banner.show{ display:block }
+  footer{ border-top:1px solid var(--line2); margin:60px 0 0; padding:26px 0 0; color:var(--faint); font-family:var(--fmono); font-size:12px; letter-spacing:.04em }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <span class="eyebrow">WebEscapade · Onboarding</span>
+  <h1>Add a <em>restaurant.</em></h1>
+  <p class="lede">Fill this in once. Every step below rewrites itself — the SQL to run in Supabase, and the exact values to paste into their site.</p>
+
+  <!-- ============ FORM ============ -->
+  <div class="card">
+    <div class="field">
+      <label for="fName">Restaurant name</label>
+      <input id="fName" placeholder="Sunset Grill" autocomplete="off">
+      <p class="hint">Exactly as their customers should see it — accents and all.</p>
+    </div>
+
+    <div class="row" style="margin-top:22px">
+      <div>
+        <label for="fSlug">Venue code</label>
+        <input id="fSlug" class="mono" placeholder="sunset-grill" autocomplete="off">
+        <p class="hint">Made from the name. Lowercase and hyphens only.</p>
+      </div>
+      <div>
+        <label for="fRepo">Site repository</label>
+        <input id="fRepo" class="mono" placeholder="sunset-grill" autocomplete="off">
+        <p class="hint">The new GitHub repo for their website.</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="fEmail">Manager's email</label>
+      <input id="fEmail" type="email" placeholder="manager@sunsetgrill.com.au" autocomplete="off">
+      <p class="hint">The login they'll use to see their bookings.</p>
+    </div>
+
+    <div class="row" style="margin-top:22px">
+      <div>
+        <label for="fPhone">Restaurant phone</label>
+        <input id="fPhone" class="mono" placeholder="+61 2 9555 1234" autocomplete="off">
+        <p class="hint">Shown to guests in their confirmation email — the number they'll actually ring.</p>
+      </div>
+      <div>
+        <label for="fBook">Bookings email</label>
+        <input id="fBook" type="email" placeholder="bookings@sunsetgrill.com.au" autocomplete="off">
+        <p class="hint">Guest replies land here, and the restaurant's booking alerts go here.</p>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:22px">
+      <div>
+        <label for="fSeats">Seats per sitting</label>
+        <input id="fSeats" type="number" value="40" min="1">
+        <p class="hint">How many they'll take online, per sitting.</p>
+      </div>
+      <div>
+        <label for="fCap">Total capacity</label>
+        <input id="fCap" type="number" value="60" min="1">
+        <p class="hint">The room's full size, walk-ins included.</p>
+      </div>
+    </div>
+
+    <div class="banner" id="banner">Fill in the restaurant name and manager's email before copying anything. Copying a step with the placeholders still in it creates a junk venue in the database.</div>
+  </div>
+
+  <!-- ============ 01 ============ -->
+  <section class="step">
+    <div class="step-head"><span class="num">01</span><h2>Create the venue</h2></div>
+    <div class="body">
+      <p>In Supabase → <b>SQL Editor</b> → New query. This creates the restaurant, its own capacity settings and its contact details — so their seats stay separate from every other client's, and guests get <b>their</b> name and phone in the confirmation email.</p>
+      <div class="code"><button class="copy" data-copy="sql1">Copy</button><pre id="sql1"></pre></div>
+      <p class="note">If it says <b>duplicate key … venues_slug_key</b>, the venue already exists. Nothing is broken — the update below still runs, so move on to step 02.</p>
+      <p class="note warn">Leave the phone blank and the guest email quietly drops the "call us on…" line. Leave the bookings email blank and guest replies come to you instead of the restaurant. Neither breaks anything, but both are worth filling in.</p>
+      <label class="done-row"><input type="checkbox"><span>Done</span></label>
+    </div>
+  </section>
+
+  <!-- ============ 02 ============ -->
+  <section class="step">
+    <div class="step-head"><span class="num">02</span><h2>Create their login</h2></div>
+    <div class="body">
+      <p>In Supabase → <b>Authentication → Users → Add user</b>. Use the manager's email, set a password, and tick the option to confirm it automatically.</p>
+      <p>Then run this to attach that login to their restaurant. Without it they can't see their bookings — or charge a no-show.</p>
+      <div class="code"><button class="copy" data-copy="sql2">Copy</button><pre id="sql2"></pre></div>
+      <p class="note warn">If it says <b>0 rows</b>, the email doesn't match a user yet. Check the spelling against the Users list and run it again.</p>
+      <label class="done-row"><input type="checkbox"><span>Done</span></label>
+    </div>
+  </section>
+
+  <!-- ============ 03 ============ -->
+  <section class="step">
+    <div class="step-head"><span class="num">03</span><h2>Check it landed</h2></div>
+    <div class="body">
+      <p>One query to confirm the venue exists with the right seats, and the manager is linked.</p>
+      <div class="code"><button class="copy" data-copy="sql3">Copy</button><pre id="sql3"></pre></div>
+      <p>You want one row, the seat numbers you typed, the phone and email you entered, and <b>staff_linked</b> of at least 1.</p>
+      <label class="done-row"><input type="checkbox"><span>Done</span></label>
+    </div>
+  </section>
+
+  <!-- ============ 04 ============ -->
+  <section class="step">
+    <div class="step-head"><span class="num">04</span><h2>Make their site</h2></div>
+    <div class="body">
+      <ol class="plain">
+        <li>New GitHub repository named <b id="repoName">…</b></li>
+        <li>Tick <b>Add a README file</b> — this creates the <b>main</b> branch</li>
+        <li>Upload <b>restaurant-deluxe-TEMPLATE.html</b> as <b>source/site-editable.html</b></li>
+        <li>Settings → Pages → Deploy from a branch → <b>main</b> → <b>/ (root)</b></li>
+      </ol>
+      <p class="note">Nothing else goes in this repo. The booking page and staff screen are shared — one copy serves every restaurant.</p>
+      <label class="done-row"><input type="checkbox"><span>Done</span></label>
+    </div>
+  </section>
+
+  <!-- ============ 05 ============ -->
+  <section class="step">
+    <div class="step-head"><span class="num">05</span><h2>Connect the site</h2></div>
+    <div class="body">
+      <p>Open their site with <b>?edit=1</b>, rebrand the text and logo, import their menu, then open the <b>Bookings</b> panel and paste these four values.</p>
+
+      <div class="val"><span class="k">Venue code</span><span class="v" id="vSlug">—</span><button class="copy" data-copy="vSlug">Copy</button></div>
+      <div class="val"><span class="k">Booking page</span><span class="v" id="vBooking">—</span><button class="copy" data-copy="vBooking">Copy</button></div>
+      <div class="val"><span class="k">Project URL</span><span class="v" id="vProject">—</span><button class="copy" data-copy="vProject">Copy</button></div>
+      <div class="val"><span class="k">Anon key</span><span class="v" id="vAnon">—</span><button class="copy" data-copy="vAnon">Copy</button></div>
+
+      <p class="note stop"><b>The venue code is the one that matters.</b> If it's wrong or missing, this restaurant's bookings won't save at all — there's no default venue to catch them any more, and that's deliberate. It fails loudly instead of quietly filing them under someone else's restaurant.</p>
+      <p>Then <b>Test connection</b> — it should recognise the venue code. Save booking settings, then <b>Deploy → Save editable copy → Publish live site</b>.</p>
+      <p class="hint">The last three values are the same for every restaurant. Only the venue code changes.</p>
+      <label class="done-row"><input type="checkbox"><span>Done</span></label>
+    </div>
+  </section>
+
+  <!-- ============ 06 ============ -->
+  <section class="step">
+    <div class="step-head"><span class="num">06</span><h2>Prove it's separate</h2></div>
+    <div class="body">
+      <p>Don't skip this one. Make a real test booking on their live site, then run this — it shows the last few bookings and which restaurant each one belongs to.</p>
+      <div class="code"><button class="copy" data-copy="sql4">Copy</button><pre id="sql4"></pre></div>
+      <p>Your test booking must show <b id="slugEcho">the venue code</b> in the venue column. Then open their staff view and confirm it lists <b>only</b> their bookings.</p>
+      <p>Check the confirmation email that arrives too — the header, sign-off, phone number and reply-to address should all be <b>this</b> restaurant's, not another client's.</p>
+      <p class="note warn">Safari caches these pages hard. Close the tab completely between checks — refreshing isn't enough, and it will make a working setup look broken.</p>
+      <p>When you're happy, clear the test:</p>
+      <div class="code"><button class="copy" data-copy="sql5">Copy</button><pre id="sql5"></pre></div>
+      <label class="done-row"><input type="checkbox"><span>Done</span></label>
+    </div>
+  </section>
+
+  <!-- ============ 07 ============ -->
+  <section class="step">
+    <div class="step-head"><span class="num">07</span><h2>Hand it over</h2></div>
+    <div class="body">
+      <p>Send the manager these two links and their password.</p>
+      <div class="val"><span class="k">Their website</span><span class="v" id="vSite">—</span><button class="copy" data-copy="vSite">Copy</button></div>
+      <div class="val"><span class="k">Staff bookings</span><span class="v" id="vStaff">—</span><button class="copy" data-copy="vStaff">Copy</button></div>
+      <p>On the staff page they scroll to <b>Staff sign in</b>. They'll see today's bookings, can mark tables seated or no-show, and manage their guest list.</p>
+      <p>To edit their own site they open it with <b>?edit=1</b> — tap text or photos to change them, then <b>Deploy → Publish live site</b>.</p>
+      <label class="done-row"><input type="checkbox"><span>Done</span></label>
+    </div>
+  </section>
+
+  <footer>WebEscapade · Restaurant Deluxe onboarding</footer>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Shared settings — the same for every restaurant.
+   Change these here if the booking page or project ever moves.
+   --------------------------------------------------------------- */
+var BOOKING_PAGE = "https://webescapade.com/restaurant-booking-supabase-with-crm-final.html";
+var PROJECT_URL  = "https://tehxobdokbvqtwtgqzrh.supabase.co";
+var ANON_KEY     = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE";
+var GH_OWNER     = "mteleki-wq";
+
+var $ = function(id){ return document.getElementById(id); };
+var nameIn=$("fName"), slugIn=$("fSlug"), repoIn=$("fRepo"),
+    emailIn=$("fEmail"), seatsIn=$("fSeats"), capIn=$("fCap"),
+    phoneIn=$("fPhone"), bookIn=$("fBook");
+
+function slugify(s){
+  /* strip accents first so "Cafe" survives as cafe, not caf */
+  var t = (s||"").normalize ? (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"") : (s||"");
+  return t.toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"");
+}
+/* single-quote escape so an apostrophe in a name can't break the SQL */
+function sq(s){ return String(s||"").replace(/'/g,"''"); }
+
+var slugEdited=false, repoEdited=false;
+slugIn.addEventListener("input", function(){ slugEdited=true; render(); });
+repoIn.addEventListener("input", function(){ repoEdited=true; render(); });
+[nameIn,emailIn,seatsIn,capIn,phoneIn,bookIn].forEach(function(el){ el.addEventListener("input", render); });
+
+function vals(){
+  var name = nameIn.value.trim();
+  var slug = slugEdited && slugIn.value.trim() ? slugify(slugIn.value) : slugify(name);
+  var repo = repoEdited && repoIn.value.trim() ? repoIn.value.trim() : slug;
+  return {
+    name: name || "Restaurant name",
+    slug: slug || "venue-code",
+    repo: repo || "venue-code",
+    email: emailIn.value.trim() || "their-manager@example.com",
+    phone: phoneIn.value.trim(),
+    book:  bookIn.value.trim(),
+    seats: parseInt(seatsIn.value,10) || 40,
+    cap:   parseInt(capIn.value,10)   || 60,
+    ready: !!(name && emailIn.value.trim())
+  };
+}
+
+function render(){
+  var v = vals();
+  if(!slugEdited) slugIn.value = v.slug === "venue-code" ? "" : v.slug;
+  if(!repoEdited) repoIn.value = v.repo === "venue-code" ? "" : v.repo;
+
+  $("banner").classList.toggle("show", !v.ready);
+
+  $("sql1").textContent =
+    "-- " + v.name + "\n" +
+    "select public.add_venue(\n" +
+    "  '" + sq(v.slug) + "',\n" +
+    "  '" + sq(v.name) + "',\n" +
+    "  " + v.seats + ",   -- seats offered online, per sitting\n" +
+    "  " + v.cap + "    -- total capacity\n" +
+    ");\n\n" +
+    "-- contact details used in the guest's confirmation email\n" +
+    "alter table public.venues\n" +
+    "  add column if not exists phone text,\n" +
+    "  add column if not exists email text,\n" +
+    "  add column if not exists reply_to text,\n" +
+    "  add column if not exists timezone text default 'Australia/Sydney';\n\n" +
+    "update public.venues\n" +
+    "   set phone = " + (v.phone ? "'" + sq(v.phone) + "'," : "null,   -- no phone: the email omits the \"call us\" line") + "\n" +
+    "       email = " + (v.book  ? "'" + sq(v.book)  + "'"  : "null    -- no address: guest replies come to you") + "\n" +
+    " where slug = '" + sq(v.slug) + "';";
+
+  $("sql2").textContent =
+    "-- link " + v.email + " to " + v.name + "\n" +
+    "insert into venue_staff (venue_id, user_id)\n" +
+    "select v.id, u.id\n" +
+    "  from venues v, auth.users u\n" +
+    " where v.slug = '" + sq(v.slug) + "'\n" +
+    "   and u.email = '" + sq(v.email) + "'\n" +
+    "on conflict do nothing;";
+
+  $("sql3").textContent =
+    "select v.slug, v.name, v.phone, v.email,\n" +
+    "       s.online_seats, s.total_capacity,\n" +
+    "       count(st.user_id) as staff_linked\n" +
+    "  from venues v\n" +
+    "  left join booking_settings s on s.venue_id = v.id\n" +
+    "  left join venue_staff     st on st.venue_id = v.id\n" +
+    " where v.slug = '" + sq(v.slug) + "'\n" +
+    " group by v.slug, v.name, v.phone, v.email, s.online_seats, s.total_capacity;";
+
+  $("sql4").textContent =
+    "select b.ref, b.name, b.guests, b.created_at, v.slug as venue\n" +
+    "  from bookings b\n" +
+    "  left join venues v on v.id = b.venue_id\n" +
+    " order by b.created_at desc\n" +
+    " limit 10;";
+
+  $("sql5").textContent =
+    "-- remove the test booking(s) for " + v.name + "\n" +
+    "delete from bookings\n" +
+    " where venue_id = (select id from venues where slug = '" + sq(v.slug) + "');";
+
+  $("repoName").textContent  = GH_OWNER + "/" + v.repo;
+  $("slugEcho").textContent  = v.slug;
+  $("vSlug").textContent     = v.slug;
+  $("vBooking").textContent  = BOOKING_PAGE;
+  $("vProject").textContent  = PROJECT_URL;
+  $("vAnon").textContent     = ANON_KEY;
+  $("vSite").textContent     = "https://" + GH_OWNER + ".github.io/" + v.repo + "/";
+  $("vStaff").textContent    = BOOKING_PAGE + "?venue=" + encodeURIComponent(v.slug);
+}
+
+document.addEventListener("click", function(e){
+  var btn = e.target.closest(".copy");
+  if(!btn) return;
+  var el = $(btn.getAttribute("data-copy"));
+  if(!el) return;
+  var text = el.textContent;
+  function flash(){
+    var was = btn.textContent;
+    btn.textContent = "Copied"; btn.classList.add("done");
+    setTimeout(function(){ btn.textContent = was; btn.classList.remove("done"); }, 1400);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(flash).catch(function(){ fallback(text, flash); });
+  } else { fallback(text, flash); }
+});
+function fallback(text, ok){
+  var ta = document.createElement("textarea");
+  ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); ok(); } catch(e){}
+  ta.remove();
+}
+
+render();
+</script>
+</body>
+</html>
