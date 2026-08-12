@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image migrator — WebEscapade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b1a; --panel:#111327; --ink:#eef1ff; --muted:#98a2c8; --faint:#6a739b;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.05);
+    --violet:#8b5cf6; --blue:#4f7cff; --cyan:#22d3ee; --teal:#2dd4bf;
+    --amber:#f0b45e; --danger:#ff7a7a;
+    --grad:linear-gradient(100deg,#8b5cf6,#4f7cff 52%,#22d3ee);
+    --fd:'Sora',-apple-system,sans-serif; --fm:'Space Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fd);line-height:1.6}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;
+    background:radial-gradient(55% 40% at 12% 0%,rgba(139,92,246,.16),transparent 60%)}
+  .wrap{max-width:760px;margin:0 auto;padding:44px 20px 80px}
+  .eyebrow{font-family:var(--fm);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--teal)}
+  h1{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.03em;margin:12px 0 0}
+  h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--muted);margin:14px 0 0;max-width:56ch}
+  .card{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:24px;margin:26px 0 0}
+  label{display:block;font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  input{width:100%;padding:13px 15px;border-radius:11px;border:1px solid var(--line);background:#0c0e20;color:var(--ink);font-family:var(--fd);font-size:15px}
+  input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:transparent}
+  input[type=file]{padding:11px;font-size:14px}
+  .field+.field{margin-top:18px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:620px){.row{grid-template-columns:1fr}}
+  button{font-family:var(--fd);font-weight:700;font-size:15px;padding:13px 24px;border-radius:12px;
+    border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);cursor:pointer}
+  button.pri{background:var(--grad);border-color:transparent;color:#fff}
+  button:disabled{opacity:.5;cursor:default}
+  .hint{font-size:13px;color:var(--faint);margin:8px 0 0}
+  .msg{margin-top:14px;font-size:14.5px;min-height:22px}
+  .ok{color:var(--teal)} .err{color:var(--danger)} .warn{color:var(--amber)}
+  .bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);margin:16px 0 0;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--grad);transition:width .25s ease}
+  .log{font-family:var(--fm);font-size:12px;color:var(--muted);margin-top:14px;max-height:230px;
+    overflow:auto;border-top:1px solid var(--line2);padding-top:12px;white-space:pre-wrap}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 0}
+  .stat{border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+  .stat .n{font-size:24px;font-weight:800;line-height:1}
+  .stat .l{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:6px}
+  .note{border-left:3px solid var(--violet);padding:2px 0 2px 14px;margin:18px 0 0;color:var(--muted);font-size:14.5px}
+  .note.warn{border-color:var(--amber)}
+  .hide{display:none}
+  .dl-link{display:inline-block;font-family:var(--fd);font-weight:700;font-size:15px;
+    padding:13px 24px;border-radius:12px;background:var(--grad);color:#fff;
+    text-decoration:none;border:1px solid transparent}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="eyebrow">WebEscapade · Stage 1</span>
+  <h1>Image <em>migrator.</em></h1>
+  <p class="lede">Takes a site file with photos baked into it, moves those photos to Supabase Storage, and hands back the same site pointing at real image URLs. Nothing else in the file is touched.</p>
+
+  <!-- ---------- sign in ---------- -->
+  <div class="card" id="authCard">
+    <div class="row">
+      <div class="field"><label for="em">Email</label><input id="em" type="email" autocomplete="username"></div>
+      <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password"></div>
+    </div>
+    <p class="hint">The restaurant's Supabase login, or your own platform admin account. Uploads are permission-checked, so this can't be skipped.</p>
+    <button class="pri" id="signin" style="margin-top:18px">Sign in</button>
+    <div class="msg" id="authMsg"></div>
+  </div>
+
+  <!-- ---------- migrate ---------- -->
+  <div class="card hide" id="workCard">
+    <div class="field">
+      <label for="slug">Venue code</label>
+      <input id="slug" placeholder="cafe-bojo">
+      <p class="hint">Must match the slug in Supabase — it decides the folder, and you can only write to venues you staff.</p>
+    </div>
+    <div class="field">
+      <label for="file">Site file</label>
+      <input id="file" type="file" accept=".html,text/html">
+      <p class="hint">Your <b>source/site-editable.html</b>. Migrate the master, then publish from it.</p>
+    </div>
+
+    <div class="stats hide" id="stats">
+      <div class="stat"><div class="n" id="sBefore">—</div><div class="l">Before</div></div>
+      <div class="stat"><div class="n" id="sImages">—</div><div class="l">Images found</div></div>
+      <div class="stat"><div class="n" id="sAfter">—</div><div class="l">After</div></div>
+    </div>
+
+    <div class="bar hide" id="barWrap"><i id="bar"></i></div>
+    <div class="msg" id="msg"></div>
+    <div class="log hide" id="log"></div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
+      <button id="scan">Scan file</button>
+      <button class="pri" id="go" disabled>Upload and rewrite</button>
+      <button id="dl" class="hide">Download the new file</button>
+      <a id="dlLink" class="hide dl-link">⬇︎  Tap to save the new file</a>
+    </div>
+
+    <p class="note">Your original file is never modified. You get a new copy to upload to GitHub, so you can always fall back.</p>
+    <p class="note warn">Photos become public URLs — anyone with the link can view them. That is already true of images on a public website, but worth knowing before you migrate anything private.</p>
+  </div>
+</div>
+
+<script>
+var SB   = "https://tehxobdokbvqtwtgqzrh.supabase.co";
+var ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE";
+var BUCKET = "venue-media";
+
+var $ = function(id){ return document.getElementById(id); };
+var token = null, html = "", found = [], outBlob = null, outName = "site-editable.html";
+
+function say(el, text, cls){ var n = $(el); n.className = "msg " + (cls || ""); n.textContent = text; }
+function logLine(t){ var l = $("log"); l.classList.remove("hide"); l.textContent += t + "\n"; l.scrollTop = l.scrollHeight; }
+function mb(n){ return (n/1048576).toFixed(2) + " MB"; }
+
+/* ---------- sign in ---------- */
+$("signin").addEventListener("click", async function(){
+  say("authMsg","",""); $("signin").disabled = true;
+  try{
+    var res = await fetch(SB + "/auth/v1/token?grant_type=password", {
+      method:"POST", headers:{ apikey:ANON, "Content-Type":"application/json" },
+      body: JSON.stringify({ email:$("em").value.trim(), password:$("pw").value })
+    });
+    var d = await res.json();
+    if(!res.ok || !d.access_token){
+      say("authMsg", d.error_description || d.msg || "That email and password didn't match.", "err");
+      $("signin").disabled = false; return;
+    }
+    token = d.access_token;
+    $("authCard").classList.add("hide");
+    $("workCard").classList.remove("hide");
+  }catch(e){
+    say("authMsg","Couldn't reach Supabase. Check your connection.","err");
+    $("signin").disabled = false;
+  }
+});
+
+/* ---------- scan ---------- */
+/* Data URLs appear in several shapes: src="data:...", url("data:..."),
+   data-photo="data:...", and inside JSON in the design store. Rather
+   than parse each context, we find every data URL and swap it wherever
+   it appears - the replacement is a plain string swap, so every context
+   is handled at once. */
+var DATA_URL = /data:image\/(png|jpe?g|webp|gif|avif);base64,[A-Za-z0-9+/=]+/g;
+
+$("file").addEventListener("change", function(){
+  found = []; outBlob = null; $("go").disabled = true;
+  $("dl").classList.add("hide"); $("log").textContent = ""; say("msg","","");
+  $("stats").classList.add("hide");
+});
+
+$("scan").addEventListener("click", function(){
+  var f = $("file").files[0];
+  if(!f){ say("msg","Choose your site file first.","warn"); return; }
+  outName = f.name || outName;
+  say("msg","Reading the file\u2026","");
+  var r = new FileReader();
+  r.onload = function(){
+    html = String(r.result || "");
+    var all = html.match(DATA_URL) || [];
+    var seen = {};
+    found = [];
+    all.forEach(function(u){ if(!seen[u]){ seen[u] = true; found.push(u); } });
+
+    var bytes = found.reduce(function(a,u){ return a + u.length; }, 0);
+    $("stats").classList.remove("hide");
+    $("sBefore").textContent = mb(html.length);
+    $("sImages").textContent = found.length;
+    $("sAfter").textContent  = "\u2014";
+
+    if(!found.length){
+      say("msg","No embedded images in this file \u2014 nothing to migrate.","ok");
+      return;
+    }
+    say("msg", found.length + " image" + (found.length>1?"s":"") + " embedded, about " +
+        mb(bytes) + " of the file (" + all.length + " references, duplicates reused).", "ok");
+    $("go").disabled = false;
+  };
+  r.onerror = function(){ say("msg","Couldn't read that file.","err"); };
+  r.readAsText(f);
+});
+
+/* ---------- upload + rewrite ---------- */
+function dataUrlToBlob(u){
+  var m = u.match(/^data:([^;]+);base64,(.*)$/);
+  if(!m) return null;
+  var mime = m[1], b64 = m[2];
+  var bin = atob(b64), len = bin.length, arr = new Uint8Array(len);
+  for(var i=0;i<len;i++) arr[i] = bin.charCodeAt(i);
+  return { blob: new Blob([arr], { type: mime }), mime: mime };
+}
+function extFor(mime){
+  if(mime.indexOf("png")>-1)  return "png";
+  if(mime.indexOf("webp")>-1) return "webp";
+  if(mime.indexOf("gif")>-1)  return "gif";
+  if(mime.indexOf("avif")>-1) return "avif";
+  return "jpg";
+}
+/* short stable name from the content, so re-running doesn't duplicate */
+function shortHash(s){
+  var h = 5381;
+  for(var i=0;i<s.length;i+=7) h = ((h*33) ^ s.charCodeAt(i)) >>> 0;
+  return h.toString(36) + s.length.toString(36);
+}
+
+$("go").addEventListener("click", async function(){
+  var slug = $("slug").value.trim().toLowerCase();
+  if(!slug){ say("msg","Enter the venue code first.","warn"); return; }
+  if(!found.length){ say("msg","Scan a file first.","warn"); return; }
+
+  $("go").disabled = true; $("scan").disabled = true;
+  $("barWrap").classList.remove("hide");
+  /* Collect the swaps first and apply them in ONE pass at the end.
+     Rewriting a 30 MB string once per image created a fresh 30 MB copy
+     each time - roughly half a gigabyte of garbage - which is what made
+     Safari discard the tab and bounce you back to the start. */
+  var map = Object.create(null), done = 0, failed = 0;
+
+  for(var i=0;i<found.length;i++){
+    var url = found[i];
+    var parsed = dataUrlToBlob(url);
+    if(!parsed){ failed++; logLine("skipped one (couldn't decode)"); continue; }
+
+    var name = slug + "/" + shortHash(url) + "." + extFor(parsed.mime);
+    try{
+      var res = await fetch(SB + "/storage/v1/object/" + BUCKET + "/" + name, {
+        method: "POST",
+        headers: {
+          apikey: ANON,
+          Authorization: "Bearer " + token,
+          "Content-Type": parsed.mime,
+          "x-upsert": "true"           /* re-running replaces, never duplicates */
+        },
+        body: parsed.blob
+      });
+      if(!res.ok){
+        var t = await res.text();
+        failed++;
+        logLine("FAILED " + name + " \u2014 " + res.status + " " + t.slice(0,120));
+      } else {
+        map[url] = SB + "/storage/v1/object/public/" + BUCKET + "/" + name;
+        done++;
+        logLine("uploaded " + name + "  (" + mb(parsed.blob.size) + ")");
+      }
+    }catch(e){
+      failed++; logLine("FAILED " + name + " \u2014 " + (e.message || e));
+    }
+    $("bar").style.width = Math.round(((i+1)/found.length)*100) + "%";
+  }
+
+  /* one pass, one new string */
+  var out = html.replace(DATA_URL, function(m){ return map[m] || m; });
+  var saved = html.length - out.length;
+
+  $("sAfter").textContent = mb(out.length);
+  outBlob = new Blob([out], { type: "text/html" });
+
+  /* Release the big strings before the browser has to hold a blob too. */
+  html = ""; found = []; map = null;
+
+  /* Safari drops the "download" permission once an upload has been
+     awaited, so a button that builds the file and clicks a link for you
+     silently does nothing. Give the user a real link to tap instead -
+     that carries its own gesture and always works. */
+  var link = $("dlLink");
+  if(link.href) { try { URL.revokeObjectURL(link.href); } catch(e){} }
+  link.href = URL.createObjectURL(outBlob);
+  link.download = outName;
+  link.classList.remove("hide");
+  $("dl").classList.add("hide");
+  $("scan").disabled = false;
+  if(failed){
+    say("msg", done + " uploaded, " + failed + " failed. Fix the failures before publishing \u2014 " +
+        "a failed image is still embedded, so the file is only partly migrated.", "warn");
+  } else {
+    say("msg", "Done. " + done + " images moved, file is " + mb(saved) + " smaller \u2014 " +
+        Math.round((saved/html.length)*100) + "% lighter.", "ok");
+  }
+});
+
+$("dl").addEventListener("click", function(){
+  if(!outBlob) return;
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(outBlob);
+  a.download = outName;
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+});
+</script>
+</body>
+</html>
