@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex,nofollow">
+<title>Menu manager</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — MENU MANAGER
+     restaurant-menu-manager.html
+
+     Staff-only. Sign in with a Supabase Auth account that has a matching
+     row in rd_staff. Managers can change anything; ordinary staff can
+     flip items sold out but cannot alter prices or tables.
+
+     Connection details are asked for once and kept on this device. The
+     anon key is all this page ever uses — the service_role key is
+     actively refused.
+
+     QR codes are generated here in the browser. Nothing is sent to a
+     third-party QR service, because a table token is the only thing
+     authorising an order and must not leave your control.
+     ================================================================== -->
+
+<script>
+  /* Optional: fill these in to skip the connect screen. */
+  var SUPABASE_URL = '';
+  var SUPABASE_KEY = '';
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0b0806; --panel:#151009; --panel-2:#1c150c; --ink:#f6efe2;
+  --muted:#b3a488; --line:rgba(179,164,136,.2); --gold:#f0cf85; --gold2:#b8783c;
+  --grad:linear-gradient(100deg,#f2d187,#df9f52 55%,#b8783c);
+  --good:#7fd6a3; --bad:#ff7a66; --warn:#ffd479;
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:'Sora',-apple-system,sans-serif;
+  font-size:15px;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;font-weight:700}
+.mono{font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+a{color:var(--gold)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+input[type=text],input[type=email],input[type=password],input[type=number],select,textarea{
+  width:100%;min-height:48px;border:1px solid var(--line);border-radius:11px;
+  background:var(--panel-2);padding:11px 14px;outline:none}
+textarea{min-height:80px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+label{display:block;font-size:12.5px;font-weight:600;margin:15px 0 7px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){ .row2{grid-template-columns:1fr} }
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;padding:12px 22px;border-radius:100px;background:var(--grad);
+  color:#241703;font-family:'Unbounded',sans-serif;font-weight:700;font-size:13.5px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.quiet{background:none;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.btn.danger{background:none;border:1px solid rgba(255,122,102,.5);color:var(--bad)}
+.btn.sm{min-height:42px;padding:9px 16px;font-size:12.5px}
+.btn.full{width:100%}
+
+#gate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);
+  border-radius:20px;padding:28px 24px calc(24px + var(--safe-b))}
+.msg{margin-top:14px;font-size:13px;color:var(--bad);min-height:18px}
+
+#app{display:none}
+.top{position:sticky;top:0;z-index:40;background:rgba(11,8,6,.96);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);padding-top:var(--safe-t)}
+.top-in{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.top h1{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spacer{flex:1}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:0 16px 11px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:1px solid var(--line);border-radius:100px;padding:9px 16px;min-height:44px;
+  color:var(--muted);font-size:12.5px;white-space:nowrap}
+.tab.on{color:#241703;background:var(--grad);border-color:transparent;font-weight:700}
+
+main{padding:18px 16px calc(40px + var(--safe-b));max-width:900px;margin:0 auto}
+.pane{display:none}
+.pane.on{display:block}
+
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:16px;margin-bottom:14px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.sec-h h2{font-size:16px}
+.sec-h .mono{color:var(--muted)}
+.hint{color:var(--muted);font-size:12.5px;margin:4px 0 0}
+
+.item{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item-b{flex:1;min-width:0}
+.item-t{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.item-n{font-weight:600;font-size:15px}
+.item-p{font-family:'Unbounded',sans-serif;font-size:13px;color:var(--gold)}
+.item-d{color:var(--muted);font-size:12.5px;margin:4px 0 0;line-height:1.45}
+.pill{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;border:1px solid var(--line);border-radius:100px;
+  padding:2px 8px;color:var(--muted)}
+.pill.out{color:var(--bad);border-color:rgba(255,122,102,.5)}
+.pill.hid{color:var(--warn);border-color:rgba(255,212,121,.5)}
+.pill.st{color:var(--gold);border-color:rgba(240,207,133,.45)}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.acts button{font-size:12px;color:var(--muted);text-decoration:underline;
+  text-underline-offset:3px;min-height:44px;padding:0 2px}
+.acts button.warn{color:var(--warn)}
+.acts button.bad{color:var(--bad)}
+
+.drag{display:flex;flex-direction:column;gap:3px;flex:0 0 auto;padding-top:2px}
+.drag button{width:44px;height:44px;border:1px solid var(--line);border-radius:9px;
+  color:var(--muted);font-size:11px;display:grid;place-items:center}
+.drag button[disabled]{opacity:.3}
+
+.modal{position:fixed;inset:0;z-index:90;background:rgba(4,3,2,.76);
+  display:none;align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.sheet{background:var(--panel);width:100%;max-width:620px;border-radius:20px 20px 0 0;
+  border-top:1px solid var(--line);max-height:94dvh;display:flex;flex-direction:column}
+@media (min-width:640px){ .modal{align-items:center} .sheet{border-radius:20px} }
+.sh-h{display:flex;align-items:center;gap:12px;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.sh-h h3{font-size:16px;flex:1}
+.sh-x{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  color:var(--muted);font-size:19px;display:grid;place-items:center;flex:0 0 auto}
+.sh-b{overflow-y:auto;padding:4px 18px 16px;flex:1;-webkit-overflow-scrolling:touch}
+.sh-f{padding:14px 18px calc(16px + var(--safe-b));border-top:1px solid var(--line);
+  background:var(--panel-2);display:flex;gap:10px}
+.sh-f .btn{flex:1}
+
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.chips button{border:1px solid var(--line);border-radius:100px;padding:9px 14px;
+  min-height:44px;font-size:12.5px;color:var(--muted)}
+.chips button.on{color:var(--gold);border-color:var(--gold);background:rgba(240,207,133,.1)}
+
+.qr-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.qr-card{background:#fff;border-radius:14px;padding:14px;text-align:center;color:#111}
+.qr-card svg{width:100%;height:auto;display:block}
+.qr-card b{display:block;font-family:'Unbounded',sans-serif;font-size:15px;margin-top:9px;color:#111}
+.qr-card small{display:block;font-size:10px;color:#555;word-break:break-all;margin-top:3px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));transform:translate(-50%,16px);
+  background:var(--panel-2);border:1px solid var(--gold);border-radius:100px;padding:11px 20px;
+  font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+  z-index:120;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.empty{text-align:center;color:var(--muted);padding:34px 16px;font-size:13.5px}
+.spin{text-align:center;color:var(--muted);padding:40px}
+@media print{
+  body{background:#fff}
+  .top,.tabs,.toast,.no-print{display:none!important}
+  .qr-card{break-inside:avoid;border:1px solid #ddd}
+  .qr-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<section id="gate">
+  <div class="card">
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1 style="margin-top:8px;font-size:21px" id="gTitle">Menu manager</h1>
+    <p class="hint" id="gSub">Staff sign-in.</p>
+
+    <div id="gConn" style="display:none">
+      <label for="cu">Project URL</label>
+      <input id="cu" type="text" placeholder="https://xxxx.supabase.co" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="url">
+      <label for="ck">anon / public key</label>
+      <input id="ck" type="text" placeholder="eyJhbGciOi..." autocapitalize="off" autocorrect="off" spellcheck="false">
+      <p class="hint">Use the anon key. Never the service_role key.</p>
+      <button class="btn full" id="cgo" style="margin-top:18px">Connect</button>
+    </div>
+
+    <div id="gLogin" style="display:none">
+      <label for="em">Email</label>
+      <input id="em" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false">
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autocomplete="current-password">
+      <button class="btn full" id="lgo" style="margin-top:18px">Sign in</button>
+      <button id="reconf" style="color:var(--muted);font-size:12px;text-decoration:underline;text-underline-offset:3px;margin-top:14px;min-height:44px">Change connection settings</button>
+    </div>
+    <p class="msg" id="gMsg" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="app">
+  <div class="top">
+    <div class="top-in">
+      <h1 id="vName">Menu manager</h1>
+      <span class="spacer"></span>
+      <button class="btn quiet sm" id="preview">Preview</button>
+      <button class="btn quiet sm" id="signout">Sign out</button>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-p="menu">Menu</button>
+      <button class="tab" data-p="mods">Modifiers</button>
+      <button class="tab" data-p="tables">Tables &amp; QR</button>
+      <button class="tab" data-p="settings">Settings</button>
+    </div>
+  </div>
+  <main>
+    <div class="pane on" id="pMenu"><div class="spin">Loading…</div></div>
+    <div class="pane" id="pMods"></div>
+    <div class="pane" id="pTables"></div>
+    <div class="pane" id="pSettings"></div>
+  </main>
+</section>
+
+<div class="modal" id="modal"><div class="sheet">
+  <div class="sh-h"><h3 id="mTitle">Edit</h3><button class="sh-x" id="mX" aria-label="Close">&times;</button></div>
+  <div class="sh-b" id="mBody"></div>
+  <div class="sh-f" id="mFoot"></div>
+</div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* Minimal QR encoder — byte mode, versions 1..14, EC level L/M/Q/H.
+   Written in-house on purpose: sending a table token to a third-party QR
+   service would hand out the one credential that authorises an order. */
+var QR = (function(){
+  'use strict';
+
+  // ---- Galois field for Reed-Solomon ----
+  var EXP = new Array(512), LOG = new Array(256);
+  (function(){
+    var x = 1;
+    for(var i=0;i<255;i++){ EXP[i]=x; LOG[x]=i; x<<=1; if(x&0x100) x^=0x11d; }
+    for(var j=255;j<512;j++) EXP[j]=EXP[j-255];
+  })();
+  function gmul(a,b){ return (a===0||b===0)?0:EXP[LOG[a]+LOG[b]]; }
+
+  function rsGenerator(deg){
+    var poly=[1];
+    for(var i=0;i<deg;i++){
+      var next=new Array(poly.length+1).fill(0);
+      for(var j=0;j<poly.length;j++){
+        next[j]   ^= gmul(poly[j], 1);
+        next[j+1] ^= gmul(poly[j], EXP[i]);
+      }
+      poly=next;
+    }
+    return poly;
+  }
+  function rsEncode(data, ecLen){
+    var gen=rsGenerator(ecLen);
+    var res=new Array(ecLen).fill(0);
+    for(var i=0;i<data.length;i++){
+      var factor = data[i] ^ res[0];
+      res.shift(); res.push(0);
+      for(var j=0;j<ecLen;j++) res[j] ^= gmul(gen[j+1], factor);
+    }
+    return res;
+  }
+
+  // ---- capacity / block tables, versions 1..14 ----
+  // [totalCodewords, ecPerBlock, group1Blocks, group1Data, group2Blocks, group2Data]
+  var TAB = {
+    L:[null,[26,7,1,19,0,0],[44,10,1,34,0,0],[70,15,1,55,0,0],[100,20,1,80,0,0],
+       [134,26,1,108,0,0],[172,18,2,68,0,0],[196,20,2,78,0,0],[242,24,2,97,0,0],
+       [292,30,2,116,0,0],[346,18,2,68,2,69],[404,20,4,81,0,0],[466,24,2,92,2,93],
+       [532,26,4,107,0,0],[581,30,3,115,1,116]],
+    M:[null,[26,10,1,16,0,0],[44,16,1,28,0,0],[70,26,1,44,0,0],[100,18,2,32,0,0],
+       [134,24,2,43,0,0],[172,16,4,27,0,0],[196,18,4,31,0,0],[242,22,2,38,2,39],
+       [292,22,3,36,2,37],[346,26,4,43,1,44],[404,30,1,50,4,51],[466,22,6,36,2,37],
+       [532,22,8,37,1,38],[581,24,4,40,5,41]],
+    Q:[null,[26,13,1,13,0,0],[44,22,1,22,0,0],[70,18,2,17,0,0],[100,26,2,24,0,0],
+       [134,18,2,15,2,16],[172,24,4,19,0,0],[196,18,2,14,4,15],[242,22,4,18,2,19],
+       [292,20,4,16,4,17],[346,24,6,19,2,20],[404,28,4,22,4,23],[466,26,4,20,6,21],
+       [532,24,8,20,4,21],[581,20,11,16,5,17]],
+    H:[null,[26,17,1,9,0,0],[44,28,1,16,0,0],[70,22,2,13,0,0],[100,16,4,9,0,0],
+       [134,22,2,11,2,12],[172,28,4,15,0,0],[196,26,4,13,1,14],[242,26,4,14,2,15],
+       [292,24,4,12,4,13],[346,28,6,15,2,16],[404,24,3,12,8,13],[466,28,7,14,4,15],
+       [532,22,12,11,4,12],[581,24,11,12,5,13]]
+  };
+
+  var ALIGN = [null,[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],
+    [6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66]];
+
+  // ---- bit buffer ----
+  function Bits(){ this.b=[]; }
+  Bits.prototype.put=function(v,len){
+    for(var i=len-1;i>=0;i--) this.b.push((v>>>i)&1);
+  };
+
+  function charCountBits(ver){ return ver<10 ? 8 : 16; }
+
+  function encode(text, ecl){
+    ecl = ecl || 'M';
+    var bytes = [];
+    // UTF-8
+    for(var i=0;i<text.length;i++){
+      var c = text.charCodeAt(i);
+      if(c<0x80) bytes.push(c);
+      else if(c<0x800){ bytes.push(0xC0|(c>>6),0x80|(c&63)); }
+      else { bytes.push(0xE0|(c>>12),0x80|((c>>6)&63),0x80|(c&63)); }
+    }
+    // choose smallest version that fits
+    var ver=0, cap;
+    for(var v=1;v<=14;v++){
+      var t=TAB[ecl][v];
+      var dataCw = t[2]*t[3] + t[4]*t[5];
+      var need = 4 + charCountBits(v) + bytes.length*8;
+      if(need <= dataCw*8){ ver=v; cap=dataCw; break; }
+    }
+    if(!ver) throw new Error('QR: content too long');
+
+    var bs=new Bits();
+    bs.put(4,4);                          // byte mode
+    bs.put(bytes.length, charCountBits(ver));
+    for(var k=0;k<bytes.length;k++) bs.put(bytes[k],8);
+    // terminator + pad
+    var maxBits=cap*8;
+    for(var t2=0;t2<4 && bs.b.length<maxBits;t2++) bs.b.push(0);
+    while(bs.b.length%8) bs.b.push(0);
+    var dataCodewords=[];
+    for(var p=0;p<bs.b.length;p+=8){
+      var byteVal=0;
+      for(var q=0;q<8;q++) byteVal=(byteVal<<1)|bs.b[p+q];
+      dataCodewords.push(byteVal);
+    }
+    var padBytes=[0xEC,0x11], pi=0;
+    while(dataCodewords.length<cap) dataCodewords.push(padBytes[pi++%2]);
+
+    // ---- split into blocks, add EC ----
+    var tt=TAB[ecl][ver];
+    var ecLen=tt[1], g1=tt[2], d1=tt[3], g2=tt[4], d2=tt[5];
+    var blocks=[], ecBlocks=[], off=0;
+    for(var b1=0;b1<g1;b1++){ var blk=dataCodewords.slice(off,off+d1); off+=d1;
+      blocks.push(blk); ecBlocks.push(rsEncode(blk,ecLen)); }
+    for(var b2=0;b2<g2;b2++){ var blk2=dataCodewords.slice(off,off+d2); off+=d2;
+      blocks.push(blk2); ecBlocks.push(rsEncode(blk2,ecLen)); }
+
+    // interleave
+    var final=[], maxD=Math.max(d1,d2);
+    for(var c1=0;c1<maxD;c1++)
+      for(var bb=0;bb<blocks.length;bb++)
+        if(c1<blocks[bb].length) final.push(blocks[bb][c1]);
+    for(var c2=0;c2<ecLen;c2++)
+      for(var bb2=0;bb2<ecBlocks.length;bb2++) final.push(ecBlocks[bb2][c2]);
+
+    return buildMatrix(final, ver, ecl);
+  }
+
+  function buildMatrix(codewords, ver, ecl){
+    var size = ver*4+17;
+    var m=[], reserved=[];
+    for(var i=0;i<size;i++){ m.push(new Array(size).fill(0)); reserved.push(new Array(size).fill(0)); }
+
+    function finder(r,c){
+      for(var dr=-1;dr<=7;dr++) for(var dc=-1;dc<=7;dc++){
+        var rr=r+dr, cc=c+dc;
+        if(rr<0||cc<0||rr>=size||cc>=size) continue;
+        var on = (dr>=0&&dr<=6&&(dc===0||dc===6)) || (dc>=0&&dc<=6&&(dr===0||dr===6)) ||
+                 (dr>=2&&dr<=4&&dc>=2&&dc<=4);
+        m[rr][cc]=on?1:0; reserved[rr][cc]=1;
+      }
+    }
+    finder(0,0); finder(0,size-7); finder(size-7,0);
+
+    // timing
+    for(var t=8;t<size-8;t++){
+      m[6][t]=(t%2===0)?1:0; reserved[6][t]=1;
+      m[t][6]=(t%2===0)?1:0; reserved[t][6]=1;
+    }
+    // alignment
+    var ap=ALIGN[ver];
+    var first=6, last=size-7;
+    for(var a1=0;a1<ap.length;a1++) for(var a2=0;a2<ap.length;a2++){
+      var ar=ap[a1], ac=ap[a2];
+      /* Only the three that would sit on a finder are omitted. Skipping
+         any that merely touch a timing line drops real patterns from
+         version 7 upward. */
+      if((ar===first&&ac===first)||(ar===first&&ac===last)||(ar===last&&ac===first)) continue;
+      for(var dr2=-2;dr2<=2;dr2++) for(var dc2=-2;dc2<=2;dc2++){
+        var on2 = Math.max(Math.abs(dr2),Math.abs(dc2))!==1;
+        m[ar+dr2][ac+dc2]=on2?1:0; reserved[ar+dr2][ac+dc2]=1;
+      }
+    }
+    // dark module + format areas
+    m[size-8][8]=1; reserved[size-8][8]=1;
+    for(var f=0;f<9;f++){
+      if(!reserved[8][f]){ reserved[8][f]=1; }
+      if(!reserved[f][8]){ reserved[f][8]=1; }
+    }
+    for(var f2=0;f2<8;f2++){ reserved[8][size-1-f2]=1; reserved[size-1-f2][8]=1; }
+    // version info for v>=7
+    if(ver>=7){
+      for(var vr=0;vr<6;vr++) for(var vc=0;vc<3;vc++){
+        reserved[vr][size-11+vc]=1; reserved[size-11+vc][vr]=1;
+      }
+    }
+
+    // place data
+    var bitIdx=0, dir=-1, row=size-1;
+    for(var col=size-1;col>0;col-=2){
+      if(col===6) col--;
+      for(;;){
+        for(var cSide=0;cSide<2;cSide++){
+          var cc2=col-cSide;
+          if(!reserved[row][cc2]){
+            var bit=0;
+            if(bitIdx< codewords.length*8){
+              bit=(codewords[bitIdx>>3]>>>(7-(bitIdx&7)))&1;
+            }
+            m[row][cc2]=bit; bitIdx++;
+          }
+        }
+        row+=dir;
+        if(row<0||row>=size){ row-=dir; dir=-dir; break; }
+      }
+    }
+
+    // pick best mask
+    var best=null, bestScore=Infinity, bestMask=0;
+    for(var mk=0;mk<8;mk++){
+      var cand=applyMask(m,reserved,mk,size);
+      placeFormat(cand,ecl,mk,size);
+      var sc=penalty(cand,size);
+      if(sc<bestScore){ bestScore=sc; best=cand; bestMask=mk; }
+    }
+    if(ver>=7) placeVersion(best,ver,size);
+    return { size:size, modules:best, version:ver, mask:bestMask };
+  }
+
+  function applyMask(m,reserved,mask,size){
+    var out=[];
+    for(var r=0;r<size;r++){
+      out.push(m[r].slice());
+      for(var c=0;c<size;c++){
+        if(reserved[r][c]) continue;
+        var flip=false;
+        switch(mask){
+          case 0: flip=((r+c)%2===0); break;
+          case 1: flip=(r%2===0); break;
+          case 2: flip=(c%3===0); break;
+          case 3: flip=((r+c)%3===0); break;
+          case 4: flip=((Math.floor(r/2)+Math.floor(c/3))%2===0); break;
+          case 5: flip=(((r*c)%2)+((r*c)%3)===0); break;
+          case 6: flip=((((r*c)%2)+((r*c)%3))%2===0); break;
+          case 7: flip=((((r+c)%2)+((r*c)%3))%2===0); break;
+        }
+        if(flip) out[r][c]^=1;
+      }
+    }
+    return out;
+  }
+
+  var ECBITS={L:1,M:0,Q:3,H:2};
+  function placeFormat(m,ecl,mask,size){
+    var data=(ECBITS[ecl]<<3)|mask;
+    var rem=data;
+    for(var i=0;i<10;i++) rem=((rem<<1)^(((rem>>>9)&1)*0x537));
+    var bitsVal=((data<<10)|rem)^0x5412;
+    /* Format bits run DOWN column 8 and ALONG row 8. Writing m[row][col]
+       means the column-8 run is m[i][8], not m[8][i] — transposing these
+       two is silent: the symbol still looks like a QR code and still has
+       valid data, it just cannot be read. */
+    function set(col,row,bit){ m[row][col]=bit; }
+    for(var b=0;b<15;b++){
+      var bit=(bitsVal>>>b)&1;
+      // copy 1: down the left of the top-right finder, then across
+      if(b<=5)       set(8, b, bit);
+      else if(b===6) set(8, 7, bit);
+      else if(b===7) set(8, 8, bit);
+      else if(b===8) set(7, 8, bit);
+      else           set(14-b, 8, bit);
+      // copy 2
+      if(b<8) set(size-1-b, 8, bit);
+      else    set(8, size-15+b, bit);
+    }
+    set(8, size-8, 1);   // the always-dark module
+  }
+  function placeVersion(m,ver,size){
+    var rem=ver;
+    for(var i=0;i<12;i++) rem=((rem<<1)^(((rem>>>11)&1)*0x1f25));
+    var bitsVal=(ver<<12)|rem;
+    for(var b=0;b<18;b++){
+      var bit=(bitsVal>>>b)&1;
+      var r=Math.floor(b/3), c=b%3;
+      m[r][size-11+c]=bit;
+      m[size-11+c][r]=bit;
+    }
+  }
+
+  function penalty(m,size){
+    var score=0, r,c,i;
+    // rule 1: runs of 5+
+    for(r=0;r<size;r++){
+      var run=1;
+      for(c=1;c<size;c++){
+        if(m[r][c]===m[r][c-1]) run++;
+        else { if(run>=5) score+=3+(run-5); run=1; }
+      }
+      if(run>=5) score+=3+(run-5);
+    }
+    for(c=0;c<size;c++){
+      var run2=1;
+      for(r=1;r<size;r++){
+        if(m[r][c]===m[r-1][c]) run2++;
+        else { if(run2>=5) score+=3+(run2-5); run2=1; }
+      }
+      if(run2>=5) score+=3+(run2-5);
+    }
+    // rule 2: 2x2 blocks
+    for(r=0;r<size-1;r++) for(c=0;c<size-1;c++){
+      var v=m[r][c];
+      if(v===m[r][c+1]&&v===m[r+1][c]&&v===m[r+1][c+1]) score+=3;
+    }
+    // rule 3: finder-like patterns
+    var pat=[1,0,1,1,1,0,1];
+    for(r=0;r<size;r++) for(c=0;c<size-6;c++){
+      var ok=true;
+      for(i=0;i<7;i++) if(m[r][c+i]!==pat[i]){ ok=false; break; }
+      if(ok) score+=40;
+    }
+    for(c=0;c<size;c++) for(r=0;r<size-6;r++){
+      var ok2=true;
+      for(i=0;i<7;i++) if(m[r+i][c]!==pat[i]){ ok2=false; break; }
+      if(ok2) score+=40;
+    }
+    // rule 4: dark ratio
+    var dark=0;
+    for(r=0;r<size;r++) for(c=0;c<size;c++) if(m[r][c]) dark++;
+    var pct=(dark*100)/(size*size);
+    score+=Math.floor(Math.abs(pct-50)/5)*10;
+    return score;
+  }
+
+  function toSvg(text, opts){
+    opts=opts||{};
+    var q=encode(text, opts.ecl||'M');
+    var quiet=opts.quiet===undefined?4:opts.quiet;
+    var total=q.size+quiet*2;
+    var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+total+' '+total+
+          '" shape-rendering="crispEdges" width="'+(opts.px||240)+'" height="'+(opts.px||240)+'">';
+    s+='<rect width="'+total+'" height="'+total+'" fill="'+(opts.bg||'#ffffff')+'"/>';
+    s+='<path fill="'+(opts.fg||'#000000')+'" d="';
+    for(var r=0;r<q.size;r++) for(var c=0;c<q.size;c++)
+      if(q.modules[r][c]) s+='M'+(c+quiet)+' '+(r+quiet)+'h1v1h-1z';
+    s+='"/></svg>';
+    return s;
+  }
+
+  return { encode:encode, toSvg:toSvg };
+})();
+
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+
+var SESSION=null, VENUE=null, ROLE='staff';
+var CATS=[], ITEMS=[], GROUPS=[], OPTS=[], LINKS=[], STATIONS=[], TABLES=[];
+var PANE='menu';
+
+/* ---------- small helpers ---------- */
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function money(c){ return '$' + ((c||0)/100).toFixed(2); }
+function toCents(v){
+  var n = parseFloat(String(v).replace(/[^0-9.\-]/g,''));
+  return isNaN(n) ? 0 : Math.round(n*100);
+}
+var toastT;
+function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('on'); },2600); }
+function isManager(){ return ROLE==='manager' || ROLE==='owner'; }
+
+/* ---------- config ---------- */
+function normaliseUrl(raw){
+  var u=String(raw||'').trim(); if(!u) return '';
+  if(/^[a-z0-9]{16,}$/i.test(u)) return 'https://'+u+'.supabase.co';
+  if(!/^https?:\/\//i.test(u)) u='https://'+u;
+  var host,path;
+  try{ var a=document.createElement('a'); a.href=u; host=a.hostname; path=a.pathname||''; }
+  catch(e){ return ''; }
+  var m=path.match(/\/project\/([a-z0-9]+)/i);
+  if(/supabase\.(com|io)$/i.test(host)&&m) return 'https://'+m[1]+'.supabase.co';
+  return 'https://'+host;
+}
+function keyRole(k){
+  try{ var p=k.split('.')[1]; if(!p) return null;
+    p=p.replace(/-/g,'+').replace(/_/g,'/'); while(p.length%4)p+='=';
+    return (JSON.parse(atob(p))||{}).role||null; }catch(e){ return null; }
+}
+function readCfg(){ try{ return JSON.parse(localStorage.getItem('rd_mgr_config')||'null'); }catch(e){ return null; } }
+function readSess(){ try{ return JSON.parse(localStorage.getItem('rd_mgr_session')||'null'); }catch(e){ return null; } }
+function saveSess(s){ try{ localStorage.setItem('rd_mgr_session', JSON.stringify(s)); }catch(e){} }
+
+/* ---------- api ---------- */
+function api(path, opts){
+  opts=opts||{}; var h=opts.headers||{};
+  h.apikey=SUPABASE_KEY;
+  h.Authorization='Bearer '+(SESSION?SESSION.access_token:SUPABASE_KEY);
+  h['Content-Type']='application/json';
+  opts.headers=h;
+  return fetch(SUPABASE_URL.replace(/\/+$/,'')+path, opts).then(function(r){
+    return r.text().then(function(t){
+      var d=null; try{ d=t?JSON.parse(t):null; }catch(e){}
+      if(!r.ok) throw {status:r.status,data:d,raw:t};
+      return d;
+    });
+  });
+}
+function apiErr(e){
+  if(e&&e.status===403) return 'You do not have permission for that. Ask a manager.';
+  if(e&&e.status===401) return 'Your session expired. Please sign in again.';
+  var m=e&&e.data&&(e.data.message||e.data.hint);
+  if(m&&/duplicate key/i.test(m)) return 'Something with that name already exists.';
+  return m || 'That did not save. Please try again.';
+}
+
+/* ---------- gate ---------- */
+function showConn(msg){
+  $('gConn').style.display=''; $('gLogin').style.display='none';
+  $('gTitle').textContent='Connect this device';
+  $('gSub').textContent='One-time setup. Settings \u2192 API in Supabase.';
+  var c=readCfg(); if(c){ $('cu').value=c.url||''; $('ck').value=c.key||''; }
+  $('gMsg').textContent=msg||'';
+}
+function showLogin(msg){
+  $('gConn').style.display='none'; $('gLogin').style.display='';
+  $('gTitle').textContent='Menu manager';
+  $('gSub').textContent='Staff sign-in.';
+  $('gMsg').textContent=msg||'';
+}
+$('cgo').addEventListener('click', function(){
+  var u=normaliseUrl($('cu').value), k=$('ck').value.trim();
+  if(!u||!k){ $('gMsg').textContent='Fill in both fields.'; return; }
+  if($('cu').value.trim()!==u) $('cu').value=u;
+  var role=keyRole(k);
+  if(role==='service_role'){
+    $('gMsg').textContent='That is the service_role key. Use the anon / public key instead.'; return;
+  }
+  $('cgo').disabled=true; $('gMsg').textContent='Checking\u2026';
+  fetch(u+'/auth/v1/settings',{headers:{apikey:k}})
+    .then(function(r){ return r.text().then(function(t){ return {status:r.status,body:t}; }); })
+    .then(function(res){
+      if(/invalid path/i.test(res.body)||res.status===404) throw new Error('path');
+      if(res.status===401||res.status===403) throw new Error('key');
+      try{ localStorage.setItem('rd_mgr_config', JSON.stringify({url:u,key:k})); }catch(e){}
+      SUPABASE_URL=u; SUPABASE_KEY=k; showLogin('');
+    })
+    .catch(function(e){
+      $('gMsg').textContent = e.message==='path'
+        ? 'That reached a server but not your project API. Use just https://<your-ref>.supabase.co'
+        : e.message==='key' ? 'The project rejected that key. Copy the anon key again, in full.'
+        : 'Could not reach that project. Check the URL and your connection.';
+    })
+    .then(function(){ $('cgo').disabled=false; });
+});
+$('reconf').addEventListener('click', function(){ showConn(''); });
+
+$('lgo').addEventListener('click', function(){
+  var e=$('em').value.trim(), p=$('pw').value;
+  if(!e||!p){ $('gMsg').textContent='Enter your email and password.'; return; }
+  $('lgo').disabled=true; $('gMsg').textContent='';
+  fetch(SUPABASE_URL.replace(/\/+$/,'')+'/auth/v1/token?grant_type=password',{
+    method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({email:e,password:p})
+  }).then(function(r){ return r.text().then(function(t){
+      var d=null; try{ d=t?JSON.parse(t):null; }catch(x){}
+      if(!r.ok) throw {status:r.status,data:d}; return d; });
+  }).then(function(d){
+    SESSION={access_token:d.access_token,refresh_token:d.refresh_token,
+      expires_at:Date.now()+((d.expires_in||3600)*1000),user:d.user||null};
+    saveSess(SESSION); $('pw').value='';
+    return loadAll();
+  }).catch(function(err){
+    if(err&&err.kind==='nostaff'){
+      $('gMsg').textContent='That account is not linked to a restaurant. A manager must add you to the staff list.';
+    } else if(err&&err.status===400){
+      $('gMsg').textContent='That email and password did not match.';
+    } else if(!$('gMsg').textContent){
+      $('gMsg').textContent='Could not sign in. Check the connection and try again.';
+    }
+  }).then(function(){ $('lgo').disabled=false; });
+});
+$('pw').addEventListener('keydown',function(e){ if(e.key==='Enter') $('lgo').click(); });
+
+$('signout').addEventListener('click', function(){
+  if(!confirm('Sign out of the menu manager?')) return;
+  try{ localStorage.removeItem('rd_mgr_session'); }catch(e){}
+  SESSION=null; VENUE=null;
+  $('app').style.display='none'; $('gate').style.display='flex'; showLogin('');
+});
+
+/* ---------- load everything ---------- */
+function loadAll(){
+  return api('/rest/v1/rd_staff?select=venue_id,role,rd_venues(*)&limit=1')
+    .then(function(rows){
+      if(!rows||!rows.length) throw {kind:'nostaff'};
+      VENUE=rows[0].rd_venues; ROLE=rows[0].role||'staff';
+      $('vName').textContent=(VENUE.name||'Menu manager');
+      var v=encodeURIComponent(VENUE.id);
+      return Promise.all([
+        api('/rest/v1/rd_stations?select=*&venue_id=eq.'+v+'&order=sort'),
+        api('/rest/v1/rd_categories?select=*&venue_id=eq.'+v+'&order=sort'),
+        api('/rest/v1/rd_items?select=*&venue_id=eq.'+v+'&order=sort'),
+        api('/rest/v1/rd_modifier_groups?select=*&venue_id=eq.'+v+'&order=sort'),
+        api('/rest/v1/rd_modifier_options?select=*&order=sort'),
+        api('/rest/v1/rd_item_modifier_groups?select=*&order=sort'),
+        api('/rest/v1/rd_tables?select=*&venue_id=eq.'+v+'&order=sort')
+      ]);
+    })
+    .then(function(r){
+      STATIONS=r[0]||[]; CATS=r[1]||[]; ITEMS=r[2]||[];
+      GROUPS=r[3]||[]; OPTS=r[4]||[]; LINKS=r[5]||[]; TABLES=r[6]||[];
+      $('gate').style.display='none'; $('app').style.display='block';
+      render();
+    });
+}
+function reload(){
+  var v=encodeURIComponent(VENUE.id);
+  return Promise.all([
+    api('/rest/v1/rd_categories?select=*&venue_id=eq.'+v+'&order=sort'),
+    api('/rest/v1/rd_items?select=*&venue_id=eq.'+v+'&order=sort'),
+    api('/rest/v1/rd_modifier_groups?select=*&venue_id=eq.'+v+'&order=sort'),
+    api('/rest/v1/rd_modifier_options?select=*&order=sort'),
+    api('/rest/v1/rd_item_modifier_groups?select=*&order=sort'),
+    api('/rest/v1/rd_tables?select=*&venue_id=eq.'+v+'&order=sort')
+  ]).then(function(r){
+    CATS=r[0]||[]; ITEMS=r[1]||[]; GROUPS=r[2]||[]; OPTS=r[3]||[]; LINKS=r[4]||[]; TABLES=r[5]||[];
+    render();
+  });
+}
+
+/* ---------- modal ---------- */
+function openModal(title, bodyHtml, footHtml){
+  $('mTitle').textContent=title; $('mBody').innerHTML=bodyHtml;
+  $('mFoot').innerHTML=footHtml||'';
+  $('modal').classList.add('on'); document.body.style.overflow='hidden';
+  $('mBody').scrollTop=0;
+}
+function closeModal(){ $('modal').classList.remove('on'); document.body.style.overflow=''; }
+$('mX').addEventListener('click', closeModal);
+$('modal').addEventListener('click', function(e){ if(e.target===$('modal')) closeModal(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+/* ---------- render dispatch ---------- */
+function render(){
+  if(PANE==='menu') renderMenu();
+  else if(PANE==='mods') renderMods();
+  else if(PANE==='tables') renderTables();
+  else renderSettings();
+}
+$('tabs').addEventListener('click', function(e){
+  var b=e.target.closest('[data-p]'); if(!b) return;
+  PANE=b.dataset.p;
+  Array.prototype.forEach.call($('tabs').children,function(c){ c.classList.toggle('on',c===b); });
+  ['pMenu','pMods','pTables','pSettings'].forEach(function(id,i){
+    $(id).classList.toggle('on', ['menu','mods','tables','settings'][i]===PANE);
+  });
+  render();
+});
+
+function stationName(id){
+  var n='—'; STATIONS.forEach(function(s){ if(s.id===id) n=s.name; }); return n;
+}
+function stationOptions(sel, allowNone, noneLabel){
+  var h = allowNone ? '<option value="">'+esc(noneLabel||'Use category default')+'</option>' : '';
+  STATIONS.forEach(function(s){
+    h+='<option value="'+s.id+'"'+(s.id===sel?' selected':'')+'>'+esc(s.name)+'</option>';
+  });
+  return h;
+}
+
+/* ================= MENU ================= */
+function renderMenu(){
+  var h='';
+  if(!CATS.length){
+    h+='<div class="sec"><div class="empty">No categories yet.</div></div>';
+  }
+  CATS.forEach(function(c,ci){
+    var mine=ITEMS.filter(function(i){ return i.category_id===c.id; });
+    h+='<div class="sec">'+
+      '<div class="sec-h">'+
+        '<h2>'+esc(c.name)+'</h2>'+
+        '<span class="pill st">'+esc(stationName(c.station_id))+'</span>'+
+        (c.visible?'':'<span class="pill hid">Hidden</span>')+
+        '<span class="spacer"></span>'+
+        '<div class="drag">'+
+          '<button data-cup="'+c.id+'"'+(ci===0?' disabled':'')+' aria-label="Move up">\u25B2</button>'+
+          '<button data-cdn="'+c.id+'"'+(ci===CATS.length-1?' disabled':'')+' aria-label="Move down">\u25BC</button>'+
+        '</div>'+
+      '</div>'+
+      (c.blurb?'<p class="hint">'+esc(c.blurb)+'</p>':'')+
+      '<div class="acts">'+
+        '<button data-cedit="'+c.id+'">Edit section</button>'+
+        '<button data-cadd="'+c.id+'">Add dish</button>'+
+        (isManager()?'<button class="bad" data-cdel="'+c.id+'">Delete section</button>':'')+
+      '</div>';
+
+    if(!mine.length) h+='<div class="empty">Nothing in this section yet.</div>';
+    mine.forEach(function(i,ii){
+      var groups=LINKS.filter(function(l){ return l.item_id===i.id; }).length;
+      var out = i.sold_out || (i.remaining_qty!=null && i.remaining_qty<=0);
+      h+='<div class="item">'+
+        '<div class="drag">'+
+          '<button data-iup="'+i.id+'"'+(ii===0?' disabled':'')+' aria-label="Move up">\u25B2</button>'+
+          '<button data-idn="'+i.id+'"'+(ii===mine.length-1?' disabled':'')+' aria-label="Move down">\u25BC</button>'+
+        '</div>'+
+        '<div class="item-b">'+
+          '<div class="item-t">'+
+            '<span class="item-n">'+esc(i.name)+'</span>'+
+            '<span class="item-p">'+money(i.price_cents)+'</span>'+
+            (out?'<span class="pill out">Sold out</span>':'')+
+            (i.visible?'':'<span class="pill hid">Hidden</span>')+
+            (i.station_id?'<span class="pill st">'+esc(stationName(i.station_id))+'</span>':'')+
+            (groups?'<span class="pill">'+groups+' option group'+(groups>1?'s':'')+'</span>':'')+
+            (i.remaining_qty!=null?'<span class="pill">'+i.remaining_qty+' left</span>':'')+
+          '</div>'+
+          (i.description?'<p class="item-d">'+esc(i.description)+'</p>':'')+
+          '<div class="acts">'+
+            '<button data-iedit="'+i.id+'">Edit</button>'+
+            '<button class="warn" data-isold="'+i.id+'">'+(out?'Back in stock':'Mark sold out')+'</button>'+
+            '<button data-ihide="'+i.id+'">'+(i.visible?'Hide':'Show')+'</button>'+
+            '<button data-idup="'+i.id+'">Duplicate</button>'+
+            (isManager()?'<button class="bad" data-idel="'+i.id+'">Delete</button>':'')+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    });
+    h+='</div>';
+  });
+  h+='<button class="btn full" id="addCat">Add a section</button>';
+  $('pMenu').innerHTML=h;
+}
+
+/* ---------- category edit ---------- */
+function catForm(c){
+  c=c||{};
+  return '<label for="fName">Section name</label>'+
+    '<input id="fName" type="text" value="'+esc(c.name||'')+'" placeholder="Entrees">'+
+    '<label for="fBlurb">Short description (optional)</label>'+
+    '<input id="fBlurb" type="text" value="'+esc(c.blurb||'')+'" placeholder="To begin">'+
+    '<label for="fStation">Goes to</label>'+
+    '<select id="fStation">'+stationOptions(c.station_id,true,'No station')+'</select>'+
+    '<p class="hint">Dishes in this section go here unless a dish overrides it.</p>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:18px">'+
+      '<input type="checkbox" id="fVis" '+(c.visible===false?'':'checked')+
+      ' style="width:22px;height:22px;min-height:22px"> Show on the menu</label>';
+}
+function openCat(c){
+  openModal(c?'Edit section':'New section', catForm(c),
+    '<button class="btn quiet" data-close>Cancel</button><button class="btn" id="saveCat">Save</button>');
+  $('saveCat').addEventListener('click', function(){
+    var body={
+      name: $('fName').value.trim(),
+      blurb: $('fBlurb').value.trim()||null,
+      station_id: $('fStation').value||null,
+      visible: $('fVis').checked
+    };
+    if(!body.name){ toast('Give the section a name'); return; }
+    this.disabled=true;
+    var p;
+    if(c){ p=api('/rest/v1/rd_categories?id=eq.'+c.id,{method:'PATCH',
+        headers:{Prefer:'return=minimal'},body:JSON.stringify(body)}); }
+    else {
+      body.venue_id=VENUE.id;
+      body.sort=(CATS.length?Math.max.apply(null,CATS.map(function(x){return x.sort||0;}))+1:1);
+      p=api('/rest/v1/rd_categories',{method:'POST',headers:{Prefer:'return=minimal'},
+        body:JSON.stringify(body)});
+    }
+    p.then(function(){ closeModal(); return reload(); })
+     .then(function(){ toast('Saved'); })
+     .catch(function(e){ toast(apiErr(e)); $('saveCat').disabled=false; });
+  });
+}
+
+/* ---------- item edit ---------- */
+var DIETS=['vegetarian','vegan','gluten-free','dairy-free','nut-free'];
+var ALLERGENS=['gluten','dairy','egg','nuts','peanuts','shellfish','fish','soy','sesame','sulphites'];
+var BADGES=[['popular','Popular'],['chef',"Chef's pick"],['new','New']];
+
+function chipRow(name, list, chosen, labels){
+  var h='<div class="chips" data-chips="'+name+'">';
+  list.forEach(function(v){
+    var val = labels ? v[0] : v;
+    var lab = labels ? v[1] : v.replace('-',' ');
+    h+='<button type="button" data-v="'+esc(val)+'"'+
+       ((chosen||[]).indexOf(val)>=0?' class="on"':'')+'>'+esc(lab)+'</button>';
+  });
+  return h+'</div>';
+}
+function chosenOf(name){
+  var out=[];
+  var box=document.querySelector('[data-chips="'+name+'"]');
+  if(box) Array.prototype.forEach.call(box.children,function(b){
+    if(b.classList.contains('on')) out.push(b.dataset.v);
+  });
+  return out;
+}
+function itemForm(i, catId){
+  i=i||{};
+  var linked=LINKS.filter(function(l){ return l.item_id===i.id; }).map(function(l){ return l.group_id; });
+  var gh='';
+  if(GROUPS.length){
+    gh='<label>Option groups</label><div class="chips" data-chips="groups">';
+    GROUPS.forEach(function(g){
+      gh+='<button type="button" data-v="'+g.id+'"'+(linked.indexOf(g.id)>=0?' class="on"':'')+'>'+
+          esc(g.name)+(g.required?' *':'')+'</button>';
+    });
+    gh+='</div><p class="hint">Tap to attach. Groups are shared \u2014 editing one changes every dish using it.</p>';
+  } else {
+    gh='<p class="hint" style="margin-top:16px">No option groups yet. Create them on the Modifiers tab.</p>';
+  }
+  return '<label for="fName">Dish name</label>'+
+    '<input id="fName" type="text" value="'+esc(i.name||'')+'">'+
+    '<label for="fDesc">Description</label>'+
+    '<textarea id="fDesc">'+esc(i.description||'')+'</textarea>'+
+    '<div class="row2">'+
+      '<div><label for="fPrice">Price</label>'+
+      '<input id="fPrice" type="text" inputmode="decimal" value="'+
+        (i.price_cents!=null?((i.price_cents/100).toFixed(2)):'')+'" placeholder="0.00"></div>'+
+      '<div><label for="fCat">Section</label><select id="fCat">'+
+        CATS.map(function(c){ return '<option value="'+c.id+'"'+
+          ((i.category_id||catId)===c.id?' selected':'')+'>'+esc(c.name)+'</option>'; }).join('')+
+      '</select></div>'+
+    '</div>'+
+    '<label for="fStation">Goes to</label>'+
+    '<select id="fStation">'+stationOptions(i.station_id,true)+'</select>'+
+    '<label>Dietary</label>'+chipRow('diet',DIETS,i.dietary)+
+    '<label>Contains</label>'+chipRow('allerg',ALLERGENS,i.allergens)+
+    '<label>Labels</label>'+chipRow('badge',BADGES,i.badges,true)+
+    gh+
+    '<label for="fQty">Portions left today (optional)</label>'+
+    '<input id="fQty" type="number" min="0" value="'+(i.remaining_qty==null?'':i.remaining_qty)+'" placeholder="Leave blank for unlimited">'+
+    '<p class="hint">Counts down as orders come in, then marks the dish sold out on its own.</p>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:18px">'+
+      '<input type="checkbox" id="fVis" '+(i.visible===false?'':'checked')+
+      ' style="width:22px;height:22px;min-height:22px"> Show on the menu</label>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:10px">'+
+      '<input type="checkbox" id="fNote" '+(i.allow_note===false?'':'checked')+
+      ' style="width:22px;height:22px;min-height:22px"> Let guests add a note</label>';
+}
+function openItem(i, catId){
+  openModal(i?'Edit dish':'New dish', itemForm(i,catId),
+    '<button class="btn quiet" data-close>Cancel</button><button class="btn" id="saveItem">Save</button>');
+  $('saveItem').addEventListener('click', function(){
+    var qty=$('fQty').value.trim();
+    var body={
+      name:$('fName').value.trim(),
+      description:$('fDesc').value.trim()||null,
+      price_cents:toCents($('fPrice').value),
+      category_id:$('fCat').value,
+      station_id:$('fStation').value||null,
+      dietary:chosenOf('diet'), allergens:chosenOf('allerg'), badges:chosenOf('badge'),
+      remaining_qty: qty===''?null:Math.max(0,parseInt(qty,10)||0),
+      visible:$('fVis').checked,
+      allow_note:$('fNote').checked
+    };
+    if(!body.name){ toast('Give the dish a name'); return; }
+    if(!body.category_id){ toast('Choose a section'); return; }
+    var wanted=chosenOf('groups');
+    this.disabled=true;
+    var p, itemId=i?i.id:null;
+    if(i){ p=api('/rest/v1/rd_items?id=eq.'+i.id,{method:'PATCH',
+        headers:{Prefer:'return=minimal'},body:JSON.stringify(body)}); }
+    else{
+      body.venue_id=VENUE.id;
+      var sib=ITEMS.filter(function(x){ return x.category_id===body.category_id; });
+      body.sort=(sib.length?Math.max.apply(null,sib.map(function(x){return x.sort||0;}))+1:1);
+      p=api('/rest/v1/rd_items',{method:'POST',headers:{Prefer:'return=representation'},
+        body:JSON.stringify(body)}).then(function(rows){ itemId=rows&&rows[0]&&rows[0].id; });
+    }
+    p.then(function(){ return syncGroups(itemId, wanted); })
+     .then(function(){ closeModal(); return reload(); })
+     .then(function(){ toast('Saved'); })
+     .catch(function(e){ toast(apiErr(e)); $('saveItem').disabled=false; });
+  });
+}
+function syncGroups(itemId, wanted){
+  if(!itemId) return Promise.resolve();
+  var have=LINKS.filter(function(l){ return l.item_id===itemId; }).map(function(l){ return l.group_id; });
+  var add=wanted.filter(function(g){ return have.indexOf(g)<0; });
+  var rm =have.filter(function(g){ return wanted.indexOf(g)<0; });
+  var jobs=[];
+  if(add.length){
+    jobs.push(api('/rest/v1/rd_item_modifier_groups',{method:'POST',
+      headers:{Prefer:'return=minimal'},
+      body:JSON.stringify(add.map(function(g,ix){ return {item_id:itemId,group_id:g,sort:ix+1}; }))}));
+  }
+  rm.forEach(function(g){
+    jobs.push(api('/rest/v1/rd_item_modifier_groups?item_id=eq.'+itemId+'&group_id=eq.'+g,
+      {method:'DELETE',headers:{Prefer:'return=minimal'}}));
+  });
+  return Promise.all(jobs);
+}
+
+/* ---------- reorder ---------- */
+function swapSort(table, list, id, dir){
+  var ix=-1; list.forEach(function(x,n){ if(x.id===id) ix=n; });
+  var jx=ix+dir;
+  if(ix<0||jx<0||jx>=list.length) return;
+  var a=list[ix], b=list[jx];
+  var as=a.sort||ix+1, bs=b.sort||jx+1;
+  if(as===bs){ as=ix+1; bs=jx+1; }
+  Promise.all([
+    api('/rest/v1/'+table+'?id=eq.'+a.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({sort:bs})}),
+    api('/rest/v1/'+table+'?id=eq.'+b.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({sort:as})})
+  ]).then(reload).catch(function(e){ toast(apiErr(e)); });
+}
+
+/* ---------- menu pane events ---------- */
+$('pMenu').addEventListener('click', function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  var d=b.dataset;
+  if(b.id==='addCat') return openCat(null);
+  if(d.cedit) return openCat(CATS.filter(function(c){return c.id===d.cedit;})[0]);
+  if(d.cadd)  return openItem(null, d.cadd);
+  if(d.cup)   return swapSort('rd_categories',CATS,d.cup,-1);
+  if(d.cdn)   return swapSort('rd_categories',CATS,d.cdn,1);
+  if(d.cdel){
+    var c=CATS.filter(function(x){return x.id===d.cdel;})[0];
+    var n=ITEMS.filter(function(i){return i.category_id===d.cdel;}).length;
+    if(!confirm('Delete "'+c.name+'"'+(n?' and its '+n+' dish'+(n>1?'es':''):'')+
+       '? Past orders keep their own record and are not affected.')) return;
+    return api('/rest/v1/rd_categories?id=eq.'+d.cdel,{method:'DELETE',headers:{Prefer:'return=minimal'}})
+      .then(reload).then(function(){ toast('Section deleted'); })
+      .catch(function(err){ toast(apiErr(err)); });
+  }
+  var item=ITEMS.filter(function(i){return i.id===(d.iedit||d.isold||d.ihide||d.idup||d.idel||d.iup||d.idn);})[0];
+  if(d.iedit) return openItem(item);
+  if(d.iup)   return swapSort('rd_items',ITEMS.filter(function(x){return x.category_id===item.category_id;}),d.iup,-1);
+  if(d.idn)   return swapSort('rd_items',ITEMS.filter(function(x){return x.category_id===item.category_id;}),d.idn,1);
+  if(d.isold){
+    var nowOut=item.sold_out||(item.remaining_qty!=null&&item.remaining_qty<=0);
+    var patch = nowOut ? {sold_out:false, remaining_qty:null} : {sold_out:true};
+    return api('/rest/v1/rd_items?id=eq.'+item.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify(patch)})
+      .then(reload).then(function(){ toast(nowOut?'Back on the menu':'Marked sold out'); })
+      .catch(function(err){ toast(apiErr(err)); });
+  }
+  if(d.ihide){
+    return api('/rest/v1/rd_items?id=eq.'+item.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify({visible:!item.visible})})
+      .then(reload).catch(function(err){ toast(apiErr(err)); });
+  }
+  if(d.idup){
+    var copy={venue_id:VENUE.id,category_id:item.category_id,name:item.name+' (copy)',
+      description:item.description,price_cents:item.price_cents,station_id:item.station_id,
+      dietary:item.dietary,allergens:item.allergens,badges:item.badges,
+      visible:false,allow_note:item.allow_note,sort:(item.sort||0)+1};
+    var newId=null;
+    return api('/rest/v1/rd_items',{method:'POST',headers:{Prefer:'return=representation'},
+      body:JSON.stringify(copy)})
+      .then(function(rows){
+        newId=rows&&rows[0]&&rows[0].id;
+        var gs=LINKS.filter(function(l){return l.item_id===item.id;});
+        if(!newId||!gs.length) return;
+        return api('/rest/v1/rd_item_modifier_groups',{method:'POST',headers:{Prefer:'return=minimal'},
+          body:JSON.stringify(gs.map(function(g,ix){return {item_id:newId,group_id:g.group_id,sort:ix+1};}))});
+      })
+      .then(reload).then(function(){ toast('Copied \u2014 the copy is hidden until you show it'); })
+      .catch(function(err){ toast(apiErr(err)); });
+  }
+  if(d.idel){
+    if(!confirm('Delete "'+item.name+'"? Past orders keep their own record.')) return;
+    return api('/rest/v1/rd_items?id=eq.'+item.id,{method:'DELETE',headers:{Prefer:'return=minimal'}})
+      .then(reload).then(function(){ toast('Deleted'); })
+      .catch(function(err){ toast(apiErr(err)); });
+  }
+});
+
+/* ================= MODIFIERS ================= */
+function renderMods(){
+  var h='<div class="sec"><div class="sec-h"><h2>Option groups</h2></div>'+
+    '<p class="hint">Groups are reusable. "Choice of side" attached to four dishes is one group \u2014 edit it once and every dish follows.</p></div>';
+  if(!GROUPS.length) h+='<div class="sec"><div class="empty">No option groups yet.</div></div>';
+  GROUPS.forEach(function(g){
+    var opts=OPTS.filter(function(o){ return o.group_id===g.id; });
+    var used=LINKS.filter(function(l){ return l.group_id===g.id; }).length;
+    var rule = g.required
+      ? (g.max_select>1 ? 'Choose '+g.min_select+'\u2013'+g.max_select : 'Choose one')
+      : (g.max_select>1 ? 'Optional, up to '+g.max_select : 'Optional');
+    h+='<div class="sec">'+
+      '<div class="sec-h"><h2>'+esc(g.name)+'</h2>'+
+        '<span class="pill'+(g.required?' st':'')+'">'+esc(rule)+'</span>'+
+        '<span class="pill">on '+used+' dish'+(used===1?'':'es')+'</span></div>'+
+      '<div class="acts">'+
+        '<button data-gedit="'+g.id+'">Edit group</button>'+
+        '<button data-oadd="'+g.id+'">Add choice</button>'+
+        (isManager()?'<button class="bad" data-gdel="'+g.id+'">Delete group</button>':'')+
+      '</div>';
+    if(!opts.length) h+='<div class="empty">No choices yet.</div>';
+    opts.forEach(function(o){
+      h+='<div class="item"><div class="item-b"><div class="item-t">'+
+        '<span class="item-n">'+esc(o.name)+'</span>'+
+        (o.price_delta_cents?'<span class="item-p">'+(o.price_delta_cents>0?'+':'\u2212')+
+           money(Math.abs(o.price_delta_cents))+'</span>':'')+
+        (o.sold_out?'<span class="pill out">Sold out</span>':'')+
+        (o.is_default?'<span class="pill">Default</span>':'')+
+        '</div><div class="acts">'+
+          '<button data-oedit="'+o.id+'">Edit</button>'+
+          '<button class="warn" data-osold="'+o.id+'">'+(o.sold_out?'Back in stock':'Mark sold out')+'</button>'+
+          (isManager()?'<button class="bad" data-odel="'+o.id+'">Delete</button>':'')+
+        '</div></div></div>';
+    });
+    h+='</div>';
+  });
+  h+='<button class="btn full" id="addGroup">Add an option group</button>';
+  $('pMods').innerHTML=h;
+}
+function groupForm(g){
+  g=g||{required:false,min_select:0,max_select:1,multi:false};
+  return '<label for="fName">Group name</label>'+
+    '<input id="fName" type="text" value="'+esc(g.name||'')+'" placeholder="Choice of side">'+
+    '<label for="fHelp">Helper text (optional)</label>'+
+    '<input id="fHelp" type="text" value="'+esc(g.help_text||'')+'">'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:18px">'+
+      '<input type="checkbox" id="fReq" '+(g.required?'checked':'')+
+      ' style="width:22px;height:22px;min-height:22px"> Guests must choose</label>'+
+    '<p class="hint">A required group is never pre-answered, so nobody taps past "how would you like your steak".</p>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:14px">'+
+      '<input type="checkbox" id="fMulti" '+(g.multi?'checked':'')+
+      ' style="width:22px;height:22px;min-height:22px"> Allow more than one</label>'+
+    '<div class="row2">'+
+      '<div><label for="fMin">Minimum</label><input id="fMin" type="number" min="0" value="'+(g.min_select||0)+'"></div>'+
+      '<div><label for="fMax">Maximum</label><input id="fMax" type="number" min="1" value="'+(g.max_select||1)+'"></div>'+
+    '</div>';
+}
+function openGroup(g){
+  openModal(g?'Edit group':'New option group', groupForm(g),
+    '<button class="btn quiet" data-close>Cancel</button><button class="btn" id="saveGroup">Save</button>');
+  $('saveGroup').addEventListener('click', function(){
+    var min=parseInt($('fMin').value,10)||0, max=parseInt($('fMax').value,10)||1;
+    if(max<1) max=1;
+    if(min>max){ toast('Minimum cannot be more than maximum'); return; }
+    var body={ name:$('fName').value.trim(), help_text:$('fHelp').value.trim()||null,
+      required:$('fReq').checked, multi:$('fMulti').checked, min_select:min, max_select:max };
+    if(!body.name){ toast('Give the group a name'); return; }
+    this.disabled=true;
+    var p;
+    if(g) p=api('/rest/v1/rd_modifier_groups?id=eq.'+g.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify(body)});
+    else{
+      body.venue_id=VENUE.id;
+      body.sort=(GROUPS.length?Math.max.apply(null,GROUPS.map(function(x){return x.sort||0;}))+1:1);
+      p=api('/rest/v1/rd_modifier_groups',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(body)});
+    }
+    p.then(function(){ closeModal(); return reload(); }).then(function(){ toast('Saved'); })
+     .catch(function(e){ toast(apiErr(e)); $('saveGroup').disabled=false; });
+  });
+}
+function optForm(o){
+  o=o||{};
+  return '<label for="fName">Choice</label>'+
+    '<input id="fName" type="text" value="'+esc(o.name||'')+'" placeholder="Hand-cut chips">'+
+    '<label for="fDelta">Extra charge</label>'+
+    '<input id="fDelta" type="text" inputmode="decimal" value="'+
+      (o.price_delta_cents?(o.price_delta_cents/100).toFixed(2):'')+'" placeholder="0.00">'+
+    '<p class="hint">Leave blank for no change. Use a minus sign to take money off.</p>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:18px">'+
+      '<input type="checkbox" id="fDef" '+(o.is_default?'checked':'')+
+      ' style="width:22px;height:22px;min-height:22px"> Pre-select this</label>'+
+    '<p class="hint">Only applies to optional groups \u2014 required groups are always left blank on purpose.</p>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:14px">'+
+      '<input type="checkbox" id="fOut" '+(o.sold_out?'checked':'')+
+      ' style="width:22px;height:22px;min-height:22px"> Sold out</label>';
+}
+function openOpt(o, groupId){
+  openModal(o?'Edit choice':'New choice', optForm(o),
+    '<button class="btn quiet" data-close>Cancel</button><button class="btn" id="saveOpt">Save</button>');
+  $('saveOpt').addEventListener('click', function(){
+    var body={ name:$('fName').value.trim(), price_delta_cents:toCents($('fDelta').value),
+      is_default:$('fDef').checked, sold_out:$('fOut').checked };
+    if(!body.name){ toast('Give the choice a name'); return; }
+    this.disabled=true;
+    var p;
+    if(o) p=api('/rest/v1/rd_modifier_options?id=eq.'+o.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify(body)});
+    else{
+      body.group_id=groupId;
+      var sib=OPTS.filter(function(x){return x.group_id===groupId;});
+      body.sort=(sib.length?Math.max.apply(null,sib.map(function(x){return x.sort||0;}))+1:1);
+      p=api('/rest/v1/rd_modifier_options',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(body)});
+    }
+    p.then(function(){ closeModal(); return reload(); }).then(function(){ toast('Saved'); })
+     .catch(function(e){ toast(apiErr(e)); $('saveOpt').disabled=false; });
+  });
+}
+$('pMods').addEventListener('click', function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  var d=b.dataset;
+  if(b.id==='addGroup') return openGroup(null);
+  if(d.gedit) return openGroup(GROUPS.filter(function(g){return g.id===d.gedit;})[0]);
+  if(d.oadd)  return openOpt(null, d.oadd);
+  if(d.gdel){
+    var g=GROUPS.filter(function(x){return x.id===d.gdel;})[0];
+    var used=LINKS.filter(function(l){return l.group_id===g.id;}).length;
+    if(!confirm('Delete "'+g.name+'"?'+(used?' It is attached to '+used+' dish'+(used>1?'es':'')+
+      ' and will be removed from them.':''))) return;
+    return api('/rest/v1/rd_modifier_groups?id=eq.'+g.id,{method:'DELETE',headers:{Prefer:'return=minimal'}})
+      .then(reload).then(function(){ toast('Group deleted'); }).catch(function(err){ toast(apiErr(err)); });
+  }
+  var o=OPTS.filter(function(x){return x.id===(d.oedit||d.osold||d.odel);})[0];
+  if(d.oedit) return openOpt(o);
+  if(d.osold) return api('/rest/v1/rd_modifier_options?id=eq.'+o.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify({sold_out:!o.sold_out})})
+      .then(reload).catch(function(err){ toast(apiErr(err)); });
+  if(d.odel){
+    if(!confirm('Delete the choice "'+o.name+'"?')) return;
+    return api('/rest/v1/rd_modifier_options?id=eq.'+o.id,{method:'DELETE',headers:{Prefer:'return=minimal'}})
+      .then(reload).catch(function(err){ toast(apiErr(err)); });
+  }
+});
+
+/* ================= TABLES & QR ================= */
+/* The QR must carry the address a GUEST'S PHONE can reach, which is not
+   necessarily where this manager page is open. Guessing from location
+   silently produces file:/// codes that work nowhere. */
+function orderBase(){
+  if(VENUE && VENUE.order_page_url) return VENUE.order_page_url;
+  var here=location.href.split('?')[0].split('#')[0];
+  return here.replace(/[^\/]*$/,'') + 'table-order.html';
+}
+function baseIsPublic(){
+  var b=orderBase();
+  return /^https?:\/\//i.test(b) && !/^https?:\/\/(localhost|127\.|0\.0\.0\.0|\[::1\])/i.test(b);
+}
+function tableUrl(t){
+  return orderBase()+'?v='+encodeURIComponent(VENUE.slug)+'&t='+encodeURIComponent(t.token);
+}
+function renderTables(){
+  var pub=baseIsPublic();
+  var h='<div class="sec"><div class="sec-h"><h2>Ordering page address</h2>'+
+      (pub?'<span class="pill st">Ready</span>':'<span class="pill out">Needs setting</span>')+
+    '</div>'+
+    '<p class="hint">The web address guests reach when they scan. It must be a public https address \u2014 the page as your customers see it, not a file on this device.</p>'+
+    '<input id="obUrl" type="text" value="'+esc(VENUE.order_page_url||'')+'" '+
+      'placeholder="https://your-site.com/table-order.html" autocapitalize="off" autocorrect="off" spellcheck="false"'+
+      (isManager()?'':' disabled')+'>'+
+    (isManager()?'<button class="btn" id="saveBase" style="margin-top:14px">Save address</button>':'')+
+    (pub?'':'<p class="hint" style="color:var(--bad);margin-top:12px">'+
+      'Until this is set, the codes below point at <b>'+esc(orderBase())+'</b>, '+
+      'which a guest\u2019s phone cannot open. Set the address, then print.</p>')+
+    '</div>'+
+    '<div class="sec"><div class="sec-h"><h2>Table QR codes</h2></div>'+
+    '<p class="hint">Print these and put one on each table. The code contains a secret unique to that table \u2014 treat a printed sheet like a set of keys, and regenerate if one goes missing.</p>'+
+    '<div class="acts no-print">'+
+      '<button id="printQr">Print all</button>'+
+      (isManager()?'<button id="addTable">Add a table</button>':'')+
+    '</div></div>';
+  if(!TABLES.length){
+    h+='<div class="sec"><div class="empty">No tables yet.</div></div>';
+  } else {
+    h+='<div class="qr-grid" id="qrGrid"></div>';
+  }
+  $('pTables').innerHTML=h;
+  if(TABLES.length){
+    var g=$('qrGrid'), out='';
+    TABLES.forEach(function(t){
+      var url=tableUrl(t);
+      var svg;
+      try{ svg=QR.toSvg(url,{px:200,ecl:'M'}); }
+      catch(e){ svg='<p style="color:#a00;font-size:11px">Could not draw a code for this URL.</p>'; }
+      out+='<div class="qr-card">'+svg+'<b>Table '+esc(t.label)+'</b>'+
+           '<small>'+esc(VENUE.slug)+'</small>'+
+           (t.active?'':'<small style="color:#a00">INACTIVE</small>')+
+           '<div class="acts no-print" style="justify-content:center">'+
+             '<button data-turl="'+esc(t.id)+'" style="color:#555">Copy link</button>'+
+             (isManager()?'<button data-tedit="'+esc(t.id)+'" style="color:#555">Edit</button>':'')+
+             (isManager()?'<button data-tnew="'+esc(t.id)+'" style="color:#a00">New code</button>':'')+
+           '</div></div>';
+    });
+    g.innerHTML=out;
+  }
+}
+function randToken(){
+  var a=new Uint8Array(9);
+  (window.crypto||window.msCrypto).getRandomValues(a);
+  return Array.prototype.map.call(a,function(x){ return ('0'+x.toString(16)).slice(-2); }).join('');
+}
+$('pTables').addEventListener('click', function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  var d=b.dataset;
+  if(b.id==='saveBase'){
+    var raw=$('obUrl').value.trim();
+    if(raw && !/^https?:\/\//i.test(raw)) raw='https://'+raw;
+    if(raw && !/table-order\.html/i.test(raw) && !/\?/.test(raw)){
+      if(!confirm('That address does not mention table-order.html.\n\nUse it anyway?')) return;
+    }
+    b.disabled=true;
+    return api('/rest/v1/rd_venues?id=eq.'+VENUE.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify({order_page_url:raw||null})})
+      .then(function(){ VENUE.order_page_url=raw||null; renderTables(); toast('Address saved'); })
+      .catch(function(err){
+        b.disabled=false;
+        toast(/order_page_url/.test(String(err&&err.data&&err.data.message))
+          ? 'Run supabase-add-order-url.sql first \u2014 that column is missing.'
+          : apiErr(err));
+      });
+  }
+  if(b.id==='printQr'){
+    if(!baseIsPublic() && !confirm('The ordering page address is not set, so these codes will not work for guests.\n\nPrint anyway?')) return;
+    return window.print();
+  }
+  if(b.id==='addTable'){
+    openModal('New table','<label for="fLabel">Table name or number</label>'+
+      '<input id="fLabel" type="text" placeholder="12">'+
+      '<p class="hint">A fresh secret code is generated automatically.</p>',
+      '<button class="btn quiet" data-close>Cancel</button><button class="btn" id="saveTable">Add</button>');
+    $('saveTable').addEventListener('click', function(){
+      var label=$('fLabel').value.trim();
+      if(!label){ toast('Give the table a name'); return; }
+      this.disabled=true;
+      api('/rest/v1/rd_tables',{method:'POST',headers:{Prefer:'return=minimal'},
+        body:JSON.stringify({venue_id:VENUE.id,label:label,token:randToken(),
+          sort:(TABLES.length?Math.max.apply(null,TABLES.map(function(x){return x.sort||0;}))+1:1)})})
+        .then(function(){ closeModal(); return reload(); }).then(function(){ toast('Table added'); })
+        .catch(function(err){ toast(apiErr(err)); $('saveTable').disabled=false; });
+    });
+    return;
+  }
+  var t=TABLES.filter(function(x){return x.id===(d.turl||d.tedit||d.tnew);})[0];
+  if(!t) return;
+  if(d.turl){
+    var url=tableUrl(t);
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ toast('Link copied'); },
+        function(){ prompt('Copy this link:',url); });
+    } else prompt('Copy this link:',url);
+    return;
+  }
+  if(d.tedit){
+    openModal('Edit table','<label for="fLabel">Table name or number</label>'+
+      '<input id="fLabel" type="text" value="'+esc(t.label)+'">'+
+      '<label style="display:flex;align-items:center;gap:10px;margin-top:18px">'+
+        '<input type="checkbox" id="fAct" '+(t.active?'checked':'')+
+        ' style="width:22px;height:22px;min-height:22px"> Accepting orders</label>',
+      '<button class="btn quiet" data-close>Cancel</button>'+
+      (isManager()?'<button class="btn danger" id="delTable">Delete</button>':'')+
+      '<button class="btn" id="saveTable">Save</button>');
+    $('saveTable').addEventListener('click', function(){
+      api('/rest/v1/rd_tables?id=eq.'+t.id,{method:'PATCH',headers:{Prefer:'return=minimal'},
+        body:JSON.stringify({label:$('fLabel').value.trim(),active:$('fAct').checked})})
+        .then(function(){ closeModal(); return reload(); }).then(function(){ toast('Saved'); })
+        .catch(function(err){ toast(apiErr(err)); });
+    });
+    var dt=$('delTable');
+    if(dt) dt.addEventListener('click', function(){
+      if(!confirm('Delete table '+t.label+'? Its QR code will stop working.')) return;
+      api('/rest/v1/rd_tables?id=eq.'+t.id,{method:'DELETE',headers:{Prefer:'return=minimal'}})
+        .then(function(){ closeModal(); return reload(); }).then(function(){ toast('Table deleted'); })
+        .catch(function(err){ toast(apiErr(err)+' A table with past orders cannot be deleted \u2014 mark it not accepting orders instead.'); });
+    });
+    return;
+  }
+  if(d.tnew){
+    if(!confirm('Generate a new code for table '+t.label+'?\n\nThe old printed QR code will stop working immediately.')) return;
+    api('/rest/v1/rd_tables?id=eq.'+t.id,{method:'PATCH',headers:{Prefer:'return=minimal'},
+      body:JSON.stringify({token:randToken()})})
+      .then(reload).then(function(){ toast('New code \u2014 reprint this table'); })
+      .catch(function(err){ toast(apiErr(err)); });
+  }
+});
+
+/* ================= SETTINGS ================= */
+function renderSettings(){
+  var v=VENUE;
+  var on = v.ordering_enabled && v.accepting_orders;
+  $('pSettings').innerHTML =
+    '<div class="sec"><div class="sec-h"><h2>Table ordering</h2>'+
+      '<span class="pill'+(on?' st':' out')+'">'+(on?'Open':'Closed')+'</span></div>'+
+      '<p class="hint">Turning this off leaves the menu readable but stops new orders. Guests are shown your closed message.</p>'+
+      '<div class="acts">'+
+        (isManager()?'<button data-tog="ordering_enabled">'+
+          (v.ordering_enabled?'Stop taking orders':'Start taking orders')+'</button>':'')+
+        (v.ordering_enabled?'<button class="warn" data-tog="accepting_orders">'+
+          (v.accepting_orders?'Pause (kitchen slammed)':'Resume')+'</button>':'')+
+      '</div></div>'+
+    '<div class="sec"><div class="sec-h"><h2>Restaurant</h2></div>'+
+      '<label for="sName">Name shown to guests</label>'+
+      '<input id="sName" type="text" value="'+esc(v.name||'')+'"'+(isManager()?'':' disabled')+'>'+
+      '<label for="sNote">Message on the confirmation screen</label>'+
+      '<textarea id="sNote"'+(isManager()?'':' disabled')+'>'+esc(v.service_note||'')+'</textarea>'+
+      '<label for="sClosed">Message when ordering is closed</label>'+
+      '<textarea id="sClosed"'+(isManager()?'':' disabled')+'>'+esc(v.closed_message||'')+'</textarea>'+
+      (isManager()?'<button class="btn" id="saveVenue" style="margin-top:18px">Save</button>':
+        '<p class="hint">Only managers can change these.</p>')+
+    '</div>'+
+    '<div class="sec"><div class="sec-h"><h2>Colours</h2></div>'+
+      '<p class="hint">The ordering page follows these, so a re-theme does not need the page republished.</p>'+
+      '<div class="row2">'+
+        '<div><label for="sBg">Background</label><input id="sBg" type="text" value="'+esc(v.brand_bg||'')+'"'+(isManager()?'':' disabled')+'></div>'+
+        '<div><label for="sInk">Text</label><input id="sInk" type="text" value="'+esc(v.brand_ink||'')+'"'+(isManager()?'':' disabled')+'></div>'+
+        '<div><label for="sAcc">Accent</label><input id="sAcc" type="text" value="'+esc(v.brand_accent||'')+'"'+(isManager()?'':' disabled')+'></div>'+
+        '<div><label for="sAcc2">Accent 2</label><input id="sAcc2" type="text" value="'+esc(v.brand_accent_2||'')+'"'+(isManager()?'':' disabled')+'></div>'+
+      '</div>'+
+      (isManager()?'<button class="btn" id="saveBrand" style="margin-top:18px">Save colours</button>':'')+
+    '</div>'+
+    '<div class="sec"><div class="sec-h"><h2>Signed in</h2></div>'+
+      '<p class="hint">'+esc((SESSION&&SESSION.user&&SESSION.user.email)||'')+' \u2014 '+esc(ROLE)+'</p></div>';
+}
+$('pSettings').addEventListener('click', function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.tog){
+    var f=b.dataset.tog, patch={};
+    patch[f]=!VENUE[f];
+    return api('/rest/v1/rd_venues?id=eq.'+VENUE.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify(patch)})
+      .then(function(){ VENUE[f]=patch[f]; renderSettings();
+        toast(patch[f]?'Ordering is open':'Ordering is closed'); })
+      .catch(function(err){ toast(apiErr(err)); });
+  }
+  if(b.id==='saveVenue'){
+    var body={name:$('sName').value.trim(),service_note:$('sNote').value.trim(),
+      closed_message:$('sClosed').value.trim()};
+    b.disabled=true;
+    return api('/rest/v1/rd_venues?id=eq.'+VENUE.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify(body)})
+      .then(function(){ Object.keys(body).forEach(function(k){ VENUE[k]=body[k]; });
+        $('vName').textContent=VENUE.name; toast('Saved'); b.disabled=false; })
+      .catch(function(err){ toast(apiErr(err)); b.disabled=false; });
+  }
+  if(b.id==='saveBrand'){
+    var hex=/^#[0-9a-f]{6}$/i;
+    var vals={brand_bg:$('sBg').value.trim(),brand_ink:$('sInk').value.trim(),
+      brand_accent:$('sAcc').value.trim(),brand_accent_2:$('sAcc2').value.trim()};
+    var bad=Object.keys(vals).filter(function(k){ return !hex.test(vals[k]); });
+    if(bad.length){ toast('Colours must look like #0b0806'); return; }
+    b.disabled=true;
+    return api('/rest/v1/rd_venues?id=eq.'+VENUE.id,{method:'PATCH',
+      headers:{Prefer:'return=minimal'},body:JSON.stringify(vals)})
+      .then(function(){ Object.keys(vals).forEach(function(k){ VENUE[k]=vals[k]; });
+        toast('Colours saved'); b.disabled=false; })
+      .catch(function(err){ toast(apiErr(err)); b.disabled=false; });
+  }
+});
+
+/* preview: open the real customer page on a real table */
+$('preview').addEventListener('click', function(){
+  if(!TABLES.length){ toast('Add a table first'); return; }
+  window.open(tableUrl(TABLES[0]),'_blank');
+});
+
+/* chip toggles + modal cancel, delegated */
+document.addEventListener('click', function(e){
+  var c=e.target.closest('[data-chips] button');
+  if(c){ e.preventDefault(); c.classList.toggle('on'); return; }
+  if(e.target.closest('[data-close]')) closeModal();
+});
+
+/* ---------- boot ---------- */
+(function(){
+  if(!SUPABASE_URL||!SUPABASE_KEY){
+    var c=readCfg();
+    if(c&&c.url&&c.key){ SUPABASE_URL=c.url; SUPABASE_KEY=c.key; }
+  }
+  if(!SUPABASE_URL||!SUPABASE_KEY) return showConn('');
+  showLogin('');
+  var s=readSess();
+  if(s&&s.access_token){
+    SESSION=s;
+    loadAll().catch(function(){ try{localStorage.removeItem('rd_mgr_session');}catch(e){} SESSION=null; });
+  }
+})();
+})();
+
+</script>
+</body>
+</html>
