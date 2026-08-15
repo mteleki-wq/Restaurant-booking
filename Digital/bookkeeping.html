@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex,nofollow">
+<title>Bookkeeping</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — BOOKKEEPING
+     bookkeeping.html
+
+     Drop in the CSV files exported from the counter screen and get back a
+     formatted Excel workbook.
+
+     Everything happens in this browser. No file is uploaded, no server is
+     contacted, and this page has no database connection at all — it never
+     asks for a key because it never needs one. Open it from your desktop
+     if you like; it works with no internet connection.
+
+     The .xlsx is written from scratch rather than with a library, so
+     there is nothing to load and nothing to break.
+     ================================================================== -->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0b0806;--panel:#151009;--panel-2:#1c150c;--ink:#f6efe2;--muted:#b3a488;
+  --line:rgba(179,164,136,.2);--gold:#f0cf85;
+  --grad:linear-gradient(100deg,#f2d187,#df9f52 55%,#b8783c);
+  --good:#7fd6a3;--bad:#ff7a66;--warn:#ffd479;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{margin:0;padding:0}
+body{margin:0;padding:0;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--ink);
+  font-family:'Sora',-apple-system,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;font-weight:700}
+.mono{font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+button{cursor:pointer;border:0;background:none;font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+main{max-width:900px;margin:0 auto;padding:28px 16px calc(50px + var(--safe-b))}
+header{text-align:center;margin-bottom:26px}
+header h1{font-size:24px;margin-top:8px}
+.hint{color:var(--muted);font-size:12.5px;margin:6px 0 0;line-height:1.55}
+
+.drop{border:2px dashed var(--line);border-radius:18px;padding:38px 20px;text-align:center;
+  transition:border-color .2s,background .2s;background:rgba(255,255,255,.012)}
+.drop.hot{border-color:var(--gold);background:rgba(240,207,133,.06)}
+.drop h2{font-size:17px;margin-bottom:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;
+  padding:13px 24px;border-radius:100px;background:var(--grad);color:#241703;
+  font-family:'Unbounded',sans-serif;font-weight:700;font-size:13.5px;margin-top:16px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.quiet{background:none;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.btn.full{width:100%}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:18px;margin-top:16px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;
+  border-bottom:1px solid var(--line);font-size:14.5px}
+.row:last-child{border-bottom:0}
+.row b{font-family:'Unbounded',sans-serif}
+.big{font-family:'Unbounded',sans-serif;font-size:29px;margin:6px 0 12px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.file{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.file:last-child{border-bottom:0}
+.file-b{flex:1;min-width:0}
+.file-n{font-weight:600;font-size:14px;word-break:break-all}
+.file-x{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  color:var(--muted);flex:0 0 auto;display:grid;place-items:center;font-size:18px}
+.tag{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:100px;padding:2px 8px;color:var(--muted)}
+.tag.warn{color:var(--warn);border-color:rgba(255,212,121,.5)}
+.tag.bad{color:var(--bad);border-color:rgba(255,122,102,.5)}
+.note{border:1px solid rgba(255,212,121,.45);background:rgba(255,212,121,.06);
+  border-radius:12px;padding:12px 14px;color:var(--warn);font-size:12.5px;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));transform:translate(-50%,16px);
+  background:var(--panel-2);border:1px solid var(--gold);border-radius:100px;padding:11px 20px;
+  font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:60}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1>Bookkeeping</h1>
+    <p class="hint">Drop in the CSV files from the counter screen.<br>
+      Everything stays on this device — nothing is uploaded.</p>
+  </header>
+
+  <div class="drop" id="drop">
+    <h2>Add your readings</h2>
+    <p class="hint">One file or a whole month of them.</p>
+    <button class="btn" id="pick">Choose files</button>
+    <input type="file" id="file" accept=".csv,text/csv" multiple style="display:none">
+  </div>
+
+  <div id="out"></div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var LOADED=[];   /* parsed readings */
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function money(c){return '$'+((c||0)/100).toFixed(2);}
+var toastT;
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on');},3000);}
+
+/* ================= CSV parsing ================= */
+function parseCsv(text){
+  var rows=[],row=[],cur='',q=false;
+  text=text.replace(/^\uFEFF/,'');
+  for(var i=0;i<text.length;i++){
+    var c=text[i];
+    if(q){
+      if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; }
+      else cur+=c;
+    } else if(c==='"') q=true;
+    else if(c===','){ row.push(cur); cur=''; }
+    else if(c==='\r'){ /* ignore */ }
+    else if(c==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+    else cur+=c;
+  }
+  if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+  return rows;
+}
+function cents(v){
+  if(v===undefined||v===null||v==='') return 0;
+  var n=parseFloat(String(v).replace(/[^0-9.\-]/g,''));
+  return isNaN(n)?0:Math.round(n*100);
+}
+function parseWhen(s){
+  /* "2026-08-15 14:20" — built by us, so no guessing at formats */
+  var m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+  if(!m) return null;
+  return new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);
+}
+
+/* Read one exported reading. Tolerant of the older export that had no GST
+   section, so a month of mixed files still imports. */
+function parseReading(text, filename){
+  var rows=parseCsv(text);
+  if(!rows.length) throw new Error('empty file');
+
+  var r={ file:filename, venue:(rows[0]&&rows[0][0])||'Unknown',
+          kind:'X', reading:null, periodStart:null, periodEnd:null,
+          card:0, cash:0, other:0, refunds:0, total:0, payments:0,
+          taxable:0, gstFree:0, gst:0, exGst:0, hasGst:false,
+          tables:[], items:[] };
+
+  var line2=(rows[1]&&rows[1][0])||'';
+  if(/^Z reading/i.test(line2)){
+    r.kind='Z';
+    var n=line2.match(/#(\d+)/); if(n) r.reading=+n[1];
+  }
+
+  var section='';
+  for(var i=0;i<rows.length;i++){
+    var a=rows[i], k=(a[0]||'').trim(), v=a[1];
+    if(!k && !a[1]) { continue; }
+
+    /* A section heading is a lone cell. "GST" is BOTH a heading and, one
+       line later, a data label - so a heading only counts when the row has
+       nothing in the second column. Without this the GST amount is eaten
+       by the heading check and silently reported as zero. */
+    if(!a[1] && (k==='SUMMARY'||k==='GST'||k==='TABLES'||k==='ITEMS SOLD'||k==='RECONCILIATION')){
+      section=k; continue;
+    }
+    if(k==='Period from') r.periodStart=parseWhen(v);
+    else if(k==='Period to') r.periodEnd=parseWhen(v);
+    else if(k==='Card') r.card=cents(v);
+    else if(k==='Cash') r.cash=cents(v);
+    else if(k==='Other') r.other=cents(v);
+    else if(k==='Refunds') r.refunds=cents(v);
+    else if(k==='Total payments') r.total=cents(v);
+    else if(k==='Payments taken') r.payments=parseInt(v,10)||0;
+    else if(k==='Taxable sales (inc GST)'){ r.taxable=cents(v); r.hasGst=true; }
+    else if(k==='GST-free sales') r.gstFree=cents(v);
+    else if(k==='GST' && section==='GST'){ r.gst=cents(v); r.hasGst=true; }
+    else if(k==='Sales excluding GST') r.exGst=cents(v);
+    else if(section==='TABLES'&&k&&k!=='Table'&&a.length>=7){
+      r.tables.push({ label:k, opened:parseWhen(a[1]), closed:parseWhen(a[2]),
+        orders:parseInt(a[3],10)||0, items:parseInt(a[4],10)||0,
+        method:a[5]||'', amount:cents(a[6]) });
+    }
+    else if(section==='ITEMS SOLD'&&k&&k!=='Item'){
+      if(a.length>=6){       /* newer export, with GST columns */
+        r.items.push({ name:k, station:a[1]||'', gstFree:/free/i.test(a[2]||''),
+          qty:parseInt(a[3],10)||0, revenue:cents(a[4]), gst:cents(a[5]) });
+      } else if(a.length>=4){ /* older export */
+        r.items.push({ name:k, station:a[1]||'', gstFree:false,
+          qty:parseInt(a[2],10)||0, revenue:cents(a[3]), gst:0 });
+      }
+    }
+  }
+  if(!r.periodEnd) throw new Error('not a counter export');
+  if(!r.hasGst) r.exGst=r.total;
+  return r;
+}
+
+/* ================= xlsx, written by hand =================
+   An .xlsx is a ZIP of XML parts. Writing both directly means this page
+   has no dependency to load and nothing to fail at the wrong moment. */
+var CRC=(function(){
+  var t=new Int32Array(256);
+  for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c;}
+  return t;
+})();
+function crc32(bytes){
+  var c=-1;
+  for(var i=0;i<bytes.length;i++) c=(c>>>8)^CRC[(c^bytes[i])&0xFF];
+  return (c^-1)>>>0;
+}
+function utf8(str){
+  var out=[],i,c;
+  for(i=0;i<str.length;i++){
+    c=str.charCodeAt(i);
+    if(c<0x80) out.push(c);
+    else if(c<0x800){ out.push(0xC0|c>>6,0x80|c&63); }
+    else if(c>=0xD800&&c<=0xDBFF){
+      var c2=str.charCodeAt(++i);
+      var cp=0x10000+((c-0xD800)<<10)+(c2-0xDC00);
+      out.push(0xF0|cp>>18,0x80|(cp>>12)&63,0x80|(cp>>6)&63,0x80|cp&63);
+    }
+    else out.push(0xE0|c>>12,0x80|(c>>6)&63,0x80|c&63);
+  }
+  return new Uint8Array(out);
+}
+/* Stored (uncompressed) entries — valid zip, and Excel is perfectly happy
+   with them. Avoids shipping a deflate implementation for files this size. */
+function zip(files){
+  var parts=[],central=[],offset=0;
+  function u16(n){return [n&255,(n>>8)&255];}
+  function u32(n){return [n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];}
+  files.forEach(function(f){
+    var name=utf8(f.name), data=f.data, c=crc32(data);
+    var local=[].concat([0x50,0x4b,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(c),u32(data.length),u32(data.length),u16(name.length),u16(0));
+    parts.push(new Uint8Array(local),name,data);
+    central.push({name:name,crc:c,size:data.length,offset:offset});
+    offset+=local.length+name.length+data.length;
+  });
+  var cd=[],cdLen=0;
+  central.forEach(function(e){
+    var h=[].concat([0x50,0x4b,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(e.crc),u32(e.size),u32(e.size),u16(e.name.length),
+      u16(0),u16(0),u16(0),u16(0),u32(0),u32(e.offset));
+    cd.push(new Uint8Array(h),e.name);
+    cdLen+=h.length+e.name.length;
+  });
+  var end=new Uint8Array([].concat([0x50,0x4b,0x05,0x06],u16(0),u16(0),
+    u16(files.length),u16(files.length),u32(cdLen),u32(offset),u16(0)));
+  var all=parts.concat(cd,[end]);
+  var total=all.reduce(function(n,p){return n+p.length;},0);
+  var buf=new Uint8Array(total),pos=0;
+  all.forEach(function(p){buf.set(p,pos);pos+=p.length;});
+  return buf;
+}
+
+function xmlEsc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    /* strip control characters Excel refuses to open */
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'');
+}
+function colName(n){
+  var s='';
+  while(n>0){ var m=(n-1)%26; s=String.fromCharCode(65+m)+s; n=(n-1-m)/26; }
+  return s;
+}
+/* Excel counts days from 1899-12-30 */
+function dateSerial(d){
+  if(!d) return null;
+  var utc=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes());
+  return (utc-Date.UTC(1899,11,30))/86400000;
+}
+
+/* style ids: 0 plain, 1 header, 2 money, 3 money bold, 4 date, 5 datetime,
+   6 bold text, 7 integer */
+var STYLES='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'+
+'<numFmts count="3">'+
+ '<numFmt numFmtId="164" formatCode="#,##0.00"/>'+
+ '<numFmt numFmtId="165" formatCode="dd/mm/yyyy"/>'+
+ '<numFmt numFmtId="166" formatCode="dd/mm/yyyy\\ hh:mm"/>'+
+'</numFmts>'+
+'<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font>'+
+'<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>'+
+'<fills count="3"><fill><patternFill patternType="none"/></fill>'+
+'<fill><patternFill patternType="gray125"/></fill>'+
+'<fill><patternFill patternType="solid"><fgColor rgb="FFF2D187"/>'+
+'<bgColor indexed="64"/></patternFill></fill></fills>'+
+'<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'+
+'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'+
+'<cellXfs count="8">'+
+ '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'+
+ '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>'+
+ '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+ '<xf numFmtId="164" fontId="1" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1"/>'+
+ '<xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+ '<xf numFmtId="166" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+ '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>'+
+ '<xf numFmtId="1" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+'</cellXfs><cellStyles count="1">'+
+'<cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+
+/* A cell: {v:value, t:'n'|'s'|'d'|'dt', s:styleId} or a bare value */
+function sheetXml(rows, widths){
+  var x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
+  if(widths&&widths.length){
+    x+='<cols>';
+    widths.forEach(function(w,i){
+      x+='<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>';
+    });
+    x+='</cols>';
+  }
+  x+='<sheetData>';
+  rows.forEach(function(row,ri){
+    x+='<row r="'+(ri+1)+'">';
+    row.forEach(function(cell,ci){
+      if(cell===null||cell===undefined||cell==='') return;
+      var ref=colName(ci+1)+(ri+1);
+      var c=(typeof cell==='object')?cell:{v:cell};
+      var st=c.s||0, t=c.t;
+      if(t===undefined) t=(typeof c.v==='number')?'n':'s';
+      if(t==='d'||t==='dt'){
+        var ser=dateSerial(c.v);
+        if(ser===null) return;
+        x+='<c r="'+ref+'" s="'+(t==='d'?4:5)+'"><v>'+ser+'</v></c>';
+      } else if(t==='n'){
+        x+='<c r="'+ref+'" s="'+st+'"><v>'+c.v+'</v></c>';
+      } else {
+        x+='<c r="'+ref+'" s="'+st+'" t="inlineStr"><is><t xml:space="preserve">'+
+           xmlEsc(c.v)+'</t></is></c>';
+      }
+    });
+    x+='</row>';
+  });
+  return x+'</sheetData></worksheet>';
+}
+
+function buildXlsx(sheets){
+  var files=[];
+  var types='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+    '<Default Extension="xml" ContentType="application/xml"/>'+
+    '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'+
+    '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>';
+  sheets.forEach(function(s,i){
+    types+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+  });
+  types+='</Types>';
+
+  var rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'+
+    '</Relationships>';
+
+  var wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '+
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>';
+  sheets.forEach(function(s,i){
+    wb+='<sheet name="'+xmlEsc(s.name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';
+  });
+  wb+='</sheets></workbook>';
+
+  var wbRels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">';
+  sheets.forEach(function(s,i){
+    wbRels+='<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';
+  });
+  wbRels+='<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>';
+  wbRels+='</Relationships>';
+
+  files.push({name:'[Content_Types].xml',data:utf8(types)});
+  files.push({name:'_rels/.rels',data:utf8(rels)});
+  files.push({name:'xl/workbook.xml',data:utf8(wb)});
+  files.push({name:'xl/_rels/workbook.xml.rels',data:utf8(wbRels)});
+  files.push({name:'xl/styles.xml',data:utf8(STYLES)});
+  sheets.forEach(function(s,i){
+    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',
+      data:utf8(sheetXml(s.rows,s.widths))});
+  });
+  return zip(files);
+}
+
+/* ================= the workbook ================= */
+var H=function(t){return {v:t,s:1};};        /* header */
+var B=function(t){return {v:t,s:6};};        /* bold text */
+var M=function(c){return {v:(c||0)/100,t:'n',s:2};};   /* money */
+var MB=function(c){return {v:(c||0)/100,t:'n',s:3};};  /* money, bold */
+var N=function(n){return {v:n||0,t:'n',s:7};};         /* whole number */
+var D=function(d){return {v:d,t:'d'};};
+var DT=function(d){return {v:d,t:'dt'};};
+var dayKey=function(d){
+  return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+};
+
+function buildWorkbook(list){
+  var sorted=list.slice().sort(function(a,b){return a.periodEnd-b.periodEnd;});
+  var sum=function(f){return sorted.reduce(function(n,r){return n+(r[f]||0);},0);};
+
+  /* ---- Summary ---- */
+  var s1=[
+    [B(sorted[0]?sorted[0].venue:'Restaurant')],
+    [B('Bookkeeping summary')],
+    ['Readings', N(sorted.length)],
+    ['From', sorted[0]?DT(sorted[0].periodStart||sorted[0].periodEnd):''],
+    ['To', sorted.length?DT(sorted[sorted.length-1].periodEnd):''],
+    ['Prepared', DT(new Date())],
+    [],
+    [H('Takings'),H('Amount')],
+    ['Card', M(sum('card'))],
+    ['Cash', M(sum('cash'))],
+    ['Other', M(sum('other'))],
+    ['Refunds', M(sum('refunds'))],
+    [B('Total payments'), MB(sum('total'))],
+    [],
+    [H('GST'),H('Amount')],
+    ['Taxable sales (inc GST)', M(sum('taxable'))],
+    ['GST-free sales', M(sum('gstFree'))],
+    [B('GST on sales'), MB(sum('gst'))],
+    ['Sales excluding GST', M(sum('exGst'))],
+    [],
+    [H('BAS reference'),H('Amount')],
+    ['G1  Total sales (inc GST)', M(sum('taxable')+sum('gstFree'))],
+    ['G3  GST-free sales', M(sum('gstFree'))],
+    ['1A  GST on sales', M(sum('gst'))]
+  ];
+
+  /* ---- Readings ---- */
+  var s2=[[H('Date'),H('Type'),H('No.'),H('From'),H('To'),H('Card'),H('Cash'),
+           H('Other'),H('Refunds'),H('Total'),H('Taxable'),H('GST-free'),
+           H('GST'),H('Ex GST'),H('Payments'),H('Tables'),H('File')]];
+  sorted.forEach(function(r){
+    s2.push([D(r.periodEnd), r.kind, r.reading?N(r.reading):'',
+      DT(r.periodStart||r.periodEnd), DT(r.periodEnd),
+      M(r.card),M(r.cash),M(r.other),M(r.refunds),M(r.total),
+      M(r.taxable),M(r.gstFree),M(r.gst),M(r.exGst),
+      N(r.payments),N(r.tables.length), r.file]);
+  });
+  s2.push([B('Total'),'','','','',MB(sum('card')),MB(sum('cash')),MB(sum('other')),
+    MB(sum('refunds')),MB(sum('total')),MB(sum('taxable')),MB(sum('gstFree')),
+    MB(sum('gst')),MB(sum('exGst')),'','','']);
+
+  /* ---- Daily income ---- */
+  var byDay={};
+  sorted.forEach(function(r){
+    var k=dayKey(r.periodEnd);
+    if(!byDay[k]) byDay[k]={date:new Date(r.periodEnd.getFullYear(),r.periodEnd.getMonth(),
+      r.periodEnd.getDate()),card:0,cash:0,other:0,refunds:0,total:0,
+      taxable:0,gstFree:0,gst:0,exGst:0,readings:0,tables:0};
+    var d=byDay[k];
+    ['card','cash','other','refunds','total','taxable','gstFree','gst','exGst']
+      .forEach(function(f){ d[f]+=r[f]||0; });
+    d.readings++; d.tables+=r.tables.length;
+  });
+  var days=Object.keys(byDay).sort().map(function(k){return byDay[k];});
+  var s3=[[H('Date'),H('Readings'),H('Tables'),H('Card'),H('Cash'),H('Other'),
+           H('Refunds'),H('Total'),H('Taxable'),H('GST-free'),H('GST'),H('Ex GST')]];
+  days.forEach(function(d){
+    s3.push([D(d.date),N(d.readings),N(d.tables),M(d.card),M(d.cash),M(d.other),
+      M(d.refunds),M(d.total),M(d.taxable),M(d.gstFree),M(d.gst),M(d.exGst)]);
+  });
+  s3.push([B('Total'),'','',MB(sum('card')),MB(sum('cash')),MB(sum('other')),
+    MB(sum('refunds')),MB(sum('total')),MB(sum('taxable')),MB(sum('gstFree')),
+    MB(sum('gst')),MB(sum('exGst'))]);
+
+  /* ---- Tables ---- */
+  var s4=[[H('Date'),H('Table'),H('Opened'),H('Closed'),H('Orders'),H('Items'),
+           H('Method'),H('Amount'),H('Reading')]];
+  var tTotal=0;
+  sorted.forEach(function(r){
+    r.tables.forEach(function(t){
+      tTotal+=t.amount;
+      s4.push([D(t.closed||r.periodEnd), t.label, DT(t.opened), DT(t.closed),
+        N(t.orders), N(t.items), t.method, M(t.amount),
+        r.kind==='Z'?('Z'+r.reading):'X']);
+    });
+  });
+  s4.push([B('Total'),'','','','','','',MB(tTotal),'']);
+
+  /* ---- Product mix ---- */
+  var mix={};
+  sorted.forEach(function(r){
+    r.items.forEach(function(i){
+      var k=i.name+'||'+i.station;
+      if(!mix[k]) mix[k]={name:i.name,station:i.station,gstFree:i.gstFree,qty:0,revenue:0,gst:0};
+      mix[k].qty+=i.qty; mix[k].revenue+=i.revenue; mix[k].gst+=i.gst;
+    });
+  });
+  var mixArr=Object.keys(mix).map(function(k){return mix[k];})
+    .sort(function(a,b){return b.revenue-a.revenue;});
+  var mixRev=mixArr.reduce(function(n,i){return n+i.revenue;},0);
+  var s5=[[H('Item'),H('Station'),H('GST status'),H('Quantity'),H('Revenue'),
+           H('GST'),H('% of sales')]];
+  mixArr.forEach(function(i){
+    s5.push([i.name,i.station,i.gstFree?'GST-free':'Taxable',N(i.qty),
+      M(i.revenue),M(i.gst),
+      {v: mixRev? Math.round(i.revenue/mixRev*1000)/10 : 0, t:'n', s:2}]);
+  });
+  s5.push([B('Total'),'','',N(mixArr.reduce(function(n,i){return n+i.qty;},0)),
+    MB(mixRev),MB(mixArr.reduce(function(n,i){return n+i.gst;},0)),'']);
+
+  return buildXlsx([
+    {name:'Summary',     rows:s1, widths:[30,14]},
+    {name:'Readings',    rows:s2, widths:[11,6,6,17,17,11,11,11,11,12,12,12,11,12,10,8,34]},
+    {name:'Daily income',rows:s3, widths:[11,10,8,11,11,11,11,12,12,12,11,12]},
+    {name:'Tables',      rows:s4, widths:[11,9,17,17,8,8,12,12,10]},
+    {name:'Product mix', rows:s5, widths:[34,12,12,10,12,11,11]}
+  ]);
+}
+
+/* ================= saving ================= */
+function saveFile(bytes, filename, mime){
+  var blob=new Blob([bytes],{type:mime});
+  if(navigator.canShare&&window.File){
+    try{
+      var f=new File([blob],filename,{type:mime});
+      if(navigator.canShare({files:[f]})){
+        navigator.share({files:[f],title:filename})
+          .then(function(){toast('Exported');})
+          .catch(function(){ dl(blob,filename); });
+        return;
+      }
+    }catch(e){}
+  }
+  dl(blob,filename);
+}
+function dl(blob,filename){
+  try{
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download=filename;a.style.display='none';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1500);
+    toast('Saved \u00b7 '+filename);
+  }catch(e){ toast('Could not save the file on this device'); }
+}
+
+/* ================= ui ================= */
+function paint(){
+  if(!LOADED.length){ $('out').innerHTML=''; return; }
+  var sorted=LOADED.slice().sort(function(a,b){return a.periodEnd-b.periodEnd;});
+  var sum=function(f){return sorted.reduce(function(n,r){return n+(r[f]||0);},0);};
+  var noGst=sorted.filter(function(r){return !r.hasGst;}).length;
+
+  var h='<div class="card"><span class="mono" style="color:var(--muted)">Loaded</span>';
+  h+=sorted.map(function(r,i){
+    return '<div class="file"><div class="file-b">'+
+      '<div class="file-n">'+esc(r.file)+'</div>'+
+      '<div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap">'+
+        '<span class="tag">'+(r.kind==='Z'?('Z #'+r.reading):'X')+'</span>'+
+        '<span class="tag">'+esc(r.periodEnd?r.periodEnd.toLocaleDateString():'')+'</span>'+
+        '<span class="tag">'+money(r.total)+'</span>'+
+        (r.hasGst?'':'<span class="tag warn">no GST data</span>')+
+      '</div></div>'+
+      '<button class="file-x" data-rm="'+i+'" aria-label="Remove">&times;</button></div>';
+  }).join('')+'</div>';
+
+  h+='<div class="card">'+
+    '<span class="mono" style="color:var(--muted)">Total across '+sorted.length+' reading'+
+      (sorted.length===1?'':'s')+'</span>'+
+    '<div class="big">'+money(sum('total'))+'</div>'+
+    '<div class="row"><span>Card</span><b>'+money(sum('card'))+'</b></div>'+
+    '<div class="row"><span>Cash</span><b>'+money(sum('cash'))+'</b></div>'+
+    (sum('other')?'<div class="row"><span>Other</span><b>'+money(sum('other'))+'</b></div>':'')+
+    (sum('refunds')?'<div class="row"><span>Refunds</span><b>'+money(sum('refunds'))+'</b></div>':'')+
+    '<div class="row"><span>GST on sales</span><b>'+money(sum('gst'))+'</b></div>'+
+    '<div class="row"><span>Sales excluding GST</span><b>'+money(sum('exGst'))+'</b></div>'+
+    '</div>';
+
+  if(noGst){
+    h+='<div class="note">'+noGst+' file'+(noGst===1?' was':'s were')+
+      ' exported before GST was added, so '+(noGst===1?'it has':'they have')+
+      ' no tax breakdown. Those readings are counted in the takings but contribute '+
+      'nothing to the GST figures \u2014 do not lodge a BAS from a mixed set without '+
+      'checking.</div>';
+  }
+  var dupes={},dupeMsg='';
+  sorted.forEach(function(r){
+    var k=r.kind+'|'+r.reading+'|'+(r.periodEnd&&r.periodEnd.getTime());
+    if(dupes[k]) dupeMsg='The same reading appears more than once. Remove the duplicate '+
+      'before exporting, or the totals will be doubled.';
+    dupes[k]=1;
+  });
+  if(dupeMsg) h+='<div class="note">'+dupeMsg+'</div>';
+
+  h+='<button class="btn full" id="xlsx" style="margin-top:16px">Download Excel workbook</button>'+
+     '<button class="btn quiet full" id="clear" style="margin-top:10px">Clear all</button>';
+  $('out').innerHTML=h;
+}
+
+function addFiles(files){
+  var pending=files.length, added=0, bad=0;
+  if(!pending) return;
+  Array.prototype.forEach.call(files,function(f){
+    var rd=new FileReader();
+    rd.onload=function(){
+      try{
+        LOADED.push(parseReading(String(rd.result), f.name));
+        added++;
+      }catch(e){ bad++; }
+      if(--pending===0){
+        paint();
+        if(added) toast(added+' reading'+(added===1?'':'s')+' loaded'+(bad?(', '+bad+' skipped'):''));
+        else toast('That does not look like a counter export');
+      }
+    };
+    rd.onerror=function(){ bad++; if(--pending===0){ paint(); toast('Could not read that file'); } };
+    rd.readAsText(f);
+  });
+}
+
+$('pick').addEventListener('click',function(){ $('file').click(); });
+$('file').addEventListener('change',function(){ addFiles($('file').files); $('file').value=''; });
+var drop=$('drop');
+['dragenter','dragover'].forEach(function(ev){
+  drop.addEventListener(ev,function(e){ e.preventDefault(); drop.classList.add('hot'); });
+});
+['dragleave','drop'].forEach(function(ev){
+  drop.addEventListener(ev,function(e){ e.preventDefault(); drop.classList.remove('hot'); });
+});
+drop.addEventListener('drop',function(e){
+  if(e.dataTransfer&&e.dataTransfer.files) addFiles(e.dataTransfer.files);
+});
+
+$('out').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.rm!==undefined){
+    var sorted=LOADED.slice().sort(function(a,b2){return a.periodEnd-b2.periodEnd;});
+    var target=sorted[+b.dataset.rm];
+    LOADED=LOADED.filter(function(r){return r!==target;});
+    paint(); return;
+  }
+  if(b.id==='clear'){ LOADED=[]; paint(); return; }
+  if(b.id==='xlsx'){
+    if(!LOADED.length) return;
+    b.disabled=true; b.textContent='Building\u2026';
+    setTimeout(function(){
+      try{
+        var bytes=buildWorkbook(LOADED);
+        var sorted=LOADED.slice().sort(function(a,b2){return a.periodEnd-b2.periodEnd;});
+        var slug=(sorted[0].venue||'restaurant').toLowerCase()
+          .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        var d=sorted[sorted.length-1].periodEnd;
+        var p=function(n){return ('0'+n).slice(-2);};
+        saveFile(bytes, slug+'-bookkeeping-'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'.xlsx',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      }catch(err){ toast('Could not build the workbook'); }
+      b.disabled=false; b.textContent='Download Excel workbook';
+    },40);
+  }
+});
+})();
+</script>
+</body>
+</html>
