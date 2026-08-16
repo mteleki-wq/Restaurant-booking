@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex,nofollow">
+<title>Platform</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — PLATFORM CONSOLE
+     platform-admin.html
+
+     Onboard and support restaurants. Sign-in is refused unless the
+     account is listed in rd_platform_admins, which can only be granted
+     by SQL - there is no way to promote yourself from this screen, and
+     that is deliberate.
+
+     Restaurant staff never need this page and cannot use it.
+     ================================================================== -->
+
+<script>
+  /* Optional: fill these in to skip the connect screen. */
+  var SUPABASE_URL = '';
+  var SUPABASE_KEY = '';
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0b0806;--panel:#151009;--panel-2:#1c150c;--ink:#f6efe2;--muted:#b3a488;
+  --line:rgba(179,164,136,.2);--gold:#f0cf85;
+  --grad:linear-gradient(100deg,#f2d187,#df9f52 55%,#b8783c);
+  --good:#7fd6a3;--bad:#ff7a66;--warn:#ffd479;
+  --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{margin:0;padding:0}
+body{margin:0;padding:0;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--ink);
+  font-family:'Sora',-apple-system,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;font-weight:700}
+.mono{font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+button{cursor:pointer;border:0;background:none;font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+a{color:var(--gold)}
+
+input[type=text],input[type=email],input[type=password],input[type=number],select{
+  width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;
+  background:var(--panel-2);padding:0 15px;outline:none}
+input:focus,select:focus{border-color:var(--gold)}
+label{display:block;font-size:12.5px;font-weight:600;margin:15px 0 7px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;
+  padding:13px 22px;border-radius:100px;background:var(--grad);color:#241703;
+  font-family:'Unbounded',sans-serif;font-weight:700;font-size:13.5px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.quiet{background:none;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.btn.danger{background:none;border:1px solid rgba(255,122,102,.5);color:var(--bad)}
+.btn.sm{min-height:44px;padding:10px 16px;font-size:12.5px}
+.btn.full{width:100%}
+.msg{margin-top:14px;font-size:13px;color:var(--bad);min-height:18px}
+
+#gate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);
+  border-radius:20px;padding:28px 24px calc(24px + var(--safe-b))}
+.hint{color:var(--muted);font-size:12.5px;margin:5px 0 0;line-height:1.55}
+
+#app{display:none}
+.top{position:sticky;top:0;z-index:40;background:rgba(11,8,6,.96);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);padding-top:var(--safe-t);
+  -webkit-transform:translateZ(0);transform:translateZ(0)}
+.top-in{display:flex;align-items:center;gap:12px;padding:13px 16px;flex-wrap:wrap}
+.top h1{font-size:15px}
+.spacer{flex:1}
+main{max-width:920px;margin:0 auto;padding:18px 16px calc(50px + var(--safe-b))}
+
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:18px;margin-bottom:14px}
+.sec-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.sec-h h2{font-size:17px}
+.pill{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;border:1px solid var(--line);border-radius:100px;
+  padding:2px 8px;color:var(--muted)}
+.pill.on{color:var(--good);border-color:rgba(127,214,163,.45)}
+.pill.off{color:var(--bad);border-color:rgba(255,122,102,.45)}
+.pill.busy{color:var(--gold);border-color:rgba(240,207,133,.45)}
+.stats{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin-top:6px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+
+.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;
+  border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row b{font-family:'Unbounded',sans-serif}
+
+.modal{position:fixed;inset:0;z-index:90;background:rgba(4,3,2,.78);display:none;
+  align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.sheet{background:var(--panel);width:100%;max-width:620px;border-radius:20px 20px 0 0;
+  border-top:1px solid var(--line);max-height:94dvh;display:flex;flex-direction:column}
+@media (min-width:640px){.modal{align-items:center}.sheet{border-radius:20px}}
+.sh-h{display:flex;align-items:center;gap:12px;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.sh-h h3{font-size:17px;flex:1}
+.sh-x{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);color:var(--muted);
+  font-size:19px;display:grid;place-items:center;flex:0 0 auto}
+.sh-b{overflow-y:auto;padding:6px 18px 16px;flex:1;-webkit-overflow-scrolling:touch}
+.sh-f{padding:14px 18px calc(16px + var(--safe-b));border-top:1px solid var(--line);
+  background:var(--panel-2);display:flex;gap:10px}
+.sh-f .btn{flex:1}
+
+.code{font-family:'Space Mono',monospace;font-size:11.5px;word-break:break-all;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;
+  color:var(--muted);margin-top:6px}
+.empty{text-align:center;color:var(--muted);padding:44px 16px}
+.toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));transform:translate(-50%,16px);
+  background:var(--panel-2);border:1px solid var(--gold);border-radius:100px;padding:11px 20px;
+  font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:120;
+  max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<section id="gate">
+  <div class="card">
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1 style="margin-top:8px;font-size:21px" id="gTitle">Platform</h1>
+    <p class="hint" id="gSub">Sign in.</p>
+
+    <div id="gConn" style="display:none">
+      <label for="cu">Project URL</label>
+      <input id="cu" type="text" placeholder="https://xxxx.supabase.co" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="url">
+      <label for="ck">anon / public key</label>
+      <input id="ck" type="text" placeholder="eyJhbGciOi..." autocapitalize="off" autocorrect="off" spellcheck="false">
+      <p class="hint">Use the anon key. Never the service_role key.</p>
+      <button class="btn full" id="cgo" style="margin-top:18px">Connect</button>
+    </div>
+
+    <div id="gLogin" style="display:none">
+      <label for="em">Email</label>
+      <input id="em" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false">
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autocomplete="current-password">
+      <button class="btn full" id="lgo" style="margin-top:18px">Sign in</button>
+      <button id="reconf" style="color:var(--muted);font-size:12px;text-decoration:underline;
+        text-underline-offset:3px;margin-top:14px;min-height:44px">Change connection settings</button>
+    </div>
+    <p class="msg" id="gMsg" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="app">
+  <div class="top"><div class="top-in">
+    <h1>Platform</h1>
+    <span class="mono" style="color:var(--muted)" id="who"></span>
+    <span class="spacer"></span>
+    <button class="btn sm" id="addVenue">Add a restaurant</button>
+    <button class="btn quiet sm" id="signout">Sign out</button>
+  </div></div>
+  <main id="list"><div class="empty">Loading…</div></main>
+</section>
+
+<div class="modal" id="modal"><div class="sheet">
+  <div class="sh-h"><h3 id="mTitle">…</h3><button class="sh-x" id="mX" aria-label="Close">&times;</button></div>
+  <div class="sh-b" id="mBody"></div>
+  <div class="sh-f" id="mFoot"></div>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var SESSION=null, VENUES=[], EMAIL='';
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+var toastT;
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on');},3000);}
+
+function normaliseUrl(raw){
+  var u=String(raw||'').trim(); if(!u) return '';
+  if(/^[a-z0-9]{16,}$/i.test(u)) return 'https://'+u+'.supabase.co';
+  if(!/^https?:\/\//i.test(u)) u='https://'+u;
+  var host,path,proto,port;
+  try{var a=document.createElement('a');a.href=u;host=a.hostname;path=a.pathname||'';
+    proto=a.protocol||'https:';port=a.port||'';}catch(e){return '';}
+  var m=path.match(/\/project\/([a-z0-9]+)/i);
+  if(/supabase\.(com|io)$/i.test(host)&&m) return 'https://'+m[1]+'.supabase.co';
+  return proto+'//'+host+(port?(':'+port):'');
+}
+function keyRole(k){
+  try{var p=k.split('.')[1];if(!p)return null;p=p.replace(/-/g,'+').replace(/_/g,'/');
+    while(p.length%4)p+='=';return (JSON.parse(atob(p))||{}).role||null;}catch(e){return null;}
+}
+function readCfg(){try{return JSON.parse(localStorage.getItem('rd_plat_config')||'null');}catch(e){return null;}}
+function readSess(){try{return JSON.parse(localStorage.getItem('rd_plat_session')||'null');}catch(e){return null;}}
+function saveSess(s){try{localStorage.setItem('rd_plat_session',JSON.stringify(s));}catch(e){}}
+
+function api(path,opts){
+  opts=opts||{};var h=opts.headers||{};
+  h.apikey=SUPABASE_KEY;
+  h.Authorization='Bearer '+(SESSION?SESSION.access_token:SUPABASE_KEY);
+  h['Content-Type']='application/json';opts.headers=h;
+  return fetch(SUPABASE_URL.replace(/\/+$/,'')+path,opts).then(function(r){
+    return r.text().then(function(t){
+      var d=null;try{d=t?JSON.parse(t):null;}catch(e){}
+      if(!r.ok) throw {status:r.status,data:d,raw:t};
+      return d;});});
+}
+function rpc(fn,body){ return api('/rest/v1/rpc/'+fn,{method:'POST',body:JSON.stringify(body||{})}); }
+function apiErr(e){
+  var m=(e&&e.data&&(e.data.message||e.data.hint))||'';
+  if(/not_platform_admin/.test(m)) return 'That account is not a platform administrator.';
+  if(/slug_taken/.test(m)) return 'That short name is already used by another restaurant.';
+  if(/bad_slug/.test(m)) return 'That short name has no usable characters.';
+  if(/bad_table_count/.test(m)) return 'Choose between 1 and 200 tables.';
+  if(/no_such_account/.test(m)) return 'No account with that email. Create it in Supabase first, under Authentication.';
+  if(/not_permitted/.test(m)) return 'You do not have permission for that.';
+  if(e&&e.status===401) return 'Your session expired. Please sign in again.';
+  return m||'That did not work. Please try again.';
+}
+
+/* ---------- gate ---------- */
+function showConn(msg){
+  $('gConn').style.display='';$('gLogin').style.display='none';
+  $('gTitle').textContent='Connect this device';
+  $('gSub').textContent='One-time setup. Settings \u2192 API in Supabase.';
+  var c=readCfg();if(c){$('cu').value=c.url||'';$('ck').value=c.key||'';}
+  $('gMsg').textContent=msg||'';
+}
+function showLogin(msg){
+  $('gConn').style.display='none';$('gLogin').style.display='';
+  $('gTitle').textContent='Platform';$('gSub').textContent='Sign in.';
+  $('gMsg').textContent=msg||'';
+}
+$('cgo').addEventListener('click',function(){
+  var u=normaliseUrl($('cu').value),k=$('ck').value.trim();
+  if(!u||!k){$('gMsg').textContent='Fill in both fields.';return;}
+  if($('cu').value.trim()!==u) $('cu').value=u;
+  if(keyRole(k)==='service_role'){
+    $('gMsg').textContent='That is the service_role key. Use the anon / public key.';return;}
+  $('cgo').disabled=true;$('gMsg').textContent='Checking\u2026';
+  fetch(u+'/auth/v1/settings',{headers:{apikey:k}})
+    .then(function(r){return r.text().then(function(t){return{status:r.status,body:t};});})
+    .then(function(res){
+      if(/invalid path/i.test(res.body)||res.status===404) throw new Error('path');
+      if(res.status===401||res.status===403) throw new Error('key');
+      try{localStorage.setItem('rd_plat_config',JSON.stringify({url:u,key:k}));}catch(e){}
+      SUPABASE_URL=u;SUPABASE_KEY=k;showLogin('');
+    })
+    .catch(function(e){
+      $('gMsg').textContent=e.message==='path'
+        ? 'That reached a server but not your project API. Use just https://<your-ref>.supabase.co'
+        : e.message==='key' ? 'The project rejected that key. Copy the anon key again, in full.'
+        : 'Could not reach that project. Check the URL and your connection.';
+    }).then(function(){$('cgo').disabled=false;});
+});
+$('reconf').addEventListener('click',function(){showConn('');});
+
+$('lgo').addEventListener('click',function(){
+  var e=$('em').value.trim(),p=$('pw').value;
+  if(!e||!p){$('gMsg').textContent='Enter your email and password.';return;}
+  $('lgo').disabled=true;$('gMsg').textContent='';
+  fetch(SUPABASE_URL.replace(/\/+$/,'')+'/auth/v1/token?grant_type=password',{
+    method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({email:e,password:p})
+  }).then(function(r){return r.text().then(function(t){
+      var d=null;try{d=t?JSON.parse(t):null;}catch(x){}
+      if(!r.ok) throw {status:r.status,data:d};return d;});
+  }).then(function(d){
+    SESSION={access_token:d.access_token,refresh_token:d.refresh_token,
+      expires_at:Date.now()+((d.expires_in||3600)*1000),user:d.user||null};
+    EMAIL=(d.user&&d.user.email)||e;
+    saveSess(SESSION);$('pw').value='';
+    return start();
+  }).catch(function(err){
+    if(err&&err.kind==='notadmin'){
+      $('gMsg').textContent='That account is not a platform administrator. '+
+        'Add it to rd_platform_admins in Supabase first.';
+    } else if(err&&err.status===400){
+      $('gMsg').textContent='That email and password did not match.';
+    } else if(!$('gMsg').textContent){
+      $('gMsg').textContent='Could not sign in. Check the connection and try again.';
+    }
+  }).then(function(){$('lgo').disabled=false;});
+});
+$('pw').addEventListener('keydown',function(e){if(e.key==='Enter')$('lgo').click();});
+$('signout').addEventListener('click',function(){
+  if(!confirm('Sign out of the platform console?'))return;
+  try{localStorage.removeItem('rd_plat_session');}catch(e){}
+  SESSION=null;$('app').style.display='none';$('gate').style.display='flex';showLogin('');
+});
+
+/* ---------- load ---------- */
+function start(){
+  /* Refuse anyone who is not a platform admin, rather than showing an
+     empty console and letting them wonder. */
+  return rpc('rd_is_platform_admin')
+    .then(function(isAdmin){
+      if(isAdmin !== true) throw {kind:'notadmin'};
+      $('who').textContent=EMAIL||'';
+      $('gate').style.display='none';$('app').style.display='block';
+      return refresh();
+    });
+}
+function refresh(){
+  return rpc('rd_my_venues').then(function(list){
+    VENUES=list||[]; paint();
+  }).catch(function(e){ $('list').innerHTML='<div class="empty"><p>'+esc(apiErr(e))+'</p></div>'; });
+}
+
+function paint(){
+  if(!VENUES.length){
+    $('list').innerHTML='<div class="empty"><h3 style="color:var(--ink);margin-bottom:8px">'+
+      'No restaurants yet</h3><p>Add your first one to get started.</p></div>';
+    return;
+  }
+  $('list').innerHTML=VENUES.map(function(v){
+    return '<div class="sec">'+
+      '<div class="sec-h"><h2>'+esc(v.name||v.slug)+'</h2>'+
+        '<span class="pill">'+esc(v.slug)+'</span>'+
+        (v.ordering_enabled?'<span class="pill on">Ordering on</span>'
+                           :'<span class="pill off">Ordering off</span>')+
+        (v.open_tables?'<span class="pill busy">'+v.open_tables+' open now</span>':'')+
+      '</div>'+
+      '<div class="stats">'+
+        '<span>'+(v.tables||0)+' table'+(v.tables===1?'':'s')+'</span>'+
+        '<span>'+(v.items||0)+' dish'+(v.items===1?'':'es')+'</span>'+
+        '<span>'+(v.order_page_url?'ordering page set':'no ordering page yet')+'</span>'+
+      '</div>'+
+      '<div class="acts">'+
+        '<button class="btn quiet sm" data-open="'+esc(v.id)+'">Details</button>'+
+        '<button class="btn quiet sm" data-staff="'+esc(v.id)+'">Staff</button>'+
+        '<button class="btn quiet sm" data-go="mgr" data-vid="'+esc(v.id)+'">Menu manager</button>'+
+        '<button class="btn quiet sm" data-go="till" data-vid="'+esc(v.id)+'">Counter</button>'+
+        '<button class="btn quiet sm" data-go="kds" data-vid="'+esc(v.id)+'">Kitchen</button>'+
+      '</div></div>';
+  }).join('');
+}
+
+/* ---------- modal ---------- */
+function openModal(title,body,foot){
+  $('mTitle').textContent=title;$('mBody').innerHTML=body;$('mFoot').innerHTML=foot||'';
+  $('modal').classList.add('on');document.body.style.overflow='hidden';$('mBody').scrollTop=0;
+}
+function closeModal(){$('modal').classList.remove('on');document.body.style.overflow='';}
+$('mX').addEventListener('click',closeModal);
+$('modal').addEventListener('click',function(e){if(e.target===$('modal'))closeModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+
+/* ---------- add a restaurant ---------- */
+$('addVenue').addEventListener('click',function(){
+  var base='';
+  VENUES.forEach(function(v){ if(!base && v.order_page_url) base=v.order_page_url; });
+  openModal('Add a restaurant',
+    '<label for="nName">Restaurant name</label>'+
+    '<input id="nName" type="text" placeholder="Sunset Grill">'+
+    '<label for="nSlug">Short name</label>'+
+    '<input id="nSlug" type="text" placeholder="sunset-grill" autocapitalize="off" spellcheck="false">'+
+    '<p class="hint">Goes inside every QR code. Lower case, no spaces. '+
+      'Changing it later means reprinting every table, so settle it now.</p>'+
+    '<div class="row2">'+
+      '<div><label for="nTables">How many tables</label>'+
+        '<input id="nTables" type="number" min="1" max="200" value="10"></div>'+
+      '<div><label for="nTz">Time zone</label>'+
+        '<input id="nTz" type="text" value="Australia/Sydney"></div>'+
+    '</div>'+
+    '<label for="nUrl">Ordering page address</label>'+
+    '<input id="nUrl" type="text" value="'+esc(base)+'" '+
+      'placeholder="https://order.yoursite.com/table-order.html" autocapitalize="off" spellcheck="false">'+
+    '<p class="hint">The public page guests reach when they scan. The same address '+
+      'serves every restaurant \u2014 only the code in the QR differs.</p>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-top:18px">'+
+      '<input type="checkbox" id="nGst" checked style="width:22px;height:22px;min-height:22px">'+
+      ' Registered for GST</label>'+
+    '<p class="msg" id="nMsg"></p>',
+    '<button class="btn quiet" data-close>Cancel</button>'+
+    '<button class="btn" id="nGo">Create</button>');
+
+  $('nName').addEventListener('input',function(){
+    if($('nSlug').dataset.touched) return;
+    $('nSlug').value=this.value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  });
+  $('nSlug').addEventListener('input',function(){ this.dataset.touched='1'; });
+
+  $('nGo').addEventListener('click',function(){
+    var name=$('nName').value.trim();
+    var slug=$('nSlug').value.trim();
+    var n=parseInt($('nTables').value,10)||0;
+    if(!name){ $('nMsg').textContent='Give the restaurant a name.'; return; }
+    if(!slug){ $('nMsg').textContent='Give it a short name.'; return; }
+    if(n<1||n>200){ $('nMsg').textContent='Choose between 1 and 200 tables.'; return; }
+    var url=$('nUrl').value.trim();
+    if(url && !/^https?:\/\//i.test(url)) url='https://'+url;
+    this.disabled=true; this.textContent='Creating\u2026';
+    var btn=this;
+    rpc('rd_provision_venue',{p_name:name,p_slug:slug,p_table_count:n,
+        p_order_page_url:url||null,p_timezone:$('nTz').value.trim()||'Australia/Sydney',
+        p_gst_registered:$('nGst').checked})
+      .then(function(res){
+        if(!res||!res.ok) throw {data:res};
+        closeModal();
+        return refresh().then(function(){
+          toast(res.name+' created with '+res.tables+' tables');
+          openVenue(res.venue_id);
+        });
+      })
+      .catch(function(e){
+        btn.disabled=false; btn.textContent='Create';
+        $('nMsg').textContent=apiErr(e);
+      });
+  });
+});
+
+/* ---------- venue details ---------- */
+function openVenue(id){
+  openModal('Loading\u2026','<div class="empty">Loading\u2026</div>','');
+  rpc('rd_venue_setup',{p_venue_id:id}).then(function(d){
+    var v=d.venue, t=d.tables||[], st=d.staff||[], c=d.counts||{};
+    var ready = v.order_page_url && c.items>0 && t.length>0;
+    openModal(v.name||v.slug,
+      '<div class="row"><span>Short name</span><b>'+esc(v.slug)+'</b></div>'+
+      '<div class="row"><span>Tables</span><b>'+(c.tables||0)+'</b></div>'+
+      '<div class="row"><span>Sections</span><b>'+(c.categories||0)+'</b></div>'+
+      '<div class="row"><span>Dishes</span><b>'+(c.items||0)+'</b></div>'+
+      '<div class="row"><span>Staff</span><b>'+st.length+'</b></div>'+
+      '<div class="row"><span>Ordering</span><b>'+(v.ordering_enabled?'On':'Off')+'</b></div>'+
+      '<div class="row"><span>GST</span><b>'+(v.gst_registered?'Registered':'Not registered')+'</b></div>'+
+
+      '<h3 style="font-size:14px;margin-top:20px">Still to do</h3>'+
+      '<div style="margin-top:8px">'+
+        checklist('Ordering page address set', !!v.order_page_url)+
+        checklist('Menu imported', (c.items||0) > 0)+
+        checklist('Tables created', t.length > 0)+
+        checklist('A staff login added', st.length > 0)+
+      '</div>'+
+      (ready?'':'<p class="hint" style="color:var(--warn);margin-top:10px">'+
+        'Finish the unticked items before this restaurant can take an order.</p>')+
+
+      '<h3 style="font-size:14px;margin-top:20px">Table links</h3>'+
+      (v.order_page_url
+        ? '<p class="hint">Print QR codes from the menu manager. These are the addresses behind them.</p>'+
+          t.slice(0,3).map(function(x){
+            return '<div class="code">'+esc(x.url||'')+'</div>'; }).join('')+
+          (t.length>3?'<p class="hint">\u2026 and '+(t.length-3)+' more.</p>':'')
+        : '<p class="hint" style="color:var(--warn)">No ordering page address yet, so the '+
+          'QR codes would point nowhere. Set it in the menu manager under Tables &amp; QR.</p>'),
+      '<button class="btn quiet" data-close>Close</button>'+
+      '<button class="btn" data-go="mgr" data-vid="'+esc(v.id)+'">Open menu manager</button>');
+  }).catch(function(e){
+    openModal('Could not load','<div class="empty"><p>'+esc(apiErr(e))+'</p></div>',
+      '<button class="btn quiet" data-close>Close</button>');
+  });
+}
+function checklist(label, done){
+  return '<div class="row"><span>'+(done?'\u2713 ':'\u25cb ')+esc(label)+'</span>'+
+    '<b style="color:'+(done?'var(--good)':'var(--warn)')+'">'+(done?'done':'to do')+'</b></div>';
+}
+
+/* ---------- staff ---------- */
+function openStaff(id){
+  openModal('Loading\u2026','<div class="empty">Loading\u2026</div>','');
+  rpc('rd_venue_setup',{p_venue_id:id}).then(function(d){
+    var st=d.staff||[];
+    openModal('Staff at '+(d.venue.name||d.venue.slug),
+      (st.length
+        ? st.map(function(s){
+            return '<div class="row"><span>'+esc(s.email)+
+              ' <span class="pill">'+esc(s.role)+'</span></span>'+
+              '<button class="btn danger sm" data-rm="'+esc(s.user_id)+'" '+
+                'data-vid="'+esc(id)+'">Remove</button></div>';
+          }).join('')
+        : '<p class="hint">Nobody yet.</p>')+
+      '<h3 style="font-size:14px;margin-top:20px">Add someone</h3>'+
+      '<p class="hint">The account must already exist in Supabase under '+
+        'Authentication \u2192 Users, with Auto Confirm ticked.</p>'+
+      '<label for="sEmail">Email</label>'+
+      '<input id="sEmail" type="email" autocapitalize="off" spellcheck="false" '+
+        'placeholder="chef@sunsetgrill.com">'+
+      '<label for="sRole">Role</label>'+
+      '<select id="sRole">'+
+        '<option value="staff">Staff \u2014 kitchen and counter, can mark items sold out</option>'+
+        '<option value="manager">Manager \u2014 also prices, tables and shift close-off</option>'+
+        '<option value="owner">Owner</option>'+
+      '</select>'+
+      '<p class="msg" id="sMsg"></p>',
+      '<button class="btn quiet" data-close>Close</button>'+
+      '<button class="btn" id="sGo" data-vid="'+esc(id)+'">Add</button>');
+  }).catch(function(e){
+    openModal('Could not load','<div class="empty"><p>'+esc(apiErr(e))+'</p></div>',
+      '<button class="btn quiet" data-close>Close</button>');
+  });
+}
+
+/* ---------- routing to the other screens ---------- */
+var PAGE={ mgr:['restaurant-menu-manager.html','rd_venue_mgr'],
+           till:['staff-counter.html','rd_venue_till'],
+           kds:['staff-kds.html','rd_venue_kds'] };
+function openFor(which, venueId){
+  var p=PAGE[which]; if(!p) return;
+  /* the target page reads this and skips its own venue picker */
+  try{ localStorage.setItem(p[1], venueId); }catch(e){}
+  window.open(p[0], '_blank');
+}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  if(b.hasAttribute('data-close')) return closeModal();
+  if(b.dataset.open)  return openVenue(b.dataset.open);
+  if(b.dataset.staff) return openStaff(b.dataset.staff);
+  if(b.dataset.go && b.dataset.vid) return openFor(b.dataset.go, b.dataset.vid);
+  if(b.dataset.rm){
+    if(!confirm('Remove this person from the restaurant?\n\nThey keep their login but lose access.')) return;
+    return rpc('rd_remove_staff',{p_venue_id:b.dataset.vid,p_user_id:b.dataset.rm})
+      .then(function(){ toast('Removed'); openStaff(b.dataset.vid); })
+      .catch(function(err){ toast(apiErr(err)); });
+  }
+  if(b.id==='sGo'){
+    var em=$('sEmail').value.trim();
+    if(!em){ $('sMsg').textContent='Enter an email address.'; return; }
+    b.disabled=true;
+    rpc('rd_add_staff',{p_venue_id:b.dataset.vid,p_email:em,p_role:$('sRole').value})
+      .then(function(){ toast('Added'); openStaff(b.dataset.vid); })
+      .catch(function(err){ b.disabled=false; $('sMsg').textContent=apiErr(err); });
+  }
+});
+
+/* ---------- boot ---------- */
+(function(){
+  if(!SUPABASE_URL||!SUPABASE_KEY){
+    var c=readCfg();
+    if(c&&c.url&&c.key){SUPABASE_URL=c.url;SUPABASE_KEY=c.key;}
+  }
+  if(!SUPABASE_URL||!SUPABASE_KEY) return showConn('');
+  showLogin('');
+  var s=readSess();
+  if(s&&s.access_token){
+    SESSION=s; EMAIL=(s.user&&s.user.email)||'';
+    start().catch(function(){ try{localStorage.removeItem('rd_plat_session');}catch(e){} SESSION=null; });
+  }
+})();
+})();
+</script>
+</body>
+</html>
