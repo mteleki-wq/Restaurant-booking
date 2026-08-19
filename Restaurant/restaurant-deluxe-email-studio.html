@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restaurant Deluxe — Email Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#06060f; --panel:#0d0f22; --panel2:#11142b;
+    --violet:#8b5cf6; --blue:#4f7cff; --cyan:#22d3ee; --gold:#f0cd8b; --teal:#2dd4bf;
+    --ink:#eef0ff; --muted:#9aa3c7; --faint:#6a7299;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.06);
+    --glass:rgba(255,255,255,.03);
+    --grad:linear-gradient(120deg,var(--violet),var(--blue) 55%,var(--cyan));
+    --fdisp:'Sora',system-ui,-apple-system,Segoe UI,sans-serif;
+    --fmono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --r:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--fdisp);
+    font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+    min-height:100vh; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(900px 500px at 12% -5%, rgba(139,92,246,.16), transparent 60%),
+      radial-gradient(800px 500px at 92% 8%, rgba(34,211,238,.10), transparent 62%);
+  }
+  :focus-visible{ outline:2px solid var(--cyan); outline-offset:2px; border-radius:6px }
+
+  /* ---------- shell ---------- */
+  .app{ position:relative; z-index:1; display:flex; flex-direction:column; min-height:100vh }
+  header.top{
+    display:flex; align-items:center; gap:16px; padding:16px 24px;
+    border-bottom:1px solid var(--line); background:rgba(6,6,15,.72);
+    -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+    position:sticky; top:0; z-index:30; flex-wrap:wrap;
+  }
+  .logo{
+    width:42px; height:42px; border-radius:12px; background:var(--grad);
+    display:grid; place-items:center; font-weight:800; font-size:14px; letter-spacing:.02em; flex:0 0 auto;
+  }
+  .brand h1{ margin:0; font-size:16px; font-weight:700; letter-spacing:-.01em }
+  .brand p{ margin:0; font-family:var(--fmono); font-size:10.5px; letter-spacing:.16em;
+            text-transform:uppercase; color:var(--faint) }
+  .top .spacer{ flex:1 1 auto }
+  .pill{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px;
+    border:1px solid var(--line); font-family:var(--fmono); font-size:11px;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted); background:var(--glass);
+  }
+  .dot{ width:7px; height:7px; border-radius:50%; background:var(--teal); box-shadow:0 0 10px var(--teal) }
+
+  .layout{ display:grid; grid-template-columns:250px minmax(0,1fr) minmax(0,1.05fr); gap:0; flex:1 1 auto; min-height:0 }
+
+  /* ---------- rail ---------- */
+  .rail{ border-right:1px solid var(--line); padding:20px 16px; display:flex; flex-direction:column; gap:8px; min-width:0 }
+  .rail-h{ font-family:var(--fmono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+           color:var(--faint); margin:0 0 4px 6px }
+  .camp{
+    position:relative; display:block; width:100%; text-align:left; cursor:pointer;
+    border:1px solid var(--line); border-radius:12px; background:var(--glass);
+    padding:12px 34px 12px 14px; color:var(--ink); font-family:var(--fdisp); font-size:14px;
+    transition:border-color .18s, background .18s, transform .18s;
+  }
+  .camp:hover{ border-color:rgba(139,92,246,.5) }
+  .camp[aria-current="true"]{ border-color:var(--violet); background:rgba(139,92,246,.13) }
+  .camp .cname{ display:block; font-weight:600; line-height:1.3 }
+  .camp .cdesc{ display:block; font-size:12px; color:var(--muted); margin-top:3px; line-height:1.4 }
+  .camp .del{
+    position:absolute; top:8px; right:8px; width:24px; height:24px; border-radius:7px;
+    border:1px solid transparent; background:transparent; color:var(--faint);
+    cursor:pointer; font-size:15px; line-height:1; display:none;
+  }
+  .camp:hover .del, .camp[aria-current="true"] .del{ display:block }
+  .camp .del:hover{ color:#ff8a8a; border-color:rgba(255,138,138,.4) }
+  .rail-actions{ display:grid; gap:8px; margin-top:6px }
+
+  /* ---------- editor ---------- */
+  .editor{ border-right:1px solid var(--line); padding:24px; min-width:0; overflow:auto }
+  .eyebrow{ font-family:var(--fmono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--cyan) }
+  h2.sec{ margin:8px 0 4px; font-size:26px; letter-spacing:-.02em; font-weight:700 }
+  .sub{ color:var(--muted); font-size:14px; margin:0 0 20px }
+  .tabs{ display:flex; gap:4px; border-bottom:1px solid var(--line); margin-bottom:20px; flex-wrap:wrap }
+  .tab{
+    background:transparent; border:none; border-bottom:2px solid transparent; cursor:pointer;
+    color:var(--muted); font-family:var(--fdisp); font-size:14px; font-weight:600;
+    padding:10px 14px; transition:color .18s, border-color .18s;
+  }
+  .tab:hover{ color:var(--ink) }
+  .tab[aria-selected="true"]{ color:var(--ink); border-bottom-color:var(--cyan) }
+  .pane[hidden]{ display:none }
+  .field{ margin-bottom:16px }
+  .field label{ display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:var(--ink) }
+  .field .help{ font-size:12px; color:var(--faint); margin:5px 0 0; line-height:1.45 }
+  input[type=text], input[type=email], input[type=url], textarea, select{
+    width:100%; padding:11px 13px; border-radius:10px; border:1px solid var(--line);
+    background:#0a0b1a; color:var(--ink); font-family:var(--fdisp); font-size:14px; line-height:1.5;
+  }
+  textarea{ resize:vertical; min-height:84px }
+  input:focus, textarea:focus, select:focus{ border-color:var(--cyan); outline:none }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px }
+  .blocks{ display:grid; gap:12px }
+  .block{ border:1px solid var(--line); border-radius:12px; padding:14px; background:var(--glass); position:relative }
+  .block .bh{ display:flex; align-items:center; gap:10px; margin-bottom:10px }
+  .block .bn{ font-family:var(--fmono); font-size:11px; letter-spacing:.14em; color:var(--cyan); flex:1 1 auto }
+  .iconbtn{
+    border:1px solid var(--line); background:transparent; color:var(--muted); cursor:pointer;
+    border-radius:8px; width:26px; height:26px; font-size:14px; line-height:1;
+  }
+  .iconbtn:hover{ color:var(--ink); border-color:var(--cyan) }
+  .iconbtn.danger:hover{ color:#ff8a8a; border-color:rgba(255,138,138,.45) }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-family:var(--fdisp); font-weight:600; font-size:14px; border-radius:999px;
+    padding:11px 18px; cursor:pointer; border:1px solid var(--line);
+    background:var(--glass); color:var(--ink); transition:border-color .18s, transform .15s, background .18s;
+  }
+  .btn:hover{ border-color:var(--cyan) }
+  .btn:active{ transform:translateY(1px) }
+  .btn.primary{ background:var(--grad); border-color:transparent; color:#fff }
+  .btn.wide{ width:100% }
+  .btnrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px }
+  .note{
+    border:1px solid var(--line); border-radius:12px; padding:14px; background:var(--glass);
+    font-size:13px; color:var(--muted); line-height:1.55; margin-top:16px;
+  }
+  .note b{ color:var(--ink) }
+
+  /* ---------- preview ---------- */
+  .preview{ padding:24px; display:flex; flex-direction:column; gap:14px; min-width:0 }
+  .pv-head{ display:flex; align-items:center; gap:12px; flex-wrap:wrap }
+  .pv-head .spacer{ flex:1 1 auto }
+  .seg{ display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--glass) }
+  .seg button{
+    background:transparent; border:none; cursor:pointer; color:var(--muted);
+    font-family:var(--fdisp); font-size:12.5px; font-weight:600; padding:8px 14px;
+  }
+  .seg button[aria-pressed="true"]{ background:rgba(139,92,246,.24); color:var(--ink) }
+  .subjectline{
+    border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--glass);
+  }
+  .subjectline .sl{ font-family:var(--fmono); font-size:10px; letter-spacing:.16em;
+                    text-transform:uppercase; color:var(--faint) }
+  .subjectline .sv{ font-weight:600; margin-top:3px; word-break:break-word }
+  .subjectline .pre{ font-size:12.5px; color:var(--muted); margin-top:4px; word-break:break-word }
+  .frame{
+    flex:1 1 auto; min-height:420px; border:1px solid var(--line); border-radius:var(--r);
+    overflow:hidden; background:#1b1e33; display:flex; justify-content:center; padding:14px;
+  }
+  .frame iframe{
+    width:100%; max-width:660px; height:100%; min-height:400px; border:0; border-radius:10px;
+    background:#fff; transition:max-width .25s ease;
+  }
+  .frame.mobile iframe{ max-width:390px }
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translate(-50%,14px);
+    background:var(--panel2); border:1px solid var(--line); color:var(--ink);
+    padding:12px 20px; border-radius:999px; font-size:13.5px; font-weight:600;
+    box-shadow:0 20px 50px rgba(0,0,0,.6); opacity:0; pointer-events:none;
+    transition:opacity .22s, transform .22s; z-index:100;
+  }
+  .toast.on{ opacity:1; transform:translate(-50%,0) }
+
+  @media (max-width:1150px){
+    .layout{ grid-template-columns:1fr; }
+    .rail{ border-right:none; border-bottom:1px solid var(--line);
+           flex-direction:row; overflow-x:auto; align-items:stretch; padding:14px }
+    .rail-h{ display:none }
+    .camp{ flex:0 0 auto; width:210px }
+    .rail-actions{ grid-auto-flow:column; margin:0 }
+    .rail-actions .btn{ white-space:nowrap }
+    .editor{ border-right:none; border-bottom:1px solid var(--line) }
+    .frame{ min-height:560px }
+  }
+  @media (max-width:620px){
+    .grid2{ grid-template-columns:1fr }
+    header.top{ padding:12px 16px }
+    .editor,.preview{ padding:16px }
+    body{ font-size:16px }
+    .btn{ flex:1 1 auto }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="logo">WE</div>
+    <div class="brand">
+      <h1>Restaurant Deluxe — Email Studio</h1>
+      <p>Marketing campaigns</p>
+    </div>
+    <div class="spacer"></div>
+    <span class="pill"><span class="dot"></span><span id="campCount">6 campaigns</span></span>
+  </header>
+
+  <div class="layout">
+    <!-- ============ CAMPAIGN RAIL ============ -->
+    <aside class="rail" aria-label="Campaigns">
+      <p class="rail-h">Campaigns</p>
+      <div id="campList"></div>
+      <div class="rail-actions">
+        <button class="btn" id="addCamp">+ New campaign</button>
+        <button class="btn" id="dupCamp">Duplicate</button>
+        <button class="btn" id="exportAll">Export all</button>
+        <button class="btn" id="importAll">Import</button>
+      </div>
+    </aside>
+
+    <!-- ============ EDITOR ============ -->
+    <section class="editor">
+      <span class="eyebrow">Restaurant Deluxe</span>
+      <h2 class="sec">Edit your campaign</h2>
+      <p class="sub">Change the copy, links and recipient. The preview updates as you type.</p>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true"  data-pane="content">Content</button>
+        <button class="tab" role="tab" aria-selected="false" data-pane="links">Links</button>
+        <button class="tab" role="tab" aria-selected="false" data-pane="send">Send</button>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="pane" id="pane-content">
+        <div class="field">
+          <label for="fName">Campaign name</label>
+          <input type="text" id="fName" data-k="name">
+          <p class="help">Only shown in the list on the left — never in the email.</p>
+        </div>
+        <div class="field">
+          <label for="fEyebrow">Eyebrow</label>
+          <input type="text" id="fEyebrow" data-k="eyebrow">
+        </div>
+        <div class="field">
+          <label for="fHeadline">Headline</label>
+          <textarea id="fHeadline" data-k="headline" rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label for="fIntro">Opening paragraph</label>
+          <textarea id="fIntro" data-k="intro" rows="3"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Feature blocks</label>
+          <div class="blocks" id="blockList"></div>
+          <div class="btnrow"><button class="btn" id="addBlock">+ Add block</button></div>
+          <p class="help">Three reads best on a phone. Leave the list empty to drop the section entirely.</p>
+        </div>
+
+        <div class="field">
+          <label for="fPricing">Pricing line</label>
+          <textarea id="fPricing" data-k="pricing" rows="2"></textarea>
+          <p class="help">Leave blank to hide the pricing band.</p>
+        </div>
+        <div class="field">
+          <label for="fClosing">Closing paragraph</label>
+          <textarea id="fClosing" data-k="closing" rows="3"></textarea>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="fSignName">Sign-off name</label>
+            <input type="text" id="fSignName" data-k="signName">
+          </div>
+          <div class="field">
+            <label for="fSignRole">Sign-off role</label>
+            <input type="text" id="fSignRole" data-k="signRole">
+          </div>
+        </div>
+      </div>
+
+      <!-- LINKS -->
+      <div class="pane" id="pane-links" hidden>
+        <div class="grid2">
+          <div class="field">
+            <label for="fCta1">Primary button</label>
+            <input type="text" id="fCta1" data-k="cta1">
+          </div>
+          <div class="field">
+            <label for="fCta1u">Primary link</label>
+            <input type="url" id="fCta1u" data-k="cta1url" placeholder="https://">
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="fCta2">Secondary button</label>
+            <input type="text" id="fCta2" data-k="cta2">
+            <p class="help">Leave blank for a single button.</p>
+          </div>
+          <div class="field">
+            <label for="fCta2u">Secondary link</label>
+            <input type="url" id="fCta2u" data-k="cta2url" placeholder="https://">
+          </div>
+        </div>
+        <div class="field">
+          <label for="fFooter">Footer line</label>
+          <textarea id="fFooter" data-k="footer" rows="2"></textarea>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="fUnsub">Unsubscribe link</label>
+            <input type="url" id="fUnsub" data-k="unsubUrl" placeholder="https://">
+          </div>
+          <div class="field">
+            <label for="fSite">Website link</label>
+            <input type="url" id="fSite" data-k="siteUrl" placeholder="https://">
+          </div>
+        </div>
+        <div class="note">
+          <b>Australian spam rules.</b> A marketing email needs a working unsubscribe link and
+          a real postal or business address. Both go in the footer above.
+        </div>
+      </div>
+
+      <!-- SEND -->
+      <div class="pane" id="pane-send" hidden>
+        <div class="field">
+          <label for="fSubject">Subject line</label>
+          <input type="text" id="fSubject" data-k="subject">
+          <p class="help"><span id="subjLen">0</span> characters — around 45 keeps it whole on a phone.</p>
+        </div>
+        <div class="field">
+          <label for="fPreheader">Preheader</label>
+          <input type="text" id="fPreheader" data-k="preheader">
+          <p class="help">The grey line after the subject in the inbox. Don't repeat the subject.</p>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="fTo">Recipient</label>
+            <input type="email" id="fTo" data-k="to" placeholder="customer@restaurant.com">
+          </div>
+          <div class="field">
+            <label for="fTheme">Email theme</label>
+            <select id="fTheme" data-k="theme">
+              <option value="light">Light — best for inboxes</option>
+              <option value="dark">Dark — matches the website</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn primary" id="copyHtml">Copy HTML</button>
+          <button class="btn" id="copyText">Copy plain text</button>
+          <button class="btn" id="downloadHtml">Download .html</button>
+          <button class="btn" id="openMail">Open in mail app</button>
+        </div>
+
+        <div class="note">
+          <b>Which to use.</b> <b>Copy HTML</b> pastes into a broadcast tool for a real send to a list.
+          <b>Open in mail app</b> fills in a new message for one person — some mail apps strip the styling,
+          so use it for individual follow-ups rather than campaigns. <b>Download</b> keeps a copy or
+          uploads to a platform that takes a file.
+        </div>
+        <div class="note">
+          <b>Dark theme warning.</b> Outlook on Windows ignores background colours on some elements,
+          which can leave dark text on a dark panel. Send yourself a test before using dark on a list.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PREVIEW ============ -->
+    <section class="preview" aria-label="Live preview">
+      <div class="pv-head">
+        <span class="eyebrow">Live preview</span>
+        <div class="spacer"></div>
+        <div class="seg" role="group" aria-label="Preview width">
+          <button id="pvDesktop" aria-pressed="true">Desktop</button>
+          <button id="pvMobile" aria-pressed="false">Mobile</button>
+        </div>
+      </div>
+      <div class="subjectline">
+        <div class="sl">Subject</div>
+        <div class="sv" id="pvSubject"></div>
+        <div class="pre" id="pvPre"></div>
+      </div>
+      <div class="frame" id="frameWrap">
+        <iframe id="pv" title="Email preview"></iframe>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="fileIn" accept="application/json,.json" hidden>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================================
+     Facts taken from the Restaurant Deluxe landing page. Nothing here
+     claims a POS replacement, payment by phone, or any statistic.
+     ===================================================================== */
+  var SITE = "https://webescapade.com";
+  var DEMO = "https://mteleki-wq.github.io/Cafe-bojo/";
+
+  function preset(o){
+    return Object.assign({
+      name:"Untitled campaign", desc:"",
+      eyebrow:"Restaurant Deluxe", headline:"", intro:"",
+      blocks:[], pricing:"", closing:"",
+      signName:"Marc", signRole:"Webescapade",
+      cta1:"Start the 14-day free trial", cta1url:SITE,
+      cta2:"", cta2url:"",
+      footer:"Webescapade — Sydney, Australia. You are receiving this because you enquired about Restaurant Deluxe.",
+      unsubUrl:"", siteUrl:SITE,
+      subject:"", preheader:"", to:"", theme:"light"
+    }, o);
+  }
+
+  var PRESETS = [
+    preset({
+      name:"Intro to Restaurant Deluxe",
+      desc:"First message to a new restaurant",
+      eyebrow:"Introducing Restaurant Deluxe",
+      headline:"Your restaurant website should do more than show the menu.",
+      intro:"Most restaurant websites are built once and then quietly go out of date, because every change means emailing a developer and waiting. Restaurant Deluxe is built the other way round: you edit it yourself, and it takes bookings directly.",
+      blocks:[
+        {t:"Fully editable", d:"Update menus, prices, photographs and opening hours yourself, whenever you need to."},
+        {t:"Direct bookings", d:"Reservations arrive through your own website, so you keep the guest details rather than renting them."},
+        {t:"CRM and AI", d:"Keep guest records in one place, and let an AI assistant answer questions on your site."}
+      ],
+      pricing:"From $68/month AUD. Setup assistance and ongoing support are included in every plan.",
+      closing:"Happy to walk you through it on a short call, or you can test the booking demo yourself — it is the real thing, not a video.",
+      cta1:"Test the booking demo", cta1url:DEMO,
+      cta2:"Talk to Marc", cta2url:SITE,
+      subject:"A restaurant website you can actually edit yourself",
+      preheader:"Direct bookings, guest records and an AI assistant — free to test for 14 days."
+    }),
+    preset({
+      name:"Table ordering launch",
+      desc:"Announce QR ordering to your list",
+      eyebrow:"New — Restaurant Deluxe Table Ordering",
+      headline:"Let guests order from the table, without waiting to catch someone's eye.",
+      intro:"Every table gets its own QR code. The guest scans it, confirms the table number, browses the menu and sends the order. Food goes to the kitchen, drinks go to the bar, and the counter keeps the running total.",
+      blocks:[
+        {t:"No app for guests", d:"The menu opens in the phone's browser. No download, no account, no personal details."},
+        {t:"Straight to the right department", d:"Kitchen and bar order displays, with table numbers, modifiers and allergy notes attached."},
+        {t:"Pay at the counter or table", d:"No payment is taken through the guest's phone. The bill is settled the normal way."}
+      ],
+      pricing:"Included in Complete at $149/month AUD, or add it to your current plan for $69/month.",
+      closing:"It runs alongside your existing POS rather than replacing it, and your staff can keep taking orders the usual way — the QR is an extra option, not a switch you have to flip.",
+      cta1:"See how table ordering works", cta1url:SITE,
+      cta2:"Book a demonstration", cta2url:SITE,
+      subject:"Guests can now order straight from the table",
+      preheader:"QR ordering routed to your kitchen, bar and counter. No app, no phone payments."
+    }),
+    preset({
+      name:"14-day free trial invite",
+      desc:"Invite a warm lead to start",
+      eyebrow:"14 days, set up for you",
+      headline:"Try it with your own menu, not a demo template.",
+      intro:"Before the trial starts we configure your branding, menu, booking rules and table QR codes. So on day one you are looking at your restaurant, not a placeholder — which makes it a fair test.",
+      blocks:[
+        {t:"We prepare it", d:"Branding, menu, booking rules, departments and table QR codes, all configured for you."},
+        {t:"You test and edit it", d:"Change the content and menu, take a test booking, place a sample order from a table."},
+        {t:"Go live", d:"Publish the site, put the QR codes out, and start taking bookings and orders."}
+      ],
+      pricing:"Founding restaurant launch offer: initial menu and table setup included, for a limited number of participating restaurants.",
+      closing:"Send me your current menu and I will have it ready for you to look at.",
+      cta1:"Start my 14-day free trial", cta1url:SITE,
+      cta2:"", cta2url:"",
+      subject:"Your menu, your branding, ready in 14 days",
+      preheader:"We set it up first, so the trial is a fair test of the real thing."
+    }),
+    preset({
+      name:"Standalone ordering ($109)",
+      desc:"For restaurants happy with their website",
+      eyebrow:"Keep your website",
+      headline:"Add table ordering without touching your current site.",
+      intro:"You do not have to move your website to use table ordering. Standalone Table Ordering works alongside whatever you have now — the QR codes, the digital menu, the kitchen and bar displays and the shift records, without changing a thing about your existing site.",
+      blocks:[
+        {t:"Your site stays as it is", d:"No migration, no redesign, no new address for your customers to learn."},
+        {t:"Ordering, routing and records", d:"QR menu, modifiers and notes, kitchen and bar displays, open tables and shift readings."},
+        {t:"Excel-compatible export", d:"Export shift and settlement records for your own analysis and bookkeeping."}
+      ],
+      pricing:"Standalone Table Ordering is $109/month AUD, including table QR setup and ongoing support.",
+      closing:"It sits alongside your existing POS rather than replacing it, and guests still settle at the counter or table.",
+      cta1:"See what is included", cta1url:SITE,
+      cta2:"Book a demonstration", cta2url:SITE,
+      subject:"Table ordering that works with the website you already have",
+      preheader:"No migration and no redesign — $109/month AUD."
+    }),
+    preset({
+      name:"Add-on for existing clients ($69)",
+      desc:"Upsell to current Restaurant Deluxe customers",
+      eyebrow:"For your restaurant",
+      headline:"Table ordering is ready whenever you are.",
+      intro:"Your site and bookings are already running on Restaurant Deluxe. Table ordering plugs into the same system — the menu you already maintain becomes the menu your guests order from, so there is nothing new to set up on your side.",
+      blocks:[
+        {t:"Your menu, already there", d:"The dishes, prices and photographs you maintain today become the ordering menu."},
+        {t:"Kitchen and bar routing", d:"Assign sections and items to the right department and orders arrive where they are made."},
+        {t:"Shift records", d:"Open tables, cash and card settlement, X and Z readings, and an Excel-compatible export."}
+      ],
+      pricing:"$69/month AUD added to your current plan. Table QR setup and support included.",
+      closing:"Reply and I will set up the table QR codes so you can try it on a quiet service first.",
+      cta1:"Add table ordering", cta1url:SITE,
+      cta2:"", cta2url:"",
+      subject:"Table ordering is ready for your restaurant",
+      preheader:"Your existing menu becomes the ordering menu — $69/month added to your plan."
+    }),
+    preset({
+      name:"Booking demo follow-up",
+      desc:"After someone tests the demo",
+      eyebrow:"Following up",
+      headline:"You tried the booking demo — what did you make of it?",
+      intro:"Thanks for taking a look. That demo is the real booking flow a guest would see, running on the same system your restaurant would use, so what you clicked through is what you would get.",
+      blocks:[
+        {t:"The guest side", d:"Choose a time, see live availability, and book without being sent to a third-party platform."},
+        {t:"Your side", d:"Bookings and guest details land in your CRM, with capacity settings that match real service."},
+        {t:"Large parties", d:"Bookings of eight or more can require a card guarantee, so a big no-show costs you less."}
+      ],
+      pricing:"",
+      closing:"If anything felt off or you have a question about how it would work at your place, just reply — I read every one.",
+      cta1:"Book a demonstration", cta1url:SITE,
+      cta2:"Start the free trial", cta2url:SITE,
+      subject:"What did you think of the booking demo?",
+      preheader:"Happy to answer anything about how it would work at your restaurant."
+    })
+  ];
+
+  /* ---------------- state ---------------- */
+  var camps = PRESETS.map(function(c){ return JSON.parse(JSON.stringify(c)); });
+  var cur = 0;
+  var mobile = false;
+
+  var $ = function(s){ return document.querySelector(s); };
+  var esc = function(s){
+    return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  };
+  var url = function(u){
+    u = String(u||'').trim();
+    if(!u) return '';
+    return /^(https?:|mailto:|tel:)/i.test(u) ? u : 'https://'+u;
+  };
+  var para = function(t){
+    return String(t||'').split(/\n{2,}/).filter(function(p){ return p.trim(); });
+  };
+
+  function toast(msg){
+    var t=$('#toast'); t.textContent=msg; t.classList.add('on');
+    clearTimeout(toast._t); toast._t=setTimeout(function(){ t.classList.remove('on'); },2200);
+  }
+
+  /* ---------------- email builder ---------------- */
+  function buildEmail(c){
+    var dark = c.theme==='dark';
+    var P = dark
+      ? { page:'#06060f', card:'#0d0f22', band:'#11142b', ink:'#eef0ff', mut:'#9aa3c7',
+          faint:'#6a7299', line:'#232744', accent:'#a78bfa', btnText:'#0a0b1a' }
+      : { page:'#f3f4fb', card:'#ffffff', band:'#f7f7fd', ink:'#12132a', mut:'#4a4f6b',
+          faint:'#8a90ab', line:'#e4e5f0', accent:'#6d3ff0', btnText:'#ffffff' };
+    var F = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
+    var GRAD = "linear-gradient(120deg,#8b5cf6,#4f7cff 55%,#22d3ee)";
+    var W = 600, out = [];
+
+    function td(content){ return content; }
+
+    out.push('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">');
+    out.push('<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>');
+    out.push('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
+    out.push('<meta name="viewport" content="width=device-width, initial-scale=1" />');
+    out.push('<meta name="x-apple-disable-message-reformatting" />');
+    out.push('<title>'+esc(c.subject||c.headline)+'</title>');
+    out.push('<style>@media only screen and (max-width:620px){'+
+      '.w{width:100% !important}.p{padding-left:22px !important;padding-right:22px !important}'+
+      '.h1{font-size:26px !important;line-height:1.24 !important}'+
+      '.btn{display:block !important;width:100% !important;text-align:center !important;margin:0 0 10px 0 !important}'+
+      '.stk{display:block !important;width:100% !important}}</style>');
+    out.push('</head><body style="margin:0;padding:0;background:'+P.page+';">');
+
+    /* preheader */
+    if(c.preheader){
+      out.push('<div style="display:none;font-size:1px;color:'+P.page+';line-height:1px;'+
+        'max-height:0;max-width:0;opacity:0;overflow:hidden;">'+esc(c.preheader)+
+        '&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>');
+    }
+
+    out.push('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:'+P.page+';">');
+    out.push('<tr><td align="center" style="padding:28px 12px;">');
+    out.push('<table role="presentation" class="w" width="'+W+'" cellpadding="0" cellspacing="0" border="0" style="width:'+W+'px;max-width:100%;">');
+
+    /* brand bar */
+    out.push('<tr><td class="p" style="padding:0 0 18px 0;font-family:'+F+';">'+
+      '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+      '<td style="background:'+GRAD+';background-color:#8b5cf6;border-radius:10px;width:38px;height:38px;'+
+      'text-align:center;vertical-align:middle;color:#ffffff;font-family:'+F+';font-weight:bold;font-size:13px;">WE</td>'+
+      '<td style="padding-left:11px;font-family:'+F+';">'+
+      '<div style="font-size:15px;font-weight:bold;color:'+P.ink+';line-height:1.2;">Restaurant Deluxe</div>'+
+      '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:'+P.faint+';">by Webescapade</div>'+
+      '</td></tr></table></td></tr>');
+
+    /* main card */
+    out.push('<tr><td style="background:'+P.card+';border:1px solid '+P.line+';border-radius:16px;overflow:hidden;">');
+    out.push('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">');
+
+    /* gradient hairline */
+    out.push('<tr><td style="height:3px;line-height:3px;font-size:0;background:'+GRAD+';background-color:#8b5cf6;">&nbsp;</td></tr>');
+
+    /* hero */
+    out.push('<tr><td class="p" style="padding:34px 38px 8px 38px;font-family:'+F+';">');
+    if(c.eyebrow){
+      out.push('<div style="font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:'+P.accent+';font-weight:bold;padding-bottom:12px;">'+esc(c.eyebrow)+'</div>');
+    }
+    if(c.headline){
+      out.push('<h1 class="h1" style="margin:0;font-size:31px;line-height:1.2;letter-spacing:-0.6px;color:'+P.ink+';font-weight:bold;">'+esc(c.headline)+'</h1>');
+    }
+    out.push('</td></tr>');
+
+    /* intro */
+    para(c.intro).forEach(function(p){
+      out.push('<tr><td class="p" style="padding:16px 38px 0 38px;font-family:'+F+';font-size:16px;line-height:1.62;color:'+P.mut+';">'+esc(p)+'</td></tr>');
+    });
+
+    /* CTAs */
+    var c1=url(c.cta1url), c2=url(c.cta2url);
+    if(c.cta1 || c.cta2){
+      out.push('<tr><td class="p" style="padding:26px 38px 4px 38px;font-family:'+F+';">');
+      if(c.cta1){
+        out.push('<a class="btn" href="'+esc(c1||'#')+'" style="display:inline-block;background:'+GRAD+';'+
+          'background-color:#6d3ff0;color:#ffffff;text-decoration:none;font-family:'+F+';font-size:15px;'+
+          'font-weight:bold;padding:14px 26px;border-radius:999px;margin:0 10px 10px 0;">'+esc(c.cta1)+'</a>');
+      }
+      if(c.cta2){
+        out.push('<a class="btn" href="'+esc(c2||'#')+'" style="display:inline-block;background:'+P.card+';'+
+          'color:'+P.ink+';text-decoration:none;font-family:'+F+';font-size:15px;font-weight:bold;'+
+          'padding:13px 25px;border-radius:999px;border:1px solid '+P.line+';margin:0 0 10px 0;">'+esc(c.cta2)+'</a>');
+      }
+      out.push('</td></tr>');
+    }
+
+    /* blocks */
+    if(c.blocks && c.blocks.length){
+      out.push('<tr><td class="p" style="padding:20px 38px 6px 38px;">'+
+        '<div style="height:1px;line-height:1px;font-size:0;background:'+P.line+';">&nbsp;</div></td></tr>');
+      c.blocks.forEach(function(b){
+        if(!b.t && !b.d) return;
+        out.push('<tr><td class="p" style="padding:18px 38px 0 38px;font-family:'+F+';">'+
+          '<div style="font-size:16px;font-weight:bold;color:'+P.ink+';padding-bottom:5px;">'+esc(b.t)+'</div>'+
+          '<div style="font-size:15px;line-height:1.6;color:'+P.mut+';">'+esc(b.d)+'</div></td></tr>');
+      });
+      out.push('<tr><td style="height:8px;line-height:8px;font-size:0;">&nbsp;</td></tr>');
+    }
+
+    /* pricing band */
+    if(c.pricing){
+      out.push('<tr><td class="p" style="padding:22px 38px 0 38px;">'+
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">'+
+        '<tr><td style="background:'+P.band+';border:1px solid '+P.line+';border-radius:12px;'+
+        'padding:16px 20px;font-family:'+F+';font-size:15px;line-height:1.6;color:'+P.ink+';">'+
+        esc(c.pricing)+'</td></tr></table></td></tr>');
+    }
+
+    /* closing */
+    para(c.closing).forEach(function(p){
+      out.push('<tr><td class="p" style="padding:20px 38px 0 38px;font-family:'+F+';font-size:16px;line-height:1.62;color:'+P.mut+';">'+esc(p)+'</td></tr>');
+    });
+
+    /* signature */
+    if(c.signName){
+      out.push('<tr><td class="p" style="padding:24px 38px 36px 38px;font-family:'+F+';">'+
+        '<div style="font-size:16px;color:'+P.ink+';font-weight:bold;">'+esc(c.signName)+'</div>'+
+        (c.signRole?'<div style="font-size:14px;color:'+P.faint+';padding-top:2px;">'+esc(c.signRole)+'</div>':'')+
+        '</td></tr>');
+    }
+
+    out.push('</table></td></tr>');
+
+    /* footer */
+    out.push('<tr><td class="p" style="padding:20px 22px 8px 22px;font-family:'+F+';font-size:12.5px;line-height:1.65;color:'+P.faint+';text-align:center;">');
+    if(c.footer) out.push(esc(c.footer)+'<br />');
+    var bits=[];
+    if(url(c.siteUrl))  bits.push('<a href="'+esc(url(c.siteUrl))+'" style="color:'+P.faint+';text-decoration:underline;">Website</a>');
+    if(url(c.unsubUrl)) bits.push('<a href="'+esc(url(c.unsubUrl))+'" style="color:'+P.faint+';text-decoration:underline;">Unsubscribe</a>');
+    if(bits.length) out.push('<span style="display:inline-block;padding-top:6px;">'+bits.join(' &nbsp;&middot;&nbsp; ')+'</span>');
+    out.push('</td></tr>');
+
+    out.push('</table></td></tr></table></body></html>');
+    return out.join('');
+  }
+
+  function buildText(c){
+    var L=[];
+    if(c.eyebrow) L.push(c.eyebrow.toUpperCase());
+    if(c.headline) L.push('', c.headline);
+    if(c.intro) L.push('', c.intro);
+    if(c.blocks && c.blocks.length){
+      L.push('');
+      c.blocks.forEach(function(b){ if(b.t||b.d) L.push('* '+b.t+' — '+b.d); });
+    }
+    if(c.pricing) L.push('', c.pricing);
+    if(c.closing) L.push('', c.closing);
+    if(c.cta1 && url(c.cta1url)) L.push('', c.cta1+': '+url(c.cta1url));
+    if(c.cta2 && url(c.cta2url)) L.push(c.cta2+': '+url(c.cta2url));
+    if(c.signName) L.push('', c.signName + (c.signRole? ', '+c.signRole : ''));
+    if(c.footer) L.push('', '—', c.footer);
+    if(url(c.unsubUrl)) L.push('Unsubscribe: '+url(c.unsubUrl));
+    return L.join('\n');
+  }
+
+  /* ---------------- rendering ---------------- */
+  function renderRail(){
+    var list=$('#campList'); list.innerHTML='';
+    camps.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.className='camp'; b.type='button';
+      b.setAttribute('aria-current', i===cur ? 'true':'false');
+      b.innerHTML='<span class="cname">'+esc(c.name)+'</span>'+
+                  (c.desc?'<span class="cdesc">'+esc(c.desc)+'</span>':'');
+      b.addEventListener('click',function(e){
+        if(e.target.classList.contains('del')) return;
+        cur=i; renderRail(); fillForm(); renderPreview();
+      });
+      if(camps.length>1){
+        var d=document.createElement('span');
+        d.className='del'; d.textContent='\u00d7';
+        d.setAttribute('role','button'); d.setAttribute('tabindex','0');
+        d.setAttribute('aria-label','Delete '+c.name);
+        d.addEventListener('click',function(ev){
+          ev.stopPropagation();
+          if(!confirm('Delete "'+c.name+'"? This cannot be undone.')) return;
+          camps.splice(i,1);
+          if(cur>=camps.length) cur=camps.length-1;
+          renderRail(); fillForm(); renderPreview(); toast('Campaign deleted');
+        });
+        b.appendChild(d);
+      }
+      list.appendChild(b);
+    });
+    $('#campCount').textContent = camps.length+' campaign'+(camps.length===1?'':'s');
+  }
+
+  function renderBlocks(){
+    var c=camps[cur], wrap=$('#blockList'); wrap.innerHTML='';
+    (c.blocks||[]).forEach(function(b,i){
+      var d=document.createElement('div'); d.className='block';
+      d.innerHTML =
+        '<div class="bh"><span class="bn">BLOCK '+(i+1)+'</span>'+
+        '<button class="iconbtn" type="button" data-up="'+i+'" aria-label="Move up">\u2191</button>'+
+        '<button class="iconbtn" type="button" data-down="'+i+'" aria-label="Move down">\u2193</button>'+
+        '<button class="iconbtn danger" type="button" data-rm="'+i+'" aria-label="Remove block">\u00d7</button></div>'+
+        '<div class="field"><input type="text" data-bt="'+i+'" placeholder="Title" value="'+esc(b.t)+'"></div>'+
+        '<div class="field" style="margin-bottom:0"><textarea data-bd="'+i+'" rows="2" placeholder="One or two sentences">'+esc(b.d)+'</textarea></div>';
+      wrap.appendChild(d);
+    });
+    wrap.querySelectorAll('[data-bt]').forEach(function(el){
+      el.addEventListener('input',function(){ c.blocks[+el.dataset.bt].t=el.value; renderPreview(); });
+    });
+    wrap.querySelectorAll('[data-bd]').forEach(function(el){
+      el.addEventListener('input',function(){ c.blocks[+el.dataset.bd].d=el.value; renderPreview(); });
+    });
+    wrap.querySelectorAll('[data-rm]').forEach(function(el){
+      el.addEventListener('click',function(){ c.blocks.splice(+el.dataset.rm,1); renderBlocks(); renderPreview(); });
+    });
+    wrap.querySelectorAll('[data-up]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var i=+el.dataset.up; if(i<1) return;
+        var t=c.blocks[i-1]; c.blocks[i-1]=c.blocks[i]; c.blocks[i]=t;
+        renderBlocks(); renderPreview();
+      });
+    });
+    wrap.querySelectorAll('[data-down]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var i=+el.dataset.down; if(i>=c.blocks.length-1) return;
+        var t=c.blocks[i+1]; c.blocks[i+1]=c.blocks[i]; c.blocks[i]=t;
+        renderBlocks(); renderPreview();
+      });
+    });
+  }
+
+  function fillForm(){
+    var c=camps[cur];
+    document.querySelectorAll('[data-k]').forEach(function(el){
+      el.value = c[el.dataset.k]==null ? '' : c[el.dataset.k];
+    });
+    $('#subjLen').textContent = (c.subject||'').length;
+    renderBlocks();
+  }
+
+  function renderPreview(){
+    var c=camps[cur];
+    $('#pvSubject').textContent = c.subject || '(no subject yet)';
+    $('#pvPre').textContent     = c.preheader || '';
+    $('#subjLen').textContent   = (c.subject||'').length;
+    $('#pv').srcdoc = buildEmail(c);
+  }
+
+  /* ---------------- wiring ---------------- */
+  document.querySelectorAll('[data-k]').forEach(function(el){
+    var ev = el.tagName==='SELECT' ? 'change' : 'input';
+    el.addEventListener(ev,function(){
+      camps[cur][el.dataset.k]=el.value;
+      if(el.dataset.k==='name') renderRail();
+      renderPreview();
+    });
+  });
+
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+      t.setAttribute('aria-selected','true');
+      ['content','links','send'].forEach(function(p){ $('#pane-'+p).hidden = (p!==t.dataset.pane); });
+    });
+  });
+
+  $('#addBlock').addEventListener('click',function(){
+    camps[cur].blocks = camps[cur].blocks || [];
+    camps[cur].blocks.push({t:'',d:''});
+    renderBlocks(); renderPreview();
+  });
+
+  $('#addCamp').addEventListener('click',function(){
+    camps.push(preset({ name:'New campaign', desc:'', headline:'', intro:'', blocks:[] }));
+    cur=camps.length-1; renderRail(); fillForm(); renderPreview();
+    $('#fName').focus(); toast('Campaign added');
+  });
+
+  $('#dupCamp').addEventListener('click',function(){
+    var copy=JSON.parse(JSON.stringify(camps[cur]));
+    copy.name = camps[cur].name+' (copy)';
+    camps.splice(cur+1,0,copy); cur=cur+1;
+    renderRail(); fillForm(); renderPreview(); toast('Campaign duplicated');
+  });
+
+  function download(name, text, type){
+    var b=new Blob([text],{type:type||'text/plain;charset=utf-8'});
+    var u=URL.createObjectURL(b), a=document.createElement('a');
+    a.href=u; a.download=name; document.body.appendChild(a); a.click();
+    document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(u); },800);
+  }
+
+  $('#exportAll').addEventListener('click',function(){
+    download('restaurant-deluxe-campaigns.json', JSON.stringify(camps,null,2), 'application/json');
+    toast('Campaigns exported');
+  });
+
+  $('#importAll').addEventListener('click',function(){ $('#fileIn').click(); });
+  $('#fileIn').addEventListener('change',function(){
+    var f=this.files && this.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var data=JSON.parse(r.result);
+        if(!Array.isArray(data) || !data.length) throw new Error('bad');
+        camps=data.map(function(c){ return preset(c); });
+        cur=0; renderRail(); fillForm(); renderPreview();
+        toast('Loaded '+camps.length+' campaigns');
+      }catch(e){
+        toast('That file is not a campaign export');
+      }
+    };
+    r.readAsText(f);
+    this.value='';
+  });
+
+  function copy(text, msg){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ toast(msg); }, fallback);
+    } else fallback();
+    function fallback(){
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); toast(msg); }
+      catch(e){ toast('Copy failed — use Download instead'); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  $('#copyHtml').addEventListener('click',function(){ copy(buildEmail(camps[cur]),'HTML copied'); });
+  $('#copyText').addEventListener('click',function(){ copy(buildText(camps[cur]),'Plain text copied'); });
+
+  $('#downloadHtml').addEventListener('click',function(){
+    var c=camps[cur];
+    var slug=(c.name||'email').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    download(slug+'.html', buildEmail(c), 'text/html;charset=utf-8');
+    toast('Downloaded');
+  });
+
+  $('#openMail').addEventListener('click',function(){
+    var c=camps[cur];
+    var body=buildText(c);
+    var href='mailto:'+encodeURIComponent(c.to||'')+
+             '?subject='+encodeURIComponent(c.subject||'')+
+             '&body='+encodeURIComponent(body);
+    if(href.length>1900){
+      copy(body,'Message too long for the mail app — plain text copied instead');
+      return;
+    }
+    window.location.href=href;
+  });
+
+  $('#pvDesktop').addEventListener('click',function(){
+    mobile=false; $('#frameWrap').classList.remove('mobile');
+    this.setAttribute('aria-pressed','true'); $('#pvMobile').setAttribute('aria-pressed','false');
+  });
+  $('#pvMobile').addEventListener('click',function(){
+    mobile=true; $('#frameWrap').classList.add('mobile');
+    this.setAttribute('aria-pressed','true'); $('#pvDesktop').setAttribute('aria-pressed','false');
+  });
+
+  /* go */
+  renderRail(); fillForm(); renderPreview();
+})();
+</script>
+</body>
+</html>
