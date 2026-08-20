@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webescapade — Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#06060f; --panel:#0d0f22; --panel2:#11142b;
+    --violet:#8b5cf6; --blue:#4f7cff; --cyan:#22d3ee; --gold:#f0cd8b; --teal:#2dd4bf;
+    --ink:#eef0ff; --muted:#9aa3c7; --faint:#6a7299;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.06);
+    --glass:rgba(255,255,255,.03);
+    --grad:linear-gradient(120deg,var(--violet),var(--blue) 55%,var(--cyan));
+    --fdisp:'Sora',system-ui,-apple-system,Segoe UI,sans-serif;
+    --fmono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--fdisp); font-size:15px;
+    line-height:1.55; -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(1000px 560px at 8% -8%, rgba(139,92,246,.18), transparent 60%),
+      radial-gradient(900px 540px at 96% 4%, rgba(34,211,238,.11), transparent 62%);
+  }
+  :focus-visible{ outline:2px solid var(--cyan); outline-offset:3px; border-radius:8px }
+
+  .wrap{ position:relative; z-index:1; max-width:1240px; margin:0 auto; padding:0 24px 80px }
+
+  /* ---------- header ---------- */
+  header{
+    display:flex; align-items:center; gap:16px; padding:22px 0 18px; flex-wrap:wrap;
+    position:sticky; top:0; z-index:20; background:linear-gradient(180deg,var(--bg) 72%,transparent);
+  }
+  .mark{
+    width:44px; height:44px; border-radius:13px; background:var(--grad); flex:0 0 auto;
+    display:grid; place-items:center; font-weight:800; font-size:15px; letter-spacing:.01em;
+  }
+  .title h1{ margin:0; font-size:19px; font-weight:700; letter-spacing:-.02em }
+  .title p{ margin:0; font-family:var(--fmono); font-size:10.5px; letter-spacing:.18em;
+            text-transform:uppercase; color:var(--faint) }
+  header .grow{ flex:1 1 auto }
+
+  .search{
+    position:relative; flex:1 1 260px; max-width:400px; min-width:0;
+  }
+  .search input{
+    width:100%; padding:11px 14px 11px 38px; border-radius:999px; border:1px solid var(--line);
+    background:var(--glass); color:var(--ink); font-family:var(--fdisp); font-size:14px;
+  }
+  .search input:focus{ border-color:var(--cyan); outline:none }
+  .search::before{
+    content:"⌕"; position:absolute; left:15px; top:50%; transform:translateY(-52%);
+    color:var(--faint); font-size:16px;
+  }
+  .search kbd{
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    font-family:var(--fmono); font-size:10px; color:var(--faint);
+    border:1px solid var(--line); border-radius:5px; padding:2px 6px; pointer-events:none;
+  }
+  .search input:focus + kbd{ display:none }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; font-family:var(--fdisp); font-weight:600;
+    font-size:13.5px; border-radius:999px; padding:10px 16px; cursor:pointer; white-space:nowrap;
+    border:1px solid var(--line); background:var(--glass); color:var(--ink);
+    transition:border-color .18s, color .18s;
+  }
+  .btn:hover{ border-color:var(--cyan) }
+  .btn.on{ background:rgba(139,92,246,.2); border-color:var(--violet) }
+  .btn.primary{ background:var(--grad); border-color:transparent; color:#fff }
+
+  /* ---------- groups ---------- */
+  .group{ margin-top:38px }
+  .group-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap }
+  .group-head h2{
+    margin:0; font-family:var(--fmono); font-size:11.5px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--cyan); font-weight:700;
+  }
+  .group-head .rule{ flex:1 1 auto; height:1px; background:var(--line); min-width:20px }
+  .group-head .count{ font-family:var(--fmono); font-size:11px; color:var(--faint) }
+  .group-head input{
+    font-family:var(--fmono); font-size:11.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--cyan); background:transparent; border:1px dashed var(--line); border-radius:6px;
+    padding:3px 8px; width:auto; min-width:180px;
+  }
+
+  .tiles{ display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:14px }
+
+  .tile{
+    position:relative; display:flex; flex-direction:column; gap:8px; min-height:132px;
+    padding:18px 18px 16px; border-radius:16px; text-align:left; cursor:pointer;
+    border:1px solid var(--line); background:var(--panel); color:var(--ink);
+    font-family:var(--fdisp); text-decoration:none; overflow:hidden;
+    transition:transform .16s ease, border-color .16s ease;
+  }
+  .tile::after{
+    content:""; position:absolute; left:0; right:0; top:0; height:2px;
+    background:var(--accent,var(--violet)); opacity:.85;
+  }
+  .tile:hover{ transform:translateY(-3px); border-color:var(--accent,var(--violet)) }
+  .tile:active{ transform:translateY(-1px) }
+  .tile .row{ display:flex; align-items:center; gap:10px }
+  .tile .ic{ font-size:20px; line-height:1 }
+  .tile .badge{
+    margin-left:auto; font-family:var(--fmono); font-size:9px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--accent,var(--violet));
+    border:1px solid currentColor; border-radius:999px; padding:3px 8px; opacity:.9;
+  }
+  .tile b{ font-size:15.5px; font-weight:700; letter-spacing:-.01em; line-height:1.25 }
+  .tile span.note{ font-size:13px; color:var(--muted); line-height:1.45 }
+  .tile .host{
+    margin-top:auto; font-family:var(--fmono); font-size:10.5px; color:var(--faint);
+    letter-spacing:.04em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .tile.blank{ border-style:dashed; background:transparent }
+  .tile.blank .host{ color:var(--gold) }
+  .tile .edit{
+    position:absolute; top:10px; right:10px; width:26px; height:26px; border-radius:8px;
+    border:1px solid var(--line); background:rgba(6,6,15,.8); color:var(--muted);
+    font-size:12px; line-height:1; cursor:pointer; display:none;
+  }
+  body.editing .tile .edit{ display:block }
+  .tile .edit:hover{ color:var(--ink); border-color:var(--cyan) }
+  .tile.add{
+    align-items:center; justify-content:center; text-align:center; border-style:dashed;
+    background:transparent; color:var(--muted); display:none;
+  }
+  body.editing .tile.add{ display:flex }
+  .tile.add::after{ display:none }
+  .tile.add b{ font-size:14px }
+
+  .hint{ font-family:var(--fmono); font-size:11.5px; color:var(--faint); margin:8px 0 0 }
+  .empty{ font-family:var(--fmono); font-size:12.5px; color:var(--faint); padding:40px 0; text-align:center }
+
+  /* ---------- editor sheet ---------- */
+  .sheet[hidden]{ display:none }
+  .sheet{
+    position:fixed; inset:0; z-index:80; display:grid; place-items:center; padding:20px;
+    background:rgba(3,3,10,.8); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  }
+  .sheet-box{
+    width:min(520px,100%); max-height:88vh; overflow:auto; border-radius:18px;
+    border:1px solid var(--line); background:var(--panel); padding:24px;
+    box-shadow:0 50px 110px rgba(0,0,0,.7);
+  }
+  .sheet h3{ margin:0 0 4px; font-size:20px; letter-spacing:-.02em }
+  .sheet .sub{ margin:0 0 18px; color:var(--muted); font-size:13.5px }
+  .field{ margin-bottom:14px }
+  .field label{ display:block; font-size:13px; font-weight:600; margin-bottom:6px }
+  .field input, .field select, .field textarea{
+    width:100%; padding:11px 13px; border-radius:10px; border:1px solid var(--line);
+    background:#0a0b1a; color:var(--ink); font-family:var(--fdisp); font-size:14px;
+  }
+  .field textarea{ min-height:64px; resize:vertical }
+  .field input:focus,.field select:focus,.field textarea:focus{ border-color:var(--cyan); outline:none }
+  .field .help{ font-size:12px; color:var(--faint); margin:5px 0 0 }
+  .swatches{ display:flex; gap:8px; flex-wrap:wrap }
+  .swatch{
+    width:30px; height:30px; border-radius:9px; border:2px solid transparent; cursor:pointer;
+  }
+  .swatch[aria-pressed="true"]{ border-color:var(--ink) }
+  .sheet-actions{ display:flex; gap:10px; margin-top:20px; flex-wrap:wrap }
+  .sheet-actions .grow{ flex:1 1 auto }
+  .danger{ color:#ff9b9b; border-color:rgba(255,155,155,.35) }
+  .danger:hover{ border-color:#ff9b9b }
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translate(-50%,14px); z-index:90;
+    background:var(--panel2); border:1px solid var(--line); color:var(--ink);
+    padding:12px 20px; border-radius:999px; font-size:13.5px; font-weight:600;
+    box-shadow:0 20px 50px rgba(0,0,0,.6); opacity:0; pointer-events:none;
+    transition:opacity .2s, transform .2s;
+  }
+  .toast.on{ opacity:1; transform:translate(-50%,0) }
+
+  @media (max-width:620px){
+    .wrap{ padding:0 16px 60px }
+    body{ font-size:16px }
+    .tiles{ grid-template-columns:1fr }
+    header{ padding-top:16px }
+    .search{ order:3; max-width:none; flex-basis:100% }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mark">WE</div>
+    <div class="title">
+      <h1>Control Room</h1>
+      <p>Webescapade</p>
+    </div>
+    <div class="grow"></div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search tools" aria-label="Search tools" autocomplete="off">
+      <kbd>/</kbd>
+    </div>
+    <button class="btn" id="editBtn" aria-pressed="false">Edit</button>
+    <button class="btn" id="exportBtn">Export</button>
+    <button class="btn" id="importBtn">Import</button>
+  </header>
+
+  <main id="board"></main>
+  <p class="hint" id="hint"></p>
+</div>
+
+<!-- editor -->
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-box">
+    <h3 id="sheetTitle">Edit tool</h3>
+    <p class="sub">Everything here is yours to change. Links open in a new tab.</p>
+    <div class="field">
+      <label for="fTitle">Name</label>
+      <input type="text" id="fTitle" placeholder="Email Studio">
+    </div>
+    <div class="field">
+      <label for="fNote">What it does</label>
+      <textarea id="fNote" placeholder="Write and send marketing campaigns"></textarea>
+    </div>
+    <div class="field">
+      <label for="fUrl">Link</label>
+      <input type="url" id="fUrl" placeholder="https://">
+      <p class="help">Leave blank and the tile stays marked as needing a link.</p>
+    </div>
+    <div class="field">
+      <label for="fGroup">Section</label>
+      <select id="fGroup"></select>
+    </div>
+    <div class="field">
+      <label for="fBadge">Badge <span style="color:var(--faint)">(optional)</span></label>
+      <input type="text" id="fBadge" placeholder="Edit mode">
+    </div>
+    <div class="field">
+      <label for="fIcon">Icon <span style="color:var(--faint)">(optional)</span></label>
+      <input type="text" id="fIcon" placeholder="✉️" maxlength="4">
+    </div>
+    <div class="field">
+      <label>Accent</label>
+      <div class="swatches" id="swatches"></div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn danger" id="delBtn">Delete</button>
+      <span class="grow"></span>
+      <button class="btn" id="cancelBtn">Cancel</button>
+      <button class="btn primary" id="saveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="fileIn" accept="application/json,.json" hidden>
+
+<script>
+(function(){
+  "use strict";
+
+  var COLOURS = {
+    violet:'#8b5cf6', blue:'#4f7cff', cyan:'#22d3ee',
+    teal:'#2dd4bf', gold:'#f0cd8b', pink:'#f472b6'
+  };
+
+  /* Sections are ordered by how a working day tends to run:
+     what you sell, what clients use, what you set up, what runs underneath. */
+  var DEFAULT_GROUPS = [
+    'Marketing',
+    'Restaurant Deluxe',
+    'Table Ordering',
+    'Set up a client',
+    'Behind the scenes'
+  ];
+
+  /* Links left blank are ones only Marc knows — the tile says so plainly
+     rather than guessing an address that would 404. */
+  var DEFAULT_TILES = [
+    { t:'Email Studio', n:'Write, send and report on campaigns', u:'', g:'Marketing', i:'✉️', c:'violet', b:'Add link' },
+    { t:'Resend', n:'Broadcasts, audiences and delivery logs', u:'https://resend.com', g:'Marketing', i:'📡', c:'violet' },
+    { t:'Start your trial form', n:'Enquiries from the landing page', u:'https://form.jotform.com/262297536936067', g:'Marketing', i:'📝', c:'cyan' },
+    { t:'Book a demonstration', n:'Demo requests with day and time', u:'https://form.jotform.com/262297436300051', g:'Marketing', i:'📅', c:'cyan' },
+
+    { t:'Landing page', n:'The published Restaurant Deluxe site', u:'https://webescapade.com', g:'Restaurant Deluxe', i:'🌐', c:'blue' },
+    { t:'Landing page editor', n:'Same page with editing switched on', u:'https://webescapade.com/?edit=1', g:'Restaurant Deluxe', i:'✏️', c:'blue', b:'Edit mode' },
+    { t:'Cafe Bojo demo', n:'The live example restaurant site', u:'https://mteleki-wq.github.io/Cafe-bojo/', g:'Restaurant Deluxe', i:'🍽️', c:'gold' },
+    { t:'Booking demo and CRM', n:'The reservation flow guests see', u:'https://mteleki-wq.github.io/Booking/restaurant-booking-supabase-with-crm-12.html', g:'Restaurant Deluxe', i:'📖', c:'gold' },
+    { t:'Alex, the AI assistant', n:'Agent settings, training and chats', u:'', g:'Restaurant Deluxe', i:'🤖', c:'violet', b:'Add link' },
+
+    { t:'Ordering platform', n:'All venues, staff and settings', u:'', g:'Table Ordering', i:'🧾', c:'teal', b:'Add link' },
+    { t:'Menu manager', n:'Dishes, prices, photos and modifiers', u:'', g:'Table Ordering', i:'📋', c:'teal', b:'Add link' },
+    { t:'Kitchen display', n:'Incoming food orders', u:'', g:'Table Ordering', i:'🍳', c:'gold', b:'Add link' },
+    { t:'Bar display', n:'Incoming drink orders', u:'', g:'Table Ordering', i:'🍸', c:'pink', b:'Add link' },
+    { t:'Counter', n:'Open tables, settlement and readings', u:'', g:'Table Ordering', i:'💳', c:'cyan', b:'Add link' },
+    { t:'Table QR codes', n:'Generate and print codes per table', u:'', g:'Table Ordering', i:'🔳', c:'teal', b:'Add link' },
+
+    { t:'Add a restaurant', n:'Create a new venue on the platform', u:'', g:'Set up a client', i:'➕', c:'violet', b:'Add link' },
+    { t:'Deploy a new site', n:'Publish a client site from the template', u:'', g:'Set up a client', i:'🚀', c:'blue', b:'Add link' },
+    { t:'Client checklist', n:'Branding, menu, rules, QR codes, go live', u:'', g:'Set up a client', i:'✅', c:'cyan', b:'Add link' },
+
+    { t:'Supabase', n:'Database, edge functions and secrets', u:'https://supabase.com/dashboard/project/tehxobdokbvqtwtgqzrh', g:'Behind the scenes', i:'🗄️', c:'teal' },
+    { t:'JotForm', n:'Forms, submissions and the AI agent', u:'https://www.jotform.com/myforms/', g:'Behind the scenes', i:'🗂️', c:'gold' },
+    { t:'GitHub', n:'Where the site files live', u:'https://github.com', g:'Behind the scenes', i:'🐙', c:'blue' },
+    { t:'n8n', n:'Older automations, mostly retired', u:'https://trainerapex.app.n8n.cloud', g:'Behind the scenes', i:'🔗', c:'pink' }
+  ];
+
+  var K = 'we.controlroom.v1';
+  var state = { groups: DEFAULT_GROUPS.slice(), tiles: DEFAULT_TILES.slice() };
+  var editing = false, current = -1, filter = '';
+
+  var $ = function(s){ return document.querySelector(s); };
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  var store = (function(){
+    var ok=false;
+    try{ localStorage.setItem('_t','1'); localStorage.removeItem('_t'); ok=true; }catch(e){}
+    return {
+      ok:ok,
+      get:function(){ try{ return ok? localStorage.getItem(K):null; }catch(e){ return null; } },
+      set:function(v){ try{ if(ok) localStorage.setItem(K,v); }catch(e){} }
+    };
+  })();
+
+  function save(){ store.set(JSON.stringify(state)); }
+  function load(){
+    var raw=store.get(); if(!raw) return;
+    try{
+      var d=JSON.parse(raw);
+      if(Array.isArray(d.tiles)) state.tiles=d.tiles;
+      if(Array.isArray(d.groups) && d.groups.length) state.groups=d.groups;
+    }catch(e){}
+  }
+
+  function toast(m){
+    var t=$('#toast'); t.textContent=m; t.classList.add('on');
+    clearTimeout(toast._t); toast._t=setTimeout(function(){ t.classList.remove('on'); },2000);
+  }
+
+  function host(u){
+    if(!u) return 'No link yet';
+    try{
+      var x=new URL(u);
+      return (x.hostname+x.pathname).replace(/^www\./,'').replace(/\/$/,'') + (x.search||'');
+    }catch(e){ return u; }
+  }
+
+  function matches(t){
+    if(!filter) return true;
+    var hay=(t.t+' '+(t.n||'')+' '+(t.g||'')+' '+(t.u||'')).toLowerCase();
+    return hay.indexOf(filter)>-1;
+  }
+
+  function render(){
+    var board=$('#board');
+    board.innerHTML='';
+    var shown=0;
+
+    state.groups.forEach(function(g){
+      var items=state.tiles.map(function(t,i){ return {t:t,i:i}; })
+                           .filter(function(o){ return (o.t.g||state.groups[0])===g && matches(o.t); });
+      if(!items.length && !editing) return;
+      if(!items.length && filter) return;
+
+      var sec=document.createElement('section');
+      sec.className='group';
+      var head='<div class="group-head">'+
+        (editing
+          ? '<input value="'+esc(g)+'" data-group="'+esc(g)+'" aria-label="Section name">'
+          : '<h2>'+esc(g)+'</h2>')+
+        '<span class="rule"></span><span class="count">'+items.length+'</span></div>';
+      var grid='<div class="tiles">';
+
+      items.forEach(function(o){
+        var t=o.t, blank=!t.u;
+        grid += '<a class="tile'+(blank?' blank':'')+'" '+
+          'style="--accent:'+(COLOURS[t.c]||COLOURS.violet)+'" '+
+          (blank? 'href="#" data-blank="'+o.i+'"' : 'href="'+esc(t.u)+'" target="_blank" rel="noopener"')+'>'+
+          '<button class="edit" type="button" data-edit="'+o.i+'" aria-label="Edit '+esc(t.t)+'">✎</button>'+
+          '<span class="row">'+(t.i?'<span class="ic">'+esc(t.i)+'</span>':'')+
+          (t.b?'<span class="badge">'+esc(t.b)+'</span>':'')+'</span>'+
+          '<b>'+esc(t.t)+'</b>'+
+          (t.n?'<span class="note">'+esc(t.n)+'</span>':'')+
+          '<span class="host">'+esc(host(t.u))+'</span></a>';
+        shown++;
+      });
+
+      grid += '<button class="tile add" type="button" data-add="'+esc(g)+'"><b>+ Add a tool</b></button>';
+      grid += '</div>';
+      sec.innerHTML = head+grid;
+      board.appendChild(sec);
+    });
+
+    if(!shown && filter){
+      board.innerHTML='<p class="empty">Nothing matches “'+esc(filter)+'”.</p>';
+    }
+
+    $('#hint').textContent = editing
+      ? 'Tap ✎ on any tile to change it, or + Add a tool. Section names are editable too.'
+      : (store.ok ? '' : 'This browser will not remember changes. Use Export to keep a copy.');
+
+    board.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); open(+b.dataset.edit); });
+    });
+    board.querySelectorAll('[data-blank]').forEach(function(a){
+      a.addEventListener('click',function(e){ e.preventDefault(); open(+a.dataset.blank); });
+    });
+    board.querySelectorAll('[data-add]').forEach(function(b){
+      b.addEventListener('click',function(){ open(-1, b.dataset.add); });
+    });
+    board.querySelectorAll('[data-group]').forEach(function(inp){
+      inp.addEventListener('change',function(){
+        var was=inp.dataset.group, now=inp.value.trim();
+        if(!now || now===was) return;
+        state.groups=state.groups.map(function(x){ return x===was?now:x; });
+        state.tiles.forEach(function(t){ if((t.g||'')===was) t.g=now; });
+        save(); render(); toast('Section renamed');
+      });
+    });
+  }
+
+  /* ---------- editor ---------- */
+  function paintSwatches(sel){
+    var w=$('#swatches'); w.innerHTML='';
+    Object.keys(COLOURS).forEach(function(name){
+      var b=document.createElement('button');
+      b.type='button'; b.className='swatch'; b.dataset.c=name;
+      b.style.background=COLOURS[name];
+      b.setAttribute('aria-label',name);
+      b.setAttribute('aria-pressed', name===sel ? 'true':'false');
+      b.addEventListener('click',function(){
+        w.querySelectorAll('.swatch').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+        b.setAttribute('aria-pressed','true');
+      });
+      w.appendChild(b);
+    });
+  }
+
+  function open(index, groupHint){
+    current=index;
+    var t = index>-1 ? state.tiles[index] : { t:'', n:'', u:'', g:groupHint||state.groups[0], i:'', c:'violet', b:'' };
+    $('#sheetTitle').textContent = index>-1 ? 'Edit tool' : 'Add a tool';
+    $('#fTitle').value=t.t||''; $('#fNote').value=t.n||''; $('#fUrl').value=t.u||'';
+    $('#fBadge').value=t.b||''; $('#fIcon').value=t.i||'';
+    var sel=$('#fGroup'); sel.innerHTML='';
+    state.groups.forEach(function(g){
+      var o=document.createElement('option'); o.value=g; o.textContent=g; sel.appendChild(o);
+    });
+    sel.value=t.g||state.groups[0];
+    paintSwatches(t.c||'violet');
+    $('#delBtn').style.display = index>-1 ? '' : 'none';
+    $('#sheet').hidden=false;
+    setTimeout(function(){ $('#fTitle').focus(); },30);
+  }
+  function close(){ $('#sheet').hidden=true; current=-1; }
+
+  $('#saveBtn').addEventListener('click',function(){
+    var name=$('#fTitle').value.trim();
+    if(!name){ $('#fTitle').focus(); toast('Give it a name first'); return; }
+    var u=$('#fUrl').value.trim();
+    if(u && !/^https?:\/\//i.test(u)) u='https://'+u;
+    var picked=$('#swatches .swatch[aria-pressed="true"]');
+    var rec={ t:name, n:$('#fNote').value.trim(), u:u, g:$('#fGroup').value,
+              i:$('#fIcon').value.trim(), c:picked?picked.dataset.c:'violet',
+              b:$('#fBadge').value.trim() };
+    if(current>-1) state.tiles[current]=rec; else state.tiles.push(rec);
+    save(); close(); render(); toast(current>-1?'Saved':'Added');
+  });
+
+  $('#delBtn').addEventListener('click',function(){
+    if(current<0) return;
+    if(!confirm('Remove “'+state.tiles[current].t+'” from the dashboard?')) return;
+    state.tiles.splice(current,1); save(); close(); render(); toast('Removed');
+  });
+
+  $('#cancelBtn').addEventListener('click',close);
+  $('#sheet').addEventListener('click',function(e){ if(e.target===$('#sheet')) close(); });
+
+  /* ---------- header actions ---------- */
+  $('#editBtn').addEventListener('click',function(){
+    editing=!editing;
+    document.body.classList.toggle('editing',editing);
+    this.setAttribute('aria-pressed',String(editing));
+    this.classList.toggle('on',editing);
+    this.textContent = editing ? 'Done' : 'Edit';
+    render();
+  });
+
+  function download(name,text,type){
+    var b=new Blob([text],{type:type}), u=URL.createObjectURL(b), a=document.createElement('a');
+    a.href=u; a.download=name; document.body.appendChild(a); a.click();
+    document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(u); },800);
+  }
+  $('#exportBtn').addEventListener('click',function(){
+    download('control-room.json', JSON.stringify(state,null,2), 'application/json');
+    toast('Exported');
+  });
+  $('#importBtn').addEventListener('click',function(){ $('#fileIn').click(); });
+  $('#fileIn').addEventListener('change',function(){
+    var f=this.files&&this.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var d=JSON.parse(r.result);
+        if(!d || !Array.isArray(d.tiles)) throw new Error('bad');
+        state.tiles=d.tiles;
+        if(Array.isArray(d.groups)&&d.groups.length) state.groups=d.groups;
+        save(); render(); toast('Loaded '+state.tiles.length+' tools');
+      }catch(e){ toast('That file is not a Control Room export'); }
+    };
+    r.readAsText(f); this.value='';
+  });
+
+  /* ---------- search ---------- */
+  $('#q').addEventListener('input',function(){ filter=this.value.trim().toLowerCase(); render(); });
+  $('#q').addEventListener('keydown',function(e){
+    if(e.key==='Escape'){ this.value=''; filter=''; render(); this.blur(); }
+    if(e.key==='Enter'){
+      var first=document.querySelector('.tile[href]:not([data-blank])');
+      if(first) first.click();
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && !$('#sheet').hidden){ close(); return; }
+    if(e.key==='/' && document.activeElement!==$('#q') &&
+       !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){
+      e.preventDefault(); $('#q').focus();
+    }
+  });
+
+  load(); render();
+})();
+</script>
+</body>
+</html>
