@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restaurant Deluxe — Email Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#06060f; --panel:#0d0f22; --panel2:#11142b;
+    --violet:#8b5cf6; --blue:#4f7cff; --cyan:#22d3ee; --gold:#f0cd8b; --teal:#2dd4bf;
+    --ink:#eef0ff; --muted:#9aa3c7; --faint:#6a7299;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.06);
+    --glass:rgba(255,255,255,.03);
+    --grad:linear-gradient(120deg,var(--violet),var(--blue) 55%,var(--cyan));
+    --fdisp:'Sora',system-ui,-apple-system,Segoe UI,sans-serif;
+    --fmono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --r:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--fdisp);font-size:15px;
+       line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(900px 500px at 12% -5%,rgba(139,92,246,.16),transparent 60%),
+               radial-gradient(800px 500px at 92% 8%,rgba(34,211,238,.10),transparent 62%)}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:6px}
+
+  .app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+  header.top{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--line);
+    background:rgba(6,6,15,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    position:sticky;top:0;z-index:30;flex-wrap:wrap}
+  .logo{width:42px;height:42px;border-radius:12px;background:var(--grad);display:grid;place-items:center;
+        font-weight:800;font-size:14px;flex:0 0 auto}
+  .brand h1{margin:0;font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .brand p{margin:0;font-family:var(--fmono);font-size:10.5px;letter-spacing:.16em;
+           text-transform:uppercase;color:var(--faint)}
+  .top .spacer{flex:1 1 auto}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;
+    border:1px solid var(--line);font-family:var(--fmono);font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted);background:var(--glass)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+
+  .layout{display:grid;grid-template-columns:248px minmax(0,1fr) minmax(0,1.05fr);flex:1 1 auto;min-height:0}
+
+  .rail{border-right:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+  .rail-h{font-family:var(--fmono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+          color:var(--faint);margin:0 0 4px 6px}
+  .camp{position:relative;display:block;width:100%;text-align:left;cursor:pointer;border:1px solid var(--line);
+    border-radius:12px;background:var(--glass);padding:12px 34px 12px 14px;color:var(--ink);
+    font-family:var(--fdisp);font-size:14px;transition:border-color .18s,background .18s}
+  .camp:hover{border-color:rgba(139,92,246,.5)}
+  .camp[aria-current="true"]{border-color:var(--violet);background:rgba(139,92,246,.13)}
+  .camp .cname{display:block;font-weight:600;line-height:1.3}
+  .camp .cdesc{display:block;font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .camp .del{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:7px;border:1px solid transparent;
+    background:transparent;color:var(--faint);cursor:pointer;font-size:15px;line-height:1;display:none}
+  .camp:hover .del,.camp[aria-current="true"] .del{display:block}
+  .camp .del:hover{color:#ff8a8a;border-color:rgba(255,138,138,.4)}
+  .rail-actions{display:grid;gap:8px;margin-top:6px}
+
+  .editor{border-right:1px solid var(--line);padding:24px;min-width:0;overflow:auto}
+  .eyebrow{font-family:var(--fmono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+  h2.sec{margin:8px 0 4px;font-size:26px;letter-spacing:-.02em;font-weight:700}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 20px}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px;flex-wrap:wrap}
+  .tab{background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--muted);
+    font-family:var(--fdisp);font-size:14px;font-weight:600;padding:10px 14px;transition:color .18s,border-color .18s}
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--cyan)}
+  .pane[hidden]{display:none}
+  details.grp{border:1px solid var(--line);border-radius:12px;margin-bottom:12px;background:var(--glass);overflow:hidden}
+  details.grp>summary{cursor:pointer;list-style:none;padding:13px 15px;font-weight:600;font-size:14px;
+    display:flex;align-items:center;gap:10px}
+  details.grp>summary::-webkit-details-marker{display:none}
+  details.grp>summary::after{content:"+";margin-left:auto;color:var(--faint);font-size:16px}
+  details.grp[open]>summary::after{content:"\2212"}
+  details.grp>summary:hover{color:var(--ink)}
+  .grp-body{padding:4px 15px 15px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+  .field .help{font-size:12px;color:var(--faint);margin:5px 0 0;line-height:1.45}
+  input[type=text],input[type=email],input[type=url],textarea,select{
+    width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);
+    background:#0a0b1a;color:var(--ink);font-family:var(--fdisp);font-size:14px;line-height:1.5}
+  textarea{resize:vertical;min-height:78px}
+  input:focus,textarea:focus,select:focus{border-color:var(--cyan);outline:none}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .chk{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;margin-bottom:12px}
+  .chk input{width:auto;accent-color:var(--violet);transform:scale(1.15)}
+  .blocks{display:grid;gap:10px}
+  .block{border:1px solid var(--line);border-radius:12px;padding:13px;background:var(--glass)}
+  .block .bh{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .block .bn{font-family:var(--fmono);font-size:10.5px;letter-spacing:.14em;color:var(--cyan);flex:1 1 auto}
+  .iconbtn{border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;
+    border-radius:8px;width:26px;height:26px;font-size:14px;line-height:1}
+  .iconbtn:hover{color:var(--ink);border-color:var(--cyan)}
+  .iconbtn.danger:hover{color:#ff8a8a;border-color:rgba(255,138,138,.45)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--fdisp);
+    font-weight:600;font-size:14px;border-radius:999px;padding:11px 18px;cursor:pointer;
+    border:1px solid var(--line);background:var(--glass);color:var(--ink);transition:border-color .18s,transform .15s}
+  .btn:hover{border-color:var(--cyan)}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--grad);border-color:transparent;color:#fff}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .note{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--glass);
+    font-size:13px;color:var(--muted);line-height:1.55;margin-top:14px}
+  .note b{color:var(--ink)}
+  .note.warn{border-color:rgba(240,205,139,.35);background:rgba(240,205,139,.06)}
+  code.tag{font-family:var(--fmono);font-size:12px;color:var(--gold);background:rgba(240,205,139,.1);
+    padding:2px 6px;border-radius:5px}
+
+  .preview{padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+  .pv-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .pv-head .spacer{flex:1 1 auto}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--glass)}
+  .seg button{background:transparent;border:none;cursor:pointer;color:var(--muted);font-family:var(--fdisp);
+    font-size:12.5px;font-weight:600;padding:8px 14px}
+  .seg button[aria-pressed="true"]{background:rgba(139,92,246,.24);color:var(--ink)}
+  .subjectline{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--glass)}
+  .subjectline .sl{font-family:var(--fmono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .subjectline .sv{font-weight:600;margin-top:3px;word-break:break-word}
+  .subjectline .pre{font-size:12.5px;color:var(--muted);margin-top:4px;word-break:break-word}
+  .frame{flex:1 1 auto;min-height:430px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    background:#1b1e33;display:flex;justify-content:center;padding:14px}
+  .frame iframe{width:100%;max-width:680px;height:100%;min-height:410px;border:0;border-radius:10px;
+    background:#fff;transition:max-width .25s ease}
+  .frame.mobile iframe{max-width:390px}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);background:var(--panel2);
+    border:1px solid var(--line);color:var(--ink);padding:12px 20px;border-radius:999px;font-size:13.5px;
+    font-weight:600;box-shadow:0 20px 50px rgba(0,0,0,.6);opacity:0;pointer-events:none;
+    transition:opacity .22s,transform .22s;z-index:100}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  .log{border:1px solid var(--line);border-radius:12px;background:#080a18;padding:12px 14px;margin-top:14px;
+    font-family:var(--fmono);font-size:12px;line-height:1.7;max-height:190px;overflow:auto}
+  .log p{margin:0;color:var(--muted);word-break:break-word}
+  .log p.ok{color:var(--teal)} .log p.bad{color:#ff9b9b} .log p.warn{color:var(--gold)}
+  .log p.dim{color:var(--faint)}
+  .status{display:inline-flex;align-items:center;gap:8px;font-family:var(--fmono);font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .status .d{width:7px;height:7px;border-radius:50%;background:var(--faint)}
+  .status.on .d{background:var(--teal);box-shadow:0 0 10px var(--teal)}
+  .status.off .d{background:#ff9b9b;box-shadow:0 0 10px rgba(255,155,155,.6)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .hist{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+  .hist th{text-align:left;font-family:var(--fmono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--faint);padding:6px 8px;border-bottom:1px solid var(--line)}
+  .hist td{padding:8px;border-bottom:1px solid var(--line2);color:var(--muted);vertical-align:top}
+  .hist td.b{color:var(--ink);font-weight:600}
+  .hist tr:last-child td{border-bottom:none}
+  .tagx{display:inline-block;font-family:var(--fmono);font-size:9.5px;letter-spacing:.1em;
+    text-transform:uppercase;padding:3px 7px;border-radius:999px;border:1px solid var(--line);color:var(--faint)}
+  .tagx.tst{color:var(--cyan);border-color:rgba(34,211,238,.4)}
+  .tagx.lst{color:var(--teal);border-color:rgba(45,212,191,.4)}
+  .tagx.bc{color:var(--gold);border-color:rgba(240,205,139,.4)}
+  .empty{color:var(--faint);font-family:var(--fmono);font-size:12px;padding:10px 2px}
+  .segs{display:grid;gap:8px;margin-top:10px}
+  .seg-row{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:11px;
+    padding:11px 13px;background:var(--glass)}
+  .seg-row .n{font-size:19px;font-weight:800;min-width:34px;letter-spacing:-.02em}
+  .seg-row .t{flex:1 1 auto;min-width:0}
+  .seg-row .t b{display:block;font-size:13.5px}
+  .seg-row .t span{font-size:12px;color:var(--faint);line-height:1.4}
+  .seg-row button{flex:0 0 auto;font-family:var(--fdisp);font-size:12.5px;font-weight:600;
+    border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;
+    padding:7px 13px;cursor:pointer}
+  .seg-row button:hover:not([disabled]){color:var(--ink);border-color:var(--cyan)}
+  .seg-row button[disabled]{opacity:.35;cursor:not-allowed}
+  .seg-row.cl .n{color:var(--teal)} .seg-row.op .n{color:var(--cyan)}
+  .seg-row.no .n{color:var(--gold)} .seg-row.al .n{color:var(--muted)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:8px;margin-top:10px}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--glass)}
+  .stat b{display:block;font-size:21px;font-weight:800;letter-spacing:-.02em}
+  .stat span{font-family:var(--fmono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .stat.op b{color:var(--cyan)} .stat.cl b{color:var(--teal)} .stat.bo b{color:#ff9b9b}
+  .links{margin-top:10px}
+  .links div{display:flex;gap:10px;font-size:12px;color:var(--muted);padding:5px 0;
+    border-bottom:1px solid var(--line2);word-break:break-all}
+  .links div b{color:var(--ink);flex:0 0 auto;font-family:var(--fmono);font-size:12px}
+  @media (max-width:1150px){
+    .layout{grid-template-columns:1fr}
+    .rail{border-right:none;border-bottom:1px solid var(--line);flex-direction:row;overflow-x:auto;padding:14px}
+    .rail-h{display:none}
+    .camp{flex:0 0 auto;width:210px}
+    .rail-actions{grid-auto-flow:column;margin:0}
+    .rail-actions .btn{white-space:nowrap}
+    .editor{border-right:none;border-bottom:1px solid var(--line)}
+    .frame{min-height:560px}
+  }
+  @media (max-width:620px){
+    .grid2,.grid3{grid-template-columns:1fr}
+    header.top{padding:12px 16px}
+    .editor,.preview{padding:16px}
+    body{font-size:16px}
+    .btn{flex:1 1 auto}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="logo">WE</div>
+    <div class="brand">
+      <h1>Restaurant Deluxe — Email Studio</h1>
+      <p>Broadcast campaigns for Resend</p>
+    </div>
+    <div class="spacer"></div>
+    <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
+  </header>
+
+  <div class="layout">
+    <aside class="rail" aria-label="Campaigns">
+      <p class="rail-h">Campaigns</p>
+      <div id="campList"></div>
+      <div class="rail-actions">
+        <button class="btn" id="addCamp">+ New campaign</button>
+        <button class="btn" id="dupCamp">Duplicate</button>
+        <button class="btn" id="exportAll">Export all</button>
+        <button class="btn" id="importAll">Import</button>
+      </div>
+    </aside>
+
+    <section class="editor">
+      <span class="eyebrow">Restaurant Deluxe</span>
+      <h2 class="sec">Edit your campaign</h2>
+      <p class="sub">Every band can be switched off. The preview updates as you type.</p>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true"  data-pane="content">Content</button>
+        <button class="tab" role="tab" aria-selected="false" data-pane="bands">Bands</button>
+        <button class="tab" role="tab" aria-selected="false" data-pane="send">Send</button>
+      </div>
+
+      <!-- ============ CONTENT ============ -->
+      <div class="pane" id="pane-content">
+        <div class="field">
+          <label for="fName">Campaign name</label>
+          <input type="text" id="fName" data-k="name">
+          <p class="help">Shown only in the list on the left, never in the email.</p>
+        </div>
+        <div class="field">
+          <label for="fBadge">Header badge</label>
+          <input type="text" id="fBadge" data-k="badge">
+        </div>
+        <div class="field">
+          <label for="fGreeting">Greeting</label>
+          <input type="text" id="fGreeting" data-k="greeting">
+          <p class="help">Resend fills in <code class="tag">{{{contact.first_name|there}}}</code> per recipient.</p>
+        </div>
+        <div class="field">
+          <label for="fEyebrow">Eyebrow</label>
+          <input type="text" id="fEyebrow" data-k="eyebrow">
+        </div>
+        <div class="field">
+          <label for="fHeadline">Headline</label>
+          <textarea id="fHeadline" data-k="headline" rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label for="fIntro">Opening paragraph</label>
+          <textarea id="fIntro" data-k="intro" rows="3"></textarea>
+        </div>
+        <div class="grid2">
+          <div class="field"><label for="fCta1">Primary button</label><input type="text" id="fCta1" data-k="cta1"></div>
+          <div class="field"><label for="fCta1u">Primary link</label><input type="url" id="fCta1u" data-k="cta1url"></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label for="fCta2">Secondary button</label><input type="text" id="fCta2" data-k="cta2"></div>
+          <div class="field"><label for="fCta2u">Secondary link</label><input type="url" id="fCta2u" data-k="cta2url"></div>
+        </div>
+      </div>
+
+      <!-- ============ BANDS ============ -->
+      <div class="pane" id="pane-bands" hidden>
+
+        <details class="grp" open>
+          <summary>Feature cards</summary>
+          <div class="grp-body">
+            <label class="chk"><input type="checkbox" data-k="featOn" id="fFeatOn"> Include this band</label>
+            <div class="field"><label for="fFeatEye">Eyebrow</label><input type="text" id="fFeatEye" data-k="featEyebrow"></div>
+            <div class="field"><label for="fFeatH">Heading</label><textarea id="fFeatH" data-k="featHeading" rows="2"></textarea></div>
+            <div class="field"><label for="fFeatS">Sub-line</label><textarea id="fFeatS" data-k="featSub" rows="2"></textarea></div>
+            <div class="blocks" id="cardList"></div>
+            <div class="btnrow"><button class="btn" id="addCard">+ Add card</button></div>
+            <p class="help">Three fits the row. More will stack.</p>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Spotlight band</summary>
+          <div class="grp-body">
+            <label class="chk"><input type="checkbox" data-k="spotOn" id="fSpotOn"> Include this band</label>
+            <div class="field"><label for="fSpotEye">Eyebrow</label><input type="text" id="fSpotEye" data-k="spotEyebrow"></div>
+            <div class="field"><label for="fSpotH">Heading</label><textarea id="fSpotH" data-k="spotHeading" rows="2"></textarea></div>
+            <div class="field"><label for="fSpotS">Sub-line</label><textarea id="fSpotS" data-k="spotSub" rows="2"></textarea></div>
+            <div class="blocks" id="boxList"></div>
+            <div class="btnrow"><button class="btn" id="addBox">+ Add box</button></div>
+            <p class="help">Two side-by-side facts, like your Early and Late sitting band.</p>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Pricing band</summary>
+          <div class="grp-body">
+            <label class="chk"><input type="checkbox" data-k="priceOn" id="fPriceOn"> Include this band</label>
+            <div class="field"><label for="fPriceEye">Eyebrow</label><input type="text" id="fPriceEye" data-k="priceEyebrow"></div>
+            <div class="field"><label for="fPriceH">Heading</label><textarea id="fPriceH" data-k="priceHeading" rows="2"></textarea></div>
+            <div class="blocks" id="planList"></div>
+            <div class="btnrow"><button class="btn" id="addPlan">+ Add plan</button></div>
+            <div class="field" style="margin-top:12px">
+              <label for="fPriceFoot">Line under the plans</label>
+              <textarea id="fPriceFoot" data-k="priceFoot" rows="2"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Closing call to action</summary>
+          <div class="grp-body">
+            <label class="chk"><input type="checkbox" data-k="finalOn" id="fFinalOn"> Include this band</label>
+            <div class="field"><label for="fFinalH">Heading</label><textarea id="fFinalH" data-k="finalHeading" rows="2"></textarea></div>
+            <div class="field"><label for="fFinalS">Sub-line</label><textarea id="fFinalS" data-k="finalSub" rows="2"></textarea></div>
+            <div class="grid2">
+              <div class="field"><label for="fFinalC">Button</label><input type="text" id="fFinalC" data-k="finalCta"></div>
+              <div class="field"><label for="fFinalU">Link</label><input type="url" id="fFinalU" data-k="finalUrl"></div>
+            </div>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Footer</summary>
+          <div class="grp-body">
+            <div class="grid2">
+              <div class="field"><label for="fPhone">Phone</label><input type="text" id="fPhone" data-k="phone"></div>
+              <div class="field"><label for="fEmail">Email</label><input type="text" id="fEmail" data-k="email"></div>
+            </div>
+            <div class="grid2">
+              <div class="field"><label for="fSite">Website</label><input type="url" id="fSite" data-k="siteUrl"></div>
+              <div class="field"><label for="fAddr">Business address</label><input type="text" id="fAddr" data-k="address"></div>
+            </div>
+            <label class="chk"><input type="checkbox" data-k="resendUnsub" id="fResendUnsub"> Use Resend's unsubscribe token</label>
+            <div class="field"><label for="fUnsub">Unsubscribe link (when not using Resend)</label>
+              <input type="url" id="fUnsub" data-k="unsubUrl"></div>
+            <div class="note warn">
+              <b>Required by Australian spam law.</b> A marketing email needs a working
+              unsubscribe and a real business address. Both live in this band.
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- ============ SEND ============ -->
+      <div class="pane" id="pane-send" hidden>
+        <div class="field">
+          <label for="fSubject">Subject line</label>
+          <input type="text" id="fSubject" data-k="subject">
+          <p class="help"><span id="subjLen">0</span> characters — around 45 stays whole on a phone.</p>
+        </div>
+        <div class="field">
+          <label for="fPreheader">Preheader</label>
+          <input type="text" id="fPreheader" data-k="preheader">
+          <p class="help">The grey line after the subject. Don't repeat the subject, and keep the trial length consistent with the body.</p>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="fTo">Test recipient</label>
+            <input type="email" id="fTo" data-k="to" placeholder="marc@webescapade.com">
+          </div>
+          <div class="field">
+            <label for="fTheme">Palette</label>
+            <select id="fTheme" data-k="theme">
+              <option value="alt">Alternating dark and light</option>
+              <option value="light">All light</option>
+              <option value="dark">All dark</option>
+            </select>
+          </div>
+        </div>
+        <div class="btnrow">
+          <button class="btn primary" id="copyHtml">Copy HTML for Resend</button>
+          <button class="btn" id="copyText">Copy plain text</button>
+          <button class="btn" id="downloadHtml">Download .html</button>
+          <button class="btn" id="openMail">Open in mail app</button>
+        </div>
+        <details class="grp" open id="grpSend">
+          <summary>Send with Resend</summary>
+          <div class="grp-body">
+            <div class="field">
+              <label for="sEndpoint">Function URL</label>
+              <input type="url" id="sEndpoint" data-g="endpoint"
+                     placeholder="https://your-project.supabase.co/functions/v1/resend-send">
+              <p class="help">Your deployed Supabase Edge Function. It holds the Resend key.</p>
+            </div>
+            <div class="field">
+              <label for="sSecret">Studio secret</label>
+              <input type="text" id="sSecret" data-g="secret" placeholder="matches STUDIO_SECRET">
+              <p class="help">Kept in memory only. It is never written into the exported campaign file.</p>
+            </div>
+            <label class="chk"><input type="checkbox" id="sRemember"> Remember on this device</label>
+            <p class="help" style="margin:-6px 0 12px">Saves the URL and details in this browser so you don't retype them.
+               Tick this only on a computer you control &mdash; it stores the secret too.</p>
+            <div class="btnrow" style="margin-bottom:8px">
+              <button class="btn" id="btnPing">Test connection</button>
+              <span class="status" id="connStatus"><span class="d"></span><span>Not connected</span></span>
+            </div>
+
+            <div class="grid2">
+              <div class="field"><label for="sFromName">From name</label>
+                <input type="text" id="sFromName" data-g="fromName" placeholder="Webescapade"></div>
+              <div class="field"><label for="sFromEmail">From address</label>
+                <input type="email" id="sFromEmail" data-g="fromEmail" placeholder="marc@webescapade.com"></div>
+            </div>
+            <div class="field"><label for="sReplyTo">Reply-to</label>
+              <input type="email" id="sReplyTo" data-g="replyTo" placeholder="marc@webescapade.com">
+              <p class="help">The from address must be on a domain you have verified in Resend.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Send to addresses now</summary>
+          <div class="grp-body">
+            <div class="field">
+              <label for="sList">Recipients</label>
+              <textarea id="sList" data-g="list" rows="4"
+                        placeholder="one@restaurant.com, two@restaurant.com&#10;three@restaurant.com"></textarea>
+              <p class="help"><span id="listCount">0</span> valid addresses. Commas, spaces or new lines all work.
+                 Each person gets their own message &mdash; nobody sees the others.</p>
+            </div>
+            <div class="btnrow">
+              <button class="btn" id="btnSendTest">Send a test to me</button>
+              <button class="btn primary" id="btnSendList">Send to the list</button>
+            </div>
+            <div class="note warn">
+              <b>Merge tags do not work here.</b> <code class="tag">{{{contact.first_name|there}}}</code> and the
+              unsubscribe token are a broadcast feature. For a direct send the studio swaps them for the
+              fallback word and your own unsubscribe link, so nothing raw reaches an inbox.
+            </div>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Broadcast to an audience</summary>
+          <div class="grp-body">
+            <div class="field">
+              <label for="sAudience">Audience</label>
+              <select id="sAudience" data-g="audienceId">
+                <option value="">Test the connection to load your audiences</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="sSchedule">Schedule (optional)</label>
+              <input type="text" id="sSchedule" data-g="scheduledAt" placeholder="in 1 hour, or 2026-08-20T09:00:00Z">
+              <p class="help">Leave blank to send straight away.</p>
+            </div>
+            <div class="btnrow">
+              <button class="btn" id="btnDraft">Create draft in Resend</button>
+              <button class="btn primary" id="btnBroadcast">Create and send</button>
+            </div>
+            <p class="help" style="margin-top:10px">Broadcasts keep the merge tags, so each recipient sees
+               their own first name and a working unsubscribe link.</p>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Link tracking</summary>
+          <div class="grp-body">
+            <label class="chk"><input type="checkbox" id="sUtm"> Tag links with UTM parameters</label>
+            <p class="help" style="margin:-6px 0 12px">Adds <code class="tag">utm_source</code>,
+               <code class="tag">utm_medium</code> and <code class="tag">utm_campaign</code> to every link,
+               so your website analytics shows who arrived from this campaign.</p>
+            <div class="grid2">
+              <div class="field"><label for="sUtmSource">Source</label>
+                <input type="text" id="sUtmSource" data-g="utmSource" placeholder="email"></div>
+              <div class="field"><label for="sUtmMedium">Medium</label>
+                <input type="text" id="sUtmMedium" data-g="utmMedium" placeholder="broadcast"></div>
+            </div>
+            <p class="help">The campaign name is used automatically, lower-cased and hyphenated.</p>
+            <div class="note">
+              <b>Opens and clicks</b> are recorded by Resend, but only once you switch tracking on:
+              Resend &rarr; Domains &rarr; your domain &rarr; enable open and click tracking.
+              The figures then appear on the Resend dashboard.
+            </div>
+          </div>
+        </details>
+
+        <details class="grp" open>
+          <summary>Send history</summary>
+          <div class="grp-body">
+            <div id="histWrap"><p class="empty">Nothing sent from this browser yet.</p></div>
+            <div id="statsWrap"></div>
+            <div class="btnrow">
+              <button class="btn" id="btnStats">Refresh opens &amp; clicks</button>
+              <button class="btn" id="btnRaw">Show recent events</button>
+              <button class="btn" id="btnCheck">Check latest broadcast</button>
+              <button class="btn primary" id="btnReport">Export report</button>
+              <button class="btn" id="btnHistCsv">Export send log</button>
+              <button class="btn" id="btnHistClear">Clear history</button>
+            </div>
+            <p class="help">History is stored in this browser. Opens and clicks come from Supabase,
+               fed by the Resend webhook, and are counted per person rather than per event.</p>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Follow up on this campaign</summary>
+          <div class="grp-body">
+            <p class="help" style="margin-top:0">Build a list from what people actually did, then choose a
+               different campaign and send to just them.</p>
+            <div class="btnrow"><button class="btn" id="btnSegment">Build follow-up lists</button></div>
+            <div id="segWrap"></div>
+            <div class="note warn" style="margin-top:12px">
+              <b>Anyone who bounced, complained or unsubscribed is removed automatically.</b>
+              A direct send does not check your audience the way a broadcast does, so the studio
+              checks for you. Pick the audience above first so unsubscribes can be read.
+            </div>
+          </div>
+        </details>
+
+        <div class="log" id="sendLog"><p class="dim">Nothing sent yet.</p></div>
+
+        <div class="note">
+          <b>Prefer to paste?</b> Copy HTML above still works: Resend &rarr; Broadcasts &rarr; new broadcast
+          &rarr; HTML code editor &rarr; paste.
+        </div>
+        <div class="note">
+          <b>Open in mail app</b> sends the plain-text version, because mail apps strip HTML from a
+          mailto. Use it for a single follow-up, not a campaign.
+        </div>
+      </div>
+    </section>
+
+    <section class="preview" aria-label="Live preview">
+      <div class="pv-head">
+        <span class="eyebrow">Live preview</span>
+        <div class="spacer"></div>
+        <div class="seg" role="group" aria-label="Preview width">
+          <button id="pvDesktop" aria-pressed="true">Desktop</button>
+          <button id="pvMobile" aria-pressed="false">Mobile</button>
+        </div>
+      </div>
+      <div class="subjectline">
+        <div class="sl">Subject</div>
+        <div class="sv" id="pvSubject"></div>
+        <div class="pre" id="pvPre"></div>
+      </div>
+      <div class="frame" id="frameWrap"><iframe id="pv" title="Email preview"></iframe></div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="fileIn" accept="application/json,.json" hidden>
+
+<script>
+(function(){
+  "use strict";
+
+  var SITE    = "https://webescapade.com";
+  var CONTACT = "https://webescapade.com/connect.html#contact";
+  var BOOKING = "https://mteleki-wq.github.io/Booking/restaurant-booking-supabase-with-crm-12.html";
+  var DEMO    = "https://mteleki-wq.github.io/Cafe-bojo/";
+  var FIRST   = "{{{contact.first_name|there}}}";
+  var RESEND_UNSUB = "{{{RESEND_UNSUBSCRIBE_URL}}}";
+
+  function preset(o){
+    return Object.assign({
+      name:"Untitled campaign", desc:"",
+      badge:"14-DAY FREE TRIAL",
+      greeting:"Hello "+FIRST+",",
+      eyebrow:"Restaurant Deluxe", headline:"", intro:"",
+      cta1:"Test the booking form", cta1url:BOOKING,
+      cta2:"View restaurant demo",  cta2url:DEMO,
+      featOn:true, featEyebrow:"One connected experience",
+      featHeading:"Built for the restaurant.\nEffortless for the customer.",
+      featSub:"", cards:[],
+      spotOn:false, spotEyebrow:"", spotHeading:"", spotSub:"", boxes:[],
+      priceOn:true, priceEyebrow:"Simple monthly options",
+      priceHeading:"Choose the right level for your restaurant.",
+      plans:[], priceFoot:"",
+      finalOn:true, finalHeading:"Test the complete experience free for 14 days.",
+      finalSub:"Setup assistance and ongoing support are included in every plan.",
+      finalCta:"Request a free demo", finalUrl:CONTACT,
+      phone:"0413 872 994", email:"marc@webescapade.com", siteUrl:SITE,
+      address:"Webescapade \u2022 Sydney, Australia",
+      resendUnsub:true, unsubUrl:"",
+      subject:"", preheader:"", to:"", theme:"alt"
+    }, o);
+  }
+
+  var PLANS3 = [
+    {tier:"STANDARD", price:"$68", per:"/ month", desc:"Editable restaurant website and direct online bookings.", hi:false},
+    {tier:"DELUXE",   price:"$98", per:"/ month", desc:"Adds CRM, AI assistance and large-booking card guarantees.", hi:false},
+    {tier:"COMPLETE", price:"$149",per:"/ month", desc:"Adds QR table ordering, kitchen and bar displays and shift records.", hi:true}
+  ];
+
+  var PRESETS = [
+    preset({
+      name:"Intro to Restaurant Deluxe", desc:"First message to a new restaurant",
+      eyebrow:"Introducing Restaurant Deluxe",
+      headline:"Turn your restaurant website into direct bookings.",
+      intro:"Webescapade builds elegant, fully editable restaurant websites connected to online reservations, live availability and an optional AI-powered customer experience \u2014 and now to ordering at the table.",
+      cards:[
+        {n:"01", t:"Fully editable", d:"Menus, prices, images, hours and offers."},
+        {n:"02", t:"Direct bookings", d:"Live availability and clear confirmation."},
+        {n:"03", t:"Deluxe tools", d:"CRM, AI and large-booking protection."}
+      ],
+      spotOn:true, spotEyebrow:"Smarter dinner service",
+      spotHeading:"Two sittings. Flexible arrival times.",
+      spotSub:"The restaurant controls capacity through an Early and Late Sitting, while each customer selects their preferred arrival time.",
+      boxes:[{l:"EARLY SITTING", v:"6:00\u20137:30 PM"},{l:"LATE SITTING", v:"8:00 PM onward"}],
+      plans:PLANS3,
+      priceFoot:"Setup assistance and ongoing support are included in every plan.",
+      subject:"A restaurant website you can actually edit yourself",
+      preheader:"Direct bookings, guest records and table ordering \u2014 free to test for 14 days."
+    }),
+    preset({
+      name:"Table ordering launch", desc:"Announce QR ordering to your list",
+      badge:"NEW \u2014 TABLE ORDERING",
+      eyebrow:"New \u2014 Restaurant Deluxe Table Ordering",
+      headline:"Let guests order from the table, without waiting to catch someone's eye.",
+      intro:"Every table gets its own QR code. The guest scans it, confirms the table number, browses the menu and sends the order. Food goes to the kitchen, drinks go to the bar, and the counter keeps the running total.",
+      cta1:"See how table ordering works", cta1url:SITE,
+      cta2:"Book a demonstration", cta2url:CONTACT,
+      featEyebrow:"From QR code to kitchen",
+      featHeading:"Simple for the guest.\nClear for the restaurant.",
+      featSub:"",
+      cards:[
+        {n:"01", t:"No app for guests", d:"The menu opens in the phone's browser. No download, no account."},
+        {n:"02", t:"The right department", d:"Kitchen and bar displays, with table numbers, modifiers and notes."},
+        {n:"03", t:"Pay at the counter", d:"No payment is taken through the guest's phone."}
+      ],
+      spotOn:true, spotEyebrow:"One order, two destinations",
+      spotHeading:"Food to the kitchen. Drinks to the bar.",
+      spotSub:"Menu sections and individual items are assigned to the right department, so each order arrives where it is actually made.",
+      boxes:[{l:"KITCHEN DISPLAY", v:"Food orders"},{l:"BAR DISPLAY", v:"Drink orders"}],
+      plans:[
+        {tier:"COMPLETE", price:"$149", per:"/ month", desc:"Website, bookings, CRM, AI and QR table ordering.", hi:true},
+        {tier:"ADD IT ON", price:"$69", per:"/ month", desc:"Already on Restaurant Deluxe? Add table ordering to your plan.", hi:false}
+      ],
+      priceFoot:"Keeping your current website? Standalone Table Ordering is $109/month AUD.",
+      finalHeading:"See it running before you decide.",
+      finalSub:"It runs alongside your existing POS rather than replacing it, and staff can keep taking orders the usual way.",
+      subject:"Guests can now order straight from the table",
+      preheader:"QR ordering routed to your kitchen, bar and counter. No app, no phone payments."
+    }),
+    preset({
+      name:"14-day free trial invite", desc:"Invite a warm lead to start",
+      eyebrow:"14 days, set up for you",
+      headline:"Try it with your own menu, not a demo template.",
+      intro:"Before the trial starts we configure your branding, menu, booking rules and table QR codes. On day one you are looking at your restaurant, not a placeholder \u2014 which makes it a fair test.",
+      cta1:"Start my 14-day free trial", cta1url:CONTACT,
+      cta2:"Test the booking form", cta2url:BOOKING,
+      featEyebrow:"How it works",
+      featHeading:"Three steps, and most of them are ours.",
+      cards:[
+        {n:"01", t:"We prepare it", d:"Branding, menu, booking rules, departments and table QR codes."},
+        {n:"02", t:"You test and edit", d:"Change content, take a test booking, place a sample order."},
+        {n:"03", t:"Go live", d:"Publish, display the QR codes, start taking bookings and orders."}
+      ],
+      plans:PLANS3,
+      priceFoot:"Founding restaurant launch offer: initial menu and table setup included, for a limited number of participating restaurants.",
+      finalHeading:"Send me your current menu.",
+      finalSub:"I will have it ready for you to look at, on your own branding.",
+      subject:"Your menu, your branding, ready in 14 days",
+      preheader:"We set it up first, so the trial is a fair test of the real thing."
+    }),
+    preset({
+      name:"Standalone ordering ($109)", desc:"For restaurants happy with their website",
+      badge:"STANDALONE ORDERING",
+      eyebrow:"Keep your website",
+      headline:"Add table ordering without touching your current site.",
+      intro:"You do not have to move your website to use table ordering. Standalone Table Ordering works alongside whatever you have now \u2014 QR codes, digital menu, kitchen and bar displays and shift records, with no migration and no redesign.",
+      cta1:"See what is included", cta1url:SITE,
+      cta2:"Book a demonstration", cta2url:CONTACT,
+      featEyebrow:"What you get",
+      featHeading:"Ordering, routing and records.\nYour website stays as it is.",
+      cards:[
+        {n:"01", t:"No migration", d:"Same site, same address, nothing for customers to relearn."},
+        {n:"02", t:"Full ordering flow", d:"QR menu, modifiers and notes, kitchen and bar displays."},
+        {n:"03", t:"Excel-compatible export", d:"Shift and settlement records for your own bookkeeping."}
+      ],
+      plans:[{tier:"STANDALONE TABLE ORDERING", price:"$109", per:"/ month", desc:"Includes table QR setup and ongoing support.", hi:true}],
+      priceFoot:"It sits alongside your existing POS rather than replacing it, and guests still settle at the counter or table.",
+      subject:"Table ordering that works with the website you already have",
+      preheader:"No migration and no redesign \u2014 $109/month AUD."
+    }),
+    preset({
+      name:"Add-on for existing clients ($69)", desc:"Upsell to current customers",
+      badge:"FOR YOUR RESTAURANT",
+      eyebrow:"Already on Restaurant Deluxe",
+      headline:"Table ordering is ready whenever you are.",
+      intro:"Your site and bookings already run on Restaurant Deluxe. Table ordering plugs into the same system, so the menu you maintain today becomes the menu your guests order from.",
+      cta1:"Add table ordering", cta1url:CONTACT,
+      cta2:"", cta2url:"",
+      featEyebrow:"Nothing new to set up",
+      featHeading:"Your menu is already the ordering menu.",
+      cards:[
+        {n:"01", t:"Your menu, already there", d:"The dishes, prices and photographs you maintain today."},
+        {n:"02", t:"Kitchen and bar routing", d:"Assign sections and items to the right department."},
+        {n:"03", t:"Shift records", d:"Open tables, settlement, X and Z readings, Excel export."}
+      ],
+      plans:[{tier:"ADD TO YOUR PLAN", price:"$69", per:"/ month", desc:"Table QR setup and ongoing support included.", hi:true}],
+      priceFoot:"",
+      finalHeading:"Try it on a quiet service first.",
+      finalSub:"Reply and I will set up your table QR codes.",
+      subject:"Table ordering is ready for your restaurant",
+      preheader:"Your existing menu becomes the ordering menu \u2014 $69/month added to your plan."
+    }),
+    preset({
+      name:"Booking demo follow-up", desc:"After someone tests the demo",
+      badge:"FOLLOWING UP",
+      eyebrow:"Following up",
+      headline:"You tried the booking form \u2014 what did you make of it?",
+      intro:"Thanks for taking a look. That demo is the real booking flow a guest would see, running on the same system your restaurant would use, so what you clicked through is what you would get.",
+      cta1:"Book a demonstration", cta1url:CONTACT,
+      cta2:"Start the free trial", cta2url:CONTACT,
+      featEyebrow:"What you were looking at",
+      featHeading:"The guest side, and yours.",
+      cards:[
+        {n:"01", t:"The guest side", d:"Live availability and booking without a third-party detour."},
+        {n:"02", t:"Your side", d:"Bookings and guest details land in your CRM."},
+        {n:"03", t:"Large parties", d:"Eight or more can require a card guarantee."}
+      ],
+      priceOn:false, plans:[],
+      finalHeading:"Anything felt off?",
+      finalSub:"Just reply \u2014 I read every one.",
+      finalCta:"Talk to Marc", finalUrl:CONTACT,
+      subject:"What did you think of the booking demo?",
+      preheader:"Happy to answer anything about how it would work at your restaurant."
+    })
+  ];
+
+  var camps = PRESETS.map(function(c){ return JSON.parse(JSON.stringify(c)); });
+  var cur = 0;
+
+  var $ = function(s){ return document.querySelector(s); };
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  /* Resend merge tags must survive escaping */
+  function escKeepTags(s){ return esc(s).replace(/\{\{\{/g,'{{{').replace(/\}\}\}/g,'}}}'); }
+  function nl(s){ return escKeepTags(s).replace(/\n/g,'<br />'); }
+  function url(u){ u=String(u||'').trim(); if(!u) return '';
+    return /^(https?:|mailto:|tel:|\{\{\{)/i.test(u) ? u : 'https://'+u; }
+  function para(t){ return String(t||'').split(/\n{2,}/).filter(function(p){return p.trim();}); }
+  function toast(m){ var t=$('#toast'); t.textContent=m; t.classList.add('on');
+    clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('on');},2200); }
+
+  /* ================= EMAIL BUILDER ================= */
+  function buildEmail(c){
+    var mode=c.theme||'alt';
+    var DARK={bg:'#070918',shell:'#0c0f24',band:'#0b0e21',band2:'#0d1026',head:'#090b1c',foot:'#080a1a',
+      ink:'#ffffff',mut:'#c7cada',faint:'#a9adbf',line:'#202643',line2:'#353b5a',eye:'#6fe6e0',cardbg:'#171a36'};
+    var LIGHT={bg:'#eceaf6',shell:'#ffffff',band:'#ffffff',band2:'#f8f5ff',head:'#f8f5ff',foot:'#f2f0fa',
+      ink:'#17192b',mut:'#5c6072',faint:'#7c8095',line:'#e4e1ef',line2:'#e4e1ef',eye:'#6e36d9',cardbg:'#f8f5ff'};
+    function bandDark(i){ return mode==='dark' ? true : mode==='light' ? false : (i%2===0); }
+    var S = mode==='light' ? LIGHT : DARK;
+    var F="Arial,Helvetica,sans-serif";
+    var GR="linear-gradient(135deg,#8d38ff,#4f7dff 52%,#2fe1db)";
+    var o=[];
+
+    o.push('<!doctype html><html lang="en"><head>');
+    o.push('<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />');
+    o.push('<meta name="x-apple-disable-message-reformatting" />');
+    o.push('<title>'+esc(c.subject||c.headline)+'</title><style>');
+    o.push('html,body{margin:0!important;padding:0!important;width:100%!important;background:'+S.bg+'}');
+    o.push('table,td{border-collapse:collapse!important;mso-table-lspace:0!important;mso-table-rspace:0!important}');
+    o.push('a{text-decoration:none}');
+    o.push('.pulse{animation:pulse 2.2s ease-in-out infinite}');
+    o.push('.shimmer{background-size:220% 100%!important;animation:shimmer 4.8s ease-in-out infinite}');
+    o.push('@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}');
+    o.push('@keyframes shimmer{0%,35%{background-position:100% 0}65%,100%{background-position:0 0}}');
+    o.push('@media(prefers-reduced-motion:reduce){.pulse,.shimmer{animation:none!important}}');
+    o.push('@media screen and (max-width:680px){.shell{width:100%!important}');
+    o.push('.pad{padding-left:24px!important;padding-right:24px!important}');
+    o.push('.hero{font-size:36px!important;line-height:41px!important}');
+    o.push('.stack{display:block!important;width:100%!important}');
+    o.push('.gap{display:block!important;height:12px!important;width:100%!important}');
+    o.push('.btnw{display:block!important;width:100%!important;text-align:center!important}}');
+    o.push('</style></head><body style="margin:0;padding:0;background:'+S.bg+';">');
+
+    if(c.preheader){
+      o.push('<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">'+
+        escKeepTags(c.preheader)+'</div>');
+    }
+
+    o.push('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background:'+S.bg+';">');
+    o.push('<tr><td align="center" style="padding:26px 12px;">');
+    o.push('<!--[if mso]><table role="presentation" width="640"><tr><td><![endif]-->');
+    o.push('<table role="presentation" class="shell" width="640" cellpadding="0" cellspacing="0" border="0" '+
+      'style="width:640px;max-width:640px;background:'+S.shell+';border-radius:25px;overflow:hidden;">');
+
+    /* ---- header ---- */
+    o.push('<tr><td class="pad" style="padding:23px 38px;background:'+S.head+';border-bottom:1px solid '+S.line+';">'+
+      '<table role="presentation" width="100%"><tr><td><table role="presentation"><tr>'+
+      '<td width="46" height="46" align="center" style="width:46px;height:46px;border-radius:12px;'+
+      'background:#7b3cff;background-image:'+GR+';font:800 16px '+F+';color:#fff;">WE</td>'+
+      '<td style="padding-left:13px;">'+
+      '<div style="font:700 18px '+F+';color:'+S.ink+';">Webescapade</div>'+
+      '<div style="padding-top:4px;font:500 9px '+F+';letter-spacing:2.3px;color:'+S.eye+';">AI-POWERED WEB EXPERIENCES</div>'+
+      '</td></tr></table></td>');
+    if(c.badge){
+      o.push('<td align="right"><span class="pulse" style="display:inline-block;width:8px;height:8px;'+
+        'border-radius:50%;background:#39ddd3;vertical-align:middle;"></span>'+
+        '<span style="padding-left:7px;font:600 10px '+F+';letter-spacing:1.2px;color:'+S.mut+';">'+
+        escKeepTags(c.badge)+'</span></td>');
+    }
+    o.push('</tr></table></td></tr>');
+
+    /* ---- hero ---- */
+    var hd=bandDark(0), H=hd?DARK:LIGHT;
+    o.push('<tr><td class="pad" style="padding:52px 48px 48px;background:'+H.band+';background-image:'+
+      'radial-gradient(circle at 88% 17%,rgba(24,199,195,.17),transparent 34%),'+
+      'radial-gradient(circle at 12% 10%,rgba(129,55,255,.23),transparent 38%),'+
+      'linear-gradient(rgba(86,100,150,.08) 1px,transparent 1px),'+
+      'linear-gradient(90deg,rgba(86,100,150,.08) 1px,transparent 1px);'+
+      'background-size:auto,auto,28px 28px,28px 28px;">');
+    if(c.greeting){
+      o.push('<div style="font:600 15px '+F+';color:'+H.mut+';margin-bottom:20px;">'+escKeepTags(c.greeting)+'</div>');
+    }
+    if(c.eyebrow){
+      o.push('<div style="font:700 11px '+F+';letter-spacing:2.2px;color:'+H.eye+';">'+escKeepTags(c.eyebrow).toUpperCase()+'</div>');
+    }
+    if(c.headline){
+      o.push('<div class="hero" style="padding-top:18px;max-width:535px;font:700 45px/50px '+F+';color:'+H.ink+';">'+
+        nl(c.headline)+'</div>');
+    }
+    o.push('<div style="margin-top:24px;width:93px;height:4px;border-radius:4px;background:#7b3cff;'+
+      'background-image:linear-gradient(90deg,#8d38ff,#2fe1db);"></div>');
+    para(c.intro).forEach(function(p){
+      o.push('<div style="padding-top:22px;max-width:520px;font:400 17px/28px '+F+';color:'+H.mut+';">'+escKeepTags(p)+'</div>');
+    });
+    if(c.cta1||c.cta2){
+      o.push('<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;"><tr>');
+      if(c.cta1){
+        o.push('<td class="shimmer" style="border-radius:11px;background:#7b3cff;background-image:'+
+          'linear-gradient(110deg,#7b3cff 0%,#7b3cff 40%,#35d9dd 50%,#7b3cff 60%,#7b3cff 100%);">'+
+          '<a href="'+esc(url(c.cta1url)||'#')+'" style="display:inline-block;padding:16px 23px;font:700 13px '+F+';color:#fff;">'+
+          escKeepTags(c.cta1).toUpperCase()+'&nbsp;&nbsp;&rarr;</a></td>');
+      }
+      if(c.cta2){
+        o.push('<td width="12" class="gap"></td><td style="border:1px solid '+H.line2+';border-radius:11px;">'+
+          '<a href="'+esc(url(c.cta2url)||'#')+'" style="display:inline-block;padding:15px 22px;font:700 13px '+F+';color:'+H.ink+';">'+
+          escKeepTags(c.cta2).toUpperCase()+'</a></td>');
+      }
+      o.push('</tr></table>');
+    }
+    o.push('</td></tr>');
+
+    var band=1;
+
+    /* ---- feature cards ---- */
+    if(c.featOn && (c.cards||[]).length){
+      var fd=bandDark(band++), B=fd?DARK:LIGHT;
+      o.push('<tr><td class="pad" style="padding:46px 42px;background:'+B.band2+';">');
+      if(c.featEyebrow) o.push('<div style="font:700 11px '+F+';letter-spacing:2px;color:'+B.eye+';">'+escKeepTags(c.featEyebrow).toUpperCase()+'</div>');
+      if(c.featHeading) o.push('<div style="padding-top:11px;font:700 29px/36px '+F+';color:'+B.ink+';">'+nl(c.featHeading)+'</div>');
+      if(c.featSub)     o.push('<div style="padding-top:14px;font:400 16px/25px '+F+';color:'+B.mut+';">'+escKeepTags(c.featSub)+'</div>');
+      var n=c.cards.length, w=(n>=3?31:n===2?48:100), gp=(n>=3?3.5:n===2?4:0);
+      o.push('<table role="presentation" width="100%" style="margin-top:26px;"><tr>');
+      c.cards.forEach(function(cd,i){
+        if(i) o.push('<td class="gap" width="'+gp+'%"></td>');
+        var accent=['#7b3cff','#4d70ef','#1db9ba'][i%3];
+        o.push('<td class="stack" width="'+w+'%" valign="top" style="width:'+w+'%;padding:20px 17px;'+
+          'background:'+B.shell+';border:1px solid '+B.line+';border-radius:15px;">'+
+          (cd.n?'<div style="font:800 22px '+F+';color:'+accent+';">'+escKeepTags(cd.n)+'</div>':'')+
+          '<div style="padding-top:12px;font:700 16px '+F+';color:'+B.ink+';">'+escKeepTags(cd.t)+'</div>'+
+          '<div style="padding-top:8px;font:400 13px/20px '+F+';color:'+B.mut+';">'+escKeepTags(cd.d)+'</div></td>');
+      });
+      o.push('</tr></table></td></tr>');
+    }
+
+    /* ---- spotlight ---- */
+    if(c.spotOn && (c.boxes||[]).length){
+      var sd=bandDark(band++), P=sd?DARK:LIGHT;
+      o.push('<tr><td class="pad" style="padding:44px 42px;background:'+(sd?DARK.band2:LIGHT.band2)+';">');
+      if(c.spotEyebrow) o.push('<div style="font:700 11px '+F+';letter-spacing:2px;color:'+P.eye+';">'+escKeepTags(c.spotEyebrow).toUpperCase()+'</div>');
+      if(c.spotHeading) o.push('<div style="padding-top:11px;font:700 28px/35px '+F+';color:'+P.ink+';">'+nl(c.spotHeading)+'</div>');
+      if(c.spotSub)     o.push('<div style="padding-top:13px;font:400 15px/24px '+F+';color:'+P.mut+';">'+escKeepTags(c.spotSub)+'</div>');
+      var bn=c.boxes.length, bw=(bn>=2?48:100);
+      o.push('<table role="presentation" width="100%" style="margin-top:24px;"><tr>');
+      c.boxes.forEach(function(bx,i){
+        if(i) o.push('<td class="gap" width="4%"></td>');
+        var ac=i%2?'#54ddd8':'#a576ff';
+        o.push('<td class="stack" width="'+bw+'%" style="width:'+bw+'%;padding:19px;border:1px solid '+P.line2+';border-radius:14px;">'+
+          '<div style="font:700 10px '+F+';letter-spacing:1.6px;color:'+ac+';">'+escKeepTags(bx.l).toUpperCase()+'</div>'+
+          '<div style="padding-top:8px;font:700 22px '+F+';color:'+P.ink+';">'+escKeepTags(bx.v)+'</div></td>');
+      });
+      o.push('</tr></table></td></tr>');
+    }
+
+    /* ---- pricing ---- */
+    if(c.priceOn && (c.plans||[]).length){
+      var pd=bandDark(band++), Q=pd?DARK:LIGHT;
+      o.push('<tr><td class="pad" style="padding:46px 42px;background:'+Q.band2+';">');
+      if(c.priceEyebrow) o.push('<div style="font:700 11px '+F+';letter-spacing:2px;color:'+Q.eye+';">'+escKeepTags(c.priceEyebrow).toUpperCase()+'</div>');
+      if(c.priceHeading) o.push('<div style="padding-top:11px;font:700 27px/34px '+F+';color:'+Q.ink+';">'+nl(c.priceHeading)+'</div>');
+      var pn=c.plans.length, pw=(pn>=3?31:pn===2?48:100), pg=(pn>=3?3.5:pn===2?4:0);
+      o.push('<table role="presentation" width="100%" style="margin-top:24px;"><tr>');
+      c.plans.forEach(function(pl,i){
+        if(i) o.push('<td class="gap" width="'+pg+'%"></td>');
+        var hi=!!pl.hi;
+        var bgv = hi ? '#171a36;background-image:radial-gradient(circle at 100% 0,rgba(45,218,211,.2),transparent 45%)' : Q.shell;
+        o.push('<td class="stack" width="'+pw+'%" valign="top" style="width:'+pw+'%;padding:22px 19px;'+
+          'background:'+bgv+';border:1px solid '+(hi?'transparent':Q.line)+';border-radius:16px;">'+
+          '<div style="font:700 11px '+F+';letter-spacing:1.5px;color:'+(hi?'#58e0da':Q.eye)+';">'+escKeepTags(pl.tier).toUpperCase()+'</div>'+
+          '<div style="padding-top:9px;font:800 33px '+F+';color:'+(hi?'#fff':Q.ink)+';">'+escKeepTags(pl.price)+
+          '<span style="font:400 12px '+F+';color:'+(hi?'#c8cad8':Q.mut)+';"> '+escKeepTags(pl.per)+'</span></div>'+
+          '<div style="padding-top:12px;font:400 14px/22px '+F+';color:'+(hi?'#d4d6e3':Q.mut)+';">'+escKeepTags(pl.desc)+'</div></td>');
+      });
+      o.push('</tr></table>');
+      if(c.priceFoot){
+        o.push('<div style="padding-top:20px;font:400 14px/22px '+F+';color:'+Q.mut+';">'+escKeepTags(c.priceFoot)+'</div>');
+      }
+      o.push('</td></tr>');
+    }
+
+    /* ---- final CTA ---- */
+    if(c.finalOn && (c.finalHeading||c.finalCta)){
+      o.push('<tr><td class="pad" align="center" style="padding:47px 42px;background:#151936;background-image:'+
+        'radial-gradient(circle at 15% 0,rgba(129,55,255,.35),transparent 45%),'+
+        'radial-gradient(circle at 90% 100%,rgba(37,211,208,.25),transparent 43%);">');
+      if(c.finalHeading) o.push('<div style="font:700 28px/35px '+F+';color:#fff;">'+nl(c.finalHeading)+'</div>');
+      if(c.finalSub)     o.push('<div style="padding-top:13px;font:400 15px/24px '+F+';color:#c8cad8;">'+escKeepTags(c.finalSub)+'</div>');
+      if(c.finalCta){
+        o.push('<table role="presentation" align="center" style="margin-top:25px;"><tr>'+
+          '<td style="border-radius:10px;background:#7b3cff;background-image:linear-gradient(100deg,#8438ff,#3479f6,#2fd7d2);">'+
+          '<a href="'+esc(url(c.finalUrl)||'#')+'" style="display:inline-block;padding:16px 27px;font:700 13px '+F+';color:#fff;">'+
+          escKeepTags(c.finalCta).toUpperCase()+'&nbsp;&nbsp;&rarr;</a></td></tr></table>');
+      }
+      o.push('</td></tr>');
+    }
+
+    /* ---- footer ---- */
+    var Fo = mode==='light' ? LIGHT : DARK;
+    o.push('<tr><td class="pad" align="center" style="padding:30px 42px;background:'+Fo.foot+';">'+
+      '<table role="presentation" align="center" cellpadding="0" cellspacing="0"><tr>'+
+      '<td width="37" height="37" align="center" style="width:37px;height:37px;border-radius:10px;'+
+      'background:#7b3cff;background-image:'+GR+';font:800 13px '+F+';color:#fff;">WE</td>'+
+      '<td style="padding-left:10px;font:700 16px '+F+';color:'+Fo.ink+';">Webescapade</td></tr></table>');
+    var bits=[];
+    if(c.phone)  bits.push('<a href="tel:'+esc(c.phone.replace(/\s/g,''))+'" style="color:'+Fo.faint+';">'+esc(c.phone)+'</a>');
+    if(c.email)  bits.push('<a href="mailto:'+esc(c.email)+'" style="color:'+Fo.faint+';">'+esc(c.email)+'</a>');
+    if(c.siteUrl)bits.push('<a href="'+esc(url(c.siteUrl))+'" style="color:'+Fo.faint+';">'+esc(String(c.siteUrl).replace(/^https?:\/\//,''))+'</a>');
+    if(bits.length){
+      o.push('<div style="padding-top:14px;font:400 12px/21px '+F+';color:'+Fo.faint+';">'+
+        bits.join('&nbsp;&nbsp;&bull;&nbsp;&nbsp;')+'</div>');
+    }
+    var un = c.resendUnsub ? RESEND_UNSUB : url(c.unsubUrl);
+    o.push('<div style="padding-top:16px;font:400 10px/17px '+F+';color:'+Fo.faint+';">'+
+      escKeepTags(c.address||'')+
+      (un ? '<br /><a href="'+un+'" style="color:'+Fo.faint+';text-decoration:underline;">Unsubscribe</a>' : '')+
+      '</div>');
+    o.push('</td></tr>');
+
+    o.push('</table><!--[if mso]></td></tr></table><![endif]--></td></tr></table></body></html>');
+    return o.join('');
+  }
+
+  function buildText(c){
+    var L=[];
+    if(c.greeting) L.push(c.greeting);
+    if(c.eyebrow) L.push('', c.eyebrow.toUpperCase());
+    if(c.headline) L.push('', c.headline.replace(/\n/g,' '));
+    if(c.intro) L.push('', c.intro);
+    if(c.featOn && (c.cards||[]).length){
+      L.push('');
+      if(c.featHeading) L.push(c.featHeading.replace(/\n/g,' '));
+      c.cards.forEach(function(x){ L.push('* '+x.t+' \u2014 '+x.d); });
+    }
+    if(c.spotOn && (c.boxes||[]).length){
+      L.push('');
+      if(c.spotHeading) L.push(c.spotHeading.replace(/\n/g,' '));
+      if(c.spotSub) L.push(c.spotSub);
+      c.boxes.forEach(function(b){ L.push('* '+b.l+': '+b.v); });
+    }
+    if(c.priceOn && (c.plans||[]).length){
+      L.push('');
+      c.plans.forEach(function(p){ L.push('* '+p.tier+' '+p.price+' '+p.per+' \u2014 '+p.desc); });
+      if(c.priceFoot) L.push(c.priceFoot);
+    }
+    if(c.cta1 && url(c.cta1url)) L.push('', c.cta1+': '+url(c.cta1url));
+    if(c.cta2 && url(c.cta2url)) L.push(c.cta2+': '+url(c.cta2url));
+    if(c.finalOn && c.finalHeading) L.push('', c.finalHeading.replace(/\n/g,' '));
+    if(c.finalOn && c.finalCta && url(c.finalUrl)) L.push(c.finalCta+': '+url(c.finalUrl));
+    L.push('', '\u2014');
+    var f=[c.phone,c.email,c.siteUrl].filter(Boolean);
+    if(f.length) L.push(f.join('  \u2022  '));
+    if(c.address) L.push(c.address);
+    if(c.resendUnsub) L.push('Unsubscribe: '+RESEND_UNSUB);
+    else if(url(c.unsubUrl)) L.push('Unsubscribe: '+url(c.unsubUrl));
+    return L.join('\n');
+  }
+
+  /* ================= UI ================= */
+  function renderRail(){
+    var list=$('#campList'); list.innerHTML='';
+    camps.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.className='camp'; b.type='button';
+      b.setAttribute('aria-current', i===cur?'true':'false');
+      b.innerHTML='<span class="cname">'+esc(c.name)+'</span>'+(c.desc?'<span class="cdesc">'+esc(c.desc)+'</span>':'');
+      b.addEventListener('click',function(e){
+        if(e.target.classList.contains('del')) return;
+        cur=i; renderRail(); fillForm(); renderPreview();
+      });
+      if(camps.length>1){
+        var d=document.createElement('span');
+        d.className='del'; d.textContent='\u00d7'; d.setAttribute('role','button');
+        d.setAttribute('tabindex','0'); d.setAttribute('aria-label','Delete '+c.name);
+        d.addEventListener('click',function(ev){
+          ev.stopPropagation();
+          if(!confirm('Delete "'+c.name+'"? This cannot be undone.')) return;
+          camps.splice(i,1); if(cur>=camps.length) cur=camps.length-1;
+          renderRail(); fillForm(); renderPreview(); toast('Campaign deleted');
+        });
+        b.appendChild(d);
+      }
+      list.appendChild(b);
+    });
+    $('#campCount').textContent = camps.length+' campaign'+(camps.length===1?'':'s');
+  }
+
+  function repeater(hostSel, arr, fields, labelPrefix){
+    var host=$(hostSel); host.innerHTML='';
+    (arr||[]).forEach(function(item,i){
+      var d=document.createElement('div'); d.className='block';
+      var h='<div class="bh"><span class="bn">'+labelPrefix+' '+(i+1)+'</span>'+
+        '<button class="iconbtn" type="button" data-up="'+i+'" aria-label="Move up">\u2191</button>'+
+        '<button class="iconbtn" type="button" data-down="'+i+'" aria-label="Move down">\u2193</button>'+
+        '<button class="iconbtn danger" type="button" data-rm="'+i+'" aria-label="Remove">\u00d7</button></div>';
+      fields.forEach(function(f){
+        h += '<div class="field" style="margin-bottom:8px">'+
+          (f.type==='ta'
+            ? '<textarea rows="2" data-f="'+f.k+'" data-i="'+i+'" placeholder="'+f.ph+'">'+esc(item[f.k]||'')+'</textarea>'
+            : f.type==='cb'
+              ? '<label class="chk" style="margin:0"><input type="checkbox" data-f="'+f.k+'" data-i="'+i+'"'+(item[f.k]?' checked':'')+'> '+f.ph+'</label>'
+              : '<input type="text" data-f="'+f.k+'" data-i="'+i+'" placeholder="'+f.ph+'" value="'+esc(item[f.k]||'')+'">')+
+          '</div>';
+      });
+      d.innerHTML=h; host.appendChild(d);
+    });
+    host.querySelectorAll('[data-f]').forEach(function(el){
+      var ev = el.type==='checkbox' ? 'change' : 'input';
+      el.addEventListener(ev,function(){
+        arr[+el.dataset.i][el.dataset.f] = el.type==='checkbox' ? el.checked : el.value;
+        renderPreview();
+      });
+    });
+    host.querySelectorAll('[data-rm]').forEach(function(el){
+      el.addEventListener('click',function(){ arr.splice(+el.dataset.rm,1); renderRepeaters(); renderPreview(); });
+    });
+    host.querySelectorAll('[data-up]').forEach(function(el){
+      el.addEventListener('click',function(){ var i=+el.dataset.up; if(i<1) return;
+        var t=arr[i-1]; arr[i-1]=arr[i]; arr[i]=t; renderRepeaters(); renderPreview(); });
+    });
+    host.querySelectorAll('[data-down]').forEach(function(el){
+      el.addEventListener('click',function(){ var i=+el.dataset.down; if(i>=arr.length-1) return;
+        var t=arr[i+1]; arr[i+1]=arr[i]; arr[i]=t; renderRepeaters(); renderPreview(); });
+    });
+  }
+
+  function renderRepeaters(){
+    var c=camps[cur];
+    c.cards=c.cards||[]; c.boxes=c.boxes||[]; c.plans=c.plans||[];
+    repeater('#cardList', c.cards, [
+      {k:'n',type:'t',ph:'Number, e.g. 01'},
+      {k:'t',type:'t',ph:'Title'},
+      {k:'d',type:'ta',ph:'One short sentence'}], 'CARD');
+    repeater('#boxList', c.boxes, [
+      {k:'l',type:'t',ph:'Label, e.g. KITCHEN DISPLAY'},
+      {k:'v',type:'t',ph:'Value, e.g. Food orders'}], 'BOX');
+    repeater('#planList', c.plans, [
+      {k:'tier',type:'t',ph:'Plan name'},
+      {k:'price',type:'t',ph:'$149'},
+      {k:'per',type:'t',ph:'/ month'},
+      {k:'desc',type:'ta',ph:'What it adds'},
+      {k:'hi',type:'cb',ph:'Highlight this plan'}], 'PLAN');
+  }
+
+  function fillForm(){
+    var c=camps[cur];
+    document.querySelectorAll('[data-k]').forEach(function(el){
+      if(el.type==='checkbox') el.checked = !!c[el.dataset.k];
+      else el.value = c[el.dataset.k]==null ? '' : c[el.dataset.k];
+    });
+    $('#subjLen').textContent=(c.subject||'').length;
+    renderRepeaters();
+  }
+
+  function renderPreview(){
+    var c=camps[cur];
+    $('#pvSubject').textContent = c.subject || '(no subject yet)';
+    $('#pvPre').textContent     = c.preheader || '';
+    $('#subjLen').textContent   = (c.subject||'').length;
+    $('#pv').srcdoc = buildEmail(c);
+  }
+
+  document.querySelectorAll('[data-k]').forEach(function(el){
+    var ev = el.type==='checkbox' ? 'change' : (el.tagName==='SELECT' ? 'change' : 'input');
+    el.addEventListener(ev,function(){
+      camps[cur][el.dataset.k] = el.type==='checkbox' ? el.checked : el.value;
+      if(el.dataset.k==='name') renderRail();
+      renderPreview();
+    });
+  });
+
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+      t.setAttribute('aria-selected','true');
+      ['content','bands','send'].forEach(function(p){ $('#pane-'+p).hidden=(p!==t.dataset.pane); });
+    });
+  });
+
+  $('#addCard').addEventListener('click',function(){
+    var c=camps[cur]; c.cards=c.cards||[];
+    c.cards.push({n:String(c.cards.length+1).padStart(2,'0'),t:'',d:''});
+    renderRepeaters(); renderPreview();
+  });
+  $('#addBox').addEventListener('click',function(){
+    var c=camps[cur]; c.boxes=c.boxes||[]; c.boxes.push({l:'',v:''});
+    renderRepeaters(); renderPreview();
+  });
+  $('#addPlan').addEventListener('click',function(){
+    var c=camps[cur]; c.plans=c.plans||[];
+    c.plans.push({tier:'',price:'',per:'/ month',desc:'',hi:false});
+    renderRepeaters(); renderPreview();
+  });
+
+  $('#addCamp').addEventListener('click',function(){
+    camps.push(preset({name:'New campaign',headline:'',intro:'',cards:[],plans:[]}));
+    cur=camps.length-1; renderRail(); fillForm(); renderPreview();
+    $('#fName').focus(); toast('Campaign added');
+  });
+  $('#dupCamp').addEventListener('click',function(){
+    var copy=JSON.parse(JSON.stringify(camps[cur]));
+    copy.name=camps[cur].name+' (copy)';
+    camps.splice(cur+1,0,copy); cur=cur+1;
+    renderRail(); fillForm(); renderPreview(); toast('Campaign duplicated');
+  });
+
+  function download(name,text,type){
+    var b=new Blob([text],{type:type||'text/plain;charset=utf-8'});
+    var u=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=u; a.download=name; document.body.appendChild(a); a.click();
+    document.body.removeChild(a); setTimeout(function(){URL.revokeObjectURL(u);},800);
+  }
+  $('#exportAll').addEventListener('click',function(){
+    /* settings travel with the campaigns, but never the secret */
+    var safe={}; Object.keys(SET).forEach(function(k){ if(k!=='secret') safe[k]=SET[k]; });
+    var pack={ version:2, settings:safe, campaigns:camps };
+    download('restaurant-deluxe-campaigns.json',JSON.stringify(pack,null,2),'application/json');
+    toast('Campaigns exported');
+  });
+  $('#importAll').addEventListener('click',function(){ $('#fileIn').click(); });
+  $('#fileIn').addEventListener('change',function(){
+    var f=this.files&&this.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var data=JSON.parse(r.result);
+        var list = Array.isArray(data) ? data : (data && data.campaigns);
+        if(!Array.isArray(list)||!list.length) throw new Error('bad');
+        if(data && data.settings){
+          Object.keys(data.settings).forEach(function(k){ if(k!=='secret') SET[k]=data.settings[k]; });
+          document.querySelectorAll('[data-g]').forEach(function(el){ el.value=SET[el.dataset.g]||''; });
+          $('#listCount').textContent=parseList(SET.list).length;
+        }
+        camps=list.map(function(c){ return preset(c); }); cur=0;
+        renderRail(); fillForm(); renderPreview(); toast('Loaded '+camps.length+' campaigns');
+      }catch(e){ toast('That file is not a campaign export'); }
+    };
+    r.readAsText(f); this.value='';
+  });
+
+  function copy(text,msg){
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){toast(msg);},fb);
+    } else fb();
+    function fb(){
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); toast(msg); }
+      catch(e){ toast('Copy failed \u2014 use Download instead'); }
+      document.body.removeChild(ta);
+    }
+  }
+  $('#copyHtml').addEventListener('click',function(){ copy(finalHtml(camps[cur]),'HTML copied \u2014 paste into Resend'); });
+  $('#copyText').addEventListener('click',function(){ copy(buildText(camps[cur]),'Plain text copied'); });
+  $('#downloadHtml').addEventListener('click',function(){
+    var c=camps[cur];
+    var slug=(c.name||'email').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    download(slug+'.html',finalHtml(c),'text/html;charset=utf-8'); toast('Downloaded');
+  });
+  $('#openMail').addEventListener('click',function(){
+    var c=camps[cur], body=buildText(c);
+    var href='mailto:'+encodeURIComponent(c.to||'')+'?subject='+encodeURIComponent(c.subject||'')+
+             '&body='+encodeURIComponent(body);
+    if(href.length>1900){ copy(body,'Too long for the mail app \u2014 plain text copied instead'); return; }
+    window.location.href=href;
+  });
+
+  $('#pvDesktop').addEventListener('click',function(){
+    $('#frameWrap').classList.remove('mobile');
+    this.setAttribute('aria-pressed','true'); $('#pvMobile').setAttribute('aria-pressed','false');
+  });
+  $('#pvMobile').addEventListener('click',function(){
+    $('#frameWrap').classList.add('mobile');
+    this.setAttribute('aria-pressed','true'); $('#pvDesktop').setAttribute('aria-pressed','false');
+  });
+
+  /* ===================================================================
+     SENDING VIA THE SUPABASE EDGE FUNCTION
+     The Resend key lives in the function, not in this file. This side
+     only knows the function URL and the studio secret, and the secret
+     is deliberately left out of exports.
+     =================================================================== */
+  var SET = { endpoint:'', secret:'', fromName:'Webescapade', fromEmail:'', replyTo:'',
+              list:'', audienceId:'', scheduledAt:'',
+              utmSource:'email', utmMedium:'broadcast' };
+  var REMEMBER = false, UTM_ON = false, HIST = [];
+
+  /* Browser storage, guarded. Some environments block it; the studio
+     still works, it just forgets between visits. */
+  var store = (function(){
+    var ok=false;
+    try{ window.localStorage.setItem('_t','1'); window.localStorage.removeItem('_t'); ok=true; }catch(e){}
+    return {
+      ok:ok,
+      get:function(k){ try{ return ok? window.localStorage.getItem(k) : null; }catch(e){ return null; } },
+      set:function(k,v){ try{ if(ok) window.localStorage.setItem(k,v); }catch(e){} },
+      del:function(k){ try{ if(ok) window.localStorage.removeItem(k); }catch(e){} }
+    };
+  })();
+  var K_SET='rdes.settings', K_HIST='rdes.history';
+
+  function saveSettings(){
+    if(!REMEMBER){ store.del(K_SET); return; }
+    var keep={};
+    ['endpoint','secret','fromName','fromEmail','replyTo','audienceId','utmSource','utmMedium']
+      .forEach(function(k){ keep[k]=SET[k]; });
+    keep._utm = UTM_ON;
+    store.set(K_SET, JSON.stringify(keep));
+  }
+  function loadSettings(){
+    var raw=store.get(K_SET); if(!raw) return;
+    try{
+      var d=JSON.parse(raw);
+      Object.keys(d).forEach(function(k){ if(k!=='_utm' && d[k]!=null) SET[k]=d[k]; });
+      UTM_ON=!!d._utm; REMEMBER=true;
+    }catch(e){}
+  }
+  function saveHist(){ store.set(K_HIST, JSON.stringify(HIST.slice(0,60))); }
+  function loadHist(){
+    var raw=store.get(K_HIST); if(!raw) return;
+    try{ var d=JSON.parse(raw); if(Array.isArray(d)) HIST=d; }catch(e){}
+  }
+
+  /* ---- UTM tagging ---------------------------------------------- */
+  function slug(t){ return String(t||'campaign').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+  function addUtm(html, campaignName){
+    if(!UTM_ON) return html;
+    var src=(SET.utmSource||'email').trim(), med=(SET.utmMedium||'broadcast').trim(), cmp=slug(campaignName);
+    return String(html).replace(/href="(https?:\/\/[^"]+)"/g, function(m, href){
+      if(/\{\{\{/.test(href)) return m;                    /* never touch merge tags */
+      if(/utm_source=/.test(href)) return m;               /* already tagged */
+      var sep = href.indexOf('?')<0 ? '?' : '&';
+      var q = 'utm_source='+encodeURIComponent(src)+
+              '&utm_medium='+encodeURIComponent(med)+
+              '&utm_campaign='+encodeURIComponent(cmp);
+      return 'href="'+href+sep+q+'"';
+    });
+  }
+  function finalHtml(c){ return addUtm(buildEmail(c), c.name); }
+
+  /* ---- history --------------------------------------------------- */
+  function addHist(entry){
+    HIST.unshift(Object.assign({ when:new Date().toISOString() }, entry));
+    saveHist(); renderHist();
+  }
+  function renderHist(){
+    var w=$('#histWrap');
+    if(!HIST.length){ w.innerHTML='<p class="empty">Nothing sent from this browser yet.</p>'; return; }
+    var rows=HIST.slice(0,25).map(function(h){
+      var d=new Date(h.when);
+      var when=d.toLocaleDateString(undefined,{day:'2-digit',month:'short'})+' '+
+               d.toTimeString().slice(0,5);
+      var kind = h.kind==='test' ? '<span class="tagx tst">Test</span>'
+               : h.kind==='list' ? '<span class="tagx lst">List</span>'
+               : '<span class="tagx bc">Broadcast</span>';
+      var res = h.failed ? (h.sent+' sent, '+h.failed+' failed')
+              : h.count!=null ? (h.count+' recipient'+(h.count===1?'':'s'))
+              : (h.status||'\u2014');
+      return '<tr><td>'+esc(when)+'</td><td>'+kind+'</td><td class="b">'+esc(h.campaign||'')+'</td>'+
+             '<td>'+esc(res)+'</td></tr>';
+    }).join('');
+    w.innerHTML='<table class="hist"><thead><tr><th>When</th><th>Type</th><th>Campaign</th>'+
+                '<th>Result</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  }
+
+  document.querySelectorAll('[data-g]').forEach(function(el){
+    el.value = SET[el.dataset.g] || '';
+    el.addEventListener('input',function(){
+      SET[el.dataset.g] = el.value;
+      if(el.dataset.g==='list') $('#listCount').textContent = parseList(SET.list).length;
+      saveSettings();
+    });
+    el.addEventListener('change',function(){ SET[el.dataset.g]=el.value; saveSettings(); });
+  });
+
+  $('#sRemember').addEventListener('change',function(){
+    REMEMBER=this.checked;
+    if(REMEMBER){ saveSettings(); toast(store.ok?'Saved on this device':'This browser blocks storage'); }
+    else { store.del(K_SET); toast('Forgotten'); }
+  });
+  $('#sUtm').addEventListener('change',function(){
+    UTM_ON=this.checked; saveSettings(); renderPreview();
+  });
+
+  function parseList(v){
+    var seen={}, out=[];
+    String(v||'').split(/[\s,;]+/).forEach(function(a){
+      a=a.trim().toLowerCase();
+      if(a && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a) && !seen[a]){ seen[a]=1; out.push(a); }
+    });
+    return out;
+  }
+
+  function logLine(msg,cls){
+    var box=$('#sendLog');
+    if(box.dataset.fresh!=='1'){ box.innerHTML=''; box.dataset.fresh='1'; }
+    var p=document.createElement('p');
+    if(cls) p.className=cls;
+    var t=new Date().toTimeString().slice(0,8);
+    p.textContent='['+t+'] '+msg;
+    box.appendChild(p); box.scrollTop=box.scrollHeight;
+  }
+
+  function fromAddress(){
+    var e=(SET.fromEmail||'').trim();
+    if(!e) return '';
+    var n=(SET.fromName||'').trim();
+    return n ? n+' <'+e+'>' : e;
+  }
+
+  /* Merge tags are broadcast-only. Resolve them for a direct send so no
+     recipient ever sees a raw {{{ ... }}} in their inbox. */
+  function resolveTags(html){
+    var c=camps[cur];
+    var unsub = url(c.unsubUrl) || (url(c.siteUrl)||'https://webescapade.com');
+    return String(html)
+      .replace(/\{\{\{\s*contact\.first_name\s*\|\s*([^}]*?)\s*\}\}\}/g,'$1')
+      .replace(/\{\{\{\s*contact\.[a-z_]+\s*\}\}\}/gi,'')
+      .replace(/\{\{\{RESEND_UNSUBSCRIBE_URL\}\}\}/g, unsub);
+  }
+
+  function busy(on){
+    ['btnPing','btnSendTest','btnSendList','btnDraft','btnBroadcast'].forEach(function(id){
+      var b=document.getElementById(id); if(b) b.disabled=!!on;
+    });
+  }
+
+  function call(action, payload){
+    if(!SET.endpoint){ logLine('Add the function URL first.','bad'); return Promise.reject(); }
+    if(!SET.secret){   logLine('Add the studio secret first.','bad'); return Promise.reject(); }
+    busy(true);
+    return fetch(SET.endpoint,{
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'x-studio-secret':SET.secret },
+      body:JSON.stringify(Object.assign({action:action},payload||{}))
+    }).then(function(res){
+      return res.json().catch(function(){ return {error:'The function replied with something that was not JSON'}; })
+        .then(function(d){ if(!res.ok || d.error) throw new Error(d.error||('HTTP '+res.status)); return d; });
+    }).catch(function(err){
+      var m=(err && err.message)||'Could not reach the function';
+      if(/Failed to fetch|NetworkError|load failed/i.test(m)){
+        m='Could not reach the function. Check the URL, and that the function allows this origin.';
+      }
+      logLine(m,'bad'); throw err;
+    }).finally(function(){ busy(false); });
+  }
+
+  function setConn(state,label){
+    var el=$('#connStatus');
+    el.className='status'+(state?' '+state:'');
+    el.lastElementChild.textContent=label;
+  }
+
+  $('#btnPing').addEventListener('click',function(){
+    logLine('Testing the connection\u2026');
+    call('ping').then(function(d){
+      setConn('on','Connected');
+      logLine('Connected. '+(d.audiences||[]).length+' audience(s) found.','ok');
+      fillAudiences(d.audiences||[]);
+    }).catch(function(){ setConn('off','Not connected'); });
+  });
+
+  function fillAudiences(list){
+    var sel=$('#sAudience');
+    sel.innerHTML='';
+    if(!list.length){
+      sel.innerHTML='<option value="">No audiences in this Resend account</option>';
+      return;
+    }
+    sel.innerHTML='<option value="">Choose an audience\u2026</option>';
+    list.forEach(function(a){
+      var o=document.createElement('option');
+      o.value=a.id; o.textContent=a.name+' \u2014 '+a.id.slice(0,8);
+      sel.appendChild(o);
+    });
+    if(SET.audienceId) sel.value=SET.audienceId;
+  }
+
+  function guardBasics(){
+    var c=camps[cur];
+    if(!fromAddress()){ logLine('Add a from address.','bad'); return false; }
+    if(!c.subject){ logLine('This campaign has no subject line.','bad'); return false; }
+    return true;
+  }
+
+  function doSend(recipients,label){
+    var c=camps[cur];
+    logLine('Sending '+label+'\u2026');
+    call('send',{
+      from:fromAddress(), replyTo:(SET.replyTo||'').trim()||undefined,
+      subject:c.subject, html:resolveTags(finalHtml(c)), text:buildText(c),
+      to:recipients, campaign:slug(c.name)
+    }).then(function(d){
+      addHist({ kind:(recipients.length===1?'test':'list'), campaign:c.name,
+                count:d.sent, sent:d.sent, failed:d.failed||0 });
+      if(d.failed){
+        logLine('Sent '+d.sent+', failed '+d.failed+'.','warn');
+        (d.failures||[]).slice(0,5).forEach(function(f){ logLine('  '+f.to+' \u2014 '+f.error,'bad'); });
+      } else {
+        logLine('Sent to '+d.sent+' recipient'+(d.sent===1?'':'s')+'.','ok');
+        toast('Sent to '+d.sent);
+      }
+    }).catch(function(){});
+  }
+
+  $('#btnSendTest').addEventListener('click',function(){
+    if(!guardBasics()) return;
+    var to=(camps[cur].to||'').trim() || (SET.fromEmail||'').trim();
+    if(!to){ logLine('Add a test recipient, or a from address to send to yourself.','bad'); return; }
+    doSend([to.toLowerCase()],'a test to '+to);
+  });
+
+  $('#btnSendList').addEventListener('click',function(){
+    if(!guardBasics()) return;
+    var to=parseList(SET.list);
+    if(!to.length){ logLine('No valid addresses in the list.','bad'); return; }
+    if(!confirm('Send "'+camps[cur].subject+'" to '+to.length+' recipient'+(to.length===1?'':'s')+' now?')) return;
+    doSend(to,'to '+to.length+' recipient'+(to.length===1?'':'s'));
+  });
+
+  function needAudience(){
+    if(!SET.audienceId){ logLine('Choose an audience first \u2014 test the connection to load them.','bad'); return false; }
+    return true;
+  }
+
+  $('#btnDraft').addEventListener('click',function(){
+    if(!guardBasics() || !needAudience()) return;
+    var c=camps[cur];
+    logLine('Creating a draft broadcast\u2026');
+    call('broadcast_create',{
+      audienceId:SET.audienceId, from:fromAddress(),
+      replyTo:(SET.replyTo||'').trim()||undefined,
+      subject:c.subject, html:finalHtml(c), name:c.name
+    }).then(function(d){
+      LAST_BC=d.id;
+      addHist({kind:'broadcast',campaign:c.name,status:'draft created',id:d.id});
+      logLine('Draft created in Resend. Id '+d.id,'ok');
+      logLine('Open Resend \u2192 Broadcasts to review and schedule it.','dim');
+      toast('Draft created in Resend');
+    }).catch(function(){});
+  });
+
+  $('#btnBroadcast').addEventListener('click',function(){
+    if(!guardBasics() || !needAudience()) return;
+    var c=camps[cur];
+    var when=(SET.scheduledAt||'').trim();
+    var msg = when ? 'Schedule "'+c.subject+'" to the whole audience for '+when+'?'
+                   : 'Send "'+c.subject+'" to the whole audience now?';
+    if(!confirm(msg)) return;
+    logLine('Creating the broadcast\u2026');
+    call('broadcast_create',{
+      audienceId:SET.audienceId, from:fromAddress(),
+      replyTo:(SET.replyTo||'').trim()||undefined,
+      subject:c.subject, html:finalHtml(c), name:c.name
+    }).then(function(d){
+      LAST_BC=d.id;
+      logLine('Broadcast created. Sending\u2026');
+      return call('broadcast_send',{ id:d.id, scheduledAt:when||undefined });
+    }).then(function(d){
+      addHist({ kind:'broadcast', campaign:c.name, id:LAST_BC,
+                status: when ? ('scheduled '+when) : 'sent to audience' });
+      logLine(when ? 'Scheduled for '+when+'.' : 'Broadcast sent to the audience.','ok');
+      toast(when ? 'Broadcast scheduled' : 'Broadcast sent');
+    }).catch(function(){});
+  });
+
+  var LAST_BC = '';
+
+  $('#btnCheck').addEventListener('click',function(){
+    var id = LAST_BC || (HIST.filter(function(h){return h.id;})[0]||{}).id;
+    if(!id){ logLine('No broadcast has been created from this browser yet.','bad'); return; }
+    logLine('Checking broadcast '+id+'\u2026');
+    call('broadcast_get',{id:id}).then(function(d){
+      var b=d.broadcast||{};
+      logLine('Status: '+(b.status||'unknown')+
+              (b.sent_at? ' \u2014 sent '+b.sent_at : '')+
+              (b.scheduled_at? ' \u2014 scheduled '+b.scheduled_at : ''),'ok');
+      logLine('Open and click figures live on the Resend dashboard.','dim');
+    }).catch(function(){});
+  });
+
+  function renderStats(row, links){
+    var w=$('#statsWrap');
+    if(!row){ w.innerHTML='<p class="empty">No events recorded for this campaign yet.</p>'; return; }
+    function box(n,label,cls){
+      return '<div class="stat'+(cls?' '+cls:'')+'"><b>'+(n==null?'\u2014':n)+'</b><span>'+label+'</span></div>';
+    }
+    var pct = (row.delivered && row.opened!=null)
+      ? Math.round((row.opened/row.delivered)*100)+'%' : null;
+    var html='<div class="stats">'+
+      box(row.sent,'Sent')+box(row.delivered,'Delivered')+
+      box(row.opened,'Opened','op')+box(row.clicked,'Clicked','cl')+
+      box(row.bounced,'Bounced','bo')+
+      (pct?box(pct,'Open rate'):'')+
+      '</div>';
+    if(links && links.length){
+      html+='<div class="links">'+links.slice(0,6).map(function(l){
+        return '<div><b>'+l.people+'</b><span>'+esc(l.click_url)+'</span></div>';
+      }).join('')+'</div>';
+    }
+    w.innerHTML=html;
+  }
+
+  /* The most recent broadcast id recorded for this campaign, if any.
+     Broadcasts are matched by id; direct sends by the campaign tag. */
+  function lastBroadcastFor(name){
+    var hit=HIST.filter(function(h){ return h.kind==='broadcast' && h.campaign===name && h.id; })[0];
+    return hit ? hit.id : '';
+  }
+
+  function showStats(d, label){
+    var row=(d.stats||[])[0];
+    renderStats(row, d.links||[]);
+    if(!row){
+      logLine('Nothing recorded against '+label+' yet.','warn');
+      logLine('Use Show recent events to see whether anything is arriving at all.','dim');
+      return;
+    }
+    logLine('Opened by '+(row.opened||0)+', clicked by '+(row.clicked||0)+
+            ' of '+(row.delivered||0)+' delivered.','ok');
+  }
+
+  $('#btnStats').addEventListener('click',function(){
+    var c=camps[cur], cmp=slug(c.name), bc=lastBroadcastFor(c.name);
+    if(bc){
+      logLine('Reading broadcast '+bc+'\u2026');
+      call('stats',{broadcastId:bc}).then(function(d){
+        if((d.stats||[]).length) return showStats(d,'broadcast '+bc);
+        /* fall back to the tag, in case it went out as a direct send too */
+        logLine('Nothing under that broadcast id \u2014 trying the campaign tag\u2026','dim');
+        return call('stats',{campaign:cmp}).then(function(d2){ showStats(d2,'"'+cmp+'"'); });
+      }).catch(function(){});
+    } else {
+      logLine('Reading events for "'+cmp+'"\u2026');
+      call('stats',{campaign:cmp}).then(function(d){ showStats(d,'"'+cmp+'"'); }).catch(function(){});
+    }
+  });
+
+  $('#btnRaw').addEventListener('click',function(){
+    logLine('Reading the last 25 events of any kind\u2026');
+    call('events_recent',{limit:25}).then(function(d){
+      var ev=d.events||[];
+      if(!ev.length){
+        logLine('Nothing at all in the table. So the webhook is not reaching Supabase.','bad');
+        logLine('Check: Resend > Webhooks shows recent deliveries and their status codes.','dim');
+        logLine('Check: the function has Verify JWT switched OFF.','dim');
+        logLine('Check: RESEND_WEBHOOK_SECRET matches the endpoint signing secret.','dim');
+        return;
+      }
+      logLine(ev.length+' event(s) found:','ok');
+      ev.slice(0,12).forEach(function(e){
+        logLine('  '+String(e.occurred_at||'').slice(5,16).replace('T',' ')+'  '+
+                e.event_type.replace('email.','')+'  '+(e.to_email||'')+
+                (e.click_url? '  \u2192 '+e.click_url.slice(0,48) : '')+
+                (e.campaign? '  [tag '+e.campaign+']' : '')+
+                (e.broadcast_id? '  [bc '+String(e.broadcast_id).slice(0,10)+']' : ''),'dim');
+      });
+    }).catch(function(){});
+  });
+
+  /* Full report: totals, the link breakdown, and one row per recipient
+     showing whether they opened, clicked, and what they clicked. */
+  $('#btnReport').addEventListener('click',function(){
+    var c=camps[cur], cmp=slug(c.name), bc=lastBroadcastFor(c.name);
+    var q = bc ? {broadcastId:bc} : {campaign:cmp};
+    logLine('Building the report\u2026');
+    Promise.all([ call('stats',q), call('events_list',q) ]).then(function(r){
+      var st=(r[0].stats||[])[0], links=r[0].links||[], ev=r[1].events||[];
+      if(!ev.length){ logLine('No events to report on yet.','warn'); return; }
+
+      /* fold the events into one row per person */
+      var people={};
+      ev.forEach(function(e){
+        var who=e.to_email||'(unknown)';
+        var p=people[who]||(people[who]={email:who,delivered:'',opened:'',clicked:'',opens:0,clicks:0,urls:{}});
+        var t=(e.event_type||'').replace('email.','');
+        if(t==='delivered' && !p.delivered) p.delivered=e.occurred_at;
+        if(t==='opened'){ p.opens++; if(!p.opened) p.opened=e.occurred_at; }
+        if(t==='clicked'){ p.clicks++; if(!p.clicked) p.clicked=e.occurred_at; if(e.click_url) p.urls[e.click_url]=1; }
+        if(t==='bounced') p.bounced=e.occurred_at;
+        if(t==='complained') p.complained=e.occurred_at;
+      });
+
+      function q1(v){ return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'; }
+      function row(a){ return a.map(q1).join(','); }
+      var L=[];
+      L.push(row(['Restaurant Deluxe \u2014 campaign report']));
+      L.push(row(['Campaign', c.name]));
+      L.push(row(['Subject', c.subject||'']));
+      L.push(row(['Identifier', bc ? ('broadcast '+bc) : ('tag '+cmp)]));
+      L.push(row(['Generated', new Date().toISOString()]));
+      L.push('');
+      L.push(row(['Sent','Delivered','Opened (people)','Clicked (people)','Bounced','Complained']));
+      L.push(row([st&&st.sent||0, st&&st.delivered||0, st&&st.opened||0,
+                  st&&st.clicked||0, st&&st.bounced||0, st&&st.complained||0]));
+      L.push('');
+      L.push(row(['Link','People','Total clicks']));
+      links.forEach(function(l){ L.push(row([l.click_url,l.people,l.clicks])); });
+      if(!links.length) L.push(row(['(no clicks recorded)','','']));
+      L.push('');
+      L.push(row(['Recipient','Delivered','First opened','First clicked','Opens','Clicks','Links clicked','Bounced','Complained']));
+      Object.keys(people).sort().forEach(function(k){
+        var p=people[k];
+        L.push(row([p.email,p.delivered,p.opened,p.clicked,p.opens,p.clicks,
+                    Object.keys(p.urls).join(' | '),p.bounced||'',p.complained||'']));
+      });
+      L.push('');
+      L.push(row(['Note','Opens are approximate: Apple Mail Privacy Protection loads tracking pixels automatically. Clicks are reliable.']));
+
+      download('report-'+cmp+'-'+new Date().toISOString().slice(0,10)+'.csv',
+               L.join('\n'),'text/csv;charset=utf-8');
+      logLine('Report exported \u2014 '+Object.keys(people).length+' recipient(s).','ok');
+      toast('Report exported');
+    }).catch(function(){});
+  });
+
+  /* ---- follow-up segments ---- */
+  var SEGS=null;
+
+  function renderSegs(d){
+    var w=$('#segWrap'), sg=d.segments||{}, ex=d.excluded||{};
+    var defs=[
+      ['clicked','cl','Clicked a link','The warm ones \u2014 worth a demonstration offer'],
+      ['openedNotClicked','op','Opened, no click','Interested but not convinced yet'],
+      ['notOpened','no','Did not open','Try a different subject line in a week'],
+      ['allDelivered','al','Everyone delivered','The whole list, minus anyone excluded']
+    ];
+    var rows=defs.map(function(f){
+      var list=sg[f[0]]||[], n=list.length;
+      return '<div class="seg-row '+f[1]+'"><span class="n">'+n+'</span>'+
+        '<span class="t"><b>'+f[2]+'</b><span>'+f[3]+'</span></span>'+
+        '<button type="button" data-seg="'+f[0]+'"'+(n?'':' disabled')+'>Load</button></div>';
+    }).join('');
+    var held=(ex.bounced||0)+(ex.complained||0)+(ex.unsubscribed||0);
+    var note = held
+      ? '<p class="help">'+held+' address(es) held back \u2014 '+
+        (ex.bounced||0)+' bounced, '+(ex.complained||0)+' complained, '+
+        (ex.unsubscribed||0)+' unsubscribed.</p>'
+      : '<p class="help">Nobody needed to be held back.</p>';
+    if(!ex.checkedAudience){
+      note += '<p class="help" style="color:var(--gold)">No audience selected, so unsubscribes '+
+              'could not be checked. Choose one above and rebuild before sending.</p>';
+    }
+    w.innerHTML='<div class="segs">'+rows+'</div>'+note;
+    w.querySelectorAll('[data-seg]').forEach(function(b){
+      b.addEventListener('click',function(){
+        var list=(SEGS&&SEGS.segments&&SEGS.segments[b.dataset.seg])||[];
+        if(!list.length) return;
+        SET.list=list.join('\n');
+        var ta=$('#sList'); if(ta) ta.value=SET.list;
+        $('#listCount').textContent=list.length;
+        saveSettings();
+        logLine(list.length+' address(es) loaded into Send to addresses now.','ok');
+        logLine('Pick the campaign you want to follow up with, then send.','dim');
+        toast(list.length+' loaded');
+      });
+    });
+  }
+
+  $('#btnSegment').addEventListener('click',function(){
+    var c=camps[cur], cmp=slug(c.name), bc=lastBroadcastFor(c.name);
+    var q = bc ? {broadcastId:bc} : {campaign:cmp};
+    if(SET.audienceId) q.audienceId=SET.audienceId;
+    logLine('Building follow-up lists\u2026');
+    call('segment',q).then(function(d){
+      SEGS=d;
+      renderSegs(d);
+      var t=(d.segments&&d.segments.allDelivered||[]).length;
+      if(!t){ logLine('No delivered recipients recorded for this campaign yet.','warn'); return; }
+      logLine('Lists ready: '+(d.segments.clicked||[]).length+' clicked, '+
+              (d.segments.openedNotClicked||[]).length+' opened only, '+
+              (d.segments.notOpened||[]).length+' did not open.','ok');
+    }).catch(function(){});
+  });
+
+  $('#btnHistCsv').addEventListener('click',function(){
+    if(!HIST.length){ toast('No history yet'); return; }
+    var rows=[['when','type','campaign','recipients','sent','failed','status','broadcast_id']];
+    HIST.forEach(function(h){
+      rows.push([h.when,h.kind||'',h.campaign||'',h.count==null?'':h.count,
+                 h.sent==null?'':h.sent,h.failed==null?'':h.failed,h.status||'',h.id||'']);
+    });
+    var csv=rows.map(function(r){
+      return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(',');
+    }).join('\n');
+    download('email-studio-history.csv',csv,'text/csv;charset=utf-8');
+    toast('History exported');
+  });
+
+  $('#btnHistClear').addEventListener('click',function(){
+    if(!HIST.length) return;
+    if(!confirm('Clear the send history stored in this browser? Resend keeps its own record.')) return;
+    HIST=[]; saveHist(); renderHist(); toast('History cleared');
+  });
+
+  /* ---- boot ---- */
+  loadSettings(); loadHist();
+  document.querySelectorAll('[data-g]').forEach(function(el){ el.value=SET[el.dataset.g]||''; });
+  $('#sRemember').checked = REMEMBER;
+  $('#sUtm').checked = UTM_ON;
+  $('#listCount').textContent = parseList(SET.list).length;
+  if(!store.ok){
+    $('#sRemember').disabled = true;
+    $('#sRemember').parentElement.nextElementSibling.textContent =
+      'This browser blocks local storage, so settings cannot be remembered here. Export all still saves your campaigns.';
+  }
+  renderHist();
+  renderRail(); fillForm(); renderPreview();
+})();
+</script>
+</body>
+</html>
