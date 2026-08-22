@@ -35,11 +35,12 @@
 
 <script>
   /* ---------- FILL THIS IN ---------- */
- var SUPABASE_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co';
-
-var SUPABASE_KEY = 'YOUR EXISTING ANON KEY';
-
-var CHECKOUT_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co/functions/v1/Edge-create-checkout';
+  var SUPABASE_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co/rest';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE';
+  /* Leave blank unless this venue takes payment on the phone. Then set it
+     to your project's function address:
+       https://<your-ref>.supabase.co/functions/v1/create-checkout   */
+  var CHECKOUT_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co/functions/v1/Edge-create-checkout';
   /* ---------- END ---------- */
 </script>
 
@@ -390,6 +391,34 @@ textarea:focus{border-color:var(--edge)}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;transition-duration:.001ms!important}
 }
+/* Safari applies its own colour to form fields and ignores an inherited
+   one, which leaves typed text near-black on a dark background. Setting
+   both colour and -webkit-text-fill-color is what actually holds, and the
+   autofill rule stops Safari repainting the field white. */
+input,select,textarea{
+  color:var(--ink);
+  -webkit-text-fill-color:var(--ink);
+  caret-color:var(--gold);
+}
+input::placeholder,textarea::placeholder{
+  color:var(--muted); -webkit-text-fill-color:var(--muted); opacity:1;
+}
+input:-webkit-autofill,input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 1000px var(--panel-2) inset;
+  caret-color:var(--gold);
+}
+
+/* tips, only shown where the venue takes payment on the phone */
+.tip-lbl{font-size:13px;color:var(--muted);margin:14px 0 8px}
+.tip-row{display:flex;gap:8px}
+.tip{flex:1;min-height:52px;border:1px solid var(--line);border-radius:13px;
+  background:none;color:var(--ink);font-size:14px;font-weight:600;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.tip span{font-size:11px;color:var(--muted);font-weight:400}
+.tip.on{background:var(--accent);color:var(--bg);border-color:transparent}
+.tip.on span{color:var(--bg);opacity:.75}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
 </style>
 </head>
 <body>
@@ -495,6 +524,16 @@ textarea:focus{border-color:var(--edge)}
 </section>
 
 <!-- ============ DONE ============ -->
+<section class="screen" id="scPaying">
+  <div class="centre">
+    <div class="mark" style="animation:pulse 1.4s ease-in-out infinite">$</div>
+    <span class="mono" style="color:var(--muted)">Confirming</span>
+    <h1 style="font-size:22px">Just a moment</h1>
+    <p id="payMsg">Confirming your payment with the bank.<br>
+      Please do not close this page.</p>
+  </div>
+</section>
+
 <section class="screen" id="scDone">
   <div class="centre">
     <div class="mark">✓</div>
@@ -537,7 +576,8 @@ textarea:focus{border-color:var(--edge)}
   </div>
   <div class="sheet-body" id="ctBody"></div>
   <div class="sheet-foot">
-    <button class="btn" id="ctSend">Send to the kitchen</button>
+    <div id="ctTips" style="display:none"></div>
+  <button class="btn" id="ctSend">Send to the kitchen</button>
   </div>
 </div>
 
@@ -588,7 +628,7 @@ function esc(s){
     .replace(/"/g,'&quot;');
 }
 function show(id){
-  ['scBoot','scSetup','scStop','scTable','scMenu','scDone'].forEach(function(s){
+  ['scBoot','scSetup','scStop','scTable','scMenu','scPaying','scDone'].forEach(function(s){
     $(s).classList.toggle('on', s === id);
   });
   window.scrollTo(0,0);
@@ -849,7 +889,8 @@ function boot(){
       $('hdName').textContent = V.name || 'Menu';
       $('hdTable').textContent = 'Table ' + TABLE.label;
       document.title = 'Table ' + TABLE.label + ' · ' + (V.name || 'Order');
-      show('scTable');
+      if(resumeAfterPayment()) return;
+    show('scTable');
       loadMenu();
     })
     .catch(function(e){
@@ -1254,6 +1295,9 @@ function paintCart(){
   $('ctBody').innerHTML = h;
   $('ctSend').disabled = false;
   $('ctSend').textContent = 'Send to the kitchen · ' + money(cartTotal());
+
+  paintTips();
+  var sb=$('ctSend'); if(sb && !sb.disabled) sb.textContent = payLabel();
 }
 
 $('ctBody').addEventListener('click', function(e){
@@ -1284,6 +1328,114 @@ $('ctBody').addEventListener('click', function(e){
   }
 });
 
+/* ================= paying at the table =================
+   Only for venues set to prepay. Everything else is untouched: the same
+   cart, the same menu, the same order. The difference is that the order
+   waits for Stripe before the kitchen ever sees it. */
+var TIP_CENTS = 0;
+function isPrepay(){ return V && V.payment_mode === 'prepay' && CHECKOUT_URL; }
+
+function paintTips(){
+  var box = $('ctTips');
+  if(!box) return;
+  if(!isPrepay() || !V.tips_enabled){ box.style.display='none'; return; }
+  box.style.display='';
+  var base = cartTotal();
+  var opts = [0, 0.05, 0.10, 0.15];
+  box.innerHTML = '<div class="tip-lbl">Add a tip for the team?</div>' +
+    '<div class="tip-row">' + opts.map(function(pc){
+      var c = Math.round(base * pc);
+      return '<button class="tip' + (c === TIP_CENTS ? ' on' : '') + '" data-tip="' + c + '">' +
+        (pc === 0 ? 'No tip' : (Math.round(pc*100) + '%<span>' + money(c) + '</span>')) +
+        '</button>';
+    }).join('') + '</div>';
+}
+
+function payAtTable(){
+  var btn = $('ctSend');
+  if(!IDEM) IDEM = 'idm-' + Date.now().toString(36) + '-' +
+                   Math.random().toString(36).slice(2,10);
+  var payload = CART.map(function(l){
+    return { item_id:l.item_id, qty:l.qty, options:l.options, note:l.note || null };
+  });
+  return fetch(CHECKOUT_URL, {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', apikey: SUPABASE_KEY,
+              Authorization: 'Bearer ' + SUPABASE_KEY },
+    body: JSON.stringify({ slug: VENUE, token: TOKEN, items: payload,
+                           idempotency_key: IDEM, tip_cents: TIP_CENTS })
+  }).then(function(r){
+    return r.text().then(function(t){
+      var d=null; try{ d = t ? JSON.parse(t) : null; }catch(e){}
+      if(!r.ok) throw { kind:'server', data:d, status:r.status };
+      return d;
+    });
+  }).then(function(res){
+    if(!res || !res.ok || !res.url) throw { kind:'server', data:res };
+    /* Remember the cart until the money is confirmed. If the guest backs
+       out of Stripe they return to a full basket, not an empty one. */
+    try{ sessionStorage.setItem('rd_paying', JSON.stringify({
+      order_id: res.order_id, cart: CART, tip: TIP_CENTS })); }catch(e){}
+    location.href = res.url;
+  });
+}
+
+/* Coming back from Stripe. The browser saying "paid" proves nothing, so
+   ask the database, which only knows once the webhook has run. */
+function resumeAfterPayment(){
+  var q = new URLSearchParams(location.search);
+  var paid = q.get('paid'), cancelled = q.get('cancelled');
+  if(!paid && !cancelled) return false;
+
+  var held = null;
+  try{ held = JSON.parse(sessionStorage.getItem('rd_paying') || 'null'); }catch(e){}
+
+  if(cancelled){
+    /* Payment abandoned. Give the basket back and say nothing alarming. */
+    if(held && held.cart){ CART = held.cart; saveCart(); }
+    try{ sessionStorage.removeItem('rd_paying'); }catch(e){}
+    history.replaceState({}, '', location.pathname + '?v=' +
+      encodeURIComponent(VENUE) + '&t=' + encodeURIComponent(TOKEN));
+    toast('Payment cancelled — your order is still here');
+    return false;
+  }
+
+  show('scPaying');
+  var tries = 0;
+  (function poll(){
+    tries++;
+    rpc('rd_payment_status', { p_venue_slug: VENUE, p_table_token: TOKEN,
+                               p_order_id: paid })
+      .then(function(st){
+        if(st && st.ok && st.paid){
+          CART = []; saveCart(); paintCartBar();
+          try{ sessionStorage.removeItem('rd_paying'); }catch(e){}
+          history.replaceState({}, '', location.pathname + '?v=' +
+            encodeURIComponent(VENUE) + '&t=' + encodeURIComponent(TOKEN));
+          $('dnNum').textContent = '#' + st.order_number;
+          $('dnLine').textContent = 'Paid · your order is with the kitchen';
+          $('dnRecap').innerHTML =
+            '<div class="sum tot"><span>Paid</span><span>' +
+            money((st.total_cents||0) + (st.tip_cents||0)) + '</span></div>' +
+            ((st.tip_cents ? '<div class="sum"><span>including tip</span><span>' +
+              money(st.tip_cents) + '</span></div>' : ''));
+          show('scDone');
+          return;
+        }
+        if(tries < 20) return setTimeout(poll, 1500);
+        /* Stripe can lag. Never claim failure - the money may well be taken. */
+        $('payMsg').textContent = 'Your payment is still being confirmed. ' +
+          'Please show this screen to a staff member.';
+      })
+      .catch(function(){
+        if(tries < 20) return setTimeout(poll, 1500);
+        $('payMsg').textContent = 'Could not confirm just now. ' +
+          'Please show this screen to a staff member.';
+      });
+  })();
+  return true;
+}
+
 /* ================= submit ================= */
 $('ctSend').addEventListener('click', function(){
   if(sending || !CART.length) return;          /* double-tap guard #1 */
@@ -1302,6 +1454,20 @@ $('ctSend').addEventListener('click', function(){
   var payload = CART.map(function(l){
     return { item_id:l.item_id, qty:l.qty, options:l.options, note:l.note || null };
   });
+
+  if(isPrepay()){
+    payAtTable().catch(function(e){
+      var msg = readErr(e);
+      var box = $('ctErr');
+      if(box){ box.className = 'notice bad'; box.style.display=''; box.textContent = msg; }
+      else toast(msg);
+      if(e && e.kind === 'server') IDEM = null;
+      sending = false;
+      $('ctSend').disabled = false;
+      $('ctSend').textContent = payLabel();
+    });
+    return;
+  }
 
   rpc('rd_place_order', {
     p_venue_slug: VENUE,
@@ -1335,8 +1501,21 @@ $('ctSend').addEventListener('click', function(){
   }).then(function(){
     sending = false;
     $('ctSend').disabled = false;
-    $('ctSend').textContent = 'Send to the kitchen · ' + money(cartTotal());
+    $('ctSend').textContent = payLabel();
   });
+});
+
+function payLabel(){
+  if(!isPrepay()) return 'Send to the kitchen \u00b7 ' + money(cartTotal());
+  return 'Pay and send \u00b7 ' + money(cartTotal() + TIP_CENTS);
+}
+
+document.addEventListener('click', function(e){
+  var b = e.target.closest('[data-tip]');
+  if(!b) return;
+  TIP_CENTS = parseInt(b.dataset.tip, 10) || 0;
+  paintTips();
+  var send = $('ctSend'); if(send) send.textContent = payLabel();
 });
 
 /* ================= wiring ================= */
