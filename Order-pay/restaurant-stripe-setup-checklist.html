@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Restaurant Stripe Setup Checklist</title>
+<style>
+  :root{
+    --bg:#0d0b08;
+    --panel:#17130e;
+    --panel2:#211a12;
+    --text:#f7f1e7;
+    --muted:#b9aa96;
+    --gold:#f2c66e;
+    --gold2:#d79b3c;
+    --line:#4a3a25;
+    --green:#39c77a;
+    --red:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(circle at top right, rgba(242,198,110,.09), transparent 32%),
+      var(--bg);
+    color:var(--text);
+    line-height:1.5;
+  }
+  .wrap{
+    max-width:860px;
+    margin:0 auto;
+    padding:28px 18px 60px;
+  }
+  .hero{
+    background:linear-gradient(145deg,#1a150e,#120f0b);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 18px 50px rgba(0,0,0,.28);
+  }
+  .eyebrow{
+    font-size:.78rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:800;
+  }
+  h1{
+    margin:.35rem 0 .45rem;
+    font-size:clamp(1.65rem,4vw,2.6rem);
+    line-height:1.12;
+  }
+  .lead{color:var(--muted);margin:0}
+  .setup-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:20px;
+  }
+  label.small{
+    display:block;
+    font-size:.78rem;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  input[type="text"]{
+    width:100%;
+    background:#0e0b08;
+    color:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 13px;
+    font-size:1rem;
+    outline:none;
+  }
+  input[type="text"]:focus{border-color:var(--gold)}
+  .mode{
+    display:flex;
+    gap:8px;
+  }
+  .mode button{
+    flex:1;
+    border:1px solid var(--line);
+    background:#0e0b08;
+    color:var(--muted);
+    padding:11px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+  }
+  .mode button.active{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#231708;
+    border-color:transparent;
+  }
+  .progress-wrap{margin-top:20px}
+  .progress-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    font-size:.9rem;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .bar{
+    height:10px;
+    background:#0c0a07;
+    border:1px solid var(--line);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .bar span{
+    display:block;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--gold),var(--green));
+    transition:width .25s ease;
+  }
+  .steps{
+    margin-top:20px;
+    display:grid;
+    gap:14px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+  }
+  .card.done{
+    border-color:rgba(57,199,122,.6);
+    box-shadow:inset 0 0 0 1px rgba(57,199,122,.08);
+  }
+  .row{
+    display:flex;
+    gap:13px;
+    align-items:flex-start;
+  }
+  .check{
+    margin-top:3px;
+    width:22px;
+    height:22px;
+    accent-color:var(--green);
+    flex:0 0 auto;
+  }
+  .stepnum{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background:#2b2114;
+    color:var(--gold);
+    font-weight:900;
+    font-size:.85rem;
+    margin-right:8px;
+    vertical-align:middle;
+  }
+  h2{
+    font-size:1.06rem;
+    margin:0 0 7px;
+  }
+  p{
+    margin:6px 0;
+  }
+  .muted{color:var(--muted)}
+  .codebox{
+    margin-top:10px;
+    background:#0d0a07;
+    border:1px solid #5a4528;
+    border-radius:12px;
+    padding:11px 12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:#ffe1a1;
+    word-break:break-all;
+  }
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:11px;
+  }
+  .btn{
+    appearance:none;
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:10px 13px;
+    background:#120f0b;
+    color:var(--text);
+    font-weight:800;
+    cursor:pointer;
+    text-decoration:none;
+    font-size:.9rem;
+  }
+  .btn.primary{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#231708;
+    border:none;
+  }
+  .btn:hover{filter:brightness(1.07)}
+  .event-list{
+    display:grid;
+    gap:7px;
+    margin-top:10px;
+  }
+  .event{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:#100c08;
+    border:1px solid #3d2f1e;
+    border-radius:10px;
+    padding:9px 11px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:.86rem;
+  }
+  .tiny{
+    font-size:.76rem;
+    padding:6px 9px;
+  }
+  .notice{
+    margin-top:16px;
+    border-left:4px solid var(--gold);
+    background:#17120c;
+    padding:13px 14px;
+    border-radius:10px;
+    color:#e8dccb;
+  }
+  .success{
+    display:none;
+    margin-top:16px;
+    border:1px solid rgba(57,199,122,.5);
+    background:rgba(57,199,122,.08);
+    padding:15px;
+    border-radius:13px;
+    color:#dff7ea;
+  }
+  .footer-actions{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:18px;
+  }
+  .status-pill{
+    display:inline-block;
+    margin-left:8px;
+    font-size:.72rem;
+    border:1px solid #694a20;
+    color:#e6bd74;
+    border-radius:999px;
+    padding:3px 8px;
+  }
+  .status-pill.ok{
+    color:#b8f3d1;
+    border-color:#2c7c50;
+  }
+  @media(max-width:650px){
+    .setup-grid{grid-template-columns:1fr}
+    .hero{padding:19px}
+    .card{padding:15px}
+    .event{align-items:flex-start; flex-direction:column}
+    .footer-actions{flex-direction:column}
+    .footer-actions .btn{width:100%;text-align:center}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Staff Setup Guide</div>
+    <h1>Restaurant Stripe Setup</h1>
+    <p class="lead">Follow the steps in order. Tick each box only when that step is finished.</p>
+
+    <div class="setup-grid">
+      <div>
+        <label class="small" for="restaurant">Restaurant name</label>
+        <input id="restaurant" type="text" placeholder="e.g. Cigalon" />
+      </div>
+      <div>
+        <label class="small">Stripe mode</label>
+        <div class="mode">
+          <button id="testMode" class="active" type="button">TEST</button>
+          <button id="liveMode" type="button">LIVE</button>
+        </div>
+      </div>
+      <div style="grid-column:1/-1">
+        <label class="small" for="slug">Restaurant code / slug</label>
+        <input id="slug" type="text" placeholder="e.g. cigalon" />
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span>Setup progress</span>
+        <strong id="progressText">0 / 7 complete</strong>
+      </div>
+      <div class="bar"><span id="progressBar"></span></div>
+    </div>
+  </section>
+
+  <div class="notice">
+    <strong>Security:</strong> Do not type or store any Stripe secret key on this instruction page.
+    Copy keys directly from Stripe into the secure restaurant setup panel.
+  </div>
+
+  <section class="steps">
+
+    <article class="card">
+      <div class="row">
+        <input class="check" type="checkbox" data-step="1" />
+        <div>
+          <h2><span class="stepnum">1</span>Open the restaurant's Stripe API keys</h2>
+          <p class="muted">In the restaurant's own Stripe account, go to <strong>Developers → API keys</strong>.</p>
+          <p>Copy the <strong>Secret key</strong> that starts with <code id="keyPrefix">sk_test_</code>, then paste it into <strong>Their secret key</strong> in your platform.</p>
+          <div class="actions">
+            <a class="btn primary" id="apiKeysBtn" href="https://dashboard.stripe.com/test/apikeys" target="_blank" rel="noopener">Open Stripe API Keys</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="row">
+        <input class="check" type="checkbox" data-step="2" />
+        <div style="width:100%">
+          <h2><span class="stepnum">2</span>Copy the restaurant webhook URL</h2>
+          <p class="muted">Use the URL shown in your platform for this restaurant. It must include the restaurant code at the end.</p>
+          <div class="codebox" id="webhookUrl">https://tehxobdokbvqtwtgqzrh.supabase.co/functions/v1/stripe-webhook?v=restaurant-code</div>
+          <div class="actions">
+            <button class="btn" id="copyWebhook" type="button">Copy webhook URL</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="row">
+        <input class="check" type="checkbox" data-step="3" />
+        <div>
+          <h2><span class="stepnum">3</span>Create a webhook endpoint in Stripe</h2>
+          <p class="muted">Go to <strong>Developers → Webhooks</strong>, choose <strong>Add endpoint</strong>, and paste the webhook URL from Step 2.</p>
+          <div class="actions">
+            <a class="btn primary" id="webhooksBtn" href="https://dashboard.stripe.com/test/webhooks" target="_blank" rel="noopener">Open Stripe Webhooks</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="row">
+        <input class="check" type="checkbox" data-step="4" />
+        <div style="width:100%">
+          <h2><span class="stepnum">4</span>Select these 3 Stripe events</h2>
+          <p class="muted">Add exactly these events to the webhook endpoint:</p>
+          <div class="event-list">
+            <div class="event"><span>checkout.session.completed</span><button class="btn tiny copyEvent" type="button">Copy</button></div>
+            <div class="event"><span>checkout.session.expired</span><button class="btn tiny copyEvent" type="button">Copy</button></div>
+            <div class="event"><span>charge.refunded</span><button class="btn tiny copyEvent" type="button">Copy</button></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="row">
+        <input class="check" type="checkbox" data-step="5" />
+        <div>
+          <h2><span class="stepnum">5</span>Copy the webhook signing secret</h2>
+          <p class="muted">After the endpoint is created, open it in Stripe and reveal the signing secret.</p>
+          <p>Copy the new value starting with <strong>whsec_</strong> and paste it into <strong>Their webhook signing secret</strong> in your platform.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="row">
+        <input class="check" type="checkbox" data-step="6" />
+        <div>
+          <h2><span class="stepnum">6</span>Save the restaurant's Stripe keys</h2>
+          <p class="muted">In your restaurant setup panel, click <strong>Save their keys</strong>.</p>
+          <p>Confirm the Stripe section changes from <span class="status-pill">NOT CONNECTED</span> to <span class="status-pill ok">CONNECTED</span>.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="row">
+        <input class="check" type="checkbox" data-step="7" />
+        <div>
+          <h2><span class="stepnum">7</span>Final restaurant check</h2>
+          <p class="muted">Make sure the restaurant has accepted the required terms and the ordering/payment status is ready.</p>
+          <p>Then perform one test order before handing the restaurant over to staff or going live.</p>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <div class="success" id="success">
+    <strong>Setup checklist complete.</strong><br>
+    The Stripe connection steps have all been ticked. Now confirm the platform shows the restaurant as connected and complete one test order.
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn" id="reset" type="button">Reset this checklist</button>
+    <button class="btn primary" id="print" type="button">Print / Save as PDF</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const base = "https://tehxobdokbvqtwtgqzrh.supabase.co/functions/v1/stripe-webhook?v=";
+  const checks = [...document.querySelectorAll(".check")];
+  const slug = document.getElementById("slug");
+  const restaurant = document.getElementById("restaurant");
+  const webhookUrl = document.getElementById("webhookUrl");
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const success = document.getElementById("success");
+  const testMode = document.getElementById("testMode");
+  const liveMode = document.getElementById("liveMode");
+  const apiKeysBtn = document.getElementById("apiKeysBtn");
+  const webhooksBtn = document.getElementById("webhooksBtn");
+  const keyPrefix = document.getElementById("keyPrefix");
+  let mode = "test";
+
+  function normalizeSlug(v){
+    return v.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+  }
+  function storageKey(){
+    return "stripeChecklist:" + (normalizeSlug(slug.value) || "default");
+  }
+  function updateUrl(){
+    const s = normalizeSlug(slug.value) || "restaurant-code";
+    webhookUrl.textContent = base + s;
+  }
+  function save(){
+    const state = {
+      restaurant: restaurant.value,
+      slug: slug.value,
+      mode,
+      checked: checks.map(c => c.checked)
+    };
+    localStorage.setItem(storageKey(), JSON.stringify(state));
+  }
+  function load(){
+    const raw = localStorage.getItem(storageKey());
+    if(!raw) return;
+    try{
+      const state = JSON.parse(raw);
+      restaurant.value = state.restaurant || restaurant.value;
+      mode = state.mode || "test";
+      (state.checked || []).forEach((v,i)=>{ if(checks[i]) checks[i].checked = !!v; });
+      setMode(mode, false);
+      updateProgress();
+    }catch(e){}
+  }
+  function updateProgress(){
+    const done = checks.filter(c => c.checked).length;
+    progressText.textContent = `${done} / ${checks.length} complete`;
+    progressBar.style.width = `${(done/checks.length)*100}%`;
+    checks.forEach(c => c.closest(".card").classList.toggle("done", c.checked));
+    success.style.display = done === checks.length ? "block" : "none";
+    save();
+  }
+  function setMode(nextMode, shouldSave=true){
+    mode = nextMode;
+    const isTest = mode === "test";
+    testMode.classList.toggle("active", isTest);
+    liveMode.classList.toggle("active", !isTest);
+    keyPrefix.textContent = isTest ? "sk_test_" : "sk_live_";
+    apiKeysBtn.href = isTest ? "https://dashboard.stripe.com/test/apikeys" : "https://dashboard.stripe.com/apikeys";
+    webhooksBtn.href = isTest ? "https://dashboard.stripe.com/test/webhooks" : "https://dashboard.stripe.com/webhooks";
+    if(shouldSave) save();
+  }
+
+  restaurant.addEventListener("input", save);
+  slug.addEventListener("input", () => { updateUrl(); save(); });
+  slug.addEventListener("change", load);
+  checks.forEach(c => c.addEventListener("change", updateProgress));
+  testMode.addEventListener("click", ()=>setMode("test"));
+  liveMode.addEventListener("click", ()=>setMode("live"));
+
+  document.getElementById("copyWebhook").addEventListener("click", async (e) => {
+    await navigator.clipboard.writeText(webhookUrl.textContent);
+    const b=e.currentTarget, old=b.textContent; b.textContent="Copied ✓";
+    setTimeout(()=>b.textContent=old,1200);
+  });
+
+  document.querySelectorAll(".copyEvent").forEach(btn => {
+    btn.addEventListener("click", async ()=>{
+      const text = btn.parentElement.querySelector("span").textContent;
+      await navigator.clipboard.writeText(text);
+      const old=btn.textContent; btn.textContent="Copied ✓";
+      setTimeout(()=>btn.textContent=old,1000);
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", ()=>{
+    if(confirm("Reset all tick boxes for this restaurant?")){
+      checks.forEach(c=>c.checked=false);
+      updateProgress();
+    }
+  });
+  document.getElementById("print").addEventListener("click", ()=>window.print());
+
+  updateUrl();
+  setMode("test", false);
+  load();
+  updateProgress();
+})();
+</script>
+</body>
+</html>
