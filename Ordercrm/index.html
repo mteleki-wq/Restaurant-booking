@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0c12" />
+  <title>Restaurant Deluxe — Order Intelligence</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">RD</div>
+        <div><strong>Restaurant Deluxe</strong><span>ORDER INTELLIGENCE</span></div>
+      </div>
+      <nav id="nav" class="nav"></nav>
+      <div class="sidebar-footer">
+        <div class="connection-mini" id="connectionMini"><span class="dot demo"></span><div><strong>Demo data</strong><small>Safe preview mode</small></div></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+        <div class="topbar-title">
+          <span class="eyebrow" id="pageEyebrow">ORDER INTELLIGENCE</span>
+          <h1 id="pageTitle">Overview</h1>
+          <p id="pageSubtitle">Know what is happening in your restaurant.</p>
+        </div>
+        <div class="topbar-actions">
+          <select id="venueSelect" class="control"></select>
+          <div class="range-switch" id="rangeSwitch">
+            <button data-days="7">7 days</button>
+            <button data-days="30" class="active">30 days</button>
+            <button data-days="90">90 days</button>
+          </div>
+          <button class="button secondary" id="refreshBtn">↻ Refresh</button>
+        </div>
+      </header>
+
+      <div id="banner" class="banner hidden"></div>
+      <section id="content" class="content" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
