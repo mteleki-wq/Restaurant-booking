@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0908">
+<meta name="robots" content="noindex,nofollow">
+<title>Kitchen Display</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — KITCHEN DISPLAY SYSTEM
+     staff-kds.html
+
+     SETUP — fill in the two lines marked "FILL THIS IN".
+       SUPABASE_URL   Settings -> API -> Project URL
+       SUPABASE_KEY   Settings -> API -> anon / public key
+
+     The anon key alone grants NOTHING here. Every row on this screen is
+     gated by Supabase Auth plus a matching row in rd_staff, enforced by
+     Row Level Security in the database. Signing out, or an account with
+     no rd_staff row, sees an empty board.
+
+     NEVER put the service_role key in this file.
+
+     This page is safe to leave open on a kitchen monitor all service:
+     the session refreshes itself, and the board reconciles on a timer
+     even if the live connection drops.
+     ================================================================== -->
+
+<script>
+  /* ---------- FILL THIS IN ---------- */
+  var SUPABASE_URL = '';
+  var SUPABASE_KEY = '';
+  /* ---------- END ---------- */
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Sora:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --bg:#0a0908;
+  --panel:#15120e;
+  --panel-2:#1d1913;
+  --ink:#f6efe2;
+  --muted:#a2957c;
+  --line:rgba(179,164,136,.2);
+  --gold:#f0cf85;
+
+  /* status colours are functional, not decorative — a chef reads these
+     across a hot pass from two metres away */
+  --new:#ffd479;
+  --acc:#8ab4ff;
+  --prep:#c9a2ff;
+  --ready:#7fd6a3;
+  --late:#ff7a66;
+
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Sora',-apple-system,sans-serif;font-size:15px;
+  -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  overscroll-behavior:none;
+}
+h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;font-weight:700}
+.mono{font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- sign in ---------- */
+#signin{
+  min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.card{
+  width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);
+  border-radius:20px;padding:30px 26px calc(26px + var(--safe-b));
+}
+.card h1{font-size:22px;margin-bottom:6px}
+.card p.sub{color:var(--muted);font-size:13.5px;margin:0 0 22px}
+label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 7px}
+input[type=email],input[type=password]{
+  width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;
+  background:var(--panel-2);padding:0 15px;outline:none;
+}
+input:focus{border-color:var(--gold)}
+.btn{
+  width:100%;min-height:52px;border-radius:100px;margin-top:22px;
+  background:linear-gradient(100deg,#f2d187,#df9f52 55%,#b8783c);
+  color:#241703;font-family:'Unbounded',sans-serif;font-weight:700;font-size:14px;
+}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.msg{margin-top:16px;font-size:13px;color:var(--late);min-height:19px}
+
+/* ---------- top bar ---------- */
+#board{display:none;flex-direction:column;height:100dvh}
+.bar{
+  flex:0 0 auto;border-bottom:1px solid var(--line);background:var(--panel);
+  padding-top:var(--safe-t);
+}
+.bar-in{display:flex;align-items:center;gap:14px;padding:11px 16px;flex-wrap:wrap}
+.bar h2{font-size:15px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ready);flex:0 0 auto}
+.dot.off{background:var(--late)}
+.spacer{flex:1}
+.chip{
+  border:1px solid var(--line);border-radius:100px;padding:9px 15px;min-height:44px;
+  display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12.5px;
+  white-space:nowrap;
+}
+.chip.on{color:#241703;background:var(--gold);border-color:transparent;font-weight:700}
+.chip b{font-family:'Space Mono',monospace;font-size:11px}
+.stations{display:flex;gap:8px;overflow-x:auto;padding:0 16px 11px;scrollbar-width:none}
+.stations::-webkit-scrollbar{display:none}
+
+/* ---------- grid ---------- */
+.grid{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:16px 16px calc(16px + var(--safe-b));
+  display:grid;gap:14px;align-content:start;
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+}
+.tick{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column;
+  border-top:4px solid var(--new);
+}
+.tick.s-accepted {border-top-color:var(--acc)}
+.tick.s-preparing{border-top-color:var(--prep)}
+.tick.s-ready    {border-top-color:var(--ready)}
+.tick.late{border-color:var(--late);box-shadow:0 0 0 1px var(--late),0 0 26px rgba(255,122,102,.2)}
+.tick.late .t-age{color:var(--late);font-weight:700}
+/* Held tickets stay visible so a chef can see what is coming and prep
+   ahead - they just cannot be started yet. Dimmed rather than hidden or
+   alarmed, since this is a normal, expected wait, not a problem. */
+.tick.held{opacity:.55;border-top-color:var(--muted)}
+.tick.held .t-foot .act[disabled]{opacity:1;color:var(--new);border-color:var(--new);background:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.tick.late .t-age i{animation:pulse 1.6s ease-in-out infinite;font-style:normal}
+
+.t-head{display:flex;align-items:baseline;gap:10px;padding:13px 15px 10px;border-bottom:1px solid var(--line)}
+.t-no{font-family:'Unbounded',sans-serif;font-weight:900;font-size:21px}
+.t-tbl{
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;
+  border:1px solid var(--gold);color:var(--gold);border-radius:100px;padding:3px 10px;
+}
+.t-age{margin-left:auto;font-family:'Space Mono',monospace;font-size:13px;color:var(--muted)}
+
+.t-items{padding:4px 15px;flex:1}
+.row{padding:11px 0;border-bottom:1px solid rgba(179,164,136,.09)}
+.row:last-child{border-bottom:0}
+.row-top{display:flex;gap:10px;align-items:baseline}
+.qty{
+  font-family:'Unbounded',sans-serif;font-weight:900;font-size:17px;color:var(--gold);
+  min-width:26px;
+}
+.nm{font-weight:600;font-size:15.5px;flex:1;line-height:1.3}
+.mods{color:var(--ink);opacity:.82;font-size:13.5px;margin:5px 0 0 36px;line-height:1.45}
+.mods span{display:inline-block;margin-right:9px}
+/* The guest's own words are the actionable safety signal — an allergy
+   only reaches the kitchen through this field, so this is what gets the
+   alarm colour. */
+.note{
+  margin:8px 0 0 36px;font-size:14px;color:#2a0d08;background:var(--late);
+  border-radius:8px;padding:7px 11px;font-weight:700;line-height:1.4;
+}
+.note::before{
+  content:"⚠ ";font-weight:900;
+}
+/* Menu allergen metadata is reference, not an alert. Every beer contains
+   gluten and every latte contains dairy; flagging those in red teaches
+   staff to ignore red, which is precisely when a real allergy gets missed. */
+.alrg{
+  margin:6px 0 0 36px;font-size:11.5px;color:var(--muted);
+  font-family:'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;
+}
+.st-tag{
+  font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:100px;padding:2px 8px;color:var(--muted);
+}
+
+.t-foot{display:flex;gap:8px;padding:12px 15px calc(13px);border-top:1px solid var(--line);background:var(--panel-2)}
+.act{
+  flex:1;min-height:48px;border-radius:12px;border:1px solid var(--line);
+  font-weight:700;font-size:13.5px;color:var(--ink);
+}
+.act.go{background:var(--gold);color:#241703;border-color:transparent}
+.act.kill{color:var(--late);flex:0 0 auto;min-width:52px}
+.act[disabled]{opacity:.45}
+
+.empty{
+  grid-column:1/-1;text-align:center;color:var(--muted);padding:64px 20px;
+}
+.empty h3{font-size:17px;margin-bottom:8px;color:var(--ink)}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(20px + var(--safe-b));transform:translate(-50%,16px);
+  background:var(--panel-2);border:1px solid var(--gold);border-radius:100px;
+  padding:11px 20px;font-size:13.5px;opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;z-index:50;max-width:calc(100vw - 32px);
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- print preview ----------
+   The whole point of Phase 1: staff can see exactly what would leave a
+   real printer before any hardware exists at all. Monospace, and the
+   same width discipline as the actual 80mm renderer, so what is shown
+   here is provably what would print - not an approximation of it. */
+.pmask{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;
+  align-items:center;justify-content:center;padding:20px;z-index:60;
+}
+.pmask.on{display:flex}
+.pcard{
+  width:100%;max-width:400px;max-height:88vh;background:var(--panel);
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.phead{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.phead h3{font-size:15px;flex:1}
+.pclose{width:32px;height:32px;border-radius:50%;background:var(--panel-2);flex:0 0 auto}
+.pbody{flex:1;overflow-y:auto;padding:16px 18px;background:#fff}
+.proll{
+  font-family:'Space Mono',monospace;font-size:12.5px;line-height:1.5;
+  color:#0a0a0a;white-space:pre;background:#fff;
+}
+.pfoot{display:flex;gap:8px;padding:14px 18px calc(14px + var(--safe-b));border-top:1px solid var(--line)}
+.pnote{padding:0 18px 12px;font-size:12.5px;color:var(--muted)}
+
+/* a kitchen monitor is far away — scale everything up */
+@media (min-width:1100px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+  .t-no{font-size:24px}
+  .nm{font-size:16.5px}
+  .mods{font-size:14.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+/* Safari applies its own colour to form fields and ignores an inherited
+   one, which leaves typed text near-black on a dark background. Setting
+   both colour and -webkit-text-fill-color is what actually holds, and the
+   autofill rule stops Safari repainting the field white. */
+input,select,textarea{
+  color:var(--ink);
+  -webkit-text-fill-color:var(--ink);
+  caret-color:var(--gold);
+}
+input::placeholder,textarea::placeholder{
+  color:var(--muted); -webkit-text-fill-color:var(--muted); opacity:1;
+}
+input:-webkit-autofill,input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 1000px var(--panel-2) inset;
+  caret-color:var(--gold);
+}
+
+/* Paid on the phone: nothing to collect, just cook and deliver. Green
+   rather than red, because it is reassurance, not a warning - red is
+   reserved for allergy notes and late tickets. */
+.t-paid{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:#0b2f1d;background:var(--ok,#7fd6a3);
+  border-radius:100px;padding:3px 9px;font-weight:700;flex:0 0 auto}
+.tick.paid-order{border-left:3px solid var(--ok,#7fd6a3)}
+</style>
+</head>
+<body>
+
+<!-- ================= FIRST-RUN SETUP ================= -->
+<section id="setup" style="display:none">
+  <div class="card">
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1 style="margin-top:8px">Connect this screen</h1>
+    <p class="sub">One-time setup. Find both values in Supabase under
+      Settings &rarr; API. They are stored on this device only.</p>
+    <label for="su">Project URL</label>
+    <input id="su" type="text" placeholder="https://xxxx.supabase.co"
+           autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="url">
+    <label for="sk">anon / public key</label>
+    <input id="sk" type="text" placeholder="eyJhbGciOi..."
+           autocapitalize="off" autocorrect="off" spellcheck="false">
+    <p class="note-hint" style="color:var(--muted);font-size:12px;margin:9px 0 0">
+      Use the <b>anon</b> key. Never the service_role key &mdash; it would give
+      anyone on this device full access to your data.</p>
+    <button class="btn" id="sgo">Connect</button>
+    <p class="msg" id="smsg" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- ================= SIGN IN ================= -->
+<section id="signin" style="display:none">
+  <div class="card">
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1 style="margin-top:8px">Kitchen display</h1>
+    <p class="sub">Staff sign-in. Ask a manager if you do not have an account yet.</p>
+    <label for="em">Email</label>
+    <input id="em" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false">
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password">
+    <button class="btn" id="go">Sign in</button>
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+    <button id="reconf" style="color:var(--muted);font-size:12px;text-decoration:underline;
+      text-underline-offset:3px;margin-top:14px;min-height:44px">Change connection settings</button>
+  </div>
+</section>
+
+<!-- ================= BOARD ================= -->
+<section id="board">
+  <div class="bar">
+    <div class="bar-in">
+      <span class="dot" id="live" title="Connection"></span>
+      <h2 id="vname">Kitchen</h2>
+      <span class="mono" style="color:var(--muted)" id="clock"></span>
+      <span class="spacer"></span>
+      <button class="chip" id="sound" aria-pressed="true">🔔 <span>Sound on</span></button>
+      <button class="chip" id="recall">Recent</button>
+      <button class="chip" id="out">Sign out</button>
+    </div>
+    <div class="stations" id="stations" role="group" aria-label="Preparation stations"></div>
+  </div>
+  <div class="grid" id="grid" aria-live="polite"></div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ================= PRINT PREVIEW ================= -->
+<div class="pmask" id="pmask">
+  <div class="pcard">
+    <div class="phead">
+      <h3 id="ptitle">Print preview</h3>
+      <button class="pclose" id="pclose" aria-label="Close">✕</button>
+    </div>
+    <div class="pbody"><div class="proll" id="proll"></div></div>
+    <p class="pnote" id="pnote"></p>
+    <div class="pfoot">
+      <button class="btn" id="pconfirm" style="margin-top:0">Mark as printed</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var $ = function(id){ return document.getElementById(id); };
+
+var SESSION = null;      /* { access_token, refresh_token, expires_at, user } */
+var VENUE   = null;
+var STATIONS = [];
+var STATION = 'all';     /* 'all' | station id | 'expo' */
+var COURSE_LABEL = {};   /* course number -> a menu section name, for held tickets */
+var VENUE_PRINTING = 'screen_only';   /* the venue's master switch */
+var PRINT_JOBS = [];     /* recent print jobs, so a ticket can show "Printed 7:42 PM" */
+var ORDERS  = [];
+var SEEN    = {};        /* order id -> true, so only genuinely new tickets chime */
+var SOUND   = true;
+var RECALL  = false;
+var pollT = null, tickT = null, refreshT = null;
+var booted = false;
+
+var LATE_MIN = 12;       /* a ticket older than this glows red */
+
+/* ---------- storage ---------- */
+function saveSession(s){
+  try { localStorage.setItem('rd_kds_session', JSON.stringify(s)); } catch(e){}
+}
+function readSession(){
+  try { return JSON.parse(localStorage.getItem('rd_kds_session') || 'null'); }
+  catch(e){ return null; }
+}
+function clearSession(){
+  try { localStorage.removeItem('rd_kds_session'); } catch(e){}
+}
+
+/* ---------- toast ---------- */
+var toastT;
+function toast(m){
+  var t = $('toast'); t.textContent = m; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove('on'); }, 3000);
+}
+
+/* ---------- sound ----------
+   Generated rather than loaded: a kitchen screen should not depend on a
+   file fetch, and iOS will not play anything until the first real tap,
+   which the sign-in button provides. */
+var actx = null;
+function beep(times){
+  if(!SOUND) return;
+  try {
+    if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if(actx.state === 'suspended') actx.resume();
+    for(var i=0;i<(times||2);i++){
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.connect(g); g.connect(actx.destination);
+      o.type = 'sine';
+      o.frequency.value = 880;
+      var t0 = actx.currentTime + i*0.22;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.22, t0+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0+0.18);
+      o.start(t0); o.stop(t0+0.2);
+    }
+  } catch(e){}
+}
+
+/* ---------- api ---------- */
+function authFetch(path, opts){
+  opts = opts || {};
+  var h = opts.headers || {};
+  h['apikey'] = SUPABASE_KEY;
+  h['Authorization'] = 'Bearer ' + (SESSION ? SESSION.access_token : SUPABASE_KEY);
+  h['Content-Type'] = 'application/json';
+  opts.headers = h;
+  return fetch(SUPABASE_URL.replace(/\/+$/,'') + path, opts).then(function(r){
+    return r.text().then(function(t){
+      var d = null; try { d = t ? JSON.parse(t) : null; } catch(e){}
+      if(!r.ok) throw { status:r.status, data:d, raw:t };
+      return d;
+    });
+  });
+}
+
+function signIn(email, password){
+  return fetch(SUPABASE_URL.replace(/\/+$/,'') + '/auth/v1/token?grant_type=password', {
+    method:'POST',
+    headers:{ 'apikey':SUPABASE_KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ email:email, password:password })
+  }).then(function(r){
+    return r.text().then(function(t){
+      var d = null; try { d = t ? JSON.parse(t) : null; } catch(e){}
+      if(!r.ok) throw { status:r.status, data:d };
+      return d;
+    });
+  });
+}
+
+/* An access token lasts about an hour; a kitchen screen stays open all
+   service. Refresh well before expiry rather than discovering it at the
+   moment a chef taps "Ready". */
+function refreshSession(){
+  if(!SESSION || !SESSION.refresh_token) return Promise.reject();
+  return fetch(SUPABASE_URL.replace(/\/+$/,'') + '/auth/v1/token?grant_type=refresh_token', {
+    method:'POST',
+    headers:{ 'apikey':SUPABASE_KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ refresh_token: SESSION.refresh_token })
+  }).then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+    .then(function(d){
+      SESSION.access_token = d.access_token;
+      SESSION.refresh_token = d.refresh_token || SESSION.refresh_token;
+      SESSION.expires_at = Date.now() + ((d.expires_in || 3600) * 1000);
+      saveSession(SESSION);
+      return SESSION;
+    });
+}
+function armRefresh(){
+  clearTimeout(refreshT);
+  if(!SESSION) return;
+  var ms = Math.max(30000, (SESSION.expires_at - Date.now()) - 300000); /* 5 min early */
+  refreshT = setTimeout(function(){
+    refreshSession().then(armRefresh).catch(function(){
+      toast('Session expired — please sign in again');
+      doSignOut();
+    });
+  }, ms);
+}
+
+/* ---------- configuration ----------
+   The two constants at the top of this file are optional. If they are
+   blank we ask once and keep the answer on this device, so a kitchen
+   iPad can be set up without anyone editing HTML. */
+function readConfig(){
+  try { return JSON.parse(localStorage.getItem('rd_kds_config') || 'null'); }
+  catch(e){ return null; }
+}
+function saveConfig(url, key){
+  try { localStorage.setItem('rd_kds_config', JSON.stringify({ url:url, key:key })); } catch(e){}
+}
+
+/* A Supabase JWT carries its role in the payload. Reading it lets us
+   refuse a service_role key outright rather than silently storing the
+   one credential that must never leave the dashboard. */
+function keyRole(k){
+  try {
+    var part = k.split('.')[1];
+    if(!part) return null;
+    part = part.replace(/-/g,'+').replace(/_/g,'/');
+    while(part.length % 4) part += '=';
+    return (JSON.parse(atob(part)) || {}).role || null;
+  } catch(e){ return null; }
+}
+
+function haveConfig(){
+  if(SUPABASE_URL && SUPABASE_KEY) return true;
+  var c = readConfig();
+  if(c && c.url && c.key){ SUPABASE_URL = c.url; SUPABASE_KEY = c.key; return true; }
+  return false;
+}
+
+function showSetup(msg){
+  $('setup').style.display = '';
+  $('signin').style.display = 'none';
+  $('board').style.display = 'none';
+  var c = readConfig();
+  if(c){ $('su').value = c.url || ''; $('sk').value = c.key || ''; }
+  $('smsg').textContent = msg || '';
+}
+
+/* People paste all sorts of things here: the dashboard address, a URL with
+   /rest/v1 already on the end, a bare project ref. Normalise to the API
+   origin rather than rejecting them for it. */
+function normaliseUrl(raw){
+  var u = String(raw||'').trim();
+  if(!u) return '';
+  /* bare project ref, e.g. "tehxobdokbvqtwtgqzrh" */
+  if(/^[a-z0-9]{16,}$/i.test(u)) return 'https://' + u + '.supabase.co';
+  if(!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  var host, path, proto, port;
+  try {
+    var a = document.createElement('a'); a.href = u;
+    host = a.hostname; path = a.pathname || '';
+    proto = a.protocol || 'https:'; port = a.port || '';
+  } catch(e){ return ''; }
+  /* dashboard link -> project API origin */
+  var m = path.match(/\/project\/([a-z0-9]+)/i);
+  if(/supabase\.(com|io)$/i.test(host) && m) return 'https://' + m[1] + '.supabase.co';
+  /* Otherwise keep origin only - discarding /rest/v1 and friends - but
+     preserve protocol and port so a self-hosted Supabase still works. */
+  return proto + '//' + host + (port ? (':' + port) : '');
+}
+
+$('sgo').addEventListener('click', function(){
+  var u = normaliseUrl($('su').value);
+  var k = $('sk').value.trim();
+  if(!u || !k){ $('smsg').textContent = 'Fill in both fields.'; return; }
+  if(!/^https:\/\/[^\s.]+\.[^\s]+$/.test(u)){
+    $('smsg').textContent = 'That does not look like a project URL. It should look like https://xxxx.supabase.co';
+    return;
+  }
+  if(u !== $('su').value.trim()) $('su').value = u;   /* show what we will use */
+  var role = keyRole(k);
+  if(role === 'service_role'){
+    $('smsg').textContent = 'That is the service_role key. It must never be used here — go back and copy the anon / public key instead.';
+    return;
+  }
+  if(role && role !== 'anon'){
+    $('smsg').textContent = 'That key has role "' + role + '". Please copy the anon / public key.';
+    return;
+  }
+  $('sgo').disabled = true; $('smsg').textContent = 'Checking…';
+  /* Probe the auth route specifically — that is the one sign-in needs, and
+     it is the one a stray /rest/v1 on the end of the URL breaks. Checking
+     some other endpoint is how a bad URL got stored in the first place. */
+  fetch(u + '/auth/v1/settings', { headers:{ apikey:k } })
+    .then(function(r){
+      return r.text().then(function(t){ return { status:r.status, body:t }; });
+    })
+    .then(function(res){
+      if(/invalid path/i.test(res.body) || res.status === 404){
+        throw new Error('path');
+      }
+      if(res.status === 401 || res.status === 403){ throw new Error('key'); }
+      if(res.status >= 500){ throw new Error('down'); }
+      saveConfig(u, k); SUPABASE_URL = u; SUPABASE_KEY = k;
+      $('setup').style.display = 'none'; $('signin').style.display = '';
+      $('msg').textContent = '';
+    })
+    .catch(function(e){
+      var m = e && e.message;
+      $('smsg').textContent =
+        m === 'path' ? 'That URL reached a server but not your project API. Use just https://<your-ref>.supabase.co with nothing after .co'
+      : m === 'key'  ? 'The project answered but rejected that key. Copy the anon / public key again, in full.'
+      : m === 'down' ? 'Your project answered with an error. Check it is not paused in the Supabase dashboard.'
+      :                'Could not reach that project. Check the URL and your connection.';
+    })
+    .then(function(){ $('sgo').disabled = false; });
+});
+
+$('reconf').addEventListener('click', function(){ showSetup(''); });
+
+
+/* ---------- which restaurant? ----------
+   One venue and it is chosen silently. More than one - a platform admin,
+   or someone who works at two of them - and they are asked, with the
+   answer remembered on this device. */
+var VENUES = [];
+function myVenues(){
+  /* this page uses authFetch, not api - the helper was shared, the
+     request function was not */
+  return authFetch('/rest/v1/rpc/rd_my_venues',{method:'POST',body:'{}'});
+}
+function savedVenueId(){
+  try { return localStorage.getItem('rd_venue_kds'); } catch(e){ return null; }
+}
+function rememberVenue(id){
+  try { localStorage.setItem('rd_venue_kds', id); } catch(e){}
+}
+function forgetVenue(){
+  try { localStorage.removeItem('rd_venue_kds'); } catch(e){}
+}
+function paintVenuePicker(list){
+  VENUES = list;
+  var h='<span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>'+
+    '<h1 style="margin-top:8px;font-size:21px">Choose a restaurant</h1>'+
+    '<p class="hint">You have access to more than one.</p>'+
+    '<div style="margin-top:16px">'+
+    list.map(function(v){
+      return '<button class="btn quiet full" data-venue="'+esc(v.id)+'" '+
+        'style="margin-top:8px;justify-content:space-between">'+
+        '<span>'+esc(v.name||v.slug)+'</span>'+
+        '<span style="color:var(--muted);font-size:11px;font-family:\'Space Mono\',monospace">'+
+          esc(v.role||'')+'</span></button>';
+    }).join('')+'</div>';
+  return h;
+}
+
+/* ---------- boot ---------- */
+function start(){
+  if(!haveConfig()){ return showSetup(''); }
+  $('signin').style.display = '';
+  var s = readSession();
+  if(s && s.access_token){
+    SESSION = s;
+    (s.expires_at && s.expires_at < Date.now() + 60000 ? refreshSession() : Promise.resolve())
+      .then(loadVenue)
+      .catch(function(){ clearSession(); SESSION = null; });
+  }
+}
+
+function loadVenue(){
+  return myVenues()
+    .then(function(list){
+      if(!list || !list.length) throw { kind:'nostaff' };
+      var want = savedVenueId();
+      var pick = list.filter(function(v){ return v.id === want; })[0];
+      if(list.length === 1) pick = list[0];
+      if(!pick){
+        document.querySelector('#signin .card').innerHTML = paintVenuePicker(list);
+        throw { kind:'pick' };
+      }
+      rememberVenue(pick.id);
+      VENUE = { id:pick.id, name:pick.name, slug:pick.slug, role:pick.role };
+      $('vname').textContent = VENUE.name || 'Kitchen';
+      return Promise.all([
+        authFetch('/rest/v1/rd_stations?select=id,key,name,is_expo,sort,printing_mode,printer_id&venue_id=eq.' +
+                  encodeURIComponent(VENUE.id) + '&order=sort'),
+        /* Category names, purely so a held ticket can say "Waiting on
+           Entrees" rather than the meaningless "Waiting on course 1". */
+        authFetch('/rest/v1/rd_categories?select=name,course&venue_id=eq.' +
+                  encodeURIComponent(VENUE.id) + '&course=not.is.null'),
+        /* The venue's own name and its printing master switch. Screen
+           Only is the default and stays that way until someone
+           deliberately turns it on in Settings. */
+        authFetch('/rest/v1/rd_venues?select=printing_mode&id=eq.' +
+                  encodeURIComponent(VENUE.id))
+      ]);
+    })
+    .then(function(res){
+      STATIONS = res[0] || [];
+      COURSE_LABEL = {};
+      (res[1]||[]).forEach(function(c){
+        if(c.course != null && !COURSE_LABEL[c.course]) COURSE_LABEL[c.course] = c.name;
+      });
+      VENUE_PRINTING = (res[2] && res[2][0] && res[2][0].printing_mode) || 'screen_only';
+      paintStations();
+      $('signin').style.display = 'none';
+      $('board').style.display = 'flex';
+      booted = true;
+      if(VENUES.length > 1 || VENUE.role === 'platform'){
+        var sw=document.getElementById('switchVenue');
+        if(sw){ sw.style.display=''; sw.textContent = VENUE.name; }
+      }
+      armRefresh();
+      startPolling();
+      clock();
+      return refresh(true);
+    })
+    .catch(function(e){
+      if(e && e.kind === 'pick'){ throw e; }      /* picker is on screen */
+      if(e && e.kind === 'nostaff'){
+        $('msg').textContent = 'That account is not linked to a restaurant yet. A manager must add you to the staff list.';
+      } else if(e && (e.status === 401 || e.status === 403)){
+        $('msg').textContent = 'That session is no longer valid. Please sign in again.';
+      } else {
+        $('msg').textContent = 'Could not load the kitchen board. Check the connection and try again.';
+      }
+      clearSession(); SESSION = null;
+      $('signin').style.display = ''; $('board').style.display = 'none';
+      throw e;
+    });
+}
+
+/* ---------- stations ---------- */
+function paintStations(){
+  var h = '<button class="chip on" data-st="all">All stations</button>';
+  STATIONS.filter(function(s){ return !s.is_expo; }).forEach(function(s){
+    h += '<button class="chip" data-st="' + s.id + '">' + esc(s.name) + ' <b class="cnt"></b></button>';
+  });
+  if(STATIONS.some(function(s){ return s.is_expo; })){
+    h += '<button class="chip" data-st="expo">Expo · whole order</button>';
+  }
+  $('stations').innerHTML = h;
+}
+
+function esc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ---------- 80mm ticket renderer ----------
+   Pure function: ticket data in, plain-text lines out, sized for a
+   42-character 80mm roll at the default font. No payment information is
+   ever read here on purpose - this is a production ticket for a
+   station, not a receipt. The exact same function backs the preview
+   modal and Test Print, so what staff see is provably what would print. */
+var TICKET_WIDTH = 42;
+function ticketCenter(s){
+  s = String(s||'');
+  if(s.length >= TICKET_WIDTH) return s.slice(0, TICKET_WIDTH);
+  var pad = TICKET_WIDTH - s.length, left = Math.floor(pad/2);
+  return ' '.repeat(left) + s + ' '.repeat(pad-left);
+}
+function ticketRule(ch){ return (ch||'-').repeat(TICKET_WIDTH); }
+function ticketWrap(s, indent){
+  indent = indent || 0;
+  var prefix = ' '.repeat(indent), maxw = TICKET_WIDTH - indent;
+  var words = String(s||'').split(/\s+/).filter(Boolean);
+  var lines = [], cur = '';
+  words.forEach(function(w){
+    if(!cur.length){ cur = w; return; }
+    if((cur + ' ' + w).length <= maxw){ cur += ' ' + w; }
+    else { lines.push(prefix + cur); cur = w; }
+  });
+  if(cur.length) lines.push(prefix + cur);
+  return lines;
+}
+function renderTicket(t){
+  var L = [];
+  L.push(ticketCenter(t.restaurant_name || 'RESTAURANT DELUXE'));
+  if(t.venue_name) L.push(ticketCenter(t.venue_name.toUpperCase()));
+  L.push('');
+  L.push(ticketCenter('TABLE ' + (t.table_label||'?')));
+  if(t.order_number != null) L.push(ticketCenter('ORDER #' + t.order_number));
+  if(t.at){
+    var d = new Date(t.at);
+    var tm = isNaN(d) ? '' : d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+    if(tm) L.push(ticketCenter(tm));
+  }
+  L.push('');
+  var heading = [t.course_label, t.station_name].filter(Boolean).join(' \u00b7 ');
+  if(heading) L.push(ticketCenter(heading.toUpperCase()));
+  L.push(ticketRule('-')); L.push('');
+  (t.items||[]).forEach(function(it){
+    ticketWrap((it.qty + ' x ' + it.name).toUpperCase(), 0).forEach(function(l){ L.push(l); });
+    (it.modifiers||[]).forEach(function(m){ L.push('    ' + m); });
+    if(it.allergens && it.allergens.length)
+      ticketWrap('CONTAINS: ' + it.allergens.join(', ').toUpperCase(), 4).forEach(function(l){ L.push(l); });
+    if(it.note) ticketWrap('** ' + it.note.toUpperCase(), 4).forEach(function(l){ L.push(l); });
+    L.push('');
+  });
+  if(t.customer_note){
+    L.push(ticketRule('-')); L.push('CUSTOMER NOTE:');
+    ticketWrap(t.customer_note, 0).forEach(function(l){ L.push(l); });
+  }
+  L.push(ticketRule('-'));
+  return L.join('\n');
+}
+
+/* ---------- can this station print at all right now? ----------
+   Checked here purely to decide whether to SHOW the button - the
+   database checks the same two switches again, independently, when the
+   button is actually pressed. Never trust the UI's own opinion of
+   itself for anything that matters. */
+function stationCanPrint(stationId){
+  if(VENUE_PRINTING === 'screen_only') return false;
+  var st = STATIONS.filter(function(s){ return s.id === stationId; })[0];
+  return !!st && st.printing_mode && st.printing_mode !== 'off';
+}
+function printStateFor(orderId, stationId, course){
+  var mine = PRINT_JOBS.filter(function(j){
+    return j.order_id === orderId && j.station_id === stationId &&
+           (j.course == null ? course == null : j.course === course);
+  });
+  if(!mine.length) return { printed:false };
+  mine.sort(function(a,b){ return new Date(b.created_at) - new Date(a.created_at); });
+  return { printed:true, at:mine[0].printed_at || mine[0].created_at, reprints:mine.length-1 };
+}
+
+/* ---------- data ---------- */
+var ACTIVE = "('new','accepted','preparing','ready')".replace(/[()']/g,'');
+function refresh(first){
+  if(!VENUE) return Promise.resolve();
+  /* The order's own status is now a SUMMARY, computed from its items - it
+     only reaches 'served' once every station has finished. So an order
+     still shows here under its normal active status even while one of
+     its stations has already fully served their own part; that station's
+     ticket just quietly drops out of ITS OWN board once done (see
+     ticketGroups below). Recall widens to include 'served' orders too,
+     since a just-finished ticket needs to stay reachable to bring back
+     even once the whole order has closed out. */
+  var statuses = RECALL ? 'new,accepted,preparing,ready,served' : 'new,accepted,preparing,ready';
+  var q = '/rest/v1/rd_orders' +
+    '?select=id,order_number,status,created_at,customer_note,total_cents,paid_at,' +
+      'rd_tables(label),' +
+      'rd_order_items(id,name_snapshot,qty,note,status,station_id,course,allergens,' +
+        'rd_order_item_modifiers(name_snapshot,group_name_snapshot,sort))' +
+    '&venue_id=eq.' + encodeURIComponent(VENUE.id) +
+    '&status=in.(' + statuses + ')' +
+    '&order=created_at.' + (RECALL ? 'desc' : 'asc') +
+    '&limit=' + (RECALL ? 40 : 60);
+
+  return authFetch(q).then(function(rows){
+    setLive(true);
+    var fresh = [];
+    (rows||[]).forEach(function(o){
+      if(!RECALL && !SEEN[o.id]){ SEEN[o.id] = true; if(!first) fresh.push(o); }
+    });
+    ORDERS = rows || [];
+    /* Only worth the extra call at all if the venue has printing on
+       anywhere - otherwise every station's printing is off regardless
+       and no ticket could ever show a print button. */
+    var anyPrinting = VENUE_PRINTING !== 'screen_only' &&
+      STATIONS.some(function(s){ return s.printing_mode !== 'off'; });
+    return (anyPrinting ? rpc('rd_recent_print_jobs', { p_venue_id: VENUE.id }) : Promise.resolve([]))
+      .catch(function(){ return PRINT_JOBS; })   /* stale data beats none, on a hiccup */
+      .then(function(jobs){
+        PRINT_JOBS = jobs || [];
+        paint();
+        if(fresh.length){
+          beep(2);
+          toast(fresh.length === 1
+            ? 'New order #' + fresh[0].order_number + ' — Table ' + tblOf(fresh[0])
+            : fresh.length + ' new orders');
+        }
+      });
+  }).catch(function(e){
+    setLive(false);
+    if(e && (e.status === 401 || e.status === 403)){
+      refreshSession().then(function(){ refresh(); }).catch(doSignOut);
+    }
+  });
+}
+function tblOf(o){ return (o.rd_tables && o.rd_tables.label) || '?'; }
+
+function setLive(on){
+  $('live').classList.toggle('off', !on);
+  $('live').title = on ? 'Connected' : 'Reconnecting…';
+}
+
+function startPolling(){
+  clearInterval(pollT);
+  /* Six seconds is fast enough that a chef never waits on a ticket, and
+     light enough to run all night. The board also reconciles whenever the
+     screen wakes, which is when a dropped connection usually surfaces. */
+  pollT = setInterval(function(){ refresh(); }, 6000);
+  clearInterval(tickT);
+  tickT = setInterval(function(){ ages(); clock(); }, 1000);
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) refresh();
+  });
+  window.addEventListener('online', function(){ refresh(); });
+}
+
+/* ---------- render ----------
+   The unit on screen is no longer "one order". A station can be mid-way
+   through two separate tickets for the very same order at once - Bar's
+   drinks and Kitchen's entree are unrelated, and Kitchen's own entree and
+   main course are two different dockets even though both are Kitchen's.
+   Every group below is one (order, station, course) combination, and its
+   items always carry the same status, because the only thing that ever
+   moves them is rd_advance_station_items moving that exact combination
+   together. */
+function ticketGroups(forStation){
+  var groups = [];
+  ORDERS.forEach(function(o){
+    var all = o.rd_order_items || [];
+    var buckets = {}, order = [];
+    all.forEach(function(i){
+      if(forStation !== 'all' && forStation !== 'expo' && i.station_id !== forStation) return;
+      var key = (i.station_id || '\u2014') + '|' + (i.course == null ? '\u2014' : i.course);
+      if(!buckets[key]){ buckets[key] = { station_id:i.station_id, course:i.course, items:[] }; order.push(key); }
+      buckets[key].items.push(i);
+    });
+    order.forEach(function(key){
+      var b = buckets[key];
+      var openItems = b.items.filter(function(i){ return i.status !== 'served' && i.status !== 'cancelled'; });
+      if(RECALL){
+        /* Recall shows exactly the tickets that were just finished -
+           nothing still in flight belongs here. */
+        var doneItems = b.items.filter(function(i){ return i.status === 'served'; });
+        if(!doneItems.length) return;
+        groups.push({ order:o, station_id:b.station_id, course:b.course,
+                      items:doneItems, status:'served', held:false });
+        return;
+      }
+      if(!openItems.length) return;   /* this ticket is finished; a sibling ticket on the same order may not be */
+
+      var status = openItems[0].status;   /* they move as one, so any item's status represents the whole ticket */
+      var held = false, heldCourse = null;
+      if(status === 'new' && b.course != null && b.course > 1){
+        var prior = all.filter(function(i){ return i.course === b.course - 1; });
+        var priorDone = !prior.length || prior.every(function(i){ return i.status === 'served' || i.status === 'cancelled'; });
+        if(!priorDone){ held = true; heldCourse = b.course - 1; }
+      }
+      groups.push({ order:o, station_id:b.station_id, course:b.course,
+                    items:openItems, status:status, held:held, heldCourse:heldCourse });
+    });
+  });
+  return groups;
+}
+
+function minsSince(iso){
+  return Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+}
+function ageText(iso){
+  var s = Math.floor((Date.now() - new Date(iso).getTime())/1000);
+  var m = Math.floor(s/60);
+  return m + ':' + ('0' + (s%60)).slice(-2);
+}
+
+var NEXT = { 'new':'accepted', 'accepted':'preparing', 'preparing':'ready', 'ready':'served' };
+var LABEL = { 'new':'Accept', 'accepted':'Start preparing', 'preparing':'Ready', 'ready':'Served' };
+
+function stationName(id){
+  var nm = '';
+  STATIONS.forEach(function(s){ if(s.id === id) nm = s.name; });
+  return nm;
+}
+function courseLabel(n){
+  return COURSE_LABEL[n] || ('course ' + n);
+}
+
+function rowsHtml(items, showStationTag){
+  return items.map(function(i){
+    var mods = (i.rd_order_item_modifiers||[])
+      .sort(function(a,b){ return (a.sort||0)-(b.sort||0); })
+      .map(function(m){ return '<span>' + esc(m.name_snapshot) + '</span>'; }).join('');
+    var stName = showStationTag ? stationName(i.station_id) : '';
+    return '<div class="row">' +
+      '<div class="row-top"><span class="qty">' + i.qty + '×</span>' +
+      '<span class="nm">' + esc(i.name_snapshot) + '</span>' +
+      (stName ? '<span class="st-tag">' + esc(stName) + '</span>' : '') + '</div>' +
+      (mods ? '<div class="mods">' + mods + '</div>' : '') +
+      ((i.allergens && i.allergens.length)
+        ? '<div class="alrg">contains ' + esc(i.allergens.join(', ')) + '</div>' : '') +
+      (i.note ? '<div class="note">' + esc(i.note) + '</div>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function ticketId(g){
+  return g.order.id + '|' + (g.station_id||'') + '|' + (g.course==null?'':g.course);
+}
+
+function paint(){
+  if(STATION === 'expo') return paintExpo();
+
+  var groups = ticketGroups(STATION);
+
+  /* station tab counts — how many separate tickets are outstanding, not
+     how many dishes, since that is what a chef actually reads at a
+     glance ("I have 3 tickets") rather than a raw item tally */
+  STATIONS.forEach(function(s){
+    var n = ticketGroups(s.id).filter(function(g){ return !RECALL; }).length;
+    var btn = $('stations').querySelector('[data-st="' + s.id + '"] .cnt');
+    if(btn) btn.textContent = n ? n : '';
+  });
+
+  if(!groups.length){
+    $('grid').innerHTML = '<div class="empty"><h3>' +
+      (RECALL ? 'Nothing completed yet' : 'All clear') + '</h3><p>' +
+      (RECALL ? 'Tickets this station has just served will appear here.'
+              : 'New orders land here the moment a table sends them.') +
+      '</p></div>';
+    return;
+  }
+
+  $('grid').innerHTML = groups.map(function(g){
+    var o = g.order;
+    var late = !RECALL && !g.held && minsSince(o.created_at) >= LATE_MIN;
+    var showStTag = (STATION === 'all');
+    var rows = rowsHtml(g.items, showStTag);
+    var tagId = ticketId(g);
+    var courseTag = g.course != null
+      ? '<span class="st-tag">' + esc(courseLabel(g.course)) + '</span>' : '';
+
+    var nxt = NEXT[g.status];
+    var canPrint = !RECALL && stationCanPrint(g.station_id);
+    var pstate = canPrint ? printStateFor(o.id, g.station_id, g.course) : { printed:false };
+    var printBtn = canPrint
+      ? '<button class="act" data-print="' + esc(tagId) + '">' +
+          (pstate.printed ? 'Reprint' : 'Print ticket') + '</button>'
+      : '';
+    var printedNote = (canPrint && pstate.printed)
+      ? '<div style="padding:0 15px 8px;font-size:11.5px;color:var(--muted)">' +
+          '\u2713 Printed ' + new Date(pstate.at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) +
+          (pstate.reprints > 0 ? ' \u00b7 reprinted ' + pstate.reprints + 'x' : '') + '</div>'
+      : '';
+
+    var foot;
+    if(RECALL){
+      foot = '<div class="t-foot"><button class="act" data-undo="' + esc(tagId) + '">Bring back</button></div>';
+    } else if(g.held){
+      foot = printedNote + '<div class="t-foot"><button class="act" disabled>Waiting on ' +
+        esc(courseLabel(g.heldCourse)) + '</button></div>';
+    } else {
+      foot = printedNote + '<div class="t-foot">' +
+        (nxt ? '<button class="act go" data-next="' + esc(tagId) + '" data-to="' + nxt + '">' +
+                 LABEL[g.status] + '</button>' : '') +
+        printBtn +
+        '<button class="act kill" data-cancel="' + esc(o.id) + '" aria-label="Cancel order">✕</button>' +
+        '</div>';
+    }
+
+    return '<article class="tick s-' + esc(g.status) + (late ? ' late' : '') +
+      (g.held ? ' held' : '') + (o.paid_at ? ' paid-order' : '') + '" data-tk="' + esc(tagId) + '">' +
+      '<div class="t-head">' +
+        '<span class="t-no">#' + o.order_number + '</span>' +
+        '<span class="t-tbl">Table ' + esc(tblOf(o)) + '</span>' +
+        courseTag +
+        (o.paid_at ? '<span class="t-paid">Paid</span>' : '') +
+        '<span class="t-age" data-at="' + o.created_at + '"><i>' + ageText(o.created_at) + '</i></span>' +
+      '</div>' +
+      '<div class="t-items">' + rows + '</div>' +
+      (o.customer_note ? '<div style="padding:0 15px 10px"><div class="note" style="margin-left:0">' +
+          esc(o.customer_note) + '</div></div>' : '') +
+      foot +
+      '</article>';
+  }).join('');
+}
+
+/* ---------- expo: read-only, whole-order overview ----------
+   Not another action tab - this is oversight. One card per order, with
+   every station's own progress shown as its own small line, including
+   which held tickets are waiting and on what. Nothing here is clickable. */
+function paintExpo(){
+  var list = ORDERS.slice();
+  $('stations').querySelectorAll('.cnt').forEach(function(el){ el.textContent = ''; });
+
+  if(!list.length){
+    $('grid').innerHTML = '<div class="empty"><h3>All clear</h3>' +
+      '<p>Every order will appear here with each station\u2019s progress.</p></div>';
+    return;
+  }
+
+  var allGroups = ticketGroups('expo');
+
+  $('grid').innerHTML = list.map(function(o){
+    var mine = allGroups.filter(function(g){ return g.order.id === o.id; })
+      .sort(function(a,b){
+        var ca = a.course==null?99:a.course, cb = b.course==null?99:b.course;
+        if(ca !== cb) return ca - cb;
+        return stationName(a.station_id).localeCompare(stationName(b.station_id));
+      });
+    var late = minsSince(o.created_at) >= LATE_MIN;
+
+    var lines = mine.map(function(g){
+      var label = stationName(g.station_id) || 'Station';
+      if(g.course != null) label += ' \u00b7 ' + courseLabel(g.course);
+      var state = g.held ? ('waiting on ' + courseLabel(g.heldCourse)) : (LABEL[g.status] === 'Accept' ? 'new' : g.status);
+      return '<div class="row" style="padding:8px 0">' +
+        '<div class="row-top"><span class="nm" style="font-size:14px">' + esc(label) + '</span>' +
+        '<span class="st-tag' + (g.held?' ':'') + '" style="' +
+          (g.status==='ready'?'color:var(--ready);border-color:var(--ready)':'') +
+          (g.held?'color:var(--new);border-color:var(--new)':'') + '">' + esc(state) + '</span></div>' +
+        '</div>';
+    }).join('') || '<div class="row" style="color:var(--muted);font-size:13px">No stations on this order</div>';
+
+    return '<article class="tick s-' + esc(o.status) + (late ? ' late' : '') +
+      (o.paid_at ? ' paid-order' : '') + '">' +
+      '<div class="t-head">' +
+        '<span class="t-no">#' + o.order_number + '</span>' +
+        '<span class="t-tbl">Table ' + esc(tblOf(o)) + '</span>' +
+        (o.paid_at ? '<span class="t-paid">Paid</span>' : '') +
+        '<span class="t-age" data-at="' + o.created_at + '"><i>' + ageText(o.created_at) + '</i></span>' +
+      '</div>' +
+      '<div class="t-items">' + lines + '</div>' +
+      (o.customer_note ? '<div style="padding:0 15px 10px"><div class="note" style="margin-left:0">' +
+          esc(o.customer_note) + '</div></div>' : '') +
+      '</article>';
+  }).join('');
+}
+
+/* update only the clocks, so a chef's tap is never interrupted by a repaint */
+function ages(){
+  document.querySelectorAll('.t-age').forEach(function(el){
+    var at = el.dataset.at;
+    el.innerHTML = '<i>' + ageText(at) + '</i>';
+    var card = el.closest('.tick');
+    if(card && !RECALL) card.classList.toggle('late', minsSince(at) >= LATE_MIN);
+  });
+}
+function clock(){
+  var d = new Date();
+  $('clock').textContent = ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2);
+}
+
+/* ---------- status changes ----------
+   Every one of these moves ONE station's ONE course-ticket on ONE order -
+   never a whole order, and never another station's own progress. The
+   database itself refuses a held ticket even if this call is somehow
+   made anyway; disabling the button here is just so a chef never has to
+   find that out by tapping it. */
+function parseTicketId(tk){
+  var parts = String(tk||'').split('|');
+  return {
+    order_id: parts[0],
+    station_id: parts[1] || null,
+    course: parts[2] === '' ? null : parseInt(parts[2], 10)
+  };
+}
+
+function rpc(name, args){
+  return authFetch('/rest/v1/rpc/' + name, {
+    method:'POST',
+    body: JSON.stringify(args)
+  });
+}
+
+function advanceTicket(tk, to){
+  var p = parseTicketId(tk);
+  var card = document.querySelector('[data-tk="' + tk.replace(/"/g,'\\"') + '"]');
+  if(card) card.querySelectorAll('button').forEach(function(b){ b.disabled = true; });
+
+  var from = null;
+  ticketGroups(p.station_id).forEach(function(g){
+    if(ticketId(g) === tk) from = g.status;
+  });
+
+  return rpc('rd_advance_station_items', {
+    p_order_id: p.order_id, p_station_id: p.station_id, p_course: p.course,
+    p_from: from, p_to: to
+  }).then(function(){
+    return refresh();
+  }).catch(function(e){
+    if(card) card.querySelectorAll('button').forEach(function(b){ b.disabled = false; });
+    var m = e && e.data && e.data.message || '';
+    if(/course_held/.test(m)) toast('That course is still waiting on an earlier one — refreshing.');
+    else if(e && e.status === 403) toast('You do not have permission to change that order');
+    else if(/nothing_to_advance/.test(m)) toast('That ticket already moved — refreshing.');
+    else toast('Could not update that ticket — try again');
+    return refresh();
+  });
+}
+
+function recallTicket(tk){
+  var p = parseTicketId(tk);
+  var card = document.querySelector('[data-tk="' + tk.replace(/"/g,'\\"') + '"]');
+  if(card) card.querySelectorAll('button').forEach(function(b){ b.disabled = true; });
+  return rpc('rd_recall_station_items', {
+    p_order_id: p.order_id, p_station_id: p.station_id, p_course: p.course
+  }).then(function(){
+    return refresh();
+  }).catch(function(e){
+    if(card) card.querySelectorAll('button').forEach(function(b){ b.disabled = false; });
+    toast('Could not bring that back — try again');
+  });
+}
+
+/* Cancelling is the one action that still belongs to the WHOLE order, not
+   one station - a customer walking out is not any single station's call.
+   The items are cascaded too, so their status stays truthful rather than
+   frozen mid-service on an order nobody is working any more. */
+function cancelOrder(id){
+  return authFetch('/rest/v1/rd_orders?id=eq.' + encodeURIComponent(id), {
+    method:'PATCH', headers:{ 'Prefer':'return=minimal' },
+    body: JSON.stringify({ status:'cancelled' })
+  }).then(function(){
+    return authFetch('/rest/v1/rd_order_items?order_id=eq.' + encodeURIComponent(id), {
+      method:'PATCH', headers:{ 'Prefer':'return=minimal' },
+      body: JSON.stringify({ status:'cancelled' })
+    }).catch(function(){ /* the order itself is already cancelled either way */ });
+  }).then(function(){
+    return authFetch('/rest/v1/rd_order_status_events', {
+      method:'POST', headers:{ 'Prefer':'return=minimal' },
+      body: JSON.stringify({
+        order_id:id, from_status:null, to_status:'cancelled',
+        actor: SESSION && SESSION.user ? SESSION.user.id : null
+      })
+    }).catch(function(){});
+  }).then(function(){
+    return refresh();
+  }).catch(function(){
+    toast('Could not cancel that order — try again');
+  });
+}
+
+/* ---------- events ---------- */
+$('go').addEventListener('click', function(){
+  var e = $('em').value.trim(), p = $('pw').value;
+  if(!e || !p){ $('msg').textContent = 'Enter your email and password.'; return; }
+  $('go').disabled = true; $('msg').textContent = '';
+  beep(0); /* unlock audio on this real tap, silently */
+  signIn(e, p).then(function(d){
+    SESSION = {
+      access_token: d.access_token,
+      refresh_token: d.refresh_token,
+      expires_at: Date.now() + ((d.expires_in || 3600) * 1000),
+      user: d.user || null
+    };
+    saveSession(SESSION);
+    $('pw').value = '';
+    return loadVenue();
+  }).catch(function(err){
+    var m = err && err.data && (err.data.error_description || err.data.msg || err.data.message);
+    if(err && err.status === 400) m = 'That email and password did not match.';
+    if(!m && err && err.kind === 'nostaff') return;
+    if(m) $('msg').textContent = m;
+    else if(!$('msg').textContent) $('msg').textContent = 'Could not sign in. Check the connection and try again.';
+  }).then(function(){ $('go').disabled = false; });
+});
+$('pw').addEventListener('keydown', function(e){ if(e.key === 'Enter') $('go').click(); });
+$('em').addEventListener('keydown', function(e){ if(e.key === 'Enter') $('pw').focus(); });
+
+$('stations').addEventListener('click', function(e){
+  var b = e.target.closest('[data-st]'); if(!b) return;
+  STATION = b.dataset.st;
+  Array.prototype.forEach.call($('stations').children, function(c){
+    c.classList.toggle('on', c === b);
+  });
+  paint();
+});
+
+$('grid').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.next)   return advanceTicket(b.dataset.next, b.dataset.to);
+  if(b.dataset.undo)   return recallTicket(b.dataset.undo);
+  if(b.dataset.print)  return openPrintPreview(b.dataset.print);
+  if(b.dataset.cancel){
+    if(confirm('Cancel this whole order? The table will not be told automatically.')){
+      cancelOrder(b.dataset.cancel);
+    }
+  }
+});
+
+/* ---------- print preview ----------
+   Printing never touches order status, and pressing this button never
+   fires or holds anything - it only shows what would leave a printer
+   and, once confirmed, records that it did. Closing the preview without
+   confirming records nothing at all; nothing is sent anywhere. */
+var PENDING_PRINT = null;   /* { order_id, station_id, course, payload, isReprint } */
+
+function ticketPayloadFor(tk){
+  var p = parseTicketId(tk);
+  var order = null;
+  ORDERS.forEach(function(o){ if(o.id === p.order_id) order = o; });
+  if(!order) return null;
+  var items = (order.rd_order_items||[]).filter(function(i){
+    return i.station_id === p.station_id && (i.course == null ? p.course == null : i.course === p.course);
+  });
+  var station = STATIONS.filter(function(s){ return s.id === p.station_id; })[0];
+  return {
+    order_id: p.order_id, station_id: p.station_id, course: p.course,
+    ticket: {
+      restaurant_name: 'RESTAURANT DELUXE',
+      venue_name: VENUE ? VENUE.name : '',
+      table_label: tblOf(order),
+      order_number: order.order_number,
+      at: order.created_at,
+      course_label: p.course != null ? courseLabel(p.course) : null,
+      station_name: station ? station.name : '',
+      items: items.map(function(i){
+        return {
+          qty: i.qty, name: i.name_snapshot,
+          modifiers: (i.rd_order_item_modifiers||[])
+            .sort(function(a,b){ return (a.sort||0)-(b.sort||0); })
+            .map(function(m){ return m.name_snapshot; }),
+          allergens: i.allergens || [], note: i.note || null
+        };
+      }),
+      customer_note: order.customer_note || null
+    }
+  };
+}
+
+function openPrintPreview(tk){
+  var built = ticketPayloadFor(tk);
+  if(!built){ toast('That ticket is no longer on the board'); return; }
+  var pstate = printStateFor(built.order_id, built.station_id, built.course);
+  PENDING_PRINT = { order_id: built.order_id, station_id: built.station_id,
+                     course: built.course, payload: built.ticket, isReprint: pstate.printed };
+  $('ptitle').textContent = (built.ticket.station_name || 'Station') +
+    (built.ticket.course_label ? ' \u00b7 ' + built.ticket.course_label : '') +
+    ' \u00b7 Table ' + built.ticket.table_label;
+  $('proll').textContent = renderTicket(built.ticket);
+  $('pnote').textContent = pstate.printed
+    ? 'This ticket was already printed at ' +
+      new Date(pstate.at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) +
+      '. Confirming below records a deliberate reprint, kept as its own entry.'
+    : 'No physical printer is connected yet - this is exactly what would be sent to one. ' +
+      'Confirming marks this ticket as printed.';
+  $('pconfirm').textContent = pstate.printed ? 'Confirm reprint' : 'Mark as printed';
+  $('pconfirm').disabled = false;
+  $('pmask').classList.add('on');
+}
+
+function closePrintPreview(){
+  $('pmask').classList.remove('on');
+  PENDING_PRINT = null;
+}
+
+$('pclose').addEventListener('click', closePrintPreview);
+$('pmask').addEventListener('click', function(e){ if(e.target === $('pmask')) closePrintPreview(); });
+
+$('pconfirm').addEventListener('click', function(){
+  if(!PENDING_PRINT) return;
+  var job = PENDING_PRINT;
+  $('pconfirm').disabled = true; $('pconfirm').textContent = 'Recording\u2026';
+  rpc('rd_record_print_job', {
+    p_order_id: job.order_id, p_station_id: job.station_id, p_course: job.course,
+    p_payload: job.payload, p_is_reprint: job.isReprint
+  }).then(function(){
+    closePrintPreview();
+    return refresh();
+  }).catch(function(e){
+    $('pconfirm').disabled = false;
+    var m = e && e.data && e.data.message || '';
+    if(/printing_off/.test(m)) toast('Printing has been turned off for this station since the board loaded — refreshing.');
+    else toast('Could not record that print — try again');
+    refresh();
+  });
+});
+
+$('sound').addEventListener('click', function(){
+  SOUND = !SOUND;
+  this.setAttribute('aria-pressed', SOUND ? 'true' : 'false');
+  this.querySelector('span').textContent = SOUND ? 'Sound on' : 'Sound off';
+  this.classList.toggle('on', SOUND);
+  if(SOUND) beep(1);
+});
+
+$('recall').addEventListener('click', function(){
+  RECALL = !RECALL;
+  this.classList.toggle('on', RECALL);
+  this.textContent = RECALL ? 'Back to service' : 'Recent';
+  refresh(true);
+});
+
+function doSignOut(){
+  clearInterval(pollT); clearInterval(tickT); clearTimeout(refreshT);
+  clearSession(); SESSION = null; VENUE = null; ORDERS = []; SEEN = {};
+  $('board').style.display = 'none'; $('signin').style.display = '';
+  $('msg').textContent = '';
+}
+$('out').addEventListener('click', function(){
+  if(confirm('Sign out of this kitchen screen?')) doSignOut();
+});
+
+document.getElementById('signin').addEventListener('click', function(e){
+  var b=e.target.closest('[data-venue]'); if(!b) return;
+  rememberVenue(b.dataset.venue);
+  location.reload();
+});
+$('out').insertAdjacentHTML('beforebegin',
+  '<button class="chip" id="switchVenue" style="display:none">Switch</button>');
+document.getElementById('switchVenue').addEventListener('click', function(){
+  forgetVenue(); location.reload();
+});
+
+$('sound').classList.add('on');
+start();
+})();
+</script>
+</body>
+</html>
