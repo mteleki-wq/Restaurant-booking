@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex,nofollow">
+<title>Business Insights — Restaurant Deluxe</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — BUSINESS INSIGHTS
+     business-insights.html
+
+     A separate page from staff-counter.html, table-order.html, and
+     everything else - none of those are touched by this one.
+
+     WHAT THIS SHOWS
+     Two layers, always kept clearly apart:
+
+       Insights - rule-based, computed directly from real order data via
+       rd_business_insights. Fixed logic, explainable, free to run, and
+       every line here is tied to an actual number, never invented.
+
+       AI summary - a short narrative Claude writes ABOUT those same
+       insights, on request, never instead of them. It only ever sees
+       the numbers already shown above it - it cannot see anything the
+       rules did not already surface.
+
+     SETUP - fill in the two lines marked "FILL THIS IN".
+       SUPABASE_URL   Settings -> API -> Project URL
+       SUPABASE_KEY   Settings -> API -> anon / public key
+     ================================================================== -->
+
+<script>
+  /* ---------- FILL THIS IN ---------- */
+  var SUPABASE_URL = '';
+  var SUPABASE_KEY = '';
+  /* ---------- END ---------- */
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --bg:#0b0806; --panel:#151009; --panel-2:#1c150c;
+  --ink:#f6efe2; --muted:#b3a488;
+  --line:rgba(179,164,136,.18);
+  --accent:#f0cf85; --accent-2:#df9f52;
+  --grad:linear-gradient(100deg,#f2d187 0%,#df9f52 55%,#b8783c 100%);
+  --edge:rgba(240,207,133,.4);
+  --good:#8fd6a8; --bad:#ff9a8a; --warn:#ffd479;
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;min-height:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-weight:300;font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Unbounded',sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}
+.mono{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+input{color:var(--ink);-webkit-text-fill-color:var(--ink);caret-color:var(--accent)}
+input::placeholder{color:var(--muted);-webkit-text-fill-color:var(--muted);opacity:1}
+
+.screen{display:none}
+.screen.on{display:flex}
+.centre{
+  width:100%;min-height:100dvh;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:32px 24px calc(32px + var(--safe-b));gap:14px;
+}
+.centre h1{font-size:clamp(22px,4vw,28px)}
+.card{
+  width:100%;max-width:420px;text-align:left;background:var(--panel);
+  border:1px solid var(--line);border-radius:20px;padding:28px;
+}
+.card label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 7px}
+.card label:first-of-type{margin-top:4px}
+.card input{
+  width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;
+  background:var(--panel-2);padding:0 15px;outline:none;
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:50px;padding:13px 24px;border-radius:100px;
+  background:var(--grad);color:#241703;font-weight:700;
+  font-family:'Unbounded',sans-serif;font-size:13.5px;
+  box-shadow:0 10px 30px rgba(184,120,60,.28);width:100%;
+}
+.btn[disabled]{opacity:.42;box-shadow:none;cursor:not-allowed}
+.btn-quiet{background:transparent;border:1px solid var(--line);color:var(--ink);box-shadow:none;font-weight:600}
+.msg{color:var(--bad);font-size:13px;min-height:18px;margin:12px 0 0}
+
+/* ---------- main app ---------- */
+#app{display:none}
+#app.on{display:block}
+.top{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:calc(16px + var(--safe-t)) 22px 16px;border-bottom:1px solid var(--line);
+}
+.top h1{font-size:17px}
+.top-spacer{flex:1}
+.top button{
+  min-height:40px;padding:0 16px;border-radius:100px;border:1px solid var(--line);
+  color:var(--muted);font-size:12.5px;font-weight:600;
+}
+main{max-width:900px;margin:0 auto;padding:24px 22px calc(60px + var(--safe-b))}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.toolbar label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px}
+.toolbar input[type=date]{background:var(--panel-2);border:1px solid var(--line);
+  border-radius:10px;color:var(--ink);padding:9px 11px;min-height:42px;font-size:13.5px}
+.tbtn{min-height:42px;padding:0 18px;border-radius:100px;border:1px solid var(--line);
+  color:var(--ink);font-weight:600;font-size:13px}
+.tbtn.primary{background:var(--grad);color:#241703;border:0;font-family:'Unbounded',sans-serif;font-size:12.5px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.presets button{background:none;border:1px solid var(--line);color:var(--muted);
+  border-radius:100px;padding:6px 13px;font-size:12px;min-height:36px}
+.presets button.on{color:var(--ink);border-color:var(--edge)}
+
+.section-h{display:flex;align-items:baseline;gap:10px;margin:26px 0 12px}
+.section-h:first-child{margin-top:0}
+.section-h h2{font-size:15px}
+.section-h p{color:var(--muted);font-size:12.5px;margin:0}
+
+.icard{
+  display:flex;gap:14px;padding:16px 18px;border-radius:14px;margin-bottom:10px;
+  background:var(--panel);border:1px solid var(--line);border-left-width:3px;
+}
+.icard.critical{border-left-color:var(--bad)}
+.icard.warning{border-left-color:var(--warn)}
+.icard.info{border-left-color:var(--line)}
+.icard.positive{border-left-color:var(--good)}
+.idot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;margin-top:6px}
+.icard.critical .idot{background:var(--bad)}
+.icard.warning .idot{background:var(--warn)}
+.icard.info .idot{background:var(--muted)}
+.icard.positive .idot{background:var(--good)}
+.ibody{flex:1;min-width:0}
+.ibody h3{font-size:14px;margin-bottom:5px}
+.ibody .detail{color:var(--muted);font-size:13px;margin-bottom:7px}
+.ibody .suggestion{font-size:13px;padding-top:8px;border-top:1px solid var(--line)}
+.ibody .suggestion b{color:var(--accent);font-weight:600}
+
+.ai-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.ai-narrative{white-space:pre-wrap;line-height:1.65;font-size:14px;margin-top:14px}
+.empty{text-align:center;color:var(--muted);padding:50px 20px}
+.hint{color:var(--muted);font-size:12.5px;margin:0}
+
+.toast{position:fixed;left:50%;bottom:32px;transform:translate(-50%,18px);z-index:130;
+  background:var(--panel-2);border:1px solid var(--edge);border-radius:100px;padding:11px 20px;
+  font-size:13px;opacity:0;pointer-events:none;transition:opacity .22s,transform .22s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<section class="screen on" id="scBoot"><div class="centre">
+  <div class="mono" style="color:var(--muted)">Restaurant Deluxe</div><h1>Loading</h1><p style="color:var(--muted)">One moment.</p>
+</div></section>
+
+<section class="screen" id="scSetup"><div class="centre">
+  <div class="card">
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1 style="margin-top:8px">Connect this device</h1>
+    <p style="color:var(--muted);margin:8px 0 0">One-time setup. Find both values in Supabase under
+      Settings &rarr; API. They are stored on this device only.</p>
+    <label for="su">Project URL</label>
+    <input id="su" type="text" placeholder="https://xxxx.supabase.co" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="url">
+    <label for="sk">anon / public key</label>
+    <input id="sk" type="text" placeholder="eyJhbGciOi..." autocapitalize="off" autocorrect="off" spellcheck="false">
+    <button class="btn" id="sgo" style="margin-top:18px">Connect</button>
+    <p class="msg" id="smsg"></p>
+  </div>
+</div></section>
+
+<section class="screen" id="scSignin"><div class="centre">
+  <div class="card">
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1 style="margin-top:8px">Business Insights</h1>
+    <p style="color:var(--muted);margin:8px 0 0">Staff sign-in. Ask a manager if you do not have an account yet.</p>
+    <label for="em">Email</label>
+    <input id="em" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false">
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password">
+    <button class="btn" id="go" style="margin-top:18px">Sign in</button>
+    <p class="msg" id="msg"></p>
+    <button id="reconf" style="color:var(--muted);font-size:12px;text-decoration:underline;margin-top:10px;min-height:44px">Change connection settings</button>
+  </div>
+</div></section>
+
+<div id="app">
+  <div class="top">
+    <h1 id="appVenue">Restaurant</h1>
+    <div class="top-spacer"></div>
+    <button id="switchVenueBtn" style="display:none">Switch restaurant</button>
+    <button id="signOutBtn">Sign out</button>
+  </div>
+  <main>
+    <div class="toolbar">
+      <div><label for="dStart">From</label><input type="date" id="dStart"></div>
+      <div><label for="dEnd">To</label><input type="date" id="dEnd"></div>
+      <button class="tbtn primary" id="loadBtn">Load insights</button>
+    </div>
+    <div class="presets">
+      <button data-preset="7d">Last 7 days</button>
+      <button data-preset="30d">Last 30 days</button>
+      <button data-preset="month">This month</button>
+      <button data-preset="lastmonth">Last month</button>
+    </div>
+
+    <div class="section-h"><h2>Insights</h2><p>Rule-based, computed directly from your order data.</p></div>
+    <div id="insightsList"><div class="empty">Pick a range and press Load insights.</div></div>
+
+    <div class="section-h"><h2>AI summary</h2><p>A short narrative built only from the insights above.</p></div>
+    <div class="ai-card">
+      <button class="btn btn-quiet" id="aiBtn" disabled>Generate AI summary</button>
+      <p class="hint" style="margin-top:10px" id="aiHint">Load insights first.</p>
+      <div class="ai-narrative" id="aiNarrative" style="display:none"></div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+
+/* ================= state ================= */
+var SESSION = null, VENUE = null, VENUES = [];
+var CURRENT_RANGE = null;
+var LAST_INSIGHTS = null;
+var refreshT = null;
+
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function show(id){
+  ['scBoot','scSetup','scSignin'].forEach(function(s){ $(s).classList.toggle('on', s===id); });
+  $('app').classList.toggle('on', id === 'app');
+  window.scrollTo(0,0);
+}
+var toastT;
+function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('on'); },2600); }
+
+/* ================= storage - this page's own, separate from every other tool ================= */
+function readConfig(){ try{ return JSON.parse(localStorage.getItem('rd_insights_config')||'null'); }catch(e){ return null; } }
+function saveConfig(u,k){ try{ localStorage.setItem('rd_insights_config', JSON.stringify({url:u,key:k})); }catch(e){} }
+function saveSession(s){ try{ localStorage.setItem('rd_insights_session', JSON.stringify(s)); }catch(e){} }
+function readSession(){ try{ return JSON.parse(localStorage.getItem('rd_insights_session')||'null'); }catch(e){ return null; } }
+function clearSession(){ try{ localStorage.removeItem('rd_insights_session'); }catch(e){} }
+function savedVenueId(){ try{ return localStorage.getItem('rd_insights_venue'); }catch(e){ return null; } }
+function rememberVenue(id){ try{ localStorage.setItem('rd_insights_venue', id); }catch(e){} }
+function forgetVenue(){ try{ localStorage.removeItem('rd_insights_venue'); }catch(e){} }
+function haveConfig(){
+  if(SUPABASE_URL && SUPABASE_KEY) return true;
+  var c = readConfig();
+  if(c && c.url && c.key){ SUPABASE_URL=c.url; SUPABASE_KEY=c.key; return true; }
+  return false;
+}
+function showSetup(msg){
+  show('scSetup');
+  var c = readConfig();
+  if(c){ $('su').value=c.url||''; $('sk').value=c.key||''; }
+  $('smsg').textContent = msg||'';
+}
+
+/* ================= resilient network - same fix as every other staff tool ================= */
+function fetchResilient(url, opts, attempts){
+  attempts = attempts==null ? 3 : attempts;
+  return fetch(url, opts).catch(function(err){
+    if(attempts <= 1) throw err;
+    return new Promise(function(res){ setTimeout(res, 500); })
+      .then(function(){ return fetchResilient(url, opts, attempts-1); });
+  });
+}
+function authFetch(path, opts){
+  opts = opts || {};
+  var h = opts.headers || {};
+  h.apikey = SUPABASE_KEY;
+  h.Authorization = 'Bearer ' + (SESSION ? SESSION.access_token : SUPABASE_KEY);
+  h['Content-Type'] = 'application/json';
+  opts.headers = h;
+  return fetchResilient(SUPABASE_URL.replace(/\/+$/,'') + path, opts).then(function(r){
+    return r.text().then(function(t){
+      var d=null; try{ d = t?JSON.parse(t):null; }catch(e){}
+      if(!r.ok) throw { status:r.status, data:d, raw:t };
+      return d;
+    });
+  });
+}
+function rpc(fn, body){ return authFetch('/rest/v1/rpc/'+fn, { method:'POST', body:JSON.stringify(body) }); }
+function edgeFn(fn, body){ return authFetch('/functions/v1/'+fn, { method:'POST', body:JSON.stringify(body) }); }
+
+function signIn(email, password){
+  return fetchResilient(SUPABASE_URL.replace(/\/+$/,'') + '/auth/v1/token?grant_type=password', {
+    method:'POST', headers:{ apikey:SUPABASE_KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ email:email, password:password })
+  }).then(function(r){
+    return r.text().then(function(t){
+      var d=null; try{ d = t?JSON.parse(t):null; }catch(e){}
+      if(!r.ok) throw { status:r.status, data:d };
+      return d;
+    });
+  });
+}
+function refreshSession(){
+  if(!SESSION || !SESSION.refresh_token) return Promise.reject();
+  return fetchResilient(SUPABASE_URL.replace(/\/+$/,'') + '/auth/v1/token?grant_type=refresh_token', {
+    method:'POST', headers:{ apikey:SUPABASE_KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ refresh_token: SESSION.refresh_token })
+  }).then(function(r){ return r.ok ? r.json() : Promise.reject({status:r.status}); })
+    .then(function(d){
+      SESSION.access_token = d.access_token;
+      SESSION.refresh_token = d.refresh_token || SESSION.refresh_token;
+      SESSION.expires_at = Date.now() + ((d.expires_in||3600)*1000);
+      saveSession(SESSION);
+      return SESSION;
+    });
+}
+function armRefresh(){
+  clearTimeout(refreshT);
+  if(!SESSION) return;
+  var ms = Math.max(30000, (SESSION.expires_at - Date.now()) - 300000);
+  refreshT = setTimeout(function(){
+    refreshSession().then(armRefresh).catch(function(err){
+      if(err && err.status){ toast('Session expired — please sign in again'); doSignOut(); }
+      else { refreshT = setTimeout(armRefresh, 30000); }
+    });
+  }, ms);
+}
+function doSignOut(){
+  clearTimeout(refreshT);
+  clearSession(); SESSION = null; VENUE = null;
+  $('em').value=''; $('pw').value='';
+  show('scSignin');
+}
+
+/* ================= boot ================= */
+function normaliseUrl(raw){
+  var u = String(raw||'').trim(); if(!u) return '';
+  if(/^[a-z0-9]{16,}$/i.test(u)) return 'https://'+u+'.supabase.co';
+  if(!/^https?:\/\//i.test(u)) u = 'https://'+u;
+  try{ var a=document.createElement('a'); a.href=u;
+    var m = (a.pathname||'').match(/\/project\/([a-z0-9]+)/i);
+    if(/supabase\.(com|io)$/i.test(a.hostname) && m) return 'https://'+m[1]+'.supabase.co';
+    return a.protocol+'//'+a.hostname+(a.port?(':'+a.port):'');
+  }catch(e){ return ''; }
+}
+function keyRole(k){
+  try{ var p=k.split('.')[1]; if(!p) return null;
+    p=p.replace(/-/g,'+').replace(/_/g,'/'); while(p.length%4)p+='=';
+    return (JSON.parse(atob(p))||{}).role||null;
+  }catch(e){ return null; }
+}
+$('sgo').addEventListener('click', function(){
+  var u = normaliseUrl($('su').value), k = $('sk').value.trim();
+  if(!u||!k){ $('smsg').textContent='Fill in both fields.'; return; }
+  if(keyRole(k)==='service_role'){ $('smsg').textContent='That is the service_role key — use the anon key instead.'; return; }
+  SUPABASE_URL=u; SUPABASE_KEY=k; saveConfig(u,k);
+  $('smsg').textContent=''; start();
+});
+$('reconf').addEventListener('click', function(){ showSetup(''); });
+
+function start(){
+  if(!haveConfig()) return showSetup('');
+  var s = readSession();
+  if(s && s.access_token){
+    SESSION = s;
+    (s.expires_at && s.expires_at < Date.now()+60000 ? refreshSession() : Promise.resolve())
+      .then(afterSignIn).catch(function(){ clearSession(); SESSION=null; show('scSignin'); });
+  } else {
+    show('scSignin');
+  }
+}
+
+$('go').addEventListener('click', function(){
+  var e=$('em').value.trim(), p=$('pw').value;
+  if(!e||!p){ $('msg').textContent='Enter your email and password.'; return; }
+  $('go').disabled=true; $('msg').textContent='';
+  signIn(e,p).then(function(d){
+    SESSION = { access_token:d.access_token, refresh_token:d.refresh_token,
+      expires_at: Date.now()+((d.expires_in||3600)*1000), user:d.user||null };
+    saveSession(SESSION); $('pw').value='';
+    return afterSignIn();
+  }).catch(function(err){
+    var m = err && err.data && (err.data.error_description || err.data.msg || err.data.message);
+    if(err && err.status===400) m = 'That email and password did not match.';
+    if(m){ $('msg').textContent = m; }
+    else if(err && err.status){ $('msg').textContent = 'Could not sign in (error '+err.status+').'; }
+    else { $('msg').textContent = 'Could not reach the server. Check this device\u2019s WiFi and try again.'; }
+  }).then(function(){ $('go').disabled=false; });
+});
+
+function paintVenuePicker(list){
+  return '<span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>'+
+    '<h1 style="margin-top:8px">Choose a restaurant</h1>'+
+    '<p style="color:var(--muted);margin:8px 0 0">You have access to more than one.</p>'+
+    '<div style="margin-top:16px">'+
+    list.map(function(v){
+      return '<button class="btn btn-quiet" data-venue="'+esc(v.id)+'" '+
+        'style="margin-top:8px;justify-content:space-between;display:flex">'+
+        '<span>'+esc(v.name||v.slug)+'</span>'+
+        '<span style="color:var(--muted);font-size:11px;font-family:\'Space Mono\',monospace">'+esc(v.role||'')+'</span>'+
+        '</button>';
+    }).join('')+'</div>';
+}
+document.getElementById('scSignin').addEventListener('click', function(e){
+  var b = e.target.closest('[data-venue]'); if(!b) return;
+  rememberVenue(b.dataset.venue);
+  location.reload();
+});
+
+function afterSignIn(){
+  return rpc('rd_my_venues', {}).then(function(list){
+    if(!list || !list.length) throw { kind:'nostaff' };
+    VENUES = list;
+    var want = savedVenueId();
+    var pick = list.filter(function(v){ return v.id === want; })[0];
+    if(list.length === 1) pick = list[0];
+    if(!pick){
+      document.querySelector('#scSignin .card').innerHTML = paintVenuePicker(list);
+      throw { kind:'pick' };
+    }
+    rememberVenue(pick.id);
+    VENUE = pick;
+    $('appVenue').textContent = VENUE.name || '';
+    if(VENUES.length > 1) $('switchVenueBtn').style.display = '';
+  }).then(function(){
+    show('app');
+    armRefresh();
+    setPreset('30d');
+  }).catch(function(e){
+    if(e && e.kind === 'pick'){ show('scSignin'); return; }
+    if(e && e.kind === 'nostaff'){ $('msg').textContent = 'This account is not staff at any venue yet.'; show('scSignin'); return; }
+    toast('Could not load venue details — try signing in again');
+    show('scSignin');
+  });
+}
+$('switchVenueBtn').addEventListener('click', function(){ forgetVenue(); location.reload(); });
+$('signOutBtn').addEventListener('click', doSignOut);
+
+/* ================= date range ================= */
+function isoDate(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+function presetRange(key){
+  var end = new Date(); var start = new Date();
+  if(key==='7d'){ start.setDate(end.getDate()-6); }
+  else if(key==='30d'){ start.setDate(end.getDate()-29); }
+  else if(key==='month'){ start = new Date(end.getFullYear(), end.getMonth(), 1); }
+  else if(key==='lastmonth'){
+    start = new Date(end.getFullYear(), end.getMonth()-1, 1);
+    end = new Date(end.getFullYear(), end.getMonth(), 0);
+  }
+  return { start: isoDate(start), end: isoDate(end) };
+}
+function setPreset(key){
+  var r = presetRange(key);
+  $('dStart').value = r.start; $('dEnd').value = r.end;
+  document.querySelectorAll('.presets button').forEach(function(b){ b.classList.toggle('on', b.dataset.preset===key); });
+  loadInsights(r.start, r.end);
+}
+document.querySelector('.presets').addEventListener('click', function(e){
+  var b = e.target.closest('[data-preset]'); if(!b) return;
+  setPreset(b.dataset.preset);
+});
+$('loadBtn').addEventListener('click', function(){
+  var s = $('dStart').value, en = $('dEnd').value;
+  if(!s || !en){ toast('Pick both dates'); return; }
+  if(s > en){ toast('The start date is after the end date'); return; }
+  document.querySelectorAll('.presets button').forEach(function(b){ b.classList.remove('on'); });
+  loadInsights(s, en);
+});
+
+/* ================= insights ================= */
+function severityLabel(sev){
+  return { critical:'Critical', warning:'Worth a look', info:'For context', positive:'Going well' }[sev] || sev;
+}
+function renderInsights(list){
+  if(!list || !list.length){
+    $('insightsList').innerHTML = '<div class="empty">Nothing to show for this range.</div>';
+    return;
+  }
+  $('insightsList').innerHTML = list.map(function(i){
+    return '<div class="icard '+esc(i.severity)+'"><div class="idot"></div><div class="ibody">'+
+      '<span class="mono" style="color:var(--muted)">'+esc(severityLabel(i.severity))+'</span>'+
+      '<h3>'+esc(i.title)+'</h3>'+
+      '<p class="detail">'+esc(i.detail)+'</p>'+
+      '<p class="suggestion"><b>Suggestion —</b> '+esc(i.suggestion)+'</p>'+
+    '</div></div>';
+  }).join('');
+}
+function loadInsights(start, end){
+  CURRENT_RANGE = { start:start, end:end };
+  LAST_INSIGHTS = null;
+  $('insightsList').innerHTML = '<div class="empty">Loading\u2026</div>';
+  $('aiBtn').disabled = true; $('aiHint').textContent = 'Load insights first.';
+  $('aiNarrative').style.display = 'none'; $('aiNarrative').textContent = '';
+  $('loadBtn').disabled = true;
+  return rpc('rd_business_insights', { p_venue_id: VENUE.id, p_start: start, p_end: end })
+    .then(function(res){
+      LAST_INSIGHTS = res;
+      renderInsights(res && res.insights);
+      $('aiBtn').disabled = false;
+      $('aiHint').textContent = 'Generates a short written summary from the insights above.';
+    })
+    .catch(function(e){
+      $('insightsList').innerHTML = '<div class="empty">'+esc(e && e.status ? 'Could not load insights.' : 'Could not reach the server. Check the WiFi and try again.')+'</div>';
+    })
+    .then(function(){ $('loadBtn').disabled = false; });
+}
+
+/* ================= AI narrative ================= */
+$('aiBtn').addEventListener('click', function(){
+  if(!CURRENT_RANGE) return;
+  var btn = this; btn.disabled = true; btn.textContent = 'Thinking\u2026';
+  $('aiHint').textContent = 'This can take a few seconds.';
+  edgeFn('business-insights-ai', { venue_id: VENUE.id, start: CURRENT_RANGE.start, end: CURRENT_RANGE.end })
+    .then(function(res){
+      if(res && res.ok && res.narrative){
+        $('aiNarrative').textContent = res.narrative;
+        $('aiNarrative').style.display = 'block';
+        $('aiHint').textContent = 'Based only on the insights above.';
+      } else {
+        // A failure here must never leave a PREVIOUS success sitting on
+        // screen looking current - that would read as a stale result
+        // silently contradicting the very message saying it failed.
+        $('aiNarrative').style.display = 'none';
+        $('aiNarrative').textContent = '';
+        $('aiHint').textContent = res && res.error === 'not_configured'
+          ? 'AI summaries are not set up for this account yet.'
+          : 'Could not generate a summary right now — try again.';
+      }
+    })
+    .catch(function(){ $('aiHint').textContent = 'Could not reach the server. Try again.'; })
+    .then(function(){ btn.disabled = false; btn.textContent = 'Generate AI summary'; });
+});
+
+start();
+})();
+</script>
+</body>
+</html>
