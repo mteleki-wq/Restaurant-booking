@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marc Teleki — Trainer &amp; Assessor, Hospitality and Business</title>
+<meta name="description" content="Marc Teleki: Senior Trainer and Assessor in hospitality and business management. French-trained chef, founder of Webescapade, and builder of restaurant booking, table-ordering and CRM systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Colours are written as hex on purpose (no CSS variables) so the file survives iPad copy/paste. */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Figtree,"Helvetica Neue",Arial,sans-serif;color:#26303B;background:#FFFFFF;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:#14304F}
+.serif{font-family:Newsreader,Georgia,"Times New Roman",serif}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+:focus-visible{outline:3px solid #B8862B;outline-offset:3px}
+[data-off]{display:none!important}
+body:not(.editing) .ed-only{display:none}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid #E3E8EE}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#14304F;-webkit-user-select:none;user-select:none}
+.mono{width:38px;height:38px;border:1.5px solid #14304F;display:grid;place-items:center;font-family:Newsreader,Georgia,serif;font-size:17px;letter-spacing:.5px;border-radius:2px}
+.brand b{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:20px}
+.nav nav{display:flex;align-items:center;gap:26px}
+.nav nav a{text-decoration:none;color:#44505D;font-size:15px;font-weight:500}
+.nav nav a:hover{color:#14304F}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:3px;font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid #14304F;cursor:pointer;font-family:inherit;transition:background .2s,color .2s}
+.btn-solid{background:#14304F;color:#FFFFFF}
+.btn-solid:hover{background:#0E2238}
+.btn-line{background:transparent;color:#14304F}
+.btn-line:hover{background:#EEF2F7}
+.nav .btn{padding:9px 16px}
+.nav nav a.btn-solid,.nav nav a.btn-solid:hover{color:#FFFFFF}
+@media (max-width:860px){.nav nav a.hide-sm{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:76px 0 40px}
+.hero .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:64px;align-items:end}
+.hero .role{font-size:15px;color:#6A7582;margin:0 0 22px;font-weight:500}
+.hero h1{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(40px,5.4vw,68px);line-height:1.04;letter-spacing:-.015em;color:#14304F;margin:0 0 26px}
+.hero .lede{font-size:19px;line-height:1.62;max-width:36em;margin:0 0 34px;color:#3A4552}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+.portrait{position:relative}
+.portrait .shot-body{aspect-ratio:4/5;background:#E9EEF4}
+.portrait .ph{background:#14304F;color:#FFFFFF}
+.portrait .ph .ph-mono{font-family:Newsreader,Georgia,serif;font-size:96px;line-height:1;color:#FFFFFF;opacity:.92}
+.portrait figcaption{margin-top:12px;font-size:14px;color:#6A7582}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr;gap:40px}.portrait{max-width:360px}}
+
+/* ---------- career line (the one bold element) ---------- */
+.career{padding:34px 0 70px}
+.career ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,1fr);position:relative}
+.career ol:before{content:"";position:absolute;left:0;right:0;top:9px;height:2px;background:#14304F;transform-origin:left;animation:draw 1.4s ease-out .2s both}
+.career li{position:relative;padding:34px 16px 0 0}
+.career li:before{content:"";position:absolute;top:3px;left:0;width:14px;height:14px;border-radius:50%;background:#FFFFFF;border:2px solid #14304F}
+.career li:last-child:before{background:#B8862B;border-color:#B8862B}
+.career .yr{font-family:Newsreader,Georgia,serif;font-size:30px;color:#14304F;line-height:1;display:block;margin-bottom:8px}
+.career .ev{font-size:14px;line-height:1.45;color:#4A5563;display:block}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (max-width:980px){
+ .career ol{grid-template-columns:1fr;padding-left:26px}
+ .career ol:before{left:6px;right:auto;top:6px;bottom:6px;width:2px;height:auto;animation:none}
+ .career li{padding:0 0 22px 18px}
+ .career li:before{left:-26px;top:6px}
+ .career .yr{display:inline-block;width:70px;font-size:24px;margin:0}
+ .career .ev{display:inline}
+}
+
+/* ---------- value band ---------- */
+.band{background:#14304F;color:#DDE5EE;padding:72px 0}
+.band h2{font-family:Newsreader,Georgia,serif;font-weight:400;color:#FFFFFF;font-size:clamp(28px,3.4vw,40px);line-height:1.15;margin:0 0 44px;max-width:22em}
+.band .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.band .col{padding:0 34px 0 0;margin-right:34px;border-right:1px solid #2F4D6E}
+.band .col:last-child{border-right:0;margin-right:0}
+.band h3{font-family:Newsreader,Georgia,serif;font-weight:500;color:#E9C77A;font-size:22px;margin:0 0 10px}
+.band p{margin:0;font-size:16px;line-height:1.6}
+@media (max-width:860px){.band .cols{grid-template-columns:1fr;gap:28px}.band .col{border-right:0;margin:0;padding:0 0 26px;border-bottom:1px solid #2F4D6E}.band .col:last-child{border-bottom:0}}
+
+/* ---------- section heads ---------- */
+.sec{padding:96px 0}
+.sec-head{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;margin-bottom:56px;align-items:end}
+.sec-head h2{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(32px,4vw,48px);line-height:1.08;color:#14304F;margin:0}
+.sec-head p{margin:0;font-size:18px;color:#4A5563;max-width:34em}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr;gap:16px}}
+
+/* ---------- project showcases ---------- */
+.project{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:start;padding:56px 0;border-top:1px solid #E3E8EE}
+.project:first-of-type{border-top:0;padding-top:0}
+.project.flip{grid-template-columns:.85fr 1.15fr}
+.project.flip .media{order:2}
+.project h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:34px;line-height:1.1;color:#14304F;margin:0 0 6px}
+.project .kind{font-size:15px;color:#8A6420;font-weight:600;margin:0 0 18px}
+.project .desc{margin:0 0 20px}
+.project ul.did{margin:0 0 22px;padding:0;list-style:none}
+.project ul.did li{position:relative;padding-left:20px;margin-bottom:8px;font-size:16px;line-height:1.5}
+.project ul.did li:before{content:"";position:absolute;left:2px;top:.62em;width:8px;height:1.5px;background:#B8862B}
+.class-use{background:#F3F6F9;border-left:3px solid #B8862B;padding:14px 18px;margin:0 0 22px;font-size:15px;line-height:1.55}
+.class-use b{color:#14304F}
+.class-use .codes{display:block;margin-top:6px;color:#8A6420;font-weight:600;letter-spacing:.02em}
+.visit{font-weight:600;text-decoration:none;border-bottom:1.5px solid #B8862B;padding-bottom:2px}
+@media (max-width:900px){.project,.project.flip{grid-template-columns:1fr;gap:28px}.project.flip .media{order:0}}
+
+/* browser-framed screenshot */
+.shot{margin:0;position:relative}
+.frame{border:1px solid #D5DCE4;border-radius:6px;overflow:hidden;background:#FFFFFF;box-shadow:0 18px 40px -24px rgba(20,48,79,.35)}
+.frame-bar{height:34px;background:#F1F4F7;border-bottom:1px solid #DDE3EA;display:flex;align-items:center;gap:6px;padding:0 12px}
+.frame-bar i{width:9px;height:9px;border-radius:50%;background:#C9D1DA;display:block}
+.frame-bar span{margin-left:12px;flex:1;max-width:320px;background:#FFFFFF;border:1px solid #DDE3EA;border-radius:4px;font-size:12px;color:#5C6875;padding:3px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot-body{position:relative;aspect-ratio:16/10;background:#E9EEF4;overflow:hidden}
+.shot-body img{width:100%;height:100%;object-fit:cover;object-position:top center;display:none;cursor:zoom-in}
+.shot.has-img .shot-body img{display:block}
+.shot.has-img .ph{display:none}
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:26px;background:#E9EEF4;color:#14304F}
+.ph .ph-name{font-family:Newsreader,Georgia,serif;font-size:clamp(30px,3.6vw,46px);line-height:1;margin:0 0 8px}
+.ph .ph-url{font-size:14px;color:#5C6875}
+.ph .ph-lines{position:absolute;top:26px;left:26px;right:26px}
+.ph .ph-lines i{display:block;height:8px;border-radius:4px;background:rgba(20,48,79,.12);margin-bottom:10px}
+.ph.t-rd{background:#1B1A1F;color:#F2E6CF}.ph.t-rd .ph-url{color:#BFB3A0}.ph.t-rd .ph-lines i{background:rgba(242,230,207,.14)}
+.ph.t-cl{background:#1C1C1C;color:#E3C878}.ph.t-cl .ph-url{color:#BBB39A}.ph.t-cl .ph-lines i{background:rgba(227,200,120,.16)}
+.ph.t-we{background:#1A1633;color:#CFE6FF}.ph.t-we .ph-url{color:#A9B4D6}.ph.t-we .ph-lines i{background:rgba(160,190,255,.16)}
+.ph.t-cn{background:#EDEFF3;color:#14304F}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.thumbs .shot-body{aspect-ratio:4/3;border:1px solid #D5DCE4;border-radius:4px}
+.thumbs .ph{padding:10px;justify-content:center;align-items:center;text-align:center;font-size:13px;color:#6A7582;background:#F3F6F9}
+.thumbs figcaption{font-size:13px;color:#5C6875;margin-top:6px;line-height:1.35}
+body:not(.editing) .thumbs .shot:not(.has-img){display:none}
+
+/* also built */
+.also{margin-top:40px;border-top:1px solid #E3E8EE;padding-top:30px;display:grid;grid-template-columns:200px 1fr;gap:24px}
+.also h4{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:22px;color:#14304F;margin:0}
+.also p{margin:0;color:#4A5563}
+@media (max-width:760px){.also{grid-template-columns:1fr;gap:8px}}
+
+/* ---------- capability list ---------- */
+.caps{background:#F6F8FA}
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #D5DCE4;border-left:1px solid #D5DCE4}
+.cap{padding:26px 26px 28px;border-right:1px solid #D5DCE4;border-bottom:1px solid #D5DCE4;background:#FFFFFF}
+.cap h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:22px;color:#14304F;margin:0 0 8px}
+.cap p{margin:0;font-size:15.5px;color:#4A5563;line-height:1.55}
+@media (max-width:900px){.cap-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.cap-grid{grid-template-columns:1fr}}
+
+/* ---------- units mapping ---------- */
+.map{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.map h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:26px;color:#14304F;margin:0 0 6px}
+.map .sub{margin:0 0 18px;color:#6A7582;font-size:15px}
+.map table{width:100%;border-collapse:collapse}
+.map td{padding:14px 0;border-top:1px solid #E3E8EE;vertical-align:top;font-size:15.5px;line-height:1.5}
+.map td.code{width:118px;color:#8A6420;font-weight:700;letter-spacing:.02em;padding-right:14px}
+.map td b{display:block;color:#14304F;font-weight:600}
+.pathway{margin-top:48px;display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;border:1px solid #D5DCE4;padding:28px 32px;border-radius:4px}
+.pathway .pw-mark{font-family:Newsreader,Georgia,serif;font-size:56px;color:#B8862B;line-height:1}
+.pathway h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:24px;color:#14304F;margin:0 0 6px}
+.pathway p{margin:0;color:#4A5563}
+@media (max-width:860px){.map{grid-template-columns:1fr;gap:44px}.pathway{grid-template-columns:1fr;gap:6px}}
+
+/* ---------- experience ---------- */
+.exp{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+.exp h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:26px;color:#14304F;margin:0 0 14px}
+.row{display:grid;grid-template-columns:118px 1fr;gap:18px;padding:16px 0;border-top:1px solid #E3E8EE}
+.row .when{font-size:14px;color:#6A7582;font-variant-numeric:tabular-nums;padding-top:2px}
+.row .what b{display:block;color:#14304F;font-weight:600}
+.row .what span{display:block;font-size:15px;color:#4A5563}
+@media (max-width:860px){.exp{grid-template-columns:1fr;gap:40px}}
+
+/* ---------- qualifications ---------- */
+.quals{display:grid;grid-template-columns:repeat(2,1fr);gap:0 64px}
+.q{padding:15px 0;border-top:1px solid #E3E8EE;display:flex;justify-content:space-between;gap:18px}
+.q b{color:#14304F;font-weight:600}
+.q span{color:#6A7582;font-size:15px;text-align:right;white-space:nowrap}
+.certs{margin-top:34px;color:#4A5563;font-size:16px}
+.certs b{color:#14304F}
+@media (max-width:760px){.quals{grid-template-columns:1fr}.q{flex-direction:column;gap:2px}.q span{text-align:left;white-space:normal}}
+
+/* ---------- contact ---------- */
+.contact{background:#14304F;color:#DDE5EE;padding:96px 0 60px}
+.contact h2{font-family:Newsreader,Georgia,serif;font-weight:400;color:#FFFFFF;font-size:clamp(36px,5vw,60px);line-height:1.05;margin:0 0 20px;max-width:13em}
+.contact .lede{max-width:34em;font-size:18px;margin:0 0 44px}
+.c-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #2F4D6E}
+.c-item{padding:24px 24px 24px 0;text-decoration:none;color:#FFFFFF;border-right:1px solid #2F4D6E;margin-right:24px}
+.c-item:last-child{border-right:0}
+.c-item small{display:block;color:#9FB2C7;font-size:14px;margin-bottom:6px}
+.c-item span{font-family:Newsreader,Georgia,serif;font-size:24px}
+.c-item:hover span{color:#E9C77A}
+.contact .btn-solid{background:#B8862B;border-color:#B8862B;color:#14304F;margin-top:36px}
+.contact .btn-solid:hover{background:#D19C3A}
+.foot{margin-top:70px;padding-top:22px;border-top:1px solid #2F4D6E;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:14px;color:#9FB2C7}
+.foot a{color:#DDE5EE}
+@media (max-width:760px){.c-grid{grid-template-columns:1fr}.c-item{border-right:0;margin:0;border-bottom:1px solid #2F4D6E}}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;background:rgba(10,20,34,.92);z-index:90;display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.lb.open{display:flex}
+.lb img{max-height:92vh;max-width:96vw;border-radius:4px}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* =================== EDITOR (hidden for visitors) =================== */
+.ed-bar,.ed-panel,.ed-slot,.ed-hint,.ed-toast{display:none}
+body.admin .ed-bar{display:flex}
+.ed-bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:100;background:#10151C;border-radius:40px;padding:6px;gap:4px;box-shadow:0 12px 30px rgba(0,0,0,.35);max-width:calc(100vw - 20px);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ed-bar button{background:transparent;color:#E8EDF3;border:0;border-radius:30px;padding:10px 14px;font:600 14px Figtree,Arial,sans-serif;white-space:nowrap;cursor:pointer}
+.ed-bar button:hover{background:#2A3441}
+.ed-bar button.on{background:#B8862B;color:#10151C}
+body.editing [data-edit]{outline:1.5px dashed rgba(184,134,43,.8);outline-offset:3px;border-radius:2px;cursor:text}
+body.editing [data-edit]:focus{outline:2px solid #B8862B;background:rgba(184,134,43,.07)}
+body.editing .ed-hint{display:block;position:fixed;top:78px;left:50%;transform:translateX(-50%);z-index:60;background:#B8862B;color:#10151C;font:600 13px Figtree,Arial,sans-serif;padding:7px 14px;border-radius:20px}
+body.editing .ed-slot{display:flex}
+.ed-slot{position:absolute;left:10px;right:10px;bottom:10px;z-index:5;gap:6px;flex-wrap:wrap}
+.ed-slot label,.ed-slot button{position:relative;overflow:hidden;background:#10151C;color:#FFFFFF;border:0;border-radius:20px;padding:8px 12px;font:600 13px Figtree,Arial,sans-serif;cursor:pointer}
+.ed-slot label input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:100px}
+.thumbs .ed-slot{left:6px;right:6px;bottom:6px;gap:4px}
+.thumbs .ed-slot label,.thumbs .ed-slot button{padding:6px 9px;font-size:12px}
+.ed-panel.open{display:block}
+.ed-panel{position:fixed;right:16px;bottom:84px;z-index:101;width:min(430px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#FFFFFF;color:#26303B;border-radius:10px;box-shadow:0 20px 50px rgba(0,0,0,.35);padding:20px;font-family:Figtree,Arial,sans-serif;font-size:14px}
+.ed-panel h4{margin:0 0 4px;font-size:17px;color:#14304F}
+.ed-panel p.note{margin:0 0 14px;color:#6A7582;font-size:13px;line-height:1.45}
+.ed-panel label.f{display:block;font-weight:600;margin:10px 0 4px;font-size:13px}
+.ed-panel input[type=text],.ed-panel input[type=password],.ed-panel input[type=url]{width:100%;padding:9px 10px;border:1px solid #C9D1DA;border-radius:6px;font:15px Figtree,Arial,sans-serif}
+.ed-panel .pr{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.ed-panel .pr button{padding:10px 14px;border-radius:6px;border:1px solid #14304F;background:#14304F;color:#FFFFFF;font:600 14px Figtree,Arial,sans-serif;cursor:pointer}
+.ed-panel .pr button.ghost{background:#FFFFFF;color:#14304F}
+.ed-panel .lk{border-top:1px solid #E3E8EE;padding:10px 0}
+.ed-panel .lk b{display:block;font-size:13px;margin-bottom:4px}
+.ed-panel .sw{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #E3E8EE}
+.ed-panel .sw input{width:18px;height:18px}
+.ed-panel .status{margin-top:12px;font-size:13px;color:#4A5563;white-space:pre-wrap}
+.ed-toast.show{display:block}
+.ed-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:102;background:#14304F;color:#FFFFFF;padding:10px 16px;border-radius:8px;font:600 14px Figtree,Arial,sans-serif;max-width:90vw;text-align:center}
+</style>
+</head>
+<body>
+<div id="site">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" id="brand" aria-label="Marc Teleki, back to top"><span class="mono">MT</span><b data-edit>Marc Teleki</b></a>
+    <nav aria-label="Main">
+      <a class="hide-sm" href="#work">Recent work</a>
+      <a class="hide-sm" href="#colleges">For colleges</a>
+      <a class="hide-sm" href="#experience">Experience</a>
+      <a class="hide-sm" href="#contact">Contact</a>
+      <a class="btn btn-solid" href="Marc_Teleki_Resume_2026_v2.pdf" data-link="Résumé button (top)" target="_blank" rel="noopener" data-edit>Download résumé</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero" data-section="Introduction">
+  <div class="wrap">
+    <div>
+      <p class="role" data-edit>Senior Trainer &amp; Assessor in Hospitality and Business Management, Sydney</p>
+      <h1 data-edit>I train cooks, managers and marketers on the systems today’s venues actually run.</h1>
+      <p class="lede" data-edit>French-trained chef, former head chef and function-centre manager, and a VET trainer since 2008. Through my studio, Webescapade, I design and build the restaurant websites, booking, table-ordering and CRM platforms shown on this page, and I bring them into class as live case studies.</p>
+      <div class="actions">
+        <a class="btn btn-solid" href="#work" data-link="See recent work button" data-edit>See recent work</a>
+        <a class="btn btn-line" href="Marc_Teleki_Resume_2026_v2.pdf" target="_blank" rel="noopener" data-link="Résumé button (hero)" data-edit>Download résumé</a>
+      </div>
+    </div>
+    <figure class="shot portrait" data-img="portrait" data-max="1100">
+      <div class="shot-body">
+        <img alt="Marc Teleki" src="" loading="lazy">
+        <div class="ph"><span class="ph-mono">MT</span><span class="ph-url ed-only" style="color:#C9D6E4;margin-top:10px">Add a portrait photo with the button below</span></div>
+        <div class="ed-slot"></div>
+      </div>
+      <figcaption data-edit>Marc Teleki, Eastwood NSW</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="career" aria-label="Career timeline" data-section="Career timeline">
+  <div class="wrap">
+    <ol>
+      <li><span class="yr" data-edit>1976</span><span class="ev" data-edit>Chef apprenticeship, Mövenpick and Restaurant du Centre, Geneva</span></li>
+      <li><span class="yr" data-edit>1989</span><span class="ev" data-edit>Owner and head chef, Swiss Chefs Banquet Catering</span></li>
+      <li><span class="yr" data-edit>2001</span><span class="ev" data-edit>Founds Webescapade, digital and marketing studio</span></li>
+      <li><span class="yr" data-edit>2008</span><span class="ev" data-edit>First accredited training role in business and hospitality</span></li>
+      <li><span class="yr" data-edit>2011</span><span class="ev" data-edit>Head chef and manager, Emporium Function Centre</span></li>
+      <li><span class="yr" data-edit>2019</span><span class="ev" data-edit>Hospitality and commercial cookery trainer, Apex International College</span></li>
+      <li><span class="yr" data-edit>2026</span><span class="ev" data-edit>Launches Restaurant Deluxe with QR table ordering</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band" data-section="What colleges get">
+  <div class="wrap">
+    <h2 data-edit>What a college gets when I take a class.</h2>
+    <div class="cols">
+      <div class="col"><h3 data-edit>Industry depth</h3><p data-edit>Classical Geneva training, a decade running my own catering business and years leading busy kitchens. Students hear how service really runs, not just how the unit describes it.</p></div>
+      <div class="col"><h3 data-edit>A long delivery record</h3><p data-edit>Accredited delivery since 2008, from Certificate II to Diploma, with session planning, assessment mapping, validation and moderation across several RTOs.</p></div>
+      <div class="col"><h3 data-edit>Current systems</h3><p data-edit>Bookings, table ordering, kitchen screens, CRM and AI assistants that I built and support, ready to use as working examples alongside the training package.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="work" data-section="Recent work">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-edit>Recent work</h2>
+      <p data-edit>Four live platforms, designed and built through Webescapade. Each one gives students a real system to study, test and critique.</p>
+    </div>
+
+    <!-- Restaurant Deluxe -->
+    <article class="project">
+      <div class="media">
+        <figure class="shot" data-img="rd-main">
+          <div class="frame">
+            <div class="frame-bar"><i></i><i></i><i></i><span data-edit>webescapade.com/Restaurant</span></div>
+            <div class="shot-body">
+              <img alt="Restaurant Deluxe website" src="" loading="lazy">
+              <div class="ph t-rd"><div class="ph-lines"><i style="width:38%"></i><i style="width:62%"></i><i style="width:48%"></i></div><p class="ph-name">Restaurant Deluxe</p><span class="ph-url">Editable website, bookings, CRM and table ordering</span></div>
+              <div class="ed-slot"></div>
+            </div>
+          </div>
+        </figure>
+        <div class="thumbs">
+          <figure class="shot" data-img="rd-t1"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Table ordering screen</div><div class="ed-slot"></div></div><figcaption data-edit>Guests order from the table</figcaption></figure>
+          <figure class="shot" data-img="rd-t2"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Kitchen and bar display</div><div class="ed-slot"></div></div><figcaption data-edit>Kitchen and bar display</figcaption></figure>
+          <figure class="shot" data-img="rd-t3"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Guest CRM</div><div class="ed-slot"></div></div><figcaption data-edit>Guest CRM and campaigns</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <h3 data-edit>Restaurant Deluxe</h3>
+        <p class="kind" data-edit>Restaurant website, bookings, table ordering and CRM</p>
+        <p class="desc" data-edit>A complete system for independent restaurants: a website the owner edits, direct bookings, QR ordering from every table and a guest CRM with email marketing.</p>
+        <ul class="did">
+          <li data-edit>Bookings by sitting and exact arrival time, checked against the venue’s capacity, with a Stripe card guarantee for parties of eight or more.</li>
+          <li data-edit>QR table ordering with dietary filters, modifiers and allergy notes, routed to kitchen and bar displays. Guests settle at the counter or table.</li>
+          <li data-edit>Open-table tracking, cash and card settlement, X and Z readings and Excel-compatible shift export.</li>
+          <li data-edit>Guest CRM with segments, AI-drafted campaigns and a Spam Act–compliant unsubscribe, plus “Alex”, an AI assistant trained on the product.</li>
+        </ul>
+        <p class="class-use"><b data-edit>In class:</b> <span data-edit>follow one guest from booking to table order to follow-up email, then review the shift figures.</span><span class="codes" data-edit>SITXCCS015 · SITXMGT004 · SITXFIN007 · SITXGLC002 · BSBMKG433</span></p>
+        <a class="visit" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" data-link="Restaurant Deluxe link" data-edit>Visit webescapade.com/Restaurant</a>
+      </div>
+    </article>
+
+    <!-- ChefLink -->
+    <article class="project flip">
+      <div class="media">
+        <figure class="shot" data-img="cl-main">
+          <div class="frame">
+            <div class="frame-bar"><i></i><i></i><i></i><span data-edit>cheflinksydney.com</span></div>
+            <div class="shot-body">
+              <img alt="ChefLink Sydney website" src="" loading="lazy">
+              <div class="ph t-cl"><div class="ph-lines"><i style="width:44%"></i><i style="width:70%"></i><i style="width:30%"></i></div><p class="ph-name">ChefLink Sydney</p><span class="ph-url">Chef portfolios and venue connections</span></div>
+              <div class="ed-slot"></div>
+            </div>
+          </div>
+        </figure>
+        <div class="thumbs">
+          <figure class="shot" data-img="cl-t1"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Chef profile</div><div class="ed-slot"></div></div><figcaption data-edit>A chef’s portfolio page</figcaption></figure>
+          <figure class="shot" data-img="cl-t2"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Profile sign-up</div><div class="ed-slot"></div></div><figcaption data-edit>Guided profile sign-up</figcaption></figure>
+          <figure class="shot" data-img="cl-t3"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Admin and CRM</div><div class="ed-slot"></div></div><figcaption data-edit>Admin dashboard and CRM</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <h3 data-edit>ChefLink Sydney</h3>
+        <p class="kind" data-edit>Chef portfolio and venue connection platform</p>
+        <p class="desc" data-edit>Working chefs present their signature dishes, experience and availability. Venues browse by cuisine and contact chefs directly.</p>
+        <ul class="did">
+          <li data-edit>Guided sign-up with photo, gallery and signature-dish uploads, reviewed by an administrator before a profile goes live.</li>
+          <li data-edit>A New Graduate Chefs spotlight for recently qualified cooks.</li>
+          <li data-edit>Admin dashboard covering trials, payments and reminders, a homepage editor, plan pricing and bulk JSON import and export.</li>
+          <li data-edit>Plain-English Terms and Conditions built around the Privacy Act and Australian Consumer Law.</li>
+        </ul>
+        <p class="class-use"><b data-edit>In class:</b> <span data-edit>cookery students build a professional profile; business students analyse the pricing plans and terms.</span><span class="codes" data-edit>SITHIND006 · SITXGLC002 · BSBMKG433 · BSBOPS505</span></p>
+        <a class="visit" href="https://cheflinksydney.com" target="_blank" rel="noopener" data-link="ChefLink link" data-edit>Visit cheflinksydney.com</a>
+      </div>
+    </article>
+
+    <!-- Webescapade -->
+    <article class="project">
+      <div class="media">
+        <figure class="shot" data-img="we-main">
+          <div class="frame">
+            <div class="frame-bar"><i></i><i></i><i></i><span data-edit>webescapade.com</span></div>
+            <div class="shot-body">
+              <img alt="Webescapade website" src="" loading="lazy">
+              <div class="ph t-we"><div class="ph-lines"><i style="width:52%"></i><i style="width:36%"></i><i style="width:64%"></i></div><p class="ph-name">Webescapade</p><span class="ph-url">AI-powered, client-editable websites</span></div>
+              <div class="ed-slot"></div>
+            </div>
+          </div>
+        </figure>
+        <div class="thumbs">
+          <figure class="shot" data-img="we-t1"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Services</div><div class="ed-slot"></div></div><figcaption data-edit>Services</figcaption></figure>
+          <figure class="shot" data-img="we-t2"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Edit toolbar</div><div class="ed-slot"></div></div><figcaption data-edit>The in-page editor</figcaption></figure>
+          <figure class="shot" data-img="we-t3"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Portfolio sites</div><div class="ed-slot"></div></div><figcaption data-edit>Portfolio websites</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <h3 data-edit>Webescapade</h3>
+        <p class="kind" data-edit>Design and AI development studio, since 2001</p>
+        <p class="desc" data-edit>My studio site. Every page carries its own editor, so clients change text and photos and publish without a developer.</p>
+        <ul class="did">
+          <li data-edit>AI chat assistants, voice features, smart forms and automated lead capture.</li>
+          <li data-edit>Try-before-you-buy portfolio websites for chefs, trainers and creatives.</li>
+          <li data-edit>Client work including Youtrac Australia, Goutatoo in Geneva, Polaris GPS and El Toro Loco.</li>
+        </ul>
+        <p class="class-use"><b data-edit>In class:</b> <span data-edit>plan a small-business website, write the copy with AI, then judge it against the brief.</span><span class="codes" data-edit>BSBMKG552 · BSBMKG555 · BSBTEC601</span></p>
+        <a class="visit" href="https://webescapade.com" target="_blank" rel="noopener" data-link="Webescapade link" data-edit>Visit webescapade.com</a>
+      </div>
+    </article>
+
+    <!-- Connect -->
+    <article class="project flip">
+      <div class="media">
+        <figure class="shot" data-img="cn-main">
+          <div class="frame">
+            <div class="frame-bar"><i></i><i></i><i></i><span data-edit>webescapade.com/connect</span></div>
+            <div class="shot-body">
+              <img alt="Let's Connect page" src="" loading="lazy">
+              <div class="ph t-cn"><div class="ph-lines"><i style="width:30%"></i><i style="width:58%"></i><i style="width:44%"></i></div><p class="ph-name">Let’s connect.</p><span class="ph-url">Contact hub with an AI agent</span></div>
+              <div class="ed-slot"></div>
+            </div>
+          </div>
+        </figure>
+        <div class="thumbs">
+          <figure class="shot" data-img="cn-t1"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Scroll story</div><div class="ed-slot"></div></div><figcaption data-edit>Two-chapter scroll story</figcaption></figure>
+          <figure class="shot" data-img="cn-t2"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">AI agent</div><div class="ed-slot"></div></div><figcaption data-edit>Jotform AI agent</figcaption></figure>
+          <figure class="shot" data-img="cn-t3"><div class="shot-body"><img alt="" src="" loading="lazy"><div class="ph">Contact options</div><div class="ed-slot"></div></div><figcaption data-edit>One-tap contact options</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <h3 data-edit>Let’s Connect</h3>
+        <p class="kind" data-edit>AI-powered contact hub</p>
+        <p class="desc" data-edit>One branded page that links Webescapade and ChefLink and turns visitors into conversations.</p>
+        <ul class="did">
+          <li data-edit>A Jotform AI agent that answers questions around the clock.</li>
+          <li data-edit>Call, email, WhatsApp and consultation booking, each one tap away.</li>
+          <li data-edit>A hidden admin mode for editing text, logo and agent without touching code.</li>
+        </ul>
+        <p class="class-use"><b data-edit>In class:</b> <span data-edit>design an AI customer-service agent, then test how it handles an enquiry and a complaint.</span><span class="codes" data-edit>BSBOPS505 · SITXCCS014 · SITXCOM010</span></p>
+        <a class="visit" href="https://webescapade.com/connect" target="_blank" rel="noopener" data-link="Connect link" data-edit>Visit webescapade.com/connect</a>
+      </div>
+    </article>
+
+    <div class="also">
+      <h4 data-edit>Also built</h4>
+      <p data-edit>A restaurant Email Studio with six preset campaigns and reporting; n8n automations for booking emails, enquiry alerts and AI campaign drafting; kitchen ticket printing to Star CloudPRNT and PrintNode; and a food-cost calculator with branded unit resources for hospitality delivery.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec caps" data-section="Behind the builds">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-edit>Behind the builds</h2>
+      <p data-edit>The skills these projects rely on are the ones employers now ask graduates about.</p>
+    </div>
+    <div class="cap-grid">
+      <div class="cap"><h3 data-edit>Service design</h3><p data-edit>Mapping the guest journey from first click to the kitchen pass, then removing the steps that cause errors.</p></div>
+      <div class="cap"><h3 data-edit>Customer data and CRM</h3><p data-edit>Guest profiles, segments, visit history and targeted campaigns that respect opt-outs.</p></div>
+      <div class="cap"><h3 data-edit>AI assistants</h3><p data-edit>Jotform AI agents and n8n concierges with knowledge bases and guardrails against invented claims.</p></div>
+      <div class="cap"><h3 data-edit>Workflow automation</h3><p data-edit>n8n workflows connecting forms, databases and Gmail for confirmations, reminders and alerts.</p></div>
+      <div class="cap"><h3 data-edit>Compliance and risk</h3><p data-edit>Spam Act, Privacy Act, Australian Consumer Law, card-payment handling and venue data separation.</p></div>
+      <div class="cap"><h3 data-edit>Testing and improvement</h3><p data-edit>Live-service testing, fault logging and fixes released quickly, the same cycle taught in continuous improvement.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="colleges" data-section="For colleges">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-edit>How this work supports your students</h2>
+      <p data-edit>I can deliver and assess across hospitality and business qualifications, using these platforms as practical evidence alongside your existing assessment tools.</p>
+    </div>
+    <div class="map">
+      <div>
+        <h3 data-edit>Hospitality</h3>
+        <p class="sub" data-edit>SIT qualifications, Certificate II to Diploma</p>
+        <table>
+          <tr><td class="code" data-edit>SITXCCS015</td><td><b data-edit>Enhance customer service experiences</b><span data-edit>The full guest journey, from booking to follow-up.</span></td></tr>
+          <tr><td class="code" data-edit>SITXMGT004</td><td><b data-edit>Monitor work operations</b><span data-edit>Kitchen and bar displays, order flow and open tables.</span></td></tr>
+          <tr><td class="code" data-edit>SITXFIN007</td><td><b data-edit>Process financial transactions</b><span data-edit>Settlement records, X and Z readings and shift export.</span></td></tr>
+          <tr><td class="code" data-edit>SITXGLC002</td><td><b data-edit>Identify and manage legal risks</b><span data-edit>Card guarantees, privacy, consent and marketing law.</span></td></tr>
+          <tr><td class="code" data-edit>SITHKOP012</td><td><b data-edit>Develop recipes for special dietary requirements</b><span data-edit>Dietary filters and allergy notes on a live digital menu.</span></td></tr>
+        </table>
+      </div>
+      <div>
+        <h3 data-edit>Business and marketing</h3>
+        <p class="sub" data-edit>BSB qualifications, Certificate IV to Advanced Diploma</p>
+        <table>
+          <tr><td class="code" data-edit>BSBMKG433</td><td><b data-edit>Undertake marketing activities</b><span data-edit>Segmented campaigns, AI-drafted copy and reporting.</span></td></tr>
+          <tr><td class="code" data-edit>BSBOPS505</td><td><b data-edit>Manage organisational customer service</b><span data-edit>Service standards, customer data and AI agents.</span></td></tr>
+          <tr><td class="code" data-edit>BSBSTR502</td><td><b data-edit>Facilitate continuous improvement</b><span data-edit>Testing, fault logs and release cycles on live systems.</span></td></tr>
+          <tr><td class="code" data-edit>BSBOPS504</td><td><b data-edit>Manage business risk</b><span data-edit>Payments, data separation and security risk.</span></td></tr>
+          <tr><td class="code" data-edit>BSBTEC601</td><td><b data-edit>Review organisational digital strategy</b><span data-edit>Choosing and connecting the right digital channels.</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="pathway">
+      <div class="pw-mark">✦</div>
+      <div>
+        <h3 data-edit>A showcase for your cookery graduates</h3>
+        <p data-edit>ChefLink’s New Graduate Chefs spotlight gives commercial cookery students a professional place to present their work to Sydney venues as they finish their course.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec caps" id="experience" data-section="Experience">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-edit>Experience</h2>
+      <p data-edit>Eighteen years of accredited delivery, built on more than three decades in commercial kitchens and hospitality management.</p>
+    </div>
+    <div class="exp">
+      <div>
+        <h3 data-edit>Training and assessment</h3>
+        <div class="row"><div class="when" data-edit>Current</div><div class="what"><b data-edit>Le Culinaire Hospitality Institute</b><span data-edit>Trainer and assessor, hospitality</span></div></div>
+        <div class="row"><div class="when" data-edit>2021 – now</div><div class="what"><b data-edit>Collins / Victory International College</b><span data-edit>Certificate IV in Business Management</span></div></div>
+        <div class="row"><div class="when" data-edit>2019 – now</div><div class="what"><b data-edit>Apex International College</b><span data-edit>Hospitality and commercial cookery, Certificate II to Diploma</span></div></div>
+        <div class="row"><div class="when" data-edit>2019 – 2024</div><div class="what"><b data-edit>Lead International College</b><span data-edit>Hospitality, theory and practical delivery</span></div></div>
+        <div class="row"><div class="when" data-edit>2013 – 2023</div><div class="what"><b data-edit>Lloyds International College</b><span data-edit>Certificate IV in Business, including the 2020 move online</span></div></div>
+        <div class="row"><div class="when" data-edit>2018 – 2019</div><div class="what"><b data-edit>The Illawarra Business College</b><span data-edit>Hospitality</span></div></div>
+        <div class="row"><div class="when" data-edit>2013 – 2018</div><div class="what"><b data-edit>Cambridge College International</b><span data-edit>Certificate IV in Business, validation focus</span></div></div>
+        <div class="row"><div class="when" data-edit>2008 – 2013</div><div class="what"><b data-edit>Precise Training College, STI and Illawarra Business College</b><span data-edit>Business, frontline management, RSA and RCG</span></div></div>
+      </div>
+      <div>
+        <h3 data-edit>Industry</h3>
+        <div class="row"><div class="when" data-edit>2001 – now</div><div class="what"><b data-edit>Webescapade</b><span data-edit>Founder, director and lead developer</span></div></div>
+        <div class="row"><div class="when" data-edit>2011 – 2022</div><div class="what"><b data-edit>Emporium Function Centre, Bankstown</b><span data-edit>Head chef and manager</span></div></div>
+        <div class="row"><div class="when" data-edit>2004 – 2008</div><div class="what"><b data-edit>Barsiroco Café and Brasserie</b><span data-edit>Head chef and manager</span></div></div>
+        <div class="row"><div class="when" data-edit>1989 – 1999</div><div class="what"><b data-edit>Swiss Chefs Banquet Catering</b><span data-edit>Owner, business manager and head chef. Clients included the Swiss Consulate, Bank of Tokyo and Fujitsu.</span></div></div>
+        <div class="row"><div class="when" data-edit>1976 – 1982</div><div class="what"><b data-edit>Mövenpick and Restaurant du Centre, Geneva</b><span data-edit>Apprentice, then chef de partie</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" data-section="Qualifications">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-edit>Qualifications</h2>
+      <p data-edit>Full copies of certificates are available on request.</p>
+    </div>
+    <div class="quals">
+      <div class="q"><b data-edit>Certificate IV in Training and Assessment</b><span data-edit>TAE40110, 2012</span></div>
+      <div class="q"><b data-edit>Advanced Diploma of Leadership and Management</b><span data-edit>BSB61015, 2016</span></div>
+      <div class="q"><b data-edit>Certificate IV in Commercial Cookery</b><span data-edit>SIT40516, 2019</span></div>
+      <div class="q"><b data-edit>Diploma of Management</b><span data-edit>BSB51107, 2011</span></div>
+      <div class="q"><b data-edit>Diploma of Business Administration</b><span data-edit>2011</span></div>
+      <div class="q"><b data-edit>Hospitality Diploma</b><span data-edit>2010</span></div>
+      <div class="q"><b data-edit>Qualified Chef, CPIA Geneva</b><span data-edit>1979</span></div>
+      <div class="q"><b data-edit>Languages</b><span data-edit>English, French, some German and Italian</span></div>
+    </div>
+    <p class="certs" data-edit><b>Current certifications:</b> Food Safety Supervisor, RSA and RCG (NSW), First Aid, LLN Skills (TAELLN411), Assessment Validation, Moodle and online delivery.</p>
+  </div>
+</section>
+
+<section class="contact" id="contact" data-section="Contact">
+  <div class="wrap">
+    <h2 data-edit>Planning your next intake?</h2>
+    <p class="lede" data-edit>I’m available for hospitality and business delivery in Sydney, face to face or online. I’m happy to send references, certificates and a sample session plan.</p>
+    <div class="c-grid">
+      <a class="c-item" href="tel:+61413872994" data-link="Phone link"><small data-edit>Phone</small><span data-edit>0413 872 994</span></a>
+      <a class="c-item" href="mailto:marc@webescapade.com?subject=Trainer%20and%20assessor%20opportunity" data-link="Email link"><small data-edit>Email</small><span data-edit>marc@webescapade.com</span></a>
+      <a class="c-item" href="https://webescapade.com/connect" target="_blank" rel="noopener" data-link="Connect page link"><small data-edit>Online</small><span data-edit>webescapade.com/connect</span></a>
+    </div>
+    <a class="btn btn-solid" href="Marc_Teleki_Resume_2026_v2.pdf" target="_blank" rel="noopener" data-link="Résumé button (contact)" data-edit>Download résumé</a>
+    <div class="foot">
+      <span data-edit>© 2026 Marc Teleki · Webescapade · ABN 65 590 549 620</span>
+      <span><a href="https://webescapade.com" data-link="Footer Webescapade link">webescapade.com</a> &nbsp; <a href="https://cheflinksydney.com" data-link="Footer ChefLink link">cheflinksydney.com</a></span>
+    </div>
+  </div>
+</section>
+
+</main>
+</div><!-- /#site -->
+
+<div class="lb" id="lb" role="dialog" aria-label="Enlarged screenshot"><img alt="" src=""></div>
+
+<!-- =================== EDITOR UI (only visible with ?edit=1, #edit, or five taps on the MT logo) =================== -->
+<div class="ed-hint" id="edHint">Tap any outlined text to change it</div>
+<div class="ed-bar" id="edBar" role="toolbar" aria-label="Page editor">
+  <button type="button" data-act="edit">✏️ Edit</button>
+  <button type="button" data-act="links">🔗 Links</button>
+  <button type="button" data-act="sections">▦ Sections</button>
+  <button type="button" data-act="save">💾 Save draft</button>
+  <button type="button" data-act="download">⬇ Download page</button>
+  <button type="button" data-act="deploy">🚀 Publish</button>
+  <button type="button" data-act="reset">↺ Reset</button>
+  <button type="button" data-act="exit">✕ Exit</button>
+</div>
+
+<div class="ed-panel" id="pLinks">
+  <h4>Links</h4>
+  <p class="note">Change where each button and link goes. For the résumé, upload the PDF next to this page and keep the file name, or paste a full link.</p>
+  <div id="lkList"></div>
+  <div class="pr"><button type="button" id="lkApply">Apply links</button><button type="button" class="ghost" data-close>Close</button></div>
+</div>
+
+<div class="ed-panel" id="pSections">
+  <h4>Sections</h4>
+  <p class="note">Untick a section to hide it from visitors. It stays in the file so you can bring it back.</p>
+  <div id="secList"></div>
+  <div class="pr"><button type="button" class="ghost" data-close>Close</button></div>
+</div>
+
+<div class="ed-panel" id="pDeploy">
+  <h4>Publish to GitHub</h4>
+  <p class="note">Commits this page straight to your repository. The access token is stored only in this browser.</p>
+  <label class="f" for="dOwner">Account</label><input type="text" id="dOwner" value="mteleki-wq" autocapitalize="off" autocorrect="off">
+  <label class="f" for="dRepo">Repository</label><input type="text" id="dRepo" value="Restaurant-booking" autocapitalize="off" autocorrect="off">
+  <label class="f" for="dBranch">Branch</label><input type="text" id="dBranch" value="main" autocapitalize="off" autocorrect="off">
+  <label class="f" for="dPath">File path</label><input type="text" id="dPath" value="Trainer/index.html" autocapitalize="off" autocorrect="off">
+  <label class="f" for="dToken">Fine-grained access token</label><input type="password" id="dToken" placeholder="github_pat_…" autocapitalize="off" autocorrect="off">
+  <div class="pr"><button type="button" id="dGo">Publish page</button><button type="button" class="ghost" data-close>Close</button></div>
+  <div class="status" id="dStatus"></div>
+</div>
+
+<div class="ed-toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  "use strict";
+  var DRAFT_KEY = "mt-trainer-portfolio-draft";
+  var DEPLOY_KEY = "mt-trainer-portfolio-deploy";
+  var body = document.body;
+  var site = document.getElementById("site");
+
+  /* ---------- lightbox (visitors) ---------- */
+  var lb = document.getElementById("lb");
+  var lbImg = lb.querySelector("img");
+  site.addEventListener("click", function(e){
+    var t = e.target;
+    if (t.tagName === "IMG" && !body.classList.contains("editing") && t.getAttribute("src")) {
+      lbImg.src = t.src; lbImg.alt = t.alt || ""; lb.classList.add("open");
+    }
+  });
+  lb.addEventListener("click", function(){ lb.classList.remove("open"); lbImg.src = ""; });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") lb.classList.remove("open"); });
+
+  /* mark filled image slots (runs for visitors too) */
+  function markSlots(){
+    var figs = document.querySelectorAll("[data-img]");
+    for (var i = 0; i < figs.length; i++) {
+      var img = figs[i].querySelector("img");
+      if (img && img.getAttribute("src")) figs[i].classList.add("has-img"); else figs[i].classList.remove("has-img");
+    }
+  }
+  markSlots();
+
+  /* ---------- admin gate ---------- */
+  var q = location.search || "";
+  var wantsAdmin = /[?&](edit|setup)=1/.test(q) || location.hash === "#edit";
+  var taps = 0, tapTimer = null;
+  document.getElementById("brand").addEventListener("click", function(e){
+    taps++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(function(){ taps = 0; }, 1800);
+    if (taps >= 5) { e.preventDefault(); taps = 0; openAdmin(); }
+  });
+  function openAdmin(){
+    if (body.classList.contains("admin")) return;
+    body.classList.add("admin");
+    try {
+      var d = localStorage.getItem(DRAFT_KEY);
+      if (d && confirm("Restore the draft saved in this browser?")) { site.innerHTML = d; markSlots(); }
+    } catch (err) {}
+    buildSlots();
+    loadDeploy();
+    toast("Editor ready. Tap ✏️ Edit to start.");
+  }
+
+  /* ---------- toast ---------- */
+  var toastEl = document.getElementById("toast"), toastT = null;
+  function toast(msg, ms){
+    toastEl.textContent = msg; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, ms || 2600);
+  }
+
+  /* ---------- toolbar ---------- */
+  var bar = document.getElementById("edBar");
+  bar.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("button") : null;
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    if (act === "edit") toggleEdit(b);
+    else if (act === "links") openPanel("pLinks", buildLinks);
+    else if (act === "sections") openPanel("pSections", buildSections);
+    else if (act === "save") saveDraft();
+    else if (act === "download") download();
+    else if (act === "deploy") openPanel("pDeploy");
+    else if (act === "reset") resetDraft();
+    else if (act === "exit") exitAdmin();
+  });
+  var panels = document.querySelectorAll(".ed-panel");
+  for (var p = 0; p < panels.length; p++) {
+    panels[p].addEventListener("click", function(e){
+      if (e.target.hasAttribute("data-close")) this.classList.remove("open");
+    });
+  }
+  function openPanel(id, builder){
+    for (var i = 0; i < panels.length; i++) if (panels[i].id !== id) panels[i].classList.remove("open");
+    var el = document.getElementById(id);
+    if (builder) builder();
+    el.classList.toggle("open");
+  }
+
+  /* ---------- text editing ---------- */
+  function setEditable(on){
+    var els = site.querySelectorAll("[data-edit]");
+    for (var i = 0; i < els.length; i++) {
+      if (on) els[i].setAttribute("contenteditable", "true"); else els[i].removeAttribute("contenteditable");
+    }
+  }
+  function toggleEdit(btn){
+    var on = !body.classList.contains("editing");
+    body.classList.toggle("editing", on);
+    btn.classList.toggle("on", on);
+    setEditable(on);
+    if (!on) toast("Editing paused. Save a draft or download to keep changes.");
+  }
+  // stop links navigating while editing; keep plain text when pasting
+  site.addEventListener("click", function(e){
+    if (!body.classList.contains("editing")) return;
+    var a = e.target.closest ? e.target.closest("a") : null;
+    if (a) e.preventDefault();
+  }, true);
+  site.addEventListener("paste", function(e){
+    if (!body.classList.contains("editing")) return;
+    var t = e.target.closest ? e.target.closest("[data-edit]") : null;
+    if (!t || !e.clipboardData) return;
+    e.preventDefault();
+    var txt = e.clipboardData.getData("text/plain");
+    document.execCommand("insertText", false, txt);
+  });
+
+  /* ---------- image slots ---------- */
+  function buildSlots(){
+    var slots = site.querySelectorAll("[data-img] .ed-slot");
+    for (var i = 0; i < slots.length; i++) {
+      var s = slots[i];
+      s.innerHTML = '<label>📷 Add photo<input type="file" accept="image/*"></label>' +
+                    '<button type="button" data-do="url">Paste link</button>' +
+                    '<button type="button" data-do="remove">Remove</button>';
+    }
+  }
+  site.addEventListener("change", function(e){
+    var input = e.target;
+    if (!input.matches || !input.matches('.ed-slot input[type="file"]')) return;
+    var fig = input.closest("[data-img]");
+    var file = input.files && input.files[0];
+    if (!fig || !file) return;
+    var max = parseInt(fig.getAttribute("data-max") || "1600", 10);
+    toast("Preparing photo…", 6000);
+    shrink(file, max, function(err, dataUrl){
+      input.value = "";
+      if (err) { toast("That photo couldn’t be read. Try a JPG or PNG, or use Paste link."); return; }
+      setImg(fig, dataUrl);
+      toast("Photo added. Save a draft to keep it.");
+    });
+  });
+  site.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest(".ed-slot button") : null;
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var fig = b.closest("[data-img]");
+    var what = b.getAttribute("data-do");
+    if (what === "url") {
+      var cur = fig.querySelector("img").getAttribute("src") || "";
+      var u = prompt("Paste the image address (for example a Supabase or GitHub link):", /^data:/.test(cur) ? "" : cur);
+      if (u === null) return;
+      u = u.trim();
+      if (u && !/^https?:\/\//i.test(u) && !/^[\w\-./]+\.(png|jpe?g|webp|gif|avif)$/i.test(u)) { toast("That doesn’t look like an image link. Use an address starting with https://"); return; }
+      setImg(fig, u);
+    } else if (what === "remove") {
+      setImg(fig, "");
+      toast("Photo removed.");
+    }
+  }, true);
+  function setImg(fig, src){
+    var img = fig.querySelector("img");
+    if (src) img.setAttribute("src", src); else img.setAttribute("src", "");
+    markSlots();
+  }
+  function shrink(file, max, cb){
+    var reader = new FileReader();
+    reader.onerror = function(){ cb(new Error("read")); };
+    reader.onload = function(){
+      var im = new Image();
+      im.onerror = function(){ cb(new Error("decode")); };
+      im.onload = function(){
+        var w = im.naturalWidth, h = im.naturalHeight;
+        var scale = Math.min(1, max / Math.max(w, h));
+        var cw = Math.round(w * scale), ch = Math.round(h * scale);
+        var c = document.createElement("canvas");
+        c.width = cw; c.height = ch;
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, cw, ch);
+        ctx.drawImage(im, 0, 0, cw, ch);
+        try { cb(null, c.toDataURL("image/jpeg", 0.8)); } catch (err) { cb(err); }
+      };
+      im.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ---------- links panel ---------- */
+  function buildLinks(){
+    var list = document.getElementById("lkList");
+    list.innerHTML = "";
+    var links = site.querySelectorAll("a[data-link]");
+    for (var i = 0; i < links.length; i++) {
+      var row = document.createElement("div");
+      row.className = "lk";
+      var lab = document.createElement("b");
+      lab.textContent = links[i].getAttribute("data-link");
+      var inp = document.createElement("input");
+      inp.type = "text"; inp.value = links[i].getAttribute("href") || "";
+      inp.setAttribute("data-i", i); inp.setAttribute("autocapitalize", "off"); inp.setAttribute("autocorrect", "off");
+      row.appendChild(lab); row.appendChild(inp); list.appendChild(row);
+    }
+  }
+  document.getElementById("lkApply").addEventListener("click", function(){
+    var links = site.querySelectorAll("a[data-link]");
+    var inputs = document.querySelectorAll("#lkList input");
+    for (var i = 0; i < inputs.length; i++) {
+      var a = links[parseInt(inputs[i].getAttribute("data-i"), 10)];
+      if (a) a.setAttribute("href", inputs[i].value.trim());
+    }
+    toast("Links updated.");
+  });
+
+  /* ---------- sections panel ---------- */
+  function buildSections(){
+    var list = document.getElementById("secList");
+    list.innerHTML = "";
+    var secs = site.querySelectorAll("[data-section]");
+    for (var i = 0; i < secs.length; i++) {
+      (function(sec){
+        var row = document.createElement("label");
+        row.className = "sw";
+        var cb = document.createElement("input");
+        cb.type = "checkbox"; cb.checked = !sec.hasAttribute("data-off");
+        cb.addEventListener("change", function(){
+          if (cb.checked) sec.removeAttribute("data-off"); else sec.setAttribute("data-off", "");
+        });
+        row.appendChild(cb);
+        row.appendChild(document.createTextNode(sec.getAttribute("data-section")));
+        list.appendChild(row);
+      })(secs[i]);
+    }
+  }
+
+  /* ---------- snapshot / save / download ---------- */
+  function cleanSiteHTML(){
+    var clone = site.cloneNode(true);
+    var ce = clone.querySelectorAll("[contenteditable]");
+    for (var i = 0; i < ce.length; i++) ce[i].removeAttribute("contenteditable");
+    var slots = clone.querySelectorAll(".ed-slot");
+    for (var j = 0; j < slots.length; j++) slots[j].innerHTML = "";
+    return clone.innerHTML;
+  }
+  function snapshot(){
+    var doc = document.documentElement.cloneNode(true);
+    var b = doc.querySelector("body");
+    b.className = "";
+    b.querySelector("#site").innerHTML = cleanSiteHTML();
+    var ps = b.querySelectorAll(".ed-panel");
+    for (var i = 0; i < ps.length; i++) ps[i].classList.remove("open");
+    var bs = b.querySelectorAll("#edBar button");
+    for (var k = 0; k < bs.length; k++) { bs[k].classList.remove("on"); bs[k].removeAttribute("disabled"); }
+    var tk = b.querySelector("#dToken"); if (tk) tk.removeAttribute("value");
+    var t = b.querySelector("#toast"); t.className = "ed-toast"; t.textContent = "";
+    var l = b.querySelector("#lb"); l.className = "lb"; l.querySelector("img").setAttribute("src", "");
+    return "<!DOCTYPE html>\n" + doc.outerHTML;
+  }
+  function saveDraft(){
+    try {
+      localStorage.setItem(DRAFT_KEY, cleanSiteHTML());
+      toast("Draft saved in this browser.");
+    } catch (err) {
+      toast("Too large to save in the browser. Use ⬇ Download page or 🚀 Publish instead.", 5000);
+    }
+  }
+  function download(){
+    var html = snapshot();
+    var blob = new Blob([html], { type: "text/html;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "index.html";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    toast("Downloading index.html (" + Math.round(html.length / 1024) + " KB).");
+  }
+  function resetDraft(){
+    if (!confirm("Remove the draft saved in this browser and reload the published version?")) return;
+    try { localStorage.removeItem(DRAFT_KEY); } catch (err) {}
+    location.reload();
+  }
+  function exitAdmin(){
+    if (body.classList.contains("editing")) { setEditable(false); body.classList.remove("editing"); }
+    for (var i = 0; i < panels.length; i++) panels[i].classList.remove("open");
+    body.classList.remove("admin");
+    var on = bar.querySelectorAll(".on"); for (var j = 0; j < on.length; j++) on[j].classList.remove("on");
+    if (/[?&](edit|setup)=1/.test(location.search) || location.hash === "#edit") {
+      history.replaceState(null, "", location.pathname);
+    }
+  }
+
+  /* ---------- GitHub publish ---------- */
+  var F = ["dOwner", "dRepo", "dBranch", "dPath", "dToken"];
+  function loadDeploy(){
+    try {
+      var s = JSON.parse(localStorage.getItem(DEPLOY_KEY) || "{}");
+      F.forEach(function(k){ if (s[k]) document.getElementById(k).value = s[k]; });
+    } catch (err) {}
+  }
+  function saveDeploy(v){ try { localStorage.setItem(DEPLOY_KEY, JSON.stringify(v)); } catch (err) {} }
+  function b64utf8(str){
+    var bytes = new TextEncoder().encode(str), bin = "", chunk = 0x8000;
+    for (var i = 0; i < bytes.length; i += chunk) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    return btoa(bin);
+  }
+  function gh(url, token, opts){
+    opts = opts || {};
+    opts.headers = { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" };
+    return fetch(url, opts);
+  }
+  document.getElementById("dGo").addEventListener("click", function(){
+    var btn = this, st = document.getElementById("dStatus");
+    var v = {};
+    F.forEach(function(k){ v[k] = document.getElementById(k).value.trim(); });
+    if (!v.dOwner || !v.dRepo || !v.dBranch || !v.dPath || !v.dToken) { st.textContent = "Fill in every field, including the access token."; return; }
+    saveDeploy(v);
+    var path = v.dPath.replace(/^\/+/, "");
+    var dir = path.indexOf("/") > -1 ? path.slice(0, path.lastIndexOf("/")) : "";
+    var name = path.slice(path.lastIndexOf("/") + 1);
+    var api = "https://api.github.com/repos/" + encodeURIComponent(v.dOwner) + "/" + encodeURIComponent(v.dRepo) + "/contents/";
+    var enc = function(p){ return p.split("/").map(encodeURIComponent).join("/"); };
+    btn.disabled = true;
+    st.textContent = "Checking the repository…";
+    // Read the sha from the folder listing (works for files over 1 MB)
+    gh(api + enc(dir) + "?ref=" + encodeURIComponent(v.dBranch), v.dToken)
+      .then(function(r){
+        if (r.status === 404) return [];
+        if (r.status === 401 || r.status === 403) throw new Error("GitHub refused the token. Check it has Contents: read and write on this repository.");
+        if (!r.ok) throw new Error("GitHub returned " + r.status + " while checking the folder.");
+        return r.json();
+      })
+      .then(function(list){
+        var sha = null;
+        if (Array.isArray(list)) list.forEach(function(f){ if (f.name === name) sha = f.sha; });
+        st.textContent = "Uploading page…";
+        var payload = { message: "Update trainer portfolio page", content: b64utf8(snapshot()), branch: v.dBranch };
+        if (sha) payload.sha = sha;
+        return gh(api + enc(path), v.dToken, { method: "PUT", body: JSON.stringify(payload) });
+      })
+      .then(function(r){
+        if (!r.ok) return r.json().then(function(j){ throw new Error("Publish failed (" + r.status + "): " + (j.message || "unknown error")); });
+        st.textContent = "Published. GitHub Pages usually updates within a minute or two.";
+        toast("Published.");
+      })
+      .catch(function(err){ st.textContent = err.message || String(err); })
+      .then(function(){ btn.disabled = false; });
+  });
+
+  if (wantsAdmin) openAdmin();
+})();
+</script>
+</body>
+</html>
