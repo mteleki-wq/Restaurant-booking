@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#111318" />
+<title>BMW R18 Service Companion - Valve Clearance</title>
+<style>
+  :root{
+    --blue:#0066b1;
+    --blue2:#0b7bd3;
+    --ink:#111318;
+    --muted:#667085;
+    --line:#d8dee8;
+    --panel:#ffffff;
+    --soft:#f4f7fb;
+    --warn:#fff6dc;
+    --ok:#eaf7ef;
+    --danger:#fff0f0;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#eef2f7;color:var(--ink);line-height:1.45}
+  a{color:var(--blue)}
+  .app{max-width:980px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:0 0 40px rgba(13,28,53,.12)}
+  .topbar{position:sticky;top:0;z-index:30;background:rgba(17,19,24,.96);color:#fff;padding:12px 18px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(12px)}
+  .brand{font-weight:800;letter-spacing:.4px;white-space:nowrap}
+  .brand span{color:#60b7ff}
+  .topbar nav{display:flex;gap:8px;overflow:auto;flex:1}
+  .topbar nav a{color:#dfe8f4;text-decoration:none;font-size:13px;padding:8px 10px;border-radius:999px;white-space:nowrap}
+  .topbar nav a:hover{background:#28303c}
+  .btn{border:0;border-radius:10px;padding:9px 13px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff;white-space:nowrap}
+  .btn.secondary{background:#2c3440}
+  .hero{padding:34px 24px 24px;background:linear-gradient(145deg,#0c1118 0%,#1a2635 58%,#0a6fb8 130%);color:#fff}
+  .eyebrow{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:#9ecfff;font-weight:800}
+  h1{margin:7px 0 8px;font-size:clamp(30px,5vw,50px);line-height:1.03}
+  .hero p{max-width:760px;margin:0;color:#d7e2ef;font-size:16px}
+  .spec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}
+  .spec{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:13px}
+  .spec b{display:block;font-size:21px;margin-top:3px}
+  .spec small{color:#bfd0e2}
+  main{padding:22px 24px 48px}
+  .section{margin:18px 0 26px}
+  .section h2{font-size:24px;margin:0 0 12px}
+  .section .sub{color:var(--muted);margin:-6px 0 14px}
+  .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .card{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:16px;box-shadow:0 4px 15px rgba(20,38,63,.04)}
+  .card h3{margin:0 0 8px;font-size:17px}
+  .badge{display:inline-block;background:#e7f4ff;color:#005491;border:1px solid #b9defa;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;margin-left:5px}
+  .checklist{display:grid;gap:9px}
+  label.tool{display:flex;gap:10px;align-items:flex-start;padding:9px;border-radius:10px;background:var(--soft)}
+  label.tool input{margin-top:4px;transform:scale(1.2);accent-color:var(--blue)}
+  label.tool span{font-size:14px}
+  label.tool b{display:block;font-size:14px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{background:#131923;color:#fff;text-align:left;padding:10px;border:1px solid #263142}
+  td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#fafbfd}
+  .torque{font-weight:800;color:#004f8d;white-space:nowrap}
+  .note{border-left:4px solid var(--blue);background:#eef7ff;padding:12px 14px;border-radius:8px;font-size:14px}
+  .warning{border-left-color:#cc8a00;background:var(--warn)}
+  .danger{border-left-color:#c93a3a;background:var(--danger)}
+
+  .proc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .proc-card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#ffffff 0%,#fbfcfe 100%);padding:16px;box-shadow:0 8px 20px rgba(20,38,63,.05)}
+  .proc-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+  .proc-num{width:36px;height:36px;flex:0 0 36px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px}
+  .proc-card h3{margin:1px 0 2px;font-size:18px;line-height:1.2}
+  .proc-tag{display:inline-block;margin-top:2px;background:#eef7ff;border:1px solid #cbe5fb;color:#005491;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;letter-spacing:.2px}
+  .proc-lead{margin:0 0 10px;color:#344054;font-size:14px}
+  .proc-points{margin:0;padding-left:18px;display:grid;gap:7px;font-size:14px}
+  .proc-points li::marker{color:var(--blue)}
+  .proc-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f3f6fa;border:1px solid #dbe3ec;color:#213041;font-size:12px;font-weight:700}
+  .pill.blue{background:#eef7ff;border-color:#cbe5fb;color:#005491}
+  .pill.green{background:#eefaf2;border-color:#cae8d5;color:#157347}
+  .pill.amber{background:#fff8e7;border-color:#f0d48f;color:#996300}
+  .step-quickbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 14px}
+  .mini-stat{background:#10151d;color:#fff;border-radius:14px;padding:11px 12px}
+  .mini-stat b{display:block;font-size:18px;margin-top:2px}
+  .mini-stat small{color:#b9c6d5}
+
+  .steps{counter-reset:step;display:grid;gap:10px}
+  .step{counter-increment:step;display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:flex-start;background:var(--soft);border-radius:12px;padding:12px}
+  .step:before{content:counter(step);width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800}
+  .tdc{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .schematic{background:#10151d;color:#fff;border-radius:16px;padding:18px;display:grid;place-items:center;min-height:230px}
+  .window{width:190px;height:190px;border:11px solid #a8afb8;border-radius:50%;display:grid;place-items:center;background:#040608;box-shadow:inset 0 0 0 3px #404751}
+  .flywheel{position:relative;width:92px;height:156px;border-radius:46px;background:linear-gradient(90deg,#6f7378,#b2b7bd 48%,#777c82);box-shadow:inset 0 0 18px #3e4349}
+  .notch{position:absolute;left:-2px;top:70px;width:18px;height:22px;background:#040608;border-radius:0 3px 3px 0}
+  .centerline{position:absolute;left:50%;top:17px;bottom:17px;width:2px;background:#39d98a;transform:translateX(-50%);opacity:.8}
+  .arrowtxt{margin-top:12px;font-size:13px;color:#c6d1dd;text-align:center}
+  .record-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:12px;color:var(--muted);font-weight:700}
+  input[type=text],input[type=date],textarea{width:100%;padding:10px;border:1px solid #ccd5e1;border-radius:9px;background:#fff;font:inherit}
+  textarea{min-height:80px;resize:vertical}
+  .measure-table input{padding:7px;font-size:13px}
+  details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;margin:9px 0}
+  details summary{font-weight:800;cursor:pointer}
+
+  .service-module{border:1px solid var(--line);border-radius:16px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 5px 18px rgba(20,38,63,.04)}
+  .service-module summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;cursor:pointer;font-weight:800;font-size:18px;background:#fff}
+  .service-module summary::-webkit-details-marker{display:none}
+  .service-module summary:after{content:"+";width:30px;height:30px;flex:0 0 30px;border-radius:50%;display:grid;place-items:center;background:#eef7ff;color:var(--blue);font-size:22px;line-height:1}
+  .service-module[open] summary{border-bottom:1px solid var(--line);background:#fbfcfe}
+  .service-module[open] summary:after{content:"−"}
+  .service-body{padding:16px}
+  .module-specs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+  .module-spec{border-radius:14px;background:#10151d;color:#fff;padding:12px}
+  .module-spec small{display:block;color:#b9c6d5;font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+  .module-spec b{display:block;margin-top:3px;font-size:18px;line-height:1.15}
+  .module-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .module-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfcfe}
+  .module-card h3{margin:0 0 9px;font-size:16px}
+  .module-card ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+  .module-table{width:100%;border-collapse:collapse;font-size:14px}
+  .module-table th{background:#151b24;color:#fff;padding:9px;text-align:left}
+  .module-table td{padding:9px;border-bottom:1px solid var(--line);vertical-align:top}
+  .module-table td:last-child{font-weight:800;color:#004f8d;white-space:nowrap}
+  .module-steps{display:grid;gap:9px;counter-reset:mstep;margin-top:14px}
+  .module-step{counter-increment:mstep;display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start;padding:11px 12px;border-radius:12px;background:#f4f7fb;border:1px solid #e2e8f0;font-size:14px}
+  .module-step:before{content:counter(mstep);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:800}
+  .source-note{margin-top:12px;font-size:12px;color:#667085}
+  .source-note a{font-weight:700}
+  footer{padding:22px 24px 34px;color:#697586;font-size:12px;background:#f6f8fb;border-top:1px solid var(--line)}
+  .print-sheet{display:none}
+  @media(max-width:760px){
+    .spec-grid{grid-template-columns:repeat(2,1fr)}
+    .cards,.tdc,.proc-grid,.step-quickbar,.module-grid,.module-specs{grid-template-columns:1fr}
+    .record-grid{grid-template-columns:repeat(2,1fr)}
+    .topbar nav{display:none}
+    main{padding:18px 15px 42px}.hero{padding:28px 16px 20px}.topbar{padding:10px 12px}
+  }
+
+  /* A4 print sheet */
+  @page{size:A4 portrait;margin:7mm}
+  @media print{
+    body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .app{display:none!important}
+    .print-sheet{display:block!important;width:196mm;min-height:283mm;margin:0 auto;color:#111;font-family:Arial,sans-serif}
+    .p-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #0066b1;padding:0 0 5mm}
+    .p-head h1{font-size:22pt;margin:0;line-height:1}.p-head .mini{font-size:8.5pt;color:#53606e;text-align:right}
+    .p-specs{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin-top:4mm}
+    .p-spec{border:1px solid #cbd3de;border-radius:2.5mm;padding:2.3mm;background:#f4f7fb}
+    .p-spec b{font-size:14pt;display:block;color:#004f8d}.p-spec span{font-size:7.5pt}
+    .p-grid{display:grid;grid-template-columns:1fr 1.16fr;gap:4mm;margin-top:4mm}
+    .p-box{border:1px solid #cbd3de;border-radius:2.4mm;overflow:hidden}
+    .p-title{background:#151b24;color:white;font-size:9.5pt;font-weight:700;padding:2mm 2.5mm}
+    .p-body{padding:2.3mm 2.6mm}
+    .p-list{margin:0;padding:0;list-style:none;font-size:7.8pt;line-height:1.35}
+    .p-list li{margin:0 0 1.3mm 0;padding-left:4mm;position:relative}
+    .p-list li:before{content:"";position:absolute;left:0;top:1.2mm;width:2.2mm;height:2.2mm;border:1px solid #4d5967}
+    .p-table{width:100%;border-collapse:collapse;font-size:7.3pt;line-height:1.25}
+    .p-table th{background:#eef2f7;color:#111;border:1px solid #cbd3de;padding:1.4mm;text-align:left}
+    .p-table td{border:1px solid #d8dee8;padding:1.35mm;vertical-align:top}
+    .p-table .nm{font-weight:800;color:#004f8d;white-space:nowrap}
+    .p-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:2mm;margin:0;padding:0;list-style:none;counter-reset:ps}
+    .p-steps li{counter-increment:ps;border:1px solid #d7dde6;border-radius:2mm;padding:1.8mm 2mm 1.8mm 8mm;position:relative;font-size:7.4pt;line-height:1.28;background:#fbfcfe}
+    .p-steps li:before{content:counter(ps);position:absolute;left:2mm;top:1.7mm;width:4.2mm;height:4.2mm;border-radius:50%;background:#0066b1;color:#fff;display:grid;place-items:center;font-weight:700;font-size:6.8pt}
+    .p-note{font-size:7.3pt;line-height:1.3;background:#fff6dc;border-left:2.5mm solid #d69400;padding:2mm 2.5mm;margin-top:2.5mm;border-radius:1.5mm}
+    .p-record{margin-top:3.5mm}
+    .p-record table{width:100%;border-collapse:collapse;font-size:7.2pt}
+    .p-record td,.p-record th{border:1px solid #cbd3de;padding:1.5mm;text-align:center;height:7mm}.p-record th{background:#eef2f7}
+    .p-foot{margin-top:3mm;border-top:1px solid #ccd4df;padding-top:2mm;font-size:6.3pt;color:#56616e;display:flex;justify-content:space-between;gap:5mm}
+    .p-foot div:first-child{max-width:70%}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">R18 <span>Service Companion</span></div>
+    <nav>
+      <a href="#tools">Tools</a><a href="#torque">Torque</a><a href="#tdc">TDC</a><a href="#steps">Procedure</a><a href="#record">Record</a><a href="#future">Oil Service</a>
+    </nav>
+    <button class="btn" onclick="window.print()">Print A4</button>
+  </div>
+
+  <section class="hero">
+    <div class="eyebrow">BMW R18 Big Boxer - DIY service card</div>
+    <h1>Valve Clearance</h1>
+    <p>A phone-friendly reference for the tools, clearances, TDC method and tightening torques used during the R18 valve-clearance check and adjustment.</p>
+    <div class="spec-grid">
+      <div class="spec"><small>ENGINE</small><b>Cold</b><small>Max 35 C</small></div>
+      <div class="spec"><small>INTAKE</small><b>0.20-0.30 mm</b><small>BMW specified range</small></div>
+      <div class="spec"><small>EXHAUST</small><b>0.20-0.30 mm</b><small>BMW specified range</small></div>
+      <div class="spec"><small>LOCKNUT</small><b>8 Nm</b><small>M6 x 0.5</small></div>
+    </div>
+  </section>
+
+  <main>
+    <section class="section" id="tools">
+      <h2>Tool checklist</h2>
+      <p class="sub">Tick items as you lay them out. The ticks are saved on this device.</p>
+      <div class="cards">
+        <div class="card">
+          <h3>Tools you selected <span class="badge">confirmed</span></h3>
+          <div class="checklist">
+            <label class="tool"><input type="checkbox" data-save="tool1"><span><b>ToolPRO metric feeler gauge</b>Must include 0.20 / 0.25 / 0.30 mm blades.</span></label>
+            <label class="tool"><input type="checkbox" data-save="tool2"><span><b>BikeService BS9132 spark-plug socket</b>14 mm, extra-thin-wall, deep, 3/8-inch drive, 18.5 mm OD.</span></label>
+            <label class="tool"><input type="checkbox" data-save="tool3"><span><b>3/8-inch ratchet + extension</b>For the spark-plug socket and general access.</span></label>
+            <label class="tool"><input type="checkbox" data-save="tool4"><span><b>Low-range torque wrench</b>Ideally about 2-20/25 Nm. Important for 8, 10 and 12 Nm fasteners.</span></label>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Additional tools</h3>
+          <div class="checklist">
+            <label class="tool"><input type="checkbox" data-save="tool5"><span><b>10 mm ring/box spanner</b>Valve-adjuster locknut.</span></label>
+            <label class="tool"><input type="checkbox" data-save="tool6"><span><b>Metric Allen/hex key set</b>For the centre adjuster. Use the exact snug-fitting key; do not force a loose size.</span></label>
+            <label class="tool"><input type="checkbox" data-save="tool7"><span><b>Torx bit/socket set</b>Recommended range T20-T45; use the exact snug-fitting bit on your cover variant.</span></label>
+            <label class="tool"><input type="checkbox" data-save="tool8"><span><b>Small flat screwdriver, torch, tray and clean rags</b>Connector release, TDC visibility and small oil drips.</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="note" style="margin-top:12px"><b>No motorcycle jack?</b> Put the gearbox in 6th and slowly roll the motorcycle forward on the ground to rotate the engine. Removing the upper/main spark plug from each cylinder reduces compression resistance; the lower secondary plug does not need to be removed for this job.</div>
+    </section>
+
+    <section class="section" id="torque">
+      <h2>Torque matrix</h2>
+      <p class="sub">Values below are the relevant R18 service values for this job. Nearby ignition-coil/cover fasteners are not all the same, so identify the fastener before applying torque.</p>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table>
+          <thead><tr><th>Part / fastener</th><th>Tool / fastener info</th><th>Torque</th></tr></thead>
+          <tbody>
+            <tr><td><b>Valve-adjuster locknut</b></td><td>M6 x 0.5; 10 mm ring/box spanner. Hold centre adjuster while tightening.</td><td class="torque">8 Nm</td></tr>
+            <tr><td><b>Main/upper spark plug</b></td><td>M10 x 1; 14 mm extra-thin-wall deep socket</td><td class="torque">12 Nm</td></tr>
+            <tr><td><b>Cylinder-head / valve cover</b></td><td>M6; Torx fasteners</td><td class="torque">10 Nm</td></tr>
+            <tr><td><b>Outer side-cover screws</b></td><td>The two cover screws used in the documented valve procedure</td><td class="torque">10 Nm</td></tr>
+            <tr><td><b>Cylinder-cover brackets</b></td><td>Cover support/bracket fasteners in the valve procedure</td><td class="torque">10 Nm</td></tr>
+            <tr><td><b>Ignition coil to cylinder-head cover</b></td><td>M6 x 20, if this fastener is removed</td><td class="torque">10 Nm</td></tr>
+            <tr><td><b>Ignition-coil cover / bracket fasteners</b></td><td>Some M6 x 12 / M6 x 16 coil-cover fasteners</td><td class="torque">8 Nm</td></tr>
+            <tr><td><b>Crankshaft-position sensor</b></td><td>M6 x 16, only if removed to view flywheel TDC notch</td><td class="torque">10 Nm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note warning" style="margin-top:12px"><b>Important:</b> do not apply threadlocker automatically. Use it only where BMW specifies it for that exact fastener. Recheck the valve clearance after tightening each 8 Nm locknut because the adjustment can move.</div>
+    </section>
+
+    <section class="section" id="tdc">
+      <h2>TDC quick guide</h2>
+      <div class="tdc">
+        <div class="schematic">
+          <div>
+            <div class="window"><div class="flywheel"><div class="notch"></div><div class="centerline"></div></div></div>
+            <div class="arrowtxt"><b>Centre the small flywheel notch in the inspection opening.</b><br>Then confirm the cylinder is on the compression stroke.</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Correct compression TDC</h3>
+          <div class="steps">
+            <div class="step">Engine cold. Select 6th gear and rotate only in the normal forward direction.</div>
+            <div class="step">Watch the valves. The intake valves must have opened and then fully closed before compression TDC.</div>
+            <div class="step">Bring the TDC notch to the centre of the inspection opening, if using the crank-sensor window.</div>
+            <div class="step">Both intake and exhaust rockers on that cylinder must be unloaded/free. If not, rotate to the next TDC.</div>
+          </div>
+          <div class="note danger" style="margin-top:12px">The crankshaft reaches TDC twice in a four-stroke cycle. Do not adjust at overlap TDC. Both valve groups must be closed/free.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="steps">
+      <h2>Valve-clearance procedure</h2>
+      <p class="sub">A cleaner step-by-step layout for quick reading on your phone while you work.</p>
+
+      <div class="step-quickbar">
+        <div class="mini-stat"><small>Target feel</small><b>0.25 mm</b><small>Light drag on the blade</small></div>
+        <div class="mini-stat"><small>Locknut torque</small><b>8 Nm</b><small>Hold adjuster while tightening</small></div>
+        <div class="mini-stat"><small>Spark plug</small><b>12 Nm</b><small>Upper/main plug only for this job</small></div>
+        <div class="mini-stat"><small>Critical check</small><b>Both rockers free</b><small>Confirms compression TDC</small></div>
+      </div>
+
+      <div class="proc-grid">
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">1</div><div><h3>Prepare the bike</h3><div class="proc-tag">Start here</div></div></div>
+          <p class="proc-lead">Set up the bike and your work area before removing anything.</p>
+          <ul class="proc-points">
+            <li>Engine must be <b>cold</b>, ideally below <b>35 C</b>.</li>
+            <li>Lay out your tools, rags, feeler gauges and catch tray.</li>
+            <li>Protect painted surfaces around the cylinder head.</li>
+            <li>Disconnect the <b>upper ignition-coil connector</b>.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill amber">Cold engine only</span><span class="pill">Tray for small oil drips</span></div>
+        </article>
+
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">2</div><div><h3>Remove access parts</h3><div class="proc-tag">Open access</div></div></div>
+          <p class="proc-lead">Take off only the parts needed to reach the rocker gear and ease engine rotation.</p>
+          <ul class="proc-points">
+            <li>Remove the <b>outer cover / brackets</b> for access.</li>
+            <li>Remove the <b>upper/main spark plug</b> using the 14 mm thin-wall socket.</li>
+            <li>The <b>lower secondary spark plug can stay in place</b>.</li>
+            <li>Remove the valve cover carefully and mind the gasket.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill blue">Spark plug: 12 Nm on refit</span><span class="pill">Cover fasteners: see torque table</span></div>
+        </article>
+
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">3</div><div><h3>Find compression TDC</h3><div class="proc-tag">Most important step</div></div></div>
+          <p class="proc-lead">Get the cylinder you are adjusting to <b>compression TDC</b>, not overlap TDC.</p>
+          <ul class="proc-points">
+            <li>Select <b>6th gear</b> and roll the bike slowly <b>forward only</b>.</li>
+            <li>Watch the intake valves: they must <b>open and then fully close</b>.</li>
+            <li>If using the inspection opening, centre the <b>small TDC notch</b>.</li>
+            <li>Check that <b>both rockers are free</b> on that cylinder.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill green">Both rockers free = correct TDC</span><span class="pill amber">If tight, rotate one full turn to next TDC</span></div>
+        </article>
+
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">4</div><div><h3>Measure the clearance</h3><div class="proc-tag">Check first</div></div></div>
+          <p class="proc-lead">BMW specifies the same cold range for both intake and exhaust.</p>
+          <ul class="proc-points">
+            <li><b>Intake:</b> 0.20-0.30 mm</li>
+            <li><b>Exhaust:</b> 0.20-0.30 mm</li>
+            <li>A good working target is <b>0.25 mm</b>.</li>
+            <li>Insert the blade and feel for a <b>light, even drag</b>.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill blue">0.20 mm = easy</span><span class="pill green">0.25 mm = light drag</span><span class="pill amber">0.30 mm = tight / may not pass</span></div>
+        </article>
+
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">5</div><div><h3>Adjust if needed</h3><div class="proc-tag">10 mm + Allen key</div></div></div>
+          <p class="proc-lead">Use the locknut and centre adjuster carefully — small movements make a difference.</p>
+          <ul class="proc-points">
+            <li>Loosen the <b>10 mm locknut</b>.</li>
+            <li>Turn the <b>centre hex adjuster</b> very slightly.</li>
+            <li>Set the clearance so the chosen blade has <b>light drag</b>.</li>
+            <li>Do not let the adjuster move while final tightening.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill">Use the snug-fitting Allen key</span><span class="pill amber">Tiny movement = noticeable change</span></div>
+        </article>
+
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">6</div><div><h3>Tighten and recheck</h3><div class="proc-tag">Torque critical</div></div></div>
+          <p class="proc-lead">This is the stage where the setting can shift, so always confirm it again.</p>
+          <ul class="proc-points">
+            <li>Hold the centre adjuster steady.</li>
+            <li>Tighten the locknut to <b>8 Nm</b>.</li>
+            <li>Measure again immediately after tightening.</li>
+            <li>Repeat until the setting stays correct.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill blue">Locknut: 8 Nm</span><span class="pill amber">Recheck every valve after torque</span></div>
+        </article>
+
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">7</div><div><h3>Repeat on the other cylinder</h3><div class="proc-tag">Same method</div></div></div>
+          <p class="proc-lead">Once one cylinder is complete, repeat the whole sequence on the opposite side.</p>
+          <ul class="proc-points">
+            <li>Rotate the engine again until the other cylinder reaches <b>compression TDC</b>.</li>
+            <li>Confirm the rockers on that side are also <b>free</b>.</li>
+            <li>Measure, adjust and torque the remaining valves.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill">Same specs on both sides</span><span class="pill green">Keep recording your measured values</span></div>
+        </article>
+
+        <article class="proc-card">
+          <div class="proc-top"><div class="proc-num">8</div><div><h3>Reassemble and final check</h3><div class="proc-tag">Finish the job</div></div></div>
+          <p class="proc-lead">Put everything back carefully, then do a calm final inspection before riding.</p>
+          <ul class="proc-points">
+            <li>Seat the valve-cover gasket properly.</li>
+            <li>Torque the valve cover, sensor and spark plug using the <b>torque matrix</b>.</li>
+            <li>Reconnect ignition components and refit covers / brackets.</li>
+            <li>Start the engine and check for <b>leaks</b> or abnormal persistent noise.</li>
+          </ul>
+          <div class="proc-meta"><span class="pill blue">Valve cover: 10 Nm</span><span class="pill blue">Crank sensor: 10 Nm</span><span class="pill blue">Spark plug: 12 Nm</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="record">
+      <h2>Service record</h2>
+      <div class="card">
+        <div class="record-grid">
+          <div class="field"><label>Date</label><input type="date" data-textsave="date"></div>
+          <div class="field"><label>Odometer</label><input type="text" placeholder="km" data-textsave="odo"></div>
+          <div class="field"><label>Engine temp</label><input type="text" placeholder="cold / C" data-textsave="temp"></div>
+          <div class="field"><label>Technician</label><input type="text" placeholder="name" data-textsave="tech"></div>
+        </div>
+        <table class="measure-table" style="margin-top:12px">
+          <thead><tr><th>Cylinder</th><th>Intake before</th><th>Intake after</th><th>Exhaust before</th><th>Exhaust after</th></tr></thead>
+          <tbody>
+            <tr><td><b>Left</b></td><td><input type="text" data-textsave="li_b" placeholder="mm"></td><td><input type="text" data-textsave="li_a" placeholder="mm"></td><td><input type="text" data-textsave="le_b" placeholder="mm"></td><td><input type="text" data-textsave="le_a" placeholder="mm"></td></tr>
+            <tr><td><b>Right</b></td><td><input type="text" data-textsave="ri_b" placeholder="mm"></td><td><input type="text" data-textsave="ri_a" placeholder="mm"></td><td><input type="text" data-textsave="re_b" placeholder="mm"></td><td><input type="text" data-textsave="re_a" placeholder="mm"></td></tr>
+          </tbody>
+        </table>
+        <div class="field" style="margin-top:12px"><label>Notes</label><textarea data-textsave="notes" placeholder="Any observations, noises, gasket condition, parts replaced...\n"></textarea></div>
+      </div>
+    </section>
+
+    <section class="section" id="future">
+      <h2>Oil service modules</h2>
+      <p class="sub">Keep these closed while you are working on the valves. Open only the service you need.</p>
+
+      <details class="service-module">
+        <summary>Engine oil + filter</summary>
+        <div class="service-body">
+          <div class="module-specs">
+            <div class="module-spec"><small>Oil quantity</small><b>4.0 L</b><small>with filter change</small></div>
+            <div class="module-spec"><small>Oil specification</small><b>SAE 15W-50</b><small>API SJ / JASO MA2</small></div>
+            <div class="module-spec"><small>Drain plug</small><b>28 Nm</b><small>M16 x 1.5</small></div>
+            <div class="module-spec"><small>Oil filter</small><b>11 Nm</b><small>oil sealing ring first</small></div>
+          </div>
+
+          <div class="module-grid">
+            <div class="module-card">
+              <h3>Oil & parts</h3>
+              <ul>
+                <li><b>4.0 L</b> engine oil for a filter change.</li>
+                <li><b>SAE 15W-50, API SJ / JASO MA2</b>. BMW recommends ADVANTEC Pro.</li>
+                <li>New oil filter. BMW filter reference commonly listed: <b>11 42 7 673 541</b>.</li>
+                <li>New engine drain-plug sealing ring: <b>A16 x 20 AL</b> / BMW <b>07 11 9 963 252</b>.</li>
+              </ul>
+            </div>
+            <div class="module-card">
+              <h3>Tools</h3>
+              <ul>
+                <li><b>8 mm Allen/hex</b> for the engine drain plug.</li>
+                <li><b>76 mm x 12-flute</b> oil-filter cup wrench for the OEM-style filter.</li>
+                <li>3/8-inch ratchet and suitable extensions.</li>
+                <li>Torque wrench that accurately covers <b>11-28 Nm</b>.</li>
+                <li>Drain pan of at least 5 L, funnel, gloves and rags.</li>
+                <li>BMW/on-board oil-filler-cap tool if required for your cap.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module-card" style="margin-top:14px;padding:0;overflow:hidden">
+            <h3 style="padding:14px 14px 0">Torque</h3>
+            <table class="module-table">
+              <tr><th>Part</th><th>Detail</th><th>Torque</th></tr>
+              <tr><td>Engine oil drain plug</td><td>M16 x 1.5, fit new A16 x 20 sealing ring</td><td>28 Nm</td></tr>
+              <tr><td>Oil filter</td><td>Lubricate the filter sealing ring with clean engine oil before installation</td><td>11 Nm</td></tr>
+            </table>
+          </div>
+
+          <h3 style="margin:16px 0 8px">Procedure</h3>
+          <div class="module-steps">
+            <div class="module-step"><div><b>Warm the oil, then switch off.</b> A short ride makes the oil flow more easily. Secure the motorcycle safely before working underneath it.</div></div>
+            <div class="module-step"><div><b>Open the filler first.</b> Confirm the filler cap can be removed before draining the engine.</div></div>
+            <div class="module-step"><div><b>Drain the engine oil.</b> Place the drain pan underneath, remove the M16 drain plug with the 8 mm Allen and allow the oil to drain fully.</div></div>
+            <div class="module-step"><div><b>Remove the oil filter.</b> Use the 76 mm x 12-flute filter wrench. Make sure the old rubber seal comes off with the old filter.</div></div>
+            <div class="module-step"><div><b>Install the new filter.</b> Lightly oil the new filter seal and torque the filter to <b>11 Nm</b>.</div></div>
+            <div class="module-step"><div><b>Install the drain plug.</b> Fit a new A16 x 20 sealing ring and torque the drain plug to <b>28 Nm</b>.</div></div>
+            <div class="module-step"><div><b>Refill.</b> Add approximately <b>4.0 L</b> of the specified 15W-50 oil for a filter change. Do not intentionally overfill.</div></div>
+            <div class="module-step"><div><b>Final check.</b> Refit the filler cap, run the engine briefly, stop it, inspect for leaks and verify the oil level using the BMW rider-manual procedure.</div></div>
+          </div>
+          <div class="note warning" style="margin-top:12px"><b>Important:</b> never work under an R18 supported by improvised blocks or a car jack alone. The motorcycle is very heavy; use stable, purpose-designed support if lifting is required.</div>
+          <div class="source-note">Reference: BMW rider manual engine-oil specification/capacity; R18 repair torque table for drain plug and oil filter; R18 owner documentation for the 8 mm drain tool and 76 mm x 12-flute filter wrench.</div>
+        </div>
+      </details>
+
+      <details class="service-module">
+        <summary>Gearbox / transmission oil</summary>
+        <div class="service-body">
+          <div class="module-specs">
+            <div class="module-spec"><small>Oil quantity</small><b>1.15 L</b><small>1150 ml</small></div>
+            <div class="module-spec"><small>Oil specification</small><b>SAE 70W-80</b><small>FUCHS Titan EG 4218 / BMW spec</small></div>
+            <div class="module-spec"><small>Drain plug</small><b>20 Nm</b><small>M14 x 1.5</small></div>
+            <div class="module-spec"><small>Filler plug</small><b>30 Nm</b><small>M18 x 1.5</small></div>
+          </div>
+
+          <div class="module-grid">
+            <div class="module-card">
+              <h3>Oil & parts</h3>
+              <ul>
+                <li><b>1.15 L</b> transmission oil.</li>
+                <li><b>SAE 70W-80</b>; BMW manual lists <b>FUCHS Titan EG 4218</b>.</li>
+                <li>Use fresh sealing rings on the fill and drain plugs.</li>
+                <li>The filler sealing ring is listed as <b>A18 x 22 AL</b>.</li>
+              </ul>
+            </div>
+            <div class="module-card">
+              <h3>Tools</h3>
+              <ul>
+                <li><b>19 mm hex socket</b> with short extension for the drain plug.</li>
+                <li><b>8 mm Allen/hex</b> for the filler plug.</li>
+                <li><b>T25 Torx</b> for the access cover.</li>
+                <li>Small flat screwdriver for the connector clip if access requires it.</li>
+                <li>Torque wrench covering <b>20-30 Nm</b>.</li>
+                <li>Drain pan of at least 1.5 L and an oil pump / bottle with flexible hose.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module-card" style="margin-top:14px;padding:0;overflow:hidden">
+            <h3 style="padding:14px 14px 0">Torque</h3>
+            <table class="module-table">
+              <tr><th>Part</th><th>Detail</th><th>Torque</th></tr>
+              <tr><td>Transmission drain plug</td><td>M14 x 1.5</td><td>20 Nm</td></tr>
+              <tr><td>Transmission filler plug</td><td>M18 x 1.5</td><td>30 Nm</td></tr>
+            </table>
+          </div>
+
+          <h3 style="margin:16px 0 8px">Procedure</h3>
+          <div class="module-steps">
+            <div class="module-step"><div><b>Prepare the bike.</b> A short ride can warm the gearbox oil. Park securely and position a drain pan under the transmission.</div></div>
+            <div class="module-step"><div><b>Remove the access cover.</b> Use the T25 Torx and, where fitted, release the connector carefully with a small flat screwdriver.</div></div>
+            <div class="module-step"><div><b>Loosen the filler plug first.</b> Use the 8 mm Allen. This confirms you can refill the gearbox before you drain it.</div></div>
+            <div class="module-step"><div><b>Drain the oil.</b> Use the 19 mm hex socket on the drain plug and let the gearbox drain fully. Keep the nearby cable clear of the tool.</div></div>
+            <div class="module-step"><div><b>Refit the drain plug.</b> Fit a fresh sealing ring, start the plug by hand and torque it to <b>20 Nm</b>.</div></div>
+            <div class="module-step"><div><b>Refill the gearbox.</b> Pump in <b>1.15 L</b> of SAE 70W-80 through the filler opening.</div></div>
+            <div class="module-step"><div><b>Refit the filler plug.</b> Fit a fresh sealing ring and torque the filler plug to <b>30 Nm</b>.</div></div>
+            <div class="module-step"><div><b>Finish.</b> Clean away spilled oil, reconnect anything removed, refit the cover and inspect both plugs for leaks after a short ride.</div></div>
+          </div>
+          <div class="note" style="margin-top:12px"><b>Torque note:</b> some older community worksheets list 28 Nm for both transmission plugs. This companion uses the R18 repair torque table values: <b>20 Nm drain</b> and <b>30 Nm filler</b>.</div>
+          <div class="source-note">Reference: BMW rider manual for SAE 70W-80 specification; R1800Wiki transmission procedure for 1.15 L and tools; R18 repair torque table for M14/M18 plug torques.</div>
+        </div>
+      </details>
+
+      <details class="service-module">
+        <summary>Rear final-drive oil</summary>
+        <div class="service-body">
+          <div class="module-specs">
+            <div class="module-spec"><small>Oil quantity</small><b>210 ml</b><small>0.21 L</small></div>
+            <div class="module-spec"><small>Oil specification</small><b>SAE 70W-80</b><small>BMW Hypoid Axle Oil G3 / equivalent BMW spec</small></div>
+            <div class="module-spec"><small>Drain plug</small><b>20 Nm</b><small>M12 x 1</small></div>
+            <div class="module-spec"><small>Filler plug</small><b>25 Nm</b><small>M12 x 1.5</small></div>
+          </div>
+
+          <div class="module-grid">
+            <div class="module-card">
+              <h3>Oil & parts</h3>
+              <ul>
+                <li><b>210 ml</b> rear final-drive oil.</li>
+                <li>BMW specifies <b>SAE 70W-80</b>; BMW Hypoid Axle Oil G3 is the commonly supplied BMW product.</li>
+                <li>Fit a <b>new sealing washer</b> to the filler plug.</li>
+                <li>Inspect the drain-plug <b>O-ring</b> and replace it if damaged, flattened or leaking.</li>
+              </ul>
+            </div>
+            <div class="module-card">
+              <h3>Tools</h3>
+              <ul>
+                <li><b>6 mm Allen/hex</b> for the filler plug.</li>
+                <li><b>T45 Torx</b> for the magnetic drain plug.</li>
+                <li>Torque wrench covering <b>20-25 Nm</b>.</li>
+                <li>Small drain pan.</li>
+                <li>Measuring jug / large syringe / oil pump with hose for accurately delivering 210 ml.</li>
+                <li>Cardboard or absorbent protection to keep oil off the rear tyre.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module-card" style="margin-top:14px;padding:0;overflow:hidden">
+            <h3 style="padding:14px 14px 0">Torque</h3>
+            <table class="module-table">
+              <tr><th>Part</th><th>Detail</th><th>Torque</th></tr>
+              <tr><td>Final-drive drain plug</td><td>M12 x 1, magnetic plug</td><td>20 Nm</td></tr>
+              <tr><td>Final-drive filler plug</td><td>M12 x 1.5, new sealing washer recommended</td><td>25 Nm</td></tr>
+            </table>
+          </div>
+
+          <h3 style="margin:16px 0 8px">Procedure</h3>
+          <div class="module-steps">
+            <div class="module-step"><div><b>Prepare.</b> Secure the motorcycle and protect the rear tyre and wheel from any oil spill.</div></div>
+            <div class="module-step"><div><b>Loosen the filler first.</b> Use the <b>6 mm Allen</b>. Never drain the final drive until you know the filler plug will open.</div></div>
+            <div class="module-step"><div><b>Drain.</b> Place the pan below and remove the magnetic drain plug with the <b>T45 Torx</b>.</div></div>
+            <div class="module-step"><div><b>Inspect the magnetic plug.</b> Wipe it clean. A light paste/fine residue can occur; larger chips or pieces deserve professional inspection.</div></div>
+            <div class="module-step"><div><b>Refit the drain plug.</b> Inspect the O-ring and torque the plug to <b>20 Nm</b>.</div></div>
+            <div class="module-step"><div><b>Measure exactly 210 ml.</b> Use a syringe, measuring jug or oil pump so the quantity is controlled.</div></div>
+            <div class="module-step"><div><b>Fill.</b> Add the <b>210 ml</b> of BMW-spec SAE 70W-80 final-drive oil through the filler opening.</div></div>
+            <div class="module-step"><div><b>Close and check.</b> Fit a new filler sealing washer, torque the filler plug to <b>25 Nm</b>, clean the housing and inspect for leaks after riding.</div></div>
+          </div>
+          <div class="note warning" style="margin-top:12px"><b>Keep oil off the tyre and brake components.</b> If any gear oil reaches the tyre tread or brake disc/pads, clean or service the affected component properly before riding.</div>
+          <div class="source-note">Reference: BMW rider manual for rear-axle oil specification; R1800Wiki final-drive procedure for 210 ml, 6 mm Allen and T45 tools; BMW-derived R18 torque table for 20/25 Nm.</div>
+        </div>
+      </details>
+    </section>
+  </main>
+  <footer>
+    <b>Reference basis:</b> BMW rider-manual specifications are used for engine and driveline oil grades/capacity where published. R18 repair-manual torque tables reproduced by R1800Wiki are used for job-specific tightening values. R18 service write-ups and owner documentation are used for practical tool/access details. For any fastener or part that differs from the description on your motorcycle, verify against VIN-specific BMW workshop data before tightening.<br><br>
+    Sources: <a href="https://www.press.bmwgroup.com/usa/article/detail/T0307310EN_US/the-new-bmw-r-18">BMW Group - R18 technical information</a> · <a href="https://manuals.bmw-motorrad.com/manuals/BA-Extern/IN/BA-INTERNET-COM/PDF/R_0N61_RM_0922_01.pdf">BMW Motorrad rider manual</a> · <a href="https://www.r1800wiki.org/en/2023/01/07/ventile-einstellen/">Valve adjustment</a> · <a href="https://www.r1800wiki.org/en/2022/12/30/oel-und-oelfilterwechsel/">Engine oil</a> · <a href="https://www.r1800wiki.org/en/2022/12/30/getriebeoelwechsel/">Transmission oil</a> · <a href="https://www.r1800wiki.org/en/2022/12/30/oelwechsel-endantrieb/">Final drive oil</a> · <a href="https://www.r1800wiki.org/en/2023/02/08/uebersicht-drehmoment-alle-schrauben/">Torque table</a>
+  </footer>
+</div>
+
+<!-- One-page A4 printable reference -->
+<section class="print-sheet">
+  <div class="p-head">
+    <div><div style="font-size:8pt;color:#0066b1;font-weight:700;letter-spacing:1px">BMW R18 BIG BOXER</div><h1>Valve Clearance - A4 Service Card</h1></div>
+    <div class="mini">Cold engine max 35 C<br>Compression TDC only</div>
+  </div>
+  <div class="p-specs">
+    <div class="p-spec"><span>INTAKE</span><b>0.20-0.30</b><span>mm</span></div>
+    <div class="p-spec"><span>EXHAUST</span><b>0.20-0.30</b><span>mm</span></div>
+    <div class="p-spec"><span>PRACTICAL MIDPOINT</span><b>0.25</b><span>mm, light drag</span></div>
+    <div class="p-spec"><span>ADJUSTER LOCKNUT</span><b>8</b><span>Nm</span></div>
+  </div>
+  <div class="p-grid">
+    <div class="p-box">
+      <div class="p-title">TOOLS</div>
+      <div class="p-body">
+        <ul class="p-list">
+          <li>ToolPRO metric feeler gauge: 0.20 / 0.25 / 0.30 mm</li>
+          <li>BikeService BS9132: 14 mm extra-thin-wall deep spark-plug socket, 3/8 drive</li>
+          <li>3/8 ratchet + short extension</li>
+          <li>Low-range torque wrench, ideally 2-20/25 Nm</li>
+          <li>10 mm ring/box spanner for valve locknut</li>
+          <li>Metric Allen/hex-key set; use exact snug fit on adjuster</li>
+          <li>Torx bit/socket set (T20-T45 recommended; verify exact fit)</li>
+          <li>Small flat screwdriver, LED torch, oil tray, clean rags</li>
+        </ul>
+      </div>
+    </div>
+    <div class="p-box">
+      <div class="p-title">TORQUE MATRIX</div>
+      <div class="p-body" style="padding:0">
+        <table class="p-table">
+          <tr><th>Part</th><th>Info</th><th>Torque</th></tr>
+          <tr><td>Valve adjuster locknut</td><td>M6 x 0.5 / 10 mm spanner</td><td class="nm">8 Nm</td></tr>
+          <tr><td>Main upper spark plug</td><td>M10 x 1 / 14 mm socket</td><td class="nm">12 Nm</td></tr>
+          <tr><td>Cylinder-head / valve cover</td><td>M6</td><td class="nm">10 Nm</td></tr>
+          <tr><td>Outer side-cover screws</td><td>Valve-job cover screws</td><td class="nm">10 Nm</td></tr>
+          <tr><td>Cylinder-cover brackets</td><td>Valve-job brackets</td><td class="nm">10 Nm</td></tr>
+          <tr><td>Ignition coil to head cover</td><td>M6 x 20, if removed</td><td class="nm">10 Nm</td></tr>
+          <tr><td>Coil cover / bracket</td><td>Some M6 x 12 / M6 x 16</td><td class="nm">8 Nm</td></tr>
+          <tr><td>Crankshaft-position sensor</td><td>M6 x 16, if removed</td><td class="nm">10 Nm</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="p-box" style="margin-top:4mm">
+    <div class="p-title">QUICK PROCEDURE</div>
+    <div class="p-body">
+      <ol class="p-steps">
+        <li>Engine cold, max 35 C. Protect covers and place a small tray below.</li>
+        <li>Remove outer cover/brackets and upper/main spark plug. Lower plug can remain.</li>
+        <li>Select 6th gear. No jack: slowly roll bike forward to rotate engine.</li>
+        <li>Find compression TDC: intake has closed, TDC notch centred if using inspection window, both rocker groups free.</li>
+        <li>Measure all valves on that cylinder. BMW range is 0.20-0.30 mm intake and exhaust.</li>
+        <li>If adjusting: loosen 10 mm locknut, set centre screw gently; 0.25 mm with light drag is a practical midpoint.</li>
+        <li>Hold adjuster, tighten locknut to 8 Nm, then recheck clearance. Repeat all four valves.</li>
+        <li>Move to compression TDC on other cylinder, repeat, reassemble and torque fasteners.</li>
+      </ol>
+      <div class="p-note"><b>TDC caution:</b> the crank reaches TDC twice. Adjust only on compression TDC with both intake and exhaust rockers unloaded/free. Nearby coil/cover M6 fasteners may be 8 or 10 Nm; identify the exact fastener before tightening. Do not add threadlocker unless BMW specifies it.</div>
+    </div>
+  </div>
+  <div class="p-record">
+    <table>
+      <tr><th style="width:18%">Service record</th><th>Date</th><th>Odometer</th><th>Engine temp</th><th>Notes</th></tr>
+      <tr><td>LEFT</td><td></td><td></td><td></td><td rowspan="2"></td></tr>
+      <tr><td>RIGHT</td><td colspan="3" style="text-align:left">Intake before/after: __________ / __________ mm &nbsp;&nbsp; Exhaust before/after: __________ / __________ mm</td></tr>
+    </table>
+  </div>
+  <div class="p-foot">
+    <div><b>Reference basis:</b> BMW Group technical information confirms 0.20-0.30 mm valve clearance. Job-specific torque values cross-checked against R18 repair-manual tables reproduced by R1800Wiki. Verify any fastener that differs from this description against VIN-specific BMW workshop data.</div>
+    <div style="text-align:right"><b>R18 Service Companion</b><br>Valve Clearance v1</div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-save]').forEach(el=>{
+    const k='r18_'+el.dataset.save;
+    el.checked=localStorage.getItem(k)==='1';
+    el.addEventListener('change',()=>localStorage.setItem(k,el.checked?'1':'0'));
+  });
+  document.querySelectorAll('[data-textsave]').forEach(el=>{
+    const k='r18_'+el.dataset.textsave;
+    const v=localStorage.getItem(k); if(v!==null) el.value=v;
+    el.addEventListener('input',()=>localStorage.setItem(k,el.value));
+  });
+</script>
+</body>
+</html>
