@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SITXFIN011 | QR Ordering & KDS Role Play</title>
+<style>
+:root{--navy:#17365d;--blue:#2878b8;--pale:#eef6fb;--gold:#d5a744;--ink:#1e293b;--muted:#64748b;--line:#d8e2ea;--ok:#e8f6ee}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fa;color:var(--ink);line-height:1.45}
+header{background:linear-gradient(120deg,var(--navy),#245c86);color:white;padding:42px 20px 32px}
+.wrap{max-width:1050px;margin:auto}.eyebrow{font-weight:700;letter-spacing:.08em;font-size:12px;color:#dbeafe}
+h1{font-size:clamp(28px,5vw,48px);margin:7px 0 8px;line-height:1.05}.lead{max-width:760px;font-size:18px;margin:0}
+.progressBox{margin-top:22px;background:#ffffff22;border:1px solid #ffffff44;border-radius:12px;padding:12px}
+.bar{height:10px;background:#ffffff33;border-radius:20px;overflow:hidden}.bar>div{height:100%;width:0;background:#fff;transition:.2s}
+main{padding:24px 16px 60px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin:16px 0;box-shadow:0 3px 14px #18324a0a}
+h2{color:var(--navy);margin:0 0 10px;font-size:22px}h3{color:var(--navy);margin:14px 0 7px;font-size:17px}
+.step{display:inline-block;background:var(--pale);color:var(--blue);font-weight:700;border-radius:99px;padding:5px 10px;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+label{font-weight:700;font-size:14px;display:block;margin:8px 0 5px}input[type=text],input[type=url],textarea,select{width:100%;border:1px solid #bdcad5;border-radius:8px;padding:10px;font:inherit;background:white}
+textarea{min-height:86px;resize:vertical}.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0}.check input{width:19px;height:19px;margin-top:1px}
+a.btn,button{display:inline-block;border:0;border-radius:9px;background:var(--blue);color:white;padding:10px 15px;font-weight:700;text-decoration:none;cursor:pointer;margin:4px 5px 4px 0}
+button.secondary,a.secondary{background:white;color:var(--navy);border:1px solid #aab9c6}.hint{color:var(--muted);font-size:13px}.callout{background:#fff8e7;border-left:4px solid var(--gold);padding:12px 14px;border-radius:8px}
+.system{background:#fafcfe;border:1px solid var(--line);padding:15px;border-radius:11px}.role{background:var(--pale);padding:12px;border-radius:10px}
+.result{background:var(--ok);padding:15px;border-radius:10px;border:1px solid #b9dfc7}.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:28px}
+@media(max-width:750px){.grid,.grid4{grid-template-columns:1fr}header{padding-top:28px}}
+@media print{header{background:white;color:black;padding:10px 0}.eyebrow{color:#333}.progressBox,.noPrint{display:none}body{background:white}.card{box-shadow:none;break-inside:avoid;margin:8px 0;padding:14px}main{padding:0}a{color:black;text-decoration:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">SITXFIN011 • MANAGE PHYSICAL ASSETS</div>
+<h1>QR Ordering & KDS<br>Management Role Play</h1>
+<p class="lead">Work as a restaurant management team. Test a QR ordering workflow, research two similar systems, compare the benefits and risks, then make a preliminary recommendation.</p>
+<div class="progressBox"><b id="progressText">Progress: 0%</b><div class="bar"><div id="bar"></div></div></div>
+</div></header>
+
+<main class="wrap">
+<section class="card">
+<span class="step">START HERE</span><h2>Your scenario</h2>
+<p>Your restaurant is considering a <b>QR order-at-the-table system with a Kitchen Display System (KDS)</b>. Customers scan a QR code, view the menu, select food and drinks, add options or notes, and send the order to the restaurant for preparation.</p>
+<div class="callout"><b>Management question:</b> Would this type of system benefit the restaurant, and what should management investigate before introducing it?</div>
+<div class="check"><input class="task" type="checkbox"><span>I have read and understood the scenario.</span></div>
+</section>
+
+<section class="card">
+<span class="step">STEP 1</span><h2>Test Restaurant Deluxe</h2>
+<p>Act as a customer and explore the Restaurant Deluxe demonstration. Look at how the ordering system connects with restaurant operations.</p>
+<a class="btn noPrint" target="_blank" rel="noopener" href="https://webescapade.com/Resto-order/staff-kds.html">Open Restaurant Deluxe KDS ↗</a>
+<div class="grid">
+<div><label>What did you like?</label><textarea data-save="liked" placeholder="Example: clear order status, easy workflow..."></textarea></div>
+<div><label>What could be improved?</label><textarea data-save="improve" placeholder="Think about customers, staff and kitchen operations..."></textarea></div>
+</div>
+<div class="check"><input class="task" type="checkbox"><span>Our group has explored the demonstration system.</span></div>
+</section>
+
+<section class="card">
+<span class="step">STEP 2</span><h2>Research TWO similar systems</h2>
+<p>Search online for two QR ordering / restaurant ordering systems. Research actual information rather than guessing.</p>
+<a class="btn noPrint" target="_blank" rel="noopener" href="https://www.google.com/search?q=restaurant+QR+table+ordering+KDS+Australia">Search QR/KDS systems ↗</a>
+<div class="grid">
+<div class="system"><h3>System 1</h3>
+<label>Name</label><input data-save="s1name" type="text">
+<label>Website / research link</label><input data-save="s1url" type="url" placeholder="https://...">
+<label>Setup / monthly / transaction cost</label><input data-save="s1cost" type="text">
+<label>Main features</label><textarea data-save="s1features"></textarea>
+<label>Hardware / integration needed</label><textarea data-save="s1hardware"></textarea>
+<label>Support / maintenance</label><textarea data-save="s1support"></textarea></div>
+<div class="system"><h3>System 2</h3>
+<label>Name</label><input data-save="s2name" type="text">
+<label>Website / research link</label><input data-save="s2url" type="url" placeholder="https://...">
+<label>Setup / monthly / transaction cost</label><input data-save="s2cost" type="text">
+<label>Main features</label><textarea data-save="s2features"></textarea>
+<label>Hardware / integration needed</label><textarea data-save="s2hardware"></textarea>
+<label>Support / maintenance</label><textarea data-save="s2support"></textarea></div>
+</div>
+<div class="check"><input class="task" type="checkbox"><span>We researched two comparable systems and recorded our sources.</span></div>
+</section>
+
+<section class="card">
+<span class="step">STEP 3</span><h2>Assign your management roles</h2>
+<div class="grid4">
+<div class="role"><b>Restaurant Manager</b><label>Student</label><input data-save="r1" type="text"><p class="hint">Business need and final discussion.</p></div>
+<div class="role"><b>Operations Manager</b><label>Student</label><input data-save="r2" type="text"><p class="hint">Customer, staff, kitchen/bar workflow.</p></div>
+<div class="role"><b>Purchasing / IT</b><label>Student</label><input data-save="r3" type="text"><p class="hint">Features, suppliers, technology.</p></div>
+<div class="role"><b>Finance Manager</b><label>Student</label><input data-save="r4" type="text"><p class="hint">Costs, savings, ongoing expenses.</p></div>
+</div>
+<div class="check"><input class="task" type="checkbox"><span>Every group member knows their role.</span></div>
+</section>
+
+<section class="card">
+<span class="step">STEP 4</span><h2>Evaluate benefits and disadvantages</h2>
+<div class="grid">
+<div><label>PROS — What could the restaurant gain?</label><textarea data-save="pros" placeholder="Service speed, accuracy, menu updates, order tracking, sales opportunities..."></textarea></div>
+<div><label>CONS / RISKS — What could go wrong?</label><textarea data-save="cons" placeholder="System failure, Wi-Fi, fees, customer resistance, training, integration..."></textarea></div>
+<div><label>Operational impact</label><textarea data-save="operations" placeholder="How would it affect customers, waitstaff, kitchen and bar?"></textarea></div>
+<div><label>Financial impact</label><textarea data-save="finance" placeholder="Setup cost, subscription, hardware, transaction fees, possible savings..."></textarea></div>
+</div>
+<div class="check"><input class="task" type="checkbox"><span>We considered both benefits and disadvantages — not only price.</span></div>
+</section>
+
+<section class="card">
+<span class="step">STEP 5</span><h2>Make your preliminary recommendation</h2>
+<label>Which system appears most suitable?</label><input data-save="choice" type="text">
+<label>Why?</label><textarea data-save="why" placeholder="Use evidence from your research and business needs."></textarea>
+<label>What information would you still need before spending money?</label><textarea data-save="more" placeholder="Formal quote? Contract? POS compatibility? Support? Total ongoing cost?"></textarea>
+<div class="check"><input class="task" type="checkbox"><span>Our recommendation is supported by our research.</span></div>
+</section>
+
+<section class="card">
+<span class="step">STEP 6</span><h2>3–5 minute management role play</h2>
+<p><b>Restaurant Manager:</b> Explain the business need and ask the team for findings.</p>
+<p><b>Operations Manager:</b> Explain operational benefits, requirements and risks.</p>
+<p><b>Purchasing / IT Manager:</b> Explain the two systems researched and key differences.</p>
+<p><b>Finance Manager:</b> Explain costs, ongoing expenses and possible financial benefits.</p>
+<div class="result"><b>Finish your meeting with:</b><br>“Our preliminary recommendation is <b>__________</b> because <b>__________</b>. Before making a final decision, we still need to investigate <b>__________</b>.”</div>
+<div class="check"><input class="task" type="checkbox"><span>We are ready to present our role play to the class.</span></div>
+</section>
+
+<section class="card noPrint">
+<h2>Save / submit your work</h2>
+<p>Your typed answers and tick boxes are saved automatically on <b>this browser/device</b>. Use Print / Save PDF if your trainer wants a copy.</p>
+<button onclick="window.print()">Print / Save as PDF</button>
+<button class="secondary" onclick="resetWork()">Clear all work</button>
+</section>
+<div class="footer">SITXFIN011 • Classroom learning activity • QR Ordering & KDS asset evaluation</div>
+</main>
+
+<script>
+const fields=[...document.querySelectorAll('[data-save]')];
+fields.forEach(el=>{
+ const k='sitxfin011_'+el.dataset.save;
+ el.value=localStorage.getItem(k)||'';
+ el.addEventListener('input',()=>localStorage.setItem(k,el.value));
+});
+const checks=[...document.querySelectorAll('.task')];
+checks.forEach((c,i)=>{
+ const k='sitxfin011_check_'+i;
+ c.checked=localStorage.getItem(k)==='1';
+ c.addEventListener('change',()=>{localStorage.setItem(k,c.checked?'1':'0');updateProgress()});
+});
+function updateProgress(){
+ const done=checks.filter(x=>x.checked).length;
+ const pct=Math.round(done/checks.length*100);
+ document.getElementById('progressText').textContent='Progress: '+pct+'% ('+done+'/'+checks.length+' steps)';
+ document.getElementById('bar').style.width=pct+'%';
+}
+function resetWork(){
+ if(!confirm('Clear all answers and progress for this activity?')) return;
+ Object.keys(localStorage).filter(k=>k.startsWith('sitxfin011_')).forEach(k=>localStorage.removeItem(k));
+ location.reload();
+}
+updateProgress();
+</script>
+</body></html>
