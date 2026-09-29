@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex,nofollow">
+<title>Table Ordering — Terms</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — TERMS ACCEPTANCE
+     terms.html
+
+     A restaurant opens this from a private link, reads the terms, ticks
+     each point, and accepts. Their ordering system switches on at that
+     moment - not before.
+
+     SETUP
+       1. Fill in the two config lines and the [SQUARE BRACKETS] in the
+          terms below: your business name, ABN, fee, notice period and
+          support hours.
+       2. Bump TERMS_VERSION whenever the wording changes. The version is
+          recorded with each acceptance, and the full text is frozen with
+          it, so you can always show what was actually agreed to.
+
+     The link is per restaurant:
+       terms.html?t=<onboarding token>
+     ================================================================== -->
+
+<script>
+  /* ---------- FILL THIS IN ---------- */
+  var SUPABASE_URL = '';
+  var SUPABASE_KEY = '';
+  var TERMS_VERSION = '1.0';
+  /* ---------- END ---------- */
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0b0806;--panel:#151009;--panel-2:#1c150c;--ink:#f6efe2;--muted:#b3a488;
+  --line:rgba(179,164,136,.2);--gold:#f0cf85;
+  --grad:linear-gradient(100deg,#f2d187,#df9f52 55%,#b8783c);
+  --good:#7fd6a3;--bad:#ff7a66;--warn:#ffd479;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{margin:0;padding:0}
+body{margin:0;padding:0;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--ink);
+  font-family:'Sora',-apple-system,sans-serif;font-size:15px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;font-weight:700}
+.mono{font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+button{cursor:pointer;border:0;background:none;font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+main{max-width:720px;margin:0 auto;padding:34px 18px calc(60px + var(--safe-b))}
+.screen{display:none}.screen.on{display:block}
+
+header{text-align:center;margin-bottom:24px}
+header h1{font-size:25px;margin-top:8px}
+.hint{color:var(--muted);font-size:12.5px;margin:6px 0 0;line-height:1.55}
+
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:22px;margin-bottom:14px}
+.sec h2{font-size:16px;margin-bottom:8px}
+.sec h3{font-size:14px;margin:18px 0 6px}
+.sec p{margin:8px 0;font-size:14px}
+.sec ul{margin:8px 0;padding-left:20px;font-size:14px}
+.sec li{margin:6px 0}
+.sec b{color:var(--ink)}
+.body-text{color:var(--muted)}
+.body-text b{color:var(--ink)}
+
+.ack{display:flex;gap:13px;align-items:flex-start;padding:14px;margin-top:10px;
+  border:1px solid var(--line);border-radius:13px;cursor:pointer;
+  background:rgba(255,255,255,.015);transition:border-color .18s,background .18s}
+.ack.on{border-color:var(--gold);background:rgba(240,207,133,.07)}
+.ack input{width:24px;height:24px;flex:0 0 auto;margin-top:1px;accent-color:#df9f52}
+.ack-t{flex:1;font-size:14px}
+.ack-t b{display:block;margin-bottom:2px}
+.ack-t span{color:var(--muted);font-size:13px}
+
+label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 7px}
+input[type=text],input[type=email]{
+  width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;
+  background:var(--panel-2);padding:0 15px;outline:none;color:var(--ink)}
+input:focus{border-color:var(--gold)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;
+  padding:15px 26px;border-radius:100px;background:var(--grad);color:#241703;
+  font-family:'Unbounded',sans-serif;font-weight:700;font-size:14px;width:100%}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
+.btn.quiet{background:none;border:1px solid var(--line);color:var(--ink);font-weight:600}
+
+.note{border:1px solid rgba(255,212,121,.45);background:rgba(255,212,121,.06);
+  border-radius:12px;padding:13px 15px;color:var(--warn);font-size:13px;margin-top:14px}
+.note.bad{border-color:rgba(255,122,102,.5);background:rgba(255,122,102,.06);color:var(--bad)}
+.msg{color:var(--bad);font-size:13.5px;min-height:19px;margin-top:12px;text-align:center}
+.centre{min-height:70dvh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;gap:14px}
+.mark{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(127,214,163,.5);background:rgba(127,214,163,.08);font-size:27px}
+.mark.bad{border-color:rgba(255,122,102,.5);background:rgba(255,122,102,.07)}
+.recap{width:100%;max-width:420px;text-align:left;border:1px solid var(--line);
+  border-radius:14px;padding:16px 18px;background:var(--panel);margin-top:4px}
+.recap .r{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}
+.recap .r b{font-family:'Unbounded',sans-serif;font-size:13px}
+@media print{
+  body{background:#fff;color:#000}
+  .sec{border-color:#ccc;background:#fff}
+  .btn,.no-print{display:none!important}
+  .body-text,.hint{color:#333}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+/* Safari applies its own colour to form fields and ignores an inherited
+   one, which leaves typed text near-black on a dark background. Setting
+   both colour and -webkit-text-fill-color is what actually holds, and the
+   autofill rule stops Safari repainting the field white. */
+input,select,textarea{
+  color:var(--ink);
+  -webkit-text-fill-color:var(--ink);
+  caret-color:var(--gold);
+}
+input::placeholder,textarea::placeholder{
+  color:var(--muted); -webkit-text-fill-color:var(--muted); opacity:1;
+}
+input:-webkit-autofill,input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 1000px var(--panel-2) inset;
+  caret-color:var(--gold);
+}
+</style>
+</head>
+<body>
+<main>
+
+<!-- ============ LOADING ============ -->
+<section class="screen on" id="scLoad">
+  <div class="centre"><p class="hint">Loading…</p></div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section class="screen" id="scStop">
+  <div class="centre">
+    <div class="mark bad">✕</div>
+    <h1 id="stopTitle">Link not recognised</h1>
+    <p class="hint" id="stopBody" style="max-width:36ch"></p>
+    <p class="hint" id="stopDetail" style="max-width:44ch;color:var(--warn);display:none"></p>
+  </div>
+</section>
+
+<!-- ============ ALREADY DONE ============ -->
+<section class="screen" id="scDone2">
+  <div class="centre">
+    <div class="mark">✓</div>
+    <h1>Already accepted</h1>
+    <p class="hint" id="doneWhen" style="max-width:36ch"></p>
+  </div>
+</section>
+
+<!-- ============ THE TERMS ============ -->
+<section class="screen" id="scTerms">
+  <header>
+    <span class="mono" style="color:var(--muted)">Table Ordering · <span id="modeLbl"></span></span>
+    <h1 id="vName">Terms of Service</h1>
+    <p class="hint">Please read this before your ordering system goes live.<br>
+      Version <span id="verLbl"></span></p>
+  </header>
+
+  <div id="termsBody"></div>
+
+  <div class="sec">
+    <h2>Please confirm each point</h2>
+    <p class="hint">Each is ticked separately so there is no doubt about what
+      was agreed.</p>
+    <div id="acks"></div>
+  </div>
+
+  <div class="sec">
+    <h2>Who is accepting</h2>
+    <div class="row2">
+      <div><label for="pName">Full name</label>
+        <input id="pName" type="text" placeholder="Sam Rivera"></div>
+      <div><label for="pRole">Position</label>
+        <input id="pRole" type="text" placeholder="Owner"></div>
+    </div>
+    <label for="pEmail">Email</label>
+    <input id="pEmail" type="email" placeholder="sam@restaurant.com"
+      autocapitalize="off" spellcheck="false">
+    <p class="hint">By accepting you confirm you are authorised to enter into
+      this agreement for the business named above.</p>
+    <button class="btn" id="accept" style="margin-top:20px" disabled>
+      Accept and switch on ordering</button>
+    <p class="msg" id="msg"></p>
+    <p class="hint" style="text-align:center">
+      <button class="no-print" id="printIt"
+        style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;
+        min-height:44px;font-size:12.5px">Print or save a copy</button></p>
+  </div>
+</section>
+
+<!-- ============ ACCEPTED ============ -->
+<section class="screen" id="scAccepted">
+  <div class="centre">
+    <div class="mark">✓</div>
+    <h1>Thank you</h1>
+    <p class="hint" style="max-width:38ch">Your ordering system is now switched
+      on. Keep a copy of this for your records.</p>
+    <div class="recap" id="recap"></div>
+    <button class="btn quiet no-print" id="printAfter" style="max-width:320px;margin-top:8px">
+      Print or save a copy</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var qs=new URLSearchParams(location.search);
+var TOKEN=(qs.get('t')||qs.get('token')||'').trim();
+var VENUE=null;
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function show(id){
+  ['scLoad','scStop','scDone2','scTerms','scAccepted'].forEach(function(s){
+    $(s).classList.toggle('on', s===id);});
+  window.scrollTo(0,0);
+}
+function stop(t,b,detail){
+  $('stopTitle').textContent=t; $('stopBody').textContent=b;
+  var d=$('stopDetail');
+  if(d){ d.textContent=detail||''; d.style.display=detail?'':'none'; }
+  show('scStop');
+}
+/* Turn a failed call into something a person can act on. "Check your
+   connection" is useless when the connection is fine and the real problem
+   is a mistyped URL or a function the database has not been given. */
+function why(e){
+  if(!e) return '';
+  if(e.status===404) return 'The database did not recognise the request (404). '+
+    'Most likely supabase-terms.sql has not been run on this project, or the '+
+    'Project URL has extra path on the end.';
+  if(e.status===401||e.status===403) return 'The project rejected the key (' +
+    e.status + '). Check the anon key is complete and belongs to this project.';
+  if(e.status) return 'The project replied with ' + e.status +
+    ((e.data&&e.data.message)?(': '+e.data.message):'');
+  return 'Could not reach ' + (SUPABASE_URL||'the project') +
+    '. Check the Project URL is exactly https://<your-ref>.supabase.co';
+}
+
+function rpc(fn, body){
+  return fetch(SUPABASE_URL.replace(/\/+$/,'')+'/rest/v1/rpc/'+fn,{
+    method:'POST',
+    headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,
+             'Content-Type':'application/json'},
+    body:JSON.stringify(body||{})
+  }).then(function(r){
+    return r.text().then(function(t){
+      var d=null; try{ d=t?JSON.parse(t):null; }catch(e){}
+      if(!r.ok) throw {status:r.status,data:d};
+      return d;});});
+}
+
+/* ---------------------------------------------------------------
+   THE TERMS. Edit the [SQUARE BRACKETS] before sending any link.
+   Change TERMS_VERSION at the top whenever this wording changes -
+   the version and the full text are both recorded with every
+   acceptance, so you can always show what was actually agreed.
+   --------------------------------------------------------------- */
+/* ---------------------------------------------------------------
+   TWO SETS OF TERMS. Which one is shown is decided by the venue's
+   payment_mode - set when the restaurant is provisioned, or changed
+   later from Settings. The guest signing this never chooses; the choice
+   was already made by whoever set the venue up.
+
+   Edit the [SQUARE BRACKETS] before sending any link. Bump
+   TERMS_VERSION_BASE whenever either wording changes - the exact text
+   shown is frozen with every acceptance regardless, but the version
+   number makes a glance at the history readable.
+   --------------------------------------------------------------- */
+var TERMS_VERSION_BASE = '1.0';
+
+var TERMS_COUNTER = [
+ {h:'What this is', p:[
+  'A table ordering system for <b>[YOUR BUSINESS NAME] (ABN [YOUR ABN])</b> '+
+  '("we") and the restaurant named above ("you").',
+  'Guests scan a code on the table, choose from your menu and send an order. '+
+  'The order appears on your kitchen and bar screens. At the end of the day '+
+  'you take a reading of what was ordered.',
+  '<b>No money passes through the system.</b> It tells you what each table '+
+  'owes. You take payment at the counter exactly as you do now, on your own '+
+  'terminal. No card details are ever entered, sent or stored.']},
+
+ {h:'What you look after', l:[
+  '<b>Your menu.</b> Prices, descriptions, allergens and GST. The system '+
+  'shows guests what you have entered.',
+  '<b>Taking payment</b> and your own till.',
+  '<b>Your tax.</b> We report GST from how you classify each dish. You and '+
+  'your accountant remain responsible for what you lodge.',
+  '<b>Your QR codes.</b> Each is unique to one table. If a card goes missing '+
+  'or is photographed, make a new one for that table.',
+  '<b>Your internet, devices and staff.</b>']},
+
+ {h:'If it stops working', p:[
+  '<b>You keep trading.</b> Your staff take orders the way they did before. '+
+  'Nothing about your kitchen or your till depends on us.',
+  'The system needs the internet and will not be available every minute of '+
+  'every day. We do not promise that it will be.',
+  'It is built so a problem is obvious rather than hidden - a guest is never '+
+  'shown a confirmed order that did not arrive.']},
+
+ {h:'What we do when something breaks', p:[
+  'We fix it. Support is <b>[SUPPORT HOURS, e.g. Monday to Friday, '+
+  '9am\u20135pm]</b>, and we get to it as quickly as we reasonably can.',
+  '<b>What we do not do is cover your business losses.</b> If the system is '+
+  'down for an evening we will put it right, but we do not pay for lost '+
+  'trade, lost time or anything of that kind.',
+  'This is deliberate, and it is why the system costs what it does. Covering '+
+  'that risk would mean a much higher price for everyone.']},
+
+ {h:'Your information', p:[
+  '<b>We do not collect anything about your guests.</b> No names, no phone '+
+  'numbers, no emails, no card details. An order is linked to a table number '+
+  'and nothing else.',
+  '<b>Your restaurant\u2019s information is yours and stays separate.</b> No '+
+  'other restaurant using this system can see any part of it.',
+  'We keep daily backups. If you ever leave, we give you your information in '+
+  'a form you can use.']},
+
+ {h:'Cost and ending it', l:[
+  '<b>[FEE] per month</b>, paid in advance.',
+  'We will tell you <b>[30] days</b> before any change to the price.',
+  'Either of us can end it with <b>[30] days</b> notice. No lock-in.',
+  'If the bill goes unpaid we may pause the service after telling you first.',
+  'When it ends, you get your information and we delete our copy.']},
+
+ {h:'The legal bit, kept short', p:[
+  'Nothing here takes away rights you have under the Australian Consumer Law. '+
+  'We cannot exclude those and we are not trying to.',
+  'Where the law allows us to limit what we owe you, our responsibility is to '+
+  '<b>fix the problem or refund what you have paid</b> - not to cover losses '+
+  'to your business.',
+  'We are not responsible for things outside our control, such as your '+
+  'internet, a guest\u2019s phone, or an outage at our hosting provider. Nor '+
+  'for the results of wrong prices, wrong GST settings, shared logins or QR '+
+  'codes that were not kept safe.',
+  'These terms are governed by the laws of <b>[YOUR STATE, e.g. New South '+
+  'Wales]</b>.']}
+];
+
+var ACKS_COUNTER = [
+ {k:'menu_checked', t:'Our menu and prices are ours to keep right',
+  d:'Including GST settings. The system shows guests what we enter.'},
+ {k:'manual_fallback', t:'We can take orders ourselves if the system is down',
+  d:'It needs the internet and will not be available every minute of every day.'},
+ {k:'no_business_loss', t:'We understand faults get fixed, not compensated',
+  d:'Support is business hours, best effort. Lost trade or lost time is not covered, and that is what keeps the price low.'},
+ {k:'own_money', t:'We take payment ourselves, at the counter',
+  d:'No money or card details go through the system.'},
+ {k:'qr_security', t:'We will look after our QR codes',
+  d:'Each one is unique to a table. If a card goes missing we will make a new one.'},
+ {k:'end_of_day', t:'We will take a reading at the end of each day',
+  d:'And check it against our own till.'},
+ {k:'authority', t:'I can accept this on behalf of the business',
+  d:''}
+];
+
+/* ---------------------------------------------------------------
+   PAY AT THE TABLE
+   The one thing this version cannot borrow from the counter version:
+   money genuinely passes through here, even though card NUMBERS never
+   do. Stripe processes the payment; we never see, transmit or store a
+   card detail at any point. Say that plainly rather than reuse the
+   counter wording, which would be inaccurate here.
+   --------------------------------------------------------------- */
+var TERMS_PREPAY = [
+ {h:'What this is', p:[
+  'A table ordering and payment system for <b>[YOUR BUSINESS NAME] (ABN '+
+  '[YOUR ABN])</b> ("we") and the restaurant named above ("you").',
+  'Guests scan a code on the table, choose from your menu, and pay on their '+
+  'own phone before the order reaches your kitchen. Apple Pay, Google Pay '+
+  'and card are all supported. The ticket arrives already marked Paid - '+
+  'nothing further to collect.',
+  '<b>We never see, transmit or store a card number.</b> Guests pay through '+
+  'Stripe, a payment processor used by a very large number of Australian '+
+  'businesses. Stripe handles the payment directly and emails the guest '+
+  'their own receipt automatically.']},
+
+ {h:'What you look after', l:[
+  '<b>Your menu.</b> Prices, descriptions, allergens and GST. Guests are '+
+  'charged exactly what you have entered.',
+  '<b>Your tax.</b> We report GST from how you classify each dish. You and '+
+  'your accountant remain responsible for what you lodge.',
+  '<b>Your QR codes.</b> Each is unique to one table. If a card goes missing '+
+  'or is photographed, make a new one for that table.',
+  '<b>Your internet, devices and staff.</b>',
+  'You no longer need to take payment at the table for orders placed this '+
+  'way - that is the point - but keep a way to take payment for anything '+
+  'ordered outside the system.']},
+
+ {h:'How your takings reach you', p:[
+  '[HOW SETTLEMENT WORKS - for example: "Card takings are paid to your '+
+  'nominated bank account weekly, less Stripe\u2019s processing fee of '+
+  'around 1.7% + 30c per transaction." This must be confirmed and filled '+
+  'in before this version is used with any restaurant other than our own '+
+  'test venue.]',
+  'Stripe\u2019s processing fee applies to every payment and is <b>not</b> '+
+  'charged separately to your guest unless you choose to add a surcharge, '+
+  'which has its own rules under Australian law - ask us before switching '+
+  'one on.',
+  'If a guest disputes a charge with their bank (a chargeback), that is '+
+  'between you, the guest and Stripe. We will help where we reasonably can, '+
+  'but the outcome and any reversed funds are decided by Stripe\u2019s own '+
+  'process, not by us.']},
+
+ {h:'If it stops working', p:[
+  '<b>You keep trading.</b> If online payment is ever unavailable, your '+
+  'staff take orders and payment the way they always have - nothing about '+
+  'your kitchen depends on this system.',
+  'The system needs the internet, a working phone in the guest\u2019s hand, '+
+  'and Stripe itself to be available. We do not promise any of those will '+
+  'be up every minute of every day.',
+  'An order only ever reaches your kitchen once Stripe has confirmed the '+
+  'payment succeeded. A guest is never shown a confirmed order that was not '+
+  'actually paid for.']},
+
+ {h:'What we do when something breaks', p:[
+  'We fix it. Support is <b>[SUPPORT HOURS, e.g. Monday to Friday, '+
+  '9am\u20135pm]</b>, and we get to it as quickly as we reasonably can.',
+  '<b>What we do not do is cover your business losses.</b> If payment is '+
+  'unavailable for an evening we will put it right, but we do not pay for '+
+  'lost trade, lost time, or a payment that failed on Stripe\u2019s side.',
+  'This is deliberate, and it is why the system costs what it does. Covering '+
+  'that risk would mean a much higher price for everyone.']},
+
+ {h:'Refunds', p:[
+  'A refund for an order paid this way is issued through Stripe, not '+
+  'automatically by this system. Tell us and we will process it, or we can '+
+  'show you how to do it directly.',
+  'A refund does not undo an order already sent to your kitchen. That '+
+  'remains a conversation between you and your guest, the same as it always '+
+  'has been.']},
+
+ {h:'Your information', p:[
+  '<b>We do not collect anything about your guests</b> beyond what Stripe '+
+  'itself needs to process the payment and send its receipt. No names, no '+
+  'phone numbers, and no card details are ever stored in this system.',
+  '<b>Your restaurant\u2019s information is yours and stays separate.</b> No '+
+  'other restaurant using this system can see any part of it.',
+  'We keep daily backups. If you ever leave, we give you your information in '+
+  'a form you can use.']},
+
+ {h:'Cost and ending it', l:[
+  '<b>[FEE] per month</b>, paid in advance, separate from Stripe\u2019s own '+
+  'processing fee on each payment.',
+  'We will tell you <b>[30] days</b> before any change to the price.',
+  'Either of us can end it with <b>[30] days</b> notice. No lock-in.',
+  'If the bill goes unpaid we may pause the service after telling you first.',
+  'When it ends, you get your information and we delete our copy.']},
+
+ {h:'The legal bit, kept short', p:[
+  'Nothing here takes away rights you have under the Australian Consumer Law. '+
+  'We cannot exclude those and we are not trying to.',
+  'Where the law allows us to limit what we owe you, our responsibility is to '+
+  '<b>fix the problem or refund what you have paid us</b> - not to cover '+
+  'losses to your business, and not to cover a payment dispute that is '+
+  'Stripe\u2019s to resolve.',
+  'We are not responsible for things outside our control, such as your '+
+  'internet, a guest\u2019s phone, or an outage at Stripe or our hosting '+
+  'provider. Nor for the results of wrong prices, wrong GST settings, '+
+  'shared logins, or QR codes that were not kept safe.',
+  'These terms are governed by the laws of <b>[YOUR STATE, e.g. New South '+
+  'Wales]</b>.']}
+];
+
+var ACKS_PREPAY = [
+ {k:'menu_checked', t:'Our menu and prices are ours to keep right',
+  d:'Including GST settings. Guests are charged exactly what we enter.'},
+ {k:'card_via_stripe', t:'We understand guests pay through Stripe, not us',
+  d:'No card number is ever seen, sent or stored by this system.'},
+ {k:'settlement_understood', t:'We understand how our takings reach us',
+  d:'Including Stripe\u2019s processing fee on each payment.'},
+ {k:'manual_fallback', t:'We can take orders and payment ourselves if needed',
+  d:'The system needs the internet, a working phone, and Stripe to all be available.'},
+ {k:'no_business_loss', t:'We understand faults get fixed, not compensated',
+  d:'Support is business hours, best effort. Lost trade or a Stripe-side issue is not covered.'},
+ {k:'qr_security', t:'We will look after our QR codes',
+  d:'Each one is unique to a table. If a card goes missing we will make a new one.'},
+ {k:'refunds_via_stripe', t:'We understand refunds go through Stripe',
+  d:'Not automatically by this system - we process them together.'},
+ {k:'authority', t:'I can accept this on behalf of the business',
+  d:''}
+];
+
+/* Chosen once the venue's payment_mode is known - see boot() below. */
+var TERMS = TERMS_COUNTER;
+var ACKS   = ACKS_COUNTER;
+var TERMS_VERSION = TERMS_VERSION_BASE + '-counter';
+
+function paintTerms(){
+  $('termsBody').innerHTML = TERMS.map(function(s){
+    var body='';
+    if(s.p) body += s.p.map(function(t){ return '<p class="body-text">'+t+'</p>'; }).join('');
+    if(s.l) body += '<ul class="body-text">'+s.l.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ul>';
+    return '<div class="sec"><h2>'+esc(s.h)+'</h2>'+body+'</div>';
+  }).join('');
+
+  $('acks').innerHTML = ACKS.map(function(a,i){
+    return '<label class="ack" data-k="'+esc(a.k)+'">'+
+      '<input type="checkbox" data-i="'+i+'">'+
+      '<span class="ack-t"><b>'+esc(a.t)+'</b><span>'+esc(a.d)+'</span></span></label>';
+  }).join('');
+}
+
+/* the plain text of what was on screen, frozen with the acceptance */
+function termsPlainText(){
+  var out=[];
+  TERMS.forEach(function(s){
+    out.push('## '+s.h);
+    (s.p||[]).forEach(function(t){ out.push(t.replace(/<[^>]+>/g,'')); });
+    (s.l||[]).forEach(function(t){ out.push('- '+t.replace(/<[^>]+>/g,'')); });
+    out.push('');
+  });
+  out.push('## Acknowledgements');
+  ACKS.forEach(function(a){ out.push('- '+a.t+' — '+a.d); });
+  return out.join('\n');
+}
+
+function ticked(){
+  return [].slice.call(document.querySelectorAll('#acks input'))
+    .map(function(el,i){ return el.checked ? ACKS[i].k : null; })
+    .filter(Boolean);
+}
+function refresh(){
+  document.querySelectorAll('#acks .ack').forEach(function(l){
+    l.classList.toggle('on', l.querySelector('input').checked);
+  });
+  var all = ticked().length === ACKS.length;
+  var named = $('pName').value.trim().length > 1;
+  $('accept').disabled = !(all && named);
+}
+
+$('acks').addEventListener('change', refresh);
+$('pName').addEventListener('input', refresh);
+$('printIt').addEventListener('click', function(){ window.print(); });
+$('printAfter').addEventListener('click', function(){ window.print(); });
+
+$('accept').addEventListener('click', function(){
+  var b=this;
+  if(ticked().length !== ACKS.length){ $('msg').textContent='Please confirm every point.'; return; }
+  var name=$('pName').value.trim();
+  if(!name){ $('msg').textContent='Please enter your name.'; return; }
+  b.disabled=true; b.textContent='Recording\u2026'; $('msg').textContent='';
+
+  rpc('rd_accept_terms',{
+    p_token:TOKEN, p_version:TERMS_VERSION,
+    p_person_name:name,
+    p_person_role:$('pRole').value.trim()||null,
+    p_person_email:$('pEmail').value.trim()||null,
+    p_acknowledgements:ticked(),
+    p_terms_text:termsPlainText(),
+    p_user_agent:navigator.userAgent
+  }).then(function(res){
+    if(!res||!res.ok) throw {data:res};
+    var d=new Date(res.accepted_at||Date.now());
+    $('recap').innerHTML=
+      '<div class="r"><span>Restaurant</span><b>'+esc(res.venue||'')+'</b></div>'+
+      '<div class="r"><span>Accepted by</span><b>'+esc(name)+'</b></div>'+
+      '<div class="r"><span>Date</span><b>'+esc(d.toLocaleString())+'</b></div>'+
+      '<div class="r"><span>Terms version</span><b>'+esc(res.version||TERMS_VERSION)+'</b></div>';
+    show('scAccepted');
+  }).catch(function(e){
+    b.disabled=false; b.textContent='Accept and switch on ordering';
+    var m=(e&&e.data&&e.data.message)||'';
+    $('msg').textContent =
+      /unknown_link/.test(m) ? 'This link is no longer valid. Please ask for a new one.'
+      : /name_required/.test(m) ? 'Please enter your name.'
+      : 'That did not save. Please check your connection and try again.';
+  });
+});
+
+/* ---------- boot ---------- */
+(function(){
+  if(!SUPABASE_URL||!SUPABASE_KEY){
+    return stop('Not set up yet','This page has not been given its database details.');
+  }
+  /* Pasting the URL with /rest/v1 on the end is an easy mistake and gives a
+     404 that looks like a connection problem. Trim it back to the origin. */
+  (function(){
+    var u=String(SUPABASE_URL).trim();
+    if(/^[a-z0-9]{16,}$/i.test(u)){ SUPABASE_URL='https://'+u+'.supabase.co'; return; }
+    if(!/^https?:\/\//i.test(u)) u='https://'+u;
+    try{
+      var a=document.createElement('a'); a.href=u;
+      SUPABASE_URL=(a.protocol||'https:')+'//'+a.hostname+(a.port?(':'+a.port):'');
+    }catch(e){ SUPABASE_URL=u.replace(/\/+$/,''); }
+  })();
+  if(!TOKEN){
+    return stop('Link incomplete',
+      'Please use the full link that was sent to you.');
+  }
+  rpc('rd_onboarding_check',{p_token:TOKEN}).then(function(res){
+    if(!res||!res.ok){
+      return stop('Link not recognised',
+        'Please check you have used the full link, or ask for a new one.',
+        'Code tried: ' + TOKEN.slice(0,8) + '\u2026');
+    }
+    VENUE=res.venue;
+    if(VENUE.already_accepted){
+      $('doneWhen').textContent='These terms were accepted for '+VENUE.name+' on '+
+        new Date(VENUE.accepted_at).toLocaleDateString()+
+        '. There is nothing further to do.';
+      return show('scDone2');
+    }
+    /* One link, one flow. The restaurant does not choose which terms to
+       read - that was already decided when the venue was set up (or last
+       changed in Settings). Pick the matching set and never show both. */
+    var isPrepay = VENUE.payment_mode === 'prepay';
+    TERMS = isPrepay ? TERMS_PREPAY : TERMS_COUNTER;
+    ACKS  = isPrepay ? ACKS_PREPAY  : ACKS_COUNTER;
+    TERMS_VERSION = TERMS_VERSION_BASE + (isPrepay ? '-prepay' : '-counter');
+
+    $('vName').textContent=VENUE.name;
+    $('verLbl').textContent=TERMS_VERSION;
+    var modeLbl=document.getElementById('modeLbl');
+    if(modeLbl) modeLbl.textContent = isPrepay ? 'Pay at the table' : 'Pay at the counter';
+    document.title=VENUE.name+' — Ordering Terms';
+    paintTerms(); refresh(); show('scTerms');
+  }).catch(function(e){
+    stop('Could not load','Please check your connection and try again.', why(e));
+  });
+})();
+})();
+</script>
+</body>
+</html>
