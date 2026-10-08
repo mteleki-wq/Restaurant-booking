@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex,nofollow">
+<title>Counter</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — COUNTER / TILL
+     staff-counter.html
+
+     Shows every table with an open bill, lets staff take payment and
+     close the table, and totals the day's takings.
+
+     THIS DOES NOT PROCESS CARDS. Take the card on your existing terminal,
+     then record it here. No card number ever reaches this page, this
+     database, or anything else in this system.
+
+     Connection details are asked for once and kept on this device.
+     Only the anon key is used; a service_role key is refused.
+
+     ACCOUNTING CONNECT (Xero / MYOB)
+     The two client IDs below are NOT secret - an OAuth client_id is
+     designed to be public, visible in the address bar during the
+     connect flow regardless. The matching client SECRETS live only as
+     Edge Function secrets on xero-oauth-callback and myob-oauth-callback,
+     never here, never in any file a browser loads.
+     ================================================================== -->
+
+<script>
+  /* Optional: fill these in to skip the connect screen. */
+  var SUPABASE_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE';
+
+  /* Same client IDs registered with Xero and MYOB, and also set as
+     XERO_CLIENT_ID / MYOB_CLIENT_ID on the two Edge Functions. */
+  var XERO_CLIENT_ID = '1DDAFD5DB31E4A14B57AC52B680811EB';
+  var MYOB_CLIENT_ID = '';
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0b0806; --panel:#151009; --panel-2:#1c150c; --ink:#f6efe2;
+  --muted:#b3a488; --line:rgba(179,164,136,.2); --gold:#f0cf85;
+  --grad:linear-gradient(100deg,#f2d187,#df9f52 55%,#b8783c);
+  --good:#7fd6a3; --bad:#ff7a66; --warn:#ffd479;
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{margin:0;padding:0}
+body{margin:0;padding:0;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--ink);
+  font-family:'Sora',-apple-system,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;font-weight:700}
+.mono{font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+input[type=text],input[type=email],input[type=password]{
+  width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;
+  background:var(--panel-2);padding:0 15px;outline:none}
+input:focus{border-color:var(--gold)}
+label{display:block;font-size:12.5px;font-weight:600;margin:15px 0 7px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;
+  padding:13px 22px;border-radius:100px;background:var(--grad);color:#241703;
+  font-family:'Unbounded',sans-serif;font-weight:700;font-size:13.5px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.quiet{background:none;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.btn.sm{min-height:44px;padding:10px 16px;font-size:12.5px}
+.btn.full{width:100%}
+.msg{margin-top:14px;font-size:13px;color:var(--bad);min-height:18px}
+
+#gate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);
+  border-radius:20px;padding:28px 24px calc(24px + var(--safe-b))}
+.hint{color:var(--muted);font-size:12.5px;margin:4px 0 0}
+
+#app{display:none}
+.top{position:sticky;top:0;z-index:40;background:rgba(11,8,6,.96);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);padding-top:var(--safe-t);
+  -webkit-transform:translateZ(0);transform:translateZ(0)}
+.top-in{display:flex;align-items:center;gap:12px;padding:12px 16px;flex-wrap:wrap}
+.top h1{font-size:15px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--good);flex:0 0 auto}
+.dot.off{background:var(--bad)}
+.spacer{flex:1}
+.tabs{display:flex;gap:8px;padding:0 16px 11px}
+.tab{border:1px solid var(--line);border-radius:100px;padding:10px 18px;min-height:44px;
+  color:var(--muted);font-size:12.5px}
+.tab.on{color:#241703;background:var(--grad);border-color:transparent;font-weight:700}
+
+main{padding:18px 16px calc(40px + var(--safe-b));max-width:1000px;margin:0 auto}
+.pane{display:none}.pane.on{display:block}
+
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.tbl{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:16px;text-align:left;width:100%;display:block;transition:border-color .18s}
+.tbl:active{border-color:var(--gold)}
+.tbl-h{display:flex;align-items:baseline;gap:10px}
+.tbl-n{font-family:'Unbounded',sans-serif;font-weight:900;font-size:20px}
+.tbl-age{margin-left:auto;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted)}
+.tbl-tot{font-family:'Unbounded',sans-serif;font-size:23px;margin-top:12px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tbl-sub{color:var(--muted);font-size:12.5px;margin-top:5px}
+.tbl.long{border-color:rgba(255,212,121,.5)}
+
+.empty{text-align:center;color:var(--muted);padding:56px 20px}
+.empty h3{color:var(--ink);font-size:17px;margin-bottom:8px}
+
+.sum-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.sum-row:last-child{border-bottom:0}
+.sum-row b{font-family:'Unbounded',sans-serif}
+.sum-big{font-family:'Unbounded',sans-serif;font-size:30px;margin:6px 0 14px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- sales trends ---------- */
+.trends-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+.trends-toolbar label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px}
+.trends-toolbar input[type=date]{background:var(--panel-2);border:1px solid var(--line);
+  border-radius:10px;color:var(--ink);padding:9px 11px;min-height:42px;font-size:13.5px}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.presets button{background:none;border:1px solid var(--line);color:var(--muted);
+  border-radius:100px;padding:6px 13px;font-size:12px;min-height:36px}
+.presets button.on{color:var(--ink);border-color:rgba(240,207,133,.4)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.stat-box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat-box .mono{font-size:10.5px}
+.stat-box .n{font-family:'Unbounded',sans-serif;font-size:21px;margin-top:5px}
+.dtable{width:100%;border-collapse:collapse;font-size:13px}
+.dtable th{text-align:left;color:var(--muted);font-weight:600;font-size:11px;
+  text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line)}
+.dtable td{padding:9px 10px;border-bottom:1px solid var(--line)}
+.dtable tr:last-child td{border-bottom:0}
+.dtable td.num,.dtable th.num{text-align:right;font-family:'Space Mono',monospace}
+.dtable tr.best td{color:var(--ink)}
+.pill-svc{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;border:1px solid var(--line);border-radius:100px;padding:2px 8px;color:var(--muted)}
+.pill-svc.lunch{color:#e0b478;border-color:rgba(224,180,120,.4)}
+.pill-svc.dinner{color:#a3b8e0;border-color:rgba(163,184,224,.4)}
+
+.modal{position:fixed;inset:0;z-index:90;background:rgba(4,3,2,.78);display:none;
+  align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.sheet{background:var(--panel);width:100%;max-width:560px;border-radius:20px 20px 0 0;
+  border-top:1px solid var(--line);max-height:94dvh;display:flex;flex-direction:column}
+@media (min-width:640px){.modal{align-items:center}.sheet{border-radius:20px}}
+.sh-h{display:flex;align-items:center;gap:12px;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.sh-h h3{font-size:17px;flex:1}
+.sh-x{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);color:var(--muted);
+  font-size:19px;display:grid;place-items:center;flex:0 0 auto}
+.sh-b{overflow-y:auto;padding:6px 18px 14px;flex:1;-webkit-overflow-scrolling:touch}
+.sh-f{padding:14px 18px calc(16px + var(--safe-b));border-top:1px solid var(--line);background:var(--panel-2)}
+
+.line{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid rgba(179,164,136,.1)}
+.line:last-child{border-bottom:0}
+.line-q{font-family:'Unbounded',sans-serif;color:var(--gold);min-width:26px}
+.line-b{flex:1;min-width:0}
+.line-n{font-weight:600;font-size:14.5px}
+.line-m{color:var(--muted);font-size:12.5px;margin-top:3px}
+.line-c{font-family:'Unbounded',sans-serif;font-size:13.5px;white-space:nowrap}
+.ord-h{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin:14px 0 2px}
+.total{display:flex;justify-content:space-between;align-items:baseline;
+  border-top:1px solid var(--line);margin-top:14px;padding-top:14px}
+.total b{font-family:'Unbounded',sans-serif;font-size:26px}
+
+.pays{display:flex;gap:9px;margin-bottom:12px}
+.pays button{flex:1;min-height:52px;border:1px solid var(--line);border-radius:13px;
+  font-weight:700;font-size:14px}
+.pays button.on{background:var(--gold);color:#241703;border-color:transparent}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));transform:translate(-50%,16px);
+  background:var(--panel-2);border:1px solid var(--gold);border-radius:100px;padding:11px 20px;
+  font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:120}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+/* Safari applies its own colour to form fields and ignores an inherited
+   one, which leaves typed text near-black on a dark background. Setting
+   both colour and -webkit-text-fill-color is what actually holds, and the
+   autofill rule stops Safari repainting the field white. */
+input,select,textarea{
+  color:var(--ink);
+  -webkit-text-fill-color:var(--ink);
+  caret-color:var(--gold);
+}
+input::placeholder,textarea::placeholder{
+  color:var(--muted); -webkit-text-fill-color:var(--muted); opacity:1;
+}
+input:-webkit-autofill,input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 1000px var(--panel-2) inset;
+  caret-color:var(--gold);
+}
+/* ---- take off the bill / refund ---- */
+.line-adj{display:block;color:var(--warn);font-size:12px;margin-top:3px}
+.line.gone .line-n,.line.gone .line-c{text-decoration:line-through;opacity:.55}
+.adj-btn{display:block;width:max-content;margin-top:6px;border:1px solid var(--line);border-radius:100px;padding:6px 12px;
+  min-height:34px;font-size:12px;font-weight:600;color:var(--muted);background:none}
+#adj{z-index:95}
+.opt-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.opt-row button{border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-height:46px;
+  font-weight:600;font-size:13px;color:var(--ink);background:none}
+.opt-row button.on{background:var(--gold);color:#241703;border-color:transparent}
+.adj-lbl{display:block;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-top:16px}
+.adj-in{width:100%;margin-top:8px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+  background:var(--bg);font-size:15px}
+/* ---- guest receipt (printed from the bill) ---- */
+#rcpt{display:none}
+@media print{
+  @page{margin:6mm}
+  body.printing{background:#fff!important;padding:0!important}
+  body.printing > *:not(#rcpt){display:none!important}
+  body.printing #rcpt{display:block!important;position:static!important}
+  body.printing{height:auto!important;overflow:visible!important}
+  #rcpt{font:12px/1.35 -apple-system,"Helvetica Neue",Arial,sans-serif;color:#000;background:#fff;
+        max-width:72mm;margin:0 auto}
+  #rcpt h1{font-size:16px;margin:0 0 2px;text-align:center}
+  #rcpt .c{text-align:center}
+  #rcpt .r{display:flex;justify-content:space-between;gap:8px}
+  #rcpt .r span:last-child{white-space:nowrap}
+  #rcpt .m{padding-left:14px;font-size:11px}
+  #rcpt hr{border:0;border-top:1px dashed #000;margin:6px 0}
+  #rcpt .big{font-size:14px;font-weight:700}
+  #rcpt .s{font-size:10.5px}
+}
+</style>
+</head>
+<body>
+
+<section id="gate">
+  <div class="card">
+    <span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>
+    <h1 style="margin-top:8px;font-size:21px" id="gTitle">Counter</h1>
+    <p class="hint" id="gSub">Staff sign-in.</p>
+
+    <div id="gConn" style="display:none">
+      <label for="cu">Project URL</label>
+      <input id="cu" type="text" placeholder="https://xxxx.supabase.co" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="url">
+      <label for="ck">anon / public key</label>
+      <input id="ck" type="text" placeholder="eyJhbGciOi..." autocapitalize="off" autocorrect="off" spellcheck="false">
+      <p class="hint">Use the anon key. Never the service_role key.</p>
+      <button class="btn full" id="cgo" style="margin-top:18px">Connect</button>
+    </div>
+
+    <div id="gLogin" style="display:none">
+      <label for="em">Email</label>
+      <input id="em" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false">
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autocomplete="current-password">
+      <button class="btn full" id="lgo" style="margin-top:18px">Sign in</button>
+      <button id="reconf" style="color:var(--muted);font-size:12px;text-decoration:underline;
+        text-underline-offset:3px;margin-top:14px;min-height:44px">Change connection settings</button>
+    </div>
+    <p class="msg" id="gMsg" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="app">
+  <div class="top">
+    <div class="top-in">
+      <span class="dot" id="live"></span>
+      <h1 id="vName">Counter</h1>
+      <span class="mono" style="color:var(--muted)" id="clock"></span>
+      <span class="spacer"></span>
+      <button class="btn quiet sm" id="switchVenue" style="display:none">Switch</button>
+      <button class="btn quiet sm" id="signout">Sign out</button>
+    </div>
+    <div class="tabs">
+      <button class="tab on" data-p="open">Open tables</button>
+      <button class="tab" data-p="today">This shift</button>
+      <button class="tab" data-p="hist">Readings</button>
+      <button class="tab" data-p="trends">Sales trends</button>
+    </div>
+  </div>
+  <main>
+    <div class="pane on" id="pOpen"><div class="empty">Loading…</div></div>
+    <div class="pane" id="pToday"></div>
+    <div class="pane" id="pHist"></div>
+    <div class="pane" id="pTrends"></div>
+  </main>
+</section>
+
+<div class="modal" id="modal"><div class="sheet">
+  <div class="sh-h"><h3 id="mTitle">Table</h3><button class="sh-x" id="mX" aria-label="Close">&times;</button></div>
+  <div class="sh-b" id="mBody"></div>
+  <div class="sh-f" id="mFoot"></div>
+</div></div>
+
+<div class="modal" id="adj"><div class="sheet">
+  <div class="sh-h"><h3 id="aTitle">Adjust</h3><button class="sh-x" id="aX" aria-label="Close">&times;</button></div>
+  <div class="sh-b" id="aBody"></div>
+  <div class="sh-f" id="aFoot"></div>
+</div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var SESSION=null, VENUE=null, ROLE='staff', OPEN=[], PANE='open', pollT=null, tickT=null;
+var CURRENT=null, METHOD='card';
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function money(c){c=c||0;return (c<0?'\u2212':'')+'$'+(Math.abs(c)/100).toFixed(2);}
+var toastT;
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on');},2800);}
+
+function normaliseUrl(raw){
+  var u=String(raw||'').trim(); if(!u) return '';
+  if(/^[a-z0-9]{16,}$/i.test(u)) return 'https://'+u+'.supabase.co';
+  if(!/^https?:\/\//i.test(u)) u='https://'+u;
+  var host,path,proto,port;
+  try{var a=document.createElement('a');a.href=u;host=a.hostname;path=a.pathname||'';
+    proto=a.protocol||'https:';port=a.port||'';}catch(e){return '';}
+  var m=path.match(/\/project\/([a-z0-9]+)/i);
+  if(/supabase\.(com|io)$/i.test(host)&&m) return 'https://'+m[1]+'.supabase.co';
+  return proto+'//'+host+(port?(':'+port):'');
+}
+function keyRole(k){
+  try{var p=k.split('.')[1];if(!p)return null;p=p.replace(/-/g,'+').replace(/_/g,'/');
+    while(p.length%4)p+='=';return (JSON.parse(atob(p))||{}).role||null;}catch(e){return null;}
+}
+function readCfg(){try{return JSON.parse(localStorage.getItem('rd_till_config')||'null');}catch(e){return null;}}
+function readSess(){try{return JSON.parse(localStorage.getItem('rd_till_session')||'null');}catch(e){return null;}}
+function saveSess(s){try{localStorage.setItem('rd_till_session',JSON.stringify(s));}catch(e){}}
+
+function api(path,opts){
+  opts=opts||{};var h=opts.headers||{};
+  h.apikey=SUPABASE_KEY;
+  h.Authorization='Bearer '+(SESSION?SESSION.access_token:SUPABASE_KEY);
+  h['Content-Type']='application/json';opts.headers=h;
+  return fetch(SUPABASE_URL.replace(/\/+$/,'')+path,opts).then(function(r){
+    return r.text().then(function(t){
+      var d=null;try{d=t?JSON.parse(t):null;}catch(e){}
+      if(!r.ok) throw {status:r.status,data:d,raw:t};
+      return d;});});
+}
+function apiErr(e){
+  if(e&&e.status===403) return 'You do not have permission for that.';
+  if(e&&e.status===401) return 'Your session expired. Please sign in again.';
+  var m=e&&e.data&&(e.data.message||e.data.hint)||'';
+  if(/not_staff/.test(m)) return 'That account is not staff at this restaurant.';
+  if(/table_already_open/.test(m)) return 'That table already has a bill running.';
+  return m||'That did not work. Please try again.';
+}
+
+/* ---------- gate ---------- */
+function showConn(msg){
+  $('gConn').style.display='';$('gLogin').style.display='none';
+  $('gTitle').textContent='Connect this device';
+  $('gSub').textContent='One-time setup. Settings \u2192 API in Supabase.';
+  var c=readCfg();if(c){$('cu').value=c.url||'';$('ck').value=c.key||'';}
+  $('gMsg').textContent=msg||'';
+}
+function showLogin(msg){
+  $('gConn').style.display='none';$('gLogin').style.display='';
+  $('gTitle').textContent='Counter';$('gSub').textContent='Staff sign-in.';
+  $('gMsg').textContent=msg||'';
+}
+$('cgo').addEventListener('click',function(){
+  var u=normaliseUrl($('cu').value),k=$('ck').value.trim();
+  if(!u||!k){$('gMsg').textContent='Fill in both fields.';return;}
+  if($('cu').value.trim()!==u) $('cu').value=u;
+  if(keyRole(k)==='service_role'){
+    $('gMsg').textContent='That is the service_role key. Use the anon / public key.';return;}
+  $('cgo').disabled=true;$('gMsg').textContent='Checking\u2026';
+  fetch(u+'/auth/v1/settings',{headers:{apikey:k}})
+    .then(function(r){return r.text().then(function(t){return {status:r.status,body:t};});})
+    .then(function(res){
+      if(/invalid path/i.test(res.body)||res.status===404) throw new Error('path');
+      if(res.status===401||res.status===403) throw new Error('key');
+      try{localStorage.setItem('rd_till_config',JSON.stringify({url:u,key:k}));}catch(e){}
+      SUPABASE_URL=u;SUPABASE_KEY=k;showLogin('');
+    })
+    .catch(function(e){
+      $('gMsg').textContent = e.message==='path'
+        ? 'That reached a server but not your project API. Use just https://<your-ref>.supabase.co'
+        : e.message==='key' ? 'The project rejected that key. Copy the anon key again, in full.'
+        : 'Could not reach that project. Check the URL and your connection.';
+    }).then(function(){$('cgo').disabled=false;});
+});
+$('reconf').addEventListener('click',function(){showConn('');});
+
+$('lgo').addEventListener('click',function(){
+  var e=$('em').value.trim(),p=$('pw').value;
+  if(!e||!p){$('gMsg').textContent='Enter your email and password.';return;}
+  $('lgo').disabled=true;$('gMsg').textContent='';
+  fetch(SUPABASE_URL.replace(/\/+$/,'')+'/auth/v1/token?grant_type=password',{
+    method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({email:e,password:p})
+  }).then(function(r){return r.text().then(function(t){
+      var d=null;try{d=t?JSON.parse(t):null;}catch(x){}
+      if(!r.ok) throw {status:r.status,data:d};return d;});
+  }).then(function(d){
+    SESSION={access_token:d.access_token,refresh_token:d.refresh_token,
+      expires_at:Date.now()+((d.expires_in||3600)*1000),user:d.user||null};
+    saveSess(SESSION);$('pw').value='';return start();
+  }).catch(function(err){
+    if(err&&err.kind==='nostaff'){
+      $('gMsg').textContent='That account is not linked to a restaurant. A manager must add you to the staff list.';
+    } else if(err&&err.status===400){
+      $('gMsg').textContent='That email and password did not match.';
+    } else if(!$('gMsg').textContent){
+      $('gMsg').textContent='Could not sign in. Check the connection and try again.';
+    }
+  }).then(function(){$('lgo').disabled=false;});
+});
+$('pw').addEventListener('keydown',function(e){if(e.key==='Enter')$('lgo').click();});
+
+$('switchVenue').addEventListener('click',function(){ forgetVenue(); location.reload(); });
+document.getElementById('gate').addEventListener('click',function(e){
+  var b=e.target.closest('[data-venue]'); if(!b) return;
+  rememberVenue(b.dataset.venue); location.reload();
+});
+$('signout').addEventListener('click',function(){
+  if(!confirm('Sign out of the counter?'))return;
+  clearInterval(pollT);clearInterval(tickT);
+  try{localStorage.removeItem('rd_till_session');}catch(e){}
+  SESSION=null;VENUE=null;
+  $('app').style.display='none';$('gate').style.display='flex';showLogin('');
+});
+
+
+/* ---------- which restaurant? ----------
+   One venue and it is chosen silently. More than one - a platform admin,
+   or someone who works at two of them - and they are asked, with the
+   answer remembered on this device. */
+var VENUES = [];
+function myVenues(){
+  return api('/rest/v1/rpc/rd_my_venues',{method:'POST',body:'{}'});
+}
+function savedVenueId(){
+  try { return localStorage.getItem('rd_venue_till'); } catch(e){ return null; }
+}
+function rememberVenue(id){
+  try { localStorage.setItem('rd_venue_till', id); } catch(e){}
+}
+function forgetVenue(){
+  try { localStorage.removeItem('rd_venue_till'); } catch(e){}
+}
+function paintVenuePicker(list){
+  VENUES = list;
+  var h='<span class="mono" style="color:var(--muted)">Restaurant Deluxe</span>'+
+    '<h1 style="margin-top:8px;font-size:21px">Choose a restaurant</h1>'+
+    '<p class="hint">You have access to more than one.</p>'+
+    '<div style="margin-top:16px">'+
+    list.map(function(v){
+      return '<button class="btn quiet full" data-venue="'+esc(v.id)+'" '+
+        'style="margin-top:8px;justify-content:space-between">'+
+        '<span>'+esc(v.name||v.slug)+'</span>'+
+        '<span style="color:var(--muted);font-size:11px;font-family:\'Space Mono\',monospace">'+
+          esc(v.role||'')+'</span></button>';
+    }).join('')+'</div>';
+  return h;
+}
+
+/* ---------- load ---------- */
+function start(){
+  return myVenues()
+    .then(function(list){
+      if(!list||!list.length) throw {kind:'nostaff'};
+      var want=savedVenueId();
+      var pick=list.filter(function(v){return v.id===want;})[0];
+      if(list.length===1) pick=list[0];
+      if(!pick){
+        document.querySelector('#gate .card').innerHTML=paintVenuePicker(list);
+        $('gate').style.display='flex'; $('app').style.display='none';
+        throw {kind:'pick'};
+      }
+      rememberVenue(pick.id);
+      VENUE={id:pick.id,name:pick.name,slug:pick.slug};ROLE=pick.role||'staff';
+      $('vName').textContent=(VENUE.name||'Counter');
+      if(list.length>1||ROLE==='platform'){
+        var sw=document.getElementById('switchVenue');
+        if(sw){ sw.style.display=''; }
+      }
+      $('gate').style.display='none';$('app').style.display='block';
+      clearInterval(pollT);pollT=setInterval(refresh,8000);
+      clearInterval(tickT);tickT=setInterval(function(){ages();clock();},1000);
+      clock();
+      handleAccountingReturn();
+      return refresh();
+    })
+    .catch(function(e){
+      if(e&&e.kind==='pick'){ throw e; }
+      if(e&&e.kind==='nostaff'){
+        $('gMsg').textContent='That account is not linked to a restaurant. A manager must add you to the staff list.';
+      }
+      try{localStorage.removeItem('rd_till_session');}catch(x){}
+      SESSION=null;$('gate').style.display='flex';$('app').style.display='none';
+      throw e;
+    });
+}
+
+function refresh(){
+  if(!VENUE) return Promise.resolve();
+  var q='/rest/v1/rd_table_sessions'+
+    '?select=id,opened_at,status,rd_tables(label),'+
+      'rd_orders(id,order_number,status,total_cents,created_at,paid_at,'+
+        'rd_order_items(id,name_snapshot,qty,line_cents,orig_line_cents,adj_cents,sort,gst_free,'+
+          'rd_order_item_modifiers(name_snapshot,sort)))'+
+    '&venue_id=eq.'+encodeURIComponent(VENUE.id)+
+    '&status=eq.open&order=opened_at';
+  return api(q).then(function(rows){
+    $('live').classList.remove('off');
+    OPEN=rows||[];
+    if(PANE==='open') paintOpen();
+    if(CURRENT){
+      var still=OPEN.filter(function(s){return s.id===CURRENT.id;})[0];
+      if(still){ CURRENT=still; paintBill(); }
+    }
+  }).catch(function(e){
+    $('live').classList.add('off');
+    if(e&&(e.status===401||e.status===403)) toast('Session expired — sign in again');
+  });
+}
+
+/* What is still OWED. Orders already paid on a guest's phone (paid_at)
+   and orders still waiting on Stripe are not charged again at the till -
+   the database now refuses to close a bill for any other amount. */
+function owing(o){
+  return o.status!=='cancelled' && o.status!=='awaiting_payment' && !o.paid_at;
+}
+function billTotal(s){
+  return (s.rd_orders||[]).filter(owing)
+    .reduce(function(n,o){return n+(o.total_cents||0);},0);
+}
+function itemCount(s){
+  return (s.rd_orders||[]).filter(function(o){return o.status!=='cancelled';})
+    .reduce(function(n,o){return n+(o.rd_order_items||[]).reduce(function(m,i){return m+i.qty;},0);},0);
+}
+function mins(iso){return Math.floor((Date.now()-new Date(iso).getTime())/60000);}
+function ageText(iso){
+  var m=mins(iso);
+  if(m<60) return m+'m';
+  return Math.floor(m/60)+'h '+(m%60)+'m';
+}
+function clock(){var d=new Date();
+  $('clock').textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
+
+/* ---------- open tables ---------- */
+function paintOpen(){
+  if(!OPEN.length){
+    $('pOpen').innerHTML='<div class="empty"><h3>No open tables</h3>'+
+      '<p>A table appears here as soon as it sends its first order.</p></div>';
+    return;
+  }
+  $('pOpen').innerHTML='<div class="grid">'+OPEN.map(function(s){
+    var long=mins(s.opened_at)>=90;
+    return '<button class="tbl'+(long?' long':'')+'" data-s="'+s.id+'">'+
+      '<span class="tbl-h"><span class="tbl-n">Table '+esc((s.rd_tables||{}).label||'?')+'</span>'+
+      '<span class="tbl-age">'+ageText(s.opened_at)+'</span></span>'+
+      '<span class="tbl-tot" style="display:block">'+money(billTotal(s))+'</span>'+
+      '<span class="tbl-sub" style="display:block">'+itemCount(s)+' item'+
+        (itemCount(s)===1?'':'s')+' \u00b7 '+
+        (s.rd_orders||[]).length+' order'+((s.rd_orders||[]).length===1?'':'s')+'</span>'+
+      '</button>';
+  }).join('')+'</div>';
+}
+function ages(){
+  if(PANE!=='open')return;
+  document.querySelectorAll('.tbl').forEach(function(el){
+    var s=OPEN.filter(function(x){return x.id===el.dataset.s;})[0];
+    if(!s)return;
+    var a=el.querySelector('.tbl-age');if(a)a.textContent=ageText(s.opened_at);
+    el.classList.toggle('long',mins(s.opened_at)>=90);
+  });
+}
+
+$('pOpen').addEventListener('click',function(e){
+  var b=e.target.closest('[data-s]');if(!b)return;
+  CURRENT=OPEN.filter(function(s){return s.id===b.dataset.s;})[0];
+  if(!CURRENT)return;
+  METHOD='card';
+  openBill();
+});
+
+/* ---------- guest receipt ----------
+   Printed with the device's own print dialog (AirPrint on iPad, any
+   printer on a computer), sized for an 80mm receipt roll but readable on
+   A4. Built only from what is already saved in the database: the line
+   prices are the server's, never recalculated here. GST is worked out
+   with the same formula as the daily report (rd_report). */
+var RCPT_VENUE=null;
+function receiptVenue(){
+  if(RCPT_VENUE && RCPT_VENUE.id===VENUE.id) return Promise.resolve(RCPT_VENUE);
+  return api('/rest/v1/rd_venues?id=eq.'+encodeURIComponent(VENUE.id)+
+    '&select=id,name,abn,gst_registered,gst_rate_pct,prices_include_gst,timezone')
+    .then(function(r){ RCPT_VENUE=(r&&r[0])||{id:VENUE.id,name:VENUE.name}; return RCPT_VENUE; })
+    .catch(function(){ return {id:VENUE.id,name:VENUE.name}; });   /* still prints, just without GST lines */
+}
+/* Build the docket for a table and mark the page so that ANY print -
+   our button, Cmd/Ctrl+P, or Safari's Share > Print - prints the docket
+   and nothing else. Synchronous on purpose: iPad Safari ignores
+   window.print() unless it runs straight from the tap, which is why the
+   old version (print after a network call) printed the whole screen. */
+function buildReceipt(s, paid){
+  var v=(RCPT_VENUE && RCPT_VENUE.id===VENUE.id) ? RCPT_VENUE : {id:VENUE.id,name:VENUE.name};
+  /* first time only: fetch the ABN / GST settings, then redraw the docket with them */
+  if(v!==RCPT_VENUE) receiptVenue().then(function(){ if(RCPT_FOR===s) buildReceipt(s, paid); });
+  RCPT_FOR=s;
+  (function(){
+    var tz=v.timezone||'Australia/Sydney', now;
+    try{ now=new Date().toLocaleString('en-AU',{timeZone:tz,day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+    catch(e){ now=new Date().toLocaleString('en-AU'); }
+    var orders=(s.rd_orders||[]).filter(function(o){return o.status!=='cancelled'&&o.status!=='awaiting_payment';})
+      .sort(function(a,b){return (a.order_number||0)-(b.order_number||0);});
+    var lines='', all=0, taxable=0, anyFree=false, prepaid=0;
+    orders.forEach(function(o){
+      if(o.paid_at) prepaid+=(o.total_cents||0);
+      (o.rd_order_items||[]).slice().sort(function(a,b){return (a.sort||0)-(b.sort||0);}).forEach(function(i){
+        var mods=(i.rd_order_item_modifiers||[]).slice().sort(function(a,b){return (a.sort||0)-(b.sort||0);})
+          .map(function(m){return m.name_snapshot;}).join(', ');
+        all+=(i.line_cents||0);
+        if(i.gst_free) anyFree=true; else taxable+=(i.line_cents||0);
+        lines+='<div class="r"><span>'+i.qty+' \u00d7 '+esc(i.name_snapshot)+(i.gst_free?' *':'')+'</span><span>'+money(i.line_cents)+'</span></div>'+
+               (mods?'<div class="m">'+esc(mods)+'</div>':'')+
+               (i.adj_cents?'<div class="m">'+money(i.adj_cents)+' taken off (was '+money(i.orig_line_cents||(i.line_cents+i.adj_cents))+')</div>':'');
+      });
+    });
+    /* totals come from the orders themselves (authoritative), lines are detail */
+    var total=orders.reduce(function(n,o){return n+(o.total_cents||0);},0);
+    var due=total-prepaid;
+    var reg=!!v.gst_registered, rate=Number(v.gst_rate_pct)||0, incl=v.prices_include_gst!==false;
+    var gst=(reg&&rate&&incl)?Math.round(taxable*rate/(100+rate)):0;
+    var isInvoice=reg&&!!v.abn;
+    var h='<h1>'+esc(v.name||VENUE.name||'')+'</h1>'+
+      (v.abn?'<div class="c">ABN '+esc(v.abn)+'</div>':'')+
+      '<div class="c big" style="margin-top:4px">'+(paid?(isInvoice?'Tax invoice':'Receipt'):'Bill')+'</div>'+
+      '<div class="c">Table '+esc((s.rd_tables||{}).label||'?')+' \u00b7 '+esc(now)+'</div><hr>'+
+      lines+'<hr>'+
+      '<div class="r big"><span>Total</span><span>'+money(total)+'</span></div>'+
+      (gst?'<div class="r"><span>Includes GST</span><span>'+money(gst)+'</span></div>':'')+
+      (anyFree&&gst?'<div class="s">* GST-free item</div>':'')+
+      (prepaid?'<div class="r"><span>Paid on phone</span><span>\u2212'+money(prepaid)+'</span></div>':'')+
+      (paid
+        ? '<div class="r big"><span>Paid by '+esc(paid.method)+'</span><span>'+money(paid.amount)+'</span></div>'
+        : (prepaid?'<div class="r big"><span>Amount due</span><span>'+money(due)+'</span></div>':''))+
+      '<hr><div class="c">Thank you!</div>';
+    var box=document.getElementById('rcpt');
+    if(!box){ box=document.createElement('div'); box.id='rcpt'; document.body.appendChild(box); }
+    box.innerHTML=h;
+    document.body.classList.add('printing');   /* print-only styles: nothing changes on screen */
+  })();
+}
+var RCPT_FOR=null;
+function clearReceipt(){ RCPT_FOR=null; document.body.classList.remove('printing'); }
+function printReceipt(s, paid){
+  buildReceipt(s, paid);
+  window.print();          /* called directly in the tap */
+}
+
+/* ---------- take a dish off the bill / refund a dish ----------
+   Managers only - the database refuses anyone else (rd_adjust_item,
+   rd_refund_item). Every change needs a reason and is logged with who and
+   when; the original price of the dish is kept. Before paying, the dish
+   comes off the bill. After paying, the refund is recorded as money going
+   out in this shift - give the money back on the terminal or from the
+   till FIRST, then record it here. */
+var ADJ=null, REFUND_SID=null;
+var ADJ_REASONS=['Not served','Unhappy with meal','Wrong dish','Long wait','Other'];
+function findItem(id){
+  var hit=null;
+  [CURRENT, REFUND_VIEW].forEach(function(s){
+    (s&&s.rd_orders||[]).forEach(function(o){
+      (o.rd_order_items||[]).forEach(function(i){ if(i.id===id) hit={item:i, order:o, session:s}; });
+    });
+  });
+  return hit;
+}
+function openAdj(kind, itemId){
+  var f=findItem(itemId); if(!f) return;
+  var refunded=(kind==='refund'&&REFUNDED[itemId])||0;
+  var max=f.item.line_cents-refunded;
+  if(max<=0){ toast('That dish has already been refunded in full'); return; }
+  ADJ={kind:kind, item:f.item, order:f.order, label:((f.session.rd_tables||{}).label||'?'),
+       max:max, amount:max, reason:'', method:f.order.paid_at?'online':'card'};
+  $('aTitle').textContent=(kind==='refund'?'Refund':'Take off the bill')+' \u00b7 Table '+ADJ.label;
+  paintAdj();
+  $('adj').classList.add('on');
+}
+function closeAdj(){ $('adj').classList.remove('on'); ADJ=null; }
+function paintAdj(){
+  var a=ADJ; if(!a) return;
+  var half=Math.round(a.max/2);
+  var isWhole=a.amount===a.max, isHalf=a.amount===half&&!isWhole;
+  var h='<div class="line" style="border:0"><span class="line-q">'+a.item.qty+'\u00d7</span>'+
+        '<span class="line-b"><span class="line-n">'+esc(a.item.name_snapshot)+'</span></span>'+
+        '<span class="line-c">'+money(a.item.line_cents)+'</span></div>'+
+        (a.kind==='refund'&&a.max<a.item.line_cents?'<p class="hint">'+money(a.item.line_cents-a.max)+' already refunded on this dish.</p>':'')+
+        '<span class="adj-lbl">How much</span><div class="opt-row" data-grp="amt">'+
+          '<button data-amt="'+a.max+'"'+(isWhole?' class="on"':'')+'>Whole dish \u00b7 '+money(a.max)+'</button>'+
+          (a.max>=200?'<button data-amt="'+half+'"'+(isHalf?' class="on"':'')+'>Half \u00b7 '+money(half)+'</button>':'')+
+          '<button data-amt="other"'+(!isWhole&&!isHalf?' class="on"':'')+'>Other amount</button>'+
+        '</div>'+
+        (!isWhole&&!isHalf?'<input class="adj-in" id="aAmt" inputmode="decimal" placeholder="e.g. 12.50" value="'+
+            (a.amount?(a.amount/100).toFixed(2):'')+'">':'')+
+        '<span class="adj-lbl">Reason</span><div class="opt-row" data-grp="why">'+
+          ADJ_REASONS.map(function(r){ return '<button data-why="'+esc(r)+'"'+(a.reason===r?' class="on"':'')+'>'+esc(r)+'</button>'; }).join('')+
+        '</div>'+
+        '<input class="adj-in" id="aNote" maxlength="200" placeholder="'+(a.reason==='Other'?'Say what happened (required)':'Note (optional)')+'" value="'+esc(a.note||'')+'">';
+  if(a.kind==='refund'){
+    h+='<span class="adj-lbl">Money given back by</span><div class="opt-row" data-grp="how">'+
+       [['card','Card'],['cash','Cash'],['online','Phone (Stripe)'],['other','Other']].map(function(m){
+         return '<button data-how="'+m[0]+'"'+(a.method===m[0]?' class="on"':'')+'>'+m[1]+'</button>'; }).join('')+
+       '</div>'+
+       '<p class="hint" style="margin-top:10px">'+(a.method==='online'
+         ? 'Refund the guest in Stripe first (Payments \u2192 Refund), then record it here.'
+         : 'Give the money back on your card terminal or from the till first, then record it here. It shows as a refund in this shift.')+'</p>';
+  } else {
+    h+='<p class="hint" style="margin-top:12px">The table pays less. The original price is kept on record, and this shows in the shift\u2019s adjustments list.</p>';
+  }
+  $('aBody').innerHTML=h;
+  $('aFoot').innerHTML='<button class="btn full" id="aGo">'+
+    (a.kind==='refund'?'Record refund \u00b7 ':'Take off \u00b7 ')+money(a.amount||0)+'</button>';
+}
+$('aX').addEventListener('click',closeAdj);
+$('adj').addEventListener('click',function(e){ if(e.target===$('adj')) closeAdj(); });
+$('aBody').addEventListener('input',function(e){
+  if(!ADJ) return;
+  if(e.target.id==='aNote'){ ADJ.note=e.target.value; return; }
+  if(e.target.id==='aAmt'){
+    var v=Math.round(parseFloat(String(e.target.value).replace(/[^0-9.]/g,''))*100);
+    ADJ.amount=isFinite(v)?v:0;
+    $('aGo').textContent=(ADJ.kind==='refund'?'Record refund \u00b7 ':'Take off \u00b7 ')+money(ADJ.amount);
+  }
+});
+$('aBody').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b||!ADJ) return;
+  var n=$('aNote'); if(n) ADJ.note=n.value;
+  if(b.dataset.amt){ ADJ.amount=b.dataset.amt==='other'?0:parseInt(b.dataset.amt,10); paintAdj();
+    if(b.dataset.amt==='other'&&$('aAmt')) $('aAmt').focus(); return; }
+  if(b.dataset.why){ ADJ.reason=b.dataset.why; paintAdj(); return; }
+  if(b.dataset.how){ ADJ.method=b.dataset.how; paintAdj(); return; }
+});
+$('aFoot').addEventListener('click',function(e){
+  var b=e.target.closest('#aGo'); if(!b||!ADJ) return;
+  var a=ADJ, n=$('aNote'); a.note=n?n.value.trim():'';
+  if(!a.amount||a.amount<1||a.amount>a.max){ toast('Choose an amount up to '+money(a.max)); return; }
+  if(!a.reason){ toast('Choose a reason'); return; }
+  if(a.reason==='Other'&&!a.note){ toast('Say what happened'); if(n) n.focus(); return; }
+  if(!confirm((a.kind==='refund'?'Record a refund of ':'Take ')+money(a.amount)+
+      (a.kind==='refund'?' by '+a.method:' off the bill')+' for '+a.item.name_snapshot+
+      ' (Table '+a.label+')?\n\nReason: '+a.reason+(a.note?' \u2014 '+a.note:''))) return;
+  b.disabled=true; b.textContent='Saving\u2026';
+  var call=a.kind==='refund'
+    ? api('/rest/v1/rpc/rd_refund_item',{method:'POST',body:JSON.stringify({p_item_id:a.item.id,
+        p_amount_cents:a.amount,p_method:a.method,p_reason:a.reason,p_note:a.note||null})})
+    : api('/rest/v1/rpc/rd_adjust_item',{method:'POST',body:JSON.stringify({p_item_id:a.item.id,
+        p_amount_cents:a.amount,p_reason:a.reason,p_note:a.note||null})});
+  call.then(function(res){
+    if(!res||!res.ok) throw {data:res};
+    closeAdj();
+    toast(a.kind==='refund'?'Refund of '+money(a.amount)+' recorded':money(a.amount)+' taken off Table '+a.label+
+      (res.removed_from_kitchen?' \u00b7 removed from the kitchen screen':''));
+    if(REFUND_SID) return openRefundTable(REFUND_SID);
+    return refresh();
+  }).catch(function(err){
+    b.disabled=false; b.textContent=(a.kind==='refund'?'Record refund \u00b7 ':'Take off \u00b7 ')+money(a.amount);
+    var m=err&&err.data&&err.data.message||'';
+    toast(/not_manager/.test(m)?'Only a manager can do this \u2014 sign in with a manager account'
+      : /bill_closed/.test(m)?'This table has already paid \u2014 use Refund from This shift'
+      : /bill_open/.test(m)?'This table has not paid yet \u2014 take the dish off the bill instead'
+      : /paid_on_phone/.test(m)?'This order was paid on the phone \u2014 use Refund'
+      : /bad_amount/.test(m)?'That is more than can be taken off this dish'
+      : /PGRST202|could not find the function/i.test(m)?'Refunds are not switched on yet \u2014 run the refunds SQL in Supabase'
+      : apiErr(err));
+  });
+});
+
+/* After paying: one settled table, every dish with a Refund button */
+var REFUND_VIEW=null, REFUNDED={};
+function openRefundTable(sid){
+  REFUND_SID=sid; CURRENT=null;
+  $('mTitle').textContent='Refund';
+  $('mBody').innerHTML='<div class="empty">Loading\u2026</div>'; $('mFoot').innerHTML='';
+  $('modal').classList.add('on'); document.body.style.overflow='hidden';
+  return Promise.all([
+    api('/rest/v1/rd_table_sessions?id=eq.'+encodeURIComponent(sid)+
+      '&select=id,status,closed_at,rd_tables(label),rd_orders(id,order_number,status,paid_at,total_cents,'+
+      'rd_order_items(id,name_snapshot,qty,line_cents,orig_line_cents,adj_cents,sort))'),
+    api('/rest/v1/rd_adjustments?session_id=eq.'+encodeURIComponent(sid)+'&kind=eq.refund&select=order_item_id,amount_cents')
+  ]).then(function(r){
+    var s=(r[0]||[])[0]; if(!s){ $('mBody').innerHTML='<div class="empty">Table not found.</div>'; return; }
+    REFUND_VIEW=s; REFUNDED={};
+    (r[1]||[]).forEach(function(x){ REFUNDED[x.order_item_id]=(REFUNDED[x.order_item_id]||0)+x.amount_cents; });
+    $('mTitle').textContent='Refund \u00b7 Table '+((s.rd_tables||{}).label||'?');
+    var h='<p class="hint">Paid '+(s.closed_at?timeOf(s.closed_at):'')+'. Choose the dish to refund.</p>';
+    (s.rd_orders||[]).filter(function(o){return o.status!=='cancelled'&&o.status!=='awaiting_payment';})
+      .sort(function(a,b){return (a.order_number||0)-(b.order_number||0);})
+      .forEach(function(o){
+        h+='<div class="ord-h">Order #'+o.order_number+'</div>';
+        (o.rd_order_items||[]).slice().sort(function(a,b){return (a.sort||0)-(b.sort||0);}).forEach(function(i){
+          var done=REFUNDED[i.id]||0, left=i.line_cents-done;
+          h+='<div class="line'+(i.line_cents&&left<=0?' gone':'')+'"><span class="line-q">'+i.qty+'\u00d7</span>'+
+             '<span class="line-b"><span class="line-n">'+esc(i.name_snapshot)+'</span>'+
+             (i.adj_cents?'<span class="line-adj">'+money(i.adj_cents)+' was taken off before paying</span>':'')+
+             (done?'<span class="line-adj">'+money(done)+' refunded</span>':'')+
+             (left>0?'<button class="adj-btn" data-refund="'+esc(i.id)+'">Refund\u2026</button>':'')+
+             '</span><span class="line-c">'+money(i.line_cents)+'</span></div>';
+        });
+      });
+    $('mBody').innerHTML=h;
+    $('mFoot').innerHTML='<button class="btn quiet full" id="closeRead">Done</button>';
+  }).catch(function(e){ $('mBody').innerHTML='<div class="empty">'+esc(apiErr(e))+'</div>'; });
+}
+/* buttons inside the bill / refund list */
+$('mBody').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.adj) return openAdj('remove', b.dataset.adj);
+  if(b.dataset.refund) return openAdj('refund', b.dataset.refund);
+});
+
+/* After payment: the table is closed, but its docket stays ready to print */
+var PAID_VIEW=null;
+function showPaid(s, paid){
+  CURRENT=null; PAID_VIEW={s:s, paid:paid};
+  $('mTitle').textContent='Table '+((s.rd_tables||{}).label||'?')+' \u00b7 paid';
+  $('mBody').innerHTML='<div class="empty" style="padding:28px 10px"><h3 style="color:var(--ink);margin-bottom:6px">\u2713 Paid '+
+    money(paid.amount)+' by '+esc(paid.method)+'</h3><p>The table is closed and ready for new guests.</p></div>';
+  $('mFoot').innerHTML='<button class="btn full" id="printPaid">Print receipt</button>'+
+    '<button class="btn quiet full" id="closeRead" style="margin-top:10px">Done</button>';
+  buildReceipt(s, paid);
+}
+
+/* ---------- the bill ---------- */
+function openBill(){
+  $('modal').classList.add('on');document.body.style.overflow='hidden';
+  paintBill();
+}
+function closeBill(){
+  $('modal').classList.remove('on');document.body.style.overflow='';CURRENT=null;clearReceipt();
+  PAID_VIEW=null;
+  if(REFUND_SID){ REFUND_SID=null; REFUND_VIEW=null; if(PANE==='today') paintToday(); }
+}
+$('mX').addEventListener('click',closeBill);
+$('modal').addEventListener('click',function(e){if(e.target===$('modal'))closeBill();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeBill();});
+
+function paintBill(){
+  var s=CURRENT;if(!s)return;
+  $('mTitle').textContent='Table '+((s.rd_tables||{}).label||'?');
+  var total=billTotal(s);
+  var orders=(s.rd_orders||[]).slice().sort(function(a,b){
+    return (a.order_number||0)-(b.order_number||0);});
+  var h='';
+  orders.forEach(function(o){
+    if(o.status==='cancelled'||o.status==='awaiting_payment') return;
+    h+='<div class="ord-h">Order #'+o.order_number+
+       (o.paid_at?' <span style="color:var(--muted);font-weight:400">\u00b7 already paid on phone</span>':'')+'</div>';
+    (o.rd_order_items||[]).slice().sort(function(a,b){return (a.sort||0)-(b.sort||0);})
+      .forEach(function(i){
+        var mods=(i.rd_order_item_modifiers||[]).slice()
+          .sort(function(a,b){return (a.sort||0)-(b.sort||0);})
+          .map(function(m){return m.name_snapshot;}).join(' \u00b7 ');
+        h+='<div class="line'+(i.adj_cents&&!i.line_cents?' gone':'')+'"><span class="line-q">'+i.qty+'\u00d7</span>'+
+           '<span class="line-b"><span class="line-n">'+esc(i.name_snapshot)+'</span>'+
+           (mods?'<span class="line-m" style="display:block">'+esc(mods)+'</span>':'')+
+           (i.adj_cents?'<span class="line-adj">'+money(i.adj_cents)+' taken off \u00b7 was '+
+              money(i.orig_line_cents||(i.line_cents+i.adj_cents))+'</span>':'')+
+           (isManagerRole()&&i.line_cents>0
+             ? (o.paid_at
+                 ? '<button class="adj-btn" data-refund="'+esc(i.id)+'">Refund\u2026</button>'
+                 : '<button class="adj-btn" data-adj="'+esc(i.id)+'">Take off the bill\u2026</button>')
+             : '')+
+           '</span>'+
+           '<span class="line-c">'+money(i.line_cents)+'</span></div>';
+      });
+  });
+  h+='<div class="total"><span>Total</span><b>'+money(total)+'</b></div>';
+  if(!isManagerRole()) h+='<p class="hint" style="margin-top:8px">A manager can take a dish off the bill if it was not served or the guest was unhappy.</p>';
+  h+='<p class="hint" style="margin-top:12px">Take the payment on your card terminal, '+
+     'then record it here. No card details are entered on this screen.</p>';
+  $('mBody').innerHTML=h;
+
+  $('mFoot').innerHTML=
+    '<div class="pays" role="group" aria-label="Payment method">'+
+      ['card','cash','other'].map(function(m){
+        return '<button data-m="'+m+'"'+(METHOD===m?' class="on"':'')+'>'+
+          m.charAt(0).toUpperCase()+m.slice(1)+'</button>';}).join('')+
+    '</div>'+
+    '<button class="btn full" id="takePay">Mark paid \u00b7 '+money(total)+'</button>'+
+    '<button class="btn quiet full" id="printBill" style="margin-top:10px">Print bill for the guest</button>';
+  buildReceipt(s, null);
+}
+
+$('mFoot').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.m){
+    METHOD=b.dataset.m;
+    Array.prototype.forEach.call(b.parentNode.children,function(c){
+      c.classList.toggle('on',c===b);});
+    return;
+  }
+  if(b.id==='expReadX'){ return exportWorkbook(LAST_READING_ID, b); }
+  if(b.id==='expRead'){ return exportReport(LAST_READING_ID, b); }
+  if(b.id==='closeRead'){ closeBill(); return; }
+  if(b.id==='printBill'){ if(CURRENT) printReceipt(CURRENT, null); return; }
+  if(b.id==='printPaid'){ if(PAID_VIEW) printReceipt(PAID_VIEW.s, PAID_VIEW.paid); return; }
+  if(b.id==='takePay'){
+    var s=CURRENT;if(!s)return;
+    var total=billTotal(s);
+    if(total<=0){toast('Nothing to pay on that table');return;}
+    if(!confirm('Mark Table '+((s.rd_tables||{}).label||'?')+' as paid?\n\n'+
+       money(total)+' by '+METHOD+'.\n\nThe table will be closed and ready for new guests.')) return;
+    b.disabled=true;b.textContent='Recording\u2026';
+    api('/rest/v1/rpc/rd_settle_session',{method:'POST',body:JSON.stringify({
+      p_session_id:s.id,p_amount_cents:total,p_method:METHOD,p_close:true})})
+      .then(function(res){
+        if(!res||!res.ok) throw {data:res};
+        var paidMethod=METHOD;
+        toast('Table '+((s.rd_tables||{}).label||'')+' paid \u00b7 '+money(total));
+        showPaid(s, {amount:total, method:paidMethod});
+        return refresh();
+      })
+      .catch(function(err){
+        var m=err&&err.data&&err.data.message||'';
+        /* The bill changed or was already settled from another till, or
+           the first tap did land and only the reply was lost. Either way
+           the screen is out of date: refresh rather than retry blind. */
+        if(/session_not_open|amount_mismatch/.test(m)){
+          toast(/session_not_open/.test(m)
+            ? 'This table was already settled \u2014 refreshing'
+            : 'The bill changed (a new order came in) \u2014 check the new total');
+          closeBill(); refresh(); return;
+        }
+        b.disabled=false;b.textContent='Mark paid \u00b7 '+money(total);
+        toast(apiErr(err));
+      });
+  }
+});
+
+/* ---------- this shift ----------
+   Everything since the last Z reading, not since midnight. That is what
+   makes a lunch Z and a dinner Z work on the same day. */
+function timeOf(iso){
+  if(!iso) return '';
+  var d=new Date(iso);
+  return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+}
+function dayOf(iso){
+  if(!iso) return '';
+  var d=new Date(iso);
+  return d.toLocaleDateString(undefined,{day:'numeric',month:'short'});
+}
+
+function paintToday(){
+  $('pToday').innerHTML='<div class="empty">Loading\u2026</div>';
+  api('/rest/v1/rpc/rd_period_summary',{method:'POST',
+    body:JSON.stringify({p_venue_id:VENUE.id})})
+    .then(function(t){
+      var tables=t.tables||[], open=t.open||[];
+      var owing=open.reduce(function(n,o){return n+(o.total_cents||0);},0);
+
+      var h='<div class="sum-card">'+
+        '<span class="mono" style="color:var(--muted)">Taken this shift</span>'+
+        '<div class="sum-big">'+money(t.total_cents)+'</div>'+
+        '<div class="sum-row"><span>Card</span><b>'+money(t.card_cents)+'</b></div>'+
+        '<div class="sum-row"><span>Cash</span><b>'+money(t.cash_cents)+'</b></div>'+
+        (t.online_cents?'<div class="sum-row"><span>Paid on the phone</span><b>'+
+           money(t.online_cents)+'</b></div>':'')+
+        (t.tip_cents?'<div class="sum-row"><span>Tips</span><b>'+
+           money(t.tip_cents)+'</b></div>':'')+
+        (t.other_cents?'<div class="sum-row"><span>Other</span><b>'+money(t.other_cents)+'</b></div>':'')+
+        (t.refund_cents?'<div class="sum-row"><span>Refunds</span><b>'+money(t.refund_cents)+'</b></div>':'')+
+        '<div class="sum-row"><span>Tables settled</span><b>'+tables.length+'</b></div>'+
+        (t.gst_registered?('<div class="sum-row"><span>GST</span><b>'+money(t.gst_cents)+'</b></div>'+
+          '<div class="sum-row"><span>Sales ex GST</span><b>'+money(t.sales_ex_gst_cents)+'</b></div>'+
+          (t.sales_gst_free_cents?'<div class="sum-row"><span>of which GST-free</span><b>'+
+             money(t.sales_gst_free_cents)+'</b></div>':'')):'')+
+        '<div class="sum-row"><span>Payments taken</span><b>'+t.payment_count+'</b></div>'+
+        '<p class="hint" style="margin-top:12px">Card should match your terminal\u2019s '+
+          'settlement. A difference means a payment was taken on the terminal but not '+
+          'recorded here, or the reverse.</p>'+
+        '<p class="hint" style="margin-top:8px">'+
+          (t.period_start
+            ? 'Since the last Z reading, '+dayOf(t.period_start)+' at '+timeOf(t.period_start)+'.'
+            : 'Since the beginning \u2014 no Z reading has been taken yet.')+
+        '</p></div>';
+
+      // every table settled this shift
+      h+='<div class="sum-card"><span class="mono" style="color:var(--muted)">'+
+         'Tables settled this shift</span>';
+      if(!tables.length){
+        h+='<p class="hint" style="margin-top:10px">Nothing settled yet.</p>';
+      } else {
+        h+='<div style="margin-top:8px">'+tables.map(function(x){
+          return '<div class="sum-row"><span><b style="font-family:\'Unbounded\',sans-serif">Table '+
+            esc(x.label)+'</b>'+
+            '<span style="color:var(--muted);font-size:12.5px"> \u00b7 '+timeOf(x.closed_at)+
+            ' \u00b7 '+esc(x.methods||'')+' \u00b7 '+(x.items||0)+' item'+
+            ((x.items===1)?'':'s')+'</span></span>'+
+            '<b>'+money(x.total_cents)+
+            (isManagerRole()?' <button class="adj-btn" style="margin:0 0 0 8px" data-refsess="'+esc(x.session_id)+'">Refund\u2026</button>':'')+
+            '</b></div>';
+        }).join('')+'</div>';
+      }
+      h+='</div>';
+
+      // anything still owing blocks a clean Z
+      if(open.length){
+        h+='<div class="sum-card" style="border-color:rgba(255,212,121,.5)">'+
+          '<span class="mono" style="color:var(--warn)">Still open \u00b7 '+money(owing)+'</span>'+
+          '<div style="margin-top:8px">'+open.map(function(o){
+            return '<div class="sum-row"><span>Table '+esc(o.label)+'</span>'+
+                   '<b>'+money(o.total_cents)+'</b></div>';
+          }).join('')+'</div>'+
+          '<p class="hint" style="margin-top:10px">These must be settled before the shift '+
+          'can be closed off.</p></div>';
+      }
+
+      h+='<div class="sum-card">'+
+        '<span class="mono" style="color:var(--muted)">End of shift</span>'+
+        '<p class="hint" style="margin:8px 0 14px">An <b>X reading</b> is the summary above \u2014 '+
+        'look as often as you like, nothing changes. A <b>Z reading</b> closes the shift off: '+
+        'it is numbered, permanent, and resets the running total to zero.</p>'+
+        '<div style="display:flex;gap:10px;flex-wrap:wrap">'+
+          '<button class="btn quiet" id="xRead">Refresh X reading</button>'+
+          '<button class="btn quiet" id="xExcel">Export to Excel</button>'+
+          '<button class="btn quiet" id="xExport">Export CSV</button>'+
+          '<button class="btn" id="zRead"'+(open.length?' disabled':'')+'>Take Z reading</button>'+
+        '</div>'+
+        (open.length?'<p class="hint" style="color:var(--warn);margin-top:10px">'+
+          open.length+' table'+(open.length===1?'':'s')+' still owing \u2014 settle '+
+          (open.length===1?'it':'them')+' first.</p>':'')+
+        '</div>';
+
+      $('pToday').innerHTML=h+'<div id="adjList"></div>';
+      LAST_SUMMARY=t;
+      paintAdjList(t.period_start);
+    })
+    .catch(function(e){
+      $('pToday').innerHTML='<div class="empty"><p>'+esc(apiErr(e))+'</p></div>';
+    });
+}
+var LAST_SUMMARY=null, LAST_READING_ID=null;
+
+/* Everything taken off bills or refunded since the last Z reading */
+function paintAdjList(since){
+  api('/rest/v1/rd_adjustments?venue_id=eq.'+encodeURIComponent(VENUE.id)+
+      (since?'&created_at=gte.'+encodeURIComponent(since):'')+
+      '&select=kind,amount_cents,reason,note,method,item_name,table_label,created_at&order=created_at.desc&limit=200')
+    .then(function(rows){
+      var box=$('adjList'); if(!box) return;
+      if(!rows||!rows.length){ box.innerHTML=''; return; }
+      var off=0, back=0;
+      rows.forEach(function(r){ if(r.kind==='refund') back+=r.amount_cents; else off+=r.amount_cents; });
+      box.innerHTML='<div class="sum-card"><span class="mono" style="color:var(--muted)">Taken off bills &amp; refunds this shift</span>'+
+        '<div class="sum-row" style="margin-top:8px"><span>Taken off bills before paying</span><b>'+money(off)+'</b></div>'+
+        '<div class="sum-row"><span>Refunded after paying</span><b>'+money(back)+'</b></div>'+
+        '<div style="margin-top:8px">'+rows.map(function(r){
+          return '<div class="sum-row"><span><b>Table '+esc(r.table_label||'?')+'</b> \u00b7 '+esc(r.item_name||'')+
+            '<span style="color:var(--muted);font-size:12.5px"> \u00b7 '+timeOf(r.created_at)+' \u00b7 '+
+            (r.kind==='refund'?'refund ('+esc(r.method||'')+')':'taken off')+' \u00b7 '+esc(r.reason)+
+            (r.note?' \u2014 '+esc(r.note):'')+'</span></span><b>'+money(r.amount_cents)+'</b></div>';
+        }).join('')+'</div>'+
+        '<p class="hint" style="margin-top:10px">Refunds are already included in \u201cTaken this shift\u201d above. '+
+        'Amounts taken off before paying were never charged.</p></div>';
+    }).catch(function(){ /* table not created yet: nothing to show */ });
+}
+
+$('pToday').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.refsess) return openRefundTable(b.dataset.refsess);
+  if(b.id==='xRead') return paintToday();
+  if(b.id==='xExcel')  return exportWorkbook(null, b);
+  if(b.id==='xExport') return exportReport(null, b);
+  if(b.id==='zRead'){
+    var t=LAST_SUMMARY||{};
+    if(!confirm('Close off this shift?\n\n'+money(t.total_cents||0)+' across '+
+       ((t.tables||[]).length)+' table(s).\n\nThis is permanent and resets the running '+
+       'total to zero. Takings after this belong to the next shift.')) return;
+    b.disabled=true; b.textContent='Closing\u2026';
+    api('/rest/v1/rpc/rd_take_z_reading',{method:'POST',
+      body:JSON.stringify({p_venue_id:VENUE.id})})
+      .then(function(z){
+        if(!z||!z.ok) throw {data:z};
+        toast('Z reading #'+z.number+' \u00b7 '+money(z.total_cents));
+        showReading(z);
+        paintToday();
+      })
+      .catch(function(err){
+        b.disabled=false; b.textContent='Take Z reading';
+        var m=(err&&err.data&&err.data.message)||'';
+        if(/tables_still_open/.test(m)) toast('Settle the open tables first');
+        else if(/nothing_to_close/.test(m)) toast('Nothing taken since the last Z reading');
+        else if(/not_manager/.test(m)) toast('Only a manager can close off a shift');
+        else toast(apiErr(err));
+      });
+  }
+});
+
+/* A Z reading is a document. Show it so it can be written down or
+   screenshotted before the screen moves on. */
+function showReading(z){
+  $('mTitle').textContent='Z reading #'+z.number;
+  $('mBody').innerHTML=
+    '<div class="ord-h">Period</div>'+
+    '<div class="sum-row"><span>From</span><b>'+
+      (z.period_start?(dayOf(z.period_start)+' '+timeOf(z.period_start)):'the beginning')+'</b></div>'+
+    '<div class="sum-row"><span>To</span><b>'+dayOf(z.period_end)+' '+timeOf(z.period_end)+'</b></div>'+
+    '<div class="ord-h">Takings</div>'+
+    '<div class="sum-row"><span>Card</span><b>'+money(z.card_cents)+'</b></div>'+
+    '<div class="sum-row"><span>Cash</span><b>'+money(z.cash_cents)+'</b></div>'+
+    (z.online_cents?'<div class="sum-row"><span>Paid on the phone</span><b>'+
+       money(z.online_cents)+'</b></div>':'')+
+    (z.tip_cents?'<div class="sum-row"><span>Tips</span><b>'+money(z.tip_cents)+'</b></div>':'')+
+    (z.other_cents?'<div class="sum-row"><span>Other</span><b>'+money(z.other_cents)+'</b></div>':'')+
+    (z.refund_cents?'<div class="sum-row"><span>Refunds</span><b>'+money(z.refund_cents)+'</b></div>':'')+
+    '<div class="sum-row"><span>Tables settled</span><b>'+(z.tables_settled||0)+'</b></div>'+
+    '<div class="sum-row"><span>Payments</span><b>'+(z.payment_count||0)+'</b></div>'+
+    '<div class="total"><span>Total</span><b>'+money(z.total_cents)+'</b></div>'+
+    (z.forced?'<p class="hint" style="color:var(--warn);margin-top:12px">Forced with '+
+      z.tables_open+' table(s) still open.</p>':'')+
+    '<p class="hint" style="margin-top:12px">Check the card total against your terminal\u2019s '+
+    'settlement before cashing up.</p>';
+  $('mFoot').innerHTML=
+    '<button class="btn quiet" id="expReadX" style="flex:1">Excel</button>'+
+    '<button class="btn quiet" id="expRead" style="flex:1">CSV</button>'+
+    '<button class="btn" id="closeRead" style="flex:1">Done</button>';
+  $('mFoot').style.display='flex'; $('mFoot').style.gap='10px';
+  LAST_READING_ID = z.reading_id || null;
+  $('modal').classList.add('on'); document.body.style.overflow='hidden';
+  CURRENT=null;
+}
+
+/* ---------- export for bookkeeping ----------
+   CSV rather than a real .xlsx: Excel, Numbers, Xero and MYOB all open it,
+   and it needs no external library, so the export cannot break because a
+   CDN is unreachable mid-service. */
+function csvCell(v){
+  var s = (v===null||v===undefined) ? '' : String(v);
+  return /[",\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function csvRow(arr){ return arr.map(csvCell).join(',') + '\r\n'; }
+function amt(c){ return ((c||0)/100).toFixed(2); }   /* bare number: Excel treats it as one */
+function stamp(iso){
+  if(!iso) return '';
+  var d=new Date(iso);
+  var p=function(n){return ('0'+n).slice(-2);};
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+
+         p(d.getHours())+':'+p(d.getMinutes());
+}
+
+function buildCsv(r){
+  var tables=r.tables||[], items=r.items||[];
+  var salesValue=items.reduce(function(n,i){return n+(i.revenue_cents||0);},0);
+  var variance=(r.total_cents||0)-salesValue;
+  var out='';
+
+  out+=csvRow([r.venue||'Restaurant']);
+  out+=csvRow([(r.kind==='Z'?('Z reading #'+r.reading):'X reading (current shift)')]);
+  out+=csvRow(['Period from', r.period_start?stamp(r.period_start):'beginning']);
+  out+=csvRow(['Period to',   stamp(r.period_end)]);
+  out+=csvRow(['Exported',    stamp(new Date().toISOString())]);
+  out+='\r\n';
+
+  out+=csvRow(['SUMMARY']);
+  out+=csvRow(['Method','Amount']);
+  out+=csvRow(['Card',   amt(r.card_cents)]);
+  out+=csvRow(['Cash',   amt(r.cash_cents)]);
+  out+=csvRow(['Paid on the phone', amt(r.online_cents)]);
+  out+=csvRow(['Tips',   amt(r.tips_cents||r.tip_cents)]);
+  out+=csvRow(['Other',  amt(r.other_cents)]);
+  out+=csvRow(['Refunds',amt(r.refund_cents)]);
+  out+=csvRow(['Total payments', amt(r.total_cents)]);
+  out+=csvRow(['Sales value of items', amt(salesValue)]);
+  out+='\r\n';
+  out+=csvRow(['GST']);
+  out+=csvRow(['Taxable sales (inc GST)', amt(r.sales_taxable_cents)]);
+  out+=csvRow(['GST-free sales',          amt(r.sales_gst_free_cents)]);
+  out+=csvRow(['GST',                     amt(r.gst_cents)]);
+  out+=csvRow(['Sales excluding GST',     amt(r.sales_ex_gst_cents)]);
+  out+=csvRow(['GST registered', r.gst_registered ? 'yes' : 'no']);
+  out+=csvRow(['GST rate %', r.gst_rate_pct]);
+  out+='\r\n';
+  out+=csvRow(['RECONCILIATION']);
+  /* Normally identical. A gap means a discount, a part payment, or a
+     mistake - either way the bookkeeper should see it rather than have it
+     quietly reconciled away. */
+  out+=csvRow(['Variance', amt(variance)]);
+  out+=csvRow(['(tips are money taken, not a sale, and are excluded from GST)']);
+  out+=csvRow(['Payments taken', r.payment_count||0]);
+  out+=csvRow(['Tables settled', tables.length]);
+  out+='\r\n';
+
+  out+=csvRow(['TABLES']);
+  out+=csvRow(['Table','Opened','Closed','Orders','Items','Method','Amount']);
+  tables.forEach(function(t){
+    out+=csvRow([t.label, stamp(t.opened_at), stamp(t.closed_at),
+                 t.orders||0, t.items||0, t.methods||'', amt(t.total_cents)]);
+  });
+  out+=csvRow(['','','','','','Total', amt(r.total_cents)]);
+  out+='\r\n';
+
+  out+=csvRow(['ITEMS SOLD']);
+  out+=csvRow(['Item','Station','GST status','Quantity','Revenue','GST']);
+  items.forEach(function(i){
+    out+=csvRow([i.name, i.station||'', i.gst_free?'GST-free':'Taxable',
+                 i.qty||0, amt(i.revenue_cents), amt(i.gst_cents)]);
+  });
+  out+=csvRow(['','','','Total', amt(salesValue),
+               amt(items.reduce(function(n,i){return n+(i.gst_cents||0);},0))]);
+
+  return out;
+}
+
+/* ================= xlsx, written by hand =================
+   An .xlsx is a ZIP of XML parts. Writing both directly means this page
+   has no dependency to load and nothing to fail at the wrong moment. */
+var CRC=(function(){
+  var t=new Int32Array(256);
+  for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c;}
+  return t;
+})();
+function crc32(bytes){
+  var c=-1;
+  for(var i=0;i<bytes.length;i++) c=(c>>>8)^CRC[(c^bytes[i])&0xFF];
+  return (c^-1)>>>0;
+}
+function utf8(str){
+  var out=[],i,c;
+  for(i=0;i<str.length;i++){
+    c=str.charCodeAt(i);
+    if(c<0x80) out.push(c);
+    else if(c<0x800){ out.push(0xC0|c>>6,0x80|c&63); }
+    else if(c>=0xD800&&c<=0xDBFF){
+      var c2=str.charCodeAt(++i);
+      var cp=0x10000+((c-0xD800)<<10)+(c2-0xDC00);
+      out.push(0xF0|cp>>18,0x80|(cp>>12)&63,0x80|(cp>>6)&63,0x80|cp&63);
+    }
+    else out.push(0xE0|c>>12,0x80|(c>>6)&63,0x80|c&63);
+  }
+  return new Uint8Array(out);
+}
+/* Stored (uncompressed) entries — valid zip, and Excel is perfectly happy
+   with them. Avoids shipping a deflate implementation for files this size. */
+function zip(files){
+  var parts=[],central=[],offset=0;
+  function u16(n){return [n&255,(n>>8)&255];}
+  function u32(n){return [n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];}
+  files.forEach(function(f){
+    var name=utf8(f.name), data=f.data, c=crc32(data);
+    var local=[].concat([0x50,0x4b,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(c),u32(data.length),u32(data.length),u16(name.length),u16(0));
+    parts.push(new Uint8Array(local),name,data);
+    central.push({name:name,crc:c,size:data.length,offset:offset});
+    offset+=local.length+name.length+data.length;
+  });
+  var cd=[],cdLen=0;
+  central.forEach(function(e){
+    var h=[].concat([0x50,0x4b,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(e.crc),u32(e.size),u32(e.size),u16(e.name.length),
+      u16(0),u16(0),u16(0),u16(0),u32(0),u32(e.offset));
+    cd.push(new Uint8Array(h),e.name);
+    cdLen+=h.length+e.name.length;
+  });
+  var end=new Uint8Array([].concat([0x50,0x4b,0x05,0x06],u16(0),u16(0),
+    u16(files.length),u16(files.length),u32(cdLen),u32(offset),u16(0)));
+  var all=parts.concat(cd,[end]);
+  var total=all.reduce(function(n,p){return n+p.length;},0);
+  var buf=new Uint8Array(total),pos=0;
+  all.forEach(function(p){buf.set(p,pos);pos+=p.length;});
+  return buf;
+}
+
+function xmlEsc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    /* strip control characters Excel refuses to open */
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'');
+}
+function colName(n){
+  var s='';
+  while(n>0){ var m=(n-1)%26; s=String.fromCharCode(65+m)+s; n=(n-1-m)/26; }
+  return s;
+}
+/* Excel counts days from 1899-12-30 */
+function dateSerial(d){
+  if(!d) return null;
+  var utc=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes());
+  return (utc-Date.UTC(1899,11,30))/86400000;
+}
+
+/* style ids: 0 plain, 1 header, 2 money, 3 money bold, 4 date, 5 datetime,
+   6 bold text, 7 integer */
+var STYLES='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'+
+'<numFmts count="3">'+
+ '<numFmt numFmtId="164" formatCode="#,##0.00"/>'+
+ '<numFmt numFmtId="165" formatCode="dd/mm/yyyy"/>'+
+ '<numFmt numFmtId="166" formatCode="dd/mm/yyyy\\ hh:mm"/>'+
+'</numFmts>'+
+'<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font>'+
+'<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>'+
+'<fills count="3"><fill><patternFill patternType="none"/></fill>'+
+'<fill><patternFill patternType="gray125"/></fill>'+
+'<fill><patternFill patternType="solid"><fgColor rgb="FFF2D187"/>'+
+'<bgColor indexed="64"/></patternFill></fill></fills>'+
+'<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'+
+'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'+
+'<cellXfs count="8">'+
+ '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'+
+ '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>'+
+ '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+ '<xf numFmtId="164" fontId="1" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1"/>'+
+ '<xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+ '<xf numFmtId="166" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+ '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>'+
+ '<xf numFmtId="1" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+'</cellXfs><cellStyles count="1">'+
+'<cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+
+/* A cell: {v:value, t:'n'|'s'|'d'|'dt', s:styleId} or a bare value */
+function sheetXml(rows, widths){
+  var x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
+  if(widths&&widths.length){
+    x+='<cols>';
+    widths.forEach(function(w,i){
+      x+='<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>';
+    });
+    x+='</cols>';
+  }
+  x+='<sheetData>';
+  rows.forEach(function(row,ri){
+    x+='<row r="'+(ri+1)+'">';
+    row.forEach(function(cell,ci){
+      if(cell===null||cell===undefined||cell==='') return;
+      var ref=colName(ci+1)+(ri+1);
+      var c=(typeof cell==='object')?cell:{v:cell};
+      var st=c.s||0, t=c.t;
+      if(t===undefined) t=(typeof c.v==='number')?'n':'s';
+      if(t==='d'||t==='dt'){
+        var ser=dateSerial(c.v);
+        if(ser===null) return;
+        x+='<c r="'+ref+'" s="'+(t==='d'?4:5)+'"><v>'+ser+'</v></c>';
+      } else if(t==='n'){
+        x+='<c r="'+ref+'" s="'+st+'"><v>'+c.v+'</v></c>';
+      } else {
+        x+='<c r="'+ref+'" s="'+st+'" t="inlineStr"><is><t xml:space="preserve">'+
+           xmlEsc(c.v)+'</t></is></c>';
+      }
+    });
+    x+='</row>';
+  });
+  return x+'</sheetData></worksheet>';
+}
+
+function buildXlsx(sheets){
+  var files=[];
+  var types='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+    '<Default Extension="xml" ContentType="application/xml"/>'+
+    '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'+
+    '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>';
+  sheets.forEach(function(s,i){
+    types+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+  });
+  types+='</Types>';
+
+  var rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'+
+    '</Relationships>';
+
+  var wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '+
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>';
+  sheets.forEach(function(s,i){
+    wb+='<sheet name="'+xmlEsc(s.name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';
+  });
+  wb+='</sheets></workbook>';
+
+  var wbRels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">';
+  sheets.forEach(function(s,i){
+    wbRels+='<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';
+  });
+  wbRels+='<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>';
+  wbRels+='</Relationships>';
+
+  files.push({name:'[Content_Types].xml',data:utf8(types)});
+  files.push({name:'_rels/.rels',data:utf8(rels)});
+  files.push({name:'xl/workbook.xml',data:utf8(wb)});
+  files.push({name:'xl/_rels/workbook.xml.rels',data:utf8(wbRels)});
+  files.push({name:'xl/styles.xml',data:utf8(STYLES)});
+  sheets.forEach(function(s,i){
+    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',
+      data:utf8(sheetXml(s.rows,s.widths))});
+  });
+  return zip(files);
+}
+
+
+var H=function(t){return {v:t,s:1};};        /* header */
+var B=function(t){return {v:t,s:6};};        /* bold text */
+var M=function(c){return {v:(c||0)/100,t:'n',s:2};};   /* money */
+var MB=function(c){return {v:(c||0)/100,t:'n',s:3};};  /* money, bold */
+var N=function(n){return {v:n||0,t:'n',s:7};};         /* whole number */
+var D=function(d){return {v:d,t:'d'};};
+var DT=function(d){return {v:d,t:'dt'};};
+var dayKey=function(d){
+  return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+};
+
+/* ---------- the workbook for one reading ----------
+   The same sheets the bookkeeping tool produces, built straight from the
+   report rather than by exporting a CSV and importing it again. That tool
+   is still the place to combine a month of readings into one file; this
+   is the single-reading version, for the shift you have just closed. */
+function buildReadingWorkbook(r){
+  var tables=r.tables||[], items=r.items||[];
+  var salesValue=items.reduce(function(n,i){return n+(i.revenue_cents||0);},0);
+  var variance=(r.total_cents||0)-salesValue;
+  var itemGst=items.reduce(function(n,i){return n+(i.gst_cents||0);},0);
+  var isZ = r.kind==='Z';
+
+  var s1=[
+    [B(r.venue||'Restaurant')],
+    [B(isZ ? ('Z reading #'+r.reading) : 'X reading \u00b7 current shift')],
+    ['Period from', r.period_start?DT(new Date(r.period_start)):'the beginning'],
+    ['Period to',   DT(new Date(r.period_end||Date.now()))],
+    ['Exported',    DT(new Date())],
+    [],
+    [H('Takings'),H('Amount')],
+    ['Card',  M(r.card_cents)],
+    ['Cash',  M(r.cash_cents)],
+    ['Paid on the phone', M(r.online_cents)],
+    ['Tips',  M(r.tips_cents||r.tip_cents)],
+    ['Other', M(r.other_cents)],
+    ['Refunds', M(r.refund_cents)],
+    [B('Total payments'), MB(r.total_cents)],
+    ['Sales value of items', M(salesValue)],
+    ['Variance', M(variance)],
+    ['Payments taken', N(r.payment_count)],
+    ['Tables settled', N(tables.length)],
+    []
+  ];
+  if(r.gst_registered){
+    s1=s1.concat([
+      [H('GST'),H('Amount')],
+      ['Taxable sales (inc GST)', M(r.sales_taxable_cents)],
+      ['GST-free sales',          M(r.sales_gst_free_cents)],
+      [B('GST on sales'),         MB(r.gst_cents)],
+      ['Sales excluding GST',     M(r.sales_ex_gst_cents)],
+      [],
+      [H('BAS reference'),H('Amount')],
+      ['G1  Total sales (inc GST)', M((r.sales_taxable_cents||0)+(r.sales_gst_free_cents||0))],
+      ['G3  GST-free sales',        M(r.sales_gst_free_cents)],
+      ['1A  GST on sales',          M(r.gst_cents)]
+    ]);
+  }
+
+  var s2=[[H('Table'),H('Opened'),H('Closed'),H('Orders'),H('Items'),H('Method'),H('Amount')]];
+  tables.forEach(function(t){
+    s2.push([t.label, DT(t.opened_at?new Date(t.opened_at):null),
+             DT(t.closed_at?new Date(t.closed_at):null),
+             N(t.orders), N(t.items), t.methods||'', M(t.total_cents)]);
+  });
+  s2.push([B('Total'),'','','','','',MB(r.total_cents)]);
+
+  var s3=[[H('Item'),H('Station'),H('GST status'),H('Quantity'),H('Revenue'),H('GST'),H('% of sales')]];
+  items.forEach(function(i){
+    s3.push([i.name, i.station||'', i.gst_free?'GST-free':'Taxable',
+             N(i.qty), M(i.revenue_cents), M(i.gst_cents),
+             {v: salesValue ? Math.round((i.revenue_cents/salesValue)*1000)/10 : 0, t:'n', s:2}]);
+  });
+  s3.push([B('Total'),'','',
+           N(items.reduce(function(n,i){return n+(i.qty||0);},0)),
+           MB(salesValue), MB(itemGst), '']);
+
+  return buildXlsx([
+    {name:'Summary',     rows:s1, widths:[30,15]},
+    {name:'Tables',      rows:s2, widths:[9,17,17,8,8,13,12]},
+    {name:'Product mix', rows:s3, widths:[34,12,12,10,12,11,11]}
+  ]);
+}
+
+function exportWorkbook(readingId, btn){
+  var label=btn?btn.textContent:'';
+  if(btn){ btn.disabled=true; btn.textContent='Building\u2026'; }
+  var body={p_venue_id:VENUE.id};
+  if(readingId) body.p_reading_id=readingId;
+  return api('/rest/v1/rpc/rd_report',{method:'POST',body:JSON.stringify(body)})
+    .then(function(r){
+      if(!r) throw {data:null};
+      var name=reportFilename(r).replace(/\.csv$/,'.xlsx');
+      saveBytes(buildReadingWorkbook(r), name,
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    })
+    .catch(function(e){ toast(apiErr(e)); })
+    .then(function(){ if(btn){ btn.disabled=false; btn.textContent=label; } });
+}
+
+function saveBytes(bytes, filename, mime){
+  var blob=new Blob([bytes],{type:mime});
+  if(navigator.canShare&&window.File){
+    try{
+      var f=new File([blob],filename,{type:mime});
+      if(navigator.canShare({files:[f]})){
+        navigator.share({files:[f],title:filename})
+          .then(function(){toast('Exported');},function(){ downloadBlob(blob,filename); });
+        return;
+      }
+    }catch(e){}
+  }
+  downloadBlob(blob,filename);
+}
+
+function reportFilename(r){
+  var d=new Date(r.period_end||Date.now());
+  var p=function(n){return ('0'+n).slice(-2);};
+  var slug=(r.venue||'restaurant').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  return slug+'-'+(r.kind==='Z'?('Z'+r.reading):'X')+'-'+
+    d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+'.csv';
+}
+
+/* A leading BOM. Without it Excel opens UTF-8 as Latin-1 and turns
+   "Café" into "CafÃ©" - which looks like corrupted books. */
+function saveCsv(text, filename){
+  var blob=new Blob(['\ufeff'+text], {type:'text/csv;charset=utf-8;'});
+
+  /* iOS Safari handles a share sheet far better than a download attribute,
+     and it lets the file go straight to Files, Mail or a cloud drive. */
+  if(navigator.canShare && window.File){
+    try{
+      var f=new File([blob], filename, {type:'text/csv'});
+      if(navigator.canShare({files:[f]})){
+        navigator.share({files:[f], title:filename})
+          .then(function(){ toast('Exported'); })
+          .catch(function(){ downloadBlob(blob, filename); });
+        return;
+      }
+    }catch(e){}
+  }
+  downloadBlob(blob, filename);
+}
+function downloadBlob(blob, filename){
+  try{
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download=filename; a.style.display='none';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 1500);
+    toast('Exported \u00b7 '+filename);
+  }catch(e){ toast('Could not save the file on this device'); }
+}
+
+function exportReport(readingId, btn){
+  var label=btn?btn.textContent:'';
+  if(btn){ btn.disabled=true; btn.textContent='Preparing\u2026'; }
+  var body={p_venue_id:VENUE.id};
+  if(readingId) body.p_reading_id=readingId;
+  return api('/rest/v1/rpc/rd_report',{method:'POST',body:JSON.stringify(body)})
+    .then(function(r){
+      if(!r) throw {data:null};
+      saveCsv(buildCsv(r), reportFilename(r));
+    })
+    .catch(function(e){ toast(apiErr(e)); })
+    .then(function(){ if(btn){ btn.disabled=false; btn.textContent=label; } });
+}
+
+/* ---------- past readings ---------- */
+/* ---------- sales trends ---------- */
+var TRENDS_DATA = null;
+var TRENDS_RANGE = null;
+
+function isManagerRole(){ return ROLE==='manager'||ROLE==='owner'||ROLE==='platform'; }
+
+function isoDate(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+function trendsPreset(key){
+  var end = new Date(); var start = new Date();
+  if(key==='7d'){ start.setDate(end.getDate()-6); }
+  else if(key==='30d'){ start.setDate(end.getDate()-29); }
+  else if(key==='month'){ start = new Date(end.getFullYear(), end.getMonth(), 1); }
+  else if(key==='lastmonth'){
+    start = new Date(end.getFullYear(), end.getMonth()-1, 1);
+    end = new Date(end.getFullYear(), end.getMonth(), 0);
+  }
+  return { start: isoDate(start), end: isoDate(end) };
+}
+
+var TRENDS_STATIONS = null;
+var LAST_ACCT_STATUS = null;
+
+function paintTrends(){
+  var r = TRENDS_RANGE || trendsPreset('30d');
+  var manager = isManagerRole();
+  var cutoff = (TRENDS_DATA && TRENDS_DATA.lunch_dinner_cutoff) ? TRENDS_DATA.lunch_dinner_cutoff.slice(0,5) : '';
+  $('pTrends').innerHTML =
+    '<div class="trends-toolbar">'+
+      '<div><label for="trStart">From</label><input type="date" id="trStart" value="'+r.start+'"></div>'+
+      '<div><label for="trEnd">To</label><input type="date" id="trEnd" value="'+r.end+'"></div>'+
+      '<button class="btn sm" id="trLoad" style="min-width:110px">Load</button>'+
+      '<button class="btn quiet sm" id="trExport" style="display:none">Export to Excel</button>'+
+    '</div>'+
+    '<div class="presets">'+
+      ['7d:Last 7 days','30d:Last 30 days','month:This month','lastmonth:Last month'].map(function(p){
+        var parts=p.split(':'); return '<button data-preset="'+parts[0]+'">'+parts[1]+'</button>';
+      }).join('')+
+    '</div>'+
+    (manager ? '<div class="sum-card" style="margin-top:14px">'+
+      '<span class="mono" style="color:var(--muted)">Lunch / dinner cutoff</span>'+
+      '<p class="hint">Orders before this local time count as lunch; this time and after count as dinner.</p>'+
+      '<div style="display:flex;gap:10px;align-items:flex-end;margin-top:10px">'+
+        '<input type="time" id="trCutoff" value="'+esc(cutoff||'16:00')+'" '+
+          'style="background:var(--panel-2);border:1px solid var(--line);border-radius:10px;'+
+          'color:var(--ink);padding:9px 11px;min-height:42px">'+
+        '<button class="btn quiet sm" id="trSaveCutoff">Save</button>'+
+      '</div></div>' : '')+
+    (manager ? '<div class="sum-card" style="margin-top:14px" id="trStationsCard">'+
+      '<span class="mono" style="color:var(--muted)">Which stations are food, which are drinks</span>'+
+      '<p class="hint">Used to split the report below. Guessed once from each station\u2019s name \u2014 correct '+
+        'any that guessed wrong.</p>'+
+      '<div id="trStationsList" style="margin-top:10px"><p class="hint">Loading\u2026</p></div>'+
+    '</div>' : '')+
+    (manager ? '<div class="sum-card" style="margin-top:14px" id="acctCard">'+
+      '<span class="mono" style="color:var(--muted)">Connect your accounting</span>'+
+      '<p class="hint">Optional. Excel export above keeps working exactly as it does today either way \u2014 '+
+        'this is a separate, additional way to send daily sales straight into your own Xero or MYOB.</p>'+
+      '<div id="acctBody" style="margin-top:10px"><p class="hint">Loading\u2026</p></div>'+
+    '</div>' : '')+
+    '<div id="trResults" style="margin-top:16px"></div>';
+
+  document.querySelectorAll('.presets button').forEach(function(b){
+    b.classList.toggle('on', TRENDS_RANGE && trendsPreset(b.dataset.preset).start===r.start && trendsPreset(b.dataset.preset).end===r.end);
+  });
+
+  if(manager) loadTrendsStations();
+  if(manager) loadAccountingStatus();
+  if(TRENDS_DATA) renderTrendsData(TRENDS_DATA);
+  else $('trResults').innerHTML = '<div class="empty">Pick a range and press Load.</div>';
+}
+
+function loadTrendsStations(){
+  var render = function(){
+    var list = TRENDS_STATIONS || [];
+    $('trStationsList').innerHTML = list.filter(function(s){ return !s.is_expo; }).map(function(s){
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;'+
+        'border-bottom:1px solid var(--line)"><span>'+esc(s.name)+'</span>'+
+        '<select data-station="'+esc(s.id)+'" style="background:var(--panel-2);border:1px solid var(--line);'+
+        'border-radius:8px;color:var(--ink);padding:7px 10px;min-height:38px">'+
+        '<option value="food"'+(!s.is_beverage?' selected':'')+'>Food</option>'+
+        '<option value="beverage"'+(s.is_beverage?' selected':'')+'>Beverage</option>'+
+        '</select></div>';
+    }).join('') || '<p class="hint">No stations set up yet.</p>';
+  };
+  if(TRENDS_STATIONS){ render(); return; }
+  api('/rest/v1/rd_stations?select=id,name,is_expo,is_beverage&venue_id=eq.'+VENUE.id+'&order=sort')
+    .then(function(rows){ TRENDS_STATIONS = rows||[]; render(); })
+    .catch(function(){ $('trStationsList').innerHTML = '<p class="hint">Could not load stations.</p>'; });
+}
+
+/* ---------- accounting connect (Xero / MYOB) ---------- */
+function handleAccountingReturn(){
+  var params = new URLSearchParams(location.search);
+  if(!params.has('acct')) return;
+  if(params.get('acct') === 'connected'){
+    toast((params.get('provider')==='xero'?'Xero':'MYOB')+' connected');
+  } else {
+    toast('Could not connect'+(params.get('msg')?': '+params.get('msg'):''));
+  }
+  // The redirect back leaves this in the address bar - clean it so a
+  // page refresh doesn't show the same toast again for something that
+  // already happened.
+  var url = new URL(location.href);
+  url.searchParams.delete('acct'); url.searchParams.delete('provider'); url.searchParams.delete('msg');
+  history.replaceState({}, '', url.toString());
+}
+function accountingCallbackUrl(provider){
+  return SUPABASE_URL.replace(/\/+$/,'') + '/functions/v1/' + provider + '-oauth-callback';
+}
+function renderAccounting(status){
+  var body;
+  if(!status || !status.configured){
+    body =
+      '<p class="hint" style="margin-bottom:10px">Pick whichever one your restaurant already uses.</p>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">'+
+        '<button class="btn quiet sm" id="acctConnectXero"'+(XERO_CLIENT_ID?'':' disabled')+'>Connect Xero</button>'+
+        '<button class="btn quiet sm" id="acctConnectMyob"'+(MYOB_CLIENT_ID?'':' disabled')+'>Connect MYOB</button>'+
+      '</div>'+
+      (!XERO_CLIENT_ID && !MYOB_CLIENT_ID
+        ? '<p class="hint" style="margin-top:8px;color:var(--warn)">Not set up on this device yet.</p>' : '');
+  } else if(status.status === 'connected'){
+    var label = status.provider === 'xero' ? 'Xero' : 'MYOB';
+    var todayIso = new Date().toISOString().slice(0,10);
+    var yestIso = new Date(Date.now()-86400000).toISOString().slice(0,10);
+    body =
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+        '<div><b style="font-family:\'Unbounded\',sans-serif;font-size:14px">'+label+'</b>'+
+        '<p class="hint" style="margin:2px 0 0">'+esc(status.org_name||'')+'</p></div>'+
+        '<span class="pill-svc" style="color:var(--good,#8bc49a)">Connected</span>'+
+      '</div>'+
+      '<button class="btn quiet sm" id="acctDisconnect" style="margin-top:12px">Disconnect</button>'+
+      '<div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">'+
+        '<p class="hint" style="margin-bottom:8px">Send one day\u2019s real sales to '+label+' as a draft invoice \u2014 '+
+          'nothing is finalised until your own bookkeeper reviews and approves it there.</p>'+
+        '<div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">'+
+          '<div><label for="acctSyncDate" style="display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px">Date</label>'+
+          '<input type="date" id="acctSyncDate" max="'+todayIso+'" value="'+yestIso+'" '+
+            'style="background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--ink);'+
+            'padding:9px 11px;min-height:42px"></div>'+
+          '<button class="btn sm" id="acctSyncNow">Sync this date</button>'+
+        '</div>'+
+        '<p class="hint" id="acctSyncResult" style="margin-top:8px"></p>'+
+      '</div>'+
+      '<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">'+
+        '<p class="hint" style="margin-bottom:8px">Recent syncs</p>'+
+        '<div id="acctSyncHistory"><p class="hint">Loading\u2026</p></div>'+
+      '</div>';
+  } else {
+    body =
+      '<p class="hint" style="color:var(--bad,#ff9a8a)">Something went wrong connecting'+
+        (status.provider?' to '+(status.provider==='xero'?'Xero':'MYOB'):'')+'.'+
+        (status.last_error?' ('+esc(status.last_error)+')':'')+'</p>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">'+
+        '<button class="btn quiet sm" id="acctConnectXero"'+(XERO_CLIENT_ID?'':' disabled')+'>Try Xero again</button>'+
+        '<button class="btn quiet sm" id="acctConnectMyob"'+(MYOB_CLIENT_ID?'':' disabled')+'>Try MYOB again</button>'+
+      '</div>';
+  }
+  $('acctBody').innerHTML = body;
+  if(status && status.status === 'connected') loadSyncHistory(status.provider);
+}
+function loadAccountingStatus(){
+  api('/rest/v1/rpc/rd_accounting_status',{method:'POST', body:JSON.stringify({p_venue_id:VENUE.id})})
+    .then(function(res){ LAST_ACCT_STATUS = res; renderAccounting(res); })
+    .catch(function(){ $('acctBody').innerHTML = '<p class="hint">Could not load status.</p>'; });
+}
+function syncDateLabel(iso){
+  var d = new Date(iso+'T00:00:00');
+  return d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
+}
+function loadSyncHistory(provider){
+  api('/rest/v1/rpc/rd_accounting_sync_status',{method:'POST', body:JSON.stringify({p_venue_id:VENUE.id, p_limit:8})})
+    .then(function(rows){
+      var relevant = (rows||[]).filter(function(r){ return r.provider === provider; });
+      if(!relevant.length){ $('acctSyncHistory').innerHTML = '<p class="hint">Nothing synced yet.</p>'; return; }
+      $('acctSyncHistory').innerHTML = relevant.map(function(r){
+        var ok = r.status === 'success';
+        return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px">'+
+          '<span>'+esc(syncDateLabel(r.sync_date))+'</span>'+
+          '<span style="color:'+(ok?'var(--good,#8bc49a)':'var(--bad,#ff9a8a)')+'">'+
+            (ok ? money(r.revenue_cents) : esc(r.last_error||'Failed'))+'</span>'+
+        '</div>';
+      }).join('');
+    })
+    .catch(function(){ $('acctSyncHistory').innerHTML = '<p class="hint">Could not load history.</p>'; });
+}
+function accountingSyncFnName(provider){ return provider + '-accounting-sync'; }
+function startAccountingConnect(provider){
+  api('/rest/v1/rpc/rd_create_oauth_state',{method:'POST',
+    body:JSON.stringify({p_venue_id:VENUE.id, p_provider:provider})})
+    .then(function(res){
+      var state = res.state;
+      var redirect = accountingCallbackUrl(provider);
+      var url;
+      if(provider === 'xero'){
+        // Xero retired the broad accounting.transactions scope for every
+        // app created on or after 2 March 2026 - a brand-new app can
+        // never be granted it at all, and requesting it fails with
+        // invalid_scope. accounting.contacts + accounting.invoices are
+        // the specific granular scopes this actually needs: a contact
+        // to bill the daily total to, and the invoice itself. Confirmed
+        // current via Xero's own developer docs, not assumed.
+        url = 'https://login.xero.com/identity/connect/authorize'+
+          '?response_type=code&client_id='+encodeURIComponent(XERO_CLIENT_ID)+
+          '&redirect_uri='+encodeURIComponent(redirect)+
+          '&scope='+encodeURIComponent('openid profile email accounting.contacts accounting.invoices offline_access')+
+          '&state='+encodeURIComponent(state);
+      } else {
+        url = 'https://secure.myob.com/oauth2/account/authorize'+
+          '?client_id='+encodeURIComponent(MYOB_CLIENT_ID)+
+          '&redirect_uri='+encodeURIComponent(redirect)+
+          '&response_type=code'+
+          '&scope='+encodeURIComponent('sme-company-file sme-sale sme-contact')+
+          '&prompt=consent&state='+encodeURIComponent(state);
+      }
+      window.location.href = url;
+    })
+    .catch(function(e){ toast(apiErr(e)); });
+}
+$('pTrends').addEventListener('click', function(e){
+  if(e.target.id === 'acctSyncNow'){
+    var dateVal = $('acctSyncDate').value;
+    if(!dateVal){ toast('Pick a date'); return; }
+    var provider = (LAST_ACCT_STATUS && LAST_ACCT_STATUS.provider) || 'xero';
+    var btn = e.target; btn.disabled = true; btn.textContent = 'Syncing\u2026';
+    $('acctSyncResult').textContent = '';
+    api('/functions/v1/'+accountingSyncFnName(provider),{method:'POST',
+      body:JSON.stringify({venue_id:VENUE.id, date:dateVal})})
+      .then(function(res){
+        if(res && res.ok){
+          $('acctSyncResult').innerHTML = '<span style="color:var(--good,#8bc49a)">Sent '+money(res.revenue_cents)+
+            ' as a draft invoice \u2014 review it in '+(provider==='xero'?'Xero':'MYOB')+'.</span>';
+        } else {
+          var msgs = {
+            already_synced: 'That date has already been sent \u2014 check your recent syncs below.',
+            nothing_to_sync: 'Nothing was sold that day \u2014 there\u2019s nothing to send.',
+            not_connected: 'Not currently connected \u2014 try reconnecting above.',
+            token_refresh_failed: 'Could not refresh the connection \u2014 try reconnecting above.',
+            contact_creation_failed: 'Could not set up the sales contact on the other end \u2014 try again shortly.',
+            invoice_creation_failed: 'The invoice itself was refused \u2014 try again shortly.'
+          };
+          $('acctSyncResult').innerHTML = '<span style="color:var(--warn)">'+
+            esc(msgs[res && res.error] || ('Could not sync that date'+((res && res.error) ? ' ('+res.error+')' : '')+' \u2014 try again.'))+'</span>';
+        }
+        loadSyncHistory(provider);
+      })
+      .catch(function(){ $('acctSyncResult').innerHTML = '<span style="color:var(--bad,#ff9a8a)">Could not reach the server. Check the WiFi and try again.</span>'; })
+      .then(function(){ btn.disabled=false; btn.textContent='Sync this date'; });
+    return;
+  }
+  if(e.target.id === 'acctConnectXero') return startAccountingConnect('xero');
+  if(e.target.id === 'acctConnectMyob') return startAccountingConnect('myob');
+  if(e.target.id === 'acctDisconnect'){
+    if(!confirm('Disconnect your accounting software? You can reconnect any time.')) return;
+    api('/rest/v1/rpc/rd_disconnect_accounting',{method:'POST', body:JSON.stringify({p_venue_id:VENUE.id})})
+      .then(function(){ toast('Disconnected'); loadAccountingStatus(); })
+      .catch(function(er){ toast(apiErr(er)); });
+  }
+});
+
+function loadTrends(start, end, btn){
+  TRENDS_RANGE = { start:start, end:end };
+  if(btn){ btn.disabled=true; btn.textContent='Loading\u2026'; }
+  $('trResults').innerHTML = '<div class="empty">Loading\u2026</div>';
+  return api('/rest/v1/rpc/rd_sales_trends',{method:'POST',
+    body:JSON.stringify({p_venue_id:VENUE.id, p_start:start, p_end:end})})
+    .then(function(r){
+      TRENDS_DATA = r;
+      $('trExport').style.display = '';
+      renderTrendsData(r);
+    })
+    .catch(function(e){
+      $('trResults').innerHTML = '<div class="empty">'+esc(apiErr(e))+'</div>';
+    })
+    .then(function(){ if(btn){ btn.disabled=false; btn.textContent='Load'; } });
+}
+
+function pctBadge(pct){
+  if(pct===null||pct===undefined) return '';
+  var up = pct >= 0;
+  return '<span style="font-size:12px;font-family:\'Space Mono\',monospace;margin-left:6px;'+
+    'color:'+(up?'#8fd6a8':'#ff9a8a')+'">'+(up?'\u2191':'\u2193')+Math.abs(pct)+'%</span>';
+}
+
+function dishRowsHtml(list){
+  if(!list.length) return '<p class="hint" style="margin-top:8px">Nothing sold in this range.</p>';
+  return '<table class="dtable" style="margin-top:10px"><thead><tr><th>Dish</th>'+
+    '<th class="num">Qty</th><th class="num">Revenue</th><th>Best day</th><th>Best service</th></tr></thead><tbody>'+
+    list.map(function(p){
+      return '<tr'+(p.is_quiet?' style="color:var(--muted)"':'')+'><td>'+esc(p.name)+
+        (p.is_quiet?' <span class="pill-svc" style="color:var(--muted)">quiet</span>':'')+'</td>'+
+        '<td class="num">'+p.qty+'</td><td class="num">'+money(p.revenue_cents)+'</td>'+
+        '<td>'+esc(p.best_day)+'</td><td><span class="pill-svc '+esc(p.best_service)+'">'+esc(p.best_service)+'</span></td></tr>';
+    }).join('')+'</tbody></table>';
+}
+
+function renderTrendsData(r){
+  var days = r.by_day_service||[];
+  var byDow = {};
+  days.forEach(function(d){ (byDow[d.dow]=byDow[d.dow]||{}); byDow[d.dow][d.service]=d; byDow[d.dow].day_name=d.day_name; });
+
+  var prev = r.previous || {};
+  var h = '<div class="stat-grid">'+
+    '<div class="stat-box"><span class="mono" style="color:var(--muted)">Revenue</span><div class="n">'+
+      money(r.total_revenue_cents)+pctBadge(prev.revenue_change_pct)+'</div></div>'+
+    '<div class="stat-box"><span class="mono" style="color:var(--muted)">Orders</span><div class="n">'+
+      (r.total_orders||0)+pctBadge(prev.orders_change_pct)+'</div></div>'+
+    '<div class="stat-box"><span class="mono" style="color:var(--muted)">Items sold</span><div class="n">'+(r.total_items||0)+'</div></div>'+
+    '<div class="stat-box"><span class="mono" style="color:var(--muted)">Avg order</span><div class="n">'+money(r.avg_order_cents)+'</div></div>'+
+  '</div>';
+
+  if(prev.start){
+    h += '<p class="hint" style="margin-bottom:14px">Compared with '+dayOf(prev.start)+' \u2013 '+dayOf(prev.end)+
+      ' ('+money(prev.total_revenue_cents)+', '+(prev.total_orders||0)+' orders).</p>';
+  }
+
+  h += '<div class="stat-grid">'+
+    '<div class="stat-box"><span class="mono" style="color:var(--muted)">Food revenue</span><div class="n">'+money(r.food_revenue_cents)+'</div></div>'+
+    '<div class="stat-box"><span class="mono" style="color:var(--muted)">Beverage revenue</span><div class="n">'+money(r.beverage_revenue_cents)+'</div></div>'+
+    '<div class="stat-box"><span class="mono" style="color:var(--muted)">Drinks per food order</span><div class="n">'+
+      (r.drinks_per_food_order==null?'\u2014':r.drinks_per_food_order)+'</div></div>'+
+  '</div>';
+
+  var quiet = (r.food_products||[]).filter(function(p){return p.is_quiet;})
+    .concat((r.beverage_products||[]).filter(function(p){return p.is_quiet;}));
+  if(quiet.length){
+    h += '<div class="sum-card" style="border-color:rgba(255,154,138,.3)">'+
+      '<span class="mono" style="color:var(--muted)">Needs attention \u2014 quietest performers</span>'+
+      '<p class="hint">'+quiet.map(function(p){return esc(p.name)+' ('+money(p.revenue_cents)+')';}).join(', ')+'</p>'+
+    '</div>';
+  }
+
+  h += '<div class="sum-card"><span class="mono" style="color:var(--muted)">By day of the week</span>'+
+    '<table class="dtable" style="margin-top:10px"><thead><tr><th>Day</th>'+
+    '<th class="num">Lunch</th><th class="num">Dinner</th><th class="num">Total</th></tr></thead><tbody>';
+  [1,2,3,4,5,6,7].forEach(function(dow){
+    var row = byDow[dow] || {};
+    var lunch = row.lunch || {revenue_cents:0}, dinner = row.dinner || {revenue_cents:0};
+    var total = (lunch.revenue_cents||0) + (dinner.revenue_cents||0);
+    h += '<tr><td>'+esc(row.day_name||'')+'</td>'+
+      '<td class="num">'+money(lunch.revenue_cents)+'</td>'+
+      '<td class="num">'+money(dinner.revenue_cents)+'</td>'+
+      '<td class="num"><b>'+money(total)+'</b></td></tr>';
+  });
+  h += '</tbody></table></div>';
+
+  h += '<div class="sum-card"><span class="mono" style="color:var(--muted)">Food</span>'+
+    dishRowsHtml(r.food_products||[])+'</div>';
+  h += '<div class="sum-card"><span class="mono" style="color:var(--muted)">Beverage</span>'+
+    dishRowsHtml(r.beverage_products||[])+'</div>';
+
+  $('trResults').innerHTML = h;
+}
+
+function trendsFilename(r){
+  var slug=(r.venue||'restaurant').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  return slug+'-sales-trends-'+r.start+'-to-'+r.end+'.xlsx';
+}
+
+function buildTrendsWorkbook(r){
+  var prev = r.previous || {};
+  var s1 = [
+    [H('Sales trends'),''],
+    ['Venue', r.venue], ['From', D(new Date(r.start))], ['To', D(new Date(r.end))],
+    ['Lunch/dinner cutoff', r.lunch_dinner_cutoff], ['',''],
+    [B('Total revenue'), MB(r.total_revenue_cents)],
+    [B('Total orders'), N(r.total_orders)],
+    [B('Total items sold'), N(r.total_items)],
+    [B('Average order'), MB(r.avg_order_cents)],
+    ['',''],
+    [B('Food revenue'), MB(r.food_revenue_cents)],
+    [B('Beverage revenue'), MB(r.beverage_revenue_cents)],
+    [B('Drinks per food order'), r.drinks_per_food_order==null?'':r.drinks_per_food_order],
+    ['','']
+  ];
+  if(prev.start){
+    s1.push([B('Previous period'), dayOf(prev.start)+' to '+dayOf(prev.end)]);
+    s1.push(['Previous revenue', MB(prev.total_revenue_cents)]);
+    s1.push(['Previous orders', N(prev.total_orders)]);
+    s1.push(['Revenue change', (prev.revenue_change_pct==null?'':prev.revenue_change_pct+'%')]);
+    s1.push(['Orders change', (prev.orders_change_pct==null?'':prev.orders_change_pct+'%')]);
+  }
+
+  var s2 = [[H('Day'),H('Service'),H('Revenue'),H('Orders'),H('Items')]];
+  (r.by_day_service||[]).forEach(function(d){
+    s2.push([d.day_name, d.service, M(d.revenue_cents), N(d.orders), N(d.items)]);
+  });
+
+  var s3 = [[H('Kind'),H('Dish'),H('Total qty'),H('Total revenue'),H('Best day'),H('Best service'),H('Quiet?')]];
+  (r.food_products||[]).forEach(function(p){
+    s3.push(['Food', p.name, N(p.qty), M(p.revenue_cents), p.best_day, p.best_service, p.is_quiet?'Yes':'']);
+  });
+  (r.beverage_products||[]).forEach(function(p){
+    s3.push(['Beverage', p.name, N(p.qty), M(p.revenue_cents), p.best_day, p.best_service, p.is_quiet?'Yes':'']);
+  });
+
+  // Flat detail - every dish x day x service, exactly the shape a
+  // manager can drop straight into their own pivot table in Excel.
+  var s4 = [[H('Kind'),H('Dish'),H('Day'),H('Service'),H('Qty'),H('Revenue')]];
+  (r.food_products||[]).concat(r.beverage_products||[]).forEach(function(p){
+    var kind = (r.food_products||[]).indexOf(p) >= 0 ? 'Food' : 'Beverage';
+    (p.by_day_service||[]).forEach(function(x){
+      s4.push([kind, p.name, x.day_name, x.service, N(x.qty), M(x.revenue_cents)]);
+    });
+  });
+
+  return buildXlsx([
+    {name:'Summary', rows:s1, widths:[22,18]},
+    {name:'By day & service', rows:s2, widths:[12,10,13,10,9]},
+    {name:'By dish', rows:s3, widths:[11,30,10,13,12,12,8]},
+    {name:'Detail', rows:s4, widths:[11,30,12,10,8,13]}
+  ]);
+}
+
+function exportTrends(btn){
+  if(!TRENDS_DATA) return;
+  var label=btn.textContent; btn.disabled=true; btn.textContent='Building\u2026';
+  try{
+    saveBytes(buildTrendsWorkbook(TRENDS_DATA), trendsFilename(TRENDS_DATA),
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  } finally { btn.disabled=false; btn.textContent=label; }
+}
+
+$('pTrends').addEventListener('click', function(e){
+  var pr = e.target.closest('[data-preset]');
+  if(pr){
+    var range = trendsPreset(pr.dataset.preset);
+    TRENDS_RANGE = range;
+    $('trStart').value = range.start; $('trEnd').value = range.end;
+    document.querySelectorAll('.presets button').forEach(function(b){ b.classList.toggle('on', b===pr); });
+    loadTrends(range.start, range.end, $('trLoad'));
+    return;
+  }
+  if(e.target.id==='trLoad'){
+    var s=$('trStart').value, en=$('trEnd').value;
+    if(!s||!en){ toast('Pick both dates'); return; }
+    if(s>en){ toast('The start date is after the end date'); return; }
+    loadTrends(s, en, e.target);
+    return;
+  }
+  if(e.target.id==='trExport') return exportTrends(e.target);
+  if(e.target.id==='trSaveCutoff'){
+    var t=$('trCutoff').value;
+    if(!t){ toast('Pick a time'); return; }
+    var b=e.target; b.disabled=true;
+    api('/rest/v1/rpc/rd_set_lunch_dinner_cutoff',{method:'POST',
+      body:JSON.stringify({p_venue_id:VENUE.id, p_cutoff:t+':00'})})
+      .then(function(){ toast('Saved'); if(TRENDS_RANGE) loadTrends(TRENDS_RANGE.start, TRENDS_RANGE.end); })
+      .catch(function(er){ toast(apiErr(er)); })
+      .then(function(){ b.disabled=false; });
+  }
+});
+
+$('pTrends').addEventListener('change', function(e){
+  var sel = e.target.closest('[data-station]'); if(!sel) return;
+  var isBev = sel.value === 'beverage';
+  sel.disabled = true;
+  api('/rest/v1/rpc/rd_set_station_kind',{method:'POST',
+    body:JSON.stringify({p_venue_id:VENUE.id, p_station_id:sel.dataset.station, p_is_beverage:isBev})})
+    .then(function(){
+      TRENDS_STATIONS = null;   // force a fresh read next time the card renders
+      toast('Saved');
+      if(TRENDS_RANGE) loadTrends(TRENDS_RANGE.start, TRENDS_RANGE.end);
+    })
+    .catch(function(er){ toast(apiErr(er)); })
+    .then(function(){ sel.disabled = false; });
+});
+
+function paintHist(){
+  $('pHist').innerHTML='<div class="empty">Loading\u2026</div>';
+  api('/rest/v1/rpc/rd_reading_history',{method:'POST',
+    body:JSON.stringify({p_venue_id:VENUE.id,p_limit:30})})
+    .then(function(rows){
+      if(!rows||!rows.length){
+        $('pHist').innerHTML='<div class="empty"><h3>No readings yet</h3>'+
+          '<p>Z readings appear here once you close off a shift.</p></div>';
+        return;
+      }
+      $('pHist').innerHTML=rows.map(function(r){
+        var t=r.totals||{};
+        return '<div class="sum-card">'+
+          '<div style="display:flex;align-items:baseline;gap:10px">'+
+            '<h2 style="font-size:17px">Z #'+r.number+'</h2>'+
+            '<span class="hint" style="margin:0">'+dayOf(r.period_end)+' '+timeOf(r.period_end)+'</span>'+
+            '<span class="spacer"></span>'+
+            '<b style="font-family:\'Unbounded\',sans-serif;font-size:19px">'+
+              money(t.total_cents)+'</b>'+
+          '</div>'+
+          '<div style="margin-top:10px">'+
+            '<div class="sum-row"><span>Card</span><b>'+money(t.card_cents)+'</b></div>'+
+            '<div class="sum-row"><span>Cash</span><b>'+money(t.cash_cents)+'</b></div>'+
+            (t.online_cents?'<div class="sum-row"><span>Phone</span><b>'+
+               money(t.online_cents)+'</b></div>':'')+
+            (t.tip_cents?'<div class="sum-row"><span>Tips</span><b>'+money(t.tip_cents)+'</b></div>':'')+
+            (t.other_cents?'<div class="sum-row"><span>Other</span><b>'+money(t.other_cents)+'</b></div>':'')+
+            '<div class="sum-row"><span>Tables</span><b>'+(t.tables_settled||0)+'</b></div>'+
+          '</div>'+
+          (r.tables_open_at_close?'<p class="hint" style="color:var(--warn);margin-top:8px">'+
+            'Forced with '+r.tables_open_at_close+' table(s) open.</p>':'')+
+          (r.note?'<p class="hint" style="margin-top:8px">'+esc(r.note)+'</p>':'')+
+          '<div class="acts" style="margin-top:12px">'+
+            '<button class="btn quiet sm" data-expx="'+r.id+'">Excel</button>'+
+            '<button class="btn quiet sm" data-exp="'+r.id+'">CSV</button>'+
+          '</div>'+
+          '</div>';
+      }).join('');
+    })
+    .catch(function(e){
+      $('pHist').innerHTML='<div class="empty"><p>'+esc(apiErr(e))+'</p></div>';
+    });
+}
+
+document.querySelector('.tabs').addEventListener('click',function(e){
+  var b=e.target.closest('[data-p]');if(!b)return;
+  PANE=b.dataset.p;
+  Array.prototype.forEach.call(b.parentNode.children,function(c){
+    c.classList.toggle('on',c===b);});
+  $('pOpen').classList.toggle('on',PANE==='open');
+  $('pToday').classList.toggle('on',PANE==='today');
+  $('pHist').classList.toggle('on',PANE==='hist');
+  $('pTrends').classList.toggle('on',PANE==='trends');
+  if(PANE==='today') paintToday();
+  else if(PANE==='hist') paintHist();
+  else if(PANE==='trends') paintTrends();
+  else paintOpen();
+});
+
+window.addEventListener('online',function(){refresh();});
+document.addEventListener('visibilitychange',function(){if(!document.hidden)refresh();});
+
+$('pHist').addEventListener('click',function(e){
+  var x=e.target.closest('[data-expx]');
+  if(x) return exportWorkbook(x.dataset.expx, x);
+  var b=e.target.closest('[data-exp]'); if(!b) return;
+  exportReport(b.dataset.exp, b);
+});
+
+/* ---------- boot ---------- */
+(function(){
+  if(!SUPABASE_URL||!SUPABASE_KEY){
+    var c=readCfg();
+    if(c&&c.url&&c.key){SUPABASE_URL=c.url;SUPABASE_KEY=c.key;}
+  }
+  if(!SUPABASE_URL||!SUPABASE_KEY) return showConn('');
+  showLogin('');
+  var s=readSess();
+  if(s&&s.access_token){SESSION=s;start().catch(function(){});}
+})();
+})();
+</script>
+</body>
+</html>
