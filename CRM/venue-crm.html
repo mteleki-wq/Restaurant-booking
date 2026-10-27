@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restaurant Deluxe — Venue CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#06060f; --panel:#0d0f22; --panel2:#11142b;
+    --violet:#8b5cf6; --blue:#4f7cff; --cyan:#22d3ee; --gold:#f0cd8b; --teal:#2dd4bf; --red:#ff8f8f;
+    --ink:#eef0ff; --muted:#9aa3c7; --faint:#6a7299;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.06);
+    --glass:rgba(255,255,255,.03);
+    --grad:linear-gradient(120deg,var(--violet),var(--blue) 55%,var(--cyan));
+    --fdisp:'Sora',system-ui,-apple-system,Segoe UI,sans-serif;
+    --fmono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--fdisp);font-size:15px;line-height:1.55;
+       -webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(1000px 560px at 8% -8%,rgba(139,92,246,.18),transparent 60%),
+               radial-gradient(900px 540px at 96% 4%,rgba(34,211,238,.11),transparent 62%)}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:8px}
+  .wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 24px 80px}
+
+  header{display:flex;align-items:center;gap:14px;padding:20px 0 14px;flex-wrap:wrap;position:sticky;top:0;z-index:20;
+    background:linear-gradient(180deg,var(--bg) 78%,transparent)}
+  .mark{width:44px;height:44px;border-radius:13px;background:var(--grad);display:grid;place-items:center;font-weight:800;font-size:15px;flex:0 0 auto}
+  .title h1{margin:0;font-size:19px;font-weight:700;letter-spacing:-.02em}
+  .title p{margin:0;font-family:var(--fmono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+  .grow{flex:1 1 auto}
+  .status{display:inline-flex;align-items:center;gap:8px;font-family:var(--fmono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .status .d{width:7px;height:7px;border-radius:50%;background:var(--faint)}
+  .status.on .d{background:var(--teal);box-shadow:0 0 10px var(--teal)}
+  .status.off .d{background:var(--red);box-shadow:0 0 10px rgba(255,143,143,.6)}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--fdisp);font-weight:600;font-size:13.5px;
+    border-radius:999px;padding:10px 16px;cursor:pointer;white-space:nowrap;border:1px solid var(--line);background:var(--glass);color:var(--ink);
+    text-decoration:none;transition:border-color .18s,transform .15s}
+  .btn:hover{border-color:var(--cyan)}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--grad);border-color:transparent;color:#fff}
+  .btn.sm{padding:7px 12px;font-size:12.5px}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+
+  nav.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:6px 0 24px;overflow-x:auto}
+  nav.tabs button{background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--muted);
+    font-family:var(--fdisp);font-size:14.5px;font-weight:600;padding:11px 16px;white-space:nowrap}
+  nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--cyan)}
+  nav.tabs .ct{font-family:var(--fmono);font-size:10.5px;color:var(--faint);margin-left:6px}
+  section[hidden]{display:none}
+
+  .eyebrow{font-family:var(--fmono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);font-weight:700}
+  h2{margin:6px 0 4px;font-size:24px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:70ch}
+
+  /* KPI strip */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:26px}
+  .kpi{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:16px 18px}
+  .kpi span{display:block;font-family:var(--fmono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .kpi b{display:block;font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1.2;margin-top:6px}
+  .kpi small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .kpi.alert b{color:var(--red)} .kpi.good b{color:var(--teal)}
+  .up{color:var(--teal)} .down{color:var(--red)}
+
+  /* venue cards */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .vcard{position:relative;text-align:left;cursor:pointer;border:1px solid var(--line);border-radius:18px;background:var(--panel);
+    padding:18px;color:var(--ink);font-family:var(--fdisp);display:flex;flex-direction:column;gap:12px;overflow:hidden;
+    transition:transform .16s,border-color .16s}
+  .vcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--lvl,var(--faint))}
+  .vcard:hover{transform:translateY(-2px);border-color:var(--lvl,var(--violet))}
+  .vcard[data-lvl="red"]{--lvl:var(--red)} .vcard[data-lvl="amber"]{--lvl:var(--gold)}
+  .vcard[data-lvl="green"]{--lvl:var(--teal)} .vcard[data-lvl="grey"]{--lvl:var(--faint)}
+  .vhead{display:flex;align-items:center;gap:10px}
+  .vhead b{font-size:17px;letter-spacing:-.01em;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .chip{font-family:var(--fmono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:999px;
+    border:1px solid currentColor;color:var(--muted);white-space:nowrap}
+  .chip.trial{color:var(--cyan)} .chip.paying{color:var(--teal)} .chip.at_risk{color:var(--red)}
+  .chip.onboarding{color:var(--violet)} .chip.paused,.chip.churned{color:var(--faint)}
+  .vnums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .vnums div{border:1px solid var(--line2);border-radius:10px;padding:8px 10px;background:var(--glass)}
+  .vnums b{display:block;font-size:17px;font-weight:700;letter-spacing:-.02em}
+  .vnums span{font-family:var(--fmono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  ul.flags{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+  ul.flags li{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:baseline}
+  ul.flags li::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--faint);transform:translateY(-1px)}
+  ul.flags li.red::before{background:var(--red)} ul.flags li.amber::before{background:var(--gold)}
+  ul.flags li.green::before{background:var(--teal)}
+  .vfoot{font-family:var(--fmono);font-size:10.5px;color:var(--faint);display:flex;justify-content:space-between;gap:8px}
+
+  /* pipeline */
+  .funnel{display:flex;height:12px;border-radius:999px;overflow:hidden;background:var(--glass);border:1px solid var(--line);margin:4px 0 16px}
+  .funnel i{display:block;height:100%}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .fchip{border:1px solid var(--line);background:var(--glass);color:var(--muted);border-radius:999px;padding:7px 13px;cursor:pointer;
+    font-family:var(--fdisp);font-size:13px;font-weight:600;display:inline-flex;gap:7px;align-items:center}
+  .fchip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .fchip b{font-family:var(--fmono);font-size:11px;color:var(--faint);font-weight:400}
+  .fchip[aria-pressed="true"]{color:var(--ink);border-color:var(--violet);background:rgba(139,92,246,.16)}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  input[type=text],input[type=search],input[type=email],input[type=url],input[type=number],input[type=date],input[type=password],textarea,select{
+    padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0a0b1a;color:var(--ink);font-family:var(--fdisp);font-size:14px;line-height:1.45;min-width:0}
+  input:focus,textarea:focus,select:focus{border-color:var(--cyan);outline:none}
+  textarea{resize:vertical;width:100%}
+  .toolbar input[type=search]{flex:1 1 220px}
+  .plist{display:grid;gap:8px}
+  .prow{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:12px 14px;display:grid;
+    grid-template-columns:minmax(0,1fr) auto auto auto;gap:10px 12px;align-items:center}
+  .prow .who b{display:block;font-size:14.5px;line-height:1.3}
+  .prow .who span{display:block;font-size:12.5px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .prow select{padding:7px 9px;font-size:13px}
+  .prow input[type=date]{padding:6px 8px;font-size:13px}
+  .prow .pri{font-family:var(--fmono);font-size:11px;font-weight:700;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;border:1px solid var(--line)}
+  .pri.A{color:var(--teal);border-color:rgba(45,212,191,.45)} .pri.B{color:var(--cyan)} .pri.C{color:var(--faint)}
+  .prow .more{grid-column:1/-1;display:none;gap:10px}
+  .prow.open .more{display:grid}
+  .prow .more .meta{font-size:12.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+  .prow .more .meta a{color:var(--cyan)}
+  .prow .tog{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;width:30px;height:30px;cursor:pointer}
+  .prow.due{border-color:rgba(240,205,139,.45)}
+  .empty{color:var(--faint);font-family:var(--fmono);font-size:12px;padding:16px 2px}
+
+  /* AI */
+  .ai-box{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:18px;margin-bottom:18px}
+  .ai-box label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+  .ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  .idea{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:18px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+  .idea::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--grad)}
+  .idea h3{margin:0;font-size:16.5px;letter-spacing:-.01em;line-height:1.3}
+  .idea .why{font-size:13.5px;color:var(--muted);margin:0}
+  .idea dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
+  .idea dt{font-family:var(--fmono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+  .idea dd{margin:0;color:var(--ink)}
+  .idea .act{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+  .thinking{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:14px;padding:18px 4px}
+  .thinking i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--cyan);animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* drawer + modal */
+  .scrim{position:fixed;inset:0;background:rgba(3,3,10,.62);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--panel2);border-left:1px solid var(--line);z-index:60;
+    transform:translateX(102%);transition:transform .24s ease;overflow-y:auto;padding:22px 22px 60px;-webkit-overflow-scrolling:touch}
+  .drawer.on{transform:none}
+  .drawer h3{margin:4px 0 2px;font-size:22px;letter-spacing:-.02em}
+  .drawer .x{position:absolute;top:16px;right:16px}
+  .form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .form .full{grid-column:1/-1}
+  .form label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px;color:var(--muted)}
+  .form input,.form select,.form textarea{width:100%}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+  .facts div{border:1px solid var(--line2);border-radius:10px;padding:9px 11px;background:var(--glass);font-size:13px}
+  .facts span{display:block;font-family:var(--fmono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);width:min(520px,calc(100vw - 32px));background:var(--panel2);
+    border:1px solid var(--line);border-radius:20px;padding:22px;z-index:70;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+  .modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+  .modal .field{margin-bottom:12px}
+  .modal label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+  .modal input{width:100%}
+  .help{font-size:12px;color:var(--faint);margin:5px 0 0;line-height:1.45}
+  .note{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--glass);font-size:13px;color:var(--muted);line-height:1.55}
+  .note.warn{border-color:rgba(240,205,139,.35);background:rgba(240,205,139,.06)}
+  .note.bad{border-color:rgba(255,143,143,.4);background:rgba(255,143,143,.06);color:#ffd6d6}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    padding:12px 20px;border-radius:999px;font-size:13.5px;font-weight:600;box-shadow:0 20px 50px rgba(0,0,0,.6);opacity:0;pointer-events:none;
+    transition:opacity .22s,transform .22s;z-index:100;max-width:calc(100vw - 32px);text-align:center}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:720px){
+    .wrap{padding:0 16px 70px}
+    .prow{grid-template-columns:minmax(0,1fr) auto}
+    .prow select,.prow input[type=date]{grid-column:span 1}
+    .form{grid-template-columns:1fr}
+    header .status{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mark">RD</div>
+    <div class="title">
+      <h1>Venue CRM</h1>
+      <p>Restaurant Deluxe · health · pipeline · AI</p>
+    </div>
+    <div class="grow"></div>
+    <span class="status" id="conn"><span class="d"></span><span id="connLbl">Not connected</span></span>
+    <button class="btn sm" id="btnRefresh" type="button">↻ Refresh</button>
+    <button class="btn sm" id="btnSettings" type="button">⚙ Connect</button>
+    <a class="btn sm" href="../Control-room/" title="Back to the Control Room">Control Room</a>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="health">Venue health<span class="ct" id="ctHealth"></span></button>
+    <button role="tab" aria-selected="false" data-tab="pipeline">Sales pipeline<span class="ct" id="ctPipe"></span></button>
+    <button role="tab" aria-selected="false" data-tab="ai">✦ AI suggestions</button>
+  </nav>
+
+  <div id="banner"></div>
+
+  <!-- ============ HEALTH ============ -->
+  <section id="tab-health">
+    <span class="eyebrow">Live venues</span>
+    <h2>How every restaurant is running</h2>
+    <p class="sub">Red needs you today, amber is worth a look this week. A venue going quiet is usually the first sign it's slipping away — catch it early with a call or an email.</p>
+    <div class="kpis" id="kpis"></div>
+    <div class="cards" id="venueCards"><p class="empty">Connect to load your venues.</p></div>
+  </section>
+
+  <!-- ============ PIPELINE ============ -->
+  <section id="tab-pipeline" hidden>
+    <span class="eyebrow">Prospects</span>
+    <h2>Sales pipeline</h2>
+    <p class="sub">Every restaurant you've imported as a lead. Move them along as you talk to them, set a follow-up date, and email a filtered group straight from the Email Studio.</p>
+    <div class="funnel" id="funnel" aria-hidden="true"></div>
+    <div class="chips" id="statusChips"></div>
+    <div class="toolbar">
+      <input type="search" id="pSearch" placeholder="Search restaurant, name, suburb…">
+      <select id="pPriority" aria-label="Priority">
+        <option value="">All priorities</option><option value="A">A only</option><option value="B">B only</option><option value="C">C only</option>
+      </select>
+      <button class="btn sm" id="btnEmailGroup" type="button">✉ Email this group</button>
+    </div>
+    <div class="plist" id="plist"></div>
+    <div style="margin-top:14px;text-align:center"><button class="btn sm" id="pMore" type="button" hidden>Show more</button></div>
+  </section>
+
+  <!-- ============ AI ============ -->
+  <section id="tab-ai" hidden>
+    <span class="eyebrow">Claude co-pilot</span>
+    <h2>What should I send next?</h2>
+    <p class="sub">Claude reads a summary of the figures above — trials, quiet venues, order trends, prospects not yet contacted, recent campaign results — and suggests campaigns. Only counts and venue names are sent, never prospects' names or email addresses. Nothing is ever sent without you.</p>
+    <div class="ai-box">
+      <label for="aiFocus">Anything to focus on? <span style="color:var(--faint);font-weight:400">(optional)</span></label>
+      <textarea id="aiFocus" rows="2" placeholder="e.g. I want to convert the trials before Christmas, or push table ordering to cafés"></textarea>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn primary" id="btnIdeas" type="button">✦ Suggest campaigns</button>
+      </div>
+    </div>
+    <div id="ideas"></div>
+  </section>
+</div>
+
+<!-- venue drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Venue details"></aside>
+
+<!-- settings -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <span class="eyebrow">Connection</span>
+  <h3 id="mTitle" style="margin:6px 0 4px;font-size:20px">Connect the Venue CRM</h3>
+  <p class="help" style="margin-bottom:14px">Uses the same studio secret as the Email Studio. If the studio already remembers it on this device, it's filled in for you.</p>
+  <div class="field"><label for="sUrl">Function URL</label><input type="url" id="sUrl" autocomplete="off"></div>
+  <div class="field"><label for="sSecret">Studio secret</label><input type="password" id="sSecret" autocomplete="off"></div>
+  <label style="display:flex;gap:10px;align-items:center;font-size:13.5px;margin:4px 0 16px"><input type="checkbox" id="sRemember"> Remember on this device</label>
+  <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+    <button class="btn" id="mCancel" type="button">Cancel</button>
+    <button class="btn primary" id="mSave" type="button">Connect</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ------------------------------------------------------------ config */
+  var DEFAULT_URL = "https://tehxobdokbvqtwtgqzrh.supabase.co/functions/v1/rd-control";
+  var STUDIO_URL  = "restaurant-deluxe-email-studio.html";
+  var K_SET = "rdcrm.settings", K_STUDIO = "rdes.settings", K_HANDOFF = "rd.handoff";
+
+  var STAGE_LABEL = {onboarding:"Onboarding",trial:"Trial",paying:"Paying",at_risk:"At risk",paused:"Paused",churned:"Churned"};
+  var PSTAT = ["New","Contacted","Replied","Demo booked","Trial","Won","Lost"];
+  var PCOL  = {"New":"#6a7299","Contacted":"#4f7cff","Replied":"#22d3ee","Demo booked":"#8b5cf6","Trial":"#f0cd8b","Won":"#2dd4bf","Lost":"#3a3f5c"};
+
+  /* ------------------------------------------------------------ helpers */
+  var $ = function(s,r){ return (r||document).querySelector(s); };
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function toast(m){ var t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(function(){ t.classList.remove("on"); },2600); }
+  function money(c){ return "$"+Math.round((c||0)/100).toLocaleString("en-AU"); }
+  function dollars(n){ return n==null||n===""?"—":"$"+Number(n).toLocaleString("en-AU",{maximumFractionDigits:2}); }
+  function daysSince(iso){ return iso ? Math.floor((Date.now()-Date.parse(iso))/864e5) : null; }
+  function daysUntil(d){ if(!d) return null; var t=new Date(d+"T23:59:59"); return Math.ceil((t-Date.now())/864e5); }
+  function ago(iso){ var d=daysSince(iso); if(d==null) return "never"; if(d===0){ var h=Math.floor((Date.now()-Date.parse(iso))/36e5); return h<1?"just now":h+"h ago"; } return d===1?"yesterday":d+" days ago"; }
+  function prio(p){ var c=String(p||"").trim().charAt(0).toUpperCase(); return /[ABC]/.test(c)?c:"–"; }
+  function validEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e||"").trim()); }
+
+  var store = (function(){
+    var ok=false; try{ localStorage.setItem("_t","1"); localStorage.removeItem("_t"); ok=true; }catch(e){}
+    return {
+      get:function(k){ try{ return ok?localStorage.getItem(k):null; }catch(e){ return null; } },
+      set:function(k,v){ try{ if(ok) localStorage.setItem(k,v); }catch(e){} },
+      del:function(k){ try{ if(ok) localStorage.removeItem(k); }catch(e){} }
+    };
+  })();
+
+  /* ------------------------------------------------------------ settings */
+  var SET = { url:"", secret:"", remember:false };
+  (function load(){
+    try{ var d=JSON.parse(store.get(K_SET)||"null"); if(d){ SET.url=d.url||""; SET.secret=d.secret||""; SET.remember=true; } }catch(e){}
+    if(!SET.secret){
+      try{
+        var s=JSON.parse(store.get(K_STUDIO)||"null");
+        if(s && s.secret){ SET.secret=s.secret; if(s.endpoint && /resend-send/.test(s.endpoint)) SET.url=s.endpoint.replace(/resend-send.*$/,"rd-control"); }
+      }catch(e){}
+    }
+    if(!SET.url) SET.url=DEFAULT_URL;
+  })();
+  function saveSet(){ if(SET.remember) store.set(K_SET,JSON.stringify({url:SET.url,secret:SET.secret})); else store.del(K_SET); }
+
+  function setConn(state,label){ var c=$("#conn"); c.className="status"+(state?" "+state:""); $("#connLbl").textContent=label; }
+
+  function call(action,payload){
+    if(!SET.secret){ openModal(); return Promise.reject(new Error("Add the studio secret first")); }
+    return fetch(SET.url,{method:"POST",headers:{"Content-Type":"application/json","x-studio-secret":SET.secret},
+      body:JSON.stringify(Object.assign({action:action},payload||{}))})
+    .then(function(r){ return r.json().catch(function(){ return {error:"The function replied with something that was not JSON"}; })
+      .then(function(d){ if(!r.ok||d.error) throw new Error(d.error||("HTTP "+r.status)); return d; }); })
+    .catch(function(e){
+      var m=(e&&e.message)||"Could not reach the function";
+      if(/Failed to fetch|NetworkError|Load failed/i.test(m)) m="Could not reach rd-control. Is it deployed, and is the URL right?";
+      throw new Error(m);
+    });
+  }
+
+  function banner(msg,cls){ $("#banner").innerHTML = msg ? '<div class="note '+(cls||"")+'" style="margin-bottom:18px">'+msg+'</div>' : ""; }
+
+  /* ------------------------------------------------------------ data */
+  var DATA = null;
+  function refresh(){
+    setConn("","Loading…");
+    return call("snapshot").then(function(d){
+      DATA=d; setConn("on","Connected"); banner("");
+      renderHealth(); renderPipeline();
+    }).catch(function(e){
+      setConn("off","Not connected");
+      banner(esc(e.message),"bad");
+    });
+  }
+
+  /* ------------------------------------------------------------ health rules */
+  function assess(v){
+    var f=[], lvl="green", stage=v.stage||"trial";
+    function add(l,t){ f.push({l:l,t:t}); if(l==="red") lvl="red"; else if(l==="amber" && lvl!=="red") lvl="amber"; }
+    if(stage==="churned"||stage==="paused"){ return {lvl:"grey",flags:[{l:"grey",t:STAGE_LABEL[stage]}]}; }
+
+    var last=daysSince(v.last_order_at);
+    if(v.ordering_enabled){
+      if(last==null) add(stage==="onboarding"?"amber":"red","No orders yet");
+      else if(last>=7) add("red","No orders for "+last+" days");
+      else if(last>=3) add("amber","Quiet — last order "+last+" days ago");
+    }
+    var o=+v.orders_7d||0, p=+v.orders_prev_7d||0;
+    if(p>=5 && o<p){
+      var drop=Math.round((1-o/p)*100);
+      if(drop>=70) add("red","Orders down "+drop+"% on last week");
+      else if(drop>=40) add("amber","Orders down "+drop+"% on last week");
+    }
+    if(+v.stuck_prints>0) add("red",v.stuck_prints+" ticket"+(v.stuck_prints>1?"s":"")+" stuck in the print queue");
+    if(+v.failed_prints_7d>0) add("amber",v.failed_prints_7d+" failed print"+(v.failed_prints_7d>1?"s":"")+" this week");
+    if(+v.printers_quiet>0) add("amber","Printer not seen for 30+ min");
+    if(+v.stale_requests>0) add("amber",v.stale_requests+" table call"+(v.stale_requests>1?"s":"")+" waiting 15+ min");
+
+    var miss=[];
+    if(!+v.menu_items) miss.push("menu");
+    if(!+v.tables) miss.push("table QR codes");
+    if(!+v.staff) miss.push("staff login");
+    if(!v.terms_accepted_at) miss.push("terms");
+    if(v.payment_mode && v.payment_mode!=="counter" && !v.has_stripe) miss.push("Stripe");
+    if(miss.length) add("amber","Setup missing: "+miss.join(", "));
+
+    if(stage==="trial"){
+      var dl=daysUntil(v.trial_ends_on);
+      if(dl==null) add("amber","Set a trial end date");
+      else if(dl<0) add("red","Trial ended "+(-dl)+" day"+(dl===-1?"":"s")+" ago — convert or extend");
+      else if(dl<=3) add("amber","Trial ends in "+dl+" day"+(dl===1?"":"s"));
+    }
+    if(stage==="at_risk" && lvl==="green") add("amber","Marked at risk");
+    if(!f.length) f.push({l:"green",t:"All good"});
+    return {lvl:lvl,flags:f};
+  }
+
+  function renderHealth(){
+    var vs=(DATA&&DATA.venues)||[];
+    var live=vs.filter(function(v){ return v.stage!=="churned"; });
+    var a=live.map(function(v){ return {v:v,a:assess(v)}; });
+    var red=a.filter(function(x){ return x.a.lvl==="red"; }).length;
+    var amber=a.filter(function(x){ return x.a.lvl==="amber"; }).length;
+    var o7=0,p7=0,rev=0,mrr=0,trialsSoon=0;
+    live.forEach(function(v){
+      o7+=+v.orders_7d||0; p7+=+v.orders_prev_7d||0; rev+=+v.revenue_30d_cents||0;
+      if(v.stage==="paying"||v.stage==="at_risk") mrr+=+v.monthly_fee||0;
+      var dl=daysUntil(v.trial_ends_on); if(v.stage==="trial" && dl!=null && dl>=0 && dl<=7) trialsSoon++;
+    });
+    var delta = p7 ? Math.round((o7/p7-1)*100) : null;
+    $("#kpis").innerHTML=[
+      kpi("Live venues", live.length, vs.length-live.length? (vs.length-live.length)+" churned":""),
+      kpi("Need you today", red, amber+" to watch this week", red?"alert":"good"),
+      kpi("Orders this week", o7, delta==null?"no orders last week":'<span class="'+(delta>=0?"up":"down")+'">'+(delta>=0?"▲ ":"▼ ")+Math.abs(delta)+"%</span> vs last week"),
+      kpi("Venue sales · 30 days", money(rev), "through Restaurant Deluxe"),
+      kpi("Monthly recurring", "$"+mrr.toLocaleString("en-AU"), "from paying venues"),
+      kpi("Trials ending ≤ 7 days", trialsSoon, trialsSoon?"time to convert":"none due", trialsSoon?"alert":"")
+    ].join("");
+    $("#ctHealth").textContent = red ? red+" red" : "";
+
+    var order={red:0,amber:1,green:2,grey:3};
+    a.sort(function(x,y){ return order[x.a.lvl]-order[y.a.lvl] || String(x.v.name).localeCompare(y.v.name); });
+    vs.filter(function(v){ return v.stage==="churned"; }).forEach(function(v){ a.push({v:v,a:assess(v)}); });
+
+    if(!a.length){ $("#venueCards").innerHTML='<p class="empty">No venues yet.</p>'; return; }
+    $("#venueCards").innerHTML=a.map(function(x){
+      var v=x.v, o=+v.orders_7d||0, p=+v.orders_prev_7d||0;
+      var trend = p ? '<span class="'+(o>=p?"up":"down")+'">'+(o>=p?"▲":"▼")+'</span> ' : "";
+      var dl=daysUntil(v.trial_ends_on);
+      return '<button class="vcard" type="button" data-lvl="'+x.a.lvl+'" data-venue="'+esc(v.id)+'">'+
+        '<div class="vhead"><b>'+esc(v.name)+'</b><span class="chip '+esc(v.stage||"")+'">'+esc(STAGE_LABEL[v.stage]||"No stage")+'</span></div>'+
+        '<div class="vnums">'+
+          '<div><b>'+trend+o+'</b><span>orders 7d</span></div>'+
+          '<div><b>'+money(v.revenue_7d_cents)+'</b><span>sales 7d</span></div>'+
+          '<div><b>'+esc(ago(v.last_order_at))+'</b><span>last order</span></div>'+
+        '</div>'+
+        '<ul class="flags">'+x.a.flags.slice(0,4).map(function(fl){ return '<li class="'+fl.l+'">'+esc(fl.t)+'</li>'; }).join("")+
+          (x.a.flags.length>4?'<li>+'+(x.a.flags.length-4)+' more</li>':'')+'</ul>'+
+        '<div class="vfoot"><span>'+esc(v.plan||"No plan set")+(v.monthly_fee?" · "+dollars(v.monthly_fee)+"/mo":"")+'</span>'+
+          '<span>'+(v.stage==="trial"&&dl!=null?(dl>=0?dl+"d left in trial":"trial over"):esc(v.slug))+'</span></div>'+
+      '</button>';
+    }).join("");
+  }
+  function kpi(l,b,s,cls){ return '<div class="kpi '+(cls||"")+'"><span>'+esc(l)+'</span><b>'+(typeof b==="number"?b:esc(b))+'</b><small>'+(s||"&nbsp;")+'</small></div>'; }
+
+  /* ------------------------------------------------------------ drawer */
+  function findVenue(id){ return ((DATA&&DATA.venues)||[]).filter(function(v){ return v.id===id; })[0]; }
+  function openDrawer(id){
+    var v=findVenue(id); if(!v) return;
+    var a=assess(v);
+    var stages=Object.keys(STAGE_LABEL).map(function(k){ return '<option value="'+k+'"'+(v.stage===k?" selected":"")+'>'+STAGE_LABEL[k]+'</option>'; }).join("");
+    $("#drawer").innerHTML=
+      '<button class="btn sm x" type="button" data-close>✕</button>'+
+      '<span class="eyebrow">'+esc(v.slug)+'</span><h3>'+esc(v.name)+'</h3>'+
+      '<ul class="flags" style="margin-top:12px">'+a.flags.map(function(f){ return '<li class="'+f.l+'">'+esc(f.t)+'</li>'; }).join("")+'</ul>'+
+      '<div class="facts">'+
+        fact("Orders this week",(+v.orders_7d||0)+" (last week "+(+v.orders_prev_7d||0)+")")+
+        fact("Sales 30 days",money(v.revenue_30d_cents))+
+        fact("Trading days · 30d",v.trading_days_30d||0)+
+        fact("Cancelled this week",v.cancelled_7d||0)+
+        fact("Menu items",v.menu_items||0)+fact("Tables",v.tables||0)+
+        fact("Staff logins",v.staff||0)+fact("Payment",(v.payment_mode||"—")+(v.has_stripe?" · Stripe ✓":""))+
+        fact("Printing",(v.printing_mode||"—")+(v.printers?" · "+v.printers+" printer"+(v.printers>1?"s":""):""))+
+        fact("Terms",v.terms_accepted_at?"Accepted "+String(v.terms_accepted_at).slice(0,10):"Not accepted")+
+      '</div>'+
+      '<span class="eyebrow">Account</span>'+
+      '<div class="form" id="acctForm">'+
+        '<div><label>Stage</label><select name="stage">'+stages+'</select></div>'+
+        '<div><label>Plan</label><select name="plan">'+["","Standard","Deluxe","Complete","Standalone ordering","Add-on"].map(function(p){ return '<option'+((v.plan||"")===p?" selected":"")+'>'+p+'</option>'; }).join("")+'</select></div>'+
+        '<div><label>Monthly fee ($)</label><input type="number" step="1" min="0" name="monthly_fee" value="'+esc(v.monthly_fee==null?"":v.monthly_fee)+'"></div>'+
+        '<div><label>Setup fee ($)</label><input type="number" step="1" min="0" name="setup_fee" value="'+esc(v.setup_fee==null?"":v.setup_fee)+'"></div>'+
+        '<div><label>Trial ends</label><input type="date" name="trial_ends_on" value="'+esc(v.trial_ends_on||"")+'"></div>'+
+        '<div><label>Started</label><input type="date" name="started_on" value="'+esc(v.started_on||"")+'"></div>'+
+        '<div><label>Contact name</label><input type="text" name="contact_name" value="'+esc(v.contact_name||"")+'"></div>'+
+        '<div><label>Contact phone</label><input type="text" name="contact_phone" value="'+esc(v.contact_phone||"")+'"></div>'+
+        '<div class="full"><label>Contact email</label><input type="email" name="contact_email" value="'+esc(v.contact_email||"")+'"></div>'+
+        '<div class="full"><label>Notes</label><textarea name="notes" rows="4">'+esc(v.notes||"")+'</textarea></div>'+
+      '</div>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">'+
+        '<button class="btn primary" type="button" data-save="'+esc(v.id)+'">Save</button>'+
+        (v.contact_email?'<button class="btn" type="button" data-mailvenue="'+esc(v.id)+'">✉ Email in Studio</button>':'')+
+        (v.order_page_url?'<a class="btn" target="_blank" rel="noopener" href="'+esc(v.order_page_url)+'">Order page ↗</a>':'')+
+      '</div>';
+    $("#drawer").classList.add("on"); $("#scrim").classList.add("on");
+  }
+  function fact(l,v){ return '<div><span>'+esc(l)+'</span>'+esc(v)+'</div>'; }
+  function closeAll(){ $("#drawer").classList.remove("on"); $("#modal").classList.remove("on"); $("#scrim").classList.remove("on"); }
+
+  function saveAccount(id,btn){
+    var fields={};
+    $("#acctForm").querySelectorAll("[name]").forEach(function(el){ fields[el.name]=el.value; });
+    if(fields.contact_email && !validEmail(fields.contact_email)){ toast("That contact email doesn't look right"); return; }
+    btn.disabled=true;
+    call("account_save",{venue_id:id,fields:fields}).then(function(){
+      var v=findVenue(id); Object.keys(fields).forEach(function(k){ v[k]= fields[k]===""?null:fields[k]; });
+      renderHealth(); openDrawer(id); toast("Saved");
+    }).catch(function(e){ toast(e.message); }).then(function(){ btn.disabled=false; });
+  }
+
+  /* ------------------------------------------------------------ pipeline */
+  var PF={status:"",prio:"",q:"",due:false,limit:60};
+  function filtered(){
+    var q=PF.q.toLowerCase(), now=Date.now();
+    return ((DATA&&DATA.prospects)||[]).filter(function(p){
+      var st=p.crm_status||"New";
+      if(PF.due){ if(!p.follow_up_at || Date.parse(p.follow_up_at)>now || st==="Won"||st==="Lost") return false; }
+      else if(PF.status && st!==PF.status) return false;
+      if(PF.prio && prio(p.priority)!==PF.prio) return false;
+      if(q){ var hay=[p.restaurant,p.name,p.suburb,p.venue_type,p.email].join(" ").toLowerCase(); if(hay.indexOf(q)<0) return false; }
+      return true;
+    }).sort(function(a,b){
+      var da=a.follow_up_at?Date.parse(a.follow_up_at):Infinity, db=b.follow_up_at?Date.parse(b.follow_up_at):Infinity;
+      if(da!==db) return da-db;
+      return prio(a.priority).localeCompare(prio(b.priority)) || String(a.restaurant||"").localeCompare(String(b.restaurant||""));
+    });
+  }
+  function renderPipeline(){
+    var ps=(DATA&&DATA.prospects)||[], counts={}, due=0, now=Date.now();
+    PSTAT.forEach(function(s){ counts[s]=0; });
+    ps.forEach(function(p){ var s=p.crm_status||"New"; counts[s]=(counts[s]||0)+1;
+      if(p.follow_up_at && Date.parse(p.follow_up_at)<=now && s!=="Won" && s!=="Lost") due++; });
+    var total=ps.length||1;
+    $("#funnel").innerHTML=PSTAT.map(function(s){ return counts[s]?'<i title="'+esc(s)+'" style="width:'+(counts[s]/total*100)+'%;background:'+PCOL[s]+'"></i>':""; }).join("");
+    var chips='<button class="fchip" type="button" data-st="" aria-pressed="'+(!PF.status&&!PF.due)+'">All <b>'+ps.length+'</b></button>'+
+      PSTAT.map(function(s){ return '<button class="fchip" type="button" data-st="'+esc(s)+'" aria-pressed="'+(PF.status===s&&!PF.due)+'"><i style="background:'+PCOL[s]+'"></i>'+esc(s)+' <b>'+(counts[s]||0)+'</b></button>'; }).join("")+
+      '<button class="fchip" type="button" data-due="1" aria-pressed="'+PF.due+'">⏰ Follow-up due <b>'+due+'</b></button>';
+    $("#statusChips").innerHTML=chips;
+    $("#ctPipe").textContent = due ? due+" due" : String(ps.length||"");
+
+    var list=filtered(), shown=list.slice(0,PF.limit);
+    $("#btnEmailGroup").textContent="✉ Email this group ("+list.filter(function(p){ return validEmail(p.email); }).length+")";
+    $("#pMore").hidden = list.length<=PF.limit;
+    if(!shown.length){ $("#plist").innerHTML='<p class="empty">Nobody matches.</p>'; return; }
+    $("#plist").innerHTML=shown.map(function(p){
+      var st=p.crm_status||"New", pr=prio(p.priority);
+      var isDue=p.follow_up_at && Date.parse(p.follow_up_at)<=now && st!=="Won" && st!=="Lost";
+      return '<div class="prow'+(isDue?" due":"")+'" data-id="'+esc(p.id)+'">'+
+        '<div class="who"><b>'+esc(p.restaurant||p.name||"(no name)")+'</b><span>'+esc([p.name,p.suburb,p.venue_type].filter(Boolean).join(" · "))+'</span></div>'+
+        '<span class="pri '+pr+'" title="Priority '+esc(p.priority||"")+'">'+pr+'</span>'+
+        '<select data-f="crm_status" aria-label="Status">'+PSTAT.map(function(s){ return '<option'+(s===st?" selected":"")+'>'+s+'</option>'; }).join("")+'</select>'+
+        '<span style="display:flex;gap:6px;align-items:center"><input type="date" data-f="follow_up_at" aria-label="Follow up on" value="'+esc(p.follow_up_at?String(p.follow_up_at).slice(0,10):"")+'">'+
+        '<button class="tog" type="button" data-tog aria-label="More">⋯</button></span>'+
+        '<div class="more">'+
+          '<div class="meta">'+(p.email?'<span>✉ '+esc(p.email)+'</span>':'<span>No email</span>')+(p.phone?'<span>☎ '+esc(p.phone)+'</span>':'')+
+            (p.website?'<a target="_blank" rel="noopener" href="'+esc(/^https?:/i.test(p.website)?p.website:"https://"+p.website)+'">Website ↗</a>':'')+
+            (p.crm_updated_at?'<span>Updated '+esc(ago(p.crm_updated_at))+'</span>':'')+'</div>'+
+          '<textarea data-f="crm_notes" rows="3" placeholder="Notes — what was said, what they need">'+esc(p.crm_notes||"")+'</textarea>'+
+        '</div>'+
+      '</div>';
+    }).join("");
+  }
+  function findProspect(id){ return ((DATA&&DATA.prospects)||[]).filter(function(p){ return p.id===id; })[0]; }
+  function updateProspect(id,field,value){
+    var p=findProspect(id); if(!p) return;
+    var payload={id:id}; payload[field]= field==="follow_up_at" ? (value?value+"T09:00:00+11:00":null) : value;
+    call("prospect_update",payload).then(function(d){
+      if(d.prospect) Object.assign(p,d.prospect);
+      if(field!=="crm_notes") renderPipeline();
+      toast("Saved");
+    }).catch(function(e){ toast(e.message); });
+  }
+
+  /* ------------------------------------------------------------ handoff to studio */
+  function recipientsFor(segment){
+    var ps=(DATA&&DATA.prospects)||[], vs=(DATA&&DATA.venues)||[];
+    var open=function(p){ var s=p.crm_status||"New"; return s!=="Won"&&s!=="Lost"; };
+    var pick=function(arr){ return arr.map(function(x){ return String(x.email||x.contact_email||"").trim().toLowerCase(); }).filter(validEmail); };
+    switch(segment){
+      case "prospects_new": return pick(ps.filter(function(p){ return (p.crm_status||"New")==="New"; }));
+      case "prospects_priority_a": return pick(ps.filter(function(p){ return prio(p.priority)==="A" && open(p); }));
+      case "prospects_followup": return pick(ps.filter(function(p){ return ["Contacted","Replied","Demo booked"].indexOf(p.crm_status)>=0; }));
+      case "trial_venues": return pick(vs.filter(function(v){ return v.stage==="trial"; }));
+      case "quiet_venues": return pick(vs.filter(function(v){ var l=assess(v).lvl; return (l==="red"||l==="amber") && v.stage!=="churned"; }));
+      case "paying_venues": return pick(vs.filter(function(v){ return v.stage==="paying"||v.stage==="at_risk"; }));
+      case "all_venues": return pick(vs.filter(function(v){ return v.stage!=="churned"; }));
+    }
+    return [];
+  }
+  function handoff(h){
+    h.v=1; h.at=Date.now();
+    h.to=Array.from(new Set(h.to||[]));
+    store.set(K_HANDOFF,JSON.stringify(h));
+    var w=window.open(STUDIO_URL,"rd-email-studio");
+    if(!w) location.href=STUDIO_URL;
+    toast(h.to.length ? h.to.length+" recipient"+(h.to.length>1?"s":"")+" sent to the Email Studio" : "Opened in the Email Studio");
+  }
+
+  /* ------------------------------------------------------------ AI ideas */
+  var IDEAS=[];
+  var SEG_LABEL={prospects_new:"New prospects",prospects_priority_a:"Priority A prospects",prospects_followup:"Prospects in conversation",
+    trial_venues:"Venues on trial",quiet_venues:"Venues needing attention",paying_venues:"Paying venues",all_venues:"All live venues"};
+  function suggest(){
+    var btn=$("#btnIdeas"); btn.disabled=true;
+    $("#ideas").innerHTML='<div class="thinking"><i></i>Claude is reading your figures…</div>';
+    call("ai_ideas",{focus:$("#aiFocus").value}).then(function(d){
+      IDEAS=d.ideas||[]; renderIdeas();
+    }).catch(function(e){
+      $("#ideas").innerHTML='<div class="note bad">'+esc(e.message)+'</div>';
+    }).then(function(){ btn.disabled=false; });
+  }
+  function renderIdeas(){
+    if(!IDEAS.length){ $("#ideas").innerHTML='<p class="empty">No ideas came back. Try again with a focus.</p>'; return; }
+    $("#ideas").innerHTML='<div class="ideas">'+IDEAS.map(function(i,ix){
+      var n=recipientsFor(i.segment).length;
+      return '<article class="idea"><h3>'+esc(i.title)+'</h3><p class="why">'+esc(i.why)+'</p>'+
+        '<dl><dt>For</dt><dd>'+esc(i.audience||SEG_LABEL[i.segment]||"")+'</dd>'+
+        '<dt>Goal</dt><dd>'+esc(i.goal||"")+'</dd>'+
+        '<dt>Hook</dt><dd>'+esc(i.angle||"")+'</dd>'+
+        '<dt>Subject</dt><dd><b>'+esc(i.subject||"")+'</b></dd>'+
+        '<dt>Starts from</dt><dd>'+esc(i.base||"")+'</dd>'+
+        '<dt>Recipients</dt><dd>'+n+' with an email address'+(SEG_LABEL[i.segment]?' · '+esc(SEG_LABEL[i.segment]):'')+'</dd></dl>'+
+        '<div class="act"><button class="btn primary sm" type="button" data-idea="'+ix+'">Draft in Email Studio →</button></div></article>';
+    }).join("")+'</div>';
+  }
+  function useIdea(ix){
+    var i=IDEAS[ix]; if(!i) return;
+    handoff({kind:"idea",title:i.title,base:i.base,subject:i.subject,preheader:i.preheader,
+      brief:[i.goal,i.angle,"Why now: "+i.why].filter(Boolean).join(". "),
+      audience:i.audience||SEG_LABEL[i.segment]||"", to:recipientsFor(i.segment), toLabel:SEG_LABEL[i.segment]||i.audience||""});
+  }
+
+  /* ------------------------------------------------------------ modal */
+  function openModal(){
+    $("#sUrl").value=SET.url; $("#sSecret").value=SET.secret; $("#sRemember").checked=SET.remember;
+    $("#modal").classList.add("on"); $("#scrim").classList.add("on");
+    setTimeout(function(){ (SET.secret?$("#mSave"):$("#sSecret")).focus(); },50);
+  }
+
+  /* ------------------------------------------------------------ events */
+  document.querySelectorAll("nav.tabs button").forEach(function(b){
+    b.addEventListener("click",function(){
+      document.querySelectorAll("nav.tabs button").forEach(function(x){ x.setAttribute("aria-selected",String(x===b)); });
+      ["health","pipeline","ai"].forEach(function(t){ $("#tab-"+t).hidden = t!==b.dataset.tab; });
+    });
+  });
+  $("#btnRefresh").addEventListener("click",refresh);
+  $("#btnSettings").addEventListener("click",openModal);
+  $("#mCancel").addEventListener("click",closeAll);
+  $("#scrim").addEventListener("click",closeAll);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeAll(); });
+  $("#mSave").addEventListener("click",function(){
+    SET.url=$("#sUrl").value.trim()||DEFAULT_URL; SET.secret=$("#sSecret").value.trim(); SET.remember=$("#sRemember").checked;
+    saveSet(); closeAll(); refresh();
+  });
+  $("#venueCards").addEventListener("click",function(e){ var c=e.target.closest("[data-venue]"); if(c) openDrawer(c.dataset.venue); });
+  $("#drawer").addEventListener("click",function(e){
+    if(e.target.closest("[data-close]")) return closeAll();
+    var s=e.target.closest("[data-save]"); if(s) return saveAccount(s.dataset.save,s);
+    var m=e.target.closest("[data-mailvenue]");
+    if(m){ var v=findVenue(m.dataset.mailvenue); handoff({kind:"venue",title:"Email to "+v.name,to:[v.contact_email],toLabel:v.name,
+      brief:"A personal note to "+v.name+" ("+(STAGE_LABEL[v.stage]||"")+"). "+assess(v).flags.map(function(f){ return f.t; }).join("; "),audience:v.name}); }
+  });
+  $("#statusChips").addEventListener("click",function(e){
+    var c=e.target.closest(".fchip"); if(!c) return;
+    if(c.dataset.due){ PF.due=!PF.due; PF.status=""; } else { PF.due=false; PF.status=c.dataset.st; }
+    PF.limit=60; renderPipeline();
+  });
+  $("#pSearch").addEventListener("input",function(){ PF.q=this.value; PF.limit=60; renderPipeline(); });
+  $("#pPriority").addEventListener("change",function(){ PF.prio=this.value; PF.limit=60; renderPipeline(); });
+  $("#pMore").addEventListener("click",function(){ PF.limit+=60; renderPipeline(); });
+  $("#plist").addEventListener("click",function(e){ var t=e.target.closest("[data-tog]"); if(t) t.closest(".prow").classList.toggle("open"); });
+  $("#plist").addEventListener("change",function(e){
+    var el=e.target.closest("[data-f]"); if(!el) return;
+    updateProspect(el.closest(".prow").dataset.id, el.dataset.f, el.value);
+  });
+  $("#btnEmailGroup").addEventListener("click",function(){
+    var list=filtered(), to=list.map(function(p){ return String(p.email||"").trim().toLowerCase(); }).filter(validEmail);
+    if(!to.length){ toast("Nobody in this group has an email address"); return; }
+    var label=(PF.due?"Follow-up due":PF.status||"All prospects")+(PF.prio?" · priority "+PF.prio:"")+(PF.q?' · "'+PF.q+'"':"");
+    if(to.length>100 && !confirm("Send "+to.length+" addresses to the Email Studio? You'll still review everything before anything is sent.")) return;
+    handoff({kind:"group",title:"Prospects — "+label,to:to,toLabel:label,audience:"Restaurant prospects ("+label+")"});
+  });
+  $("#btnIdeas").addEventListener("click",suggest);
+  $("#ideas").addEventListener("click",function(e){ var b=e.target.closest("[data-idea]"); if(b) useIdea(+b.dataset.idea); });
+
+  /* ------------------------------------------------------------ boot */
+  if(SET.secret) refresh(); else { setConn("off","Not connected"); openModal(); }
+})();
+</script>
+</body>
+</html>
