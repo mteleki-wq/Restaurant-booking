@@ -155,10 +155,13 @@ PRODUCT: Restaurant Deluxe by Webescapade (Sydney). Built by Marc, a hospitality
 WHAT IT IS: editable restaurant website + direct online bookings with live availability + guest CRM + optional AI assistant + QR table ordering (kitchen and bar displays, ticket printing, shift records with X/Z readings and Excel export).
 TABLE ORDERING: guest scans the table QR, browses the menu in the phone browser (no app, no account), sends the order; food routes to the kitchen, drinks to the bar. Runs alongside the venue's existing POS — it does NOT replace the POS.
 PRICES (AUD, per month): Standard $68 (website + bookings); Deluxe $98 (adds CRM, AI assistance, large-booking card guarantees); Complete $149 (adds QR table ordering, kitchen/bar displays, shift records). Table ordering add-on for existing clients $69. Standalone Table Ordering (keep your own website) $109.
+NO COMMISSION: flat monthly fee only. No commission or percentage on orders or bookings. Lead with this.
 TRIAL: 14-day free trial. During the trial Webescapade connects the restaurant to the system at no cost. Loading the menu, photos and add-ons is NOT part of the free trial.
-QUICK START SETUP (optional): $150 + GST, non-refundable. Webescapade imports the menu, images and add-ons, plus online video training (video only, no on-site training). Covers screen ordering with pay at the counter only.
-FULL SETUP when moving to a paid plan: $400-$600 + GST depending on what the venue needs (card payments, kitchen/bar printers, website and bookings, several stations). Any $150 Quick Start fee already paid is deducted from it.
-SUPPORT: ongoing support is included in every monthly plan. Setup is NOT included or free beyond the trial connection.
+QUICK START SETUP (optional): $150 + GST. Webescapade imports the menu, images and add-ons, plus online training videos (video only). Covers screen ordering with pay at the counter only. Non-refundable once setup has started.
+FOUNDING OFFER: the Quick Start setup is free for the first 5 venues. Do not invent a deadline or say how many places are left.
+SETUP WHEN CHOOSING A PLAN (+ GST, fixed): $400 table ordering (menu, add-ons, kitchen and bar printers and stations); $500 adds card payments; $600 adds website and online bookings. Can be paid in one go or over the first 3 months. Any $150 Quick Start already paid is deducted.
+SUPPORT: ongoing support is included in every monthly plan. Setup is NOT free or included beyond the trial connection and the founding offer.
+CAFES: for cafés, lead with Standalone Table Ordering at $109/month (keep their website) and the $400 setup.
 CONTACT: Marc, marc@webescapade.com, 0413 872 994.
 `;
 
@@ -167,7 +170,7 @@ You write marketing email copy for Restaurant Deluxe, sent business-to-business 
 RULES — follow all of them:
 - Australian English spelling (organise, colour, centre).
 - Use ONLY the facts supplied. Never invent statistics, percentages, customer counts, testimonials, awards, discounts, deadlines, prices or features.
-- Never say setup is free or included, except the free trial connection. State the $150 + GST Quick Start and $400-$600 + GST setup exactly as in FACTS when setup is mentioned.
+- Never say setup is free or included, except the free trial connection. State the Quick Start, founding offer and $400/$500/$600 + GST setup exactly as in FACTS when setup is mentioned. Mention one plan and one setup figure per email, not the whole price list.
 - Never claim it replaces a POS. Never claim it "prevents" no-shows or overbooking — "reduces" or "helps with" only.
 - Do not use spammy wording (FREE!!!, act now, guaranteed, 100%, risk-free) or ALL CAPS sentences.
 - Subject lines under 50 characters, no emoji unless asked. Preheaders under 90 characters.
@@ -374,7 +377,7 @@ Deno.serve(async (req) => {
           `Suggest 4 email campaigns Marc could send in the next two weeks, most valuable first. ` +
           `Base each one on something specific in the data (a trial ending, a venue gone quiet, a drop in orders, prospects never contacted, a setup step missing, a past campaign to follow up). ` +
           `Name the venue(s) or group it is for. Keep it honest — if the data is thin, say so in "why".\n\n` +
-          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: Intro to Restaurant Deluxe | Table ordering launch | 14-day free trial invite | Standalone ordering ($109) | Add-on for existing clients ($69) | Booking demo follow-up"}]}`,
+          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: Intro to Restaurant Deluxe | Cafés: order at the table | Table ordering launch | 14-day free trial invite | Standalone ordering ($109) | Add-on for existing clients ($69) | Booking demo follow-up"}]}`,
           3000,
         );
         return json({ ok: true, ideas: out.ideas || [], snapshotSummary: s });
