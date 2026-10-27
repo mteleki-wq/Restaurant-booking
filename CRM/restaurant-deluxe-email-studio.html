@@ -224,6 +224,30 @@
   .ai-ok{border-left-color:var(--teal)}
   .ai-handoff{border:1px solid rgba(34,211,238,.4);background:rgba(34,211,238,.06);border-radius:14px;padding:14px;margin-bottom:14px;font-size:13.5px}
   .ai-handoff>b:first-child{display:block;margin-bottom:3px}
+  /* ---- prospect import + audience picker (v15) ---- */
+  .grp-body > p.help,.pk-box p.help{font-size:12.5px;color:var(--faint);line-height:1.5}
+  .pk-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+  label.btn{user-select:none;-webkit-user-select:none}
+  .pk-box{border:1px solid var(--line);border-radius:12px;background:#0a0b1a;padding:14px;margin-bottom:12px}
+  .pk-box h5{margin:0 0 8px;font-size:13.5px}
+  .pk-map{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+  .pk-map label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px}
+  .pk-map select,.pk-map input{padding:8px 10px;font-size:13px}
+  .pk-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;display:block;overflow-x:auto}
+  .pk-tbl th,.pk-tbl td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line2);white-space:nowrap;color:var(--muted)}
+  .pk-tbl th{font-family:var(--fmono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .pk-stats{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:8px 0}
+  .pk-stats b{color:var(--ink)}
+  .pk-h{font-family:var(--fmono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:14px 0 6px;display:flex;gap:10px;align-items:center}
+  .pk-h a{color:var(--cyan);cursor:pointer;text-transform:none;letter-spacing:0;font-family:var(--fdisp);font-size:12px}
+  .pk-chips{display:flex;gap:6px;flex-wrap:wrap}
+  .pk-chips button{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:6px 11px;
+    font-family:var(--fdisp);font-size:12.5px;font-weight:600;cursor:pointer}
+  .pk-chips button b{font-family:var(--fmono);font-size:10.5px;color:var(--faint);font-weight:400;margin-left:4px}
+  .pk-chips button[aria-pressed="true"]{color:var(--ink);border-color:var(--violet);background:rgba(139,92,246,.18)}
+  .pk-result{border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.05);border-radius:12px;padding:12px 14px;margin-top:14px}
+  .pk-result .big{font-size:22px;font-weight:800;letter-spacing:-.02em}
+  @media (max-width:620px){ .pk-map{grid-template-columns:1fr} }
   @media (max-width:1150px){
     .layout{grid-template-columns:1fr}
     .rail{border-right:none;border-bottom:1px solid var(--line);flex-direction:row;overflow-x:auto;padding:14px}
@@ -253,7 +277,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v14</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v15</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -608,7 +632,23 @@
           </div>
         </details>
 
-        <details class="grp">
+        <details class="grp" open id="grpPick">
+          <summary>Choose recipients from your prospects</summary>
+          <div class="grp-body">
+            <p class="help" style="margin:0 0 12px">Import a spreadsheet of restaurants, then pick a group by venue type and suburb.
+               Anyone who unsubscribed, bounced or complained is always left out.</p>
+            <div class="btnrow" style="margin:0 0 12px">
+              <label class="btn" for="pkFile" id="pkFileBtn">⬆ Import Excel or CSV</label>
+              <button class="btn" type="button" data-act="pk-load">↻ Load prospects</button>
+            </div>
+            <input type="file" id="pkFile" class="pk-file"
+                   accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
+            <div id="pkImport"></div>
+            <div id="pkPick"><p class="empty">Tap “Load prospects” to choose a group.</p></div>
+          </div>
+        </details>
+
+        <details class="grp" id="grpList">
           <summary>Send to addresses now</summary>
           <div class="grp-body">
             <div class="field">
@@ -784,7 +824,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v14 \u00b7 AI co-pilot';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v15 \u00b7 prospect groups';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1639,7 +1679,8 @@
      recipient ever sees a raw {{{ ... }}} in their inbox. */
   function resolveTags(html){
     var c=camps[cur];
-    var unsub = url(c.unsubUrl) || (url(c.siteUrl)||'https://webescapade.com');
+    /* Direct sends always carry a working unsubscribe link. */
+    var unsub = url(c.unsubUrl) || 'https://webescapade.com/CRM/unsubscribe.html';
     return String(html)
       .replace(/\{\{\{\s*contact\.first_name\s*\|\s*([^}]*?)\s*\}\}\}/g,'$1')
       .replace(/\{\{\{\s*contact\.[a-z_]+\s*\}\}\}/gi,'')
@@ -1715,7 +1756,7 @@
     logLine('Sending '+label+'\u2026');
     call('send',{
       from:fromAddress(), replyTo:(SET.replyTo||'').trim()||undefined,
-      subject:c.subject, html:resolveTags(finalHtml(c)), text:buildText(c),
+      subject:c.subject, html:resolveTags(finalHtml(c)), text:resolveTags(buildText(c)),
       to:recipients, campaign:slug(c.name)
     }).then(function(d){
       addHist({ kind:(recipients.length===1?'test':'list'), campaign:c.name,
@@ -2441,6 +2482,269 @@
     toast('Loaded from the Venue CRM');
   }
 
+  /* ===================================================================
+     PROSPECT IMPORT + AUDIENCE PICKER (v15)
+     Excel/CSV rows are mapped to prospect fields here, then saved through
+     rd-control (duplicates skipped by email). The picker filters saved
+     prospects by venue type and suburb and loads the group into
+     "Send to addresses now", in batches of up to 500.
+     =================================================================== */
+  var XLSX_URL='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  var PK={ list:null, blocked:{}, types:{}, subs:{}, subQ:'', skipWonLost:true, batch:0, imp:null };
+  var PK_FIELDS=[
+    {k:'email',      label:'Email',            req:true, re:/e-?mail/i},
+    {k:'restaurant', label:'Business name',    req:true, re:/(business|restaurant|venue|company|trading|establishment|outlet)/i},
+    {k:'name',       label:'Contact name',     re:/(contact|owner|manager|first ?name|person|^name$)/i},
+    {k:'venue_type', label:'Venue type',       re:/(type|category|segment|kind|format|style)/i},
+    {k:'suburb',     label:'Suburb or area',   re:/(suburb|area|location|city|region|town|locality)/i},
+    {k:'phone',      label:'Phone',            re:/(phone|mobile|tel|cell)/i},
+    {k:'website',    label:'Website',          re:/(web|site|url|domain|link)/i},
+    {k:'priority',   label:'Priority',         re:/(priority|tier|rank|score|grade)/i},
+    {k:'notes',      label:'Notes',            re:/(note|why|comment|fit|remark)/i}
+  ];
+  var PK_EMAIL=/^[^\s@,;()"<>]+@[^\s@,;()"<>]+\.[^\s@,;()"<>]{2,}$/;
+
+  function loadXLSX(){
+    if(window.XLSX) return Promise.resolve(window.XLSX);
+    if(loadXLSX._p) return loadXLSX._p;
+    loadXLSX._p=new Promise(function(res,rej){
+      var s=document.createElement('script'); s.src=XLSX_URL; s.async=true;
+      s.onload=function(){ window.XLSX?res(window.XLSX):rej(new Error('The spreadsheet reader did not load')); };
+      s.onerror=function(){ loadXLSX._p=null; rej(new Error('Could not load the spreadsheet reader. Check your connection and try again.')); };
+      document.head.appendChild(s);
+    });
+    return loadXLSX._p;
+  }
+  function cellStr(v){ if(v==null) return ''; if(v instanceof Date) return v.toISOString().slice(0,10); return String(v).replace(/\s+/g,' ').trim(); }
+  function emailIn(v){ var m=cellStr(v).replace(/^mailto:/i,'').match(/[^\s@,;()"<>:]+@[^\s@,;()"<>]+\.[^\s@,;()"<>]{2,}/); return m?m[0].toLowerCase():''; }
+
+  /* ---- reading the file ---- */
+  $('#pkFile').addEventListener('change',function(){
+    var f=this.files&&this.files[0]; this.value='';
+    if(!f) return;
+    if(f.size>15*1024*1024){ toast('That file is over 15 MB'); return; }
+    $('#pkImport').innerHTML='<div class="ai-busy"><i></i>Reading '+esc(f.name)+'…</div>';
+    Promise.all([loadXLSX(), f.arrayBuffer ? f.arrayBuffer() : new Promise(function(res,rej){
+      var r=new FileReader(); r.onload=function(){res(r.result);}; r.onerror=function(){rej(r.error);}; r.readAsArrayBuffer(f); })])
+    .then(function(a){
+      var wb=a[0].read(new Uint8Array(a[1]),{type:'array',cellDates:true});
+      var sheets=wb.SheetNames.map(function(n){
+        var rows=a[0].utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',blankrows:false,raw:false});
+        var em=0; rows.forEach(function(r){ r.forEach(function(c){ if(emailIn(c)) em++; }); });
+        return {name:n, rows:rows, emails:em};
+      }).filter(function(s){ return s.rows.length; });
+      if(!sheets.length) throw new Error('That file has no rows.');
+      var best=sheets.slice().sort(function(x,y){ return y.emails-x.emails; })[0];
+      PK.imp={file:f.name, sheets:sheets, sheet:best.name};
+      pkPrepSheet(); pkRenderImport();
+    }).catch(function(e){ $('#pkImport').innerHTML='<div class="note warn">'+esc((e&&e.message)||'Could not read that file')+'</div>'; });
+  });
+
+  function pkPrepSheet(){
+    var I=PK.imp, sh=I.sheets.filter(function(s){ return s.name===I.sheet; })[0], rows=sh.rows;
+    var h=-1;
+    for(var i=0;i<Math.min(rows.length,20);i++){ if(rows[i].some(function(c){ return /e-?mail/i.test(cellStr(c)) && !emailIn(c); })){ h=i; break; } }
+    if(h<0){ var bestN=-1; for(var j=0;j<Math.min(rows.length,10);j++){ var n=rows[j].filter(function(c){ var t=cellStr(c); return t && !emailIn(t) && isNaN(t); }).length; if(n>bestN){ bestN=n; h=j; } } }
+    var width=rows.reduce(function(m,r){ return Math.max(m,r.length); },0);
+    var head=[]; for(var c=0;c<width;c++){ head.push(cellStr(rows[h][c])||('Column '+(c+1))); }
+    I.headerRow=h; I.head=head; I.data=rows.slice(h+1).filter(function(r){ return r.some(function(c){ return cellStr(c); }); });
+    var map={}, taken={};
+    ['email','phone','website','suburb','venue_type','priority','name','restaurant','notes'].forEach(function(k){
+      var f=PK_FIELDS.filter(function(x){ return x.k===k; })[0];
+      for(var c=0;c<head.length;c++){
+        if(taken[c]) continue;
+        if(k==='restaurant' && /(contact|owner|manager|person)/i.test(head[c])) continue;
+        if(k==='website' && /e-?mail/i.test(head[c])) continue;
+        if(f.re.test(head[c])){ map[k]=c; taken[c]=1; return; }
+      }
+    });
+    if(map.email==null){ for(var c2=0;c2<head.length;c2++){ var hits=I.data.slice(0,30).filter(function(r){ return emailIn(r[c2]); }).length; if(hits && !taken[c2]){ map.email=c2; taken[c2]=1; break; } } }
+    if(map.restaurant==null){ for(var c3=0;c3<head.length;c3++){ if(!taken[c3] && /name/i.test(head[c3])){ map.restaurant=c3; taken[c3]=1; break; } } }
+    I.map=map; I.fillType=''; I.update=true;
+  }
+
+  function pkMapped(){
+    var I=PK.imp, m=I.map;
+    return I.data.map(function(r){
+      var o={};
+      PK_FIELDS.forEach(function(f){ o[f.k]= m[f.k]==null ? '' : (f.k==='email' ? emailIn(r[m[f.k]]) : cellStr(r[m[f.k]])); });
+      if(!o.venue_type && I.fillType) o.venue_type=I.fillType;
+      return o;
+    });
+  }
+
+  function pkRenderImport(){
+    /* Replacing the panel blurs a focused field, whose change event would
+       re-render mid-render. Run one render at a time, after events settle. */
+    if(pkRenderImport._busy){ pkRenderImport._again=true; return; }
+    pkRenderImport._busy=true;
+    try{ pkRenderImportNow(); } finally { pkRenderImport._busy=false; }
+    if(pkRenderImport._again){ pkRenderImport._again=false; setTimeout(pkRenderImport,0); }
+  }
+  function pkRenderImportNow(){
+    var I=PK.imp; if(!I){ $('#pkImport').innerHTML=''; return; }
+    var rows=pkMapped(), seen={}, valid=0, bad=0, dup=0, already=0;
+    var saved={}; (PK.list||[]).forEach(function(p){ saved[String(p.email||'').toLowerCase()]=1; });
+    rows.forEach(function(r){ if(!PK_EMAIL.test(r.email)){ bad++; return; } if(seen[r.email]){ dup++; return; } seen[r.email]=1; valid++; if(saved[r.email]) already++; });
+    var opts=function(sel){ return '<option value="">— not in this sheet —</option>'+I.head.map(function(h,i){ return '<option value="'+i+'"'+(sel===i?' selected':'')+'>'+esc(h)+'</option>'; }).join(''); };
+    var sheetSel = I.sheets.length>1
+      ? '<div class="field" style="margin-bottom:10px"><label>Sheet</label><select id="pkSheet">'+I.sheets.map(function(s){ return '<option'+(s.name===I.sheet?' selected':'')+'>'+esc(s.name)+'</option>'; }).join('')+'</select></div>' : '';
+    var preview=rows.filter(function(r){ return PK_EMAIL.test(r.email); }).slice(0,5);
+    $('#pkImport').innerHTML='<div class="pk-box"><h5>'+esc(I.file)+' — '+I.data.length+' rows</h5>'+sheetSel+
+      '<p class="help" style="margin:0 0 10px">Check which column holds what. Email and business name are needed.</p>'+
+      '<div class="pk-map">'+PK_FIELDS.map(function(f){ return '<div><label>'+f.label+(f.req?' *':'')+'</label><select data-pkmap="'+f.k+'">'+opts(I.map[f.k])+'</select></div>'; }).join('')+
+        '<div><label>Venue type for rows without one</label><input type="text" id="pkFillType" placeholder="e.g. Pub" value="'+esc(I.fillType)+'"></div></div>'+
+      '<div class="pk-stats"><span><b>'+valid+'</b> with a valid email</span>'+(already?'<span><b>'+already+'</b> already saved</span>':'')+
+        (dup?'<span>'+dup+' duplicate'+(dup>1?'s':'')+' in the file</span>':'')+(bad?'<span>'+bad+' without a usable email</span>':'')+'</div>'+
+      (preview.length?'<table class="pk-tbl"><tr><th>Business</th><th>Email</th><th>Type</th><th>Suburb</th><th>Contact</th></tr>'+
+        preview.map(function(r){ return '<tr><td>'+esc(r.restaurant)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.venue_type)+'</td><td>'+esc(r.suburb)+'</td><td>'+esc(r.name)+'</td></tr>'; }).join('')+'</table>':'')+
+      '<label class="chk" style="margin:12px 0 0"><input type="checkbox" id="pkUpdate"'+(I.update?' checked':'')+'> Update venue type, suburb and details for people already saved</label>'+
+      '<div class="btnrow"><button class="btn primary" type="button" data-act="pk-save"'+((valid&&I.map.email!=null)?'':' disabled')+'>Save '+valid+' to prospects</button>'+
+        '<button class="btn" type="button" data-act="pk-cancel">Cancel</button></div></div>';
+    var ss=$('#pkSheet'); if(ss) ss.addEventListener('change',function(){ I.sheet=this.value; pkPrepSheet(); pkRenderImport(); });
+    $('#pkImport').querySelectorAll('[data-pkmap]').forEach(function(s){
+      s.addEventListener('change',function(){ var k=s.dataset.pkmap, v=s.value===''?null:+s.value;
+        Object.keys(I.map).forEach(function(x){ if(I.map[x]===v && x!==k) I.map[x]=null; }); I.map[k]=v; pkRenderImport(); });
+    });
+    $('#pkFillType').addEventListener('change',function(){ var v=this.value.trim(); if(v===I.fillType) return; I.fillType=v; setTimeout(pkRenderImport,0); });
+    $('#pkUpdate').addEventListener('change',function(){ I.update=this.checked; });
+  }
+  act('pk-cancel',function(){ PK.imp=null; pkRenderImport(); });
+
+  act('pk-save',function(btn){
+    var I=PK.imp; if(!I) return;
+    if(I.map.restaurant==null && !confirm('No business name column is chosen. Use the email domain as the name?')) return;
+    var seen={}, rows=pkMapped().filter(function(r){ if(!PK_EMAIL.test(r.email)||seen[r.email]) return false; seen[r.email]=1; return true; });
+    btn.disabled=true;
+    var tot={added:0,updated:0,existing:0,invalid:0}, chunks=[];
+    for(var i=0;i<rows.length;i+=500) chunks.push(rows.slice(i,i+500));
+    var step=0;
+    function next(){
+      if(step>=chunks.length) return Promise.resolve();
+      $('#pkImport').querySelector('[data-act="pk-save"]').textContent='Saving '+Math.min((step+1)*500,rows.length)+' of '+rows.length+'…';
+      return aiCall('prospects_import',{rows:chunks[step], fileName:I.file, updateExisting:!!I.update}).then(function(d){
+        tot.added+=d.added||0; tot.updated+=d.updated||0; tot.existing+=d.existing||0; tot.invalid+=d.invalid||0; step++; return next();
+      });
+    }
+    next().then(function(){
+      var msg=tot.added+' new prospect'+(tot.added===1?'':'s')+' saved'+(tot.existing?', '+tot.existing+' already there'+(tot.updated?' ('+tot.updated+' updated)':''):'')+'.';
+      logLine('Import: '+msg,'ok'); toast('Import done');
+      PK.imp=null; $('#pkImport').innerHTML='<div class="note">'+esc(msg)+' Choose a group below.</div>';
+      return pkLoad(true);
+    }).catch(function(e){
+      btn.disabled=false; btn.textContent='Try again';
+      $('#pkImport').insertAdjacentHTML('beforeend','<div class="note warn">'+esc((e&&e.message)||e)+(tot.added?' ('+tot.added+' were saved before this stopped — trying again skips them.)':'')+'</div>');
+    });
+  });
+
+  /* ---- grouping ---- */
+  function pkTypes(t){
+    var parts=String(t||'').split(/\s*(?:\/|,|&|\+|\||;|\band\b)\s*/i).map(function(x){ return x.trim().toLowerCase().replace(/caf[eé]/g,'cafe'); }).filter(Boolean);
+    if(!parts.length) return ['(not set)'];
+    return parts.map(function(w){
+      if(/ies$/.test(w) && w.length>4) w=w.replace(/ies$/,'y');
+      else if(/[^s]s$/.test(w) && w.length>3) w=w.slice(0,-1);
+      return w.replace(/\b\w/g,function(c){ return c.toUpperCase(); });
+    });
+  }
+  function pkSub(s){ s=String(s||'').trim().toLowerCase(); return s ? s.replace(/\b\w/g,function(c){ return c.toUpperCase(); }) : '(not set)'; }
+
+  function pkLoad(quiet){
+    if(!quiet) $('#pkPick').innerHTML='<div class="ai-busy"><i></i>Loading your prospects…</div>';
+    return aiCall('snapshot',{}).then(function(d){
+      PK.list=d.prospects||[]; PK.blocked={}; (d.blocked||[]).forEach(function(e){ PK.blocked[e]=1; });
+      PK.batch=0; pkRender();
+    }).catch(function(e){ $('#pkPick').innerHTML='<div class="note warn">'+esc((e&&e.message)||e)+'</div>'; });
+  }
+  act('pk-load',function(){ pkLoad(false); });
+
+  function pkMatches(){
+    var held=0, noEmail=0, out=[];
+    var selT=Object.keys(PK.types).filter(function(k){ return PK.types[k]; });
+    var selS=Object.keys(PK.subs).filter(function(k){ return PK.subs[k]; });
+    (PK.list||[]).forEach(function(p){
+      if(PK.skipWonLost && (p.crm_status==='Won'||p.crm_status==='Lost')) return;
+      if(selT.length && !pkTypes(p.venue_type).some(function(t){ return selT.indexOf(t)>=0; })) return;
+      if(selS.length && selS.indexOf(pkSub(p.suburb))<0) return;
+      var e=String(p.email||'').trim().toLowerCase();
+      if(!PK_EMAIL.test(e)){ noEmail++; return; }
+      if(PK.blocked[e]){ held++; return; }
+      out.push(e);
+    });
+    return {emails:Array.from(new Set(out)), held:held, noEmail:noEmail, types:selT, subs:selS};
+  }
+
+  function pkRender(){
+    var list=PK.list||[];
+    if(!list.length){ $('#pkPick').innerHTML='<p class="empty">No prospects saved yet. Import a spreadsheet to start.</p>'; return; }
+    $('#pkPick').innerHTML=
+      '<div class="pk-h">Venue type <a data-pkclear="t"></a></div><div class="pk-chips" id="pkTypeWrap"></div>'+
+      '<div class="pk-h">Suburb or area <a data-pkclear="s"></a></div>'+
+      '<input type="text" id="pkSubQ" placeholder="Search suburbs…" value="'+esc(PK.subQ)+'" style="margin-bottom:8px;padding:8px 11px;font-size:13px">'+
+      '<div class="pk-chips" id="pkSubWrap"></div>'+
+      '<label class="chk" style="margin:12px 0 0"><input type="checkbox" id="pkSkip"'+(PK.skipWonLost?' checked':'')+'> Leave out prospects marked Won or Lost</label>'+
+      '<div class="pk-result" id="pkRes"></div>';
+    $('#pkSubQ').addEventListener('input',function(){ PK.subQ=this.value; pkFill(); });
+    $('#pkSkip').addEventListener('change',function(){ PK.skipWonLost=this.checked; PK.batch=0; pkFill(); });
+    pkFill();
+  }
+  function pkClick(e){
+    var b=e.target.closest('[data-pkt],[data-pks],[data-pkclear]'); if(!b) return;
+    if(b.dataset.pkt!=null) PK.types[b.dataset.pkt]=!PK.types[b.dataset.pkt];
+    else if(b.dataset.pks!=null) PK.subs[b.dataset.pks]=!PK.subs[b.dataset.pks];
+    else if(b.dataset.pkclear==='t') PK.types={}; else PK.subs={};
+    PK.batch=0; pkFill();
+  }
+  function pkFill(){
+    var list=PK.list||[], tc={}, sc={};
+    list.forEach(function(p){
+      if(PK.skipWonLost && (p.crm_status==='Won'||p.crm_status==='Lost')) return;
+      pkTypes(p.venue_type).forEach(function(t){ tc[t]=(tc[t]||0)+1; });
+      var s=pkSub(p.suburb); sc[s]=(sc[s]||0)+1;
+    });
+    var tKeys=Object.keys(tc).sort(function(a,b){ return tc[b]-tc[a]||a.localeCompare(b); });
+    var q=PK.subQ.toLowerCase().trim();
+    var sKeys=Object.keys(sc).sort(function(a,b){ return (PK.subs[b]?1:0)-(PK.subs[a]?1:0)||sc[b]-sc[a]||a.localeCompare(b); });
+    var sShown=sKeys.filter(function(s){ return PK.subs[s] || !q || s.toLowerCase().indexOf(q)>=0; });
+    var more=Math.max(0,sShown.length-24); sShown=sShown.slice(0,24);
+    var chip=function(kind,k,n,on){ return '<button type="button" data-pk'+kind+'="'+esc(k)+'" aria-pressed="'+(!!on)+'">'+esc(k)+'<b>'+n+'</b></button>'; };
+    $('#pkTypeWrap').innerHTML=tKeys.map(function(k){ return chip('t',k,tc[k],PK.types[k]); }).join('');
+    $('#pkSubWrap').innerHTML=sShown.map(function(k){ return chip('s',k,sc[k],PK.subs[k]); }).join('')+
+      (more?'<span class="help" style="align-self:center;margin:0">+'+more+' more — search to find them</span>':'')+
+      (!sShown.length?'<span class="help" style="margin:0">No suburb matches “'+esc(PK.subQ)+'”</span>':'');
+    var m=pkMatches(), batches=Math.ceil(m.emails.length/500)||1;
+    $('#pkPick').querySelector('[data-pkclear="t"]').textContent=m.types.length?'Clear':'';
+    $('#pkPick').querySelector('[data-pkclear="s"]').textContent=m.subs.length?'Clear':'';
+    if(PK.batch>=batches) PK.batch=0;
+    var from=PK.batch*500, to=Math.min(from+500,m.emails.length);
+    var label=(m.types.length?m.types.join(', '):'All venue types')+' · '+(m.subs.length?m.subs.join(', '):'all areas');
+    $('#pkRes').innerHTML='<span class="big">'+m.emails.length+'</span> recipient'+(m.emails.length===1?'':'s')+' — '+esc(label)+
+      '<div class="pk-stats">'+(m.held?'<span>'+m.held+' held back (unsubscribed or bounced)</span>':'')+(m.noEmail?'<span>'+m.noEmail+' without an email</span>':'')+'</div>'+
+      (batches>1?'<div class="field" style="margin:8px 0"><label>More than 500 — send in batches</label><select id="pkBatch">'+
+        Array.apply(null,Array(batches)).map(function(_,i){ return '<option value="'+i+'"'+(i===PK.batch?' selected':'')+'>Batch '+(i+1)+' of '+batches+' ('+(i*500+1)+'–'+Math.min(i*500+500,m.emails.length)+')</option>'; }).join('')+'</select></div>':'')+
+      '<div class="btnrow"><button class="btn primary" type="button" data-act="pk-use"'+(m.emails.length?'':' disabled')+'>Use '+(batches>1?(to-from)+' (batch '+(PK.batch+1)+')':'these '+m.emails.length)+' →</button></div>';
+    var bs=$('#pkBatch'); if(bs) bs.addEventListener('change',function(){ PK.batch=+this.value; pkFill(); });
+    PK.current={emails:m.emails.slice(from,to), label:label+(batches>1?' (batch '+(PK.batch+1)+' of '+batches+')':'')};
+  }
+
+  act('pk-use',function(){
+    var c=PK.current; if(!c||!c.emails.length) return;
+    SET.list=c.emails.join('\n');
+    var ta=$('#sList'); if(ta) ta.value=SET.list;
+    $('#listCount').textContent=c.emails.length;
+    var g=$('#grpList'); if(g){ g.open=true; try{ g.scrollIntoView({block:'start',behavior:'smooth'}); }catch(e){} }
+    logLine(c.emails.length+' recipient'+(c.emails.length===1?'':'s')+' loaded — '+c.label+'.','ok');
+    logLine('Check the campaign, send yourself a test, then use “Send to the list”.','dim');
+    toast(c.emails.length+' recipients loaded');
+  });
+
+  function pkBoot(){
+    $('#pkPick').addEventListener('click',pkClick);
+    document.querySelectorAll('.tab').forEach(function(t){
+      t.addEventListener('click',function(){ if(t.dataset.pane==='send' && PK.list===null && SET.secret) pkLoad(false); });
+    });
+  }
+
   /* ---- boot ---- */
   var vl=document.getElementById('verLbl');
   if(vl) vl.textContent=BUILD;
@@ -2458,6 +2762,7 @@
   renderHist();
   renderRail(); fillForm(); renderPreview();
   aiBoot();
+  pkBoot();
 })();
 </script>
 </body>

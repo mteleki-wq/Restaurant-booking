@@ -62,15 +62,44 @@ async function db(path: string, init: RequestInit = {}) {
 const STAGES = ["onboarding", "trial", "paying", "at_risk", "paused", "churned"];
 const PROSPECT_STATUSES = ["New", "Contacted", "Replied", "Demo booked", "Trial", "Won", "Lost"];
 
-async function snapshot() {
-  const [venues, prospects, campaigns, deliveries] = await Promise.all([
-    db("rpc/rd_platform_health", { method: "POST", body: "{}" }),
-    db("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at&order=created_at.desc&limit=2000"),
-    db("email_marketing_campaigns?select=name,subject,status,sent_at,created_at&order=created_at.desc&limit=12"),
-    db(`crm_email_deliveries?select=status,campaign,subject,created_at&created_at=gte.${new Date(Date.now() - 60 * 864e5).toISOString()}&limit=5000`),
-  ]);
-  return { venues: venues || [], prospects: prospects || [], campaigns: campaigns || [], deliveries: deliveries || [] };
+// Supabase returns at most 1000 rows per request, so page through.
+async function readAll(path: string, cap = 20000) {
+  const out: any[] = [];
+  for (let offset = 0; offset < cap; offset += 1000) {
+    const rows = await db(`${path}${path.includes("?") ? "&" : "?"}limit=1000&offset=${offset}`);
+    if (!Array.isArray(rows)) break;
+    out.push(...rows);
+    if (rows.length < 1000) break;
+  }
+  return out;
 }
+
+async function snapshot() {
+  const [venues, prospects, campaigns, deliveries, optouts, badDeliveries, badEvents] = await Promise.all([
+    db("rpc/rd_platform_health", { method: "POST", body: "{}" }),
+    readAll("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at&order=created_at.desc,id.desc"),
+    db("email_marketing_campaigns?select=name,subject,status,sent_at,created_at&order=created_at.desc&limit=12"),
+    db(`crm_email_deliveries?select=status,campaign,subject,created_at&created_at=gte.${new Date(Date.now() - 60 * 864e5).toISOString()}&limit=1000`),
+    readAll("email_optouts?select=email&order=id.asc"),
+    readAll("crm_email_deliveries?select=recipient_email&status=in.(bounced,complained,suppressed)&order=id.asc"),
+    readAll("email_events?select=to_email&event_type=in.(email.bounced,email.complained,email.suppressed)&order=id.asc"),
+  ]);
+  // Addresses that must never be emailed again. Only prospects' own
+  // addresses are returned, so restaurant guests' opt-outs never leave the server.
+  const bad = new Set<string>([
+    ...optouts.map((r: any) => r.email),
+    ...badDeliveries.map((r: any) => r.recipient_email),
+    ...badEvents.map((r: any) => r.to_email),
+  ].filter(Boolean).map((e: string) => String(e).trim().toLowerCase()));
+  const blocked = [...new Set(prospects.map((p: any) => String(p.email || "").trim().toLowerCase()))].filter((e) => bad.has(e));
+  return { venues: venues || [], prospects, campaigns: campaigns || [], deliveries: deliveries || [], blocked };
+}
+
+const EMAIL_RE = /^[^\s@,;()"<>]+@[^\s@,;()"<>]+\.[^\s@,;()"<>]{2,}$/;
+const clip = (v: unknown, n = 300) => {
+  const t = String(v ?? "").replace(/\s+/g, " ").trim();
+  return t ? t.slice(0, n) : null;
+};
 
 // A compact, PII-free picture of the business for the model.
 function summarise(s: Awaited<ReturnType<typeof snapshot>>) {
@@ -226,6 +255,70 @@ Deno.serve(async (req) => {
       // ---------------------------------------------------------- data
       case "snapshot":
         return json({ ok: true, ...(await snapshot()), stages: STAGES, prospectStatuses: PROSPECT_STATUSES });
+
+      // Rows from an Excel/CSV sheet, already mapped to our columns by the studio.
+      case "prospects_import": {
+        const rows = Array.isArray(body.rows) ? body.rows : [];
+        if (!rows.length) return json({ error: "No rows were sent" }, 400);
+        if (rows.length > 1000) return json({ error: "Send at most 1000 rows at a time" }, 400);
+        const fileName = clip(body.fileName, 200);
+        const source = clip(body.source, 120) || ("Excel import" + (fileName ? " · " + fileName : ""));
+        const update = body.updateExisting === true;
+        const seen = new Set<string>();
+        let invalid = 0, dupInFile = 0;
+        const clean: any[] = [];
+        for (const r of rows) {
+          const email = String(r?.email || "").trim().toLowerCase();
+          if (!EMAIL_RE.test(email)) { invalid++; continue; }
+          if (seen.has(email)) { dupInFile++; continue; }
+          seen.add(email);
+          clean.push({
+            email,
+            restaurant: clip(r.restaurant, 200) || clip(r.name, 200) || email.split("@")[1],
+            name: clip(r.name, 200) || "Restaurant team",
+            phone: clip(r.phone, 60) || "",
+            website: clip(r.website, 300),
+            suburb: clip(r.suburb, 120),
+            venue_type: clip(r.venue_type, 120),
+            priority: clip(r.priority, 40),
+            why_it_fits: clip(r.notes, 1000),
+            source,
+            import_file_name: fileName,
+          });
+        }
+        if (!clean.length) return json({ ok: true, added: 0, updated: 0, existing: 0, invalid, dupInFile });
+        // Which of these are already saved?
+        const existing = new Set<string>();
+        for (let i = 0; i < clean.length; i += 150) {
+          const list = clean.slice(i, i + 150).map((r) => `"${r.email.replace(/"/g, "")}"`).join(",");
+          const found = await db(`crm_prospects?select=email_normalized&email_normalized=in.(${encodeURIComponent(list)})`);
+          (found || []).forEach((f: any) => existing.add(f.email_normalized));
+        }
+        const fresh = clean.filter((r) => !existing.has(r.email));
+        if (fresh.length) {
+          await db("crm_prospects?on_conflict=email_normalized", {
+            method: "POST",
+            headers: { Prefer: "resolution=ignore-duplicates,return=minimal" },
+            body: JSON.stringify(fresh),
+          });
+        }
+        let updated = 0;
+        if (update) {
+          // Fill in details for people already saved, without touching their
+          // pipeline status, notes or follow-up date. Blank cells change nothing.
+          for (const r of clean.filter((x) => existing.has(x.email))) {
+            const patch: any = {};
+            for (const k of ["restaurant", "phone", "website", "suburb", "venue_type", "priority"]) if (r[k]) patch[k] = r[k];
+            if (r.name && r.name !== "Restaurant team") patch.name = r.name;
+            if (!Object.keys(patch).length) continue;
+            await db(`crm_prospects?email_normalized=eq.${encodeURIComponent(r.email)}`, {
+              method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(patch),
+            });
+            updated++;
+          }
+        }
+        return json({ ok: true, added: fresh.length, updated, existing: existing.size, invalid, dupInFile });
+      }
 
       case "prospect_update": {
         const id = String(body.id || "");
