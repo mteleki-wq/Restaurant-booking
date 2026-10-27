@@ -155,7 +155,10 @@ PRODUCT: Restaurant Deluxe by Webescapade (Sydney). Built by Marc, a hospitality
 WHAT IT IS: editable restaurant website + direct online bookings with live availability + guest CRM + optional AI assistant + QR table ordering (kitchen and bar displays, ticket printing, shift records with X/Z readings and Excel export).
 TABLE ORDERING: guest scans the table QR, browses the menu in the phone browser (no app, no account), sends the order; food routes to the kitchen, drinks to the bar. Runs alongside the venue's existing POS — it does NOT replace the POS.
 PRICES (AUD, per month): Standard $68 (website + bookings); Deluxe $98 (adds CRM, AI assistance, large-booking card guarantees); Complete $149 (adds QR table ordering, kitchen/bar displays, shift records). Table ordering add-on for existing clients $69. Standalone Table Ordering (keep your own website) $109.
-TRIAL: 14-day free trial, set up first with the restaurant's own menu and branding. Setup assistance and ongoing support included.
+TRIAL: 14-day free trial. During the trial Webescapade connects the restaurant to the system at no cost. Loading the menu, photos and add-ons is NOT part of the free trial.
+QUICK START SETUP (optional): $150 + GST, non-refundable. Webescapade imports the menu, images and add-ons, plus online video training (video only, no on-site training). Covers screen ordering with pay at the counter only.
+FULL SETUP when moving to a paid plan: $400-$600 + GST depending on what the venue needs (card payments, kitchen/bar printers, website and bookings, several stations). Any $150 Quick Start fee already paid is deducted from it.
+SUPPORT: ongoing support is included in every monthly plan. Setup is NOT included or free beyond the trial connection.
 CONTACT: Marc, marc@webescapade.com, 0413 872 994.
 `;
 
@@ -164,6 +167,7 @@ You write marketing email copy for Restaurant Deluxe, sent business-to-business 
 RULES — follow all of them:
 - Australian English spelling (organise, colour, centre).
 - Use ONLY the facts supplied. Never invent statistics, percentages, customer counts, testimonials, awards, discounts, deadlines, prices or features.
+- Never say setup is free or included, except the free trial connection. State the $150 + GST Quick Start and $400-$600 + GST setup exactly as in FACTS when setup is mentioned.
 - Never claim it replaces a POS. Never claim it "prevents" no-shows or overbooking — "reduces" or "helps with" only.
 - Do not use spammy wording (FREE!!!, act now, guaranteed, 100%, risk-free) or ALL CAPS sentences.
 - Subject lines under 50 characters, no emoji unless asked. Preheaders under 90 characters.

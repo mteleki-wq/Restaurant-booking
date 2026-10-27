@@ -277,7 +277,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v15</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v16</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -824,7 +824,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v15 \u00b7 prospect groups';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v16 \u00b7 trial terms';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -854,6 +854,10 @@
   var FIRST   = "{{{contact.first_name|there}}}";
   var RESEND_UNSUB = "{{{RESEND_UNSUBSCRIBE_URL}}}";
 
+  /* Trial and setup terms (Oct 2026). Change them here and every preset follows. */
+  var TERMS_SHORT = "Free 14-day trial. Want us to load your menu? Quick Start setup is $150 + GST, and it comes off your setup fee when you choose a plan.";
+  var TERMS_FOOT  = "Setup is separate from the monthly plan: $400\u2013$600 + GST depending on what you need (card payments, kitchen and bar printers, website and bookings, extra stations). Any $150 Quick Start fee already paid is deducted.";
+
   function preset(o){
     return Object.assign({
       name:"Untitled campaign", desc:"",
@@ -870,7 +874,7 @@
       priceHeading:"Choose the right level for your restaurant.",
       plans:[], priceFoot:"",
       finalOn:true, finalHeading:"Test the complete experience free for 14 days.",
-      finalSub:"Setup assistance and ongoing support are included in every plan.",
+      finalSub:TERMS_SHORT,
       finalCta:"Request a free demo", finalUrl:CONTACT,
       phone:"0413 872 994", email:"marc@webescapade.com", siteUrl:SITE,
       address:"Webescapade \u2022 Sydney, Australia",
@@ -902,7 +906,7 @@
       spotSub:"The restaurant controls capacity through an Early and Late Sitting, while each customer selects their preferred arrival time.",
       boxes:[{l:"EARLY SITTING", v:"6:00\u20137:30 PM"},{l:"LATE SITTING", v:"8:00 PM onward"}],
       plans:PLANS3,
-      priceFoot:"Setup assistance and ongoing support are included in every plan.",
+      priceFoot:TERMS_FOOT,
       subject:"A restaurant website you can actually edit yourself",
       preheader:"Direct bookings, guest records and table ordering \u2014 free to test for 14 days."
     }),
@@ -937,25 +941,29 @@
       preheader:"QR ordering routed to your kitchen, bar and counter. No app, no phone payments."
     }),
     preset({
-      name:"14-day free trial invite", desc:"Invite a warm lead to start",
-      eyebrow:"14 days, set up for you",
-      headline:"Try it with your own menu, not a demo template.",
-      intro:"Before the trial starts we configure your branding, menu, booking rules and table QR codes. On day one you are looking at your restaurant, not a placeholder \u2014 which makes it a fair test.",
+      name:"14-day free trial invite", desc:"Trial terms with the $150 Quick Start",
+      eyebrow:"Try it free for 14 days",
+      headline:"See Restaurant Deluxe running in your restaurant, free for 14 days.",
+      intro:"We connect your restaurant to the system at no cost, so you can see how ordering at the table works with your own team.\n\nIf you would rather we did the menu work, our Quick Start setup loads your menu, photos and add-ons for you and includes online video training.",
       cta1:"Start my 14-day free trial", cta1url:CONTACT,
       cta2:"Test the booking form", cta2url:BOOKING,
-      featEyebrow:"How it works",
-      featHeading:"Three steps, and most of them are ours.",
+      featEyebrow:"How the trial works",
+      featHeading:"Free to connect.\nOptional help with the setup.",
       cards:[
-        {n:"01", t:"We prepare it", d:"Branding, menu, booking rules, departments and table QR codes."},
-        {n:"02", t:"You test and edit", d:"Change content, take a test booking, place a sample order."},
-        {n:"03", t:"Go live", d:"Publish, display the QR codes, start taking bookings and orders."}
+        {n:"01", t:"Free connection", d:"We connect your restaurant to the system for the 14-day trial."},
+        {n:"02", t:"Quick Start, $150 + GST", d:"Optional and non-refundable: we import your menu, photos and add-ons, plus video training."},
+        {n:"03", t:"Choose a plan", d:"Full setup is $400\u2013$600 + GST depending on your needs, less the $150."}
       ],
+      spotOn:true, spotEyebrow:"What the Quick Start covers",
+      spotHeading:"Screen ordering, paid at the counter.",
+      spotSub:"The $150 Quick Start covers ordering on screen with payment at the counter. Card payments, kitchen and bar printers, website and bookings, or extra stations are part of the full setup when you choose a plan.",
+      boxes:[{l:"FREE TRIAL", v:"14 days"},{l:"QUICK START", v:"$150 + GST"}],
       plans:PLANS3,
-      priceFoot:"Founding restaurant launch offer: initial menu and table setup included, for a limited number of participating restaurants.",
-      finalHeading:"Send me your current menu.",
-      finalSub:"I will have it ready for you to look at, on your own branding.",
-      subject:"Your menu, your branding, ready in 14 days",
-      preheader:"We set it up first, so the trial is a fair test of the real thing."
+      priceFoot:TERMS_FOOT,
+      finalHeading:"Ready to try it?",
+      finalSub:"Reply with your menu if you would like the Quick Start, and I will load it on your own branding.",
+      subject:"Try Restaurant Deluxe free for 14 days",
+      preheader:"Free connection, optional $150 menu setup with video training."
     }),
     preset({
       name:"Standalone ordering ($109)", desc:"For restaurants happy with their website",
@@ -972,7 +980,7 @@
         {n:"02", t:"Full ordering flow", d:"QR menu, modifiers and notes, kitchen and bar displays."},
         {n:"03", t:"Excel-compatible export", d:"Shift and settlement records for your own bookkeeping."}
       ],
-      plans:[{tier:"STANDALONE TABLE ORDERING", price:"$109", per:"/ month", desc:"Includes table QR setup and ongoing support.", hi:true}],
+      plans:[{tier:"STANDALONE TABLE ORDERING", price:"$109", per:"/ month", desc:"Ongoing support included. Setup from $400 + GST.", hi:true}],
       priceFoot:"It sits alongside your existing POS rather than replacing it, and guests still settle at the counter or table.",
       subject:"Table ordering that works with the website you already have",
       preheader:"No migration and no redesign \u2014 $109/month AUD."
@@ -992,10 +1000,10 @@
         {n:"02", t:"Kitchen and bar routing", d:"Assign sections and items to the right department."},
         {n:"03", t:"Shift records", d:"Open tables, settlement, X and Z readings, Excel export."}
       ],
-      plans:[{tier:"ADD TO YOUR PLAN", price:"$69", per:"/ month", desc:"Table QR setup and ongoing support included.", hi:true}],
+      plans:[{tier:"ADD TO YOUR PLAN", price:"$69", per:"/ month", desc:"Ongoing support included. Setup quoted to suit your venue.", hi:true}],
       priceFoot:"",
       finalHeading:"Try it on a quiet service first.",
-      finalSub:"Reply and I will set up your table QR codes.",
+      finalSub:"Reply and I will talk you through the setup for your venue.",
       subject:"Table ordering is ready for your restaurant",
       preheader:"Your existing menu becomes the ordering menu \u2014 $69/month added to your plan."
     }),
