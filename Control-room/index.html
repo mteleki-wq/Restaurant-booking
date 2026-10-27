@@ -281,7 +281,8 @@
   /* Links left blank are ones only Marc knows — the tile says so plainly
      rather than guessing an address that would 404. */
   var DEFAULT_TILES = [
-    { t:'Email Studio', n:'Write, send and report on campaigns', u:'', g:'Marketing', i:'✉️', c:'violet', b:'Add link' },
+    { t:'Venue CRM', n:'Venue health, sales pipeline and AI campaign ideas', u:'../CRM/venue-crm.html', g:'Marketing', i:'📈', c:'cyan', b:'New' },
+    { t:'Email Studio', n:'Write, send and report on campaigns — now with AI', u:'../CRM/restaurant-deluxe-email-studio.html', g:'Marketing', i:'✉️', c:'violet' },
     { t:'Resend', n:'Broadcasts, audiences and delivery logs', u:'https://resend.com', g:'Marketing', i:'📡', c:'violet' },
     { t:'Start your trial form', n:'Enquiries from the landing page', u:'https://form.jotform.com/262297536936067', g:'Marketing', i:'📝', c:'cyan' },
     { t:'Book a demonstration', n:'Demo requests with day and time', u:'https://form.jotform.com/262297436300051', g:'Marketing', i:'📅', c:'cyan' },
@@ -334,7 +335,18 @@
       var d=JSON.parse(raw);
       if(Array.isArray(d.tiles)) state.tiles=d.tiles;
       if(Array.isArray(d.groups) && d.groups.length) state.groups=d.groups;
+      state.seen = Array.isArray(d.seen) ? d.seen : [];
     }catch(e){}
+    /* Tiles added in later builds appear once, even for a saved layout,
+       and stay deleted if Marc removes them. */
+    state.seen = state.seen || [];
+    DEFAULT_TILES.forEach(function(t){
+      if(t.t!=='Venue CRM' || state.seen.indexOf(t.t)>=0) return;
+      state.seen.push(t.t);
+      var has = state.tiles.some(function(x){ return x.t===t.t; });
+      if(!has) state.tiles.unshift(Object.assign({},t));
+      save();
+    });
   }
 
   function toast(m){
