@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Résumé Outreach Studio — Marc Teleki</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Colours hardcoded as hex on purpose — CSS custom properties turn into em dashes on iPad copy/paste. */
+*{box-sizing:border-box}
+body{margin:0;font-family:Figtree,-apple-system,"Helvetica Neue",Arial,sans-serif;background:#F6F8FA;color:#26303B;font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{margin:0}
+.serif{font-family:Newsreader,Georgia,serif;font-weight:500}
+button,input,select,textarea{font-family:inherit;font-size:15px}
+:focus-visible{outline:2px solid #B8862B;outline-offset:2px}
+a{color:#14304F}
+.hide{display:none!important}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:30;background:#14304F;color:#FFFFFF}
+.top .in{max-width:1180px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.logo i{width:34px;height:34px;border:1.5px solid #8FA7C2;border-radius:3px;display:grid;place-items:center;font-family:Newsreader,Georgia,serif;font-style:normal;font-size:15px}
+.logo b{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:19px}
+.logo span{display:block;font-size:12px;color:#9FB2C7;line-height:1.2}
+.top .sp{flex:1}
+.tabs{display:flex;gap:2px;background:#0E2238;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs .in{max-width:1180px;margin:0 auto;padding:0 10px;display:flex;gap:2px;width:100%}
+.tabs button{background:transparent;border:0;color:#AFC0D2;padding:12px 15px;font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent}
+.tabs button.on{color:#FFFFFF;border-bottom-color:#B8862B}
+
+/* layout */
+.page{max-width:1180px;margin:0 auto;padding:22px 16px 90px}
+.panel{display:none}
+.panel.on{display:block}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.head h2{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:28px;color:#14304F;line-height:1.1}
+.head p{margin:4px 0 0;color:#6A7582;font-size:14px;max-width:62ch}
+.card{background:#FFFFFF;border:1px solid #E3E8EE;border-radius:8px;padding:18px;margin-bottom:16px}
+.card h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:20px;color:#14304F;margin-bottom:4px}
+.card .sub{color:#6A7582;font-size:13.5px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* buttons */
+.b{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:6px;border:1.5px solid #14304F;background:#14304F;color:#FFFFFF;font-weight:600;font-size:14.5px;cursor:pointer;text-decoration:none}
+.b:hover{background:#0E2238}
+.b.ghost{background:#FFFFFF;color:#14304F}
+.b.ghost:hover{background:#EEF2F7}
+.b.gold{background:#B8862B;border-color:#B8862B;color:#14304F}
+.b.gold:hover{background:#D19C3A}
+.b.sm{padding:7px 11px;font-size:13.5px;border-radius:5px}
+.b.danger{background:#FFFFFF;border-color:#B4443A;color:#B4443A}
+.b[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+
+/* forms */
+label.f{display:block;font-weight:600;font-size:13px;margin:12px 0 4px;color:#3A4552}
+input[type=text],input[type=email],input[type=url],input[type=tel],input[type=number],input[type=password],select,textarea{width:100%;padding:9px 11px;border:1px solid #C9D1DA;border-radius:6px;background:#FFFFFF;color:#26303B}
+textarea{min-height:90px;resize:vertical;line-height:1.5}
+.inline{display:flex;gap:10px;align-items:center}
+.inline input[type=checkbox]{width:17px;height:17px;flex:none}
+.hint{font-size:12.5px;color:#6A7582;margin-top:5px;line-height:1.45}
+
+/* table */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #E3E8EE;border-radius:8px;background:#FFFFFF}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;background:#F0F3F7;color:#44505D;font-size:12px;letter-spacing:.03em;text-transform:uppercase;padding:10px;border-bottom:1px solid #E3E8EE;white-space:nowrap}
+td{padding:10px;border-bottom:1px solid #EDF1F5;vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.nm b{color:#14304F;display:block}
+td.nm span{display:block;color:#6A7582;font-size:12.5px}
+td.ac{white-space:nowrap;text-align:right}
+.pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
+.s-new{background:#EEF2F7;color:#44505D}
+.s-sent{background:#E7EFFA;color:#1A4C87}
+.s-followed{background:#FBF1DC;color:#8A6420}
+.s-replied{background:#E2F3E9;color:#16603A}
+.s-meeting{background:#E2F3E9;color:#0F4D2E}
+.s-hired{background:#14304F;color:#FFFFFF}
+.s-no{background:#F3F0F0;color:#8A5B55}
+.warn{background:#FBF1DC;border-left:3px solid #B8862B;padding:11px 14px;border-radius:0 6px 6px 0;font-size:13.5px;line-height:1.5;margin-bottom:14px}
+.empty{text-align:center;padding:40px 20px;color:#6A7582}
+.empty b{display:block;color:#14304F;font-family:Newsreader,Georgia,serif;font-size:20px;margin-bottom:6px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
+.stat{background:#FFFFFF;border:1px solid #E3E8EE;border-radius:8px;padding:13px}
+.stat b{display:block;font-family:Newsreader,Georgia,serif;font-size:27px;color:#14304F;line-height:1}
+.stat span{font-size:12.5px;color:#6A7582}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* editor */
+.etool{display:flex;gap:4px;flex-wrap:wrap;padding:7px;background:#F0F3F7;border:1px solid #C9D1DA;border-bottom:0;border-radius:6px 6px 0 0}
+.etool button{background:#FFFFFF;border:1px solid #C9D1DA;border-radius:4px;padding:5px 9px;font-size:13px;font-weight:600;cursor:pointer;color:#3A4552}
+.etool button:hover{background:#E7ECF2}
+.ed{border:1px solid #C9D1DA;border-radius:0 0 6px 6px;padding:14px;min-height:230px;background:#FFFFFF;line-height:1.55;overflow-y:auto;max-height:440px}
+.ed p{margin:0 0 11px}
+.ed:focus{outline:2px solid #B8862B;outline-offset:-2px}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.chip{background:#EEF2F7;border:1px solid #D5DCE4;border-radius:14px;padding:3px 10px;font-size:12.5px;cursor:pointer;color:#14304F;font-weight:600}
+.chip:hover{background:#E0E7EF}
+iframe.prev{width:100%;height:560px;border:1px solid #E3E8EE;border-radius:8px;background:#FFFFFF}
+
+/* send queue */
+.q{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:960px){.q{grid-template-columns:1fr}}
+.qbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#14304F;color:#FFFFFF;border-radius:8px;padding:13px 17px;margin-bottom:14px}
+.qbar b{font-family:Newsreader,Georgia,serif;font-size:19px;font-weight:500}
+.qbar small{color:#AFC0D2;display:block;font-size:12.5px}
+.kv{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #EDF1F5;font-size:14px}
+.kv b{min-width:72px;color:#6A7582;font-weight:600;font-size:13px}
+.kv span{flex:1;word-break:break-word}
+.pick{max-height:420px;overflow-y:auto;border:1px solid #E3E8EE;border-radius:8px;background:#FFFFFF}
+.pick label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-bottom:1px solid #EDF1F5;cursor:pointer}
+.pick label:last-child{border-bottom:0}
+.pick input{margin-top:3px;width:17px;height:17px;flex:none}
+.pick b{display:block;color:#14304F;font-size:14px}
+.pick span{color:#6A7582;font-size:12.5px}
+
+/* modal */
+.mw{position:fixed;inset:0;background:rgba(14,24,38,.55);z-index:60;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.mw.on{display:flex}
+.mo{background:#FFFFFF;border-radius:10px;width:100%;max-width:720px;padding:22px;margin:auto;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.mo h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:22px;color:#14304F;margin-bottom:4px}
+.mo .sub{color:#6A7582;font-size:13.5px;margin-bottom:14px}
+.mo .ft{display:flex;gap:9px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.map{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;align-items:center;max-height:46vh;overflow-y:auto;padding-right:4px}
+.map .h{font-size:13px;font-weight:600;color:#3A4552;word-break:break-word}
+@media(max-width:620px){.map{grid-template-columns:1fr;gap:4px 0}.map .h{margin-top:10px}}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#14304F;color:#FFFFFF;padding:11px 18px;border-radius:8px;font-weight:600;font-size:14px;z-index:90;display:none;max-width:92vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.toast.on{display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <div class="logo"><i>MT</i><div><b>Résumé Outreach Studio</b><span id="whoami">Marc Teleki · Webescapade</span></div></div>
+    <div class="sp"></div>
+    <button class="b ghost sm" id="btnBackup">⬇ Download backup</button>
+  </div>
+</header>
+<nav class="tabs"><div class="in">
+  <button data-tab="colleges" class="on">Colleges</button>
+  <button data-tab="templates">Email templates</button>
+  <button data-tab="send">Send</button>
+  <button data-tab="followups">Follow-ups</button>
+  <button data-tab="settings">Settings</button>
+</div></nav>
+
+<div class="page">
+
+<!-- ============ COLLEGES ============ -->
+<section class="panel on" id="p-colleges">
+  <div class="head">
+    <div><h2>Colleges</h2><p>Import your spreadsheet, then keep every approach and reply in one place.</p></div>
+    <div class="row">
+      <button class="b ghost sm" id="btnSample">Download import template</button>
+      <button class="b ghost sm" id="btnExport">Export to Excel</button>
+      <button class="b" id="btnImport">Import spreadsheet</button>
+      <input type="file" id="fileIn" accept=".xlsx,.xls,.csv,.tsv,.txt" class="hide">
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="card">
+    <div class="row">
+      <input type="text" id="qSearch" placeholder="Search name, contact, suburb…" style="flex:1;min-width:190px">
+      <select id="qStatus" style="width:auto;min-width:160px"></select>
+      <select id="qState" style="width:auto;min-width:130px"></select>
+      <button class="b ghost sm" id="btnAdd">+ Add a college</button>
+    </div>
+  </div>
+
+  <div class="tw"><table>
+    <thead><tr><th>College</th><th>Contact</th><th>Email</th><th>Status</th><th>Last sent</th><th></th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table></div>
+  <p class="hint" id="rowCount"></p>
+</section>
+
+<!-- ============ TEMPLATES ============ -->
+<section class="panel" id="p-templates">
+  <div class="head">
+    <div><h2>Email templates</h2><p>Write once, personalise automatically. The frame, buttons and signature are built from your settings.</p></div>
+    <div class="row">
+      <button class="b ghost sm" id="btnNewTpl">+ New template</button>
+      <button class="b ghost sm" id="btnResetTpl">Restore the originals</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <select id="tplPick" style="flex:1;min-width:220px"></select>
+      <button class="b ghost sm" id="btnDupTpl">Duplicate</button>
+      <button class="b danger sm" id="btnDelTpl">Delete</button>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Write the message</h3>
+      <div class="sub">Tap a field below to drop it in. Each email fills them from that college's row.</div>
+      <label class="f" for="tplName">Template name</label>
+      <input type="text" id="tplName">
+      <label class="f" for="tplSubject">Subject line</label>
+      <input type="text" id="tplSubject">
+      <label class="f">Message</label>
+      <div class="etool">
+        <button type="button" data-cmd="bold"><b>B</b></button>
+        <button type="button" data-cmd="italic"><i>I</i></button>
+        <button type="button" data-cmd="insertUnorderedList">• List</button>
+        <button type="button" data-cmd="createLink">Link</button>
+        <button type="button" data-cmd="removeFormat">Clear</button>
+        <button type="button" id="btnHtml">HTML</button>
+      </div>
+      <div class="ed" id="tplBody" contenteditable="true"></div>
+      <textarea id="tplRaw" class="hide" style="min-height:240px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px"></textarea>
+      <div class="chips" id="mergeChips"></div>
+      <div class="inline" style="margin-top:14px"><input type="checkbox" id="tplButtons"><label for="tplButtons" style="font-weight:600;font-size:14px">Show the “View my work and résumé” button</label></div>
+    </div>
+    <div class="card">
+      <h3>Preview</h3>
+      <div class="sub">Shown with a real college from your list, so you can see the merge fields filled in.</div>
+      <select id="prevWho" style="margin-bottom:12px"></select>
+      <div class="kv"><b>Subject</b><span id="prevSubject"></span></div>
+      <iframe class="prev" id="prevFrame" title="Email preview" sandbox=""></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEND ============ -->
+<section class="panel" id="p-send">
+  <div class="head">
+    <div><h2>Send</h2><p>One college at a time, each message personalised. Copy it into your own email so it comes from you.</p></div>
+  </div>
+
+  <div id="sendSetup">
+    <div class="card">
+      <h3>1 · Choose the message</h3>
+      <select id="sendTpl"></select>
+      <h3 style="margin-top:20px">2 · Choose who it goes to</h3>
+      <div class="row" style="margin:8px 0 12px">
+        <select id="sendStatus" style="width:auto;min-width:170px"></select>
+        <select id="sendState" style="width:auto;min-width:130px"></select>
+        <button class="b ghost sm" id="btnAll">Select all shown</button>
+        <button class="b ghost sm" id="btnNone">Clear</button>
+      </div>
+      <div class="pick" id="pickList"></div>
+      <div class="row" style="margin-top:16px">
+        <button class="b gold" id="btnStart">Start sending</button>
+        <span class="hint" id="pickCount" style="margin:0"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="sendQueue" class="hide">
+    <div class="qbar">
+      <div><b id="qName"></b><small id="qPos"></small></div>
+      <div class="row">
+        <button class="b ghost sm" id="btnSkip">Skip</button>
+        <button class="b ghost sm" id="btnStop">Finish</button>
+      </div>
+    </div>
+    <div class="q">
+      <div class="card">
+        <h3>This email</h3>
+        <div class="kv"><b>To</b><span id="qTo"></span></div>
+        <div class="kv"><b>Subject</b><span id="qSubject"></span></div>
+        <div class="kv"><b>Status</b><span id="qStatusNow"></span></div>
+        <div class="row" style="margin-top:16px">
+          <button class="b" id="btnCopyOpen">Copy &amp; open Gmail</button>
+          <button class="b ghost sm" id="btnCopy">Copy email</button>
+          <button class="b ghost sm" id="btnMail">Open in Mail</button>
+          <button class="b ghost sm hide" id="btnLive">Send now</button>
+        </div>
+        <p class="hint" id="sendHow"></p>
+        <div class="row" style="margin-top:18px;border-top:1px solid #EDF1F5;padding-top:16px">
+          <button class="b gold" id="btnMarkSent">Mark as sent, next →</button>
+        </div>
+        <label class="f" for="qNote">Note for this college</label>
+        <input type="text" id="qNote" placeholder="e.g. spoke to reception, asked for the training manager">
+      </div>
+      <div class="card">
+        <h3>Preview</h3>
+        <div class="sub">Exactly what lands in their inbox.</div>
+        <iframe class="prev" id="qFrame" title="Email preview" sandbox="" style="height:600px"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOLLOW-UPS ============ -->
+<section class="panel" id="p-followups">
+  <div class="head">
+    <div><h2>Follow-ups</h2><p>Colleges you contacted that haven’t replied yet. A short follow-up often does more than the first email.</p></div>
+  </div>
+  <div id="fuDue"></div>
+  <div class="card">
+    <h3>Everything in progress</h3>
+    <div class="sub">Replies, meetings and anything you’ve marked as not now.</div>
+    <div class="tw"><table>
+      <thead><tr><th>College</th><th>Status</th><th>Last sent</th><th>Notes</th><th></th></tr></thead>
+      <tbody id="fuBody"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<section class="panel" id="p-settings">
+  <div class="head"><div><h2>Settings</h2><p>Your details and links, and where your data lives.</p></div></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Your details</h3>
+      <div class="sub">These appear in the email header and signature.</div>
+      <label class="f" for="sName">Name</label><input type="text" id="sName">
+      <label class="f" for="sTitle">Title under your name</label><input type="text" id="sTitle">
+      <label class="f" for="sEmail">Email</label><input type="email" id="sEmail">
+      <label class="f" for="sPhone">Phone</label><input type="tel" id="sPhone">
+      <label class="f" for="sLoc">Location</label><input type="text" id="sLoc">
+      <label class="f" for="sSignoff">Sign-off</label><input type="text" id="sSignoff">
+    </div>
+
+    <div class="card">
+      <h3>Your links</h3>
+      <div class="sub">The portfolio link is the button in every email. Both are available as merge fields.</div>
+      <label class="f" for="sPortfolio">Portfolio page</label><input type="url" id="sPortfolio">
+      <label class="f" for="sResume">Résumé PDF</label><input type="url" id="sResume">
+      <label class="f" for="sLinkedin">LinkedIn (optional)</label><input type="url" id="sLinkedin">
+      <label class="f" for="sButton">Button wording</label><input type="text" id="sButton">
+
+      <h3 style="margin-top:22px">Sending</h3>
+      <label class="f" for="sMethod">What the main button does</label>
+      <select id="sMethod">
+        <option value="gmail">Copy the email, then open Gmail</option>
+        <option value="mail">Copy the email, then open Mail</option>
+        <option value="copy">Just copy the email</option>
+      </select>
+      <label class="f" for="sFollowDays">Remind me to follow up after</label>
+      <input type="number" id="sFollowDays" min="2" max="90"> <span class="hint">days with no reply</span>
+      <label class="f" for="sCap">Warn me after this many emails in one day</label>
+      <input type="number" id="sCap" min="1" max="200">
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Send straight from the page (optional)</h3>
+    <div class="sub">Leave this empty unless you want automatic sending. A personal email pasted into Gmail reaches an inbox more reliably than a bulk one.</div>
+    <label class="f" for="sHook">Webhook address</label>
+    <input type="url" id="sHook" placeholder="https://… (n8n or your Supabase function)">
+    <p class="hint">It receives <code>{to, subject, html, text, name, college}</code> as JSON. Your existing Resend function or an n8n webhook both work.</p>
+  </div>
+
+  <div class="card">
+    <h3>Your data</h3>
+    <div class="sub">Everything stays in this browser. Nothing is uploaded anywhere.</div>
+    <div class="warn">Keep a backup. Download a copy after each round of sending — the saved copy opens with all your colleges already in it.</div>
+    <div class="row">
+      <button class="b" id="btnBackup2">⬇ Download backup (with my data)</button>
+      <button class="b ghost sm" id="btnRestore">Restore from a backup</button>
+      <input type="file" id="fileJson" accept=".json,.html" class="hide">
+      <button class="b ghost sm" id="btnPublish">🚀 Publish a blank copy</button>
+      <button class="b danger sm" id="btnWipe">Erase everything</button>
+    </div>
+    <p class="hint" id="dataNote"></p>
+  </div>
+
+  <div class="card hide" id="pubCard">
+    <h3>Publish to GitHub</h3>
+    <div class="sub">This publishes an <b>empty</b> copy of the tool. Your college list is never included, so nothing private goes onto the web.</div>
+    <div class="grid3">
+      <div><label class="f" for="gOwner">Account</label><input type="text" id="gOwner" value="mteleki-wq" autocapitalize="off" autocorrect="off"></div>
+      <div><label class="f" for="gRepo">Repository</label><input type="text" id="gRepo" value="Restaurant-booking" autocapitalize="off" autocorrect="off"></div>
+      <div><label class="f" for="gBranch">Branch</label><input type="text" id="gBranch" value="main" autocapitalize="off" autocorrect="off"></div>
+    </div>
+    <label class="f" for="gPath">File path</label><input type="text" id="gPath" value="Resume/outreach.html" autocapitalize="off" autocorrect="off">
+    <label class="f" for="gToken">Fine-grained access token</label><input type="password" id="gToken" placeholder="github_pat_…" autocapitalize="off" autocorrect="off">
+    <div class="row" style="margin-top:16px"><button class="b" id="gGo">Publish</button><button class="b ghost sm" id="gClose">Close</button></div>
+    <p class="hint" id="gStatus"></p>
+  </div>
+</section>
+
+</div><!-- /page -->
+
+<!-- modals -->
+<div class="mw" id="mCollege"><div class="mo">
+  <h3 id="cTitle">College</h3>
+  <div class="sub">Aim for a named person — the training manager or whoever handles trainer recruitment.</div>
+  <div class="grid2">
+    <div><label class="f" for="cName">College name</label><input type="text" id="cName"></div>
+    <div><label class="f" for="cEmail">Email</label><input type="email" id="cEmail"></div>
+    <div><label class="f" for="cContact">Contact person</label><input type="text" id="cContact"></div>
+    <div><label class="f" for="cRole">Their role</label><input type="text" id="cRole" placeholder="e.g. Training Manager"></div>
+    <div><label class="f" for="cPhone">Phone</label><input type="tel" id="cPhone"></div>
+    <div><label class="f" for="cWebsite">Website</label><input type="url" id="cWebsite"></div>
+    <div><label class="f" for="cSuburb">Suburb</label><input type="text" id="cSuburb"></div>
+    <div><label class="f" for="cState">State</label><input type="text" id="cState"></div>
+    <div><label class="f" for="cStatus">Status</label><select id="cStatus"></select></div>
+    <div><label class="f" for="cFollow">Follow up on</label><input type="text" id="cFollow" placeholder="YYYY-MM-DD"></div>
+  </div>
+  <label class="f" for="cNotes">Notes</label><textarea id="cNotes" style="min-height:70px"></textarea>
+  <div id="cHistory"></div>
+  <div class="ft">
+    <button class="b danger" id="cDelete">Delete</button>
+    <button class="b ghost" id="cCancel">Cancel</button>
+    <button class="b" id="cSave">Save</button>
+  </div>
+</div></div>
+
+<div class="mw" id="mMap"><div class="mo">
+  <h3>Match up your columns</h3>
+  <div class="sub" id="mapCount"></div>
+  <div class="map" id="mapRows"></div>
+  <div class="inline" style="margin-top:16px"><input type="checkbox" id="mapSkip" checked><label for="mapSkip" style="font-weight:600;font-size:14px">Skip colleges already in my list (matched on email)</label></div>
+  <div class="ft"><button class="b ghost" id="mapCancel">Cancel</button><button class="b" id="mapGo">Import</button></div>
+</div></div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script id="seed" type="application/json">null</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------------- constants ---------------- */
+var KEY = "mt-outreach-v1";
+var STATUS = [
+  {k:"new",      t:"Not contacted"},
+  {k:"sent",     t:"Sent"},
+  {k:"followed", t:"Followed up"},
+  {k:"replied",  t:"Replied"},
+  {k:"meeting",  t:"Interview / meeting"},
+  {k:"hired",    t:"Engaged"},
+  {k:"no",       t:"Not right now"}
+];
+var MERGE = [
+  ["{greeting}","Hello Jane / Hello"],
+  ["{first}","First name"],
+  ["{contact}","Full contact name"],
+  ["{college}","College name"],
+  ["{role}","Their role"],
+  ["{state}","State"],
+  ["{suburb}","Suburb"],
+  ["{portfolio}","Portfolio link"],
+  ["{resume}","Résumé link"],
+  ["{my_name}","Your name"],
+  ["{my_email}","Your email"],
+  ["{my_phone}","Your phone"]
+];
+var FIELDS = [
+  ["name","College name"],["contact","Contact person"],["role","Their role"],
+  ["email","Email"],["phone","Phone"],["suburb","Suburb"],["state","State"],
+  ["website","Website"],["notes","Notes"]
+];
+
+/* ---------------- defaults ---------------- */
+function defaultTemplates(){
+  return [
+   {id:uid(),name:"First approach — hospitality & cookery",buttons:true,
+    subject:"Hospitality & Commercial Cookery trainer available — {my_name}",
+    body:"<p>{greeting},</p>"+
+      "<p>I'm a French-trained chef and VET trainer based in Sydney, writing to introduce myself in case {college} has hospitality or commercial cookery delivery coming up.</p>"+
+      "<p>I hold a Certificate IV in Training and Assessment (TAE40110) and a Certificate IV in Commercial Cookery, and I've been delivering accredited hospitality since 2008 — currently at Le Culinaire Hospitality Institute and Apex International College, from Certificate II through to Advanced Diploma. Behind that sit more than 35 years in commercial kitchens: Geneva-trained, former head chef and function centre manager.</p>"+
+      "<p>What I bring beyond the training package is current industry practice. I design and build the systems venues now run on — online bookings, QR ordering at the table, kitchen display screens and guest CRM — and I bring them into class as live case studies, so students work on real systems rather than hypothetical ones.</p>"+
+      "<p>I've put my recent work and full résumé on a single page, linked below. If it would help, I'm happy to send references or a sample session plan.</p>"},
+
+   {id:uid(),name:"First approach — business & marketing",buttons:true,
+    subject:"Business & Marketing trainer/assessor available — {my_name}",
+    body:"<p>{greeting},</p>"+
+      "<p>I'm writing to introduce myself as a trainer and assessor in business and marketing, in case {college} is planning delivery for an upcoming intake.</p>"+
+      "<p>I hold a Certificate IV in Training and Assessment (TAE40110) and an Advanced Diploma of Leadership and Management, and I've delivered Certificate IV and Diploma level business since 2008 — currently at Collins / Victory International College, with earlier long-running delivery at Lloyds International College and Cambridge College International.</p>"+
+      "<p>Alongside training I've run Webescapade, my own digital and marketing practice, since 2001. That means marketing, CRM, campaign reporting and risk are taught from live commercial work rather than from a textbook, including AI tools students will meet in their first job.</p>"+
+      "<p>My recent work and full résumé are on the page linked below. I'd welcome a conversation if you have delivery coming up.</p>"},
+
+   {id:uid(),name:"First approach — both disciplines",buttons:true,
+    subject:"Trainer & Assessor — hospitality and business — {my_name}",
+    body:"<p>{greeting},</p>"+
+      "<p>I'm a Sydney-based trainer and assessor working across two disciplines, and I'm writing in case {college} has delivery coming up in either.</p>"+
+      "<p><b>Hospitality and commercial cookery</b> — Geneva-trained chef, former head chef and function centre manager, delivering Certificate II through Advanced Diploma since 2008.</p>"+
+      "<p><b>Business and marketing</b> — Certificate IV and Diploma delivery, backed by 25 years running my own digital and marketing practice.</p>"+
+      "<p>I hold TAE40110, an Advanced Diploma of Leadership and Management and a Certificate IV in Commercial Cookery, and I keep current on both sides: the hospitality technology I teach is software I've built and support for working restaurants.</p>"+
+      "<p>Everything is set out on the page linked below, including my full résumé.</p>"},
+
+   {id:uid(),name:"Follow-up after no reply",buttons:true,
+    subject:"Following up — trainer availability, {college}",
+    body:"<p>{greeting},</p>"+
+      "<p>I wrote a couple of weeks ago about trainer and assessor availability and thought I'd follow up briefly, in case the timing is better now.</p>"+
+      "<p>Short version: Certificate IV in Training and Assessment, 18 years of accredited delivery across hospitality and business, and 35+ years of industry behind it. I'm available for face-to-face or online delivery in Sydney.</p>"+
+      "<p>My work and résumé are on the page below. If trainer recruitment sits with someone else at {college}, I'd be grateful if you could point me their way.</p>"},
+
+   {id:uid(),name:"After a conversation",buttons:true,
+    subject:"Thank you — {college}",
+    body:"<p>{greeting},</p>"+
+      "<p>Thank you for your time today. I enjoyed the conversation and it was useful to hear how you're planning the next intake.</p>"+
+      "<p>As promised, my full résumé and recent work are on the page linked below, including the hospitality systems I mentioned and how I use them in class.</p>"+
+      "<p>Happy to send references or a sample session plan whenever it's useful.</p>"}
+  ];
+}
+function defaults(){
+  return {
+    v:1,
+    profile:{
+      name:"Marc Teleki", title:"Senior Trainer & Assessor · Hospitality, Business & Marketing",
+      email:"marc@webescapade.com", phone:"0413 872 994", location:"Sydney, NSW",
+      portfolio:"https://webescapade.com/Resume/",
+      resume:"https://webescapade.com/Resume/Marc_Teleki_Resume_2026_v2.pdf",
+      linkedin:"", signoff:"Kind regards", button:"View my work and résumé"
+    },
+    settings:{ method:"gmail", followDays:12, cap:25, hook:"" },
+    colleges:[], templates:defaultTemplates(),
+    log:{}
+  };
+}
+
+/* ---------------- state ---------------- */
+var DB = defaults(), curTpl = null, queue = [], qIdx = 0, pending = null, editId = null, rawMode = false;
+function uid(){ return Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-4); }
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function today(){ var d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function pad(n){ return n<10?"0"+n:""+n; }
+function daysSince(s){ if(!s) return 9999; var t=Date.parse(s); if(isNaN(t)) return 9999; return Math.floor((Date.now()-t)/86400000); }
+function statusText(k){ for(var i=0;i<STATUS.length;i++) if(STATUS[i].k===k) return STATUS[i].t; return k||"Not contacted"; }
+
+var toastT=null;
+function toast(msg, ms){
+  var el=$("toast"); el.textContent=msg; el.classList.add("on");
+  clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove("on"); }, ms||2800);
+}
+
+function load(){
+  var raw=null;
+  try{ raw=localStorage.getItem(KEY); }catch(e){}
+  if(!raw){
+    var seed=$("seed");
+    if(seed && seed.textContent.trim() && seed.textContent.trim()!=="null"){
+      try{ raw=seed.textContent; }catch(e){}
+    }
+  }
+  if(raw){
+    try{
+      var o=JSON.parse(raw);
+      if(o && o.profile){
+        DB=o;
+        if(!DB.settings) DB.settings=defaults().settings;
+        if(!DB.templates || !DB.templates.length) DB.templates=defaultTemplates();
+        if(!DB.colleges) DB.colleges=[];
+        if(!DB.log) DB.log={};
+      }
+    }catch(e){}
+  }
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(DB)); }
+  catch(e){ toast("This browser won't save any more. Download a backup now.", 6000); }
+}
+
+/* ---------------- tabs ---------------- */
+var tabBtns=document.querySelectorAll(".tabs button");
+for(var ti=0;ti<tabBtns.length;ti++){
+  tabBtns[ti].addEventListener("click", function(){
+    for(var i=0;i<tabBtns.length;i++) tabBtns[i].classList.remove("on");
+    this.classList.add("on");
+    var name=this.getAttribute("data-tab"), ps=document.querySelectorAll(".panel");
+    for(var j=0;j<ps.length;j++) ps[j].classList.remove("on");
+    $("p-"+name).classList.add("on");
+    if(name==="send") renderSend();
+    if(name==="followups") renderFollow();
+    if(name==="templates") renderTplPreview();
+    window.scrollTo(0,0);
+  });
+}
+
+/* ---------------- merge + email building ---------------- */
+function firstName(c){
+  var n=(c.contact||"").trim();
+  if(!n) return "there";
+  return n.split(/\s+/)[0];
+}
+function greeting(c){
+  var n=(c.contact||"").trim();
+  return n ? "Hello "+n.split(/\s+/)[0] : "Hello";
+}
+function merge(str, c){
+  var p=DB.profile;
+  var map={
+    "{greeting}":greeting(c), "{first}":firstName(c), "{contact}":c.contact||"",
+    "{college}":c.name||"your college", "{role}":c.role||"", "{state}":c.state||"",
+    "{suburb}":c.suburb||"", "{portfolio}":p.portfolio||"", "{resume}":p.resume||"",
+    "{my_name}":p.name||"", "{my_email}":p.email||"", "{my_phone}":p.phone||""
+  };
+  return String(str||"").replace(/\{(greeting|first|contact|college|role|state|suburb|portfolio|resume|my_name|my_email|my_phone)\}/g, function(m){
+    return map[m]!==undefined ? map[m] : m;
+  });
+}
+function linkify(html){
+  // turn a bare portfolio/resume URL that came from a merge field into a real link
+  return html.replace(/(^|[\s(>])((?:https?:\/\/)[^\s<)]+)/g, function(all, pre, url){
+    return pre+'<a href="'+esc(url)+'" style="color:#14304F;">'+esc(url.replace(/^https?:\/\//,""))+"</a>";
+  });
+}
+function buildEmail(tpl, c){
+  var p=DB.profile;
+  var subject=merge(tpl.subject, c);
+  var body=linkify(merge(tpl.body, c));
+  var btn="";
+  if(tpl.buttons && p.portfolio){
+    btn='<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:22px 0 6px;"><tr>'+
+        '<td bgcolor="#14304F" style="border-radius:4px;">'+
+        '<a href="'+esc(p.portfolio)+'" style="display:inline-block;padding:13px 26px;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;color:#ffffff;text-decoration:none;">'+esc(p.button||"View my work and résumé")+'</a>'+
+        '</td></tr></table>';
+    if(p.resume) btn+='<p style="margin:0 0 4px;font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#6A7582;">Or download the résumé directly: <a href="'+esc(p.resume)+'" style="color:#14304F;">PDF</a></p>';
+  }
+  var sigBits=[];
+  if(p.email) sigBits.push('<a href="mailto:'+esc(p.email)+'" style="color:#14304F;">'+esc(p.email)+"</a>");
+  if(p.phone) sigBits.push(esc(p.phone));
+  if(p.location) sigBits.push(esc(p.location));
+  if(p.linkedin) sigBits.push('<a href="'+esc(p.linkedin)+'" style="color:#14304F;">LinkedIn</a>');
+
+  var inner =
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f6f8;margin:0;padding:22px 10px;">'+
+  '<tr><td align="center">'+
+  '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#ffffff;border:1px solid #e3e8ee;">'+
+    '<tr><td style="background-color:#14304F;padding:20px 28px;font-family:Georgia,serif;">'+
+      '<div style="font-size:21px;color:#ffffff;letter-spacing:0.5px;">'+esc(p.name)+"</div>"+
+      '<div style="font-size:13px;color:#aec0d4;font-family:Helvetica,Arial,sans-serif;padding-top:4px;">'+esc(p.title)+"</div>"+
+    "</td></tr>"+
+    '<tr><td style="padding:26px 28px 10px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#26303b;">'+
+      body + btn +
+    "</td></tr>"+
+    '<tr><td style="padding:14px 28px 26px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#26303b;">'+
+      esc(p.signoff||"Kind regards")+"<br><b>"+esc(p.name)+"</b>"+
+      '<div style="font-size:13px;color:#6a7582;padding-top:6px;line-height:1.7;">'+sigBits.join(" &nbsp;·&nbsp; ")+"</div>"+
+    "</td></tr>"+
+    '<tr><td style="background-color:#f4f6f8;border-top:1px solid #e3e8ee;padding:14px 28px;font-family:Helvetica,Arial,sans-serif;font-size:11.5px;color:#8a95a1;line-height:1.5;">'+
+      "Sent personally by "+esc(p.name)+" regarding trainer and assessor availability. If you'd prefer no further emails, reply with “no thanks” and I won't write again."+
+    "</td></tr>"+
+  "</table></td></tr></table>";
+
+  var full='<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(subject)+'</title></head><body style="margin:0;padding:0;">'+inner+"</body></html>";
+  return { subject:subject, inner:inner, html:full, text:toText(body, p, tpl) };
+}
+function toText(bodyHtml, p, tpl){
+  var t=bodyHtml
+    .replace(/<\s*br\s*\/?>/gi,"\n")
+    .replace(/<\/p\s*>/gi,"\n\n")
+    .replace(/<li[^>]*>/gi,"• ")
+    .replace(/<\/li\s*>/gi,"\n")
+    .replace(/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/gi,"$2 ($1)")
+    .replace(/<[^>]+>/g,"")
+    .replace(/&nbsp;/g," ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"')
+    .replace(/\n{3,}/g,"\n\n").trim();
+  if(tpl.buttons && p.portfolio) t += "\n\nMy work and résumé: "+p.portfolio;
+  if(tpl.buttons && p.resume) t += "\nRésumé PDF: "+p.resume;
+  t += "\n\n"+(p.signoff||"Kind regards")+"\n"+p.name;
+  var bits=[]; if(p.email) bits.push(p.email); if(p.phone) bits.push(p.phone); if(p.location) bits.push(p.location);
+  if(bits.length) t += "\n"+bits.join(" · ");
+  return t;
+}
+
+/* ---------------- colleges ---------------- */
+function fillSelect(sel, opts, all){
+  sel.innerHTML="";
+  if(all){ var o=document.createElement("option"); o.value=""; o.textContent=all; sel.appendChild(o); }
+  for(var i=0;i<opts.length;i++){
+    var e=document.createElement("option"); e.value=opts[i].k; e.textContent=opts[i].t; sel.appendChild(e);
+  }
+}
+function states(){
+  var seen={}, out=[];
+  for(var i=0;i<DB.colleges.length;i++){
+    var s=(DB.colleges[i].state||"").trim();
+    if(s && !seen[s.toUpperCase()]){ seen[s.toUpperCase()]=1; out.push({k:s,t:s}); }
+  }
+  out.sort(function(a,b){ return a.t<b.t?-1:1; });
+  return out;
+}
+function filtered(q, st, stt){
+  q=(q||"").toLowerCase();
+  return DB.colleges.filter(function(c){
+    if(st && (c.status||"new")!==st) return false;
+    if(stt && (c.state||"")!==stt) return false;
+    if(!q) return true;
+    return ((c.name||"")+" "+(c.contact||"")+" "+(c.suburb||"")+" "+(c.email||"")+" "+(c.role||"")).toLowerCase().indexOf(q)>-1;
+  });
+}
+function renderStats(){
+  var n=DB.colleges.length, sent=0, rep=0, due=0, todayN=DB.log[today()]||0;
+  for(var i=0;i<DB.colleges.length;i++){
+    var c=DB.colleges[i], s=c.status||"new";
+    if(s!=="new") sent++;
+    if(s==="replied"||s==="meeting"||s==="hired") rep++;
+    if((s==="sent"||s==="followed") && daysSince(c.lastSent)>=(DB.settings.followDays||12)) due++;
+  }
+  $("stats").innerHTML =
+    stat(n,"Colleges")+stat(sent,"Approached")+stat(rep,"Replies")+stat(due,"Follow-ups due")+stat(todayN,"Sent today");
+}
+function stat(v,l){ return '<div class="stat"><b>'+v+'</b><span>'+l+"</span></div>"; }
+
+function renderTable(){
+  var rows=filtered($("qSearch").value, $("qStatus").value, $("qState").value);
+  var tb=$("tbody"); tb.innerHTML="";
+  if(!DB.colleges.length){
+    tb.innerHTML='<tr><td colspan="6"><div class="empty"><b>No colleges yet</b>Import your spreadsheet, or add one by hand to try it out.</div></td></tr>';
+  } else if(!rows.length){
+    tb.innerHTML='<tr><td colspan="6"><div class="empty"><b>Nothing matches</b>Try clearing the search or the filters.</div></td></tr>';
+  } else {
+    var html="";
+    for(var i=0;i<rows.length;i++){
+      var c=rows[i], s=c.status||"new";
+      var who = c.contact ? esc(c.contact)+(c.role?'<span>'+esc(c.role)+"</span>":"")
+                          : '<span style="color:#B07A12;font-weight:600">no name yet</span>';
+      html+='<tr data-id="'+c.id+'">'+
+        '<td class="nm"><b>'+esc(c.name||"(no name)")+"</b>"+(c.suburb||c.state?"<span>"+esc([c.suburb,c.state].filter(Boolean).join(", "))+"</span>":"")+"</td>"+
+        '<td class="nm">'+who+"</td>"+
+        "<td>"+(c.email?esc(c.email):'<span style="color:#B4443A">missing</span>')+"</td>"+
+        '<td><span class="pill s-'+s+'">'+esc(statusText(s))+"</span></td>"+
+        "<td>"+(c.lastSent?esc(c.lastSent):"—")+"</td>"+
+        '<td class="ac"><button class="b ghost sm" data-act="find">Find contact</button> <button class="b ghost sm" data-act="edit">Open</button></td>'+
+      "</tr>";
+    }
+    tb.innerHTML=html;
+  }
+  $("rowCount").textContent = rows.length+" of "+DB.colleges.length+" shown";
+  renderStats(); dataNote();
+}
+$("tbody").addEventListener("click", function(e){
+  var b=e.target.closest ? e.target.closest("button") : null;
+  if(!b) return;
+  var tr=b.closest("tr"), id=tr.getAttribute("data-id"), c=byId(id);
+  if(!c) return;
+  if(b.getAttribute("data-act")==="find"){
+    var q=encodeURIComponent('"'+(c.name||"")+'" careers OR employment OR "trainer" contact');
+    window.open("https://www.google.com/search?q="+q, "_blank", "noopener");
+  } else openCollege(c);
+});
+function byId(id){ for(var i=0;i<DB.colleges.length;i++) if(DB.colleges[i].id===id) return DB.colleges[i]; return null; }
+
+$("qSearch").addEventListener("input", renderTable);
+$("qStatus").addEventListener("change", renderTable);
+$("qState").addEventListener("change", renderTable);
+
+function openCollege(c){
+  editId = c ? c.id : null;
+  var x = c || {};
+  $("cTitle").textContent = c ? (x.name||"College") : "Add a college";
+  $("cName").value=x.name||""; $("cEmail").value=x.email||""; $("cContact").value=x.contact||"";
+  $("cRole").value=x.role||""; $("cPhone").value=x.phone||""; $("cWebsite").value=x.website||"";
+  $("cSuburb").value=x.suburb||""; $("cState").value=x.state||""; $("cStatus").value=x.status||"new";
+  $("cFollow").value=x.followUp||""; $("cNotes").value=x.notes||"";
+  $("cDelete").style.display = c ? "" : "none";
+  var h=(x.history||[]);
+  $("cHistory").innerHTML = h.length
+    ? '<label class="f">History</label><div class="tw"><table><tbody>'+h.map(function(e){
+        return "<tr><td style='white-space:nowrap'>"+esc(e.date)+"</td><td>"+esc(e.what)+"</td></tr>";
+      }).join("")+"</tbody></table></div>"
+    : "";
+  $("mCollege").classList.add("on");
+}
+$("btnAdd").addEventListener("click", function(){ openCollege(null); });
+$("cCancel").addEventListener("click", function(){ $("mCollege").classList.remove("on"); });
+$("cSave").addEventListener("click", function(){
+  var c = editId ? byId(editId) : null;
+  if(!c){ c={id:uid(),history:[],status:"new"}; DB.colleges.push(c); }
+  c.name=$("cName").value.trim(); c.email=$("cEmail").value.trim(); c.contact=$("cContact").value.trim();
+  c.role=$("cRole").value.trim(); c.phone=$("cPhone").value.trim(); c.website=$("cWebsite").value.trim();
+  c.suburb=$("cSuburb").value.trim(); c.state=$("cState").value.trim(); c.status=$("cStatus").value;
+  c.followUp=$("cFollow").value.trim(); c.notes=$("cNotes").value.trim();
+  save(); $("mCollege").classList.remove("on"); refreshFilters(); renderTable(); toast("Saved.");
+});
+$("cDelete").addEventListener("click", function(){
+  if(!editId || !confirm("Remove this college from your list?")) return;
+  DB.colleges = DB.colleges.filter(function(c){ return c.id!==editId; });
+  save(); $("mCollege").classList.remove("on"); refreshFilters(); renderTable(); toast("Removed.");
+});
+
+/* ---------------- import ---------------- */
+$("btnImport").addEventListener("click", function(){ $("fileIn").click(); });
+$("fileIn").addEventListener("change", function(){
+  var f=this.files && this.files[0]; this.value="";
+  if(!f) return;
+  var r=new FileReader();
+  r.onerror=function(){ toast("That file couldn't be read."); };
+  r.onload=function(){
+    var rows=null;
+    try{
+      if(/\.(csv|tsv|txt)$/i.test(f.name) || !window.XLSX){
+        rows = parseDelim(typeof r.result==="string" ? r.result : new TextDecoder().decode(r.result));
+      } else {
+        var wb=XLSX.read(r.result,{type:"array"});
+        var sh=wb.Sheets[wb.SheetNames[0]];
+        rows=XLSX.utils.sheet_to_json(sh,{header:1,blankrows:false,defval:""});
+      }
+    }catch(err){ toast("Couldn't read that spreadsheet. Try saving it as CSV."); return; }
+    if(!rows || rows.length<2){ toast("That file doesn't have a header row and at least one college."); return; }
+    showMapping(rows);
+  };
+  var isText=/\.(csv|tsv|txt)$/i.test(f.name);
+  if(!isText && !window.XLSX){
+    toast("The spreadsheet reader didn't load — open the file in Excel or Numbers, save it as CSV, and import that.", 7000);
+    return;
+  }
+  if(isText) r.readAsText(f); else r.readAsArrayBuffer(f);
+});
+function parseDelim(text){
+  var d = text.indexOf("\t")>-1 && text.indexOf("\t") < (text.indexOf(",")===-1?1e9:text.indexOf(",")) ? "\t" : ",";
+  var rows=[], row=[], cell="", q=false;
+  for(var i=0;i<text.length;i++){
+    var ch=text[i];
+    if(q){
+      if(ch==='"'){ if(text[i+1]==='"'){ cell+='"'; i++; } else q=false; }
+      else cell+=ch;
+    } else if(ch==='"'){ q=true; }
+    else if(ch===d){ row.push(cell); cell=""; }
+    else if(ch==="\n"){ row.push(cell); rows.push(row); row=[]; cell=""; }
+    else if(ch!=="\r"){ cell+=ch; }
+  }
+  if(cell.length||row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(function(r){ return r.join("").trim()!==""; });
+}
+function guess(header){
+  var h=String(header||"").toLowerCase().replace(/[^a-z ]/g," ");
+  if(/contact|person|attention|recipient|manager name|full name|first name|surname/.test(h)) return "contact";
+  if(/e ?mail/.test(h)) return "email";
+  if(/role|position|job|title/.test(h)) return "role";
+  if(/phone|mobile|tel|number/.test(h)) return "phone";
+  if(/suburb|city|town/.test(h)) return "suburb";
+  if(/state|region/.test(h)) return "state";
+  if(/web|url|site|domain/.test(h)) return "website";
+  if(/note|comment|remark/.test(h)) return "notes";
+  if(/college|institute|organisation|organization|company|provider|school|rto|business|name/.test(h)) return "name";
+  return "";
+}
+function showMapping(rows){
+  pending = rows;
+  var heads=rows[0];
+  $("mapCount").textContent = (rows.length-1)+" rows found. Tell me which column is which — anything left as “Ignore” is skipped.";
+  var html="";
+  for(var i=0;i<heads.length;i++){
+    var g=guess(heads[i]);
+    html+='<div class="h">'+esc(heads[i]||("Column "+(i+1)))+"</div><div><select data-col=\""+i+'">';
+    html+='<option value="">Ignore</option>';
+    for(var j=0;j<FIELDS.length;j++){
+      html+='<option value="'+FIELDS[j][0]+'"'+(g===FIELDS[j][0]?" selected":"")+">"+FIELDS[j][1]+"</option>";
+    }
+    html+="</select></div>";
+  }
+  $("mapRows").innerHTML=html;
+  $("mMap").classList.add("on");
+}
+$("mapCancel").addEventListener("click", function(){ $("mMap").classList.remove("on"); pending=null; });
+$("mapGo").addEventListener("click", function(){
+  if(!pending) return;
+  var sels=$("mapRows").querySelectorAll("select"), map={};
+  for(var i=0;i<sels.length;i++){ if(sels[i].value) map[parseInt(sels[i].getAttribute("data-col"),10)]=sels[i].value; }
+  var hasName=false; for(var k in map) if(map[k]==="name") hasName=true;
+  if(!hasName){ toast("Pick which column holds the college name."); return; }
+  var skip=$("mapSkip").checked, added=0, skipped=0;
+  var known={}, n2={};
+  for(var a=0;a<DB.colleges.length;a++){
+    if(DB.colleges[a].email) known[DB.colleges[a].email.toLowerCase()]=1;
+    if(DB.colleges[a].name) n2[DB.colleges[a].name.toLowerCase().trim()]=1;
+  }
+  for(var r=1;r<pending.length;r++){
+    var row=pending[r], c={id:uid(),status:"new",history:[]}, any=false;
+    for(var col in map){
+      var v=row[col]; v = v==null ? "" : String(v).trim();
+      if(v){ c[map[col]]=v; any=true; }
+    }
+    if(!any || !c.name) continue;
+    var key=(c.email||"").toLowerCase();
+    if(skip && ((key && known[key]) || (!key && n2[c.name.toLowerCase().trim()]))){ skipped++; continue; }
+    if(key) known[key]=1; n2[c.name.toLowerCase().trim()]=1;
+    DB.colleges.push(c); added++;
+  }
+  save(); pending=null; $("mMap").classList.remove("on");
+  refreshFilters(); renderTable();
+  toast("Added "+added+" college"+(added===1?"":"s")+(skipped?", skipped "+skipped+" already on the list":"")+".", 4500);
+});
+
+$("btnSample").addEventListener("click", function(){
+  var csv='College name,Contact person,Their role,Email,Phone,Suburb,State,Website,Notes\n'+
+    'Example Institute,Jane Smith,Training Manager,jane@example.edu.au,02 9000 0000,Parramatta,NSW,https://example.edu.au,Hospitality scope\n';
+  dl(new Blob([csv],{type:"text/csv"}), "college-import-template.csv");
+  toast("Template downloaded. Fill it in and import it.");
+});
+$("btnExport").addEventListener("click", function(){
+  var head=["College name","Contact person","Their role","Email","Phone","Suburb","State","Website","Status","Last sent","Follow up","Notes"];
+  var rows=[head];
+  for(var i=0;i<DB.colleges.length;i++){
+    var c=DB.colleges[i];
+    rows.push([c.name,c.contact,c.role,c.email,c.phone,c.suburb,c.state,c.website,statusText(c.status||"new"),c.lastSent,c.followUp,c.notes]);
+  }
+  if(window.XLSX){
+    var wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), "Colleges");
+    XLSX.writeFile(wb, "colleges-"+today()+".xlsx");
+  } else {
+    var csv=rows.map(function(r){ return r.map(function(v){ v=v==null?"":String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }).join(","); }).join("\n");
+    dl(new Blob([csv],{type:"text/csv"}), "colleges-"+today()+".csv");
+  }
+  toast("Exported.");
+});
+function dl(blob, name){
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+
+/* ---------------- templates ---------------- */
+function tplById(id){ for(var i=0;i<DB.templates.length;i++) if(DB.templates[i].id===id) return DB.templates[i]; return null; }
+function renderTplList(){
+  var sel=$("tplPick"); sel.innerHTML="";
+  for(var i=0;i<DB.templates.length;i++){
+    var o=document.createElement("option"); o.value=DB.templates[i].id; o.textContent=DB.templates[i].name; sel.appendChild(o);
+  }
+  if(!curTpl || !tplById(curTpl)) curTpl = DB.templates.length ? DB.templates[0].id : null;
+  sel.value=curTpl;
+  loadTpl();
+}
+function loadTpl(){
+  var t=tplById(curTpl); if(!t) return;
+  $("tplName").value=t.name; $("tplSubject").value=t.subject;
+  $("tplBody").innerHTML=t.body; $("tplRaw").value=t.body;
+  $("tplButtons").checked=!!t.buttons;
+  renderTplPreview();
+}
+function storeTpl(){
+  var t=tplById(curTpl); if(!t) return;
+  t.name=$("tplName").value; t.subject=$("tplSubject").value;
+  t.body = rawMode ? $("tplRaw").value : $("tplBody").innerHTML;
+  t.buttons=$("tplButtons").checked;
+  save();
+}
+$("tplPick").addEventListener("change", function(){ curTpl=this.value; loadTpl(); });
+["tplName","tplSubject"].forEach(function(id){
+  $(id).addEventListener("input", function(){ storeTpl(); if(id==="tplName") renderTplList2(); renderTplPreview(); });
+});
+function renderTplList2(){
+  var sel=$("tplPick");
+  for(var i=0;i<sel.options.length;i++) if(sel.options[i].value===curTpl) sel.options[i].textContent=$("tplName").value;
+}
+$("tplBody").addEventListener("input", function(){ storeTpl(); renderTplPreview(); });
+$("tplRaw").addEventListener("input", function(){ storeTpl(); renderTplPreview(); });
+$("tplButtons").addEventListener("change", function(){ storeTpl(); renderTplPreview(); });
+$("btnHtml").addEventListener("click", function(){
+  rawMode=!rawMode;
+  if(rawMode){ $("tplRaw").value=$("tplBody").innerHTML; $("tplBody").classList.add("hide"); $("tplRaw").classList.remove("hide"); this.textContent="Rich text"; }
+  else { $("tplBody").innerHTML=$("tplRaw").value; $("tplBody").classList.remove("hide"); $("tplRaw").classList.add("hide"); this.textContent="HTML"; }
+});
+var etool=document.querySelector(".etool");
+etool.addEventListener("click", function(e){
+  var b=e.target.closest ? e.target.closest("button[data-cmd]") : null;
+  if(!b) return;
+  var cmd=b.getAttribute("data-cmd");
+  $("tplBody").focus();
+  if(cmd==="createLink"){
+    var u=prompt("Link address:","https://");
+    if(u) document.execCommand("createLink", false, u);
+  } else document.execCommand(cmd, false, null);
+  storeTpl(); renderTplPreview();
+});
+(function(){
+  var h="";
+  for(var i=0;i<MERGE.length;i++) h+='<span class="chip" data-m="'+MERGE[i][0]+'" title="'+esc(MERGE[i][1])+'">'+MERGE[i][0]+"</span>";
+  $("mergeChips").innerHTML=h;
+})();
+$("mergeChips").addEventListener("click", function(e){
+  if(!e.target.classList.contains("chip")) return;
+  var m=e.target.getAttribute("data-m");
+  if(rawMode){
+    var ta=$("tplRaw"), p=ta.selectionStart||0;
+    ta.value=ta.value.slice(0,p)+m+ta.value.slice(ta.selectionEnd||p);
+    ta.focus(); ta.selectionStart=ta.selectionEnd=p+m.length;
+  } else {
+    $("tplBody").focus();
+    document.execCommand("insertText", false, m);
+  }
+  storeTpl(); renderTplPreview();
+});
+$("btnNewTpl").addEventListener("click", function(){
+  var t={id:uid(),name:"New template",subject:"",body:"<p>{greeting},</p><p></p>",buttons:true};
+  DB.templates.push(t); curTpl=t.id; save(); renderTplList(); toast("Template added.");
+});
+$("btnDupTpl").addEventListener("click", function(){
+  var t=tplById(curTpl); if(!t) return;
+  var n=JSON.parse(JSON.stringify(t)); n.id=uid(); n.name=t.name+" (copy)";
+  DB.templates.push(n); curTpl=n.id; save(); renderTplList(); toast("Duplicated.");
+});
+$("btnDelTpl").addEventListener("click", function(){
+  if(DB.templates.length<2){ toast("Keep at least one template."); return; }
+  if(!confirm("Delete this template?")) return;
+  DB.templates=DB.templates.filter(function(t){ return t.id!==curTpl; });
+  curTpl=null; save(); renderTplList(); toast("Deleted.");
+});
+$("btnResetTpl").addEventListener("click", function(){
+  if(!confirm("Replace all templates with the originals? Anything you've written here is lost.")) return;
+  DB.templates=defaultTemplates(); curTpl=null; save(); renderTplList(); toast("Originals restored.");
+});
+function sampleCollege(){
+  var id=$("prevWho").value, c=id?byId(id):null;
+  return c || {name:"Example Institute", contact:"Jane Smith", role:"Training Manager", state:"NSW", suburb:"Parramatta", email:"jane@example.edu.au"};
+}
+function renderTplPreview(){
+  var sel=$("prevWho"), keep=sel.value;
+  sel.innerHTML='<option value="">Example college (Jane Smith)</option>';
+  for(var i=0;i<DB.colleges.length && i<300;i++){
+    var o=document.createElement("option"); o.value=DB.colleges[i].id;
+    o.textContent=DB.colleges[i].name+(DB.colleges[i].contact?" — "+DB.colleges[i].contact:"");
+    sel.appendChild(o);
+  }
+  sel.value=keep||"";
+  var t=tplById(curTpl); if(!t) return;
+  var m=buildEmail(t, sampleCollege());
+  $("prevSubject").textContent=m.subject||"(no subject yet)";
+  $("prevFrame").srcdoc=m.html;
+}
+$("prevWho").addEventListener("change", renderTplPreview);
+
+/* ---------------- send ---------------- */
+function renderSend(){
+  var sel=$("sendTpl"), keep=sel.value;
+  sel.innerHTML="";
+  for(var i=0;i<DB.templates.length;i++){
+    var o=document.createElement("option"); o.value=DB.templates[i].id; o.textContent=DB.templates[i].name; sel.appendChild(o);
+  }
+  if(keep && tplById(keep)) sel.value=keep;
+  $("btnLive").classList.toggle("hide", !(DB.settings.hook||"").trim());
+  renderPick();
+}
+function renderPick(){
+  var st=$("sendStatus").value, stt=$("sendState").value;
+  var list=DB.colleges.filter(function(c){
+    if(!c.email) return false;
+    if(st && (c.status||"new")!==st) return false;
+    if(stt && (c.state||"")!==stt) return false;
+    return true;
+  });
+  var box=$("pickList");
+  if(!list.length){
+    box.innerHTML='<div class="empty"><b>Nobody to show</b>Colleges need an email address before they appear here.</div>';
+    $("pickCount").textContent=""; return;
+  }
+  var html="";
+  for(var i=0;i<list.length;i++){
+    var c=list[i];
+    html+='<label><input type="checkbox" value="'+c.id+'"><span><b>'+esc(c.name)+"</b><span>"+
+      esc(c.email)+(c.contact?" · "+esc(c.contact):" · no name yet")+" · "+esc(statusText(c.status||"new"))+"</span></span></label>";
+  }
+  box.innerHTML=html;
+  updatePickCount();
+}
+$("pickList").addEventListener("change", updatePickCount);
+function picked(){
+  var cbs=$("pickList").querySelectorAll("input:checked"), out=[];
+  for(var i=0;i<cbs.length;i++){ var c=byId(cbs[i].value); if(c) out.push(c); }
+  return out;
+}
+function updatePickCount(){
+  var n=picked().length;
+  $("pickCount").textContent = n ? n+" selected" : "Tick the colleges you want to write to.";
+  $("btnStart").disabled = !n;
+}
+$("sendStatus").addEventListener("change", renderPick);
+$("sendState").addEventListener("change", renderPick);
+$("btnAll").addEventListener("click", function(){
+  var cbs=$("pickList").querySelectorAll("input[type=checkbox]");
+  for(var i=0;i<cbs.length;i++) cbs[i].checked=true;
+  updatePickCount();
+});
+$("btnNone").addEventListener("click", function(){
+  var cbs=$("pickList").querySelectorAll("input[type=checkbox]");
+  for(var i=0;i<cbs.length;i++) cbs[i].checked=false;
+  updatePickCount();
+});
+$("btnStart").addEventListener("click", function(){
+  queue=picked(); qIdx=0;
+  if(!queue.length) return;
+  var capped=DB.settings.cap||25, done=DB.log[today()]||0;
+  if(done+queue.length>capped){
+    if(!confirm("That would be "+(done+queue.length)+" emails today. Sending a smaller batch, well personalised, usually works better. Keep going anyway?")) return;
+  }
+  $("sendSetup").classList.add("hide"); $("sendQueue").classList.remove("hide");
+  showCurrent();
+});
+$("btnStop").addEventListener("click", function(){
+  $("sendQueue").classList.add("hide"); $("sendSetup").classList.remove("hide");
+  renderSend(); renderTable(); toast("Finished.");
+});
+$("btnSkip").addEventListener("click", function(){ next(); });
+function current(){ return queue[qIdx]; }
+function currentMail(){
+  var t=tplById($("sendTpl").value) || DB.templates[0];
+  return buildEmail(t, current());
+}
+function showCurrent(){
+  var c=current();
+  if(!c){ $("btnStop").click(); return; }
+  var m=currentMail();
+  $("qName").textContent=c.name;
+  $("qPos").textContent="Email "+(qIdx+1)+" of "+queue.length+"  ·  "+(DB.log[today()]||0)+" sent today";
+  $("qTo").textContent=(c.contact? c.contact+" <"+c.email+">" : c.email);
+  $("qSubject").textContent=m.subject;
+  $("qStatusNow").innerHTML='<span class="pill s-'+(c.status||"new")+'">'+esc(statusText(c.status||"new"))+"</span>"+
+    (c.lastSent?' <span style="color:#6A7582;font-size:13px">last contacted '+esc(c.lastSent)+"</span>":"");
+  $("qNote").value="";
+  $("qFrame").srcdoc=m.html;
+  var how={gmail:"Copies the email, then opens Gmail with the address and subject filled in — paste it in and send.",
+           mail:"Copies the email, then opens your Mail app. Paste the message in.",
+           copy:"Copies the email so you can paste it into whatever you send from."};
+  $("sendHow").textContent=how[DB.settings.method]||how.gmail;
+  if(!c.contact) $("sendHow").textContent += " This one has no named contact — worth a minute to find the right person first.";
+}
+function next(){
+  qIdx++;
+  if(qIdx>=queue.length){
+    $("sendQueue").classList.add("hide"); $("sendSetup").classList.remove("hide");
+    renderSend(); renderTable(); toast("That's the whole batch done.");
+    return;
+  }
+  showCurrent();
+}
+function copyRich(html, text, done){
+  var ok=function(){ if(done) done(); };
+  function fallback(){
+    var d=document.createElement("div");
+    d.setAttribute("contenteditable","true");
+    d.style.cssText="position:fixed;left:-10000px;top:0;white-space:pre-wrap;";
+    d.innerHTML=html;
+    document.body.appendChild(d);
+    var r=document.createRange(); r.selectNodeContents(d);
+    var s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    try{ document.execCommand("copy"); }catch(e){}
+    s.removeAllRanges(); d.remove();
+    ok();
+  }
+  try{
+    if(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+      var item=new ClipboardItem({
+        "text/html": new Blob([html],{type:"text/html"}),
+        "text/plain": new Blob([text],{type:"text/plain"})
+      });
+      navigator.clipboard.write([item]).then(ok, fallback);
+    } else fallback();
+  }catch(e){ fallback(); }
+}
+$("btnCopy").addEventListener("click", function(){
+  var m=currentMail();
+  copyRich(m.inner, m.text, function(){ toast("Email copied. Paste it into your message."); });
+});
+$("btnCopyOpen").addEventListener("click", function(){
+  var c=current(), m=currentMail(), method=DB.settings.method||"gmail";
+  copyRich(m.inner, m.text, function(){
+    if(method==="gmail"){
+      window.open("https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(c.email)+"&su="+encodeURIComponent(m.subject), "_blank", "noopener");
+      toast("Copied. Paste into the Gmail window, then send.", 4000);
+    } else if(method==="mail"){
+      window.location.href="mailto:"+encodeURIComponent(c.email)+"?subject="+encodeURIComponent(m.subject)+"&body="+encodeURIComponent(m.text);
+      toast("Copied. Paste over the text if you want the designed version.", 4000);
+    } else toast("Email copied.");
+  });
+});
+$("btnMail").addEventListener("click", function(){
+  var c=current(), m=currentMail();
+  window.location.href="mailto:"+encodeURIComponent(c.email)+"?subject="+encodeURIComponent(m.subject)+"&body="+encodeURIComponent(m.text);
+});
+$("btnLive").addEventListener("click", function(){
+  var hook=(DB.settings.hook||"").trim(); if(!hook) return;
+  var c=current(), m=currentMail(), btn=this;
+  btn.disabled=true; toast("Sending…", 8000);
+  fetch(hook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+    to:c.email, subject:m.subject, html:m.html, text:m.text, name:c.contact||"", college:c.name||""
+  })}).then(function(r){
+    if(!r.ok) return r.text().then(function(t){ throw new Error("The send service refused it ("+r.status+"). "+t.slice(0,160)); });
+    markSent("Sent from the page"); toast("Sent.");
+  }).catch(function(err){
+    toast(/Failed to fetch/i.test(err.message) ? "The request never reached your send service. Check the address is right and the workflow is active." : err.message, 7000);
+  }).then(function(){ btn.disabled=false; });
+});
+$("btnMarkSent").addEventListener("click", function(){ markSent("Marked as sent"); });
+function markSent(what){
+  var c=current(); if(!c) return;
+  var t=tplById($("sendTpl").value) || DB.templates[0];
+  c.status = (c.status==="sent"||c.status==="followed") ? "followed" : "sent";
+  c.lastSent = today();
+  if(!c.history) c.history=[];
+  c.history.unshift({date:today(), what:what+" — "+t.name});
+  var note=$("qNote").value.trim();
+  if(note){ c.notes=(c.notes?c.notes+"\n":"")+today()+": "+note; c.history.unshift({date:today(), what:note}); }
+  DB.log[today()]=(DB.log[today()]||0)+1;
+  save(); next();
+}
+
+/* ---------------- follow-ups ---------------- */
+function renderFollow(){
+  var days=DB.settings.followDays||12;
+  var due=DB.colleges.filter(function(c){
+    var s=c.status||"new";
+    return (s==="sent"||s==="followed") && daysSince(c.lastSent)>=days;
+  });
+  due.sort(function(a,b){ return daysSince(b.lastSent)-daysSince(a.lastSent); });
+  var box=$("fuDue");
+  if(!due.length){
+    box.innerHTML='<div class="card"><div class="empty"><b>Nothing due</b>Colleges you contacted will appear here once '+days+' days have passed with no reply.</div></div>';
+  } else {
+    var h='<div class="card"><h3>Due now — '+due.length+'</h3><div class="sub">Contacted '+days+'+ days ago with no reply. Use the “Follow-up after no reply” template.</div><div class="tw"><table><thead><tr><th>College</th><th>Contact</th><th>Sent</th><th>Waiting</th><th></th></tr></thead><tbody>';
+    for(var i=0;i<due.length;i++){
+      var c=due[i];
+      h+='<tr data-id="'+c.id+'"><td class="nm"><b>'+esc(c.name)+"</b><span>"+esc(c.email||"")+"</span></td><td>"+
+         esc(c.contact||"—")+"</td><td>"+esc(c.lastSent||"—")+"</td><td>"+daysSince(c.lastSent)+" days</td>"+
+         '<td class="ac"><button class="b ghost sm" data-act="edit">Open</button></td></tr>';
+    }
+    box.innerHTML=h+"</tbody></table></div></div>";
+  }
+  var live=DB.colleges.filter(function(c){
+    var s=c.status||"new"; return s!=="new";
+  });
+  live.sort(function(a,b){ return (b.lastSent||"")<(a.lastSent||"")?-1:1; });
+  var tb=$("fuBody");
+  if(!live.length){ tb.innerHTML='<tr><td colspan="5"><div class="empty"><b>Nothing in progress yet</b>Once you start sending, every college shows up here.</div></td></tr>'; return; }
+  var html="";
+  for(var j=0;j<live.length;j++){
+    var x=live[j];
+    html+='<tr data-id="'+x.id+'"><td class="nm"><b>'+esc(x.name)+"</b><span>"+esc(x.contact||"")+"</span></td>"+
+      '<td><span class="pill s-'+(x.status||"new")+'">'+esc(statusText(x.status))+"</span></td><td>"+esc(x.lastSent||"—")+"</td>"+
+      "<td>"+esc((x.notes||"").split("\n").slice(-1)[0]||"")+"</td>"+
+      '<td class="ac"><button class="b ghost sm" data-act="edit">Open</button></td></tr>';
+  }
+  tb.innerHTML=html;
+}
+function wireOpen(el){
+  el.addEventListener("click", function(e){
+    var b=e.target.closest ? e.target.closest('button[data-act="edit"]') : null;
+    if(!b) return;
+    var c=byId(b.closest("tr").getAttribute("data-id"));
+    if(c) openCollege(c);
+  });
+}
+wireOpen($("fuDue")); wireOpen($("fuBody"));
+
+var modals=document.querySelectorAll(".mw");
+for(var mi=0;mi<modals.length;mi++){
+  modals[mi].addEventListener("click", function(e){ if(e.target===this) this.classList.remove("on"); });
+}
+document.addEventListener("keydown", function(e){
+  if(e.key!=="Escape") return;
+  for(var i=0;i<modals.length;i++) modals[i].classList.remove("on");
+});
+
+/* ---------------- settings ---------------- */
+var SMAP=[["sName","name"],["sTitle","title"],["sEmail","email"],["sPhone","phone"],["sLoc","location"],
+          ["sSignoff","signoff"],["sPortfolio","portfolio"],["sResume","resume"],["sLinkedin","linkedin"],["sButton","button"]];
+function dataNote(){
+  var n=0; try{ n=(localStorage.getItem(KEY)||"").length; }catch(e){}
+  $("dataNote").textContent = DB.colleges.length+" colleges and "+DB.templates.length+" templates stored in this browser ("+Math.round(n/1024)+" KB).";
+}
+function loadSettings(){
+  for(var i=0;i<SMAP.length;i++) $(SMAP[i][0]).value = DB.profile[SMAP[i][1]] || "";
+  $("sMethod").value=DB.settings.method||"gmail";
+  $("sFollowDays").value=DB.settings.followDays||12;
+  $("sCap").value=DB.settings.cap||25;
+  $("sHook").value=DB.settings.hook||"";
+  $("whoami").textContent=(DB.profile.name||"")+" · Webescapade";
+  dataNote();
+}
+for(var si=0;si<SMAP.length;si++){
+  (function(pair){
+    $(pair[0]).addEventListener("input", function(){
+      DB.profile[pair[1]]=this.value; save(); $("whoami").textContent=(DB.profile.name||"")+" · Webescapade"; renderTplPreview();
+    });
+  })(SMAP[si]);
+}
+$("sMethod").addEventListener("change", function(){ DB.settings.method=this.value; save(); });
+$("sFollowDays").addEventListener("input", function(){ DB.settings.followDays=Math.max(2,parseInt(this.value,10)||12); save(); });
+$("sCap").addEventListener("input", function(){ DB.settings.cap=Math.max(1,parseInt(this.value,10)||25); save(); });
+$("sHook").addEventListener("input", function(){ DB.settings.hook=this.value.trim(); save(); $("btnLive").classList.toggle("hide", !this.value.trim()); });
+
+/* ---------------- backup / snapshot ---------------- */
+function snapshot(withData){
+  var doc=document.documentElement.cloneNode(true);
+  var seed=doc.querySelector("#seed");
+  seed.textContent = withData ? JSON.stringify(DB).replace(/</g,"\\u003c") : "null";
+  var mws=doc.querySelectorAll(".mw"); for(var i=0;i<mws.length;i++) mws[i].classList.remove("on");
+  var tst=doc.querySelector("#toast"); tst.className="toast"; tst.textContent="";
+  var tok=doc.querySelector("#gToken"); if(tok) tok.removeAttribute("value");
+  var pc=doc.querySelector("#pubCard"); if(pc) pc.classList.add("hide");
+  var frames=doc.querySelectorAll("iframe"); for(var j=0;j<frames.length;j++) frames[j].removeAttribute("srcdoc");
+  var btns=doc.querySelectorAll("button"); for(var k=0;k<btns.length;k++) btns[k].removeAttribute("disabled");
+  return "<!DOCTYPE html>\n"+doc.outerHTML;
+}
+function doBackup(){
+  var html=snapshot(true);
+  dl(new Blob([html],{type:"text/html;charset=utf-8"}), "resume-outreach-"+today()+".html");
+  toast("Backup downloaded ("+Math.round(html.length/1024)+" KB). Open that file any time — your colleges are inside it.", 5000);
+}
+$("btnBackup").addEventListener("click", doBackup);
+$("btnBackup2").addEventListener("click", doBackup);
+$("btnRestore").addEventListener("click", function(){ $("fileJson").click(); });
+$("fileJson").addEventListener("change", function(){
+  var f=this.files && this.files[0]; this.value="";
+  if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    var txt=String(r.result), data=null;
+    try{
+      if(/^\s*\{/.test(txt)) data=JSON.parse(txt);
+      else{
+        var m=txt.match(/<script id="seed" type="application\/json">([\s\S]*?)<\/script>/);
+        if(m && m[1].trim()!=="null") data=JSON.parse(m[1].replace(/\\u003c/g,"<"));
+      }
+    }catch(e){}
+    if(!data || !data.profile){ toast("That file doesn't hold any Outreach Studio data."); return; }
+    if(!confirm("Replace everything here with the contents of that backup?")) return;
+    DB=data;
+    if(!DB.settings) DB.settings=defaults().settings;
+    if(!DB.log) DB.log={};
+    save(); curTpl=null; boot(); toast("Restored.");
+  };
+  r.readAsText(f);
+});
+$("btnWipe").addEventListener("click", function(){
+  if(!confirm("Erase every college, template and setting from this browser? Download a backup first if you're not sure.")) return;
+  if(!confirm("Last check — this cannot be undone.")) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  DB=defaults(); curTpl=null; save(); boot(); toast("Everything erased.");
+});
+
+/* ---------------- publish ---------------- */
+$("btnPublish").addEventListener("click", function(){ $("pubCard").classList.toggle("hide"); if(!$("pubCard").classList.contains("hide")) $("pubCard").scrollIntoView({block:"start"}); });
+$("gClose").addEventListener("click", function(){ $("pubCard").classList.add("hide"); });
+function b64utf8(str){
+  var bytes=new TextEncoder().encode(str), bin="", chunk=0x8000;
+  for(var i=0;i<bytes.length;i+=chunk) bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+chunk));
+  return btoa(bin);
+}
+$("gGo").addEventListener("click", function(){
+  var btn=this, st=$("gStatus");
+  var owner=$("gOwner").value.trim(), repo=$("gRepo").value.trim(), branch=$("gBranch").value.trim(),
+      path=$("gPath").value.trim().replace(/^\/+/,""), token=$("gToken").value.trim();
+  if(!owner||!repo||!branch||!path||!token){ st.textContent="Fill in every field, including the token."; return; }
+  if(!/\.html?$/i.test(path)){ st.textContent="The file path needs to end in .html"; return; }
+  var dir = path.indexOf("/")>-1 ? path.slice(0,path.lastIndexOf("/")) : "";
+  var name = path.slice(path.lastIndexOf("/")+1);
+  var api="https://api.github.com/repos/"+encodeURIComponent(owner)+"/"+encodeURIComponent(repo)+"/contents/";
+  var enc=function(p){ return p.split("/").map(encodeURIComponent).join("/"); };
+  var H={Authorization:"Bearer "+token, Accept:"application/vnd.github+json", "Content-Type":"application/json"};
+  btn.disabled=true; st.textContent="Checking the repository…";
+  fetch(api+enc(dir)+"?ref="+encodeURIComponent(branch),{headers:H})
+    .then(function(r){
+      if(r.status===404) return [];
+      if(r.status===401||r.status===403) throw new Error("GitHub refused the token. Check it has Contents: read and write on this repository.");
+      if(!r.ok) throw new Error("GitHub returned "+r.status+" while checking the folder.");
+      return r.json();
+    })
+    .then(function(list){
+      var sha=null;
+      if(list && list.length) list.forEach(function(f){ if(f.name===name) sha=f.sha; });
+      st.textContent="Uploading…";
+      var payload={message:"Update résumé outreach studio", content:b64utf8(snapshot(false)), branch:branch};
+      if(sha) payload.sha=sha;
+      return fetch(api+enc(path),{method:"PUT",headers:H,body:JSON.stringify(payload)});
+    })
+    .then(function(r){
+      if(!r.ok) return r.json().then(function(j){ throw new Error("Publish failed ("+r.status+"): "+(j.message||"unknown error")); });
+      st.textContent="Published — a blank copy, with none of your college data in it. GitHub Pages usually updates within a minute or two.";
+      toast("Published.");
+    })
+    .catch(function(err){ st.textContent=err.message||String(err); })
+    .then(function(){ btn.disabled=false; });
+});
+
+/* ---------------- boot ---------------- */
+function refreshFilters(){
+  fillSelect($("qStatus"), STATUS, "All statuses");
+  fillSelect($("sendStatus"), STATUS, "All statuses");
+  fillSelect($("qState"), states(), "All states");
+  fillSelect($("sendState"), states(), "All states");
+  fillSelect($("cStatus"), STATUS, null);
+}
+function boot(){
+  refreshFilters();
+  loadSettings();
+  renderTplList();
+  renderTable();
+  renderSend();
+  renderFollow();
+}
+load();
+boot();
+
+window.addEventListener("beforeunload", function(){ try{ storeTpl(); }catch(e){} });
+})();
+</script>
+</body>
+</html>
