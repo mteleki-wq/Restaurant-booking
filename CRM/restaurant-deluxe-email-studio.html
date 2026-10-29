@@ -277,7 +277,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v17</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v18</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -824,7 +824,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v17 \u00b7 founding offer';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v18 \u00b7 digital waitlist';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -920,7 +920,7 @@
       badge:"FOR CAFÉS",
       eyebrow:"Table ordering for cafés",
       headline:"Let customers order from the table while your team keeps up with the coffee.",
-      intro:"Each table gets a QR code. Customers scan it, order from your menu on their own phone and pay at the counter as usual. Food goes to the kitchen, coffees go to the bar, and nothing is lost on a busy morning.\n\nYou keep your website, your POS and your way of working.",
+      intro:"Each table gets a QR code. Customers scan it, order from your menu on their own phone and pay at the counter as usual. Food goes to the kitchen, coffees go to the bar, and nothing is lost on a busy morning.\n\nYou keep your website, your POS and your way of working. New: a digital waitlist for busy mornings is included too (early access).",
       cta1:"Start my 14-day free trial", cta1url:CONTACT,
       cta2:"See it in action", cta2url:SITE,
       featEyebrow:"Made for a busy café",
@@ -943,11 +943,39 @@
       preheader:"Free 14-day trial. Founding offer: Quick Start setup free for the first 5 venues."
     }),
     preset({
+      name:"Digital waitlist — early access", desc:"New: scan-to-wait, free with table ordering",
+      badge:"NEW — EARLY ACCESS",
+      eyebrow:"New — Restaurant Deluxe Digital Waitlist",
+      headline:"No more crowd at the door. Your queue lives on their phone.",
+      intro:"When you are full, guests scan a QR code at the door, add a first name and party size, and see their place in line live on their phone. They can grab a drink nearby instead of standing on the footpath.\n\nWhen a table is ready, staff tap Call. The guest's phone buzzes and asks “Coming?” — Yes holds the table, No passes it straight to the next party. No more shouting names into a busy room.",
+      cta1:"Request early access", cta1url:CONTACT,
+      cta2:"See table ordering", cta2url:SITE,
+      featEyebrow:"Simple for guests. Calm for staff.",
+      featHeading:"The door, sorted.\nThe tables, filled faster.",
+      cards:[
+        {n:"01", t:"No app, no phone number", d:"Just a first name and party size. Nothing to download, no personal details collected."},
+        {n:"02", t:"The right table, suggested", d:"Your counter screen suggests the smallest free table that fits each party, in queue order."},
+        {n:"03", t:"No-shows handled", d:"No answer within the hold time? The table passes to the next party."}
+      ],
+      spotOn:true, spotEyebrow:"How it works",
+      spotHeading:"Scan. Wait anywhere. Get the buzz.",
+      spotSub:"Your team also sees which tables have asked for the bill, so the next party can be called before the table is even cleared. Walk-ins can be added from the counter in seconds.",
+      boxes:[{l:"AT THE DOOR", v:"Scan & join"},{l:"WHILE WAITING", v:"Live place in line"},{l:"TABLE READY", v:"Buzz: “Coming?”"}],
+      priceEyebrow:"Included, not extra", priceHeading:"Free with table ordering.",
+      plans:[{tier:"TABLE ORDERING + WAITLIST", price:"$109", per:"/ month", desc:"QR ordering, kitchen and bar displays, shift records — and now the digital waitlist, at no extra cost.", hi:true}],
+      priceFoot:"Early access: we are opening the waitlist to a small group of venues first. "+SETUP_ORDER,
+      finalHeading:"Be one of the first to use it.",
+      finalSub:"Reply “waitlist” and I will show you how it would work at your door. No commission on orders, ever.",
+      finalCta:"Request early access", finalUrl:CONTACT,
+      subject:"No more crowd at the door",
+      preheader:"New: guests scan, wait anywhere, and get a buzz when their table is ready."
+    }),
+    preset({
       name:"Table ordering launch", desc:"Announce QR ordering to your list",
       badge:"NEW — TABLE ORDERING",
       eyebrow:"New — Restaurant Deluxe Table Ordering",
       headline:"Let guests order from the table, without waiting to catch someone's eye.",
-      intro:"Every table gets its own QR code. The guest scans it, confirms the table number, browses the menu and sends the order. Food goes to the kitchen, drinks go to the bar, and the counter keeps the running total.\n\nNo commission on orders — one flat monthly price.",
+      intro:"Every table gets its own QR code. The guest scans it, confirms the table number, browses the menu and sends the order. Food goes to the kitchen, drinks go to the bar, and the counter keeps the running total.\n\nNo commission on orders — one flat monthly price. New, in early access: a digital waitlist, included at no extra cost.",
       cta1:"See how table ordering works", cta1url:SITE,
       cta2:"Book a demonstration", cta2url:CONTACT,
       featEyebrow:"From QR code to kitchen",
@@ -1212,11 +1240,11 @@
       if(c.spotEyebrow) o.push('<div style="font:700 11px '+F+';letter-spacing:2px;color:'+P.eye+';">'+escKeepTags(c.spotEyebrow).toUpperCase()+'</div>');
       if(c.spotHeading) o.push('<div style="padding-top:11px;font:700 28px/35px '+F+';color:'+P.ink+';">'+nl(c.spotHeading)+'</div>');
       if(c.spotSub)     o.push('<div style="padding-top:13px;font:400 15px/24px '+F+';color:'+P.mut+';">'+escKeepTags(c.spotSub)+'</div>');
-      var bn=c.boxes.length, bw=(bn>=2?48:100);
+      var bn=Math.min(c.boxes.length,3), bw=Math.floor((100-4*(bn-1))/bn*10)/10;
       o.push('<table role="presentation" width="100%" style="margin-top:24px;"><tr>');
-      c.boxes.forEach(function(bx,i){
+      c.boxes.slice(0,3).forEach(function(bx,i){
         if(i) o.push('<td class="gap" width="4%"></td>');
-        var ac=i%2?'#54ddd8':'#a576ff';
+        var ac=['#a576ff','#54ddd8','#f0cd8b'][i%3];
         o.push('<td class="stack" width="'+bw+'%" style="width:'+bw+'%;padding:19px;border:1px solid '+P.line2+';border-radius:14px;">'+
           '<div style="font:700 10px '+F+';letter-spacing:1.6px;color:'+ac+';">'+escKeepTags(bx.l).toUpperCase()+'</div>'+
           '<div style="padding-top:8px;font:700 22px '+F+';color:'+P.ink+';">'+escKeepTags(bx.v)+'</div></td>');
