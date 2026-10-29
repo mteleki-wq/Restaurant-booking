@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex,nofollow">
+<title>Join the waitlist</title>
+
+<!-- =====================================================================
+     RESTAURANT DELUXE — DIGITAL WAITLIST
+     waitlist.html
+
+     The door QR code (Menu Manager -> Settings -> Waitlist) points at:
+       https://your-site/waitlist.html?v=<venue-slug>&w=<door-code>
+
+     Guests join with a first name and party size, then watch their place
+     in line here. When the counter calls them, this page buzzes, changes
+     colour and asks "Coming?" - Yes holds the table, No passes it on.
+     No phone number or email is collected.
+
+     Needs supabase-waitlist-migration.sql run once in Supabase.
+     SUPABASE_KEY is the anon / public key - DESIGNED to be public. The
+     service_role key must NEVER appear in this file.
+     ===================================================================== -->
+<script>
+  var SUPABASE_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE';
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0b0806; --panel:#151009; --panel-2:#1c150c; --ink:#f6efe2; --muted:#b3a488;
+  --line:rgba(179,164,136,.18); --accent:#f0cf85; --accent-2:#df9f52;
+  --grad:linear-gradient(100deg,#f2d187 0%,#df9f52 55%,#b8783c 100%);
+  --edge:rgba(240,207,133,.4); --on-accent:#241703; --tint:rgba(240,207,133,.07);
+  --btn-shadow:rgba(184,120,60,.3); --good:#7fd6a3; --bad:#ff9a8a; --warn:#ffd479;
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-weight:300;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  min-height:100vh;min-height:100dvh}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+input{font:inherit;color:inherit}
+h1,h2{font-family:'Unbounded',sans-serif;font-weight:700;margin:0;line-height:1.2}
+.wrap{max-width:480px;margin:0 auto;padding:calc(28px + var(--safe-t)) 22px calc(30px + var(--safe-b))}
+.screen{display:none;min-height:calc(100vh - 60px);flex-direction:column}
+.screen.on{display:flex}
+.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;margin-bottom:26px}
+.brand img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid var(--edge);display:none}
+.vname{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.lead{color:var(--muted);text-align:center;margin:8px 0 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px}
+.stat{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0 22px}
+.pill{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:100px;padding:7px 13px;color:var(--muted)}
+.pill b{color:var(--ink)}
+label{display:block;font-weight:600;font-size:13px;margin:0 0 8px}
+.field{width:100%;min-height:54px;border-radius:14px;border:1px solid var(--line);background:var(--panel-2);
+  padding:0 16px;font-size:17px;outline:none}
+.field:focus{border-color:var(--edge)}
+.step{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);
+  border-radius:14px;background:var(--panel-2);padding:6px}
+.step button{width:52px;height:52px;border-radius:12px;font-size:26px;font-weight:600;color:var(--accent);background:var(--tint)}
+.step button[disabled]{opacity:.35}
+.step .n{font-family:'Unbounded',sans-serif;font-weight:700;font-size:24px;text-align:center;flex:1}
+.step .n small{display:block;font-family:'Sora',sans-serif;font-weight:400;font-size:12px;color:var(--muted)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;border-radius:100px;
+  background:var(--grad);color:var(--on-accent);font-weight:700;font-size:16px;box-shadow:0 8px 22px var(--btn-shadow)}
+.btn[disabled]{opacity:.5;box-shadow:none}
+.btn.quiet{background:none;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:600}
+.btn.bad{background:none;color:var(--bad);border:1px solid currentColor;box-shadow:none}
+.mt{margin-top:16px}.mt2{margin-top:26px}
+.hint{color:var(--muted);font-size:13px;text-align:center;margin:12px 0 0}
+.err{color:var(--bad);font-size:14px;text-align:center;margin:12px 0 0;min-height:20px}
+.big{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(64px,24vw,108px);line-height:1;text-align:center;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin:6px 0 2px}
+.big-sub{text-align:center;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.wait{display:flex;justify-content:center;gap:8px;align-items:baseline;margin-top:18px;font-size:16px}
+.wait b{font-family:'Unbounded',sans-serif;font-size:22px}
+.who{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.who .nm{font-weight:600;font-size:17px}
+.live{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--good);animation:blink 2s infinite}
+.live.off i{background:var(--warn);animation:none}
+@keyframes blink{50%{opacity:.35}}
+.tips{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;color:var(--muted);font-size:13.5px}
+.tips li{display:flex;gap:10px}.tips li:before{content:'\2022';color:var(--accent)}
+.spacer{flex:1}
+/* called: impossible to miss */
+.callbox{border-radius:26px;padding:26px 20px;text-align:center;background:var(--grad);color:var(--on-accent);
+  animation:pulse 1.4s ease-in-out infinite;box-shadow:0 0 0 0 var(--edge)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--edge)}70%{box-shadow:0 0 0 22px rgba(0,0,0,0)}100%{box-shadow:0 0 0 0 rgba(0,0,0,0)}}
+.callbox h1{font-size:28px}
+.callbox .tbl{font-family:'Unbounded',sans-serif;font-weight:900;font-size:44px;margin:8px 0 2px}
+.callbox .cd{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.06em;opacity:.85}
+.mark{width:84px;height:84px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+  font-size:38px;border:1.5px solid var(--edge);color:var(--accent);background:var(--tint)}
+.center{text-align:center}
+.sound{position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + var(--safe-t));white-space:nowrap;z-index:5;
+  background:var(--panel);border:1px solid var(--edge);color:var(--ink);border-radius:100px;padding:10px 16px;
+  font-size:13px;font-weight:600;display:none;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.sk{border-radius:10px;background:var(--panel);height:16px;animation:blink 1.4s infinite}
+@media (prefers-reduced-motion:reduce){ .callbox,.live i,.sk{animation:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- loading -->
+  <section class="screen on" id="scBoot">
+    <div style="margin:auto;width:70%"><div class="sk"></div><div class="sk" style="margin-top:12px;width:60%"></div></div>
+  </section>
+
+  <!-- problem -->
+  <section class="screen" id="scStop">
+    <div class="spacer"></div>
+    <div class="center">
+      <div class="mark">!</div>
+      <h1 id="stopT">This link isn't working</h1>
+      <p class="lead" id="stopM">Please scan the QR code at the door again, or see a staff member.</p>
+      <button class="btn quiet mt2" id="stopRetry" style="display:none">Try again</button>
+    </div>
+    <div class="spacer"></div>
+  </section>
+
+  <!-- join -->
+  <section class="screen" id="scJoin">
+    <div class="brand"><img class="logo" alt=""><span class="vname"></span>
+      <h1>Join the waitlist</h1>
+      <p class="lead" style="margin:0">Skip the queue outside. We'll tell you on this phone when your table is ready.</p>
+    </div>
+    <div class="stat" id="joinStat"></div>
+    <div class="card">
+      <label for="jName">First name</label>
+      <input class="field" id="jName" type="text" maxlength="40" autocomplete="given-name" autocapitalize="words" enterkeyhint="done" placeholder="So we know who to call">
+      <label style="margin-top:18px">How many people?</label>
+      <div class="step">
+        <button type="button" id="pMinus" aria-label="One less person">&minus;</button>
+        <span class="n" aria-live="polite"><span id="pN">2</span><small id="pW">people</small></span>
+        <button type="button" id="pPlus" aria-label="One more person">+</button>
+      </div>
+    </div>
+    <button class="btn mt2" id="jGo" disabled>Add your name</button>
+    <p class="err" id="jErr" role="alert"></p>
+    <p class="hint">No phone number needed. Keep this page open while you wait.</p>
+  </section>
+
+  <!-- closed -->
+  <section class="screen" id="scClosed">
+    <div class="spacer"></div>
+    <div class="center">
+      <div class="brand"><img class="logo" alt=""><span class="vname"></span></div>
+      <h1>The waitlist isn't open right now</h1>
+      <p class="lead">Please see a staff member at the door.</p>
+    </div>
+    <div class="spacer"></div>
+  </section>
+
+  <!-- waiting -->
+  <section class="screen" id="scWait">
+    <div class="brand" style="margin-bottom:8px"><img class="logo" alt=""><span class="vname"></span></div>
+    <div class="big-sub">You're</div>
+    <div class="big" id="wPos">1st</div>
+    <div class="big-sub">in line</div>
+    <div class="wait" id="wEst"></div>
+    <div class="card mt2">
+      <div class="who"><span class="nm" id="wWho"></span><span class="live" id="wLive"><i></i><span>Live</span></span></div>
+      <ul class="tips">
+        <li><span>Keep this page open &mdash; it changes and buzzes when your table is ready.</span></li>
+        <li><span>Stay close by: you'll have <b id="wHold">10</b> minutes to answer and come back.</span></li>
+      </ul>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn quiet mt2" id="wLeave">Leave the queue</button>
+  </section>
+
+  <!-- called -->
+  <section class="screen" id="scCall">
+    <div class="brand" style="margin-bottom:16px"><img class="logo" alt=""><span class="vname"></span></div>
+    <div class="callbox" role="alert">
+      <h1>Your table is ready!</h1>
+      <div class="tbl" id="cTbl"></div>
+      <div class="cd" id="cCd"></div>
+    </div>
+    <p class="lead mt2" id="cWho"></p>
+    <div class="spacer"></div>
+    <button class="btn mt2" id="cYes">Yes, we're coming</button>
+    <button class="btn bad mt" id="cNo">No thanks, give it to someone else</button>
+    <p class="err" id="cErr" role="alert"></p>
+  </section>
+
+  <!-- confirmed -->
+  <section class="screen" id="scHeld">
+    <div class="spacer"></div>
+    <div class="center">
+      <div class="brand"><img class="logo" alt=""><span class="vname"></span></div>
+      <div class="mark">&#10003;</div>
+      <h1 id="hT">See you soon</h1>
+      <p class="lead" id="hM"></p>
+      <div class="card mt2"><div class="big-sub">Show this to staff</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:22px;margin-top:8px" id="hWho"></div></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn quiet mt2" id="hLeave">We can't make it after all</button>
+  </section>
+
+  <!-- finished: seated / declined / expired / left -->
+  <section class="screen" id="scDone">
+    <div class="spacer"></div>
+    <div class="center">
+      <div class="brand"><img class="logo" alt=""><span class="vname"></span></div>
+      <div class="mark" id="dMark">&#10003;</div>
+      <h1 id="dT"></h1>
+      <p class="lead" id="dM"></p>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn mt2" id="dAgain">Join the waitlist again</button>
+  </section>
+
+</div>
+<button class="sound" id="soundBtn">&#128276; Tap to turn on sound alerts</button>
+
+<script>
+(function(){
+'use strict';
+function $(id){ return document.getElementById(id); }
+var qs = new URLSearchParams(location.search);
+var VENUE = (qs.get('v') || '').trim(), CODE = (qs.get('w') || '').trim();
+var V = { name:'', brand:{} }, ST = null, TOKEN = null, PARTY = 2, POLL = null, DEADLINE = 0, LAST_OK = 0, PREV = null;
+
+/* ---------- storage (Safari private mode can throw) ---------- */
+function sget(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+function sset(k, v){ try { if(v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e){} }
+function tokKey(){ return 'rd_wl_' + VENUE; }
+function deviceKey(){
+  var d = sget('rd_wl_device');
+  if(!d){ d = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2, 12); sset('rd_wl_device', d); }
+  return d;
+}
+
+/* ---------- server ---------- */
+function rpc(fn, body){
+  var ctl = window.AbortController ? new AbortController() : null;
+  var t = setTimeout(function(){ if(ctl) ctl.abort(); }, 15000);
+  return fetch(SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest(\/v1)?$/, '') + '/rest/v1/rpc/' + fn, {
+    method:'POST', signal: ctl ? ctl.signal : undefined,
+    headers:{ 'apikey':SUPABASE_KEY, 'Authorization':'Bearer ' + SUPABASE_KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  }).then(function(r){
+    clearTimeout(t);
+    return r.text().then(function(txt){
+      var d = null; try { d = txt ? JSON.parse(txt) : null; } catch(e){}
+      if(!r.ok) throw { status:r.status, data:d };
+      return d;
+    });
+  }, function(e){ clearTimeout(t); throw { network:true }; });
+}
+function errText(e){
+  var m = (e && e.data && (e.data.message || e.data.error)) || '';
+  if(e && e.network) return 'No connection. Check your internet and try again.';
+  if(/waitlist_closed/.test(m))     return 'The waitlist has just closed. Please see a staff member.';
+  if(/waitlist_full/.test(m))       return 'The waitlist is full right now. Please see a staff member.';
+  if(/too_many_requests/.test(m))   return 'Lots of people are joining at once. Please try again in a minute.';
+  if(/name_required/.test(m))       return 'Please add your first name.';
+  if(/bad_party_size/.test(m))      return 'Please choose how many people.';
+  if(/too_late/.test(m))            return 'Sorry, the time to answer ran out. Please see staff at the door.';
+  if(/not_called/.test(m))          return 'This has already been answered.';
+  if(/unknown_waitlist|unknown_ticket/.test(m)) return 'This waitlist link is no longer valid. Please scan the code at the door again.';
+  if(/PGRST202|Could not find/i.test(m)) return 'The waitlist is not set up yet. Please see a staff member.';
+  return 'Something went wrong. Please try again.';
+}
+
+/* ---------- theme (same engine as the table menu) ---------- */
+function applyBrand(b, venue){
+  b = b || {}; var r = document.documentElement.style;
+  function rgb(hx){ var x = String(hx||'').replace('#',''); if(x.length === 3) x = x.replace(/./g,'$&$&');
+    if(!/^[0-9a-f]{6}$/i.test(x)) return null; return [parseInt(x.substr(0,2),16), parseInt(x.substr(2,2),16), parseInt(x.substr(4,2),16)]; }
+  function hex(c){ return '#' + c.map(function(v){ return ('0' + Math.round(Math.max(0,Math.min(255,v))).toString(16)).slice(-2); }).join(''); }
+  function mix(a, c2, t){ return [0,1,2].map(function(i){ return a[i] + (c2[i] - a[i]) * t; }); }
+  function rgba(c, al){ return 'rgba(' + c.map(Math.round).join(',') + ',' + al + ')'; }
+  function lum(c){ return c.reduce(function(s, v, i){ v = v/255; v = v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); return s + v * [0.2126,0.7152,0.0722][i]; }, 0); }
+  var bg = rgb(b.bg), ink = rgb(b.ink), ac = rgb(b.accent), ac2 = rgb(b.accent2) || ac;
+  if(bg){
+    var light = lum(bg) > 0.45, inkC = ink || (light ? [42,33,24] : [246,239,226]);
+    r.setProperty('--bg', hex(bg));
+    r.setProperty('--panel',   hex(light ? mix(bg, [255,255,255], 0.7) : mix(bg, inkC, 0.05)));
+    r.setProperty('--panel-2', hex(light ? mix(bg, inkC, 0.05) : mix(bg, inkC, 0.085)));
+    r.setProperty('--muted',   hex(mix(inkC, bg, light ? 0.4 : 0.36)));
+    r.setProperty('--line',    rgba(inkC, light ? 0.14 : 0.18));
+    if(light){ r.setProperty('--good','#15803d'); r.setProperty('--bad','#b91c1c'); r.setProperty('--warn','#a16207'); }
+    var mt = document.querySelector('meta[name=theme-color]'); if(mt) mt.setAttribute('content', hex(bg));
+  }
+  if(ink) r.setProperty('--ink', hex(ink));
+  if(ac){
+    r.setProperty('--accent', hex(ac)); r.setProperty('--accent-2', hex(ac2));
+    r.setProperty('--edge', rgba(ac, 0.4)); r.setProperty('--tint', rgba(ac, 0.08));
+    r.setProperty('--btn-shadow', rgba(ac2, 0.28));
+    r.setProperty('--grad', 'linear-gradient(100deg,' + hex(ac) + ' 0%,' + hex(ac2) + ' 100%)');
+    r.setProperty('--on-accent', (lum(ac) + lum(ac2)) / 2 > 0.33 ? '#1b1206' : '#ffffff');
+  }
+  venue = venue || {};
+  if(venue.name){ V.name = venue.name; document.title = 'Waitlist · ' + venue.name; }
+  Array.prototype.forEach.call(document.querySelectorAll('.vname'), function(el){ el.textContent = V.name; });
+  if(venue.logo_url) Array.prototype.forEach.call(document.querySelectorAll('.logo'), function(el){
+    el.src = venue.logo_url; el.alt = V.name; el.style.display = 'block'; });
+}
+
+/* ---------- screens ---------- */
+function show(id){
+  Array.prototype.forEach.call(document.querySelectorAll('.screen'), function(s){ s.classList.toggle('on', s.id === id); });
+}
+function stop(t, m, retry){
+  $('stopT').textContent = t; $('stopM').textContent = m;
+  $('stopRetry').style.display = retry ? '' : 'none'; show('scStop');
+}
+function ordinal(n){ var s = ['th','st','nd','rd'], v = n % 100; return n + (s[(v-20)%10] || s[v] || s[0]); }
+function people(n){ return n + (n === 1 ? ' person' : ' people'); }
+function mmss(sec){ sec = Math.max(0, Math.round(sec)); return Math.floor(sec/60) + ':' + ('0' + (sec % 60)).slice(-2); }
+function clock(ms){ return new Date(ms).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' }); }
+
+/* ---------- alerts: sound (after a tap), vibration (Android), title ---------- */
+var AC = null, BEEP_T = null, TITLE_T = null, BASE_TITLE = document.title;
+function unlockSound(){
+  try {
+    if(!AC){ var C = window.AudioContext || window.webkitAudioContext; if(C) AC = new C(); }
+    if(AC && AC.state === 'suspended') AC.resume();
+  } catch(e){}
+  paintSoundBtn();
+}
+function soundReady(){ return AC && AC.state === 'running'; }
+function paintSoundBtn(){
+  var need = TOKEN && ST && (ST.status === 'waiting' || ST.status === 'called') && !soundReady();
+  $('soundBtn').style.display = need ? 'block' : 'none';
+}
+document.addEventListener('pointerdown', unlockSound, true);
+$('soundBtn').addEventListener('click', function(){ unlockSound(); beep(1); });
+function beep(times){
+  if(!soundReady()) return;
+  var t = AC.currentTime;
+  for(var i = 0; i < (times||3); i++){
+    [880, 1175].forEach(function(f, j){
+      var o = AC.createOscillator(), g = AC.createGain();
+      o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(AC.destination);
+      var s = t + i * 0.55 + j * 0.18;
+      g.gain.setValueAtTime(0.0001, s); g.gain.exponentialRampToValueAtTime(0.35, s + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, s + 0.16); o.start(s); o.stop(s + 0.18);
+    });
+  }
+}
+function startAlert(){
+  stopAlert();
+  var go = function(){
+    beep(3);
+    try { if(navigator.vibrate) navigator.vibrate([400,150,400,150,600]); } catch(e){}
+  };
+  go(); BEEP_T = setInterval(go, 12000);
+  var on = false;
+  TITLE_T = setInterval(function(){ on = !on; document.title = on ? '🔔 Your table is ready!' : BASE_TITLE; }, 1000);
+}
+function stopAlert(){
+  clearInterval(BEEP_T); clearInterval(TITLE_T); BEEP_T = TITLE_T = null;
+  document.title = V.name ? 'Waitlist · ' + V.name : BASE_TITLE;
+}
+/* keep the screen awake while waiting, where the phone allows it */
+var LOCK = null;
+function wake(){
+  try { if(navigator.wakeLock && !LOCK && document.visibilityState === 'visible')
+    navigator.wakeLock.request('screen').then(function(l){ LOCK = l; l.addEventListener('release', function(){ LOCK = null; }); }, function(){}); } catch(e){}
+}
+
+/* ---------- join ---------- */
+function paintParty(){
+  $('pN').textContent = PARTY; $('pW').textContent = PARTY === 1 ? 'person' : 'people';
+  $('pMinus').disabled = PARTY <= 1; $('pPlus').disabled = PARTY >= 20;
+  var ok = $('jName').value.trim().length > 0;
+  $('jGo').disabled = !ok;
+  $('jGo').textContent = ok ? 'Join the queue · ' + people(PARTY) : 'Add your name';
+}
+$('pMinus').addEventListener('click', function(){ if(PARTY > 1){ PARTY--; paintParty(); } });
+$('pPlus').addEventListener('click', function(){ if(PARTY < 20){ PARTY++; paintParty(); } });
+$('jName').addEventListener('input', paintParty);
+$('jName').addEventListener('keydown', function(e){ if(e.key === 'Enter') $('jName').blur(); });
+$('jGo').addEventListener('click', function(){
+  var b = this, name = $('jName').value.trim(); if(!name) return;
+  unlockSound(); b.disabled = true; b.textContent = 'Joining…'; $('jErr').textContent = '';
+  sset('rd_wl_name', name);
+  rpc('rd_waitlist_join', { p_slug:VENUE, p_code:CODE, p_name:name, p_party:PARTY, p_device:deviceKey() })
+    .then(function(res){
+      if(!res || !res.token) throw { data:res };
+      TOKEN = res.token; sset(tokKey(), TOKEN); wake(); poll();
+    })
+    .catch(function(e){ $('jErr').textContent = errText(e); paintParty(); });
+});
+function openJoin(info){
+  var st = '';
+  if(info){
+    st = '<span class="pill"><b>' + info.waiting + '</b> ' + (info.waiting === 1 ? 'party' : 'parties') + ' waiting</span>' +
+         (info.waiting > 0 ? '<span class="pill">about <b>' + info.est_minutes + '</b> min</span>' : '<span class="pill">no queue right now</span>');
+  }
+  $('joinStat').innerHTML = st;
+  $('jName').value = sget('rd_wl_name') || '';
+  paintParty(); show('scJoin');
+}
+function loadInfo(){
+  return rpc('rd_waitlist_info', { p_slug:VENUE, p_code:CODE }).then(function(info){
+    if(!info || !info.ok){ stop('This link isn’t working', 'Please scan the QR code at the door again, or see a staff member.'); return null; }
+    applyBrand(info.brand, info.venue);
+    $('wHold').textContent = info.hold_minutes || 10;
+    if(!info.open){ show('scClosed'); return null; }
+    return info;
+  });
+}
+
+/* ---------- live status ---------- */
+function schedule(ms){ clearTimeout(POLL); POLL = setTimeout(poll, ms); }
+function poll(){
+  if(!TOKEN) return;
+  rpc('rd_waitlist_status', { p_slug:VENUE, p_token:TOKEN }).then(function(s){
+    LAST_OK = Date.now(); $('wLive').classList.remove('off'); $('wLive').lastChild.textContent = 'Live';
+    if(!s || !s.ok){ TOKEN = null; sset(tokKey(), null); stopAlert(); return start(); }
+    applyBrand(s.brand, s.venue);
+    if(s.hold_minutes) $('wHold').textContent = s.hold_minutes;
+    paint(s);
+    if(s.status === 'called' || s.status === 'confirmed') schedule(4000);
+    else if(s.status === 'waiting') schedule(7000);
+    else clearTimeout(POLL);                                   /* finished: nothing more to watch */
+  }, function(){
+    $('wLive').classList.add('off'); $('wLive').lastChild.textContent = 'Reconnecting…';
+    schedule(6000);
+  });
+}
+function paint(s){
+  var prev = PREV; PREV = s.status; ST = s;
+  if(s.seconds_left != null) DEADLINE = Date.now() + s.seconds_left * 1000;
+  var who = s.name + ' · ' + people(s.party);
+  if(s.status === 'waiting'){
+    $('wPos').textContent = ordinal(s.position);
+    $('wEst').innerHTML = s.position === 1 && s.est_minutes <= 5
+      ? '<span>You’re next — any minute now</span>'
+      : '<span>About</span><b>' + s.est_minutes + '</b><span>min</span>';
+    $('wWho').textContent = who;
+    stopAlert(); show('scWait'); wake();
+  } else if(s.status === 'called'){
+    $('cTbl').textContent = s.table_label ? 'Table ' + s.table_label : '';
+    $('cWho').textContent = who + '. Please answer so we can hold it for you.';
+    $('cYes').disabled = $('cNo').disabled = false; $('cErr').textContent = '';
+    show('scCall'); tick();
+    if(prev !== 'called') startAlert();
+  } else if(s.status === 'confirmed'){
+    stopAlert();
+    $('hT').textContent = 'See you soon';
+    $('hM').textContent = (s.table_label ? 'Table ' + s.table_label + ' is' : 'Your table is') + ' held for you until ' + clock(DEADLINE) + '. Head to the door and give staff your name.';
+    $('hWho').textContent = who;
+    show('scHeld');
+  } else {
+    stopAlert(); clearTimeout(POLL);
+    var t = { seated:['Enjoy your meal!', 'You’re all set. Thank you for waiting with us.', '✓'],
+              declined:['No problem', 'We’ve passed the table on. You’re welcome to join again whenever you’re ready.', '✓'],
+              expired:['We couldn’t hold the table', 'The time to answer ran out, so it went to the next party. Please see a staff member at the door, or join again.', '!'],
+              cancelled:['You’ve left the queue', 'Thanks for letting us know.', '✓'],
+              removed:['You’re no longer in the queue', 'Please see a staff member at the door if this is a mistake.', '!'] }[s.status] || ['Done', '', '✓'];
+    $('dT').textContent = t[0]; $('dM').textContent = t[1]; $('dMark').textContent = t[2];
+    $('dAgain').style.display = s.status === 'seated' ? 'none' : '';
+    show('scDone');
+  }
+  paintSoundBtn();
+}
+/* local countdown between server checks */
+setInterval(tick, 1000);
+function tick(){
+  if(!ST) return;
+  var left = (DEADLINE - Date.now()) / 1000;
+  if(ST.status === 'called') $('cCd').textContent = left > 0 ? 'Please answer within ' + mmss(left) : 'Checking…';
+  if((ST.status === 'called' || ST.status === 'confirmed') && left <= 0 && Date.now() - LAST_OK > 3000) poll();
+}
+function answer(coming){
+  $('cYes').disabled = $('cNo').disabled = true; $('cErr').textContent = '';
+  rpc('rd_waitlist_respond', { p_slug:VENUE, p_token:TOKEN, p_coming:coming })
+    .then(function(){ stopAlert(); poll(); })
+    .catch(function(e){ $('cErr').textContent = errText(e); $('cYes').disabled = $('cNo').disabled = false; poll(); });
+}
+$('cYes').addEventListener('click', function(){ answer(true); });
+$('cNo').addEventListener('click', function(){
+  if(confirm('Give your table to the next party? You will leave the queue.')) answer(false);
+});
+function leave(){
+  if(!confirm('Leave the queue? You will lose your place.')) return;
+  rpc('rd_waitlist_leave', { p_slug:VENUE, p_token:TOKEN }).then(poll, function(e){ alert(errText(e)); });
+}
+$('wLeave').addEventListener('click', leave);
+$('hLeave').addEventListener('click', leave);
+$('dAgain').addEventListener('click', function(){
+  TOKEN = null; ST = null; PREV = null; sset(tokKey(), null); start();
+});
+$('stopRetry').addEventListener('click', function(){ start(); });
+/* phones pause hidden pages: check straight away when the guest comes back */
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible'){ LOCK = null; if(TOKEN) poll(); }
+});
+
+/* ---------- start ---------- */
+function start(){
+  if(!VENUE || !CODE){ stop('This link isn’t complete', 'Please scan the QR code at the door again.'); return; }
+  TOKEN = sget(tokKey());
+  if(TOKEN){
+    /* came back to the page: show their place straight away */
+    rpc('rd_waitlist_info', { p_slug:VENUE, p_code:CODE }).then(function(i){ if(i && i.ok) applyBrand(i.brand, i.venue); }, function(){});
+    return poll();
+  }
+  loadInfo().then(function(info){ if(info) openJoin(info); })
+    .catch(function(e){ stop('Can’t reach the restaurant', errText(e), true); });
+}
+start();
+})();
+</script>
+
+<!-- Restaurant Deluxe CRM analytics: retained in editable exports. -->
+<script src="../restaurant-analytics.js" defer></script>
+</body>
+</html>
