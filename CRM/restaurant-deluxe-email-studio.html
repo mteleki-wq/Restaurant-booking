@@ -277,7 +277,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v19</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v20</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -824,7 +824,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v19 \u00b7 waitlist in trial';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v20 \u00b7 founding 28 days';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -860,13 +860,18 @@
      Each email shows ONE plan and ONE setup figure, so a busy owner
      reading on a phone is never handed the whole price list.
      --------------------------------------------------------------- */
-  var FOUNDING     = "Founding offer: the first 5 venues get the $150 Quick Start setup free.";
+  var TRIAL_DAYS   = 14;   /* standard free trial */
+  var FOUNDER_DAYS = 28;   /* founding offer for the first 5 restaurants */
+  var FOUNDING     = "Founding offer: the first 5 restaurants get a "+FOUNDER_DAYS+"-day free trial with free setup on screen.";
+  var FOUNDER_WHAT = "We connect you, import your menu and get ordering working on your own screens (kitchen, bar and front counter). Compatible printers you already have are connected free.";
+  var FOUNDER_NOT  = "We supply web-based software only, no hardware. Paying by phone at the table can be demonstrated but is not part of the free trial. New printers or other setup are extra.";
+  var CALL_ME      = "Call Marc on 0413 872 994 and I will walk you through how it works.";
   var SPREAD       = "Pay setup in one go, or over your first 3 months.";
   var SETUP_ORDER  = "Setup $400 + GST — menu, add-ons, kitchen and bar printers and stations. "+SPREAD;
   var SETUP_CARD   = "Setup $500 + GST with card payments. "+SPREAD;
   var SETUP_SITE   = "Setup $600 + GST with your website and online bookings. "+SPREAD;
   var QS_CREDIT    = "Any $150 Quick Start already paid comes off your setup.";
-  var TERMS_SHORT  = "Free 14-day trial and no commission on orders, ever. "+FOUNDING;
+  var TERMS_SHORT  = "Free "+TRIAL_DAYS+"-day trial and no commission on orders, ever. "+FOUNDING;
 
   function preset(o){
     return Object.assign({
@@ -883,7 +888,7 @@
       priceOn:true, priceEyebrow:"Simple monthly options",
       priceHeading:"Choose the right level for your restaurant.",
       plans:[], priceFoot:"",
-      finalOn:true, finalHeading:"Test the complete experience free for 14 days.",
+      finalOn:true, finalHeading:"Test the complete experience free for "+TRIAL_DAYS+" days.",
       finalSub:TERMS_SHORT,
       finalCta:"Request a free demo", finalUrl:CONTACT,
       phone:"0413 872 994", email:"marc@webescapade.com", siteUrl:SITE,
@@ -895,6 +900,35 @@
   }
 
   var PRESETS = [
+    preset({
+      name:"Founding 5 — 28-day free trial", desc:"Our best offer: first 5 restaurants",
+      badge:"FOUNDING OFFER — 5 PLACES",
+      eyebrow:"For our first 5 restaurants",
+      headline:"Try ordering at the table free for "+FOUNDER_DAYS+" days — we set it up for you.",
+      intro:"We are looking for five restaurants and cafés to be the first to run Restaurant Deluxe. You get "+FOUNDER_DAYS+" days free, four full weekends, to see how ordering at the table works with your own menu, your own team and your own customers.\n\nWe do the setup: we connect your venue, import your menu and get orders flowing to your kitchen, bar and front counter screens. Customers order from their table and pay at the counter as usual, and your staff can take orders for guests from a tablet too.",
+      cta1:"Call me about a founding place", cta1url:"tel:0413872994",
+      cta2:"Reply to apply", cta2url:CONTACT,
+      featEyebrow:"What the "+FOUNDER_DAYS+" days include",
+      featHeading:"Set up for you.\nRunning on your own screens.",
+      cards:[
+        {n:"01", t:"Connected and set up", d:"Your menu imported and ordering working on screen, at no cost."},
+        {n:"02", t:"Order at the table", d:"Guests scan, order and pay at the counter. Staff can take orders too."},
+        {n:"03", t:"Digital waitlist", d:"Our new scan-to-queue at the door, switched on for your trial."},
+        {n:"04", t:"Your printers, connected", d:"Got a compatible thermal printer? We connect it free."}
+      ],
+      spotOn:true, spotEyebrow:"What you need",
+      spotHeading:"Three tablets or screens. That is it.",
+      spotSub:"Everything runs in a web browser: one screen in the kitchen, one at the bar and one at the front counter. Use the tablets or computers you already have. "+FOUNDER_NOT,
+      boxes:[{l:"KITCHEN", v:"Tablet or screen"},{l:"BAR", v:"Tablet or screen"},{l:"FRONT COUNTER", v:"Tablet or computer"}],
+      priceEyebrow:"After your "+FOUNDER_DAYS+" days", priceHeading:"One flat price. No commission.",
+      plans:[{tier:"TABLE ORDERING + WAITLIST", price:"$109", per:"/ month", desc:"Your ordering setup is already done, so you only pay for extras you add, such as card payments or a website.", hi:true}],
+      priceFoot:"Simple thermal printers are not expensive, and we can set one up for you if you want it.",
+      finalHeading:"Five places. Let’s talk.",
+      finalSub:CALL_ME+" Or simply reply to this email.",
+      finalCta:"Call Marc", finalUrl:"tel:0413872994",
+      subject:"5 restaurants: "+FOUNDER_DAYS+" days free, set up for you",
+      preheader:"Order at the table and our new digital waitlist, set up on your own screens."
+    }),
     preset({
       name:"Intro to Restaurant Deluxe", desc:"First message to a new restaurant",
       eyebrow:"Introducing Restaurant Deluxe",
@@ -931,16 +965,16 @@
         {n:"03", t:"No commission", d:"A flat monthly fee. Every sale stays yours."}
       ],
       spotOn:true, spotEyebrow:"Founding offer",
-      spotHeading:"Quick Start setup free for the first 5 venues.",
-      spotSub:"We load your menu, photos and add-ons and send you short training videos, so your free trial starts with your own café on screen.",
-      boxes:[{l:"FREE TRIAL", v:"14 days"},{l:"QUICK START", v:"Free for 5"}],
+      spotHeading:"First 5 caf\u00e9s: "+FOUNDER_DAYS+" days free, set up for you.",
+      spotSub:FOUNDER_WHAT+" "+FOUNDER_NOT,
+      boxes:[{l:"FOUNDING 5", v:FOUNDER_DAYS+" days free"},{l:"SETUP", v:"Free on screen"},{l:"WAITLIST", v:"Included"}],
       priceEyebrow:"One simple price", priceHeading:"Table ordering for your café.",
       plans:[{tier:"TABLE ORDERING", price:"$109", per:"/ month", desc:"QR menu, kitchen and bar displays, shift records. Keep your current website.", hi:true}],
       priceFoot:SETUP_ORDER,
-      finalHeading:"Try it free for 14 days.",
+      finalHeading:"Try it free for up to "+FOUNDER_DAYS+" days.",
       finalSub:"Reply with your menu and I will set up your café for the trial.",
       subject:"Table ordering for your café, no commission",
-      preheader:"Free 14-day trial. Founding offer: Quick Start setup free for the first 5 venues."
+      preheader:"First 5 caf\u00e9s: "+FOUNDER_DAYS+"-day free trial, set up for you, no commission."
     }),
     preset({
       name:"Digital waitlist — early access", desc:"New: scan-to-wait, free with table ordering",
@@ -999,28 +1033,28 @@
       preheader:"QR ordering to your kitchen and bar. No app, no commission."
     }),
     preset({
-      name:"14-day free trial invite", desc:"Trial + founding offer + waitlist early access",
-      eyebrow:"Try it free for 14 days",
-      headline:"See Restaurant Deluxe running in your restaurant, free for 14 days.",
-      intro:"We connect your restaurant to the system at no cost, so you can see how ordering at the table works with your own team. One flat monthly price after that, with no commission on orders.\n\nEarly access bonus: if you choose, we also switch on our new digital waitlist for your trial \u2014 guests scan at the door and their phone buzzes when their table is ready.\n\nWant your own menu on screen from day one? Our Quick Start setup loads your menu, photos and add-ons and includes online training videos — and for our first 5 venues it is free.",
+      name:"14-day free trial invite", desc:"Standard trial + waitlist early access",
+      eyebrow:"Try it free for "+TRIAL_DAYS+" days",
+      headline:"See Restaurant Deluxe running in your restaurant, free for "+TRIAL_DAYS+" days.",
+      intro:"We connect your restaurant to the system at no cost, so you can see how ordering at the table works with your own team. One flat monthly price after that, with no commission on orders.\n\nEarly access bonus: if you choose, we also switch on our new digital waitlist for your trial \u2014 guests scan at the door and their phone buzzes when their table is ready.\n\nWant your own menu on screen from day one? Our Quick Start setup ($150 + GST) loads your menu, photos and add-ons and includes online training videos.\n\n"+FOUNDING+" Ask about a founding place.",
       cta1:"Start my 14-day free trial", cta1url:CONTACT,
       cta2:"Test the booking form", cta2url:BOOKING,
       featEyebrow:"How the trial works",
       featHeading:"Free to connect.\nWaitlist included if you want it.",
       cards:[
-        {n:"01", t:"Free connection", d:"We connect your restaurant to the system for the 14-day trial."},
+        {n:"01", t:"Free connection", d:"We connect your restaurant to the system for the "+TRIAL_DAYS+"-day trial."},
         {n:"02", t:"Digital waitlist, early access", d:"Optional and free during the trial: a door QR code and live queue on guests' phones."},
-        {n:"03", t:"Quick Start setup", d:"$150 + GST, or free for the first 5 venues. Menu, photos, add-ons and training videos."},
+        {n:"03", t:"Quick Start setup", d:"$150 + GST. Menu, photos, add-ons and training videos. Free for founding restaurants."},
         {n:"04", t:"Choose a plan", d:"Setup from $400 + GST, payable over 3 months. The $150 comes off. The waitlist stays included with table ordering."}
       ],
       spotOn:true, spotEyebrow:"Your trial, your choice",
-      spotHeading:"Two early extras for your 14 days.",
-      spotSub:"Ask for the digital waitlist when you sign up and we switch it on with your trial. The founding Quick Start is free for the first 5 venues and covers screen ordering with payment at the counter. Printers, card payments, website and bookings are added when you choose a plan.",
-      boxes:[{l:"FREE TRIAL", v:"14 days"},{l:"WAITLIST", v:"Early access"},{l:"QUICK START", v:"Free for 5"}],
+      spotHeading:"Two early extras for your "+TRIAL_DAYS+" days.",
+      spotSub:"Ask for the digital waitlist when you sign up and we switch it on with your trial. The Quick Start covers screen ordering with payment at the counter. Printers, card payments, website and bookings are added when you choose a plan.",
+      boxes:[{l:"FREE TRIAL", v:TRIAL_DAYS+" days"},{l:"WAITLIST", v:"Early access"},{l:"FOUNDING 5", v:FOUNDER_DAYS+" days free"}],
       priceOn:false, plans:[],
       finalHeading:"Ready to try it?",
       finalSub:"Reply with your menu, and add \u201cwaitlist\u201d if you would like it switched on for your trial. The Quick Start is non-refundable once setup has started; "+QS_CREDIT.charAt(0).toLowerCase()+QS_CREDIT.slice(1),
-      subject:"Try Restaurant Deluxe free for 14 days",
+      subject:"Try Restaurant Deluxe free for "+TRIAL_DAYS+" days",
       preheader:"Free connection, plus early access to our new digital waitlist."
     }),
     preset({

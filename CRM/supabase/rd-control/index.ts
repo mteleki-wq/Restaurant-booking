@@ -159,9 +159,9 @@ DIGITAL WAITLIST (NEW, EARLY ACCESS): included at no extra cost with table order
 NO COMMISSION: flat monthly fee only. No commission or percentage on orders or bookings. Lead with this.
 TRIAL: 14-day free trial. During the trial Webescapade connects the restaurant to the system at no cost. Loading the menu, photos and add-ons is NOT part of the free trial.
 QUICK START SETUP (optional): $150 + GST. Webescapade imports the menu, images and add-ons, plus online training videos (video only). Covers screen ordering with pay at the counter only. Non-refundable once setup has started.
-FOUNDING OFFER: the Quick Start setup is free for the first 5 venues. Do not invent a deadline or say how many places are left.
+FOUNDING OFFER (first 5 restaurants only): a 28-day free trial instead of 14, with setup done free: Webescapade connects the venue, imports the menu and makes ordering work on the venue's own screens (one tablet or screen in the kitchen, one at the bar, one at the front counter), switches on the digital waitlist, and connects compatible thermal printers the venue already has at no cost. Customers order at the table and pay at the counter; staff can also take orders for guests. NOT included free: paying by phone at the table (can be demonstrated only), new printers, any hardware (Webescapade supplies web-based software only, never hardware) and other setup. After the 28 days the ordering setup is already done, so they only pay for extras they add (for example card payments or a website). Invite them to call Marc on 0413 872 994. Do not invent a deadline or say how many places are left.
 SETUP WHEN CHOOSING A PLAN (+ GST, fixed): $400 table ordering (menu, add-ons, kitchen and bar printers and stations); $500 adds card payments; $600 adds website and online bookings. Can be paid in one go or over the first 3 months. Any $150 Quick Start already paid is deducted.
-SUPPORT: ongoing support is included in every monthly plan. Setup is NOT free or included beyond the trial connection and the founding offer.
+SUPPORT: ongoing support is included in every monthly plan. Setup is NOT free or included beyond the trial connection and the founding offer. Webescapade does not supply hardware.
 CAFES: for cafés, lead with Standalone Table Ordering at $109/month (keep their website) and the $400 setup.
 CONTACT: Marc, marc@webescapade.com, 0413 872 994.
 `;
@@ -378,7 +378,7 @@ Deno.serve(async (req) => {
           `Suggest 4 email campaigns Marc could send in the next two weeks, most valuable first. ` +
           `Base each one on something specific in the data (a trial ending, a venue gone quiet, a drop in orders, prospects never contacted, a setup step missing, a past campaign to follow up). ` +
           `Name the venue(s) or group it is for. Keep it honest — if the data is thin, say so in "why".\n\n` +
-          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: Intro to Restaurant Deluxe | Cafés: order at the table | Digital waitlist — early access | Table ordering launch | 14-day free trial invite | Standalone ordering ($109) | Add-on for existing clients ($69) | Booking demo follow-up"}]}`,
+          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: Founding 5 — 28-day free trial | Intro to Restaurant Deluxe | Cafés: order at the table | Digital waitlist — early access | Table ordering launch | 14-day free trial invite | Standalone ordering ($109) | Add-on for existing clients ($69) | Booking demo follow-up"}]}`,
           3000,
         );
         return json({ ok: true, ideas: out.ideas || [], snapshotSummary: s });
