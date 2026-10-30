@@ -119,6 +119,10 @@
   section{ position:relative }
   .section{ padding:92px 0 }
   .section-head{ max-width:720px; margin:0 0 46px }
+  .promo-video{ max-width:960px; margin:0 auto; border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.12); box-shadow:0 30px 80px rgba(0,0,0,.45); background:#000; aspect-ratio:16/9; position:relative }
+  .promo-video iframe{ position:absolute; inset:0; width:100%; height:100%; border:0 }
+  .promo-video-cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:26px }
+
   .section-head.center{ margin-left:auto; margin-right:auto; text-align:center }
   .section-head h2{ font-size:clamp(30px,4.4vw,46px); margin:16px 0 0 }
   .section-head p{ color:var(--muted); font-size:17px; margin-top:16px }
@@ -1217,6 +1221,24 @@
       <div class="benefit reveal in"><div class="ic">📱</div><h3>Let guests order when ready</h3><p>Customers scan their table QR, browse the menu and place an order without waiting to attract a staff member.</p></div>
       <div class="benefit reveal in"><div class="ic">🍳</div><h3>Send orders to the right department</h3><p>Food reaches the kitchen, drinks reach the bar and open-table totals remain available at the counter.</p></div>
       <div class="benefit reveal in"><div class="ic">📊</div><h3>Keep clear business records</h3><p>Review open tables, shift totals and previous readings, then export organised records for Excel and bookkeeping.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROMO VIDEO ============ -->
+<section class="section" id="video">
+  <div class="wrap">
+    <div class="section-head center reveal in">
+      <span class="eyebrow">Watch · 1 minute</span>
+      <h2>Order at the table. Wait without the queue.</h2>
+      <p>See the new digital waitlist and table ordering in action. For the first 5 restaurants: <span data-days="founder">28</span> days free, set up for you.</p>
+    </div>
+    <div class="promo-video reveal in">
+      <iframe src="https://www.youtube-nocookie.com/embed/RM-XOZriWNM?rel=0&amp;modestbranding=1" title="Restaurant Deluxe: digital waitlist and order at the table" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <div class="promo-video-cta">
+      <a class="btn btn-primary btn-lg" href="tel:0413872994">Call Marc · 0413 872 994</a>
+      <a class="btn btn-ghost btn-lg" data-cta="trial" style="cursor: pointer;">Start my free trial</a>
     </div>
   </div>
 </section>
