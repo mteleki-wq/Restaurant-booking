@@ -277,7 +277,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v20</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v21</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -345,6 +345,29 @@
 
       <!-- ============ BANDS ============ -->
       <div class="pane" id="pane-bands" hidden>
+
+        <details class="grp" open>
+          <summary>Video (YouTube)</summary>
+          <div class="grp-body">
+            <p class="help" style="margin:0 0 12px">Emails can't play video, so the email shows your video's picture with a
+               play button. Tapping it opens the video on YouTube. Leave the link empty for no video.</p>
+            <div class="field"><label for="fVidUrl">YouTube link</label>
+              <input type="url" id="fVidUrl" data-k="videoUrl" placeholder="https://youtu.be/…"></div>
+            <div class="field"><label for="fVidTitle">Title under the video</label>
+              <input type="text" id="fVidTitle" data-k="videoTitle" placeholder="Watch the digital waitlist in action"></div>
+            <div class="grid2">
+              <div class="field"><label for="fVidPos">Where in the email</label>
+                <select id="fVidPos" data-k="videoPos">
+                  <option value="hero">Right after the opening</option>
+                  <option value="features">After the feature cards</option>
+                  <option value="price">Just before the prices</option>
+                </select></div>
+              <div class="field"><label for="fVidThumb">Own cover picture <span style="color:var(--faint)">(optional)</span></label>
+                <input type="url" id="fVidThumb" data-k="videoThumb" placeholder="Uses YouTube's picture"></div>
+            </div>
+            <p class="help" id="vidStatus" style="margin:0"></p>
+          </div>
+        </details>
 
         <details class="grp" open>
           <summary>Feature cards</summary>
@@ -824,7 +847,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v20 \u00b7 founding 28 days';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v21 \u00b7 video + waitlist first';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -894,6 +917,7 @@
       phone:"0413 872 994", email:"marc@webescapade.com", siteUrl:SITE,
       address:"Webescapade \u2022 Sydney, Australia",
       heroImage:"", heroAlt:"", bandImage:"", bandAlt:"", bandLink:"", bandCaption:"",
+      videoUrl:"", videoTitle:"", videoThumb:"", videoPos:"hero",
       resendUnsub:true, unsubUrl:"",
       subject:"", preheader:"", to:"", theme:"alt"
     }, o);
@@ -901,19 +925,20 @@
 
   var PRESETS = [
     preset({
-      name:"Founding 5 — 28-day free trial", desc:"Our best offer: first 5 restaurants",
+      name:"Founding 5 — 28-day free trial", desc:"Waitlist + ordering, first 5 restaurants",
       badge:"FOUNDING OFFER — 5 PLACES",
-      eyebrow:"For our first 5 restaurants",
-      headline:"Try ordering at the table free for "+FOUNDER_DAYS+" days — we set it up for you.",
-      intro:"We are looking for five restaurants and cafés to be the first to run Restaurant Deluxe. You get "+FOUNDER_DAYS+" days free, four full weekends, to see how ordering at the table works with your own menu, your own team and your own customers.\n\nWe do the setup: we connect your venue, import your menu and get orders flowing to your kitchen, bar and front counter screens. Customers order from their table and pay at the counter as usual, and your staff can take orders for guests from a tablet too.",
+      eyebrow:"New: digital waitlist + ordering at the table",
+      headline:"Order at the table — and now a digital waitlist at the door.",
+      intro:"Restaurant Deluxe already lets your guests order from their table on their own phone — friendly, simple, no app — and lets your staff take orders on a tablet too.\n\nNow the same system looks after your door. When you are full, guests scan a QR code, add a first name and party size, and wait anywhere. Their phone buzzes when their table is ready and asks “Coming?”. No app, no phone number, no shouting names across a busy room.\n\nOur first 5 restaurants get both free for "+FOUNDER_DAYS+" days, set up for you on your own screens.",
+      videoTitle:"Watch the digital waitlist in action", videoPos:"hero",
       cta1:"Call me about a founding place", cta1url:"tel:0413872994",
       cta2:"Reply to apply", cta2url:CONTACT,
       featEyebrow:"What the "+FOUNDER_DAYS+" days include",
-      featHeading:"Set up for you.\nRunning on your own screens.",
+      featHeading:"The door and the table.\nOne friendly system.",
       cards:[
-        {n:"01", t:"Connected and set up", d:"Your menu imported and ordering working on screen, at no cost."},
-        {n:"02", t:"Order at the table", d:"Guests scan, order and pay at the counter. Staff can take orders too."},
-        {n:"03", t:"Digital waitlist", d:"Our new scan-to-queue at the door, switched on for your trial."},
+        {n:"01", t:"Digital waitlist", d:"Scan at the door, wait anywhere, and the phone buzzes when the table is ready."},
+        {n:"02", t:"Order at the table", d:"Guests scan, order and pay at the counter. Staff can take orders on a tablet too."},
+        {n:"03", t:"Set up for you", d:"Your menu imported and everything working on your own screens, at no cost."},
         {n:"04", t:"Your printers, connected", d:"Got a compatible thermal printer? We connect it free."}
       ],
       spotOn:true, spotEyebrow:"What you need",
@@ -926,8 +951,8 @@
       finalHeading:"Five places. Let’s talk.",
       finalSub:CALL_ME+" Or simply reply to this email.",
       finalCta:"Call Marc", finalUrl:"tel:0413872994",
-      subject:"5 restaurants: "+FOUNDER_DAYS+" days free, set up for you",
-      preheader:"Order at the table and our new digital waitlist, set up on your own screens."
+      subject:"Now: order at the table + a digital waitlist",
+      preheader:"First 5 restaurants: "+FOUNDER_DAYS+" days free, set up on your own screens."
     }),
     preset({
       name:"Intro to Restaurant Deluxe", desc:"First message to a new restaurant",
@@ -1138,6 +1163,28 @@
   function toast(m){ var t=$('#toast'); t.textContent=m; t.classList.add('on');
     clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('on');},2200); }
 
+  /* ================= VIDEO (YouTube) ================= */
+  function ytId(u){
+    var m=String(u||'').trim().match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/);
+    return m?m[1]:'';
+  }
+  function videoLink(c){ var id=ytId(c.videoUrl); return id?'https://www.youtube.com/watch?v='+id:''; }
+  function videoBlock(c, P){
+    var F="Arial,Helvetica,sans-serif";
+    var id=ytId(c.videoUrl); if(!id) return '';
+    var link=videoLink(c), thumb=url(c.videoThumb)||('https://i.ytimg.com/vi/'+id+'/hqdefault.jpg');
+    var title=c.videoTitle||'Watch the video';
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:26px;">'+
+      '<tr><td><a href="'+esc(link)+'" style="text-decoration:none;display:block;">'+
+      '<img src="'+esc(thumb)+'" width="544" alt="'+esc('Video: '+title)+'" '+
+      'style="display:block;width:100%;max-width:544px;height:auto;border:0;border-radius:14px;" /></a></td></tr>'+
+      '<tr><td style="padding-top:14px;">'+
+      '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+      '<td style="border-radius:999px;background:#ff3b3b;">'+
+      '<a href="'+esc(link)+'" style="display:inline-block;padding:11px 18px;font:700 13px '+F+';color:#fff;text-decoration:none;">'+
+      '&#9654;&nbsp;&nbsp;'+escKeepTags(title)+'</a></td></tr></table></td></tr></table>';
+  }
+
   /* ================= EMAIL BUILDER ================= */
   function buildEmail(c){
     var mode=c.theme||'alt';
@@ -1228,6 +1275,7 @@
     para(c.intro).forEach(function(p){
       o.push('<div style="padding-top:22px;max-width:520px;font:400 17px/28px '+F+';color:'+H.mut+';">'+escKeepTags(p)+'</div>');
     });
+    if((c.videoPos||'hero')==='hero') o.push(videoBlock(c,H));
     if(c.cta1||c.cta2){
       o.push('<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;"><tr>');
       if(c.cta1){
@@ -1268,6 +1316,13 @@
       o.push('</tr></table></td></tr>');
     }
 
+    function videoBand(){
+      if(!ytId(c.videoUrl)) return;
+      var vd=bandDark(band++), V=vd?DARK:LIGHT;
+      o.push('<tr><td class="pad" style="padding:34px 42px 40px;background:'+V.band2+';">'+videoBlock(c,V)+'</td></tr>');
+    }
+    if(c.videoPos==='features') videoBand();
+
     /* ---- spotlight ---- */
     if(c.spotOn && (c.boxes||[]).length){
       var sd=bandDark(band++), P=sd?DARK:LIGHT;
@@ -1304,6 +1359,8 @@
           : '')+
         '</table></td></tr>');
     }
+
+    if(c.videoPos==='price') videoBand();
 
     /* ---- pricing ---- */
     if(c.priceOn && (c.plans||[]).length){
@@ -1396,6 +1453,7 @@
       if(c.priceFoot) L.push(c.priceFoot);
     }
     if(c.bandCaption) L.push('', c.bandCaption);
+    if(videoLink(c)) L.push('', (c.videoTitle||'Watch the video')+': '+videoLink(c));
     if(c.cta1 && url(c.cta1url)) L.push('', c.cta1+': '+url(c.cta1url));
     if(c.cta2 && url(c.cta2url)) L.push(c.cta2+': '+url(c.cta2url));
     if(c.finalOn && c.finalHeading) L.push('', c.finalHeading.replace(/\n/g,' '));
@@ -1508,6 +1566,8 @@
 
   function renderPreview(){
     var c=camps[cur];
+    var vs=document.getElementById('vidStatus');
+    if(vs) vs.textContent = !c.videoUrl ? '' : (ytId(c.videoUrl) ? '\u2713 YouTube video found \u2014 shown in the preview.' : 'That doesn\u2019t look like a YouTube link yet.');
     $('#pvSubject').textContent = c.subject || '(no subject yet)';
     $('#pvPre').textContent     = c.preheader || '';
     $('#subjLen').textContent   = (c.subject||'').length;
