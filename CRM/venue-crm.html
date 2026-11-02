@@ -126,6 +126,46 @@
   .prow.due{border-color:rgba(240,205,139,.45)}
   .empty{color:var(--faint);font-family:var(--fmono);font-size:12px;padding:16px 2px}
 
+  /* email engagement */
+  .eng{font-family:var(--fmono);font-size:10.5px;letter-spacing:.04em;border-radius:999px;padding:3px 8px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+  .eng.clicked{color:#ffd28a;border-color:rgba(255,190,90,.5);background:rgba(255,170,60,.10)}
+  .eng.opened{color:var(--cyan);border-color:rgba(34,211,238,.45)}
+  .eng.delivered{color:var(--muted)}
+  .eng.bounced{color:var(--red);border-color:rgba(255,143,143,.45)}
+  .eng.none{color:var(--faint);border-style:dashed}
+  .who .sub2{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:5px}
+  .prow .who .sub2 span{display:inline-block;white-space:normal;overflow:visible;font-size:inherit}
+  .prow .who .sub2 .eng{font-size:10.5px} .prow .who .sub2 .next{font-size:12px;color:var(--gold)}
+  .next{font-size:12px;color:var(--gold)}
+  .hist{display:grid;gap:4px;font-size:12.5px}
+  .hist div{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;align-items:center;border-bottom:1px solid var(--line2);padding:5px 0}
+  .hist .d{font-family:var(--fmono);font-size:11px;color:var(--faint)}
+  .hist .s{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+  .chips.eng-chips{margin-top:-4px}
+
+  /* call today */
+  .today{border:1px solid rgba(255,190,90,.35);background:linear-gradient(180deg,rgba(255,170,60,.07),transparent);border-radius:18px;padding:16px;margin:0 0 18px}
+  .today h3{margin:0 0 4px;font-size:16px}
+  .today .tl{display:grid;gap:8px;margin-top:10px}
+  .trow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
+  .trow b{font-size:14px} .trow .why{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .trow .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .trow a.tel{color:var(--teal);font-weight:700;text-decoration:none;font-size:13.5px}
+
+  /* campaign results */
+  .ctable{display:grid;gap:12px}
+  .crow{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:14px 16px}
+  .crow .ch{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+  .crow .ch b{font-size:15px}
+  .crow .ch span{font-family:var(--fmono);font-size:11px;color:var(--faint)}
+  .cnums{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin-top:10px}
+  .cnums div{border:1px solid var(--line2);border-radius:10px;padding:8px 10px;background:var(--glass)}
+  .cnums b{display:block;font-size:18px} .cnums span{font-family:var(--fmono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .cnums small{display:block;font-size:11px;color:var(--muted)}
+  .cbar{display:flex;height:8px;border-radius:999px;overflow:hidden;background:var(--glass);margin-top:10px}
+  .cbar i{display:block;height:100%}
+  .tag{font-family:var(--fmono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:var(--faint);margin-left:6px}
+
   /* AI */
   .ai-box{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:18px;margin-bottom:18px}
   .ai-box label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
@@ -189,7 +229,7 @@
     <div class="mark">RD</div>
     <div class="title">
       <h1>Venue CRM</h1>
-      <p>Restaurant Deluxe · health · pipeline · AI</p>
+      <p>Restaurant Deluxe · health · pipeline · campaigns · AI</p>
     </div>
     <div class="grow"></div>
     <span class="status" id="conn"><span class="d"></span><span id="connLbl">Not connected</span></span>
@@ -201,6 +241,7 @@
   <nav class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-tab="health">Venue health<span class="ct" id="ctHealth"></span></button>
     <button role="tab" aria-selected="false" data-tab="pipeline">Sales pipeline<span class="ct" id="ctPipe"></span></button>
+    <button role="tab" aria-selected="false" data-tab="campaigns">📊 Campaign results</button>
     <button role="tab" aria-selected="false" data-tab="ai">✦ AI suggestions</button>
   </nav>
 
@@ -220,8 +261,10 @@
     <span class="eyebrow">Prospects</span>
     <h2>Sales pipeline</h2>
     <p class="sub">Every restaurant you've imported as a lead. Move them along as you talk to them, set a follow-up date, and email a filtered group straight from the Email Studio.</p>
+    <div id="callToday"></div>
     <div class="funnel" id="funnel" aria-hidden="true"></div>
     <div class="chips" id="statusChips"></div>
+    <div class="chips eng-chips" id="engChips"></div>
     <div class="toolbar">
       <input type="search" id="pSearch" placeholder="Search restaurant, name, suburb…">
       <select id="pPriority" aria-label="Priority">
@@ -231,6 +274,15 @@
     </div>
     <div class="plist" id="plist"></div>
     <div style="margin-top:14px;text-align:center"><button class="btn sm" id="pMore" type="button" hidden>Show more</button></div>
+  </section>
+
+  <!-- ============ CAMPAIGNS ============ -->
+  <section id="tab-campaigns" hidden>
+    <span class="eyebrow">Email Studio results</span>
+    <h2>What each campaign brought in</h2>
+    <p class="sub">Every email sent from the Email Studio, grouped by subject line: how many were delivered, opened and clicked, and where those restaurants are in your pipeline now. Results come straight from Resend each time you open the CRM.</p>
+    <div id="emailSync" class="help" style="margin:-6px 0 14px"></div>
+    <div class="ctable" id="ctable"><p class="empty">Connect to load your campaigns.</p></div>
   </section>
 
   <!-- ============ AI ============ -->
@@ -335,16 +387,97 @@
   function banner(msg,cls){ $("#banner").innerHTML = msg ? '<div class="note '+(cls||"")+'" style="margin-bottom:18px">'+msg+'</div>' : ""; }
 
   /* ------------------------------------------------------------ data */
-  var DATA = null;
+  var DATA = null, EM = {}, SYNC = {at:null, busy:false, msg:""};
+  function sendUrl(){ return /rd-control/.test(SET.url) ? SET.url.replace(/rd-control.*$/,"resend-send") : SET.url.replace(/\/functions\/v1\/.*$/,"/functions/v1/resend-send"); }
+  function callSend(action,payload){
+    return fetch(sendUrl(),{method:"POST",headers:{"Content-Type":"application/json","x-studio-secret":SET.secret},
+      body:JSON.stringify(Object.assign({action:action},payload||{}))})
+    .then(function(r){ return r.json().catch(function(){ return {error:"resend-send replied with something that was not JSON"}; })
+      .then(function(d){ if(!r.ok||d.error) throw new Error(d.error||("HTTP "+r.status)); return d; }); });
+  }
+  function load(){
+    return call("snapshot",{withEmails:true}).then(function(d){
+      DATA=d; indexEmails(); setConn("on","Connected"); banner("");
+      renderHealth(); renderPipeline(); renderCampaigns();
+    });
+  }
+  /* Opening the CRM: show what is saved straight away, then ask Resend for the
+     latest results, update the pipeline from them, and redraw. */
   function refresh(){
     setConn("","Loading…");
-    return call("snapshot").then(function(d){
-      DATA=d; setConn("on","Connected"); banner("");
-      renderHealth(); renderPipeline();
-    }).catch(function(e){
+    return load().then(syncEmails).catch(function(e){
       setConn("off","Not connected");
       banner(esc(e.message),"bad");
     });
+  }
+  function syncEmails(){
+    if(SYNC.busy) return;
+    SYNC.busy=true; SYNC.msg="Checking Resend for the latest email results…"; paintSync();
+    var subjects=Object.keys(((DATA&&DATA.emails)||[]).reduce(function(m,r){ if(r.subject) m[r.subject]=1; return m; },{}));
+    return callSend("delivery_refresh",{subjects:subjects.slice(0,200)})
+      .then(function(d){ SYNC.warn=d.warning||""; }, function(e){ SYNC.warn="Resend not checked ("+e.message+"). Showing saved results."; })
+      .then(function(){ return call("pipeline_sync"); })
+      .then(function(r){
+        SYNC.at=Date.now();
+        var bits=[];
+        if(r.contacted) bits.push(r.contacted+" moved to Contacted");
+        if(r.hot) bits.push(r.hot+" new click"+(r.hot>1?"s":"")+" to call");
+        if(r.flagged) bits.push(r.flagged+" flagged do-not-email");
+        SYNC.msg="Email results updated "+new Date().toLocaleTimeString("en-AU",{hour:"numeric",minute:"2-digit"})+(bits.length?" · "+bits.join(" · "):"");
+        if(bits.length) toast(bits.join(" · "));
+        return load();
+      })
+      .catch(function(e){ SYNC.msg="Pipeline not updated: "+e.message; })
+      .then(function(){ SYNC.busy=false; paintSync(); });
+  }
+  function paintSync(){
+    var t=esc(SYNC.msg||"")+(SYNC.warn?' <span style="color:var(--gold)">'+esc(SYNC.warn)+'</span>':"");
+    var el=$("#emailSync"); if(el) el.innerHTML=t;
+    var el2=$("#pipeSync"); if(el2) el2.innerHTML=t;
+  }
+
+  /* ------------------------------------------------------------ email activity */
+  var FU_CAMPAIGN=/^(follow-up-|re-send-)/;
+  var RANK={clicked:5,opened:4,delivered:3,sent:2,delayed:2,pending:1,unconfirmed:1,bounced:0,complained:0,suppressed:0,failed:-1,canceled:-1};
+  function isFollowUp(r){ return FU_CAMPAIGN.test(String(r.campaign||"")) || /^(Shall I show you how it works\?|Will it work with your tablets\?)$/.test(r.subject||""); }
+  function when(r){ return Date.parse(r.sent_at||r.created_at)||0; }
+  function indexEmails(){
+    EM={};
+    ((DATA&&DATA.emails)||[]).forEach(function(r){
+      var e=String(r.recipient_email||"").trim().toLowerCase(); if(!e) return;
+      (EM[e]=EM[e]||[]).push(r);
+    });
+    Object.keys(EM).forEach(function(e){ EM[e].sort(function(a,b){ return when(b)-when(a); }); });
+  }
+  function emailsOf(p){ return EM[String(p.email||"").trim().toLowerCase()]||[]; }
+  /* the best thing they have done with any email in the last 60 days */
+  function engagement(p){
+    var rows=emailsOf(p);
+    if(!rows.length) return {k:"none",label:"Never emailed",last:null};
+    var cut=Date.now()-60*864e5, best=null;
+    rows.forEach(function(r){ if(when(r)<cut) return; if(!best||(RANK[r.status]||0)>(RANK[best.status]||0)) best=r; });
+    var last=rows[0];
+    if(!best) return {k:"delivered",label:"Emailed "+ago(last.sent_at||last.created_at),last:last};
+    var k=best.status==="clicked"?"clicked":best.status==="opened"?"opened":(best.status==="bounced"||best.status==="complained"||best.status==="suppressed")?"bounced":"delivered";
+    var lab={clicked:"🔥 Clicked",opened:"👀 Opened",delivered:"✉ Not opened yet",bounced:"⚠ Bounced"}[k];
+    return {k:k,label:lab,last:last,best:best};
+  }
+  function day(ms){ return new Date(ms).toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"}); }
+  var EXIT=["Replied","Demo booked","Trial","Won","Lost"];
+  /* where this restaurant is in the follow-up journey of its latest campaign */
+  function nextStep(p){
+    var st=p.crm_status||"New";
+    if(EXIT.indexOf(st)>=0) return "";
+    var rows=emailsOf(p); if(!rows.length) return "";
+    if(DATA && (DATA.blocked||[]).indexOf(String(p.email||"").trim().toLowerCase())>=0) return "Do not email \u2014 call instead";
+    var main=rows.filter(function(r){ return !isFollowUp(r); })[0]; if(!main) return "";
+    var t0=when(main), fus=rows.filter(function(r){ return isFollowUp(r) && when(r)>t0; });
+    var s=main.status, due;
+    if(s==="clicked"){ if(fus.length) return "Call them \u2014 follow-up sent "+day(when(fus[0])); due=t0+864e5; return "Follow-up 1 (call me) due "+day(due); }
+    if(s==="opened"){ if(fus.length) return "Follow-up sent "+day(when(fus[0])); due=t0+3*864e5; return "Follow-up 2 (quick answers) due "+day(due); }
+    if(s==="bounced"||s==="complained"||s==="suppressed") return "Do not email \u2014 call instead";
+    if(fus.length) return "Journey finished \u2014 re-sent "+day(when(fus[0]));
+    due=t0+5*864e5; return "Re-send with a new subject due "+day(due);
   }
 
   /* ------------------------------------------------------------ health rules */
@@ -492,7 +625,8 @@
   }
 
   /* ------------------------------------------------------------ pipeline */
-  var PF={status:"",prio:"",q:"",due:false,limit:60};
+  var PF={status:"",prio:"",q:"",due:false,eng:"",limit:60};
+  var HIDE={}; try{ HIDE=JSON.parse(store.get("rdcrm.called")||"{}")||{}; }catch(e){ HIDE={}; }
   function filtered(){
     var q=PF.q.toLowerCase(), now=Date.now();
     return ((DATA&&DATA.prospects)||[]).filter(function(p){
@@ -500,6 +634,7 @@
       if(PF.due){ if(!p.follow_up_at || Date.parse(p.follow_up_at)>now || st==="Won"||st==="Lost") return false; }
       else if(PF.status && st!==PF.status) return false;
       if(PF.prio && prio(p.priority)!==PF.prio) return false;
+      if(PF.eng && engagement(p).k!==PF.eng) return false;
       if(q){ var hay=[p.restaurant,p.name,p.suburb,p.venue_type,p.email].join(" ").toLowerCase(); if(hay.indexOf(q)<0) return false; }
       return true;
     }).sort(function(a,b){
@@ -519,6 +654,12 @@
       PSTAT.map(function(s){ return '<button class="fchip" type="button" data-st="'+esc(s)+'" aria-pressed="'+(PF.status===s&&!PF.due)+'"><i style="background:'+PCOL[s]+'"></i>'+esc(s)+' <b>'+(counts[s]||0)+'</b></button>'; }).join("")+
       '<button class="fchip" type="button" data-due="1" aria-pressed="'+PF.due+'">⏰ Follow-up due <b>'+due+'</b></button>';
     $("#statusChips").innerHTML=chips;
+    var ec={clicked:0,opened:0,delivered:0,bounced:0,none:0};
+    ps.forEach(function(p){ ec[engagement(p).k]++; });
+    $("#engChips").innerHTML=[["clicked","🔥 Clicked"],["opened","👀 Opened"],["delivered","✉ Not opened"],["bounced","⚠ Bounced"],["none","Never emailed"]].map(function(x){
+      return '<button class="fchip" type="button" data-eng="'+x[0]+'" aria-pressed="'+(PF.eng===x[0])+'">'+x[1]+' <b>'+ec[x[0]]+'</b></button>'; }).join("")+
+      '<span class="help" id="pipeSync" style="align-self:center;margin:0 0 0 4px"></span>';
+    paintSync(); renderToday();
     $("#ctPipe").textContent = due ? due+" due" : String(ps.length||"");
 
     var list=filtered(), shown=list.slice(0,PF.limit);
@@ -528,8 +669,12 @@
     $("#plist").innerHTML=shown.map(function(p){
       var st=p.crm_status||"New", pr=prio(p.priority);
       var isDue=p.follow_up_at && Date.parse(p.follow_up_at)<=now && st!=="Won" && st!=="Lost";
+      var en=engagement(p), nx=nextStep(p), rows=emailsOf(p);
       return '<div class="prow'+(isDue?" due":"")+'" data-id="'+esc(p.id)+'">'+
-        '<div class="who"><b>'+esc(p.restaurant||p.name||"(no name)")+'</b><span>'+esc([p.name,p.suburb,p.venue_type].filter(Boolean).join(" · "))+'</span></div>'+
+        '<div class="who"><b>'+esc(p.restaurant||p.name||"(no name)")+'</b><span>'+esc([p.name,p.suburb,p.venue_type].filter(Boolean).join(" · "))+'</span>'+
+          '<div class="sub2"><span class="eng '+en.k+'" title="'+esc(en.last?("Last email: "+(en.last.subject||"")):"")+'">'+esc(en.label)+'</span>'+
+          (rows.length?'<span class="eng none" style="border-style:solid">'+rows.length+' email'+(rows.length>1?'s':'')+'</span>':'')+
+          (nx?'<span class="next">→ '+esc(nx)+'</span>':'')+'</div></div>'+
         '<span class="pri '+pr+'" title="Priority '+esc(p.priority||"")+'">'+pr+'</span>'+
         '<select data-f="crm_status" aria-label="Status">'+PSTAT.map(function(s){ return '<option'+(s===st?" selected":"")+'>'+s+'</option>'; }).join("")+'</select>'+
         '<span style="display:flex;gap:6px;align-items:center"><input type="date" data-f="follow_up_at" aria-label="Follow up on" value="'+esc(p.follow_up_at?String(p.follow_up_at).slice(0,10):"")+'">'+
@@ -539,10 +684,84 @@
             (p.website?'<a target="_blank" rel="noopener" href="'+esc(/^https?:/i.test(p.website)?p.website:"https://"+p.website)+'">Website ↗</a>':'')+
             (p.crm_updated_at?'<span>Updated '+esc(ago(p.crm_updated_at))+'</span>':'')+'</div>'+
           '<textarea data-f="crm_notes" rows="3" placeholder="Notes — what was said, what they need">'+esc(p.crm_notes||"")+'</textarea>'+
+          (rows.length?'<div><span class="eyebrow" style="font-size:9.5px">Emails sent</span><div class="hist">'+rows.slice(0,12).map(function(r){
+            var k=r.status==="clicked"?"clicked":r.status==="opened"?"opened":(r.status==="bounced"||r.status==="complained"||r.status==="suppressed")?"bounced":"delivered";
+            var lab={clicked:"Clicked",opened:"Opened",bounced:r.status==="complained"?"Spam":"Bounced",delivered:r.status==="delivered"?"Delivered":r.status==="sent"?"Sent":r.status}[k];
+            return '<div><span class="d">'+esc(new Date(when(r)).toLocaleDateString("en-AU",{day:"numeric",month:"short"}))+'</span><span class="s">'+esc(r.subject||"")+(isFollowUp(r)?'<span class="tag">follow-up</span>':'')+'</span><span class="eng '+k+'">'+esc(lab)+'</span></div>';
+          }).join("")+'</div></div>':'')+
         '</div>'+
       '</div>';
     }).join("");
   }
+  /* ---- call today: recent clickers and follow-ups that are due ---- */
+  function renderToday(){
+    var ps=(DATA&&DATA.prospects)||[], now=Date.now(), list=[];
+    ps.forEach(function(p){
+      var st=p.crm_status||"New"; if(EXIT.indexOf(st)>=0) return;
+      var en=engagement(p), clickAt=en.k==="clicked"&&en.best?when(en.best):0;
+      var called=(HIDE[p.id]&&HIDE[p.id]>=clickAt) || (String(p.crm_notes||"").indexOf("Called after click")>=0 && Date.parse(p.crm_updated_at||0)>clickAt);
+      var hot=clickAt && clickAt>now-7*864e5 && !called;
+      var due=p.follow_up_at && Date.parse(p.follow_up_at)<=now;
+      if(!hot && !due) return;
+      list.push({p:p,hot:hot,clickAt:clickAt,why:hot?"Clicked \u201c"+(en.best.subject||"")+"\u201d "+ago(en.best.sent_at||en.best.created_at):"Follow-up due "+(daysSince(p.follow_up_at)?ago(p.follow_up_at):"today")});
+    });
+    list.sort(function(a,b){ return (b.hot-a.hot) || (b.clickAt-a.clickAt); });
+    if(!list.length){ $("#callToday").innerHTML=""; return; }
+    $("#callToday").innerHTML='<div class="today"><h3>📞 Call today <span class="tag">'+list.length+'</span></h3>'+
+      '<p class="help" style="margin:0">Restaurants who clicked an email in the last 7 days, and follow-ups that are due. Mark them done, or move them along after you call.</p>'+
+      '<div class="tl">'+list.slice(0,12).map(function(x){
+        var p=x.p, st=p.crm_status||"New";
+        return '<div class="trow" data-id="'+esc(p.id)+'"><div><b>'+esc(p.restaurant||p.name||"")+'</b>'+(x.hot?' <span class="eng clicked">🔥</span>':'')+
+          '<span class="why">'+esc(x.why)+(p.name?' · '+esc(p.name):'')+'</span></div>'+
+          '<div class="acts">'+(p.phone?'<a class="tel" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎ '+esc(p.phone)+'</a>':'<span class="help" style="margin:0">no phone</span>')+
+          '<select data-tq="crm_status" aria-label="Status">'+PSTAT.map(function(s){ return '<option'+(s===st?" selected":"")+'>'+s+'</option>'; }).join("")+'</select>'+
+          '<button class="btn sm" type="button" data-tdone="3">In 3 days</button>'+
+          '<button class="btn sm" type="button" data-tdone="0">Done ✓</button></div></div>';
+      }).join("")+(list.length>12?'<p class="help">+'+(list.length-12)+' more — use the ⏰ Follow-up due and 🔥 Clicked filters below.</p>':'')+'</div></div>';
+  }
+
+  /* ---- campaign results ---- */
+  function renderCampaigns(){
+    var rows=(DATA&&DATA.emails)||[], ps=(DATA&&DATA.prospects)||[], byEmail={};
+    ps.forEach(function(p){ var e=String(p.email||"").trim().toLowerCase(); if(e) byEmail[e]=p; });
+    if(!rows.length){ $("#ctable").innerHTML='<p class="empty">No emails in the send log yet. Sends from the Email Studio (Send to the list) appear here.</p>'; return; }
+    var g={};
+    rows.forEach(function(r){
+      var k=r.subject||"(no subject)", c=g[k]||(g[k]={subject:k,first:Infinity,last:0,who:{},fu:false});
+      var e=String(r.recipient_email||"").toLowerCase(), t=when(r);
+      c.first=Math.min(c.first,t); c.last=Math.max(c.last,t); if(isFollowUp(r)) c.fu=true;
+      if(!c.who[e] || (RANK[r.status]||0)>(RANK[c.who[e]]||0)) c.who[e]=r.status;
+    });
+    var list=Object.keys(g).map(function(k){ return g[k]; }).sort(function(a,b){ return b.last-a.last; });
+    $("#ctable").innerHTML=list.map(function(c){
+      var n={sent:0,delivered:0,opened:0,clicked:0,bounced:0,replied:0,demo:0,trial:0,won:0};
+      Object.keys(c.who).forEach(function(e){
+        var s=c.who[e]; n.sent++;
+        if(s==="delivered"||s==="opened"||s==="clicked") n.delivered++;
+        if(s==="opened"||s==="clicked") n.opened++;
+        if(s==="clicked") n.clicked++;
+        if(s==="bounced"||s==="complained"||s==="suppressed") n.bounced++;
+        var p=byEmail[e], st=p&&p.crm_status;
+        if(st==="Replied") n.replied++; if(st==="Demo booked") n.demo++; if(st==="Trial") n.trial++; if(st==="Won") n.won++;
+      });
+      var pc=function(a,b){ return b?Math.round(a/b*100)+"%":"—"; };
+      var w=function(x){ return (x/(n.sent||1)*100).toFixed(1)+"%"; };
+      return '<div class="crow"><div class="ch"><b>'+esc(c.subject)+(c.fu?'<span class="tag">follow-up</span>':'')+'</b><span>'+esc(day(c.first))+(c.last-c.first>864e5?' – '+esc(day(c.last)):'')+'</span></div>'+
+        '<div class="cbar" aria-hidden="true"><i style="width:'+w(n.clicked)+';background:#ffb35a"></i><i style="width:'+w(n.opened-n.clicked)+';background:var(--cyan)"></i><i style="width:'+w(n.delivered-n.opened)+';background:var(--blue)"></i><i style="width:'+w(n.bounced)+';background:var(--red)"></i></div>'+
+        '<div class="cnums">'+
+          '<div><span>Sent</span><b>'+n.sent+'</b></div>'+
+          '<div><span>Delivered</span><b>'+n.delivered+'</b><small>'+pc(n.delivered,n.sent)+'</small></div>'+
+          '<div><span>Opened</span><b>'+n.opened+'</b><small>'+pc(n.opened,n.delivered)+' of delivered</small></div>'+
+          '<div><span>Clicked</span><b>'+n.clicked+'</b><small>'+pc(n.clicked,n.delivered)+' of delivered</small></div>'+
+          '<div><span>Bounced</span><b>'+n.bounced+'</b></div>'+
+          '<div><span>Replied</span><b>'+n.replied+'</b></div>'+
+          '<div><span>Demo</span><b>'+n.demo+'</b></div>'+
+          '<div><span>Trial</span><b>'+n.trial+'</b></div>'+
+          '<div><span>Won</span><b>'+n.won+'</b></div>'+
+        '</div></div>';
+    }).join("");
+  }
+
   function findProspect(id){ return ((DATA&&DATA.prospects)||[]).filter(function(p){ return p.id===id; })[0]; }
   function updateProspect(id,field,value){
     var p=findProspect(id); if(!p) return;
@@ -624,7 +843,7 @@
   document.querySelectorAll("nav.tabs button").forEach(function(b){
     b.addEventListener("click",function(){
       document.querySelectorAll("nav.tabs button").forEach(function(x){ x.setAttribute("aria-selected",String(x===b)); });
-      ["health","pipeline","ai"].forEach(function(t){ $("#tab-"+t).hidden = t!==b.dataset.tab; });
+      ["health","pipeline","campaigns","ai"].forEach(function(t){ $("#tab-"+t).hidden = t!==b.dataset.tab; });
     });
   });
   $("#btnRefresh").addEventListener("click",refresh);
@@ -648,6 +867,28 @@
     var c=e.target.closest(".fchip"); if(!c) return;
     if(c.dataset.due){ PF.due=!PF.due; PF.status=""; } else { PF.due=false; PF.status=c.dataset.st; }
     PF.limit=60; renderPipeline();
+  });
+  $("#engChips").addEventListener("click",function(e){
+    var c=e.target.closest("[data-eng]"); if(!c) return;
+    PF.eng = PF.eng===c.dataset.eng ? "" : c.dataset.eng; PF.limit=60; renderPipeline();
+  });
+  $("#callToday").addEventListener("change",function(e){
+    var el=e.target.closest("[data-tq]"); if(!el) return;
+    updateProspect(el.closest(".trow").dataset.id,"crm_status",el.value);
+  });
+  $("#callToday").addEventListener("click",function(e){
+    var b=e.target.closest("[data-tdone]"); if(!b) return;
+    var id=b.closest(".trow").dataset.id, n=+b.dataset.tdone, p=findProspect(id);
+    var d=n?new Date(Date.now()+n*864e5).toISOString().slice(0,10):"";
+    var en=engagement(p);
+    if(!n && en.k==="clicked" && en.best){
+      /* done after a click: keep them off the list until they click something new */
+      var stamp="Called after click ("+day(Date.now())+")";
+      if(String(p.crm_notes||"").indexOf(stamp)<0) updateProspect(id,"crm_notes",(p.crm_notes?p.crm_notes+"\n":"")+stamp);
+      HIDE[id]=when(en.best);
+      try{ store.set("rdcrm.called",JSON.stringify(HIDE)); }catch(x){}
+    }
+    updateProspect(id,"follow_up_at",d);
   });
   $("#pSearch").addEventListener("input",function(){ PF.q=this.value; PF.limit=60; renderPipeline(); });
   $("#pPriority").addEventListener("change",function(){ PF.prio=this.value; PF.limit=60; renderPipeline(); });

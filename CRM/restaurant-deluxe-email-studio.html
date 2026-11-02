@@ -283,7 +283,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v28</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v29</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -857,7 +857,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v28 \u00b7 follow-up journey';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v29 \u00b7 linked to Venue CRM';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2030,6 +2030,7 @@
         logLine('Sent to '+d.sent+' recipient'+(d.sent===1?'':'s')+'.','ok');
         if(record) logLine('Saved to the send log. Use \u201cCheck delivery status\u201d to see delivered, opened and clicked.','dim');
         if(jctx){ JRN.send=null; logLine('Follow-up sent. \u201cCheck the journey\u201d will now show this group as done.','dim'); }
+        if(record) crmSync();
         toast('Sent to '+d.sent);
       }
     }).catch(function(){});
@@ -2198,6 +2199,17 @@
     }).catch(function(e){ logLine('CRM update stopped: '+((e&&e.message)||e),'bad'); });
   });
 
+  /* keep the Venue CRM pipeline in step with the send log */
+  function crmSync(){
+    aiCall('pipeline_sync',{}).then(function(r){
+      var bits=[];
+      if(r.contacted) bits.push(r.contacted+' moved to Contacted');
+      if(r.hot) bits.push(r.hot+' new click'+(r.hot>1?'s':'')+' to call');
+      if(r.flagged) bits.push(r.flagged+' flagged do-not-email');
+      logLine('Venue CRM updated'+(bits.length?': '+bits.join(' \u00b7 '):' \u2014 nothing new')+'.','ok');
+    }).catch(function(e){ logLine('Venue CRM not updated: '+((e&&e.message)||e),'warn'); });
+  }
+
   /* ---- delivery status, read straight from Resend (no webhook needed) ---- */
   function deliveryRow(rows){
     var n={sent:rows.length,delivered:0,opened:0,clicked:0,bounced:0,complained:0,waiting:0};
@@ -2239,6 +2251,7 @@
       });
       if(!mine.some(function(r){ return r.status==='opened'||r.status==='clicked'; }) && mine.length)
         logLine('Opens only show if open tracking is on: Resend \u2192 Domains \u2192 your domain \u2192 Open tracking.','dim');
+      crmSync();
     }).catch(function(){});
   });
 

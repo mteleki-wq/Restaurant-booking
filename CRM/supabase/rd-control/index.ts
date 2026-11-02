@@ -95,6 +95,68 @@ async function snapshot() {
   return { venues: venues || [], prospects, campaigns: campaigns || [], deliveries: deliveries || [], blocked };
 }
 
+// Every email in the send log, for the CRM's per-restaurant history and
+// campaign results. Browser only — never sent to the AI.
+async function emailLog() {
+  return await readAll("crm_email_deliveries?select=recipient_email,subject,campaign,status,sent_at,created_at&order=created_at.desc,id.desc", 10000);
+}
+
+const EXIT_STATUSES = ["Replied", "Demo booked", "Trial", "Won", "Lost"];
+const ACCEPTED = ["sent", "delivered", "opened", "clicked", "delayed"];
+
+// Keeps the pipeline in step with the send log:
+//  - New prospects who were emailed become Contacted
+//  - a click in the last 14 days adds a note and makes them due for a call today (once per campaign)
+//  - bounced, spam-complaint or unsubscribed addresses get a do-not-email note (once)
+// Prospects marked Replied, Demo booked, Trial, Won or Lost are left alone.
+async function pipelineSync() {
+  const [prospects, rows, snap] = await Promise.all([
+    readAll("crm_prospects?select=id,email,crm_status,crm_notes,follow_up_at&order=id.asc"),
+    emailLog(),
+    snapshot(),
+  ]);
+  const bad = new Set<string>(snap.blocked || []);
+  const byEmail = new Map<string, any[]>();
+  for (const r of rows) {
+    const e = String(r.recipient_email || "").trim().toLowerCase();
+    if (!e) continue;
+    if (!byEmail.has(e)) byEmail.set(e, []);
+    byEmail.get(e)!.push(r);
+  }
+  const now = new Date();
+  const day = new Intl.DateTimeFormat("en-AU", { timeZone: "Australia/Sydney", day: "numeric", month: "short" });
+  let contacted = 0, hot = 0, flagged = 0, updated = 0;
+  for (const p of prospects) {
+    const email = String(p.email || "").trim().toLowerCase();
+    const ds = byEmail.get(email);
+    if (!email || !ds || !ds.length) continue;
+    const status = p.crm_status || "New";
+    if (EXIT_STATUSES.includes(status)) continue;
+    let notes = String(p.crm_notes || "");
+    const patch: any = {};
+    if (status === "New" && ds.some((d) => ACCEPTED.includes(d.status))) { patch.crm_status = "Contacted"; contacted++; }
+    const clicks = ds.filter((d) => d.status === "clicked" && Date.parse(d.sent_at || d.created_at) > now.getTime() - 14 * 864e5);
+    for (const c of clicks) {
+      const stamp = `Clicked \u201c${c.subject}\u201d`;
+      if (notes.includes(stamp)) continue;
+      notes = (notes ? notes + "\n" : "") + `${stamp} (${day.format(new Date(c.sent_at || c.created_at))}) \u2014 call them.`;
+      patch.crm_notes = notes;
+      if (!p.follow_up_at || Date.parse(p.follow_up_at) > now.getTime()) patch.follow_up_at = now.toISOString();
+      hot++;
+    }
+    const warn = "Email bounced, marked as spam or unsubscribed";
+    if (bad.has(email) && !notes.includes(warn)) {
+      notes = (notes ? notes + "\n" : "") + `\u26a0 ${warn} \u2014 do not email; call instead.`;
+      patch.crm_notes = notes; flagged++;
+    }
+    if (!Object.keys(patch).length) continue;
+    patch.crm_updated_at = now.toISOString();
+    await db(`crm_prospects?id=eq.${p.id}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(patch) });
+    updated++;
+  }
+  return { ok: true, updated, contacted, hot, flagged };
+}
+
 const EMAIL_RE = /^[^\s@,;()"<>]+@[^\s@,;()"<>]+\.[^\s@,;()"<>]{2,}$/;
 const clip = (v: unknown, n = 300) => {
   const t = String(v ?? "").replace(/\s+/g, " ").trim();
@@ -262,8 +324,13 @@ Deno.serve(async (req) => {
       }
 
       // ---------------------------------------------------------- data
-      case "snapshot":
-        return json({ ok: true, ...(await snapshot()), stages: STAGES, prospectStatuses: PROSPECT_STATUSES });
+      case "snapshot": {
+        const [snap, emails] = await Promise.all([snapshot(), body.withEmails ? emailLog() : Promise.resolve(undefined)]);
+        return json({ ok: true, ...snap, ...(emails ? { emails } : {}), stages: STAGES, prospectStatuses: PROSPECT_STATUSES });
+      }
+
+      case "pipeline_sync":
+        return json(await pipelineSync());
 
       // Rows from an Excel/CSV sheet, already mapped to our columns by the studio.
       case "prospects_import": {
