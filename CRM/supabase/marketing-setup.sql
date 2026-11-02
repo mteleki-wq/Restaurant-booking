@@ -16,3 +16,16 @@
 --  * rd_is_crm_owner(): Marc's three accounts or a platform admin. crm_accounts / crm_activity /
 --    crm_contacts / crm_comms / crm_notes now owner-only; email_optouts readable by the owner and by
 --    venue staff for their own venue only (migration lock_down_crm_tables).
+
+-- ===================================================================
+-- DEMO CALENDAR (migration: demo_availability_calendar)
+--   rd_demo_settings  one row: slot_minutes, buffer_minutes, min_notice_hours,
+--                     days_ahead, max_per_day, weekly {"1".."7": {on,from,to}} (Sydney time)
+--   rd_demo_blocks    time off: start_at, end_at, reason
+--   rd_demo_grid_rows(from,to)   every slot with state free/blocked/booked/busy/past/beyond/full (service role only)
+--   rd_demo_slots()   public: free start times, driven by the settings + blocks + bookings
+--   rd_demo_info()    public: { minutes }
+--   rd_demo_book(...) takes pg_advisory_xact_lock, re-checks the slot is free, so no double or overlapping bookings
+--   rd_demo_admin_get / _save_settings / _block / _unblock / _cancel   service role only,
+--                     called by the rd-demo-admin edge function (x-studio-secret)
+-- ===================================================================

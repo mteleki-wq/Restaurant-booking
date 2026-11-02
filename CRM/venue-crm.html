@@ -170,7 +170,7 @@
   .outs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0 12px}
   .outs button{border:1px solid var(--line);background:var(--glass);color:var(--ink);border-radius:12px;padding:11px 10px;font-family:var(--fdisp);font-size:13.5px;font-weight:600;cursor:pointer;text-align:left}
   .outs button[aria-pressed="true"]{border-color:var(--violet);background:rgba(139,92,246,.18)}
-  @media (max-width:900px){ .hgrid{grid-template-columns:1fr} }
+  @media (max-width:900px){ .hgrid{grid-template-columns:minmax(0,1fr)} }
 
   /* campaign results */
   .ctable{display:grid;gap:12px}
@@ -233,8 +233,54 @@
     transition:opacity .22s,transform .22s;z-index:100;max-width:calc(100vw - 32px);text-align:center}
   .toast.on{opacity:1;transform:translate(-50%,0)}
 
+  /* demo calendar */
+  .daychips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin:10px 0 12px;scrollbar-width:thin}
+  .daychip{flex:0 0 auto;min-width:58px;border:1px solid var(--line);background:var(--glass);color:var(--muted);border-radius:12px;padding:7px 8px;
+    cursor:pointer;font-family:var(--fdisp);text-align:center;line-height:1.25}
+  .daychip b{display:block;font-size:16px;color:var(--ink)}
+  .daychip small{display:block;font-family:var(--fmono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase}
+  .daychip i{display:block;font-style:normal;font-family:var(--fmono);font-size:9.5px;color:var(--teal);margin-top:2px}
+  .daychip.off i{color:var(--faint)} .daychip.has i{color:var(--violet)}
+  .daychip[aria-pressed="true"]{border-color:var(--cyan);background:rgba(34,211,238,.10);color:var(--ink)}
+  .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+  .slot{border:1px solid var(--line);border-radius:12px;padding:9px 10px;background:var(--glass);color:var(--ink);font-family:var(--fdisp);
+    text-align:left;cursor:pointer;min-height:58px;transition:border-color .15s}
+  .slot b{display:block;font-size:14.5px}
+  .slot span{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .slot.free{border-color:rgba(45,212,191,.45)} .slot.free span{color:var(--teal)}
+  .slot.free:hover{background:rgba(45,212,191,.08)}
+  .slot.blocked{background:repeating-linear-gradient(135deg,rgba(255,143,143,.07) 0 6px,transparent 6px 12px);border-color:rgba(255,143,143,.4)}
+  .slot.blocked span{color:var(--red)}
+  .slot.booked{background:rgba(139,92,246,.18);border-color:var(--violet)} .slot.booked span{color:#d9ccff}
+  .slot.busy{border-style:dashed} .slot.past,.slot.beyond,.slot.full{opacity:.45;cursor:default}
+  .slot[aria-pressed="true"]{outline:2px solid var(--cyan);outline-offset:2px}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--faint);margin-top:12px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid}
+  .dayhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .dayhead h3{margin:0;flex:1 1 auto}
+  .bdetail{margin-top:14px;border:1px solid var(--violet);border-radius:14px;padding:14px;background:rgba(139,92,246,.08);font-size:13.5px}
+  .bdetail .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .hours{display:grid;gap:8px}
+  .hours .hr{display:grid;grid-template-columns:92px minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;font-size:13.5px}
+  .hours .hr label{display:flex;gap:8px;align-items:center;font-weight:600;cursor:pointer}
+  .hours .hr input[type=time]{width:100%;padding:7px 8px}
+  .hours .hr.off input[type=time]{opacity:.35}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+  .rules label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px;color:var(--muted)}
+  .rules select{width:100%}
+  .offform{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .offform input{width:100%}
+  .offform .full{grid-column:1/-1}
+  .blist{display:grid;gap:8px;margin-top:12px}
+  .blist > div{display:flex;gap:10px;align-items:center;border:1px solid var(--line2);border-radius:10px;padding:8px 10px;font-size:13px}
+  .blist > div span{flex:1 1 auto;min-width:0}
+  input[type=time],input[type=datetime-local]{background:var(--glass);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px 10px;font-family:var(--fdisp);font-size:14px;color-scheme:dark}
+
   @media (max-width:720px){
     .wrap{padding:0 16px 70px}
+    .hours .hr{grid-template-columns:64px minmax(0,1fr) auto minmax(0,1fr);gap:5px}
+    .hours .hr input[type=time]{font-size:12.5px;padding:7px 4px}
+    .rules,.offform{grid-template-columns:1fr}
     .prow{grid-template-columns:minmax(0,1fr) auto}
     .prow select,.prow input[type=date]{grid-column:span 1}
     .form{grid-template-columns:1fr}
@@ -260,6 +306,7 @@
 
   <nav class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-tab="home">🏠 Today<span class="ct" id="ctHome"></span></button>
+    <button role="tab" aria-selected="false" data-tab="cal">📅 Demo calendar<span class="ct" id="ctCal"></span></button>
     <button role="tab" aria-selected="false" data-tab="health">Venue health<span class="ct" id="ctHealth"></span></button>
     <button role="tab" aria-selected="false" data-tab="pipeline">Sales pipeline<span class="ct" id="ctPipe"></span></button>
     <button role="tab" aria-selected="false" data-tab="campaigns">📊 Campaign results</button>
@@ -285,12 +332,73 @@
       </div>
       <div>
         <div class="hcard"><h3>📅 Upcoming demos</h3><div id="homeDemos"></div>
-          <p class="help" style="margin:10px 0 0">Restaurants book themselves at <a href="../Restaurant/demo.html" target="_blank" rel="noopener" style="color:var(--cyan)">webescapade.com/Restaurant/demo.html</a> — the link is in your emails.</p></div>
+          <p class="help" style="margin:10px 0 0">Restaurants book themselves at <a href="../Restaurant/demo.html" target="_blank" rel="noopener" style="color:var(--cyan)">webescapade.com/Restaurant/demo.html</a> — the link is in your emails.</p>
+          <button class="btn sm" type="button" id="btnOpenCal" style="margin-top:10px">📅 Set my availability</button></div>
         <div class="hcard"><h3>⭐ Founding 5</h3><div id="homeFounding"></div></div>
         <div class="hcard"><h3>Recent activity</h3><div class="feed" id="homeFeed"></div></div>
         <div class="hcard"><h3>📬 Weekly report</h3>
           <p class="help" style="margin:0 0 10px">Emailed every Monday at 7:30 am to <b id="repTo">sales@webescapade.com</b>: emails, clicks, calls, new leads, follow-ups due and trials ending.</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" id="btnRepPrev">Preview this week</button><button class="btn sm" type="button" id="btnRepSend">Email it to me now</button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO CALENDAR ============ -->
+  <section id="tab-cal" hidden>
+    <span class="eyebrow">Demo calendar</span>
+    <h2>When restaurants can book you</h2>
+    <p class="sub">Set your usual hours, then tap any time to block it or open it again. Restaurants only see free times on the <a href="../Restaurant/demo.html" target="_blank" rel="noopener" style="color:var(--cyan)">booking page</a>, and once someone books a time it's locked — nobody else can take it or overlap it.</p>
+    <div id="calBanner"></div>
+    <div class="hgrid">
+      <div>
+        <div class="hcard">
+          <div style="display:flex;gap:8px;align-items:center">
+            <h3 style="flex:1 1 auto;margin:0">Your days</h3>
+            <button class="btn sm" type="button" id="calPrev" aria-label="Earlier days">‹</button>
+            <button class="btn sm" type="button" id="calToday">Today</button>
+            <button class="btn sm" type="button" id="calNext" aria-label="Later days">›</button>
+          </div>
+          <div class="daychips" id="calDays"><p class="empty">Connect to load your calendar.</p></div>
+          <div id="calDay"></div>
+          <div class="legend">
+            <span><i style="border-color:var(--teal)"></i>Free — tap to block</span>
+            <span><i style="border-color:var(--red);background:rgba(255,143,143,.15)"></i>Blocked — tap to open</span>
+            <span><i style="border-color:var(--violet);background:rgba(139,92,246,.3)"></i>Booked</span>
+            <span><i style="border-color:var(--line);border-style:dashed"></i>Gap next to a demo</span>
+            <span><i style="border-color:var(--line);opacity:.5"></i>Too soon / past / full</span>
+          </div>
+        </div>
+        <div class="hcard"><h3>📅 Booked demos</h3><div id="calBookings"></div></div>
+      </div>
+      <div>
+        <div class="hcard">
+          <h3>Weekly hours</h3>
+          <p class="help" style="margin:0 0 12px">Your normal availability, Sydney time. Untick a day to close it.</p>
+          <div class="hours" id="calHours"></div>
+          <h3 style="margin-top:18px">Rules</h3>
+          <div class="rules">
+            <div><label for="rLen">Demo length</label><select id="rLen"><option value="15">15 min</option><option value="20">20 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60">1 hour</option><option value="90">1½ hours</option></select></div>
+            <div><label for="rGap">Gap between demos</label><select id="rGap"><option value="0">No gap</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hour</option></select></div>
+            <div><label for="rNotice">Minimum notice</label><select id="rNotice"><option value="0">None</option><option value="1">1 hour</option><option value="2">2 hours</option><option value="4">4 hours</option><option value="12">12 hours</option><option value="24">1 day</option><option value="48">2 days</option></select></div>
+            <div><label for="rAhead">Book up to</label><select id="rAhead"><option value="7">1 week ahead</option><option value="14">2 weeks ahead</option><option value="21">3 weeks ahead</option><option value="30">1 month ahead</option><option value="60">2 months ahead</option></select></div>
+            <div><label for="rMax">Most demos a day</label><select id="rMax"><option value="0">No limit</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="8">8</option></select></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap">
+            <button class="btn primary sm" type="button" id="calSave">Save hours and rules</button>
+            <span class="help" id="calSaved" style="margin:0"></span>
+          </div>
+        </div>
+        <div class="hcard">
+          <h3>🌴 Time off</h3>
+          <p class="help" style="margin:0 0 12px">Holidays, appointments, anything longer than a slot. Nobody can book inside it.</p>
+          <div class="offform">
+            <div><label class="help" for="oFrom" style="display:block;margin:0 0 4px">From</label><input type="datetime-local" id="oFrom" step="900"></div>
+            <div><label class="help" for="oTo" style="display:block;margin:0 0 4px">To</label><input type="datetime-local" id="oTo" step="900"></div>
+            <div class="full"><input type="text" id="oWhy" placeholder="Reason (only you see this) — e.g. Holiday" maxlength="200"></div>
+            <div class="full"><button class="btn sm" type="button" id="oAdd">Add time off</button></div>
+          </div>
+          <div class="blist" id="calBlocks"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -1036,17 +1144,230 @@
   document.querySelectorAll("nav.tabs button").forEach(function(b){
     b.addEventListener("click",function(){
       document.querySelectorAll("nav.tabs button").forEach(function(x){ x.setAttribute("aria-selected",String(x===b)); });
-      ["home","health","pipeline","campaigns","ai"].forEach(function(t){ $("#tab-"+t).hidden = t!==b.dataset.tab; });
+      ["home","cal","health","pipeline","campaigns","ai"].forEach(function(t){ $("#tab-"+t).hidden = t!==b.dataset.tab; });
+      if(b.dataset.tab==="cal") calLoad();
     });
   });
-  $("#btnRefresh").addEventListener("click",refresh);
+
+  /* ------------------------------------------------------------ demo calendar */
+  var TZ = "Australia/Sydney";
+  var CAL = { from:null, sel:null, data:null, busy:false, pick:null };
+  var DOWS = ["","Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  function demoUrl(){ return /rd-control/.test(SET.url) ? SET.url.replace(/rd-control.*$/,"rd-demo-admin") : SET.url.replace(/\/functions\/v1\/.*$/,"/functions/v1/rd-demo-admin"); }
+  function callDemo(action,payload){
+    if(!SET.secret){ openModal(); return Promise.reject(new Error("Add the studio secret first")); }
+    return fetch(demoUrl(),{method:"POST",headers:{"Content-Type":"application/json","x-studio-secret":SET.secret},
+      body:JSON.stringify(Object.assign({action:action},payload||{}))})
+    .then(function(r){ return r.json().catch(function(){ return {error:"The calendar replied with something that was not JSON"}; })
+      .then(function(d){ if(!r.ok||d.error||d.ok===false) throw new Error(d.error||("HTTP "+r.status)); return d; }); })
+    .catch(function(e){ var m=(e&&e.message)||"Could not reach the calendar";
+      if(/Failed to fetch|NetworkError|Load failed/i.test(m)) m="Could not reach rd-demo-admin. Check your connection."; throw new Error(m); });
+  }
+  /* Sydney wall-clock "YYYY-MM-DD" + "HH:MM" -> ISO instant, whatever timezone this device is in */
+  function sydOffsetMin(ms){
+    var p={}; new Intl.DateTimeFormat("en-US",{timeZone:TZ,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"})
+      .formatToParts(new Date(ms)).forEach(function(x){ p[x.type]=x.value; });
+    return (Date.UTC(+p.year,+p.month-1,+p.day,+p.hour%24,+p.minute)-Math.floor(ms/6e4)*6e4)/6e4;
+  }
+  function sydISO(date,time){
+    var a=date.split("-"), b=(time||"00:00").split(":");
+    var guess=Date.UTC(+a[0],+a[1]-1,+a[2],+b[0],+b[1]);
+    var ms=guess-sydOffsetMin(guess)*6e4; ms=guess-sydOffsetMin(ms)*6e4;
+    return new Date(ms).toISOString();
+  }
+  function addDays(date,n){ var a=date.split("-"); return new Date(Date.UTC(+a[0],+a[1]-1,+a[2]+n)).toISOString().slice(0,10); }
+  function tm(iso){ return new Date(iso).toLocaleTimeString("en-AU",{timeZone:TZ,hour:"numeric",minute:"2-digit"}).replace(/\s/g,"").toLowerCase(); }
+  function dt(iso){ return new Date(iso).toLocaleDateString("en-AU",{timeZone:TZ,weekday:"short",day:"numeric",month:"short"}); }
+  function longDay(date){ return new Date(date+"T12:00:00Z").toLocaleDateString("en-AU",{timeZone:"UTC",weekday:"long",day:"numeric",month:"long"}); }
+  function localInput(iso){ /* ISO -> "YYYY-MM-DDTHH:MM" Sydney */
+    var p={}; new Intl.DateTimeFormat("en-CA",{timeZone:TZ,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"})
+      .formatToParts(new Date(iso)).forEach(function(x){ p[x.type]=x.value; });
+    return p.year+"-"+p.month+"-"+p.day+"T"+(p.hour==="24"?"00":p.hour)+":"+p.minute;
+  }
+  var MODE = {phone:"📞 Phone call",video:"💻 Video call",visit:"🏠 Visit at the restaurant"};
+
+  function calLoad(keepSel){
+    if(CAL.busy) return; CAL.busy=true;
+    if(!CAL.data) $("#calDays").innerHTML='<p class="empty">Loading your calendar…</p>';
+    callDemo("get",{from:CAL.from,days:14}).then(function(d){
+      CAL.data=d; if(!CAL.from) CAL.from=d.today;
+      if(!keepSel || !d.days.some(function(x){ return x.date===CAL.sel; })){
+        var first=d.days.filter(function(x){ return x.slots.some(function(s){ return s.s!=="past"; }); })[0];
+        CAL.sel=(first||d.days[0]).date; CAL.pick=null;
+      }
+      $("#calBanner").innerHTML=""; renderCal(); fillRules();
+    }).catch(function(e){
+      $("#calBanner").innerHTML='<div class="note bad" style="margin-bottom:16px">'+esc(e.message)+'</div>';
+      if(!CAL.data) $("#calDays").innerHTML='<p class="empty">Could not load the calendar.</p>';
+    }).then(function(){ CAL.busy=false; });
+  }
+
+  function renderCal(){
+    var d=CAL.data; if(!d) return;
+    var upcoming=d.bookings.filter(function(b){ return Date.parse(b.start_at)>Date.now()-36e5; });
+    $("#ctCal").textContent=upcoming.length||"";
+    $("#calPrev").disabled = CAL.from<=d.today;
+    $("#calDays").innerHTML=d.days.map(function(x){
+      var free=x.slots.filter(function(s){ return s.s==="free"; }).length;
+      var booked=x.slots.filter(function(s){ return s.s==="booked"; }).length;
+      var cls = !x.slots.length||x.day_block ? "off" : booked ? "has" : "";
+      var lab = !x.slots.length ? "closed" : x.day_block ? "day off" : booked ? booked+" booked" : free ? free+" free" : "full";
+      var dd=x.date.split("-");
+      return '<button type="button" class="daychip '+cls+'" data-day="'+x.date+'" aria-pressed="'+(x.date===CAL.sel)+'"><small>'+DOWS[x.dow]+'</small><b>'+(+dd[2])+'</b><i>'+lab+'</i></button>';
+    }).join("");
+    renderDay();
+    $("#calBookings").innerHTML = upcoming.length ? '<div class="blist" style="margin-top:4px">'+upcoming.map(function(b){
+      return '<div><span><b>'+esc(dt(b.start_at))+' · '+esc(tm(b.start_at))+'</b> — '+esc(b.restaurant)+'<br><small style="color:var(--faint)">'+esc(b.name)+' · '+esc(MODE[b.mode]||b.mode)+(b.phone?' · '+esc(b.phone):'')+'</small></span>'+
+        '<button class="btn sm" type="button" data-goto="'+esc(b.start_at)+'">Show</button></div>';
+    }).join("")+'</div>' : '<p class="empty">No demos booked yet. The booking link is in every Email Studio template.</p>';
+    $("#calBlocks").innerHTML = d.blocks.length ? d.blocks.map(function(k){
+      var same = localInput(k.start_at).slice(0,10)===localInput(k.end_at).slice(0,10);
+      var range = dt(k.start_at)+' '+tm(k.start_at)+' → '+(same?'':dt(k.end_at)+' ')+tm(k.end_at);
+      return '<div><span><b>'+esc(range)+'</b>'+(k.reason?' · '+esc(k.reason):'')+'</span><button class="btn sm" type="button" data-unblock="'+k.id+'">Remove</button></div>';
+    }).join("") : '<p class="empty" style="padding:4px 2px">No time off booked.</p>';
+  }
+
+  function renderDay(){
+    var d=CAL.data, x=d.days.filter(function(y){ return y.date===CAL.sel; })[0];
+    if(!x){ $("#calDay").innerHTML=""; return; }
+    var head='<div class="dayhead"><h3>'+esc(longDay(x.date))+'</h3>';
+    var future = x.slots.some(function(s){ return s.s!=="past"; });
+    if(x.day_block) head+='<button class="btn sm" type="button" data-unblock="'+x.day_block+'">Open this day again</button>';
+    else if(x.slots.length && future) head+='<button class="btn sm" type="button" id="calBlockDay">Block the whole day</button>';
+    head+='</div>';
+    if(!x.slots.length){
+      $("#calDay").innerHTML=head+'<p class="empty">Closed — '+esc(DOWS[x.dow])+' is switched off in your weekly hours. Tick it in Weekly hours to open '+esc(DOWS[x.dow])+'s.</p>';
+      return;
+    }
+    var html=x.slots.map(function(s){
+      var lab={free:"Free",blocked:s.l?s.l:"Blocked",booked:s.l||"Booked",busy:"Gap · "+(s.l||"demo"),past:"Too soon",beyond:"Not open yet",full:"Day full"}[s.s]||s.s;
+      var dis = /^(past|beyond|full)$/.test(s.s) ? ' disabled' : '';
+      return '<button type="button" class="slot '+s.s+'" data-slot="'+esc(s.t)+'"'+dis+' aria-pressed="'+(CAL.pick===s.t)+'"><b>'+esc(tm(s.t))+'</b><span>'+esc(lab)+'</span></button>';
+    }).join("");
+    var det="";
+    var pk=CAL.pick && x.slots.filter(function(s){ return s.t===CAL.pick; })[0];
+    if(pk && pk.b){
+      var b=d.bookings.filter(function(y){ return y.id===pk.b; })[0];
+      if(b){
+        det='<div class="bdetail"><b style="font-size:15px">'+esc(b.restaurant)+'</b> — '+esc(dt(b.start_at))+', '+esc(tm(b.start_at))+' ('+b.minutes+' min)'+
+          '<div style="color:var(--muted);margin-top:4px">'+esc(b.name)+' · '+esc(MODE[b.mode]||b.mode)+'<br>'+
+          '<a href="mailto:'+esc(b.email)+'" style="color:var(--cyan)">'+esc(b.email)+'</a>'+(b.phone?' · <a href="tel:'+esc(String(b.phone).replace(/[^\d+]/g,""))+'" style="color:var(--cyan)">'+esc(b.phone)+'</a>':'')+
+          (b.note?'<br>“'+esc(b.note)+'”':'')+'</div><div class="row">'+
+          (b.phone?'<a class="btn sm" href="tel:'+esc(String(b.phone).replace(/[^\d+]/g,""))+'">📞 Call</a>':'')+
+          '<button class="btn sm" type="button" data-cancel="'+b.id+'">Cancel this demo</button></div></div>';
+      }
+    }
+    $("#calDay").innerHTML=head+'<div class="slots">'+html+'</div>'+det;
+  }
+
+  function fillRules(){
+    var s=CAL.data.settings;
+    function pick(sel,v){ var el=$(sel), has=[].some.call(el.options,function(o){ return +o.value===+v; });
+      if(!has){ var o=document.createElement("option"); o.value=v; o.textContent=v; el.appendChild(o); } el.value=String(v); }
+    pick("#rLen",s.slot_minutes); pick("#rGap",s.buffer_minutes); pick("#rNotice",s.min_notice_hours); pick("#rAhead",s.days_ahead); pick("#rMax",s.max_per_day);
+    var names=["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+    $("#calHours").innerHTML=[1,2,3,4,5,6,7].map(function(i){
+      var w=s.weekly[String(i)]||{on:false,from:"10:00",to:"16:00"};
+      return '<div class="hr'+(w.on?'':' off')+'" data-dow="'+i+'"><label><input type="checkbox"'+(w.on?' checked':'')+' data-hon> '+names[i].slice(0,3)+'</label>'+
+        '<input type="time" step="900" value="'+esc(w.from)+'" data-hfrom aria-label="'+names[i]+' start"><span style="color:var(--faint)">to</span>'+
+        '<input type="time" step="900" value="'+esc(w.to)+'" data-hto aria-label="'+names[i]+' end"></div>';
+    }).join("");
+    $("#calSaved").textContent="";
+  }
+
+  function calBlock(startIso,endIso,reason,msg){
+    return callDemo("block",{start:startIso,end:endIso,reason:reason||null}).then(function(r){
+      toast(r.clashes ? msg+" — note: "+r.clashes+" booked demo"+(r.clashes>1?"s are":" is")+" still inside it" : msg);
+      calLoad(true);
+    }).catch(function(e){ toast(e.message); });
+  }
+  function calUnblock(id,msg){
+    return callDemo("unblock",{id:id}).then(function(){ toast(msg||"Open again"); calLoad(true); }).catch(function(e){ toast(e.message); });
+  }
+
+  $("#calDays").addEventListener("click",function(e){
+    var c=e.target.closest("[data-day]"); if(!c) return; CAL.sel=c.dataset.day; CAL.pick=null; renderCal();
+  });
+  $("#calPrev").addEventListener("click",function(){ if(!CAL.data) return; var f=addDays(CAL.from,-7); CAL.from = f<CAL.data.today?CAL.data.today:f; calLoad(); });
+  $("#calNext").addEventListener("click",function(){ if(!CAL.data) return; CAL.from=addDays(CAL.from,7); calLoad(); });
+  $("#calToday").addEventListener("click",function(){ CAL.from=null; calLoad(); });
+  $("#tab-cal").addEventListener("click",function(e){
+    var t;
+    if((t=e.target.closest("[data-slot]"))){
+      var x=CAL.data.days.filter(function(y){ return y.date===CAL.sel; })[0];
+      var s=x.slots.filter(function(y){ return y.t===t.dataset.slot; })[0]; if(!s) return;
+      if(s.s==="free"){
+        var end=new Date(Date.parse(s.t)+CAL.data.settings.slot_minutes*6e4).toISOString();
+        t.disabled=true; return calBlock(s.t,end,null,"Blocked "+tm(s.t)+" — tap it again to open it");
+      }
+      if(s.s==="blocked"){
+        var k=CAL.data.blocks.filter(function(y){ return y.id===s.k; })[0];
+        var single = k && Date.parse(k.start_at)===Date.parse(s.t) && Date.parse(k.end_at)-Date.parse(k.start_at)<=CAL.data.settings.slot_minutes*6e4;
+        if(single || !k){ t.disabled=true; return calUnblock(s.k,tm(s.t)+" is open again"); }
+        if(confirm(tm(s.t)+" is inside your time off"+(k.reason?" (“"+k.reason+"”)":"")+": "+dt(k.start_at)+" "+tm(k.start_at)+" → "+dt(k.end_at)+" "+tm(k.end_at)+".\n\nRemove that whole time off?"))
+          return calUnblock(k.id,"Time off removed");
+        return;
+      }
+      if(s.s==="busy"){ var bb=CAL.data.bookings.filter(function(y){ return y.id===s.b; })[0];
+        toast(bb ? "Kept clear for the demo with "+(bb.restaurant||"a restaurant")+" at "+tm(bb.start_at) : "Kept clear next to a demo"); return; }
+      if(s.s==="booked"){ CAL.pick = CAL.pick===s.t ? null : s.t; renderDay(); return; }
+      return;
+    }
+    if((t=e.target.closest("#calBlockDay"))){
+      var why=prompt("Block all of "+longDay(CAL.sel)+"? Add a reason if you like (only you see it):","Day off");
+      if(why===null) return;
+      return calBlock(sydISO(CAL.sel,"00:00"),sydISO(addDays(CAL.sel,1),"00:00"),why||"Day off",longDay(CAL.sel)+" blocked");
+    }
+    if((t=e.target.closest("[data-unblock]"))){ return calUnblock(t.dataset.unblock,"Time off removed"); }
+    if((t=e.target.closest("[data-cancel]"))){
+      var b=CAL.data.bookings.filter(function(y){ return y.id===t.dataset.cancel; })[0];
+      if(!confirm("Cancel the demo with "+(b?b.restaurant+" on "+dt(b.start_at)+" at "+tm(b.start_at):"this restaurant")+"?\n\nThe time becomes free again and the prospect goes back to “Replied” in your pipeline. They are NOT emailed — give them a call or send a note.")) return;
+      t.disabled=true;
+      return callDemo("cancel",{id:t.dataset.cancel}).then(function(){ toast("Demo cancelled — the time is free again"); CAL.pick=null; calLoad(true); })
+        .catch(function(e2){ t.disabled=false; toast(e2.message); });
+    }
+    if((t=e.target.closest("[data-goto]"))){
+      var iso=t.dataset.goto, day=localInput(iso).slice(0,10);
+      if(CAL.data.days.some(function(y){ return y.date===day; })){ CAL.sel=day; CAL.pick=iso; renderCal(); $("#calDay").scrollIntoView({behavior:"smooth",block:"center"}); }
+      else { CAL.from=day; CAL.sel=day; CAL.pick=iso; calLoad(true); }
+    }
+  });
+  $("#calHours").addEventListener("change",function(e){
+    var r=e.target.closest(".hr"); if(r && e.target.matches("[data-hon]")) r.classList.toggle("off",!e.target.checked);
+    $("#calSaved").textContent="Not saved yet";
+  });
+  $(".rules").addEventListener("change",function(){ $("#calSaved").textContent="Not saved yet"; });
+  $("#calSave").addEventListener("click",function(){
+    var b=this, weekly={}, bad="";
+    $("#calHours").querySelectorAll(".hr").forEach(function(r){
+      var w={on:r.querySelector("[data-hon]").checked, from:r.querySelector("[data-hfrom]").value||"10:00", to:r.querySelector("[data-hto]").value||"16:00"};
+      if(w.from>=w.to && !bad) bad=["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][+r.dataset.dow];
+      weekly[r.dataset.dow]=w;
+    });
+    if(bad){ toast(bad+": the start time must be before the end time"); return; }
+    b.disabled=true;
+    callDemo("settings",{settings:{weekly:weekly,slot_minutes:+$("#rLen").value,buffer_minutes:+$("#rGap").value,
+      min_notice_hours:+$("#rNotice").value,days_ahead:+$("#rAhead").value,max_per_day:+$("#rMax").value}})
+    .then(function(){ toast("Saved — the booking page now uses these hours"); calLoad(true); })
+    .catch(function(e){ toast(e.message); }).then(function(){ b.disabled=false; });
+  });
+  $("#oAdd").addEventListener("click",function(){
+    var f=$("#oFrom").value, t=$("#oTo").value;
+    if(!f||!t){ toast("Pick when the time off starts and ends"); return; }
+    if(t<=f){ toast("The end must be after the start"); return; }
+    var b=this; b.disabled=true;
+    calBlock(sydISO(f.slice(0,10),f.slice(11,16)),sydISO(t.slice(0,10),t.slice(11,16)),$("#oWhy").value.trim(),"Time off added")
+      .then(function(){ $("#oFrom").value=""; $("#oTo").value=""; $("#oWhy").value=""; b.disabled=false; });
+  });
+  $("#btnRefresh").addEventListener("click",function(){ refresh(); if(!$("#tab-cal").hidden) calLoad(true); });
   $("#btnSettings").addEventListener("click",openModal);
+  $("#btnOpenCal").addEventListener("click",function(){ $('nav.tabs [data-tab="cal"]').click(); window.scrollTo({top:0,behavior:"smooth"}); });
   $("#mCancel").addEventListener("click",closeAll);
   $("#scrim").addEventListener("click",closeAll);
   document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeAll(); });
   $("#mSave").addEventListener("click",function(){
     SET.url=$("#sUrl").value.trim()||DEFAULT_URL; SET.secret=$("#sSecret").value.trim(); SET.remember=$("#sRemember").checked;
-    saveSet(); closeAll(); refresh();
+    saveSet(); closeAll(); refresh(); CAL.data=null; calLoad();
   });
   $("#venueCards").addEventListener("click",function(e){ var c=e.target.closest("[data-venue]"); if(c) openDrawer(c.dataset.venue); });
   $("#drawer").addEventListener("click",function(e){
@@ -1130,7 +1451,7 @@
   $("#ideas").addEventListener("click",function(e){ var b=e.target.closest("[data-idea]"); if(b) useIdea(+b.dataset.idea); });
 
   /* ------------------------------------------------------------ boot */
-  if(SET.secret) refresh(); else { setConn("off","Not connected"); openModal(); }
+  if(SET.secret){ refresh(); calLoad(); } else { setConn("off","Not connected"); openModal(); }
 })();
 </script>
 </body>

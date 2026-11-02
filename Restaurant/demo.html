@@ -84,7 +84,7 @@
   </header>
 
   <div id="form">
-    <span class="eyebrow">Book a demo · 30 minutes</span>
+    <span class="eyebrow">Book a demo · <span id="len">30 minutes</span></span>
     <h1>See it working for your restaurant.</h1>
     <p class="lead">Pick a time that suits you. I’ll show you bookings, the digital waitlist and ordering at the table — working together on the tablets you already have. No commission, no pressure.</p>
 
@@ -168,7 +168,7 @@
   "use strict";
   var SB="https://tehxobdokbvqtwtgqzrh.supabase.co", KEY="sb_publishable_CrlY9xXYdhI7qCQwuMnDWg_hFQ3mXCJ";
   var $=function(s){ return document.querySelector(s); };
-  var S={slots:[],day:"",time:"",mode:""};
+  var S={slots:[],day:"",time:"",mode:"",minutes:30};
   var TZ="Australia/Sydney";
   function rpc(fn,body){
     return fetch(SB+"/rest/v1/rpc/"+fn,{method:"POST",headers:{"Content-Type":"application/json",apikey:KEY},body:JSON.stringify(body||{})})
@@ -214,7 +214,7 @@
   ["#fName","#fRest","#fEmail","#fPhone"].forEach(function(s){ $(s).addEventListener("input",check); });
 
   function icsLink(start){
-    var s=new Date(start), e=new Date(s.getTime()+30*60000);
+    var s=new Date(start), e=new Date(s.getTime()+(S.minutes||30)*60000);
     var f=function(d){ return d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,""); };
     var txt=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Webescapade//Restaurant Deluxe demo//EN","BEGIN:VEVENT","UID:"+Date.now()+"@webescapade.com",
       "DTSTAMP:"+f(new Date()),"DTSTART:"+f(s),"DTEND:"+f(e),"SUMMARY:Restaurant Deluxe demo with Marc","DESCRIPTION:Questions? Call Marc on 0413 872 994","END:VEVENT","END:VCALENDAR"].join("\r\n");
@@ -231,6 +231,8 @@
       window.scrollTo(0,0);
     }).catch(function(e){ $("#err").textContent=e.message||"Couldn’t book that time."; b.textContent="Book my demo"; check(); });
   });
+  rpc("rd_demo_info").then(function(i){ var m=+(i&&i.minutes)||30; S.minutes=m;
+    $("#len").textContent = m>=60 ? (m===60?"1 hour":m%60?Math.floor(m/60)+" h "+(m%60)+" min":(m/60)+" hours") : m+" minutes"; }).catch(function(){});
   load();
 })();
 </script>
