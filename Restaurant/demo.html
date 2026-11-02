@@ -61,7 +61,18 @@
   .done .tick{width:64px;height:64px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:30px;margin:0 auto 16px}
   .done a.btn{display:inline-block;margin:8px 6px 0;border:1px solid var(--line);border-radius:999px;padding:11px 18px;color:var(--ink);text-decoration:none;font-size:14px}
   .empty{color:var(--faint);font-family:var(--fmono);font-size:12px;padding:10px 0}
-  @media (max-width:820px){ .grid{grid-template-columns:1fr} .row2{grid-template-columns:1fr} }
+  .try{border:1px solid rgba(240,205,139,.3);background:linear-gradient(180deg,rgba(240,205,139,.07),transparent);border-radius:20px;padding:20px;margin:0 0 22px}
+  .try h2{margin:6px 0 6px;font-size:22px;letter-spacing:-.01em}
+  .try p.s{color:var(--muted);font-size:14.5px;margin:0 0 14px;line-height:1.55}
+  .tgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .tcard{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:16px;text-decoration:none;color:var(--ink);transition:border-color .2s,transform .2s}
+  .tcard:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .tcard .ic{font-size:26px}
+  .tcard b{font-size:16px}
+  .tcard span{color:var(--muted);font-size:13.5px;line-height:1.5}
+  .tcard em{font-style:normal;color:var(--gold);font-weight:700;font-size:13.5px;margin-top:auto;padding-top:6px}
+  .try .fine{font-size:12.5px;color:var(--faint);margin:12px 0 0}
+  @media (max-width:820px){ .grid{grid-template-columns:1fr} .row2{grid-template-columns:1fr} .tgrid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -76,6 +87,27 @@
     <span class="eyebrow">Book a demo · 30 minutes</span>
     <h1>See it working for your restaurant.</h1>
     <p class="lead">Pick a time that suits you. I’ll show you bookings, the digital waitlist and ordering at the table — working together on the tablets you already have. No commission, no pressure.</p>
+
+    <section class="try" aria-labelledby="tryH">
+      <span class="eyebrow" style="color:var(--gold)">Try it yourself now</span>
+      <h2 id="tryH">Be the guest for a minute.</h2>
+      <p class="s">Open these on your phone, just like a guest would — no app, nothing to install. In the demo I’ll show you the other side: the kitchen screen, the front counter and your bookings.</p>
+      <div class="tgrid">
+        <a class="tcard" href="../Resto-order-test/table-order.html?v=sunset-grill&amp;t=c8ddd5f9fb36459fb9" target="_blank" rel="noopener">
+          <span class="ic">📱</span><b>Order at the table</b>
+          <span>You’re at Table 7. Browse the menu, add a dish, send the order — it goes straight to the kitchen screen.</span>
+          <em>Open the menu →</em></a>
+        <a class="tcard" href="../Resto-order-test/waitlist.html?v=sunset-grill&amp;w=769d94ba39f4" target="_blank" rel="noopener">
+          <span class="ic">⏳</span><b>Join the waitlist</b>
+          <span>This is the QR at the door. Add a first name and party size, and watch your place in line live.</span>
+          <em>Join the queue →</em></a>
+        <a class="tcard" href="../restaurant-booking-supabase-with-crm-final.html?venue=sunset-grill&amp;name=Sunset%20Grill" target="_blank" rel="noopener">
+          <span class="ic">📅</span><b>Book a table</b>
+          <span>The online booking page your guests use, with live availability and an instant confirmation email.</span>
+          <em>Make a booking →</em></a>
+      </div>
+      <p class="fine">This is our demo restaurant, Sunset Grill — nothing is charged and no food is made. Orders are paid at the counter, so you’ll never be asked for a card.</p>
+    </section>
 
     <div class="grid">
       <div class="card">
