@@ -277,7 +277,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v25</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v26</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -744,15 +744,17 @@
             <div id="histWrap"><p class="empty">Nothing sent from this browser yet.</p></div>
             <div id="statsWrap"></div>
             <div class="btnrow">
+              <button class="btn primary" id="btnDeliv">Check delivery status</button>
               <button class="btn" id="btnStats">Refresh opens &amp; clicks</button>
               <button class="btn" id="btnRaw">Show recent events</button>
               <button class="btn" id="btnCheck">Check latest broadcast</button>
-              <button class="btn primary" id="btnReport">Export report</button>
+              <button class="btn" id="btnReport">Export report</button>
               <button class="btn" id="btnHistCsv">Export send log</button>
               <button class="btn" id="btnHistClear">Clear history</button>
             </div>
-            <p class="help">History is stored in this browser. Opens and clicks come from Supabase,
-               fed by the Resend webhook, and are counted per person rather than per event.</p>
+            <p class="help"><b>Check delivery status</b> asks Resend directly how every email sent to a list is doing:
+               delivered, opened, clicked or bounced. It works on any device. The list above is this browser’s own history;
+               “Refresh opens &amp; clicks” uses the Resend webhook.</p>
           </div>
         </details>
 
@@ -847,7 +849,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v25 \u00b7 new promo video';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v26 \u00b7 delivery tracking';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1946,21 +1948,39 @@
     return true;
   }
 
-  function doSend(recipients,label){
+  function newId(){
+    try{ if(window.crypto && crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+    var b=new Uint8Array(16); (window.crypto||{}).getRandomValues ? crypto.getRandomValues(b) : b.forEach(function(_,i){ b[i]=Math.random()*256|0; });
+    b[6]=(b[6]&15)|64; b[8]=(b[8]&63)|128;
+    var h=Array.prototype.map.call(b,function(x){ return (x+256).toString(16).slice(1); }).join('');
+    return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);
+  }
+
+  /* record:true = list sends. Every recipient is written to the send log in
+     Supabase BEFORE anything is sent, with the Resend receipt id, so
+     "Check delivery status" can follow each email (delivered, opened,
+     clicked, bounced) straight from Resend. */
+  function doSend(recipients,label,record){
     var c=camps[cur];
     logLine('Sending '+label+'\u2026');
-    call('send',{
+    var payload={
       from:fromAddress(), replyTo:(SET.replyTo||'').trim()||undefined,
       subject:c.subject, html:resolveTags(finalHtml(c)), text:resolveTags(buildText(c)),
       to:recipients, campaign:slug(c.name)
-    }).then(function(d){
-      addHist({ kind:(recipients.length===1?'test':'list'), campaign:c.name,
+    };
+    if(record){ payload.recordDelivery=true; payload.requestId=newId(); payload.repeatConfirmation='FOLLOWUP'; }
+    call('send',payload).then(function(d){
+      addHist({ kind:(recipients.length===1&&!record?'test':'list'), campaign:c.name,
                 count:d.sent, sent:d.sent, failed:d.failed||0 });
+      if(d.warning) logLine(d.warning,'warn');
       if(d.failed){
-        logLine('Sent '+d.sent+', failed '+d.failed+'.','warn');
+        logLine('Sent '+d.sent+', not confirmed or failed '+d.failed+'.','warn');
         (d.failures||[]).slice(0,5).forEach(function(f){ logLine('  '+f.to+' \u2014 '+f.error,'bad'); });
+        if((d.failures||[]).some(function(f){ return f.uncertain; }))
+          logLine('Do not send again. Use \u201cCheck delivery status\u201d in a minute to see what Resend has.','dim');
       } else {
         logLine('Sent to '+d.sent+' recipient'+(d.sent===1?'':'s')+'.','ok');
+        if(record) logLine('Saved to the send log. Use \u201cCheck delivery status\u201d to see delivered, opened and clicked.','dim');
         toast('Sent to '+d.sent);
       }
     }).catch(function(){});
@@ -1977,8 +1997,69 @@
     if(!guardBasics()) return;
     var to=parseList(SET.list);
     if(!to.length){ logLine('No valid addresses in the list.','bad'); return; }
-    if(!confirm('Send "'+camps[cur].subject+'" to '+to.length+' recipient'+(to.length===1?'':'s')+' now?')) return;
-    doSend(to,'to '+to.length+' recipient'+(to.length===1?'':'s'));
+    if(to.length>500){ logLine('That is more than 500 addresses \u2014 send in batches of 500.','bad'); return; }
+    logLine('Checking the send log for '+to.length+' address'+(to.length===1?'':'es')+'\u2026');
+    call('recipient_check',{to:to}).then(function(d){
+      var prev=d.previous||[], HOLD=['bounced','complained','suppressed','pending','unconfirmed','scheduled','delayed'];
+      var skip={}, before=0;
+      prev.forEach(function(p){ if(HOLD.indexOf(p.status)>=0) skip[p.recipient_email]=p.status; else before++; });
+      var send=to.filter(function(a){ return !skip[a]; }), nSkip=to.length-send.length;
+      if(nSkip){
+        logLine('Left out '+nSkip+': bounced, marked as spam, or an earlier send not confirmed yet.','warn');
+        Object.keys(skip).slice(0,5).forEach(function(a){ logLine('  '+a+' \u2014 '+skip[a],'dim'); });
+      }
+      if(!send.length){ logLine('Nobody left to send to.','bad'); return; }
+      var msg='Send "'+camps[cur].subject+'" to '+send.length+' recipient'+(send.length===1?'':'s')+' now?';
+      if(before) msg+='\n\n'+before+' of them had an earlier email from you (another campaign).';
+      if(nSkip) msg+='\n\n'+nSkip+' left out (bounced, spam complaint or not confirmed).';
+      msg+='\n\nPress OK once only.';
+      if(!confirm(msg)) return;
+      doSend(send,'to '+send.length+' recipient'+(send.length===1?'':'s'),true);
+    }).catch(function(){ logLine('Nothing was sent.','dim'); });
+  });
+
+  /* ---- delivery status, read straight from Resend (no webhook needed) ---- */
+  function deliveryRow(rows){
+    var n={sent:rows.length,delivered:0,opened:0,clicked:0,bounced:0,complained:0,waiting:0};
+    rows.forEach(function(r){
+      var s=r.status;
+      if(s==='delivered'||s==='opened'||s==='clicked') n.delivered++;
+      if(s==='opened'||s==='clicked') n.opened++;
+      if(s==='clicked') n.clicked++;
+      if(s==='bounced') n.bounced++;
+      if(s==='complained') n.complained++;
+      if(s==='sent'||s==='delayed'||s==='pending'||s==='unconfirmed') n.waiting++;
+    });
+    return n;
+  }
+  $('#btnDeliv').addEventListener('click',function(){
+    var subjects=camps.map(function(c){ return String(c.subject||'').trim(); }).filter(Boolean);
+    logLine('Asking Resend for the latest status of every email\u2026');
+    call('delivery_refresh',{subjects:subjects}).then(function(d){
+      if(d.warning) logLine(d.warning,'warn');
+      var rows=(d.deliveries||[]).filter(function(r){ return r.recipient_email; });
+      if(!rows.length){ logLine('No sends in the log yet.','warn'); return; }
+      var by={};
+      rows.forEach(function(r){ var k=r.subject||'(no subject)'; (by[k]=by[k]||[]).push(r); });
+      var mine=by[camps[cur].subject]||[];
+      if(mine.length){
+        var n=deliveryRow(mine);
+        renderStats({sent:n.sent,delivered:n.delivered,opened:n.opened,clicked:n.clicked,bounced:n.bounced},[]);
+        logLine('This campaign: '+n.sent+' sent \u00b7 '+n.delivered+' delivered \u00b7 '+n.opened+' opened \u00b7 '+n.clicked+' clicked'+
+          (n.bounced?' \u00b7 '+n.bounced+' bounced':'')+(n.complained?' \u00b7 '+n.complained+' spam':'')+(n.waiting?' \u00b7 '+n.waiting+' still on the way':'')+'.','ok');
+        var bad=mine.filter(function(r){ return r.status==='bounced'||r.status==='complained'; });
+        bad.slice(0,8).forEach(function(r){ logLine('  '+r.status+': '+r.recipient_email,'bad'); });
+      } else {
+        $('#statsWrap').innerHTML='';
+        logLine('Nothing in the log for this campaign\u2019s subject yet.','warn');
+      }
+      Object.keys(by).filter(function(k){ return k!==camps[cur].subject; }).slice(0,6).forEach(function(k){
+        var m=deliveryRow(by[k]);
+        logLine('  \u201c'+k.slice(0,48)+'\u201d \u2014 '+m.sent+' sent, '+m.delivered+' delivered, '+m.opened+' opened, '+m.clicked+' clicked'+(m.bounced?', '+m.bounced+' bounced':''),'dim');
+      });
+      if(!mine.some(function(r){ return r.status==='opened'||r.status==='clicked'; }) && mine.length)
+        logLine('Opens only show if open tracking is on: Resend \u2192 Domains \u2192 your domain \u2192 Open tracking.','dim');
+    }).catch(function(){});
   });
 
   function needAudience(){
