@@ -157,6 +157,143 @@ async function pipelineSync() {
   return { ok: true, updated, contacted, hot, flagged };
 }
 
+// ---------------------------------------------------------------- calls
+const CALL_LABEL: Record<string, string> = {
+  no_answer: "No answer", call_back: "Call back", interested: "Interested",
+  demo: "Demo booked", not_interested: "Not interested", note: "Note",
+};
+const sydDay = new Intl.DateTimeFormat("en-AU", { timeZone: "Australia/Sydney", day: "numeric", month: "short" });
+
+// One phone call (or note) on a prospect: saved to rd_prospect_calls, and the
+// pipeline moves on from it (status, next follow-up date, a dated note).
+async function logCall(body: any) {
+  const id = String(body.id || "");
+  if (!/^[0-9a-f-]{36}$/i.test(id)) throw new Error("No prospect was named");
+  const outcome = String(body.outcome || "");
+  if (!CALL_LABEL[outcome]) throw new Error("Choose what happened on the call");
+  const note = clip(body.note, 1000);
+  const rows = await db(`crm_prospects?id=eq.${id}&select=id,crm_status,crm_notes,follow_up_at`);
+  const p = rows?.[0];
+  if (!p) throw new Error("That prospect no longer exists");
+  const now = new Date();
+  const inDays = (n: number) => new Date(now.getTime() + n * 864e5).toISOString();
+  let next: string | null = null;
+  if (body.next_at) { const d = new Date(body.next_at); if (!isNaN(d.getTime())) next = d.toISOString(); }
+  const st = p.crm_status || "New";
+  const patch: any = { crm_updated_at: now.toISOString() };
+  switch (outcome) {
+    case "no_answer": patch.follow_up_at = next || inDays(1); if (st === "New") patch.crm_status = "Contacted"; break;
+    case "call_back": patch.follow_up_at = next || inDays(2); if (st === "New") patch.crm_status = "Contacted"; break;
+    case "interested": patch.follow_up_at = next || inDays(2); if (st === "New" || st === "Contacted") patch.crm_status = "Replied"; break;
+    case "demo": patch.follow_up_at = next || inDays(1); if (st !== "Trial" && st !== "Won") patch.crm_status = "Demo booked"; break;
+    case "not_interested": patch.follow_up_at = null; patch.crm_status = "Lost"; break;
+    case "note": if (next) patch.follow_up_at = next; break;
+  }
+  patch.crm_notes = (p.crm_notes ? p.crm_notes + "\n" : "") + `\u{1F4DE} ${sydDay.format(now)}: ${CALL_LABEL[outcome]}${note ? " \u2014 " + note : ""}`;
+  const call = await db("rd_prospect_calls", {
+    method: "POST", headers: { Prefer: "return=representation" },
+    body: JSON.stringify({ prospect_id: id, outcome, note, next_at: patch.follow_up_at ?? next ?? null }),
+  });
+  const up = await db(`crm_prospects?id=eq.${id}`, { method: "PATCH", headers: { Prefer: "return=representation" }, body: JSON.stringify(patch) });
+  return { ok: true, prospect: up?.[0] || null, call: call?.[0] || null };
+}
+
+// --------------------------------------------------------- weekly report
+const REPORT_TO = Deno.env.get("REPORT_TO") || "sales@webescapade.com";
+const CRM_LINK = "https://webescapade.com/CRM/venue-crm.html";
+const h = (v: unknown) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
+
+async function resendApi(path: string, init: RequestInit = {}) {
+  const key = Deno.env.get("RESEND_API_KEY");
+  if (!key) throw new Error("RESEND_API_KEY is not set");
+  const res = await fetch("https://api.resend.com" + path, {
+    ...init, headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", ...(init.headers || {}) },
+    signal: AbortSignal.timeout(20000),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || `Resend returned ${res.status}`);
+  return data;
+}
+
+async function weeklyReport(send: boolean) {
+  const [snap, emails, calls, founding] = await Promise.all([
+    snapshot(), emailLog(),
+    readAll("rd_prospect_calls?select=prospect_id,outcome,created_at&order=created_at.desc", 5000),
+    readAll("rd_venue_accounts?select=venue_id&founding=is.true"),
+  ]);
+  const now = Date.now(), wk = 7 * 864e5;
+  const t = (r: any) => Date.parse(r.sent_at || r.created_at) || 0;
+  const week = (a: number, b: number) => {
+    const rs = emails.filter((r: any) => t(r) >= now - b && t(r) < now - a);
+    const c = { sent: rs.length, delivered: 0, opened: 0, clicked: 0, bounced: 0 };
+    for (const r of rs) {
+      if (["delivered", "opened", "clicked"].includes(r.status)) c.delivered++;
+      if (["opened", "clicked"].includes(r.status)) c.opened++;
+      if (r.status === "clicked") c.clicked++;
+      if (["bounced", "complained", "suppressed"].includes(r.status)) c.bounced++;
+    }
+    return c;
+  };
+  const tw = week(0, wk), lw = week(wk, 2 * wk);
+  const prospects: any[] = snap.prospects || [];
+  const byEmail = new Map(prospects.map((p) => [String(p.email || "").trim().toLowerCase(), p]));
+  const open = (p: any) => p && !["Won", "Lost"].includes(p.crm_status || "New");
+  const hotMap = new Map<string, any>();
+  for (const r of emails) if (r.status === "clicked" && t(r) > now - wk) { const e = String(r.recipient_email).toLowerCase(); if (!hotMap.has(e)) hotMap.set(e, r); }
+  const hot = [...hotMap.entries()].map(([e, r]) => ({ p: byEmail.get(e), r })).filter((x) => open(x.p));
+  const callsW = calls.filter((c: any) => Date.parse(c.created_at) > now - wk);
+  const callsLW = calls.filter((c: any) => { const x = Date.parse(c.created_at); return x > now - 2 * wk && x <= now - wk; });
+  const demos = callsW.filter((c: any) => c.outcome === "demo").length;
+  const newLeads = prospects.filter((p) => Date.parse(p.created_at) > now - wk);
+  const web = newLeads.filter((p) => p.source === "Website enquiry");
+  const due = prospects.filter((p) => open(p) && p.follow_up_at && Date.parse(p.follow_up_at) <= now + 864e5)
+    .sort((a, b) => Date.parse(a.follow_up_at) - Date.parse(b.follow_up_at));
+  const trials = (snap.venues || []).filter((v: any) => v.stage === "trial" && v.trial_ends_on)
+    .map((v: any) => ({ v, d: Math.ceil((Date.parse(v.trial_ends_on) - now) / 864e5) })).filter((x: any) => x.d <= 7)
+    .sort((a: any, b: any) => a.d - b.d);
+  const status: Record<string, number> = {};
+  for (const p of prospects) status[p.crm_status || "New"] = (status[p.crm_status || "New"] || 0) + 1;
+
+  const from = new Date(now - wk), range = `${sydDay.format(from)} \u2013 ${sydDay.format(new Date(now))}`;
+  const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) + "%" : "\u2014");
+  const diff = (a: number, b: number) => (b || a ? (a >= b ? "\u25B2 " : "\u25BC ") + Math.abs(a - b) + " vs last week" : "");
+  const F = "Arial,Helvetica,sans-serif";
+  const kpi = (label: string, n: number | string, sub: string) =>
+    `<td style="width:33%;padding:6px"><div style="border:1px solid #e6e3f3;border-radius:10px;padding:12px;background:#faf9ff"><div style="font:600 10px ${F};letter-spacing:.12em;text-transform:uppercase;color:#7b7699">${h(label)}</div><div style="font:700 24px ${F};color:#1b1730;margin-top:4px">${h(n)}</div><div style="font:12px ${F};color:#6b6788;margin-top:2px">${h(sub)}</div></div></td>`;
+  const list = (title: string, rows: string[], empty: string) =>
+    `<h3 style="font:700 16px ${F};color:#1b1730;margin:22px 0 8px">${h(title)}</h3>` +
+    (rows.length ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">${rows.join("")}</table>` : `<p style="font:13px ${F};color:#8a86a3;margin:0">${h(empty)}</p>`);
+  const row = (a: string, b: string) => `<tr><td style="padding:8px 0;border-bottom:1px solid #eeecf6;font:14px ${F};color:#1b1730">${a}</td><td style="padding:8px 0;border-bottom:1px solid #eeecf6;font:13px ${F};color:#6b6788;text-align:right">${b}</td></tr>`;
+  const phone = (p: any) => (p?.phone ? `<a href="tel:${h(String(p.phone).replace(/[^0-9+]/g, ""))}" style="color:#0f8f7e;text-decoration:none;font-weight:700">${h(p.phone)}</a>` : "no phone");
+
+  const html = `<!doctype html><html><body style="margin:0;background:#f3f2f8"><div style="max-width:640px;margin:0 auto;padding:24px 16px">
+  <div style="background:#ffffff;border-radius:14px;padding:24px;border:1px solid #e6e3f3">
+  <div style="font:700 11px ${F};letter-spacing:.16em;text-transform:uppercase;color:#7c5cf0">Restaurant Deluxe \u00b7 weekly report</div>
+  <h1 style="font:700 24px ${F};color:#1b1730;margin:6px 0 2px">Your week in marketing</h1>
+  <div style="font:13px ${F};color:#6b6788">${h(range)}</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr>
+    ${kpi("Emails sent", tw.sent, diff(tw.sent, lw.sent))}${kpi("Opened", tw.opened, pct(tw.opened, tw.delivered) + " of delivered")}${kpi("Clicked", tw.clicked, pct(tw.clicked, tw.delivered) + " of delivered")}
+  </tr><tr>
+    ${kpi("Calls logged", callsW.length, diff(callsW.length, callsLW.length))}${kpi("Demos booked", demos, "from calls this week")}${kpi("New leads", newLeads.length, web.length + " from the website")}
+  </tr></table>
+  ${list("\u{1F525} Call these first \u2014 they clicked", hot.slice(0, 10).map((x) => row(`<b>${h(x.p.restaurant || x.p.name || "")}</b><br><span style="font-size:12px;color:#6b6788">clicked \u201c${h(x.r.subject)}\u201d</span>`, phone(x.p))), "Nobody clicked an email this week.")}
+  ${list("\u{1F310} New website enquiries", web.slice(0, 10).map((p) => row(`<b>${h(p.restaurant)}</b>${p.name ? " \u00b7 " + h(p.name) : ""}`, phone(p))), "No website enquiries this week.")}
+  ${list("\u23F0 Follow-ups due (today and tomorrow)", due.slice(0, 12).map((p) => row(`<b>${h(p.restaurant || p.name || "")}</b> <span style="font-size:12px;color:#6b6788">${h(p.crm_status || "New")}</span>`, phone(p))), "No follow-ups due.")}
+  ${trials.length ? list("\u23F3 Trials ending within 7 days", trials.map((x: any) => row(`<b>${h(x.v.name)}</b>`, x.d < 0 ? "ended " + -x.d + " days ago" : x.d === 0 ? "ends today" : "ends in " + x.d + " days")), "") : ""}
+  <h3 style="font:700 16px ${F};color:#1b1730;margin:22px 0 8px">Founding 5 and pipeline</h3>
+  <p style="font:14px ${F};color:#1b1730;margin:0 0 6px"><b>${founding.length} of 5</b> founding places taken.</p>
+  <p style="font:13px ${F};color:#6b6788;margin:0">${["New", "Contacted", "Replied", "Demo booked", "Trial", "Won", "Lost"].map((k) => `${k}: <b style="color:#1b1730">${status[k] || 0}</b>`).join(" \u00b7 ")}</p>
+  <div style="margin-top:24px"><a href="${CRM_LINK}" style="display:inline-block;background:#6d4df2;color:#ffffff;font:700 14px ${F};padding:12px 20px;border-radius:10px;text-decoration:none">Open the Venue CRM \u2192</a></div>
+  </div><p style="font:11px ${F};color:#9a96b3;text-align:center;margin:14px 0 0">Sent automatically every Monday morning by your Restaurant Deluxe CRM.</p></div></body></html>`;
+  const subject = `Your marketing week: ${tw.sent} sent \u00b7 ${tw.clicked} clicked \u00b7 ${hot.length + web.length} to call`;
+  if (!send) return { ok: true, subject, html, to: REPORT_TO };
+  const domains = await resendApi("/domains");
+  const dom = ((domains?.data ?? []) as any[]).find((d) => d?.status === "verified")?.name;
+  if (!dom) throw new Error("No verified sending domain in Resend");
+  const sent = await resendApi("/emails", { method: "POST", body: JSON.stringify({ from: `Restaurant Deluxe CRM <reports@${dom}>`, to: [REPORT_TO], subject, html }) });
+  return { ok: true, subject, to: REPORT_TO, id: sent?.id || null };
+}
+
 const EMAIL_RE = /^[^\s@,;()"<>]+@[^\s@,;()"<>]+\.[^\s@,;()"<>]{2,}$/;
 const clip = (v: unknown, n = 300) => {
   const t = String(v ?? "").replace(/\s+/g, " ").trim();
@@ -304,13 +441,23 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "Use POST" }, 405);
 
-  const expected = Deno.env.get("STUDIO_SECRET");
-  if (!expected) return json({ error: "STUDIO_SECRET is not set on this function" }, 500);
-  if (req.headers.get("x-studio-secret") !== expected) return json({ error: "Wrong studio secret" }, 401);
-
   let body: any;
   try { body = await req.json(); } catch { return json({ error: "Body was not valid JSON" }, 400); }
   const action = String(body.action || "");
+
+  // The Monday job (pg_cron) can only ask for the weekly report, with its own key from Vault.
+  const cronKey = req.headers.get("x-cron-key");
+  if (cronKey && action === "weekly_report") {
+    try {
+      const ok = await db("rpc/rd_cron_key_ok", { method: "POST", body: JSON.stringify({ p_key: cronKey }) });
+      if (ok !== true) return json({ error: "Wrong cron key" }, 401);
+      return json(await weeklyReport(true));
+    } catch (e) { console.error("weekly report failed", e); return json({ error: (e as Error).message }, 502); }
+  }
+
+  const expected = Deno.env.get("STUDIO_SECRET");
+  if (!expected) return json({ error: "STUDIO_SECRET is not set on this function" }, 500);
+  if (req.headers.get("x-studio-secret") !== expected) return json({ error: "Wrong studio secret" }, 401);
 
   try {
     switch (action) {
@@ -325,9 +472,24 @@ Deno.serve(async (req) => {
 
       // ---------------------------------------------------------- data
       case "snapshot": {
-        const [snap, emails] = await Promise.all([snapshot(), body.withEmails ? emailLog() : Promise.resolve(undefined)]);
-        return json({ ok: true, ...snap, ...(emails ? { emails } : {}), stages: STAGES, prospectStatuses: PROSPECT_STATUSES });
+        const [snap, emails, calls, founding] = await Promise.all([
+          snapshot(),
+          body.withEmails ? emailLog() : Promise.resolve(undefined),
+          body.withEmails ? readAll("rd_prospect_calls?select=prospect_id,outcome,note,next_at,created_at&order=created_at.desc", 5000) : Promise.resolve(undefined),
+          body.withEmails ? readAll("rd_venue_accounts?select=venue_id&founding=is.true") : Promise.resolve(undefined),
+        ]);
+        return json({ ok: true, ...snap, ...(emails ? { emails, calls, founding: (founding || []).map((r: any) => r.venue_id) } : {}),
+          stages: STAGES, prospectStatuses: PROSPECT_STATUSES });
       }
+
+      case "call_log":
+        return json(await logCall(body));
+
+      case "report_preview":
+        return json(await weeklyReport(false));
+
+      case "report_send":
+        return json(await weeklyReport(true));
 
       case "pipeline_sync":
         return json(await pipelineSync());
@@ -427,6 +589,7 @@ Deno.serve(async (req) => {
         for (const k of ["trial_ends_on", "started_on"]) {
           if (f[k] !== undefined) row[k] = f[k] || null;
         }
+        if (f.founding !== undefined) row.founding = f.founding === true || f.founding === "true";
         const rows = await db("rd_venue_accounts?on_conflict=venue_id", {
           method: "POST",
           headers: { Prefer: "resolution=merge-duplicates,return=representation" },

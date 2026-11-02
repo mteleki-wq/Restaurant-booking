@@ -1,0 +1,9 @@
+-- Restaurant Deluxe marketing additions (applied Nov 2026 via Supabase migrations
+-- rd_marketing_calls_enquiries_founding + rd_weekly_report_schedule). Kept here for reference.
+--  * enquiries: plan / tables / pos / demo columns (the landing form already sends them)
+--  * rd_prospect_calls: phone calls logged from the Venue CRM (server access only)
+--  * rd_venue_accounts.founding: Founding 5 flag
+--  * trigger rd_enquiry_to_prospect: website enquiry -> crm_prospects as a hot lead (Replied, call today)
+--  * pg_cron job rd-weekly-report: Monday 7:30 am AEDT (Sunday 20:30 UTC) -> rd-control weekly_report,
+--    authorised with a random key kept in Vault (rd_cron_key) and checked by public.rd_cron_key_ok()
+-- Report recipient: REPORT_TO edge secret, default sales@webescapade.com

@@ -150,7 +150,27 @@
   .trow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
   .trow b{font-size:14px} .trow .why{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
   .trow .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  #homeToday .trow{grid-template-columns:minmax(0,1fr)} #homeToday .trow .acts{justify-content:flex-start}
   .trow a.tel{color:var(--teal);font-weight:700;text-decoration:none;font-size:13.5px}
+
+  /* marketing home */
+  .hgrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:start}
+  .hcard{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:16px;margin-bottom:18px}
+  .hcard h3{margin:0 0 4px;font-size:16px}
+  .jrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center;border-top:1px solid var(--line2);padding:10px 0}
+  .jrow b{font-size:14px} .jrow span{display:block;font-size:12.5px;color:var(--muted)}
+  .jrow .num{font-family:var(--fmono);font-size:20px;font-weight:700;text-align:right}
+  .jrow .num.now{color:#ffb35a}
+  .fdots{display:flex;gap:8px;margin:10px 0}
+  .fdots i{width:34px;height:34px;border-radius:10px;border:1px dashed var(--line);display:grid;place-items:center;font-style:normal;font-size:13px;color:var(--faint)}
+  .fdots i.on{border:1px solid var(--gold);background:rgba(240,205,139,.14);color:var(--gold)}
+  .feed{display:grid;gap:2px;font-size:13px}
+  .feed div{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;padding:6px 0;border-top:1px solid var(--line2)}
+  .feed .d{font-family:var(--fmono);font-size:11px;color:var(--faint)}
+  .outs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0 12px}
+  .outs button{border:1px solid var(--line);background:var(--glass);color:var(--ink);border-radius:12px;padding:11px 10px;font-family:var(--fdisp);font-size:13.5px;font-weight:600;cursor:pointer;text-align:left}
+  .outs button[aria-pressed="true"]{border-color:var(--violet);background:rgba(139,92,246,.18)}
+  @media (max-width:900px){ .hgrid{grid-template-columns:1fr} }
 
   /* campaign results */
   .ctable{display:grid;gap:12px}
@@ -229,7 +249,7 @@
     <div class="mark">RD</div>
     <div class="title">
       <h1>Venue CRM</h1>
-      <p>Restaurant Deluxe · health · pipeline · campaigns · AI</p>
+      <p>Restaurant Deluxe · marketing · venues · pipeline · AI</p>
     </div>
     <div class="grow"></div>
     <span class="status" id="conn"><span class="d"></span><span id="connLbl">Not connected</span></span>
@@ -239,7 +259,8 @@
   </header>
 
   <nav class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-tab="health">Venue health<span class="ct" id="ctHealth"></span></button>
+    <button role="tab" aria-selected="true" data-tab="home">🏠 Today<span class="ct" id="ctHome"></span></button>
+    <button role="tab" aria-selected="false" data-tab="health">Venue health<span class="ct" id="ctHealth"></span></button>
     <button role="tab" aria-selected="false" data-tab="pipeline">Sales pipeline<span class="ct" id="ctPipe"></span></button>
     <button role="tab" aria-selected="false" data-tab="campaigns">📊 Campaign results</button>
     <button role="tab" aria-selected="false" data-tab="ai">✦ AI suggestions</button>
@@ -248,7 +269,31 @@
   <div id="banner"></div>
 
   <!-- ============ HEALTH ============ -->
-  <section id="tab-health">
+  <!-- ============ MARKETING HOME ============ -->
+  <section id="tab-home">
+    <span class="eyebrow">Marketing home</span>
+    <h2>Today</h2>
+    <p class="sub">Who to call, which follow-up emails are due, your Founding 5 places and how this week is going — Email Studio and pipeline together.</p>
+    <div class="kpis" id="homeKpis"></div>
+    <div class="hgrid">
+      <div>
+        <div id="homeToday"><div class="hcard"><p class="empty">Connect to load your day.</p></div></div>
+        <div class="hcard"><h3>✉ Follow-up emails due</h3>
+          <p class="help" style="margin:0 0 4px">From the Email Studio journey. Open the Studio, pick the campaign, tap <b>Check the journey</b>.</p>
+          <div id="homeJourney"></div></div>
+        <div class="hcard"><h3>🌐 Website enquiries <span class="tag">14 days</span></h3><div id="homeWeb"></div></div>
+      </div>
+      <div>
+        <div class="hcard"><h3>⭐ Founding 5</h3><div id="homeFounding"></div></div>
+        <div class="hcard"><h3>Recent activity</h3><div class="feed" id="homeFeed"></div></div>
+        <div class="hcard"><h3>📬 Weekly report</h3>
+          <p class="help" style="margin:0 0 10px">Emailed every Monday at 7:30 am to <b id="repTo">sales@webescapade.com</b>: emails, clicks, calls, new leads, follow-ups due and trials ending.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" id="btnRepPrev">Preview this week</button><button class="btn sm" type="button" id="btnRepSend">Email it to me now</button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-health" hidden>
     <span class="eyebrow">Live venues</span>
     <h2>How every restaurant is running</h2>
     <p class="sub">Red needs you today, amber is worth a look this week. A venue going quiet is usually the first sign it's slipping away — catch it early with a call or an email.</p>
@@ -317,6 +362,32 @@
     <button class="btn" id="mCancel" type="button">Cancel</button>
     <button class="btn primary" id="mSave" type="button">Connect</button>
   </div>
+</div>
+
+<!-- log a call -->
+<div class="modal" id="callModal" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+  <span class="eyebrow">Log a call</span>
+  <h3 id="cTitle" style="margin:6px 0 2px;font-size:20px"></h3>
+  <p class="help" id="cWho" style="margin:0"></p>
+  <div class="outs" id="cOuts">
+    <button type="button" data-out="no_answer" aria-pressed="false">📵 No answer<br><small style="color:var(--faint);font-weight:400">try again tomorrow</small></button>
+    <button type="button" data-out="call_back" aria-pressed="false">🔁 Call back<br><small style="color:var(--faint);font-weight:400">pick a date</small></button>
+    <button type="button" data-out="interested" aria-pressed="false">👍 Interested<br><small style="color:var(--faint);font-weight:400">→ Replied</small></button>
+    <button type="button" data-out="demo" aria-pressed="false">📅 Demo booked<br><small style="color:var(--faint);font-weight:400">→ Demo booked</small></button>
+    <button type="button" data-out="not_interested" aria-pressed="false">✋ Not interested<br><small style="color:var(--faint);font-weight:400">→ Lost</small></button>
+    <button type="button" data-out="note" aria-pressed="false">📝 Just a note</button>
+  </div>
+  <div class="field"><label for="cNext" id="cNextLbl">Next follow-up <span style="color:var(--faint);font-weight:400">(optional)</span></label><input type="date" id="cNext"></div>
+  <div class="field"><label for="cNote">Note</label><textarea id="cNote" rows="3" placeholder="What was said, what they need"></textarea></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+    <button class="btn" type="button" id="cCancel">Cancel</button>
+    <button class="btn primary" type="button" id="cSave">Save call</button>
+  </div>
+</div>
+<!-- report preview -->
+<div class="modal" id="repModal" role="dialog" aria-modal="true" style="width:min(700px,calc(100vw - 32px));padding:14px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px"><b id="repSubj" style="font-size:14px"></b><button class="btn sm" type="button" data-close>✕</button></div>
+  <iframe id="repFrame" title="Weekly report preview" style="width:100%;height:min(70vh,760px);border:0;border-radius:12px;background:#fff"></iframe>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -398,7 +469,7 @@
   function load(){
     return call("snapshot",{withEmails:true}).then(function(d){
       DATA=d; indexEmails(); setConn("on","Connected"); banner("");
-      renderHealth(); renderPipeline(); renderCampaigns();
+      renderHealth(); renderPipeline(); renderCampaigns(); renderHome();
     });
   }
   /* Opening the CRM: show what is saved straight away, then ask Resend for the
@@ -602,6 +673,7 @@
         '<div><label>Contact phone</label><input type="text" name="contact_phone" value="'+esc(v.contact_phone||"")+'"></div>'+
         '<div class="full"><label>Contact email</label><input type="email" name="contact_email" value="'+esc(v.contact_email||"")+'"></div>'+
         '<div class="full"><label>Notes</label><textarea name="notes" rows="4">'+esc(v.notes||"")+'</textarea></div>'+
+        '<div class="full"><label style="display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink)"><input type="checkbox" name="founding" style="width:auto"'+(isFounding(v.id)?" checked":"")+'> ⭐ Founding 5 restaurant</label></div>'+
       '</div>'+
       '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">'+
         '<button class="btn primary" type="button" data-save="'+esc(v.id)+'">Save</button>'+
@@ -611,16 +683,18 @@
     $("#drawer").classList.add("on"); $("#scrim").classList.add("on");
   }
   function fact(l,v){ return '<div><span>'+esc(l)+'</span>'+esc(v)+'</div>'; }
-  function closeAll(){ $("#drawer").classList.remove("on"); $("#modal").classList.remove("on"); $("#scrim").classList.remove("on"); }
+  function closeAll(){ ["#drawer","#modal","#callModal","#repModal","#scrim"].forEach(function(x){ $(x).classList.remove("on"); }); }
 
   function saveAccount(id,btn){
     var fields={};
-    $("#acctForm").querySelectorAll("[name]").forEach(function(el){ fields[el.name]=el.value; });
+    $("#acctForm").querySelectorAll("[name]").forEach(function(el){ fields[el.name]= el.type==="checkbox" ? el.checked : el.value; });
     if(fields.contact_email && !validEmail(fields.contact_email)){ toast("That contact email doesn't look right"); return; }
     btn.disabled=true;
     call("account_save",{venue_id:id,fields:fields}).then(function(){
-      var v=findVenue(id); Object.keys(fields).forEach(function(k){ v[k]= fields[k]===""?null:fields[k]; });
-      renderHealth(); openDrawer(id); toast("Saved");
+      var v=findVenue(id); Object.keys(fields).forEach(function(k){ if(k!=="founding") v[k]= fields[k]===""?null:fields[k]; });
+      var fl=DATA.founding||(DATA.founding=[]), at=fl.indexOf(id);
+      if(fields.founding && at<0) fl.push(id); if(!fields.founding && at>=0) fl.splice(at,1);
+      renderHealth(); renderHome(); openDrawer(id); toast("Saved");
     }).catch(function(e){ toast(e.message); }).then(function(){ btn.disabled=false; });
   }
 
@@ -684,6 +758,8 @@
             (p.website?'<a target="_blank" rel="noopener" href="'+esc(/^https?:/i.test(p.website)?p.website:"https://"+p.website)+'">Website ↗</a>':'')+
             (p.crm_updated_at?'<span>Updated '+esc(ago(p.crm_updated_at))+'</span>':'')+'</div>'+
           '<textarea data-f="crm_notes" rows="3" placeholder="Notes — what was said, what they need">'+esc(p.crm_notes||"")+'</textarea>'+
+          '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" data-logcall="'+esc(p.id)+'">📞 Log call</button>'+(p.phone?'<a class="btn sm" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎ Call '+esc(p.phone)+'</a>':'')+'</div>'+
+          callsHtml(p)+
           (rows.length?'<div><span class="eyebrow" style="font-size:9.5px">Emails sent</span><div class="hist">'+rows.slice(0,12).map(function(r){
             var k=r.status==="clicked"?"clicked":r.status==="opened"?"opened":(r.status==="bounced"||r.status==="complained"||r.status==="suppressed")?"bounced":"delivered";
             var lab={clicked:"Clicked",opened:"Opened",bounced:r.status==="complained"?"Spam":"Bounced",delivered:r.status==="delivered"?"Delivered":r.status==="sent"?"Sent":r.status}[k];
@@ -697,7 +773,7 @@
   function renderToday(){
     var ps=(DATA&&DATA.prospects)||[], now=Date.now(), list=[];
     ps.forEach(function(p){
-      var st=p.crm_status||"New"; if(EXIT.indexOf(st)>=0) return;
+      var st=p.crm_status||"New"; if(st==="Won"||st==="Lost") return;
       var en=engagement(p), clickAt=en.k==="clicked"&&en.best?when(en.best):0;
       var called=(HIDE[p.id]&&HIDE[p.id]>=clickAt) || (String(p.crm_notes||"").indexOf("Called after click")>=0 && Date.parse(p.crm_updated_at||0)>clickAt);
       var hot=clickAt && clickAt>now-7*864e5 && !called;
@@ -706,8 +782,9 @@
       list.push({p:p,hot:hot,clickAt:clickAt,why:hot?"Clicked \u201c"+(en.best.subject||"")+"\u201d "+ago(en.best.sent_at||en.best.created_at):"Follow-up due "+(daysSince(p.follow_up_at)?ago(p.follow_up_at):"today")});
     });
     list.sort(function(a,b){ return (b.hot-a.hot) || (b.clickAt-a.clickAt); });
-    if(!list.length){ $("#callToday").innerHTML=""; return; }
-    $("#callToday").innerHTML='<div class="today"><h3>📞 Call today <span class="tag">'+list.length+'</span></h3>'+
+    $("#ctHome").textContent = list.length ? list.length+" to call" : "";
+    if(!list.length){ $("#callToday").innerHTML=""; $("#homeToday").innerHTML='<div class="today"><h3>📞 Call today</h3><p class="help" style="margin:0">Nobody to call right now. Clicks from your emails and due follow-ups appear here.</p></div>'; return; }
+    var TODAY_HTML='<div class="today"><h3>📞 Call today <span class="tag">'+list.length+'</span></h3>'+
       '<p class="help" style="margin:0">Restaurants who clicked an email in the last 7 days, and follow-ups that are due. Mark them done, or move them along after you call.</p>'+
       '<div class="tl">'+list.slice(0,12).map(function(x){
         var p=x.p, st=p.crm_status||"New";
@@ -715,9 +792,11 @@
           '<span class="why">'+esc(x.why)+(p.name?' · '+esc(p.name):'')+'</span></div>'+
           '<div class="acts">'+(p.phone?'<a class="tel" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎ '+esc(p.phone)+'</a>':'<span class="help" style="margin:0">no phone</span>')+
           '<select data-tq="crm_status" aria-label="Status">'+PSTAT.map(function(s){ return '<option'+(s===st?" selected":"")+'>'+s+'</option>'; }).join("")+'</select>'+
+          '<button class="btn sm primary" type="button" data-logcall="'+esc(p.id)+'">📞 Log call</button>'+
           '<button class="btn sm" type="button" data-tdone="3">In 3 days</button>'+
           '<button class="btn sm" type="button" data-tdone="0">Done ✓</button></div></div>';
-      }).join("")+(list.length>12?'<p class="help">+'+(list.length-12)+' more — use the ⏰ Follow-up due and 🔥 Clicked filters below.</p>':'')+'</div></div>';
+      }).join("")+(list.length>12?'<p class="help">+'+(list.length-12)+' more — use the ⏰ Follow-up due and 🔥 Clicked filters in Sales pipeline.</p>':'')+'</div></div>';
+    $("#callToday").innerHTML=TODAY_HTML; $("#homeToday").innerHTML=TODAY_HTML;
   }
 
   /* ---- campaign results ---- */
@@ -762,13 +841,116 @@
     }).join("");
   }
 
+  /* ---- calls ---- */
+  var OUT_LABEL={no_answer:"📵 No answer",call_back:"🔁 Call back",interested:"👍 Interested",demo:"📅 Demo booked",not_interested:"✋ Not interested",note:"📝 Note"};
+  function callsOf(p){ return ((DATA&&DATA.calls)||[]).filter(function(c){ return c.prospect_id===p.id; }); }
+  function callsHtml(p){
+    var cs=callsOf(p); if(!cs.length) return "";
+    return '<div><span class="eyebrow" style="font-size:9.5px">Calls</span><div class="hist">'+cs.slice(0,10).map(function(c){
+      return '<div><span class="d">'+esc(new Date(c.created_at).toLocaleDateString("en-AU",{day:"numeric",month:"short"}))+'</span><span class="s">'+esc(OUT_LABEL[c.outcome]||c.outcome)+(c.note?' — '+esc(c.note):'')+'</span>'+
+        '<span class="eng none" style="border-style:solid">'+(c.next_at?'next '+esc(new Date(c.next_at).toLocaleDateString("en-AU",{day:"numeric",month:"short"})):'—')+'</span></div>';
+    }).join("")+'</div></div>';
+  }
+  var CALL={id:null,out:""};
+  function openCall(id){
+    var p=findProspect(id); if(!p) return;
+    CALL={id:id,out:""};
+    $("#cTitle").textContent=p.restaurant||p.name||"";
+    $("#cWho").textContent=[p.name,p.phone,p.crm_status||"New"].filter(Boolean).join(" · ");
+    $("#cOuts").querySelectorAll("[data-out]").forEach(function(b){ b.setAttribute("aria-pressed","false"); });
+    $("#cNext").value=""; $("#cNote").value="";
+    $("#callModal").classList.add("on"); $("#scrim").classList.add("on");
+  }
+  function saveCall(){
+    if(!CALL.out){ toast("Choose what happened on the call"); return; }
+    var d=$("#cNext").value, btn=$("#cSave"); btn.disabled=true;
+    call("call_log",{id:CALL.id,outcome:CALL.out,note:$("#cNote").value,next_at:d?d+"T09:00:00+11:00":null}).then(function(r){
+      var p=findProspect(CALL.id); if(p&&r.prospect) Object.assign(p,r.prospect);
+      if(r.call){ (DATA.calls=DATA.calls||[]).unshift(r.call); }
+      if(CALL.out!=="note" && p) HIDE[p.id]=Date.now();
+      try{ store.set("rdcrm.called",JSON.stringify(HIDE)); }catch(x){}
+      closeAll(); renderPipeline(); renderHome(); toast("Call saved");
+    }).catch(function(e){ toast(e.message); }).then(function(){ btn.disabled=false; });
+  }
+
+  /* ---- journey stage as data (for the home screen) ---- */
+  function journey(p){
+    var st=p.crm_status||"New"; if(EXIT.indexOf(st)>=0) return null;
+    if(DATA && (DATA.blocked||[]).indexOf(String(p.email||"").trim().toLowerCase())>=0) return null;
+    var rows=emailsOf(p); if(!rows.length) return null;
+    var main=rows.filter(function(r){ return !isFollowUp(r); })[0]; if(!main) return null;
+    var t0=when(main), fu=rows.some(function(r){ return isFollowUp(r) && when(r)>t0; }); if(fu) return null;
+    var s=main.status;
+    if(s==="clicked") return {k:"fu1",due:t0+864e5,subject:main.subject};
+    if(s==="opened") return {k:"fu2",due:t0+3*864e5,subject:main.subject};
+    if(s==="delivered"||s==="sent") return {k:"resend",due:t0+5*864e5,subject:main.subject};
+    return null;
+  }
+  function isFounding(id){ return ((DATA&&DATA.founding)||[]).indexOf(id)>=0; }
+  function renderHome(){
+    if(!DATA) return;
+    var now=Date.now(), wk=7*864e5, em=DATA.emails||[], calls=DATA.calls||[], ps=DATA.prospects||[];
+    function inW(t,a,b){ return t>=now-b && t<now-a; }
+    function wkE(a,b){ var c={sent:0,del:0,op:0,cl:0}; em.forEach(function(r){ if(!inW(when(r),a,b)) return; c.sent++;
+      if(/delivered|opened|clicked/.test(r.status)) c.del++; if(/opened|clicked/.test(r.status)) c.op++; if(r.status==="clicked") c.cl++; }); return c; }
+    var tw=wkE(0,wk), lw=wkE(wk,2*wk);
+    var cw=calls.filter(function(c){ return inW(Date.parse(c.created_at),0,wk); }), cl=calls.filter(function(c){ return inW(Date.parse(c.created_at),wk,2*wk); });
+    var demos=cw.filter(function(c){ return c.outcome==="demo"; }).length;
+    var leads=ps.filter(function(p){ return Date.parse(p.created_at)>now-wk; }), webW=leads.filter(function(p){ return p.source==="Website enquiry"; });
+    function vs(a,b){ return (a||b)?'<span class="'+(a>=b?"up":"down")+'">'+(a>=b?"▲ ":"▼ ")+Math.abs(a-b)+'</span> vs last week':"this week"; }
+    function pc(a,b){ return b?Math.round(a/b*100)+"%":"—"; }
+    $("#homeKpis").innerHTML=[
+      kpi("Emails sent · 7 days",tw.sent,vs(tw.sent,lw.sent)),
+      kpi("Opened",tw.op,pc(tw.op,tw.del)+" of delivered"),
+      kpi("Clicked",tw.cl,pc(tw.cl,tw.del)+" of delivered",tw.cl?"good":""),
+      kpi("Calls logged",cw.length,vs(cw.length,cl.length)),
+      kpi("Demos booked",demos,"from calls this week",demos?"good":""),
+      kpi("New leads",leads.length,webW.length+" from the website")
+    ].join("");
+
+    /* follow-up journey */
+    var J={fu1:{t:"Follow-up 1 — clicked: call Marc",now:0,later:0,next:null},fu2:{t:"Follow-up 2 — opened: quick answers",now:0,later:0,next:null},resend:{t:"Re-send with a new subject — not opened",now:0,later:0,next:null}};
+    ps.forEach(function(p){ var j=journey(p); if(!j) return; var g=J[j.k]; if(j.due<=now) g.now++; else { g.later++; if(!g.next||j.due<g.next) g.next=j.due; } });
+    $("#homeJourney").innerHTML=Object.keys(J).map(function(k){ var g=J[k];
+      return '<div class="jrow"><div><b>'+esc(g.t)+'</b><span>'+(g.now?g.now+' due now':'none due now')+(g.later?' · '+g.later+' more from '+esc(day(g.next)):'')+'</span></div><div class="num'+(g.now?" now":"")+'">'+g.now+'</div></div>';
+    }).join("")+'<div style="margin-top:10px"><a class="btn sm" href="'+STUDIO_URL+'" target="rd-email-studio">Open the Email Studio →</a></div>';
+
+    /* website enquiries */
+    var web=ps.filter(function(p){ return p.source==="Website enquiry" && Date.parse(p.created_at)>now-14*864e5; }).sort(function(a,b){ return Date.parse(b.created_at)-Date.parse(a.created_at); });
+    $("#homeWeb").innerHTML=web.length?'<div class="tl" style="display:grid;gap:8px;margin-top:8px">'+web.slice(0,8).map(function(p){
+      return '<div class="trow" data-id="'+esc(p.id)+'"><div><b>'+esc(p.restaurant||"")+'</b><span class="why">'+esc([p.name,ago(p.created_at),p.crm_status].filter(Boolean).join(" · "))+'</span></div>'+
+        '<div class="acts">'+(p.phone?'<a class="tel" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎ '+esc(p.phone)+'</a>':'')+'<button class="btn sm primary" type="button" data-logcall="'+esc(p.id)+'">📞 Log call</button></div></div>';
+    }).join("")+'</div>':'<p class="help" style="margin:6px 0 0">None yet. Enquiries from webescapade.com/Restaurant appear here and in your pipeline straight away, as hot leads to call.</p>';
+
+    /* founding 5 */
+    var fv=(DATA.venues||[]).filter(function(v){ return isFounding(v.id); });
+    var dots=""; for(var i=0;i<5;i++) dots+='<i class="'+(i<fv.length?"on":"")+'">'+(i<fv.length?"★":i+1)+'</i>';
+    $("#homeFounding").innerHTML='<div class="fdots">'+dots+'</div><p style="margin:0 0 6px;font-size:14px"><b>'+fv.length+' of 5</b> founding places taken'+(fv.length>=5?' — full!':'')+'.</p>'+
+      (fv.length?fv.map(function(v){ var dl=daysUntil(v.trial_ends_on);
+        return '<div class="jrow"><div><b>'+esc(v.name)+'</b><span>'+esc(STAGE_LABEL[v.stage]||"No stage")+(v.plan?' · '+esc(v.plan):'')+'</span></div><div class="num'+(v.stage==="trial"&&dl!=null&&dl<=7?" now":"")+'" style="font-size:13px">'+(v.stage==="trial"&&dl!=null?(dl>=0?dl+" days left":"trial over"):v.stage==="paying"?"paying ✓":"")+'</div></div>'; }).join("")
+      :'<p class="help" style="margin:0">When a restaurant takes a place, open it in <b>Venue health</b> and tick <b>⭐ Founding 5 restaurant</b>.</p>');
+
+    /* activity feed */
+    var feed=[];
+    em.forEach(function(r){ var t=when(r); if(t<now-7*864e5) return;
+      if(r.status==="clicked") feed.push({t:t,h:'🔥 <b>'+esc(nameOf(r.recipient_email))+'</b> clicked “'+esc(r.subject)+'”'});
+      else if(r.status==="bounced"||r.status==="complained") feed.push({t:t,h:'⚠ '+esc(nameOf(r.recipient_email))+' '+esc(r.status)});
+    });
+    calls.forEach(function(c){ var t=Date.parse(c.created_at); if(t<now-7*864e5) return; var p=findProspect(c.prospect_id);
+      feed.push({t:t,h:(OUT_LABEL[c.outcome]||"📞")+' — <b>'+esc(p?(p.restaurant||p.name):"")+'</b>'+(c.note?' · '+esc(c.note):'')}); });
+    web.forEach(function(p){ feed.push({t:Date.parse(p.created_at),h:'🌐 New website enquiry — <b>'+esc(p.restaurant||"")+'</b>'}); });
+    feed.sort(function(a,b){ return b.t-a.t; });
+    $("#homeFeed").innerHTML=feed.length?feed.slice(0,14).map(function(f){ return '<div><span class="d">'+esc(ago(new Date(f.t).toISOString()))+'</span><span>'+f.h+'</span></div>'; }).join(""):'<p class="help" style="margin:0">Nothing in the last 7 days yet.</p>';
+  }
+  function nameOf(email){ var p=null, e=String(email||"").toLowerCase(); ((DATA&&DATA.prospects)||[]).some(function(x){ if(String(x.email||"").toLowerCase()===e){ p=x; return true; } return false; }); return p?(p.restaurant||p.name||e):e; }
+
   function findProspect(id){ return ((DATA&&DATA.prospects)||[]).filter(function(p){ return p.id===id; })[0]; }
   function updateProspect(id,field,value){
     var p=findProspect(id); if(!p) return;
     var payload={id:id}; payload[field]= field==="follow_up_at" ? (value?value+"T09:00:00+11:00":null) : value;
     call("prospect_update",payload).then(function(d){
       if(d.prospect) Object.assign(p,d.prospect);
-      if(field!=="crm_notes") renderPipeline();
+      if(field!=="crm_notes"){ renderPipeline(); renderHome(); }
       toast("Saved");
     }).catch(function(e){ toast(e.message); });
   }
@@ -843,7 +1025,7 @@
   document.querySelectorAll("nav.tabs button").forEach(function(b){
     b.addEventListener("click",function(){
       document.querySelectorAll("nav.tabs button").forEach(function(x){ x.setAttribute("aria-selected",String(x===b)); });
-      ["health","pipeline","campaigns","ai"].forEach(function(t){ $("#tab-"+t).hidden = t!==b.dataset.tab; });
+      ["home","health","pipeline","campaigns","ai"].forEach(function(t){ $("#tab-"+t).hidden = t!==b.dataset.tab; });
     });
   });
   $("#btnRefresh").addEventListener("click",refresh);
@@ -868,6 +1050,32 @@
     if(c.dataset.due){ PF.due=!PF.due; PF.status=""; } else { PF.due=false; PF.status=c.dataset.st; }
     PF.limit=60; renderPipeline();
   });
+  document.addEventListener("click",function(e){
+    var b=e.target.closest&&e.target.closest("[data-logcall]"); if(b){ e.preventDefault(); openCall(b.dataset.logcall); return; }
+    var o=e.target.closest&&e.target.closest("#cOuts [data-out]");
+    if(o){ CALL.out=o.dataset.out; $("#cOuts").querySelectorAll("[data-out]").forEach(function(x){ x.setAttribute("aria-pressed",String(x===o)); });
+      $("#cNextLbl").innerHTML = CALL.out==="demo" ? "Demo date" : CALL.out==="call_back" ? "Call back on" : 'Next follow-up <span style="color:var(--faint);font-weight:400">(optional)</span>';
+      return; }
+    if(e.target.closest&&e.target.closest("#repModal [data-close]")) closeAll();
+  });
+  $("#cCancel").addEventListener("click",closeAll);
+  $("#cSave").addEventListener("click",saveCall);
+  $("#homeToday").addEventListener("change",function(e){
+    var el=e.target.closest("[data-tq]"); if(!el) return;
+    updateProspect(el.closest(".trow").dataset.id,"crm_status",el.value);
+  });
+  $("#homeToday").addEventListener("click",function(e){ var b=e.target.closest("[data-tdone]"); if(b) todayDone(b); });
+  $("#btnRepPrev").addEventListener("click",function(){
+    var b=this; b.disabled=true;
+    call("report_preview").then(function(r){
+      $("#repSubj").textContent=r.subject+" → "+r.to; $("#repTo").textContent=r.to;
+      $("#repFrame").srcdoc=r.html; $("#repModal").classList.add("on"); $("#scrim").classList.add("on");
+    }).catch(function(e){ toast(e.message); }).then(function(){ b.disabled=false; });
+  });
+  $("#btnRepSend").addEventListener("click",function(){
+    var b=this; if(!confirm("Email this week’s report to "+$("#repTo").textContent+" now?")) return; b.disabled=true;
+    call("report_send").then(function(r){ toast("Report sent to "+r.to); }).catch(function(e){ toast(e.message); }).then(function(){ b.disabled=false; });
+  });
   $("#engChips").addEventListener("click",function(e){
     var c=e.target.closest("[data-eng]"); if(!c) return;
     PF.eng = PF.eng===c.dataset.eng ? "" : c.dataset.eng; PF.limit=60; renderPipeline();
@@ -877,7 +1085,9 @@
     updateProspect(el.closest(".trow").dataset.id,"crm_status",el.value);
   });
   $("#callToday").addEventListener("click",function(e){
-    var b=e.target.closest("[data-tdone]"); if(!b) return;
+    var b=e.target.closest("[data-tdone]"); if(b) todayDone(b);
+  });
+  function todayDone(b){
     var id=b.closest(".trow").dataset.id, n=+b.dataset.tdone, p=findProspect(id);
     var d=n?new Date(Date.now()+n*864e5).toISOString().slice(0,10):"";
     var en=engagement(p);
@@ -889,7 +1099,7 @@
       try{ store.set("rdcrm.called",JSON.stringify(HIDE)); }catch(x){}
     }
     updateProspect(id,"follow_up_at",d);
-  });
+  }
   $("#pSearch").addEventListener("input",function(){ PF.q=this.value; PF.limit=60; renderPipeline(); });
   $("#pPriority").addEventListener("change",function(){ PF.prio=this.value; PF.limit=60; renderPipeline(); });
   $("#pMore").addEventListener("click",function(){ PF.limit+=60; renderPipeline(); });
