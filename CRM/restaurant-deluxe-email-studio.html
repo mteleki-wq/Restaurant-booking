@@ -162,6 +162,12 @@
   .tagx.tst{color:var(--cyan);border-color:rgba(34,211,238,.4)}
   .tagx.lst{color:var(--teal);border-color:rgba(45,212,191,.4)}
   .tagx.bc{color:var(--gold);border-color:rgba(240,205,139,.4)}
+  .jr-row{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;background:var(--glass)}
+  .jr-row .jr-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .jr-row b.n{font-size:22px;margin-right:6px}
+  .jr-row .jr-due{font-family:var(--fmono);font-size:12px}
+  .jr-row .jr-due.now{color:var(--good,#5ad19a)} .jr-row .jr-due.wait{color:var(--faint)} .jr-row .jr-due.done{color:var(--faint)}
+  .jr-row p{margin:6px 0 8px;color:var(--faint);font-size:13px}
   .empty{color:var(--faint);font-family:var(--fmono);font-size:12px;padding:10px 2px}
   .imgbox{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);
     border-radius:12px;padding:12px;background:var(--glass);margin-bottom:10px}
@@ -277,7 +283,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v26</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v27</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -759,16 +765,18 @@
         </details>
 
         <details class="grp">
-          <summary>Follow up on this campaign</summary>
+          <summary>Follow-up journey</summary>
           <div class="grp-body">
-            <p class="help" style="margin-top:0">Build a list from what people actually did, then choose a
-               different campaign and send to just them.</p>
-            <div class="btnrow"><button class="btn" id="btnSegment">Build follow-up lists</button></div>
-            <div id="segWrap"></div>
+            <p class="help" style="margin-top:0">Choose the campaign you sent (left), then tap <b>Check the journey</b>.
+               Restaurants are grouped by what they did &mdash; clicked, opened, or not opened &mdash; and each group gets
+               its own follow-up when it is due. Nothing is sent until you press <b>Send to the list</b>.</p>
+            <div class="btnrow"><button class="btn primary" type="button" data-act="jr-check">Check the journey</button></div>
+            <div id="jrWrap"></div>
+            <div hidden><button class="btn" id="btnSegment">Build follow-up lists</button><div id="segWrap"></div></div>
             <div class="note warn" style="margin-top:12px">
               <b>Anyone who bounced, complained or unsubscribed is removed automatically.</b>
-              A direct send does not check your audience the way a broadcast does, so the studio
-              checks for you. Pick the audience above first so unsubscribes can be read.
+              So is anyone you have marked Replied, Demo booked, Trial, Won or Lost in the Venue CRM,
+              and anyone who already received that follow-up. At most three follow-ups per campaign.
             </div>
           </div>
         </details>
@@ -849,7 +857,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v26 \u00b7 delivery tracking';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v27 \u00b7 follow-up journey';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -956,7 +964,7 @@
       finalHeading:"Five places. Let’s talk.",
       finalSub:CALL_ME+" Or simply reply to this email.",
       finalCta:"Call Marc", finalUrl:"tel:0413872994",
-      subject:"Bookings, walk-ins and orders on one screen",
+      subject:"Bookings, walk-ins and orders on one screen", resendSubject:"28 days free, set up for you",
       preheader:"First 5 restaurants: "+FOUNDER_DAYS+" days free, set up on your own screens."
     }),
     preset({
@@ -988,7 +996,7 @@
       finalHeading:"Five founding places. Let’s talk.",
       finalSub:CALL_ME+" Or simply reply to this email.",
       finalCta:"Call Marc", finalUrl:"tel:0413872994",
-      subject:"Stop giving walk-ins your booked tables",
+      subject:"Stop giving walk-ins your booked tables", resendSubject:"Bookings and walk-ins, on one screen",
       preheader:"Bookings, waitlist and ordering on one screen. First 5 restaurants: "+FOUNDER_DAYS+" days free."
     }),
     preset({
@@ -1182,6 +1190,44 @@
       finalCta:"Talk to Marc", finalUrl:CONTACT,
       subject:"What did you think of the booking demo?",
       preheader:"Happy to answer anything about how it would work at your restaurant."
+    }),
+    /* ---- follow-up journey templates (loaded by the Follow-up journey panel) ---- */
+    preset({
+      name:"Follow-up 1 — clicked: call Marc", desc:"Journey: people who clicked, 1 day later",
+      followup:"clicked", followDays:1,
+      badge:"FOUNDING OFFER — 5 PLACES",
+      eyebrow:"A quick note from Marc",
+      headline:"Shall I show you how it would work at your place?",
+      intro:"Thanks for taking a look at Restaurant Deluxe.\n\nI’m Marc, a hospitality trainer and web developer here in Sydney, and I built this for restaurants like yours. If you have 15 minutes, I’ll show you how bookings, the digital waitlist and ordering at the table would work in your venue, on the tablets you already have.\n\nNo pressure, and no commission on bookings or orders, ever. If it isn’t right for you, I’ll tell you.",
+      cta1:"Call Marc · 0413 872 994", cta1url:"tel:0413872994",
+      cta2:"Reply with a good time", cta2url:CONTACT,
+      featOn:false, spotOn:false, priceOn:false, finalOn:false,
+      subject:"Shall I show you how it works?",
+      preheader:"15 minutes, on your own tablets. First 5 restaurants: "+FOUNDER_DAYS+" days free."
+    }),
+    preset({
+      name:"Follow-up 2 — opened: quick answers", desc:"Journey: opened but didn’t click, 3 days later",
+      followup:"openedNotClicked", followDays:3,
+      badge:"FOUNDING OFFER — 5 PLACES",
+      eyebrow:"Straight answers",
+      headline:"Will it work with what you already have? Yes.",
+      intro:"Here are short answers to the first questions most owners ask about Restaurant Deluxe.",
+      videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch the 1-minute video", videoPos:"hero",
+      cta1:"Call Marc · 0413 872 994", cta1url:"tel:0413872994",
+      cta2:"Reply with a question", cta2url:CONTACT,
+      featEyebrow:"Four quick answers", featHeading:"Your screens, your POS,\nyour bookings, the price.",
+      cards:[
+        {n:"01", t:"Your tablets and screens", d:"It runs in a web browser, so the tablets or computers you have are enough. We supply software only."},
+        {n:"02", t:"Your POS and bookings", d:"It works alongside your POS. Online bookings and the waitlist share the front-counter screen."},
+        {n:"03", t:"What it costs", d:"After "+FOUNDER_DAYS+" days: $149 a month with bookings, or $109 for ordering and waitlist. No commission."},
+        {n:"04", t:"Set up for you", d:"We import your menu and connect your screens during the free trial."}
+      ],
+      spotOn:false, priceOn:false,
+      finalHeading:"Easier to talk it through?",
+      finalSub:CALL_ME+" Or simply reply to this email.",
+      finalCta:"Call Marc", finalUrl:"tel:0413872994",
+      subject:"Will it work with your tablets?",
+      preheader:"Short answers: screens, POS, bookings and price. No commission."
     })
   ];
 
@@ -1969,6 +2015,8 @@
       to:recipients, campaign:slug(c.name)
     };
     if(record){ payload.recordDelivery=true; payload.requestId=newId(); payload.repeatConfirmation='FOLLOWUP'; }
+    var jctx=(record && JRN.send && JRN.send.subject===c.subject) ? JRN.send : null;
+    if(jctx){ payload.followUpDeliveryIds=jctx.ids; payload.followUpSegment=jctx.seg; }
     call('send',payload).then(function(d){
       addHist({ kind:(recipients.length===1&&!record?'test':'list'), campaign:c.name,
                 count:d.sent, sent:d.sent, failed:d.failed||0 });
@@ -1981,6 +2029,7 @@
       } else {
         logLine('Sent to '+d.sent+' recipient'+(d.sent===1?'':'s')+'.','ok');
         if(record) logLine('Saved to the send log. Use \u201cCheck delivery status\u201d to see delivered, opened and clicked.','dim');
+        if(jctx){ JRN.send=null; logLine('Follow-up sent. \u201cCheck the journey\u201d will now show this group as done.','dim'); }
         toast('Sent to '+d.sent);
       }
     }).catch(function(){});
@@ -2016,6 +2065,137 @@
       if(!confirm(msg)) return;
       doSend(send,'to '+send.length+' recipient'+(send.length===1?'':'s'),true);
     }).catch(function(){ logLine('Nothing was sent.','dim'); });
+  });
+
+  /* ---- follow-up journey ----
+     Groups come from the send log (Resend receipts), via the server's
+     delivery_followups, which also removes bounced, complained and
+     unsubscribed addresses. The server re-checks every follow-up send
+     against the same group, so nobody outside it can be emailed. */
+  var JRN={ source:null, ids:[], base:null, seg:null, sent:{}, exits:{}, prospects:{}, send:null };
+  var JR_GROUPS=[
+    {k:'clicked', t:'Clicked', d:'Warm: they watched the video or tapped a button. Personal note: offer a 15-minute call.', days:1},
+    {k:'openedNotClicked', t:'Opened, didn\u2019t click', d:'Interested, not convinced. Short answers to the usual questions, with the video.', days:3},
+    {k:'notOpened', t:'Not opened', d:'Didn\u2019t see it. The same email once more, with a new subject line.', days:5}
+  ];
+  var JR_EXIT=['Replied','Demo booked','Trial','Won','Lost'];
+  function jrDay(ms){ return new Date(ms).toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}); }
+  function jrTemplateFor(k){
+    for(var i=0;i<camps.length;i++) if(camps[i].followup===k && k!=='notOpened') return i;
+    return -1;
+  }
+  function jrResendSubject(src){ return String(src.resendSubject||'').trim(); }
+  function jrSubjectFor(k){
+    if(k==='notOpened') return jrResendSubject(JRN.source)||'';
+    var i=jrTemplateFor(k); return i>=0 ? camps[i].subject : '';
+  }
+  act('jr-check',function(){
+    var src=camps[cur];
+    if(src.followup){
+      if(!JRN.source){ logLine('Choose the campaign you originally sent, not a follow-up template, then check again.','warn'); return; }
+      src=JRN.source;
+    }
+    $('#jrWrap').innerHTML='<div class="ai-busy"><i></i>Reading the send log and Resend\u2026</div>';
+    var subjects=camps.map(function(c){ return String(c.subject||'').trim(); }).filter(Boolean);
+    if(jrResendSubject(src)) subjects.push(jrResendSubject(src));
+    var crm=aiCall('snapshot',{}).then(function(d){ return d.prospects||[]; }).catch(function(e){ logLine('Venue CRM not read ('+((e&&e.message)||e)+'). Replied or won restaurants may still be in the lists.','warn'); return null; });
+    call('delivery_refresh',{subjects:subjects}).then(function(d){
+      if(d.warning) logLine(d.warning,'warn');
+      var rows=(d.deliveries||[]).filter(function(r){ return r.recipient_email && r.id; });
+      var mine=rows.filter(function(r){ return r.subject===src.subject; });
+      if(!mine.length){ $('#jrWrap').innerHTML='<p class="empty">Nothing in the send log for \u201c'+esc(src.subject)+'\u201d yet. Send it to a list first.</p>'; return; }
+      var base=Math.min.apply(null,mine.map(function(r){ return new Date(r.sent_at||r.created_at).getTime(); }));
+      var sent={};
+      rows.forEach(function(r){ (sent[r.subject]=sent[r.subject]||{})[String(r.recipient_email).toLowerCase()]=1; });
+      JRN.source=JSON.parse(JSON.stringify(src)); JRN.ids=mine.slice(0,500).map(function(r){ return r.id; }); JRN.base=base; JRN.sent=sent;
+      return Promise.all([ call('delivery_followups',{deliveryIds:JRN.ids}), crm ]).then(function(r){
+        JRN.seg=r[0].segments||{}; JRN.excluded=r[0].excluded||0;
+        JRN.exits={}; JRN.prospects={};
+        (r[1]||[]).forEach(function(p){
+          var e=String(p.email||'').trim().toLowerCase(); if(!e) return;
+          JRN.prospects[e]=p; if(JR_EXIT.indexOf(p.crm_status)>=0) JRN.exits[e]=p.crm_status;
+        });
+        jrRender();
+      });
+    }).catch(function(e){ $('#jrWrap').innerHTML='<div class="note warn">'+esc((e&&e.message)||'Could not read the journey')+'</div>'; });
+  });
+  function jrGroup(k){
+    var all=(JRN.seg[k]||[]), subj=jrSubjectFor(k), done=(subj&&JRN.sent[subj])||{};
+    var exit=0, already=0, todo=[];
+    all.forEach(function(e){ if(JRN.exits[e]) exit++; else if(done[e]) already++; else todo.push(e); });
+    return {all:all, todo:todo, exit:exit, already:already, subject:subj};
+  }
+  function jrRender(){
+    var now=Date.now(), html='<p class="help" style="margin:6px 0">Sent \u201c'+esc(JRN.source.subject)+'\u201d on '+esc(jrDay(JRN.base))+
+      ' \u00b7 '+JRN.ids.length+' in the send log'+(JRN.excluded?' \u00b7 '+JRN.excluded+' bounced or unsubscribed, left out':'')+'.</p>';
+    JR_GROUPS.forEach(function(g){
+      var x=jrGroup(g.k), due=JRN.base+g.days*864e5, cls, label;
+      if(!x.all.length){ cls='wait'; label='nobody yet'; }
+      else if(!x.todo.length){ cls='done'; label='done \u2713'; }
+      else if(now>=due){ cls='now'; label='due '+(now-due<864e5?'today':'since '+jrDay(due)); }
+      else { cls='wait'; label='due '+jrDay(due); }
+      var needSubj=g.k==='notOpened' && !x.subject;
+      html+='<div class="jr-row"><div class="jr-top"><span><b class="n">'+x.all.length+'</b>'+esc(g.t)+'</span><span class="jr-due '+cls+'">'+label+'</span></div>'+
+        '<p>'+esc(g.d)+(x.already?' '+x.already+' already followed up.':'')+(x.exit?' '+x.exit+' left out (replied, demo, trial, won or lost).':'')+'</p>'+
+        (x.todo.length?'<div class="btnrow" style="margin:0"><button class="btn'+(cls==='now'?' primary':'')+'" type="button" data-act="jr-load" data-g="'+g.k+'">Load '+x.todo.length+' + follow-up email \u2192</button>'+
+          (g.k==='clicked'?'<button class="btn" type="button" data-act="jr-crm">Put them in my CRM pipeline</button>':'')+'</div>':'')+
+        (needSubj&&x.todo.length?'<p style="margin:8px 0 0">This campaign has no re-send subject yet; you will be asked to change the subject line before sending.</p>':'')+
+      '</div>';
+    });
+    html+='<p class="help">Follow-ups wait for you: loading a group fills the send list and opens the right email. Check it, then press <b>Send to the list</b>.</p>';
+    $('#jrWrap').innerHTML=html;
+  }
+  act('jr-load',function(el){
+    var k=el.getAttribute('data-g'), x=jrGroup(k);
+    if(!x.todo.length){ toast('Nobody left in that group'); return; }
+    var idx;
+    if(k==='notOpened'){
+      var copy=JSON.parse(JSON.stringify(JRN.source));
+      copy.name='Re-send (new subject) \u2014 '+JRN.source.name; copy.desc='Journey: not opened, 5 days later';
+      copy.followup='notOpened'; copy.followDays=5;
+      copy.subject=jrResendSubject(JRN.source)||JRN.source.subject;
+      var at=-1; for(var i=0;i<camps.length;i++) if(camps[i].name===copy.name) at=i;
+      if(at>=0) camps[at]=copy; else { camps.push(copy); at=camps.length-1; }
+      idx=at;
+    } else idx=jrTemplateFor(k);
+    if(idx<0){ logLine('The follow-up template is missing \u2014 reload the studio.','bad'); return; }
+    cur=idx; renderRail(); fillForm(); renderPreview();
+    SET.list=x.todo.join('\n');
+    var ta=$('#sList'); if(ta) ta.value=SET.list;
+    $('#listCount').textContent=x.todo.length;
+    JRN.send={ids:JRN.ids.slice(), seg:k, subject:camps[cur].subject};
+    var g=$('#grpList'); if(g){ g.open=true; try{ g.scrollIntoView({block:'start',behavior:'smooth'}); }catch(e){} }
+    logLine('Follow-up loaded: '+x.todo.length+' restaurant'+(x.todo.length===1?'':'s')+' \u2014 '+JR_GROUPS.filter(function(gg){ return gg.k===k; })[0].t+'.','ok');
+    if(k==='notOpened' && camps[cur].subject===JRN.source.subject){
+      logLine('Change the subject line in the Content tab before sending \u2014 the same subject was not opened last time.','warn');
+      JRN.send.subject=null;
+    } else logLine('Check the email on the right, then press \u201cSend to the list\u201d.','dim');
+  });
+  /* if the subject is edited after loading, keep the follow-up link */
+  document.addEventListener('input',function(e){
+    if(JRN.send && e.target && e.target.getAttribute && e.target.getAttribute('data-k')==='subject' && camps[cur] && camps[cur].followup===JRN.send.seg)
+      JRN.send.subject=camps[cur].subject;
+  });
+  act('jr-crm',function(){
+    var list=jrGroup('clicked').todo.concat(), today=new Date().toISOString().slice(0,10), n=0, miss=0;
+    var subj=JRN.source.subject, stamp='Clicked \u201c'+subj+'\u201d ('+jrDay(Date.now())+')';
+    var jobs=list.map(function(e){ return JRN.prospects[e]; }).filter(function(p){ if(!p) miss++; return !!p; });
+    if(!jobs.length){ logLine('None of them are saved prospects in the Venue CRM.','warn'); return; }
+    logLine('Updating '+jobs.length+' prospect'+(jobs.length===1?'':'s')+' in the Venue CRM\u2026');
+    jobs.reduce(function(pr,p){
+      return pr.then(function(){
+        var notes=String(p.crm_notes||'');
+        var body={id:p.id};
+        if(!p.crm_status||p.crm_status==='New') body.crm_status='Contacted';
+        if(!p.follow_up_at||p.follow_up_at>today) body.follow_up_at=today;
+        if(notes.indexOf(stamp)<0) body.crm_notes=(notes?notes+'\n':'')+stamp+' \u2014 call them.';
+        if(Object.keys(body).length===1) return;
+        return aiCall('prospect_update',body).then(function(){ n++; });
+      });
+    },Promise.resolve()).then(function(){
+      logLine(n+' updated: status Contacted, follow-up today, note added. Open the Venue CRM to call them.'+(miss?' ('+miss+' not in the CRM.)':''),'ok');
+      toast('CRM updated');
+    }).catch(function(e){ logLine('CRM update stopped: '+((e&&e.message)||e),'bad'); });
   });
 
   /* ---- delivery status, read straight from Resend (no webhook needed) ---- */
