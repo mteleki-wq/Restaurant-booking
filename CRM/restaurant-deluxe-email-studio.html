@@ -277,7 +277,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v23</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v24</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -847,7 +847,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v23 \u00b7 custom video cover';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v24 \u00b7 bookings + walk-ins';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -886,14 +886,15 @@
   var TRIAL_DAYS   = 14;   /* standard free trial */
   var FOUNDER_DAYS = 28;   /* founding offer for the first 5 restaurants */
   var FOUNDING     = "Founding offer: the first 5 restaurants get a "+FOUNDER_DAYS+"-day free trial with free setup on screen.";
-  var FOUNDER_WHAT = "We connect you, import your menu and get ordering working on your own screens (kitchen, bar and front counter). Compatible printers you already have are connected free.";
-  var FOUNDER_NOT  = "We supply web-based software only, no hardware. Paying by phone at the table can be demonstrated but is not part of the free trial. New printers or other setup are extra.";
+  var FOUNDER_WHAT = "We connect you, import your menu, switch on your online bookings and get ordering working on your own screens (kitchen, bar and front counter). Compatible printers you already have are connected free.";
+  var FOUNDER_NOT  = "We supply web-based software only, no hardware. Paying by phone at the table can be demonstrated but is not part of the free trial. New printers, a new website or other setup are extra.";
   var CALL_ME      = "Call Marc on 0413 872 994 and I will walk you through how it works.";
   var SPREAD       = "Pay setup in one go, or over your first 3 months.";
   var SETUP_ORDER  = "Setup $400 + GST — menu, add-ons, kitchen and bar printers and stations. "+SPREAD;
   var SETUP_CARD   = "Setup $500 + GST with card payments. "+SPREAD;
   var SETUP_SITE   = "Setup $600 + GST with your website and online bookings. "+SPREAD;
   var QS_CREDIT    = "Any $150 Quick Start already paid comes off your setup.";
+  var BOOK_LINK    = "Your online bookings show on the front counter, so walk-ins aren’t offered a table someone has booked.";
   var TERMS_SHORT  = "Free "+TRIAL_DAYS+"-day trial and no commission on orders, ever. "+FOUNDING;
 
   function preset(o){
@@ -925,34 +926,68 @@
 
   var PRESETS = [
     preset({
-      name:"Founding 5 — 28-day free trial", desc:"Waitlist + ordering, first 5 restaurants",
+      name:"Founding 5 — 28-day free trial", desc:"Waitlist + ordering + bookings, first 5 restaurants",
       badge:"FOUNDING OFFER — 5 PLACES",
-      eyebrow:"New: digital waitlist + ordering at the table",
+      eyebrow:"New: waitlist, bookings and ordering on one screen",
       headline:"Order at the table — and now a digital waitlist at the door.",
-      intro:"Restaurant Deluxe already lets your guests order from their table on their own phone — friendly, simple, no app — and lets your staff take orders on a tablet too.\n\nNow the same system looks after your door. When you are full, guests scan a QR code, add a first name and party size, and wait anywhere. Their phone buzzes when their table is ready and asks “Coming?”. No app, no phone number, no shouting names across a busy room.\n\nOur first 5 restaurants get both free for "+FOUNDER_DAYS+" days, set up for you on your own screens.",
+      intro:"Restaurant Deluxe already lets your guests order from their table on their own phone — friendly, simple, no app — and lets your staff take orders on a tablet too.\n\nNow the same system looks after your door. When you are full, guests scan a QR code, add a first name and party size, and wait anywhere. Their phone buzzes when their table is ready and asks “Coming?”. No app, no phone number, no shouting names across a busy room.\n\nAnd it now works with your online bookings. Booked tables show as reserved on the front counter and are kept for those guests, so walk-ins aren’t offered a table someone has booked. If a booking doesn’t turn up, one tap marks the no-show and the table goes back to the waitlist.\n\nOur first 5 restaurants get all three free for "+FOUNDER_DAYS+" days, set up for you on your own screens.",
       videoUrl:"https://youtu.be/RM-XOZriWNM", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch the digital waitlist in action", videoPos:"hero",
       cta1:"Call me about a founding place", cta1url:"tel:0413872994",
       cta2:"Reply to apply", cta2url:CONTACT,
       featEyebrow:"What the "+FOUNDER_DAYS+" days include",
-      featHeading:"The door and the table.\nOne friendly system.",
+      featHeading:"The door, the bookings and the table.\nOne friendly system.",
       cards:[
         {n:"01", t:"Digital waitlist", d:"Scan at the door, wait anywhere, and the phone buzzes when the table is ready."},
         {n:"02", t:"Order at the table", d:"Guests scan, order and pay at the counter. Staff can take orders on a tablet too."},
-        {n:"03", t:"Set up for you", d:"Your menu imported and everything working on your own screens, at no cost."},
-        {n:"04", t:"Your printers, connected", d:"Got a compatible thermal printer? We connect it free."}
+        {n:"03", t:"Your bookings join in", d:"Booked tables are kept for their guests and not offered to walk-ins."},
+        {n:"04", t:"Set up for you", d:"Menu imported, bookings switched on, working on your own screens. Compatible printers connected free."}
       ],
-      spotOn:true, spotEyebrow:"What you need",
-      spotHeading:"Three tablets or screens. That is it.",
-      spotSub:"Everything runs in a web browser: one screen in the kitchen, one at the bar and one at the front counter. Use the tablets or computers you already have. "+FOUNDER_NOT,
-      boxes:[{l:"KITCHEN", v:"Tablet or screen"},{l:"BAR", v:"Tablet or screen"},{l:"FRONT COUNTER", v:"Tablet or computer"}],
+      spotOn:true, spotEyebrow:"Bookings + walk-ins",
+      spotHeading:"Never give away a booked table.",
+      spotSub:"Your front counter sees today’s bookings next to the waitlist. Everything runs in a web browser on the tablets or computers you already have: kitchen, bar and front counter. "+FOUNDER_NOT,
+      boxes:[{l:"BOOKED 7:30 PM", v:"Table 9 kept for them"},{l:"NO-SHOW?", v:"One tap frees the table"},{l:"WALK-INS", v:"Offered free tables only"}],
+      bandImage:"https://webescapade.com/Restaurant/counter-bookings.jpg", bandAlt:"The Restaurant Deluxe front counter showing today's bookings, reserved tables and the waitlist",
+      bandCaption:"The front counter: today’s bookings, reserved tables and the waitlist together.", bandLink:"https://webescapade.com/Restaurant/#bookings-walkins",
       priceEyebrow:"After your "+FOUNDER_DAYS+" days", priceHeading:"One flat price. No commission.",
-      plans:[{tier:"TABLE ORDERING + WAITLIST", price:"$109", per:"/ month", desc:"Your ordering setup is already done, so you only pay for extras you add, such as card payments or a website.", hi:true}],
+      plans:[{tier:"BOOKINGS + ORDERING + WAITLIST", price:"$149", per:"/ month", desc:"Your setup is already done, so you only pay for extras you add, such as card payments or a new website. Ordering and waitlist only: $109 / month.", hi:true}],
       priceFoot:"Simple thermal printers are not expensive, and we can set one up for you if you want it.",
       finalHeading:"Five places. Let’s talk.",
       finalSub:CALL_ME+" Or simply reply to this email.",
       finalCta:"Call Marc", finalUrl:"tel:0413872994",
-      subject:"Now: order at the table + a digital waitlist",
+      subject:"Bookings, walk-ins and orders on one screen",
       preheader:"First 5 restaurants: "+FOUNDER_DAYS+" days free, set up on your own screens."
+    }),
+    preset({
+      name:"Already take bookings? One screen", desc:"For venues with bookings: bookings + waitlist + ordering together",
+      badge:"FOUNDING OFFER — 5 PLACES",
+      eyebrow:"Bookings, waitlist and ordering — together",
+      headline:"Your bookings, your waitlist and your table orders. Finally on one screen.",
+      intro:"Most restaurants juggle a bookings diary, a crowd at the door and orders on paper. Restaurant Deluxe puts all three on one front-counter screen.\n\nToday’s bookings show next to the waitlist. Booked tables are kept for their guests, so walk-ins aren’t offered a table someone has booked, and you get a warning before seats due for bookings are given away. A no-show is one tap, and the table goes straight back to the waitlist.\n\nWalk-ins scan a QR code at the door and wait anywhere. At the table, guests order from their own phone. No app, and no commission on bookings or orders.",
+      videoUrl:"https://youtu.be/RM-XOZriWNM", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch the waitlist and ordering in action", videoPos:"hero",
+      cta1:"Call me about a founding place", cta1url:"tel:0413872994",
+      cta2:"Reply to apply", cta2url:CONTACT,
+      featEyebrow:"How it works together",
+      featHeading:"Booked, walked in or ordering.\nOne friendly system.",
+      cards:[
+        {n:"01", t:"Bookings kept safe", d:"Booked tables show as reserved and are held for their guests."},
+        {n:"02", t:"No-shows freed fast", d:"One tap, and the table goes back to the waitlist."},
+        {n:"03", t:"Walk-ins wait anywhere", d:"Scan at the door; the phone buzzes when a table is ready."},
+        {n:"04", t:"Order at the table", d:"Guests order from their phone, straight to kitchen and bar."}
+      ],
+      spotOn:true, spotEyebrow:"The front counter",
+      spotHeading:"Everything at a glance.",
+      spotSub:"Bookings, reserved tables and the waitlist on the tablet or computer you already have. "+FOUNDER_NOT,
+      boxes:[{l:"BOOKED 7:30 PM", v:"Table 9 kept for them"},{l:"NO-SHOW?", v:"One tap frees the table"},{l:"WALK-INS", v:"Offered free tables only"}],
+      bandImage:"https://webescapade.com/Restaurant/counter-bookings.jpg", bandAlt:"The Restaurant Deluxe front counter showing today's bookings, reserved tables and the waitlist",
+      bandCaption:"The front counter: today’s bookings, reserved tables and the waitlist together.", bandLink:"https://webescapade.com/Restaurant/#bookings-walkins",
+      priceEyebrow:"After your "+FOUNDER_DAYS+" days", priceHeading:"One flat price. No commission.",
+      plans:[{tier:"BOOKINGS + ORDERING + WAITLIST", price:"$149", per:"/ month", desc:"Online bookings, CRM, the digital waitlist and table ordering. Your setup is done during the trial; you only pay for extras such as card payments or a new website.", hi:true}],
+      priceFoot:FOUNDING,
+      finalHeading:"Five founding places. Let’s talk.",
+      finalSub:CALL_ME+" Or simply reply to this email.",
+      finalCta:"Call Marc", finalUrl:"tel:0413872994",
+      subject:"Stop giving walk-ins your booked tables",
+      preheader:"Bookings, waitlist and ordering on one screen. First 5 restaurants: "+FOUNDER_DAYS+" days free."
     }),
     preset({
       name:"Intro to Restaurant Deluxe", desc:"First message to a new restaurant",

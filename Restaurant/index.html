@@ -128,6 +128,18 @@
   .pv-play::after{ content:""; position:absolute; left:39px; top:21px; border-style:solid; border-width:13px 0 13px 23px; border-color:transparent transparent transparent #fff }
   .pv-poster:hover .pv-play{ transform:scale(1.08) }
   .pv-poster:focus-visible{ outline:3px solid #fff; outline-offset:-3px }
+  .bw-grid{ display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:48px; align-items:center }
+  .bw-h{ font-size:clamp(28px,4vw,42px); margin:16px 0 0 }
+  .bw-p{ color:var(--muted); font-size:17px; margin-top:16px }
+  .bw-list{ list-style:none; padding:0; margin:22px 0 0; display:grid; gap:12px }
+  .bw-list li{ position:relative; padding-left:28px; color:var(--muted); font-size:15.5px }
+  .bw-list li::before{ content:"✓"; position:absolute; left:0; top:0; color:var(--gold); font-weight:800 }
+  .bw-list b{ color:var(--text, #fff) }
+  .bw-note{ margin-top:20px; font-size:14px; color:var(--gold) }
+  .bw-fig{ margin:0; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.12); box-shadow:0 30px 80px rgba(0,0,0,.45); background:#0e0b09 }
+  .bw-fig img{ display:block; width:100%; height:auto }
+  .bw-fig figcaption{ font-size:13px; color:var(--muted); padding:10px 14px }
+  @media (max-width:860px){ .bw-grid{ grid-template-columns:1fr; gap:28px } }
   .promo-video-cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:26px }
 
   .section-head.center{ margin-left:auto; margin-right:auto; text-align:center }
@@ -1238,7 +1250,7 @@
     <div class="section-head center reveal in">
       <span class="eyebrow">Watch · 1 minute</span>
       <h2>Order at the table. Wait without the queue.</h2>
-      <p>See the new digital waitlist and table ordering in action. For the first 5 restaurants: <span data-days="founder">28</span> days free, set up for you.</p>
+      <p>See the new digital waitlist and table ordering in action — now working with your online bookings. For the first 5 restaurants: <span data-days="founder">28</span> days free, set up for you.</p>
     </div>
     <div class="promo-video reveal in" id="promoVideo">
       <button type="button" class="pv-poster" aria-label="Play the 1-minute video: digital waitlist and order at the table" onclick="(function(b){var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/RM-XOZriWNM?autoplay=1&rel=0&modestbranding=1';f.title='Restaurant Deluxe: digital waitlist and order at the table';f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';f.referrerPolicy='strict-origin-when-cross-origin';f.allowFullscreen=true;b.parentNode.replaceChild(f,b);})(this)">
@@ -1250,6 +1262,28 @@
       <a class="btn btn-primary btn-lg" href="tel:0413872994">Call Marc · 0413 872 994</a>
       <a class="btn btn-ghost btn-lg" data-cta="trial" style="cursor: pointer;">Start my free trial</a>
     </div>
+  </div>
+</section>
+
+<!-- ============ BOOKINGS + WALK-INS ============ -->
+<section class="section" id="bookings-walkins" style="padding-top:10px">
+  <div class="wrap bw-grid">
+    <div class="reveal in">
+      <span class="eyebrow">New · Bookings + walk-ins</span>
+      <h2 class="bw-h">Never give away a booked table.</h2>
+      <p class="bw-p">Your online bookings now show on the front counter, right next to the digital waitlist. One screen tells your team who has booked, which tables to keep, and who is waiting at the door.</p>
+      <ul class="bw-list">
+        <li><b>Booked tables are kept.</b> They show as reserved and are not offered to walk-ins.</li>
+        <li><b>A warning before it's too late.</b> Staff are told if seating a walk-in would leave too few seats for bookings due soon.</li>
+        <li><b>No-shows freed in one tap.</b> The table goes straight back to the waitlist.</li>
+        <li><b>Big parties sorted.</b> Join tables, such as 5 + 6, for one booking.</li>
+      </ul>
+      <p class="bw-note">Included in the <span data-days="founder">28</span>-day founding trial for the first 5 restaurants.</p>
+    </div>
+    <figure class="bw-fig reveal in">
+      <img src="counter-bookings.jpg" alt="The Restaurant Deluxe front counter showing today's bookings, reserved tables and the waitlist" width="1400" height="944" loading="lazy">
+      <figcaption>The front counter: today’s bookings, reserved tables and the waitlist together.</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -1640,7 +1674,7 @@
     </div>
     <div class="price-note trial-terms" id="trialTerms">
       <p><b>No commission on orders or bookings — ever.</b></p>
-      <p class="founder"><b>Founding offer — first 5 restaurants: order at the table and our new digital waitlist, free for <span data-days="founder">28</span> days, set up for you.</b> Guests scan a QR code at the door, wait anywhere, and their phone buzzes when their table is ready. We connect your venue, import your menu and get ordering working on your own screens — one in the kitchen, one at the bar and one at the front counter. Customers order at the table and pay at the counter; your staff can take orders too. The digital waitlist is switched on, and compatible printers you already have are connected free. We supply web-based software only, no hardware. Paying by phone can be demonstrated but is not part of the free trial; new printers or other setup are extra. After the trial your ordering setup is already done — you only pay for extras you add. <a href="tel:0413872994">Call Marc on 0413 872 994</a> to ask about a place.</p>
+      <p class="founder"><b>Founding offer — first 5 restaurants: order at the table, our new digital waitlist and your online bookings, free for <span data-days="founder">28</span> days, set up for you.</b> Guests scan a QR code at the door, wait anywhere, and their phone buzzes when their table is ready. We connect your venue, import your menu and get ordering working on your own screens — one in the kitchen, one at the bar and one at the front counter. Customers order at the table and pay at the counter; your staff can take orders too. The digital waitlist and online bookings are switched on — booked tables show as reserved on the front counter, so walk-ins aren’t offered a table someone has booked — and compatible printers you already have are connected free. We supply web-based software only, no hardware. Paying by phone can be demonstrated but is not part of the free trial; new printers, a new website or other setup are extra. After the trial your ordering setup is already done — you only pay for extras you add. <a href="tel:0413872994">Call Marc on 0413 872 994</a> to ask about a place.</p>
       <p><b><span data-days="trial">14</span>-day free trial:</b> we connect your restaurant to Restaurant Deluxe at no cost.</p>
       <p><b>New — digital waitlist, early access:</b> ask for it and we switch it on free for your trial. Guests scan a QR code at the door, wait anywhere, and their phone buzzes when their table is ready. <span class="ff">Included with table ordering after the trial.</span></p>
       <p><b>Quick Start setup — $150 + GST:</b> we load your menu, photos and add-ons and send you online training videos. It covers screen ordering with payment at the counter. <span class="ff">Free for founding restaurants.</span></p>
@@ -1719,7 +1753,8 @@
       <details><summary>Does Webescapade store card details?<span class="pl">+</span></summary><div class="a">No. Card information is securely handled by Stripe and is not stored by Webescapade or the restaurant website.</div></details>
       <details><summary>Do you take a commission on orders?<span class="pl">+</span></summary><div class="a">No. You pay a flat monthly fee and every sale stays yours — there is no percentage taken from orders or bookings.</div></details>
       <details><summary>Can I try the digital waitlist?<span class="pl">+</span></summary><div class="a">Yes. It is in early access, and you can ask for it to be switched on free during your <span data-days="trial">14</span>-day trial (or your <span data-days="founder">28</span>-day founding trial). Guests scan a QR code at the door, enter a first name and party size — no app and no phone number — and see their place in line live. When their table is ready their phone buzzes and asks “Coming?”. After the trial it stays included at no extra cost with table ordering.</div></details>
-      <details><summary>What is the founding offer?<span class="pl">+</span></summary><div class="a">Our first 5 restaurants get a <span data-days="founder">28</span>-day free trial with setup done for them: we connect the venue, import the menu and get ordering working on their own screens (kitchen, bar and front counter), switch on the digital waitlist, and connect any compatible printers they already have. Customers order at the table and pay at the counter, and staff can take orders too. We supply software only — it runs in a web browser on tablets or computers you already have. Paying by phone can be demonstrated but is not included in the free trial, and new printers or other setup are extra. After the trial you only pay for extras you add, such as card payments or a website. Call Marc on 0413 872 994 to ask about a place.</div></details>
+      <details><summary>What is the founding offer?<span class="pl">+</span></summary><div class="a">Our first 5 restaurants get a <span data-days="founder">28</span>-day free trial with setup done for them: we connect the venue, import the menu and get ordering working on their own screens (kitchen, bar and front counter), switch on the digital waitlist and online bookings, and connect any compatible printers they already have. Customers order at the table and pay at the counter, and staff can take orders too. We supply software only — it runs in a web browser on tablets or computers you already have. Paying by phone can be demonstrated but is not included in the free trial, and new printers or other setup are extra. After the trial you only pay for extras you add, such as card payments or a new website. Call Marc on 0413 872 994 to ask about a place.</div></details>
+      <details><summary>Do bookings and walk-ins work together?<span class="pl">+</span></summary><div class="a">Yes. Today’s online bookings show on the front counter next to the digital waitlist. Booked tables are shown as reserved and are kept for their guests, so they are not offered to walk-ins, and staff get a warning before giving away seats that bookings due soon will need. Big parties can be given joined tables, such as 5 + 6. Staff tap Arrived when guests come in, or No-show if they don’t, and the table goes straight back to the waitlist. Guests on the waitlist can also choose to book a time online instead.</div></details>
       <details><summary>What does the free trial include?<span class="pl">+</span></summary><div class="a">For <span data-days="trial">14</span> days we connect your restaurant to the system at no cost, so you can try it with your own team. Loading your menu, photos and add-ons is not part of the free trial — choose the Quick Start setup if you would like us to do it.</div></details>
       <details><summary>What is the Quick Start setup?<span class="pl">+</span></summary><div class="a">An optional setup of $150 + GST. We import your menu, images and add-ons and send you online training videos. It covers screen ordering with payment at the counter. It is included free for our founding restaurants. The Quick Start is non-refundable once setup has started, and if you go on to choose a plan, the $150 comes off your setup.</div></details>
       <details><summary>How much is setup on a paid plan?<span class="pl">+</span></summary><div class="a">$400 + GST for table ordering (menu, add-ons, kitchen and bar printers and stations), $500 + GST with card payments, or $600 + GST with your website and online bookings. You can pay it in one go or over your first 3 months, and any Quick Start fee you have paid comes off. Ongoing support is included in every plan.</div></details>
