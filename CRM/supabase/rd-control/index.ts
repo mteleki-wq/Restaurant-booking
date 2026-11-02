@@ -151,7 +151,7 @@ function summarise(s: Awaited<ReturnType<typeof snapshot>>) {
 // Edit FACTS when prices or features change. The model is told these are
 // the ONLY facts it may state about the product.
 const FACTS = `
-PRODUCT: Restaurant Deluxe by Webescapade (Sydney). Built by Marc, a hospitality professional, for independent restaurants.
+PRODUCT: Restaurant Deluxe by Webescapade (Sydney). Built by Marc, a Sydney web designer with 50 years' experience in hospitality, for independent restaurants. Describe Marc only that way: never as a trainer, teacher or assessor.
 WHAT IT IS: editable restaurant website + direct online bookings with live availability + guest CRM + optional AI assistant + QR table ordering (kitchen and bar displays, ticket printing, shift records with X/Z readings and Excel export).
 TABLE ORDERING: guest scans the table QR, browses the menu in the phone browser (no app, no account), sends the order; food routes to the kitchen, drinks to the bar. Runs alongside the venue's existing POS — it does NOT replace the POS.
 PRICES (AUD, per month): Standard $68 (website + bookings); Deluxe $98 (adds CRM, AI assistance, large-booking card guarantees); Complete $149 (adds QR table ordering, kitchen/bar displays, shift records). Table ordering add-on for existing clients $69. Standalone Table Ordering (keep your own website) $109.
