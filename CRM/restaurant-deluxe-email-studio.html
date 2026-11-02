@@ -283,7 +283,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v29</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v30</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -857,7 +857,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v29 \u00b7 linked to Venue CRM';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v30 \u00b7 book-a-demo links';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -893,6 +893,7 @@
      Each email shows ONE plan and ONE setup figure, so a busy owner
      reading on a phone is never handed the whole price list.
      --------------------------------------------------------------- */
+  var DEMO_BOOK    = "https://webescapade.com/Restaurant/demo.html";   /* restaurants pick a demo time; lands in the Venue CRM as Demo booked */
   var TRIAL_DAYS   = 14;   /* standard free trial */
   var FOUNDER_DAYS = 28;   /* founding offer for the first 5 restaurants */
   var FOUNDING     = "Founding offer: the first 5 restaurants get a "+FOUNDER_DAYS+"-day free trial with free setup on screen.";
@@ -943,7 +944,7 @@
       intro:"Restaurant Deluxe already lets your guests order from their table on their own phone — friendly, simple, no app — and lets your staff take orders on a tablet too.\n\nNow the same system looks after your door. When you are full, guests scan a QR code, add a first name and party size, and wait anywhere. Their phone buzzes when their table is ready and asks “Coming?”. No app, no phone number, no shouting names across a busy room.\n\nAnd it now works with your online bookings. Booked tables show as reserved on the front counter and are kept for those guests, so walk-ins aren’t offered a table someone has booked. If a booking doesn’t turn up, one tap marks the no-show and the table goes back to the waitlist.\n\nOur first 5 restaurants get all three free for "+FOUNDER_DAYS+" days, set up for you on your own screens.",
       videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch bookings, waitlist and ordering in action", videoPos:"hero",
       cta1:"Call me about a founding place", cta1url:"tel:0413872994",
-      cta2:"Reply to apply", cta2url:CONTACT,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"What the "+FOUNDER_DAYS+" days include",
       featHeading:"The door, the bookings and the table.\nOne friendly system.",
       cards:[
@@ -975,7 +976,7 @@
       intro:"Most restaurants juggle a bookings diary, a crowd at the door and orders on paper. Restaurant Deluxe puts all three on one front-counter screen.\n\nToday’s bookings show next to the waitlist. Booked tables are kept for their guests, so walk-ins aren’t offered a table someone has booked, and you get a warning before seats due for bookings are given away. A no-show is one tap, and the table goes straight back to the waitlist.\n\nWalk-ins scan a QR code at the door and wait anywhere. At the table, guests order from their own phone. No app, and no commission on bookings or orders.",
       videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch bookings, waitlist and ordering in action", videoPos:"hero",
       cta1:"Call me about a founding place", cta1url:"tel:0413872994",
-      cta2:"Reply to apply", cta2url:CONTACT,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"How it works together",
       featHeading:"Booked, walked in or ordering.\nOne friendly system.",
       cards:[
@@ -1200,7 +1201,7 @@
       headline:"Shall I show you how it would work at your place?",
       intro:"Thanks for taking a look at Restaurant Deluxe.\n\nI’m Marc, a web designer here in Sydney with 50 years’ experience in hospitality, and I built this for restaurants like yours. If you have 15 minutes, I’ll show you how bookings, the digital waitlist and ordering at the table would work in your venue, on the tablets you already have.\n\nNo pressure, and no commission on bookings or orders, ever. If it isn’t right for you, I’ll tell you.",
       cta1:"Call Marc · 0413 872 994", cta1url:"tel:0413872994",
-      cta2:"Reply with a good time", cta2url:CONTACT,
+      cta2:"Pick a demo time", cta2url:DEMO_BOOK,
       featOn:false, spotOn:false, priceOn:false, finalOn:false,
       subject:"Shall I show you how it works?",
       preheader:"15 minutes, on your own tablets. First 5 restaurants: "+FOUNDER_DAYS+" days free."
@@ -1214,7 +1215,7 @@
       intro:"Here are short answers to the first questions most owners ask about Restaurant Deluxe.",
       videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch the 1-minute video", videoPos:"hero",
       cta1:"Call Marc · 0413 872 994", cta1url:"tel:0413872994",
-      cta2:"Reply with a question", cta2url:CONTACT,
+      cta2:"Book a 30-minute demo", cta2url:DEMO_BOOK,
       featEyebrow:"Four quick answers", featHeading:"Your screens, your POS,\nyour bookings, the price.",
       cards:[
         {n:"01", t:"Your tablets and screens", d:"It runs in a web browser, so the tablets or computers you have are enough. We supply software only."},

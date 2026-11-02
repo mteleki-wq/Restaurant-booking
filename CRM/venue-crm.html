@@ -284,6 +284,8 @@
         <div class="hcard"><h3>🌐 Website enquiries <span class="tag">14 days</span></h3><div id="homeWeb"></div></div>
       </div>
       <div>
+        <div class="hcard"><h3>📅 Upcoming demos</h3><div id="homeDemos"></div>
+          <p class="help" style="margin:10px 0 0">Restaurants book themselves at <a href="../Restaurant/demo.html" target="_blank" rel="noopener" style="color:var(--cyan)">webescapade.com/Restaurant/demo.html</a> — the link is in your emails.</p></div>
         <div class="hcard"><h3>⭐ Founding 5</h3><div id="homeFounding"></div></div>
         <div class="hcard"><h3>Recent activity</h3><div class="feed" id="homeFeed"></div></div>
         <div class="hcard"><h3>📬 Weekly report</h3>
@@ -921,6 +923,15 @@
       return '<div class="trow" data-id="'+esc(p.id)+'"><div><b>'+esc(p.restaurant||"")+'</b><span class="why">'+esc([p.name,ago(p.created_at),p.crm_status].filter(Boolean).join(" · "))+'</span></div>'+
         '<div class="acts">'+(p.phone?'<a class="tel" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎ '+esc(p.phone)+'</a>':'')+'<button class="btn sm primary" type="button" data-logcall="'+esc(p.id)+'">📞 Log call</button></div></div>';
     }).join("")+'</div>':'<p class="help" style="margin:6px 0 0">None yet. Enquiries from webescapade.com/Restaurant appear here and in your pipeline straight away, as hot leads to call.</p>';
+
+    /* upcoming demos (booked online or logged after a call) */
+    var demos=ps.filter(function(p){ return p.crm_status==="Demo booked" && p.follow_up_at && Date.parse(p.follow_up_at)>now-3*36e5; })
+      .sort(function(a,b){ return Date.parse(a.follow_up_at)-Date.parse(b.follow_up_at); });
+    $("#homeDemos").innerHTML=demos.length?demos.slice(0,8).map(function(p){
+      var t=new Date(p.follow_up_at), how=(String(p.crm_notes||"").match(/\((phone call|video call|visit at the restaurant)\)/)||[])[1]||"";
+      return '<div class="jrow"><div><b>'+esc(p.restaurant||p.name||"")+'</b><span>'+esc(t.toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"})+" · "+t.toLocaleTimeString("en-AU",{hour:"numeric",minute:"2-digit"})+(how?" · "+how:""))+'</span></div>'+
+        '<div class="acts" style="display:flex;gap:6px">'+(p.phone?'<a class="btn sm" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎</a>':'')+'<button class="btn sm" type="button" data-logcall="'+esc(p.id)+'">📞 Log</button></div></div>';
+    }).join(""):'<p class="help" style="margin:0">No demos booked yet.</p>';
 
     /* founding 5 */
     var fv=(DATA.venues||[]).filter(function(v){ return isFounding(v.id); });

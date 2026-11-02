@@ -7,3 +7,12 @@
 --  * pg_cron job rd-weekly-report: Monday 7:30 am AEDT (Sunday 20:30 UTC) -> rd-control weekly_report,
 --    authorised with a random key kept in Vault (rd_cron_key) and checked by public.rd_cron_key_ok()
 -- Report recipient: REPORT_TO edge secret, default sales@webescapade.com
+
+-- Nov 2026 (later): book-a-demo + security
+--  * rd_demo_bookings + rd_demo_slots() + rd_demo_book(): public demo page Restaurant/demo.html
+--    (Mon-Fri 10:00-16:00 Sydney, 30-min slots, 2 h to 21 days ahead). Booking marks the prospect
+--    "Demo booked" with follow_up_at = demo time and calls edge function rd-demo-notify
+--    (confirmation + .ics to the restaurant, alert to REPORT_TO).
+--  * rd_is_crm_owner(): Marc's three accounts or a platform admin. crm_accounts / crm_activity /
+--    crm_contacts / crm_comms / crm_notes now owner-only; email_optouts readable by the owner and by
+--    venue staff for their own venue only (migration lock_down_crm_tables).
