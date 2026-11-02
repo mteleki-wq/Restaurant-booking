@@ -283,7 +283,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v30</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v31</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -857,7 +857,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v30 \u00b7 book-a-demo links';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v31 \u00b7 demo page in every email';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1002,6 +1002,7 @@
     }),
     preset({
       name:"Intro to Restaurant Deluxe", desc:"First message to a new restaurant",
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       eyebrow:"Introducing Restaurant Deluxe",
       headline:"Turn your restaurant website into direct bookings.",
       intro:"Webescapade builds elegant, fully editable restaurant websites connected to online reservations, live availability and an optional AI-powered customer experience — and now to ordering at the table.\n\nOne flat monthly price. No commission on bookings or orders.",
@@ -1027,7 +1028,7 @@
       headline:"Let customers order from the table while your team keeps up with the coffee.",
       intro:"Each table gets a QR code. Customers scan it, order from your menu on their own phone and pay at the counter as usual. Food goes to the kitchen, coffees go to the bar, and nothing is lost on a busy morning.\n\nYou keep your website, your POS and your way of working. New: a digital waitlist for busy mornings is included too (early access).",
       cta1:"Start my 14-day free trial", cta1url:CONTACT,
-      cta2:"See it in action", cta2url:SITE,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"Made for a busy café",
       featHeading:"Fewer trips to the counter.\nNo commission on orders.",
       cards:[
@@ -1054,7 +1055,7 @@
       headline:"No more crowd at the door. Your queue lives on their phone.",
       intro:"When you are full, guests scan a QR code at the door, add a first name and party size, and see their place in line live on their phone. They can grab a drink nearby instead of standing on the footpath.\n\nWhen a table is ready, staff tap Call. The guest's phone buzzes and asks “Coming?” — Yes holds the table, No passes it straight to the next party. No more shouting names into a busy room.",
       cta1:"Request early access", cta1url:CONTACT,
-      cta2:"See table ordering", cta2url:SITE,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"Simple for guests. Calm for staff.",
       featHeading:"The door, sorted.\nThe tables, filled faster.",
       cards:[
@@ -1082,7 +1083,7 @@
       headline:"Let guests order from the table, without waiting to catch someone's eye.",
       intro:"Every table gets its own QR code. The guest scans it, confirms the table number, browses the menu and sends the order. Food goes to the kitchen, drinks go to the bar, and the counter keeps the running total.\n\nNo commission on orders — one flat monthly price. New, in early access: a digital waitlist, included at no extra cost.",
       cta1:"See how table ordering works", cta1url:SITE,
-      cta2:"Book a demonstration", cta2url:CONTACT,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"From QR code to kitchen",
       featHeading:"Simple for the guest.\nClear for the restaurant.",
       featSub:"",
@@ -1109,7 +1110,7 @@
       headline:"See Restaurant Deluxe running in your restaurant, free for "+TRIAL_DAYS+" days.",
       intro:"We connect your restaurant to the system at no cost, so you can see how ordering at the table works with your own team. One flat monthly price after that, with no commission on orders.\n\nEarly access bonus: if you choose, we also switch on our new digital waitlist for your trial \u2014 guests scan at the door and their phone buzzes when their table is ready.\n\nWant your own menu on screen from day one? Our Quick Start setup ($150 + GST) loads your menu, photos and add-ons and includes online training videos.\n\n"+FOUNDING+" Ask about a founding place.",
       cta1:"Start my 14-day free trial", cta1url:CONTACT,
-      cta2:"Test the booking form", cta2url:BOOKING,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"How the trial works",
       featHeading:"Free to connect.\nWaitlist included if you want it.",
       cards:[
@@ -1135,7 +1136,7 @@
       headline:"Add table ordering without touching your current site.",
       intro:"You do not have to move your website to use table ordering. Standalone Table Ordering works alongside whatever you have now — QR codes, digital menu, kitchen and bar displays and shift records, with no migration and no redesign.",
       cta1:"See what is included", cta1url:SITE,
-      cta2:"Book a demonstration", cta2url:CONTACT,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"What you get",
       featHeading:"Ordering, routing and records.\nYour website stays as it is.",
       cards:[
@@ -1155,7 +1156,7 @@
       headline:"Table ordering is ready whenever you are.",
       intro:"Your site and bookings already run on Restaurant Deluxe. Table ordering plugs into the same system, so the menu you maintain today becomes the menu your guests order from.",
       cta1:"Add table ordering", cta1url:CONTACT,
-      cta2:"", cta2url:"",
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"Nothing new to set up",
       featHeading:"Your menu is already the ordering menu.",
       cards:[
@@ -1176,7 +1177,7 @@
       eyebrow:"Following up",
       headline:"You tried the booking form — what did you make of it?",
       intro:"Thanks for taking a look. That demo is the real booking flow a guest would see, running on the same system your restaurant would use, so what you clicked through is what you would get.",
-      cta1:"Book a demonstration", cta1url:CONTACT,
+      cta1:"Book a demo time", cta1url:DEMO_BOOK,
       cta2:"Start the free trial", cta2url:CONTACT,
       featEyebrow:"What you were looking at",
       featHeading:"The guest side, and yours.",
