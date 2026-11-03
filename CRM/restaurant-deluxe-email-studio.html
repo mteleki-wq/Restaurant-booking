@@ -283,7 +283,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v31</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v32</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -857,7 +857,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v31 \u00b7 demo page in every email';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v32 \u00b7 Scan & Queue promo';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -894,6 +894,7 @@
      reading on a phone is never handed the whole price list.
      --------------------------------------------------------------- */
   var DEMO_BOOK    = "https://webescapade.com/Restaurant/demo.html";   /* restaurants pick a demo time; lands in the Venue CRM as Demo booked */
+  var WAITLIST_TRY = "https://webescapade.com/Resto-order-test/waitlist.html?v=sunset-grill&w=769d94ba39f4";   /* live demo queue at Sunset Grill */
   var TRIAL_DAYS   = 14;   /* standard free trial */
   var FOUNDER_DAYS = 28;   /* founding offer for the first 5 restaurants */
   var FOUNDING     = "Founding offer: the first 5 restaurants get a "+FOUNDER_DAYS+"-day free trial with free setup on screen.";
@@ -1075,6 +1076,34 @@
       finalCta:"Request early access", finalUrl:CONTACT,
       subject:"No more crowd at the door",
       preheader:"New: guests scan, wait anywhere, and get a buzz when their table is ready."
+    }),
+    preset({
+      name:"Scan & Queue — waitlist only ($39)", desc:"Standalone digital waitlist, $39 / month, "+FOUNDER_DAYS+" days free",
+      badge:FOUNDER_DAYS+" DAYS FREE",
+      eyebrow:"Scan & Queue — the digital waitlist",
+      headline:"Skip the queue.",
+      intro:"A digital waitlist for busy restaurants. Guests scan a QR code at the door, wait wherever they like, and their phone tells them when the table is ready.\n\nNo app, no phone number, no crowd at the door. Try it yourself: tap the button below and join our demo queue on your phone.",
+      cta1:"Try the waitlist on your phone", cta1url:WAITLIST_TRY,
+      cta2:"Book a demo time", cta2url:DEMO_BOOK,
+      featEyebrow:"How it works", featHeading:"Scan. Wait anywhere.\nTable ready.",
+      cards:[
+        {n:"01", t:"Scan", d:"Guests scan the sign at your door and join with a first name and party size."},
+        {n:"02", t:"Wait anywhere", d:"Their phone shows their place in line and roughly how long to wait, live."},
+        {n:"03", t:"Table ready", d:"One tap from your team and their phone buzzes. They answer “coming” and head back."}
+      ],
+      spotOn:true, spotEyebrow:"What your team gets",
+      spotHeading:"A calm door on any tablet.",
+      spotSub:"A live queue board on any iPad, tablet or phone. See who’s coming, who said no and who didn’t answer. Add guests without a phone by name. Wait times learn how fast you really seat people. It works alongside your existing POS, nothing to replace, and your door sign comes ready to print.",
+      boxes:[{l:"QUEUE BOARD", v:"Any tablet or phone"},{l:"TABLE READY", v:"One tap, with table no."},{l:"YOUR POS", v:"Nothing to replace"}],
+      priceEyebrow:"After your "+FOUNDER_DAYS+" days", priceHeading:"One simple price.",
+      plans:[{tier:"SCAN & QUEUE", price:"$39", per:"/ month + GST", desc:"$42.90 including GST, per restaurant. Unlimited guests and staff logins. Free setup: we create your queue and show your team. No lock-in, month to month. Pay yearly: $390 + GST, two months free.", hi:true}],
+      priceFoot:"Ready for more? Scan & Queue is part of Restaurant Deluxe. Add QR table ordering, kitchen screens and online bookings whenever you like, and your queue comes with you.",
+      finalHeading:"Start your "+FOUNDER_DAYS+" days free.",
+      finalSub:"Call Marc on 0413 872 994 or email sales@webescapade.com. Or simply reply to this email. Built in Sydney by a web designer with 50 years’ experience in hospitality.",
+      finalCta:"Call Marc", finalUrl:"tel:0413872994",
+      email:"sales@webescapade.com",
+      subject:"Skip the queue: a digital waitlist for $39 a month", resendSubject:"Your door, without the queue",
+      preheader:"Guests scan at the door, wait anywhere, and their phone buzzes when the table is ready. "+FOUNDER_DAYS+" days free."
     }),
     preset({
       name:"Table ordering launch", desc:"Announce QR ordering to your list",
