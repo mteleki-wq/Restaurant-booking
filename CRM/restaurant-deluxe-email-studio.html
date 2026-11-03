@@ -283,7 +283,7 @@
       <p>Broadcast campaigns for Resend</p>
     </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v32</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v33</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -857,7 +857,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v32 \u00b7 Scan & Queue promo';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v33 \u00b7 Scan & Queue image';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1082,7 +1082,8 @@
       badge:FOUNDER_DAYS+" DAYS FREE",
       eyebrow:"Scan & Queue — the digital waitlist",
       headline:"Skip the queue.",
-      intro:"A digital waitlist for busy restaurants. Guests scan a QR code at the door, wait wherever they like, and their phone tells them when the table is ready.\n\nNo app, no phone number, no crowd at the door. Try it yourself: tap the button below and join our demo queue on your phone.",
+      heroImage:"https://webescapade.com/Restaurant/scan-queue-hero.jpg", heroAlt:"A QR sign at a restaurant door saying Scan to skip the queue, and a phone showing #3 in line, about 12 minutes",
+      intro:"A digital waitlist for busy restaurants. Guests scan a QR code at the door, wait wherever they like, and their phone tells them when the table is ready.\n\nNo app, no phone number, no crowd at the door. Try it yourself and join our demo queue: reading this on a computer? Scan the QR code in the picture with your phone. On your phone? Tap the button below.",
       cta1:"Try the waitlist on your phone", cta1url:WAITLIST_TRY,
       cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"How it works", featHeading:"Scan. Wait anywhere.\nTable ready.",
