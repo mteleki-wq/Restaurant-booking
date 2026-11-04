@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Staff · Bookings</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Service Deluxe — staff page. One copy serves every venue: ?venue=<slug> */
+:root{--bg:#F3F1EC;--card:#fff;--ink:#1E2622;--muted:#6B746F;--line:#E3DED5;--accent:#4F6B5C;--soft:#E7EEE9;--warn:#9A3B2E;--amber:#A06A14;--hour:64px}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+.hide{display:none!important}
+header.top{position:sticky;top:0;z-index:20;background:rgba(243,241,236,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .in{max-width:1400px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top h1{font:400 24px/1 "Instrument Serif",serif;margin:0;white-space:nowrap}
+.top h1 small{display:block;font:600 11px Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0}
+nav.tabs button{border:0;background:none;padding:8px 12px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:600;white-space:nowrap}
+nav.tabs button.on{background:var(--ink);color:#fff}
+.who{font-size:13px;color:var(--muted);white-space:nowrap}
+.who button{margin-left:6px}
+main{max-width:1400px;margin:0 auto;padding:16px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.acc{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.danger{color:var(--warn)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.4}
+.card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sp{flex:1}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=password],input[type=date],input[type=time],input[type=datetime-local],input[type=url],select,textarea{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;min-width:0;font-size:15px}
+textarea{width:100%;min-height:70px}
+label.f{display:grid;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+label.f input,label.f select,label.f textarea{color:var(--ink);font-weight:400}
+.g2{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:700px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}}
+.g3{display:grid;gap:12px}
+h2{font:400 28px/1.1 "Instrument Serif",serif;margin:0}
+h3{margin:0 0 10px;font-size:15px}
+.muted{color:var(--muted)}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;background:var(--soft);color:var(--accent)}
+.pill.cancelled{background:#F4E4E1;color:var(--warn)} .pill.no_show{background:#F6EBD6;color:var(--amber)} .pill.completed{background:#E6E8E7;color:#555}
+/* login */
+.login{max-width:380px;margin:12vh auto;display:grid;gap:12px}
+.login h2{text-align:center}
+.err{color:var(--warn);font-size:14px}
+/* calendar */
+.calbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.calbar .date{font:400 26px/1 "Instrument Serif",serif;margin:0 6px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:7px 12px;cursor:pointer;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--soft);color:var(--accent)}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.stat{background:var(--card);border-radius:12px;padding:8px 12px;font-size:13px;color:var(--muted)}
+.stat b{color:var(--ink);font-size:16px;margin-right:4px}
+.calwrap{background:var(--card);border-radius:16px;overflow:auto;max-height:calc(100vh - 210px);-webkit-overflow-scrolling:touch}
+.cal{display:grid;position:relative;min-width:max-content}
+.cal .hd{position:sticky;top:0;z-index:3;background:var(--card);border-bottom:1px solid var(--line);padding:10px 8px;font-weight:700;font-size:13px;text-align:center;white-space:nowrap}
+.cal .hd small{display:block;font-weight:500;color:var(--muted)}
+.cal .tcol{position:sticky;left:0;z-index:2;background:var(--card);border-right:1px solid var(--line)}
+.cal .hd.corner{left:0;z-index:4}
+.tlab{height:var(--hour);font-size:11px;color:var(--muted);text-align:right;padding:0 8px;transform:translateY(-7px)}
+.colb{position:relative;border-right:1px solid var(--line);min-width:150px}
+.colb .hl{height:var(--hour);border-top:1px solid #F0ECE5}
+.colb .off{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,#F6F4F0 0 6px,#EFECE6 6px 12px)}
+.ap{position:absolute;left:4px;right:4px;border-radius:9px;padding:4px 7px;font-size:12px;line-height:1.25;overflow:hidden;cursor:pointer;background:var(--soft);border-left:3px solid var(--accent);color:var(--ink)}
+.ap b{display:block;font-size:12.5px}
+.ap.cancelled{opacity:.45;text-decoration:line-through}
+.ap.no_show{background:#F6EBD6;border-left-color:var(--amber)}
+.ap.completed{background:#ECEDEC;border-left-color:#888}
+.ap .buf{position:absolute;left:0;right:0;bottom:0;background:repeating-linear-gradient(90deg,transparent 0 4px,rgba(0,0,0,.05) 4px 8px)}
+.nowline{position:absolute;left:0;right:0;height:2px;background:var(--warn);z-index:1}
+/* lists */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px;border-bottom:1px solid var(--line)}
+td{padding:10px 8px;border-bottom:1px solid #F0ECE5;vertical-align:top}
+tr.click{cursor:pointer} tr.click:hover td{background:#FAF9F6}
+.items{display:grid;gap:10px}
+.item{background:var(--card);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.item .main{flex:1;min-width:200px}
+.item .main b{font-size:15px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:12px;background:var(--bg);border-radius:999px;padding:2px 9px;color:var(--muted)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px 14px}
+.checks label{display:flex;gap:8px;align-items:center;font-size:14px}
+.week{display:grid;gap:8px}
+.wd{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:start}
+.wd .ranges{display:flex;flex-direction:column;gap:6px}
+.wd .rg{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+/* drawer & modal */
+.scrim{position:fixed;inset:0;background:rgba(20,24,22,.35);z-index:40}
+.sheet{position:fixed;z-index:41;background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch;right:0;top:0;bottom:0;width:min(520px,100%);padding:20px;box-shadow:-10px 0 30px rgba(0,0,0,.12)}
+.sheet .x{float:right}
+.sheet dl{display:grid;grid-template-columns:110px 1fr;gap:8px 12px;margin:14px 0}
+.sheet dt{color:var(--muted)} .sheet dd{margin:0;font-weight:600;word-break:break-word}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px;max-height:220px;overflow:auto}
+.slot{padding:8px 0;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font-weight:600}
+.slot.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;z-index:60;font-size:14px}
+.spin{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin:30px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <h1><small>Staff</small><span id="vname">Bookings</span></h1>
+  <nav class="tabs hide" id="tabs">
+    <button data-tab="cal" class="on">Calendar</button>
+    <button data-tab="list">Bookings</button>
+    <button data-tab="svc">Treatments</button>
+    <button data-tab="team">Team</button>
+    <button data-tab="rooms">Rooms</button>
+    <button data-tab="hours">Hours &amp; closures</button>
+    <button data-tab="set">Settings</button>
+  </nav>
+  <div class="who hide" id="who"><span id="whoem"></span><button class="btn sm" id="logout">Sign out</button></div>
+</div></header>
+<main id="app"><div class="spin"></div></main>
+<div id="layer"></div>
+
+<script>
+/* ======================= CONFIG ======================= */
+var CONFIG = {
+  supabaseUrl: "https://tehxobdokbvqtwtgqzrh.supabase.co",
+  supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE",
+  venue: "serenity-spa",
+  bookingPage: "service-booking.html",   // client booking page (relative or full URL)
+  practitionerWord: "therapist"
+};
+/* ====================================================== */
+var BASE = CONFIG.supabaseUrl.replace(/\/+$/, "").replace(/\/rest(\/v1)?$/, "");
+var q = new URLSearchParams(location.search);
+var VENUE = (q.get("venue") || CONFIG.venue).trim().toLowerCase();
+var WORD = q.get("word") || CONFIG.practitionerWord;
+var TZ = "Australia/Sydney", VID = null, VENUE_ROW = null;
+var D = { services: [], providers: [], links: [], rooms: [], hours: [], timeoff: [], settings: null };
+var V = { tab: "cal", date: null, mode: "provider" };
+var SES = null;
+var $ = function (id) { return document.getElementById(id); };
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+function money(c){ return c == null ? "" : c === 0 ? "Free" : "$" + (c / 100).toFixed(c % 100 ? 2 : 0); }
+function toast(t){ var d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 2600); }
+
+/* ---------- time zone helpers (venue local <-> UTC) ---------- */
+function partsIn(date){
+  var o = {}; new Intl.DateTimeFormat("en-CA", { timeZone: TZ, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" })
+    .formatToParts(date).forEach(function (p) { o[p.type] = p.value; });
+  return o;
+}
+function localToUtc(ds, hm){
+  var y = +ds.slice(0, 4), m = +ds.slice(5, 7) - 1, d = +ds.slice(8, 10), h = +hm.slice(0, 2), mi = +hm.slice(3, 5);
+  var guess = Date.UTC(y, m, d, h, mi);
+  for (var i = 0; i < 2; i++) {
+    var p = partsIn(new Date(guess));
+    var asUtc = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute);
+    guess += Date.UTC(y, m, d, h, mi) - asUtc;
+  }
+  return new Date(guess);
+}
+function localDate(d){ var p = partsIn(new Date(d)); return p.year + "-" + p.month + "-" + p.day; }
+function localTime(d){ var p = partsIn(new Date(d)); return p.hour + ":" + p.minute; }
+function minsOfDay(d){ var p = partsIn(new Date(d)); return +p.hour * 60 + +p.minute; }
+function today(){ return localDate(new Date()); }
+function addDays(ds, n){ var d = new Date(ds + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+function dow(ds){ return new Date(ds + "T12:00:00Z").getUTCDay(); }
+function fmtDay(ds, o){ return new Date(ds + "T12:00:00Z").toLocaleDateString("en-AU", Object.assign({ timeZone: "UTC" }, o)); }
+var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+/* ---------- Supabase REST with the staff session ---------- */
+function saveSes(s){ SES = s; try { localStorage.setItem("svc_staff_session", JSON.stringify(s)); } catch (e) {} }
+function loadSes(){ try { return JSON.parse(localStorage.getItem("svc_staff_session") || "null"); } catch (e) { return null; } }
+function auth(path, body){
+  return fetch(BASE + "/auth/v1/" + path, { method: "POST", headers: { apikey: CONFIG.supabaseKey, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error_description || j.msg || j.message || "Sign-in failed"); return j; }); });
+}
+function fresh(){
+  if (!SES) return Promise.reject(new Error("Not signed in"));
+  if (SES.expires_at && SES.expires_at * 1000 - Date.now() > 60000) return Promise.resolve(SES.access_token);
+  return auth("token?grant_type=refresh_token", { refresh_token: SES.refresh_token }).then(function (s) { saveSes(s); return s.access_token; });
+}
+function api(method, path, body, prefer){
+  return fresh().then(function (tok) {
+    var h = { apikey: CONFIG.supabaseKey, Authorization: "Bearer " + tok, "Content-Type": "application/json" };
+    if (prefer) h.Prefer = prefer;
+    return fetch(BASE + "/rest/v1/" + path, { method: method, headers: h, body: body == null ? undefined : JSON.stringify(body) });
+  }).then(function (r) {
+    return r.text().then(function (t) {
+      var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {}
+      if (!r.ok) {
+        var msg = (j && (j.message || j.details)) || ("Error " + r.status);
+        if (/svc_no_provider_clash/.test(msg)) msg = "That " + WORD + " is already booked at that time.";
+        if (/svc_no_room_clash/.test(msg)) msg = "That room is already booked at that time.";
+        if (r.status === 401) { saveSes(null); }
+        throw new Error(msg);
+      }
+      return j;
+    });
+  });
+}
+var get = function (p) { return api("GET", p); };
+var post = function (p, b) { return api("POST", p, b, "return=representation"); };
+var patch = function (p, b) { return api("PATCH", p, b, "return=representation"); };
+var del = function (p) { return api("DELETE", p); };
+function rpc(fn, args){ return api("POST", "rpc/" + fn, args); }
+
+/* ---------- boot / sign in ---------- */
+function boot(){
+  SES = loadSes();
+  fetch(BASE + "/rest/v1/rpc/svc_get_catalog", { method: "POST", headers: { apikey: CONFIG.supabaseKey, Authorization: "Bearer " + CONFIG.supabaseKey, "Content-Type": "application/json" }, body: JSON.stringify({ p_venue: VENUE }) })
+    .then(function (r) { return r.json(); })
+    .then(function (c) {
+      if (!c || !c.ok) { $("app").innerHTML = '<div class="card login"><h2>Unknown business</h2><p class="muted">No venue called “' + esc(VENUE) + '”. Check the ?venue= part of the link.</p></div>'; return; }
+      VID = c.venue.id; VENUE_ROW = c.venue; TZ = c.venue.timezone || TZ;
+      $("vname").textContent = c.venue.name; document.title = "Staff · " + c.venue.name;
+      V.date = today();
+      if (SES) enter(); else loginView();
+    }).catch(function (e) { $("app").innerHTML = '<div class="card login"><p class="err">' + esc(e.message) + "</p></div>"; });
+}
+function loginView(msg){
+  $("tabs").classList.add("hide"); $("who").classList.add("hide");
+  $("app").innerHTML = '<form class="card login" id="lf"><h2>Staff sign in</h2><p class="muted" style="text-align:center;margin:0">' + esc(VENUE_ROW.name) + '</p>' +
+    '<label class="f">Email<input type="email" id="le" autocomplete="username" required></label>' +
+    '<label class="f">Password<input type="password" id="lp" autocomplete="current-password" required></label>' +
+    '<button class="btn pri" type="submit">Sign in</button><div class="err" id="lerr">' + esc(msg || "") + "</div></form>";
+  $("lf").onsubmit = function (ev) {
+    ev.preventDefault();
+    auth("token?grant_type=password", { email: $("le").value.trim(), password: $("lp").value })
+      .then(function (s) { saveSes(s); enter(); })
+      .catch(function (e) { $("lerr").textContent = e.message; });
+  };
+}
+function enter(){
+  rpc("svc_is_staff", { p_venue: VID }).then(function (ok) {
+    if (!ok) { saveSes(null); return loginView("This account isn't on the staff list for " + VENUE_ROW.name + "."); }
+    $("tabs").classList.remove("hide"); $("who").classList.remove("hide");
+    $("whoem").textContent = (SES.user && SES.user.email) || "";
+    return loadAll().then(show);
+  }).catch(function (e) { saveSes(null); loginView(e.message); });
+}
+$("logout").onclick = function () { saveSes(null); loginView(); };
+function loadAll(){
+  var v = "venue_id=eq." + VID;
+  return Promise.all([
+    get("svc_services?" + v + "&order=sort,name"), get("svc_providers?" + v + "&order=sort,name"),
+    get("svc_provider_services?" + v), get("svc_rooms?" + v + "&order=sort,name"),
+    get("svc_hours?" + v + "&order=weekday,start_time"),
+    get("svc_time_off?" + v + "&ends_at=gte." + encodeURIComponent(new Date(Date.now() - 864e5).toISOString()) + "&order=starts_at"),
+    get("svc_settings?" + v)
+  ]).then(function (r) {
+    D.services = r[0]; D.providers = r[1]; D.links = r[2]; D.rooms = r[3]; D.hours = r[4]; D.timeoff = r[5]; D.settings = r[6][0] || null;
+  });
+}
+document.querySelectorAll("[data-tab]").forEach(function (b) {
+  b.onclick = function () { V.tab = b.getAttribute("data-tab"); document.querySelectorAll("[data-tab]").forEach(function (x) { x.classList.toggle("on", x === b); }); show(); };
+});
+function show(){
+  closeSheet();
+  ({ cal: viewCal, list: viewList, svc: viewServices, team: viewTeam, rooms: viewRooms, hours: viewHours, set: viewSettings })[V.tab]();
+}
+function byId(list, id){ return list.filter(function (x) { return x.id === id; })[0]; }
+
+/* =================== CALENDAR =================== */
+var APPTS = [];
+function viewCal(){
+  $("app").innerHTML = '<div class="calbar"><button class="btn" id="cp">‹</button><button class="btn" id="ct">Today</button><button class="btn" id="cn">›</button>' +
+    '<input type="date" id="cd" value="' + V.date + '"><span class="date" id="clabel"></span><span class="sp"></span>' +
+    '<span class="seg"><button data-m="provider" class="' + (V.mode === "provider" ? "on" : "") + '">' + cap(WORD) + 's</button><button data-m="room" class="' + (V.mode === "room" ? "on" : "") + '">Rooms</button></span>' +
+    '<button class="btn acc" id="newb">+ New booking</button><button class="btn" id="blk">Block time</button></div><div class="stats" id="stats"></div><div class="calwrap" id="cw"><div class="spin"></div></div>';
+  $("cp").onclick = function () { V.date = addDays(V.date, -1); viewCal(); };
+  $("cn").onclick = function () { V.date = addDays(V.date, 1); viewCal(); };
+  $("ct").onclick = function () { V.date = today(); viewCal(); };
+  $("cd").onchange = function () { if (this.value) { V.date = this.value; viewCal(); } };
+  document.querySelectorAll("[data-m]").forEach(function (b) { b.onclick = function () { V.mode = b.getAttribute("data-m"); viewCal(); }; });
+  $("newb").onclick = function () { bookingSheet({ date: V.date }); };
+  $("blk").onclick = function () { blockSheet({ date: V.date }); };
+  $("clabel").textContent = fmtDay(V.date, { weekday: "long", day: "numeric", month: "long" });
+  var a = localToUtc(V.date, "00:00").toISOString(), b = localToUtc(addDays(V.date, 1), "00:00").toISOString();
+  get("svc_appointments?venue_id=eq." + VID + "&starts_at=gte." + encodeURIComponent(a) + "&starts_at=lt." + encodeURIComponent(b) + "&order=starts_at")
+    .then(function (rows) { APPTS = rows; drawCal(); })
+    .catch(function (e) { $("cw").innerHTML = '<div class="card err">' + esc(e.message) + "</div>"; });
+}
+function venueWindows(ds){ return D.hours.filter(function (h) { return !h.provider_id && h.weekday === dow(ds); }); }
+function hm2m(t){ return +t.slice(0, 2) * 60 + +t.slice(3, 5); }
+function drawCal(){
+  var ds = V.date, wins = venueWindows(ds);
+  var live = APPTS.filter(function (x) { return x.status !== "cancelled"; });
+  var start = 8 * 60, end = 20 * 60;
+  if (wins.length) { start = Math.min.apply(null, wins.map(function (w) { return hm2m(w.start_time); })); end = Math.max.apply(null, wins.map(function (w) { return hm2m(w.end_time); })); }
+  APPTS.forEach(function (x) { start = Math.min(start, minsOfDay(x.starts_at)); end = Math.max(end, minsOfDay(x.block_until) || 1440); });
+  start = Math.floor(start / 60) * 60; end = Math.min(1440, Math.ceil(end / 60) * 60);
+  var HP = 64, px = function (m) { return (m - start) / 60 * HP; };
+  var revenue = live.filter(function (x) { return x.status !== "no_show"; }).reduce(function (s, x) { return s + (x.price_cents || 0); }, 0);
+  $("stats").innerHTML = '<span class="stat"><b>' + live.length + "</b>bookings</span>" +
+    '<span class="stat"><b>' + money(revenue) + "</b>booked value</span>" +
+    '<span class="stat"><b>' + APPTS.filter(function (x) { return x.status === "cancelled"; }).length + "</b>cancelled</span>" +
+    (wins.length ? '<span class="stat">Open ' + wins.map(function (w) { return w.start_time.slice(0, 5) + "–" + w.end_time.slice(0, 5); }).join(", ") + "</span>" : '<span class="stat" style="color:var(--warn)">Closed (no opening hours today)</span>');
+
+  var cols;
+  if (V.mode === "provider") {
+    cols = D.providers.filter(function (p) { return p.active; }).map(function (p) { return { id: p.id, name: p.name, sub: p.title || "", key: "provider_id" }; });
+    if (live.some(function (x) { return !x.provider_id; })) cols.push({ id: null, name: "No " + WORD, sub: "room-only", key: "provider_id" });
+  } else {
+    cols = D.rooms.filter(function (r) { return r.active; }).map(function (r) { return { id: r.id, name: r.name, sub: r.room_type || "", key: "room_id" }; });
+    if (live.some(function (x) { return !x.room_id; })) cols.push({ id: null, name: "No room", sub: "e.g. consults", key: "room_id" });
+  }
+  if (!cols.length) { $("cw").innerHTML = '<div class="card muted">Add ' + (V.mode === "provider" ? WORD + "s in Team" : "rooms in Rooms") + " to see the calendar.</div>"; return; }
+
+  var hoursH = "";
+  for (var m = start; m < end; m += 60) hoursH += '<div class="tlab">' + (m === start ? "" : String(m / 60).padStart(2, "0") + ":00") + "</div>";
+  var html = '<div class="cal" style="grid-template-columns:56px repeat(' + cols.length + ',minmax(150px,1fr))"><div class="hd corner tcol"></div>';
+  cols.forEach(function (c) { html += '<div class="hd">' + esc(c.name) + "<small>" + esc(c.sub) + "</small></div>"; });
+  html += '<div class="tcol" style="padding-top:0">' + hoursH + "</div>";
+  cols.forEach(function (c) {
+    var body = "";
+    for (var mm = start; mm < end; mm += 60) body += '<div class="hl"></div>';
+    // shade non-working time
+    var work = [];
+    if (V.mode === "provider" && c.id) {
+      var own = D.hours.filter(function (h) { return h.provider_id === c.id; });
+      work = (own.length ? own.filter(function (h) { return h.weekday === dow(ds); }) : wins);
+    } else work = wins;
+    work = work.map(function (w) { return [hm2m(w.start_time), hm2m(w.end_time)]; }).sort(function (a, b) { return a[0] - b[0]; });
+    var cur = start;
+    work.concat([[end, end]]).forEach(function (w) { if (w[0] > cur) body += '<div class="off" style="top:' + px(cur) + "px;height:" + (px(w[0]) - px(cur)) + 'px"></div>'; cur = Math.max(cur, w[1]); });
+    // time off blocks
+    D.timeoff.forEach(function (t) {
+      var hit = (!t.provider_id && !t.room_id) || (V.mode === "provider" && t.provider_id === c.id && c.id) || (V.mode === "room" && t.room_id === c.id && c.id);
+      if (!hit) return;
+      var s = new Date(t.starts_at), e = new Date(t.ends_at), d0 = localToUtc(ds, "00:00"), d1 = localToUtc(addDays(ds, 1), "00:00");
+      if (e <= d0 || s >= d1) return;
+      var sm = s < d0 ? start : minsOfDay(s), em = e >= d1 ? end : minsOfDay(e);
+      body += '<div class="off" data-to="' + t.id + '" style="cursor:pointer;top:' + px(Math.max(sm, start)) + "px;height:" + Math.max(8, px(Math.min(em, end)) - px(Math.max(sm, start))) + 'px;background:repeating-linear-gradient(135deg,#F1E3DF 0 6px,#EAD7D2 6px 12px)" title="' + esc(t.reason || "Blocked") + '"></div>';
+    });
+    APPTS.filter(function (x) { return (x[c.key] || null) === c.id && (x.status !== "cancelled" || V.showCancelled); }).forEach(function (x) {
+      var sm = minsOfDay(x.starts_at), em = sm + (new Date(x.ends_at) - new Date(x.starts_at)) / 6e4, bm = sm + (new Date(x.block_until) - new Date(x.starts_at)) / 6e4;
+      var other = V.mode === "provider" ? (x.room_id ? (byId(D.rooms, x.room_id) || {}).name : "") : (x.provider_id ? (byId(D.providers, x.provider_id) || {}).name : "");
+      var h = px(bm) - px(sm), bh = px(bm) - px(em);
+      body += '<div class="ap ' + x.status + '" data-ap="' + x.id + '" style="top:' + px(sm) + "px;height:" + Math.max(18, h - 2) + 'px">' +
+        "<b>" + localTime(x.starts_at) + " " + esc(x.client_name) + "</b>" + esc(x.service_name) + (other ? '<br><span class="muted">' + esc(other) + "</span>" : "") +
+        (bh > 0 ? '<span class="buf" style="height:' + bh + 'px"></span>' : "") + "</div>";
+    });
+    if (ds === today()) { var nm = minsOfDay(new Date()); if (nm >= start && nm <= end) body += '<div class="nowline" style="top:' + px(nm) + 'px"></div>'; }
+    html += '<div class="colb" style="height:' + px(end) + 'px">' + body + "</div>";
+  });
+  html += "</div>";
+  $("cw").innerHTML = html;
+  $("cw").querySelectorAll("[data-ap]").forEach(function (el) { el.onclick = function () { apptSheet(byId(APPTS, el.getAttribute("data-ap"))); }; });
+  $("cw").querySelectorAll("[data-to]").forEach(function (el) {
+    el.onclick = function () {
+      var t = byId(D.timeoff, el.getAttribute("data-to"));
+      if (confirm("Remove this block" + (t.reason ? " (" + t.reason + ")" : "") + "?")) del("svc_time_off?id=eq." + t.id).then(loadAll).then(function () { toast("Block removed"); viewCal(); }).catch(function (e) { alert(e.message); });
+    };
+  });
+}
+
+/* ---------- sheets ---------- */
+function openSheet(html){ $("layer").innerHTML = '<div class="scrim" id="scrim"></div><div class="sheet">' + html + "</div>"; $("scrim").onclick = closeSheet; var x = document.querySelector(".sheet .x"); if (x) x.onclick = closeSheet; }
+function closeSheet(){ $("layer").innerHTML = ""; }
+function apptSheet(x){
+  var pr = byId(D.providers, x.provider_id), rm = byId(D.rooms, x.room_id);
+  openSheet('<button class="btn sm x">Close</button><h2>' + esc(x.client_name) + '</h2><span class="pill ' + x.status + '">' + x.status.replace("_", " ") + "</span>" +
+    "<dl><dt>Ref</dt><dd>" + esc(x.ref) + "</dd><dt>Treatment</dt><dd>" + esc(x.service_name) + (x.price_cents != null ? " · " + money(x.price_cents) : "") + "</dd>" +
+    "<dt>When</dt><dd>" + fmtDay(localDate(x.starts_at), { weekday: "short", day: "numeric", month: "short" }) + " · " + localTime(x.starts_at) + "–" + localTime(x.ends_at) + "</dd>" +
+    "<dt>" + cap(WORD) + "</dt><dd>" + (pr ? esc(pr.name) : "—") + "</dd><dt>Room</dt><dd>" + (rm ? esc(rm.name) : "—") + "</dd>" +
+    "<dt>Email</dt><dd>" + (x.client_email ? '<a href="mailto:' + esc(x.client_email) + '">' + esc(x.client_email) + "</a>" : "—") + "</dd>" +
+    "<dt>Phone</dt><dd>" + (x.client_phone ? '<a href="tel:' + esc(x.client_phone) + '">' + esc(x.client_phone) + "</a>" : "—") + "</dd>" +
+    "<dt>Client notes</dt><dd>" + esc(x.notes || "—") + "</dd><dt>Booked</dt><dd>" + esc(x.source) + " · " + new Date(x.created_at).toLocaleString("en-AU", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" }) + "</dd></dl>" +
+    '<label class="f">Staff notes (private)<textarea id="sn">' + esc(x.staff_notes || "") + '</textarea></label><div class="row" style="margin-top:8px"><button class="btn sm" id="savn">Save notes</button></div>' +
+    '<h3 style="margin-top:20px">Change</h3><div class="g2">' +
+    '<label class="f">' + cap(WORD) + '<select id="cpr"><option value="">—</option>' + D.providers.map(function (p) { return '<option value="' + p.id + '"' + (p.id === x.provider_id ? " selected" : "") + ">" + esc(p.name) + "</option>"; }).join("") + "</select></label>" +
+    '<label class="f">Room<select id="crm"><option value="">—</option>' + D.rooms.map(function (r) { return '<option value="' + r.id + '"' + (r.id === x.room_id ? " selected" : "") + ">" + esc(r.name) + "</option>"; }).join("") + "</select></label></div>" +
+    '<div class="row" style="margin-top:8px"><button class="btn sm" id="savm">Save change</button><span class="muted" style="font-size:13px">Clashes are refused automatically.</span></div>' +
+    '<h3 style="margin-top:20px">Status</h3><div class="row">' +
+    (x.status !== "completed" ? '<button class="btn sm" data-st="completed">Mark completed</button>' : "") +
+    (x.status !== "no_show" ? '<button class="btn sm" data-st="no_show">No-show</button>' : "") +
+    (x.status !== "confirmed" ? '<button class="btn sm" data-st="confirmed">Back to confirmed</button>' : "") +
+    (x.status !== "cancelled" ? '<button class="btn sm danger" data-st="cancelled">Cancel booking</button>' : "") + "</div>" +
+    '<div class="row" style="margin-top:14px"><button class="btn sm" id="rebook">Rebook / reschedule…</button></div><div class="err" id="aerr"></div>');
+  var after = function (msg) { return function () { toast(msg); closeSheet(); if (V.tab === "cal") viewCal(); else show(); }; };
+  var fail = function (e) { $("aerr").textContent = e.message; };
+  $("savn").onclick = function () { patch("svc_appointments?id=eq." + x.id, { staff_notes: $("sn").value }).then(after("Notes saved")).catch(fail); };
+  $("savm").onclick = function () { patch("svc_appointments?id=eq." + x.id, { provider_id: $("cpr").value || null, room_id: $("crm").value || null }).then(after("Updated")).catch(fail); };
+  document.querySelectorAll("[data-st]").forEach(function (b) {
+    b.onclick = function () {
+      var st = b.getAttribute("data-st");
+      if (st === "cancelled" && !confirm("Cancel " + x.client_name + "'s booking?")) return;
+      patch("svc_appointments?id=eq." + x.id, { status: st }).then(function () {
+        if (st === "cancelled") notifyHook("cancelled", x.ref);
+      }).then(after("Saved")).catch(fail);
+    };
+  });
+  $("rebook").onclick = function () { bookingSheet({ date: localDate(x.starts_at), service: x.service_id, provider: x.provider_id, name: x.client_name, email: x.client_email, phone: x.client_phone, notes: x.notes, replace: x }); };
+}
+function notifyHook(){ /* emails are sent by the database itself (Supabase function svc-booking-email) */ }
+function bookingSheet(o){
+  var sv = D.services.filter(function (s) { return s.active; });
+  openSheet('<button class="btn sm x">Close</button><h2>' + (o.replace ? "Reschedule" : "New booking") + '</h2><p class="muted">Phone or walk-in booking. Availability rules apply; the custom time skips the online notice period.</p><div class="g2">' +
+    '<label class="f">Treatment<select id="bs">' + sv.map(function (s) { return '<option value="' + s.id + '"' + (s.id === o.service ? " selected" : "") + ">" + esc(s.name) + " (" + s.duration_min + " min)</option>"; }).join("") + "</select></label>" +
+    '<label class="f">' + cap(WORD) + '<select id="bp"></select></label>' +
+    '<label class="f">Date<input type="date" id="bd" value="' + (o.date || V.date) + '"></label>' +
+    '<label class="f">Custom time<input type="time" id="bt" step="300"></label></div>' +
+    '<h3 style="margin-top:14px">Free times</h3><div class="slots" id="bsl"><div class="spin"></div></div>' +
+    '<h3 style="margin-top:14px">Client</h3><div class="g2"><label class="f">Name<input type="text" id="bn" value="' + esc(o.name || "") + '"></label>' +
+    '<label class="f">Phone<input type="tel" id="bph" value="' + esc(o.phone || "") + '"></label>' +
+    '<label class="f">Email<input type="email" id="be" value="' + esc(o.email || "") + '"></label>' +
+    '<label class="f">Notes<input type="text" id="bno" value="' + esc(o.notes || "") + '"></label></div>' +
+    '<div class="row" style="margin-top:14px"><button class="btn pri" id="bgo">' + (o.replace ? "Book new time & cancel old" : "Book") + '</button><span class="err" id="berr"></span></div>');
+  var pick = null;
+  var fillPros = function () {
+    var sid = $("bs").value, s = byId(D.services, sid);
+    var pros = D.providers.filter(function (p) { return p.active && D.links.some(function (l) { return l.provider_id === p.id && l.service_id === sid; }); });
+    $("bp").innerHTML = s && !s.needs_provider ? '<option value="">Not needed</option>' : '<option value="">Anyone available</option>' + pros.map(function (p) { return '<option value="' + p.id + '"' + (p.id === o.provider ? " selected" : "") + ">" + esc(p.name) + "</option>"; }).join("");
+    $("bp").disabled = s && !s.needs_provider;
+  };
+  var loadS = function () {
+    pick = null; $("bsl").innerHTML = '<div class="spin"></div>';
+    rpc("svc_get_slots", { p_venue: VENUE, p_service: $("bs").value, p_date: $("bd").value, p_provider: $("bp").value || null }).then(function (r) {
+      var sl = (r && r.slots) || [];
+      $("bsl").innerHTML = sl.length ? sl.map(function (s) { return '<button class="slot" data-s="' + s.start + '">' + s.time + "</button>"; }).join("") : '<span class="muted">No free times — try a custom time or another day.</span>';
+      $("bsl").querySelectorAll("[data-s]").forEach(function (b) { b.onclick = function () { pick = b.getAttribute("data-s"); $("bt").value = ""; $("bsl").querySelectorAll(".slot").forEach(function (z) { z.classList.toggle("sel", z === b); }); }; });
+    }).catch(function (e) { $("bsl").innerHTML = '<span class="err">' + esc(e.message) + "</span>"; });
+  };
+  fillPros(); loadS();
+  $("bs").onchange = function () { fillPros(); loadS(); };
+  $("bp").onchange = loadS; $("bd").onchange = loadS;
+  $("bt").oninput = function () { pick = null; $("bsl").querySelectorAll(".slot").forEach(function (z) { z.classList.remove("sel"); }); };
+  $("bgo").onclick = function () {
+    var start = pick || ($("bt").value ? localToUtc($("bd").value, $("bt").value).toISOString() : null);
+    if (!start) { $("berr").textContent = "Pick a free time or enter a custom time."; return; }
+    if (!$("bn").value.trim()) { $("berr").textContent = "Client name is needed."; return; }
+    if (!$("bph").value.trim() && !$("be").value.trim()) { $("berr").textContent = "Add a phone or email for the client."; return; }
+    var b = $("bgo"); b.disabled = true;
+    var go = function () {
+      return rpc("svc_book", { p_venue: VENUE, p_service: $("bs").value, p_start: start, p_provider: $("bp").value || null, p_name: $("bn").value, p_email: $("be").value, p_phone: $("bph").value, p_notes: $("bno").value, p_source: "staff" });
+    };
+    // when rescheduling, free the old slot first so the client can move within their own time
+    var pre = o.replace ? patch("svc_appointments?id=eq." + o.replace.id, { status: "cancelled" }) : Promise.resolve();
+    pre.then(go).then(function (r) {
+      if (!r.ok) {
+        $("berr").textContent = r.error; b.disabled = false;
+        if (o.replace) return patch("svc_appointments?id=eq." + o.replace.id, { status: o.replace.status }).catch(function () {});
+        return;
+      }
+      notifyHook("confirmed", r.ref);
+      if (o.replace) notifyHook("rescheduled_from", o.replace.ref);
+      toast("Booked " + r.ref + (r.provider ? " with " + r.provider : "")); closeSheet();
+      V.date = localDate(r.starts_at); V.tab = "cal"; viewCal();
+    }).catch(function (e) { $("berr").textContent = e.message; b.disabled = false; });
+  };
+}
+function blockSheet(o){
+  openSheet('<button class="btn sm x">Close</button><h2>Block time</h2><p class="muted">Leave, training, maintenance or a public holiday. Online booking won\'t offer these times.</p><div class="g2">' +
+    '<label class="f">What<select id="kw"><option value="">Whole business (closed)</option><optgroup label="' + cap(WORD) + 's">' + D.providers.map(function (p) { return '<option value="p:' + p.id + '">' + esc(p.name) + "</option>"; }).join("") + '</optgroup><optgroup label="Rooms">' + D.rooms.map(function (r) { return '<option value="r:' + r.id + '">' + esc(r.name) + "</option>"; }).join("") + "</optgroup></select></label>" +
+    '<label class="f">Reason<input type="text" id="kr" placeholder="Annual leave"></label>' +
+    '<label class="f">From<input type="datetime-local" id="ks" value="' + (o.date || V.date) + 'T09:00"></label>' +
+    '<label class="f">To<input type="datetime-local" id="ke" value="' + (o.date || V.date) + 'T17:00"></label></div>' +
+    '<div class="row" style="margin-top:14px"><button class="btn pri" id="kgo">Save block</button><span class="err" id="kerr"></span></div>' +
+    (D.timeoff.length ? '<h3 style="margin-top:22px">Upcoming blocks</h3><table>' + D.timeoff.map(function (t) {
+      var w = t.provider_id ? (byId(D.providers, t.provider_id) || {}).name : t.room_id ? (byId(D.rooms, t.room_id) || {}).name : "Whole business";
+      return "<tr><td><b>" + esc(w) + "</b><br>" + esc(t.reason || "") + "</td><td>" + new Date(t.starts_at).toLocaleString("en-AU", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" }) + " → " + new Date(t.ends_at).toLocaleString("en-AU", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" }) + '</td><td><button class="btn sm danger" data-rmto="' + t.id + '">Remove</button></td></tr>';
+    }).join("") + "</table>" : ""));
+  $("kgo").onclick = function () {
+    var s = $("ks").value, e = $("ke").value, w = $("kw").value;
+    if (!s || !e) return;
+    var row = { venue_id: VID, reason: $("kr").value || null, starts_at: localToUtc(s.slice(0, 10), s.slice(11, 16)).toISOString(), ends_at: localToUtc(e.slice(0, 10), e.slice(11, 16)).toISOString() };
+    if (w.indexOf("p:") === 0) row.provider_id = w.slice(2);
+    if (w.indexOf("r:") === 0) row.room_id = w.slice(2);
+    if (new Date(row.ends_at) <= new Date(row.starts_at)) { $("kerr").textContent = "End must be after start."; return; }
+    post("svc_time_off", row).then(loadAll).then(function () { toast("Blocked"); closeSheet(); if (V.tab === "cal") viewCal(); else show(); }).catch(function (er) { $("kerr").textContent = er.message; });
+  };
+  document.querySelectorAll("[data-rmto]").forEach(function (b) { b.onclick = function () { del("svc_time_off?id=eq." + b.getAttribute("data-rmto")).then(loadAll).then(function () { toast("Removed"); blockSheet(o); }); }; });
+}
+
+/* =================== BOOKINGS LIST =================== */
+function viewList(){
+  $("app").innerHTML = '<div class="row" style="margin-bottom:12px"><h2>Bookings</h2><span class="sp"></span><input type="text" id="ls" placeholder="Search name, email, phone, ref" style="min-width:240px">' +
+    '<select id="lr"><option value="up">Upcoming</option><option value="past">Past 30 days</option><option value="all">Everything</option></select><button class="btn" id="lcsv">Export CSV</button></div><div class="card" id="lt"><div class="spin"></div></div>';
+  var rows = [];
+  var load = function () {
+    var r = $("lr").value, now = new Date().toISOString(), p = "svc_appointments?venue_id=eq." + VID;
+    if (r === "up") p += "&starts_at=gte." + encodeURIComponent(now) + "&order=starts_at&limit=500";
+    if (r === "past") p += "&starts_at=lt." + encodeURIComponent(now) + "&starts_at=gte." + encodeURIComponent(new Date(Date.now() - 30 * 864e5).toISOString()) + "&order=starts_at.desc&limit=500";
+    if (r === "all") p += "&order=starts_at.desc&limit=1000";
+    get(p).then(function (x) { rows = x; draw(); }).catch(function (e) { $("lt").innerHTML = '<span class="err">' + esc(e.message) + "</span>"; });
+  };
+  var draw = function () {
+    var s = $("ls").value.trim().toLowerCase();
+    var f = rows.filter(function (x) { return !s || [x.client_name, x.client_email, x.client_phone, x.ref, x.service_name].join(" ").toLowerCase().indexOf(s) >= 0; });
+    $("lt").innerHTML = f.length ? "<table><tr><th>When</th><th>Client</th><th>Treatment</th><th>" + cap(WORD) + "</th><th>Status</th></tr>" + f.map(function (x) {
+      return '<tr class="click" data-id="' + x.id + '"><td>' + fmtDay(localDate(x.starts_at), { weekday: "short", day: "numeric", month: "short" }) + " " + localTime(x.starts_at) + "</td><td><b>" + esc(x.client_name) + '</b><br><span class="muted">' + esc(x.client_phone || x.client_email || "") + "</span></td><td>" + esc(x.service_name) + "</td><td>" + esc((byId(D.providers, x.provider_id) || {}).name || "—") + '</td><td><span class="pill ' + x.status + '">' + x.status.replace("_", " ") + "</span></td></tr>";
+    }).join("") + "</table>" : '<span class="muted">No bookings.</span>';
+    $("lt").querySelectorAll("[data-id]").forEach(function (tr) { tr.onclick = function () { apptSheet(byId(rows, tr.getAttribute("data-id"))); }; });
+  };
+  $("ls").oninput = draw; $("lr").onchange = load;
+  $("lcsv").onclick = function () {
+    var head = ["ref", "date", "time", "client_name", "client_email", "client_phone", "service", "provider", "room", "status", "price", "source", "notes"];
+    var lines = [head.join(",")].concat(rows.map(function (x) {
+      return [x.ref, localDate(x.starts_at), localTime(x.starts_at), x.client_name, x.client_email, x.client_phone, x.service_name, (byId(D.providers, x.provider_id) || {}).name, (byId(D.rooms, x.room_id) || {}).name, x.status, x.price_cents != null ? (x.price_cents / 100).toFixed(2) : "", x.source, x.notes]
+        .map(function (v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(",");
+    }));
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" })); a.download = VENUE + "-bookings.csv"; document.body.appendChild(a); a.click(); a.remove();
+  };
+  load();
+}
+
+/* =================== TREATMENTS =================== */
+function roomTypes(){ var t = {}; D.rooms.forEach(function (r) { if (r.room_type) t[r.room_type] = 1; }); return Object.keys(t); }
+function viewServices(){
+  $("app").innerHTML = '<div class="row" style="margin-bottom:12px"><h2>Treatments</h2><span class="sp"></span><button class="btn acc" id="addsv">+ Add treatment</button></div><div class="items">' +
+    (D.services.length ? D.services.map(function (s) {
+      var who = D.links.filter(function (l) { return l.service_id === s.id; }).map(function (l) { return (byId(D.providers, l.provider_id) || {}).name; }).filter(Boolean);
+      return '<div class="item"><div class="main"><b>' + esc(s.name) + "</b> " + (s.active ? "" : '<span class="pill cancelled">hidden</span>') + '<div class="muted">' + esc(s.category || "") + "</div><div class=\"chips\">" +
+        '<span class="chip">' + s.duration_min + " min" + (s.buffer_min ? " + " + s.buffer_min + " clean-up" : "") + '</span><span class="chip">' + money(s.price_cents) + "</span>" +
+        (s.needs_provider ? '<span class="chip">' + who.length + " " + WORD + (who.length === 1 ? "" : "s") + "</span>" : '<span class="chip">no ' + WORD + "</span>") +
+        (s.needs_room ? '<span class="chip">room: ' + esc(s.room_type || "any") + "</span>" : '<span class="chip">no room</span>') + '</div></div><button class="btn sm" data-es="' + s.id + '">Edit</button></div>';
+    }).join("") : '<div class="card muted">No treatments yet.</div>') + "</div>";
+  $("addsv").onclick = function () { serviceSheet({ active: true, needs_provider: true, needs_room: true, duration_min: 60, buffer_min: 15, sort: D.services.length + 1 }); };
+  document.querySelectorAll("[data-es]").forEach(function (b) { b.onclick = function () { serviceSheet(byId(D.services, b.getAttribute("data-es"))); }; });
+}
+function serviceSheet(s){
+  var rt = roomTypes();
+  openSheet('<button class="btn sm x">Close</button><h2>' + (s.id ? "Edit treatment" : "New treatment") + '</h2><div class="g2" style="margin-top:14px">' +
+    '<label class="f">Name<input type="text" id="sn1" value="' + esc(s.name || "") + '"></label><label class="f">Category<input type="text" id="sc" value="' + esc(s.category || "") + '" placeholder="Massage, Skin…"></label>' +
+    '<label class="f">Length (min)<input type="number" id="sd" min="5" step="5" value="' + (s.duration_min || 60) + '"></label><label class="f">Clean-up after (min)<input type="number" id="sb" min="0" step="5" value="' + (s.buffer_min || 0) + '"></label>' +
+    '<label class="f">Price ($)<input type="number" id="spr" min="0" step="0.5" value="' + (s.price_cents != null ? s.price_cents / 100 : "") + '"></label><label class="f">Sort order<input type="number" id="so" value="' + (s.sort || 0) + '"></label></div>' +
+    '<label class="f" style="margin-top:12px">Description<textarea id="sde">' + esc(s.description || "") + "</textarea></label>" +
+    '<h3 style="margin-top:16px">Needs</h3><div class="checks"><label><input type="checkbox" id="snp"' + (s.needs_provider ? " checked" : "") + "> A " + WORD + '</label><label><input type="checkbox" id="snr"' + (s.needs_room ? " checked" : "") + "> A room</label>" +
+    '<label><input type="checkbox" id="sac"' + (s.active !== false ? " checked" : "") + "> Bookable online</label></div>" +
+    '<label class="f" style="margin-top:10px">Room type <input type="text" id="srt" list="rtl" value="' + esc(s.room_type || "") + '" placeholder="blank = any room"><datalist id="rtl">' + rt.map(function (t) { return '<option value="' + esc(t) + '">'; }).join("") + "</datalist></label>" +
+    '<h3 style="margin-top:16px">Who can do it</h3><div class="checks">' + D.providers.map(function (p) {
+      var on = s.id && D.links.some(function (l) { return l.service_id === s.id && l.provider_id === p.id; });
+      return '<label><input type="checkbox" data-lp="' + p.id + '"' + (on ? " checked" : "") + "> " + esc(p.name) + "</label>";
+    }).join("") + '</div><div class="row" style="margin-top:18px"><button class="btn pri" id="ssave">Save</button>' + (s.id ? '<button class="btn danger" id="sdel">Delete</button>' : "") + '<span class="err" id="serr"></span></div>');
+  $("ssave").onclick = function () {
+    var row = { venue_id: VID, name: $("sn1").value.trim(), category: $("sc").value.trim() || null, description: $("sde").value.trim() || null,
+      duration_min: +$("sd").value, buffer_min: +$("sb").value || 0, price_cents: $("spr").value === "" ? null : Math.round(+$("spr").value * 100), sort: +$("so").value || 0,
+      needs_provider: $("snp").checked, needs_room: $("snr").checked, room_type: $("srt").value.trim() || null, active: $("sac").checked };
+    if (!row.name) { $("serr").textContent = "Name is needed."; return; }
+    if (!row.needs_provider && !row.needs_room) { $("serr").textContent = "Tick a " + WORD + ", a room, or both."; return; }
+    var chosen = Array.prototype.map.call(document.querySelectorAll("[data-lp]:checked"), function (c) { return c.getAttribute("data-lp"); });
+    (s.id ? patch("svc_services?id=eq." + s.id, row) : post("svc_services", row)).then(function (r) {
+      var id = s.id || r[0].id;
+      return del("svc_provider_services?service_id=eq." + id).then(function () {
+        if (!chosen.length) return;
+        return post("svc_provider_services", chosen.map(function (p) { return { venue_id: VID, provider_id: p, service_id: id }; }));
+      });
+    }).then(loadAll).then(function () { toast("Saved"); viewServices(); }).catch(function (e) { $("serr").textContent = e.message; });
+  };
+  if (s.id) $("sdel").onclick = function () {
+    if (!confirm("Delete " + s.name + "? Existing bookings keep their details. To just stop online booking, untick 'Bookable online' instead.")) return;
+    del("svc_services?id=eq." + s.id).then(loadAll).then(function () { toast("Deleted"); viewServices(); }).catch(function (e) { $("serr").textContent = e.message; });
+  };
+}
+
+/* =================== TEAM =================== */
+function viewTeam(){
+  $("app").innerHTML = '<div class="row" style="margin-bottom:12px"><h2>Team</h2><span class="sp"></span><button class="btn acc" id="addp">+ Add ' + WORD + '</button></div><div class="items">' +
+    (D.providers.length ? D.providers.map(function (p) {
+      var sv = D.links.filter(function (l) { return l.provider_id === p.id; }).map(function (l) { return (byId(D.services, l.service_id) || {}).name; }).filter(Boolean);
+      var own = D.hours.filter(function (h) { return h.provider_id === p.id; });
+      return '<div class="item"><div class="main"><b>' + esc(p.name) + "</b> " + (p.active ? "" : '<span class="pill cancelled">inactive</span>') + '<div class="muted">' + esc(p.title || "") + '</div><div class="chips">' +
+        (own.length ? '<span class="chip">' + hoursSummary(own) + "</span>" : '<span class="chip">follows opening hours</span>') +
+        sv.map(function (n) { return '<span class="chip">' + esc(n) + "</span>"; }).join("") + '</div></div><button class="btn sm" data-ep="' + p.id + '">Edit</button></div>';
+    }).join("") : '<div class="card muted">No team yet.</div>') + "</div>";
+  $("addp").onclick = function () { providerSheet({ active: true, sort: D.providers.length + 1 }); };
+  document.querySelectorAll("[data-ep]").forEach(function (b) { b.onclick = function () { providerSheet(byId(D.providers, b.getAttribute("data-ep"))); }; });
+}
+function hoursSummary(rows){
+  var d = {}; rows.forEach(function (h) { d[h.weekday] = 1; });
+  return [1, 2, 3, 4, 5, 6, 0].filter(function (w) { return d[w]; }).map(function (w) { return DAYS[w].slice(0, 3); }).join(" ");
+}
+function weekEditor(id, rows){
+  return '<div class="week" id="' + id + '">' + [1, 2, 3, 4, 5, 6, 0].map(function (w) {
+    var r = rows.filter(function (h) { return h.weekday === w; });
+    return '<div class="wd" data-w="' + w + '"><b style="padding-top:8px">' + DAYS[w].slice(0, 3) + '</b><div class="ranges">' + r.map(rangeRow).join("") + '<div><button class="btn sm" data-addr>+ ' + (r.length ? "add break / shift" : "add hours") + "</button></div></div></div>";
+  }).join("") + "</div>";
+}
+function rangeRow(h){ return '<div class="rg"><input type="time" data-s value="' + (h ? h.start_time.slice(0, 5) : "09:00") + '"> – <input type="time" data-e value="' + (h ? h.end_time.slice(0, 5) : "17:00") + '"><button class="btn sm danger" data-rmr>✕</button></div>'; }
+function bindWeek(id){
+  var root = $(id);
+  root.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t.hasAttribute("data-addr")) { t.parentNode.insertAdjacentHTML("beforebegin", rangeRow(null)); }
+    if (t.hasAttribute("data-rmr")) { t.parentNode.remove(); }
+  });
+}
+function readWeek(id){
+  var out = [], bad = null;
+  $(id).querySelectorAll(".wd").forEach(function (wd) {
+    var w = +wd.getAttribute("data-w");
+    wd.querySelectorAll(".rg").forEach(function (rg) {
+      var s = rg.querySelector("[data-s]").value, e = rg.querySelector("[data-e]").value;
+      if (!s || !e) return;
+      if (e <= s) bad = DAYS[w] + ": end must be after start";
+      out.push({ weekday: w, start_time: s, end_time: e });
+    });
+  });
+  if (bad) throw new Error(bad);
+  return out;
+}
+function providerSheet(p){
+  var own = p.id ? D.hours.filter(function (h) { return h.provider_id === p.id; }) : [];
+  openSheet('<button class="btn sm x">Close</button><h2>' + (p.id ? esc(p.name) : "New " + WORD) + '</h2><div class="g2" style="margin-top:14px">' +
+    '<label class="f">Name<input type="text" id="pn" value="' + esc(p.name || "") + '"></label><label class="f">Title<input type="text" id="pt" value="' + esc(p.title || "") + '" placeholder="Remedial Therapist"></label>' +
+    '<label class="f">Email (optional, for their copy)<input type="email" id="pe" value="' + esc(p.email || "") + '"></label><label class="f">Photo URL<input type="url" id="pph" value="' + esc(p.photo_url || "") + '"></label></div>' +
+    '<label class="f" style="margin-top:12px">Short bio<textarea id="pb">' + esc(p.bio || "") + '</textarea></label><div class="checks" style="margin-top:10px"><label><input type="checkbox" id="pa"' + (p.active !== false ? " checked" : "") + "> Taking bookings</label></div>" +
+    '<h3 style="margin-top:16px">Treatments</h3><div class="checks">' + D.services.map(function (s) {
+      var on = p.id && D.links.some(function (l) { return l.provider_id === p.id && l.service_id === s.id; });
+      return '<label><input type="checkbox" data-ls="' + s.id + '"' + (on ? " checked" : "") + "> " + esc(s.name) + "</label>";
+    }).join("") + "</div>" +
+    '<h3 style="margin-top:16px">Working hours</h3><div class="checks" style="margin-bottom:10px"><label><input type="checkbox" id="pfo"' + (own.length ? "" : " checked") + "> Same as opening hours</label></div>" +
+    '<div id="pwk" class="' + (own.length ? "" : "hide") + '">' + weekEditor("pweek", own) + "</div>" +
+    '<div class="row" style="margin-top:18px"><button class="btn pri" id="psave">Save</button>' + (p.id ? '<button class="btn danger" id="pdel">Delete</button>' : "") + '<span class="err" id="perr"></span></div>');
+  bindWeek("pweek");
+  $("pfo").onchange = function () { $("pwk").classList.toggle("hide", this.checked); };
+  $("psave").onclick = function () {
+    var row = { venue_id: VID, name: $("pn").value.trim(), title: $("pt").value.trim() || null, email: $("pe").value.trim() || null, photo_url: $("pph").value.trim() || null, bio: $("pb").value.trim() || null, active: $("pa").checked };
+    if (!row.name) { $("perr").textContent = "Name is needed."; return; }
+    var hrs; try { hrs = $("pfo").checked ? [] : readWeek("pweek"); } catch (e) { $("perr").textContent = e.message; return; }
+    if (!$("pfo").checked && !hrs.length) { $("perr").textContent = "Add some hours, or tick 'Same as opening hours'."; return; }
+    var chosen = Array.prototype.map.call(document.querySelectorAll("[data-ls]:checked"), function (c) { return c.getAttribute("data-ls"); });
+    (p.id ? patch("svc_providers?id=eq." + p.id, row) : post("svc_providers", row)).then(function (r) {
+      var id = p.id || r[0].id;
+      return del("svc_provider_services?provider_id=eq." + id)
+        .then(function () { if (chosen.length) return post("svc_provider_services", chosen.map(function (s) { return { venue_id: VID, provider_id: id, service_id: s }; })); })
+        .then(function () { return del("svc_hours?provider_id=eq." + id); })
+        .then(function () { if (hrs.length) return post("svc_hours", hrs.map(function (h) { return Object.assign({ venue_id: VID, provider_id: id }, h); })); });
+    }).then(loadAll).then(function () { toast("Saved"); viewTeam(); }).catch(function (e) { $("perr").textContent = e.message; });
+  };
+  if (p.id) $("pdel").onclick = function () {
+    if (!confirm("Delete " + p.name + "? Their past bookings stay but show no " + WORD + ". To pause them, untick 'Taking bookings' instead.")) return;
+    del("svc_providers?id=eq." + p.id).then(loadAll).then(function () { toast("Deleted"); viewTeam(); }).catch(function (e) { $("perr").textContent = e.message; });
+  };
+}
+
+/* =================== ROOMS =================== */
+function viewRooms(){
+  $("app").innerHTML = '<div class="row" style="margin-bottom:12px"><h2>Rooms</h2><span class="sp"></span><button class="btn acc" id="addr">+ Add room</button></div>' +
+    '<p class="muted" style="margin-top:0">A treatment that needs a room gets the first free room of its room type. Leave the type blank on a treatment to allow any room.</p><div class="card"><table><tr><th>Name</th><th>Type</th><th>In use</th><th></th></tr>' +
+    D.rooms.map(function (r) {
+      return '<tr><td><input type="text" data-rn="' + r.id + '" value="' + esc(r.name) + '"></td><td><input type="text" data-rt="' + r.id + '" value="' + esc(r.room_type || "") + '"></td><td><input type="checkbox" data-ra="' + r.id + '"' + (r.active ? " checked" : "") + '></td><td><button class="btn sm" data-rs="' + r.id + '">Save</button> <button class="btn sm danger" data-rd="' + r.id + '">Delete</button></td></tr>';
+    }).join("") + "</table>" + (D.rooms.length ? "" : '<p class="muted">No rooms yet.</p>') + "</div>";
+  $("addr").onclick = function () {
+    var n = prompt("Room name", "Room " + (D.rooms.length + 1)); if (!n) return;
+    var t = prompt("Room type (e.g. treatment, facial, sauna — blank for general)", (D.rooms[0] || {}).room_type || "");
+    post("svc_rooms", { venue_id: VID, name: n, room_type: (t || "").trim() || null, sort: D.rooms.length + 1 }).then(loadAll).then(function () { toast("Room added"); viewRooms(); }).catch(function (e) { alert(e.message); });
+  };
+  document.querySelectorAll("[data-rs]").forEach(function (b) {
+    b.onclick = function () {
+      var id = b.getAttribute("data-rs");
+      patch("svc_rooms?id=eq." + id, { name: document.querySelector('[data-rn="' + id + '"]').value, room_type: document.querySelector('[data-rt="' + id + '"]').value.trim() || null, active: document.querySelector('[data-ra="' + id + '"]').checked })
+        .then(loadAll).then(function () { toast("Saved"); }).catch(function (e) { alert(e.message); });
+    };
+  });
+  document.querySelectorAll("[data-rd]").forEach(function (b) {
+    b.onclick = function () { if (!confirm("Delete this room?")) return; del("svc_rooms?id=eq." + b.getAttribute("data-rd")).then(loadAll).then(function () { toast("Deleted"); viewRooms(); }).catch(function (e) { alert(e.message); }); };
+  });
+}
+
+/* =================== HOURS & CLOSURES =================== */
+function viewHours(){
+  var vh = D.hours.filter(function (h) { return !h.provider_id; });
+  $("app").innerHTML = '<div class="g2"><div class="card"><h2>Opening hours</h2><p class="muted">Online times are only offered inside these hours. Add a second range for a midday close. Leave a day empty to close it.</p>' + weekEditor("vweek", vh) +
+    '<div class="row" style="margin-top:14px"><button class="btn pri" id="hsave">Save hours</button><span class="err" id="herr"></span></div></div>' +
+    '<div class="card"><h2>Closures &amp; leave</h2><p class="muted">Public holidays, staff leave, room maintenance.</p><button class="btn acc" id="hblk">+ Block time</button><div id="tol" style="margin-top:12px"></div></div></div>';
+  bindWeek("vweek");
+  $("tol").innerHTML = D.timeoff.length ? "<table>" + D.timeoff.map(function (t) {
+    var w = t.provider_id ? (byId(D.providers, t.provider_id) || {}).name : t.room_id ? (byId(D.rooms, t.room_id) || {}).name : "Whole business";
+    return "<tr><td><b>" + esc(w) + "</b><br><span class=\"muted\">" + esc(t.reason || "") + "</span></td><td>" + new Date(t.starts_at).toLocaleString("en-AU", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" }) + "<br>→ " + new Date(t.ends_at).toLocaleString("en-AU", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" }) + '</td><td><button class="btn sm danger" data-rmto="' + t.id + '">Remove</button></td></tr>';
+  }).join("") + "</table>" : '<p class="muted">Nothing blocked.</p>';
+  document.querySelectorAll("[data-rmto]").forEach(function (b) { b.onclick = function () { del("svc_time_off?id=eq." + b.getAttribute("data-rmto")).then(loadAll).then(function () { toast("Removed"); viewHours(); }); }; });
+  $("hblk").onclick = function () { blockSheet({ date: today() }); };
+  $("hsave").onclick = function () {
+    var hrs; try { hrs = readWeek("vweek"); } catch (e) { $("herr").textContent = e.message; return; }
+    del("svc_hours?venue_id=eq." + VID + "&provider_id=is.null")
+      .then(function () { if (hrs.length) return post("svc_hours", hrs.map(function (h) { return Object.assign({ venue_id: VID, provider_id: null }, h); })); })
+      .then(loadAll).then(function () { toast("Opening hours saved"); viewHours(); }).catch(function (e) { $("herr").textContent = e.message; });
+  };
+}
+
+/* =================== SETTINGS =================== */
+function viewSettings(){
+  var s = D.settings || {};
+  var link = new URL(CONFIG.bookingPage, location.href); link.searchParams.set("venue", VENUE);
+  $("app").innerHTML = '<div class="g2"><div class="card"><h2>Online booking rules</h2><div class="g2" style="margin-top:14px">' +
+    '<label class="f">Time steps (min)<select id="st1">' + [5, 10, 15, 20, 30, 60].map(function (v) { return "<option" + ((s.slot_step_min || 15) === v ? " selected" : "") + ">" + v + "</option>"; }).join("") + "</select></label>" +
+    '<label class="f">Minimum notice (hours)<input type="number" id="st2" min="0" step="0.5" value="' + ((s.lead_time_min != null ? s.lead_time_min : 120) / 60) + '"></label>' +
+    '<label class="f">Book up to (days ahead)<input type="number" id="st3" min="1" max="365" value="' + (s.max_days_ahead || 60) + '"></label>' +
+    '<label class="f">Online cancel cut-off (hours)<input type="number" id="st4" min="0" value="' + (s.cancel_hours != null ? s.cancel_hours : 24) + '"></label></div>' +
+    '<label class="f" style="margin-top:12px">Note shown before confirming<textarea id="st5">' + esc(s.booking_note || "") + "</textarea></label>" +
+    '<p class="muted" style="margin:12px 0 0;font-size:13px">Confirmation, cancellation and day-before reminder emails are sent automatically.</p>' +
+    '<div class="row" style="margin-top:14px"><button class="btn pri" id="stsave">Save</button><span class="err" id="sterr"></span></div></div>' +
+    '<div class="card"><h2>Links</h2><p class="muted">Client booking page for ' + esc(VENUE_ROW.name) + ':</p><p><a href="' + esc(link) + '" target="_blank">' + esc(link) + "</a></p>" +
+    '<p class="muted">Link straight to one treatment by adding <code>&amp;service=&lt;id&gt;</code>. Treatment ids:</p><table>' + D.services.map(function (x) { return "<tr><td>" + esc(x.name) + '</td><td><code style="font-size:11px">' + x.id + "</code></td></tr>"; }).join("") + "</table>" +
+    '<p class="muted" style="margin-top:14px">Business name, phone and email come from the venue record.<br>Venue code: <b>' + esc(VENUE) + "</b> · time zone " + esc(TZ) + "</p></div></div>";
+  $("stsave").onclick = function () {
+    var row = { venue_id: VID, slot_step_min: +$("st1").value, lead_time_min: Math.round(+$("st2").value * 60), max_days_ahead: +$("st3").value, cancel_hours: +$("st4").value, booking_note: $("st5").value.trim() || null, updated_at: new Date().toISOString() };
+    api("POST", "svc_settings?on_conflict=venue_id", row, "resolution=merge-duplicates,return=representation")
+      .then(loadAll).then(function () { toast("Settings saved"); }).catch(function (e) { $("sterr").textContent = e.message; });
+  };
+}
+
+boot();
+</script>
+</body>
+</html>
