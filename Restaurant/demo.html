@@ -43,6 +43,15 @@
   .mode{border:1px solid var(--line);background:var(--glass);color:var(--ink);border-radius:14px;padding:12px 8px;cursor:pointer;font-family:var(--fdisp);font-size:13.5px;font-weight:600;text-align:center}
   .mode span{display:block;font-size:20px;margin-bottom:4px}
   .mode[aria-pressed="true"]{border-color:var(--violet);background:rgba(139,92,246,.2)}
+  .mode{position:relative}
+  .mode small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:3px;line-height:1.35}
+  .mode .rec{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-family:var(--fmono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:3px 8px;white-space:nowrap}
+  .mhelp{font-size:13.5px;color:var(--muted);line-height:1.55;margin:12px 0 0;padding:11px 13px;border-radius:12px;background:var(--glass);border:1px solid var(--line)}
+  .mhelp b{color:var(--ink)}
+  .visitbox{display:none;margin-top:4px;padding:2px 14px 14px;border:1px solid rgba(240,205,139,.3);border-radius:14px;background:rgba(240,205,139,.05)}
+  .visitbox.on{display:block}
+  select{width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:#0a0b1a;color:var(--ink);font-family:var(--fdisp);font-size:15px}
+  .done a.zoom{background:#2D8CFF;border-color:#2D8CFF;font-weight:700}
   label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 6px}
   input,textarea{width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:#0a0b1a;color:var(--ink);font-family:var(--fdisp);font-size:15px}
   input:focus,textarea:focus{outline:none;border-color:var(--cyan)}
@@ -86,7 +95,7 @@
   <div id="form">
     <span class="eyebrow">Book a demo · <span id="len">30 minutes</span></span>
     <h1>See it working for your restaurant.</h1>
-    <p class="lead">Pick a time that suits you. I’ll show you bookings, the digital waitlist and ordering at the table — working together on the tablets you already have. No commission, no pressure.</p>
+    <p class="lead">Pick a time that suits you — the easiest is a quick Zoom video call. I’ll show you bookings, the digital waitlist and ordering at the table — working together on the tablets you already have. No commission, no pressure.</p>
 
     <section class="try" aria-labelledby="tryH">
       <span class="eyebrow" style="color:var(--gold)">Try it yourself now</span>
@@ -117,10 +126,18 @@
         <div class="times" id="times"></div>
 
         <p class="step" style="margin-top:22px">3 · How would you like it?</p>
-        <div class="modes" id="modes">
-          <button type="button" class="mode" data-mode="phone" aria-pressed="false"><span>📞</span>Phone call</button>
-          <button type="button" class="mode" data-mode="video" aria-pressed="false"><span>💻</span>Video call</button>
-          <button type="button" class="mode" data-mode="visit" aria-pressed="false"><span>🍽️</span>Visit my restaurant</button>
+        <div class="modes" id="modes" style="margin-top:14px">
+          <button type="button" class="mode" data-mode="video" aria-pressed="true"><i class="rec" style="font-style:normal">Easiest</i><span>💻</span>Zoom video call<small>See it live on my screen</small></button>
+          <button type="button" class="mode" data-mode="phone" aria-pressed="false"><span>📞</span>Phone call<small>I call you</small></button>
+          <button type="button" class="mode" data-mode="visit" aria-pressed="false"><span>🍽️</span>Visit my restaurant<small>On request</small></button>
+        </div>
+        <p class="mhelp" id="mhelp"></p>
+        <div class="visitbox" id="visitbox">
+          <label for="fAddr">Restaurant address</label><input id="fAddr" autocomplete="street-address" placeholder="Street, suburb">
+          <div class="row2">
+            <div><label for="fTables">How many tables?</label><select id="fTables"><option value="">Choose…</option><option>Under 10</option><option>10–20</option><option>20–40</option><option>More than 40</option></select></div>
+            <div><label for="fStart">When would you like to start?</label><select id="fStart"><option value="">Choose…</option><option>As soon as possible</option><option>Within a month</option><option>In 1–3 months</option><option>Just looking for now</option></select></div>
+          </div>
         </div>
 
         <p class="step" style="margin-top:22px">4 · Your details</p>
@@ -155,9 +172,10 @@
 
   <div class="done card" id="done">
     <div class="tick">✓</div>
-    <h1 style="font-size:30px;margin:0 0 8px">You’re booked in.</h1>
+    <h1 style="font-size:30px;margin:0 0 8px" id="doneH">You’re booked in.</h1>
     <p class="lead" style="margin:0 auto 6px" id="doneWhen"></p>
-    <p style="color:var(--muted);font-size:14.5px;margin:0 auto;max-width:520px">A confirmation with a calendar invite is on its way to your inbox. Need to change it? Reply to that email or call <a href="tel:0413872994" style="color:var(--teal)">0413 872 994</a>.</p>
+    <p style="color:var(--muted);font-size:14.5px;margin:0 auto;max-width:520px" id="doneMsg">A confirmation with a calendar invite is on its way to your inbox. Need to change it? Reply to that email or call <a href="tel:0413872994" style="color:var(--teal)">0413 872 994</a>.</p>
+    <a class="btn zoom" id="zoomBtn" target="_blank" rel="noopener" style="display:none">🎥 Your Zoom link</a>
     <a class="btn" id="ics" download="restaurant-deluxe-demo.ics">📅 Add to my calendar</a>
     <a class="btn" href="./">Back to Restaurant Deluxe</a>
   </div>
@@ -168,7 +186,12 @@
   "use strict";
   var SB="https://tehxobdokbvqtwtgqzrh.supabase.co", KEY="sb_publishable_CrlY9xXYdhI7qCQwuMnDWg_hFQ3mXCJ";
   var $=function(s){ return document.querySelector(s); };
-  var S={slots:[],day:"",time:"",mode:"",minutes:30};
+  var S={slots:[],day:"",time:"",mode:"video",minutes:30};
+  var HELP={
+    video:"<b>Recommended.</b> A 30-minute Zoom call: I share my screen and show you everything working, just as your staff and guests would see it. Tap the link in your confirmation email — no account needed.",
+    phone:"I’ll call you at the time you choose and talk you through it. Add your phone number below.",
+    visit:"<b>Visits are on request.</b> I keep in-person visits for restaurants ready to get started, so tell me a little about your venue. I’ll confirm within one business day — or we can start with a quick Zoom call."
+  };
   var TZ="Australia/Sydney";
   function rpc(fn,body){
     return fetch(SB+"/rest/v1/rpc/"+fn,{method:"POST",headers:{"Content-Type":"application/json",apikey:KEY},body:JSON.stringify(body||{})})
@@ -178,7 +201,7 @@
   function dayKey(d){ return part(d,{year:"numeric",month:"2-digit",day:"2-digit"}); }
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   /* prefill from links in emails: demo.html?r=Restaurant&e=email */
-  try{ var q=new URLSearchParams(location.search); if(q.get("r")) $("#fRest").value=q.get("r"); if(q.get("e")) $("#fEmail").value=q.get("e"); if(q.get("n")) $("#fName").value=q.get("n"); }catch(e){}
+  try{ var q=new URLSearchParams(location.search); if(q.get("r")) $("#fRest").value=q.get("r"); if(q.get("e")) $("#fEmail").value=q.get("e"); if(q.get("n")) $("#fName").value=q.get("n"); if(/^(video|phone|visit)$/.test(q.get("m")||"")) S.mode=q.get("m"); }catch(e){}
 
   function load(){
     rpc("rd_demo_slots").then(function(list){
@@ -200,39 +223,63 @@
       return '<button type="button" class="time" data-t="'+iso+'" aria-pressed="'+(iso===S.time)+'">'+esc(part(d,{hour:"numeric",minute:"2-digit"}))+'</button>'; }).join("");
     check();
   }
+  function setMode(m){
+    S.mode=m;
+    document.querySelectorAll("[data-mode]").forEach(function(x){ x.setAttribute("aria-pressed",String(x.dataset.mode===m)); });
+    $("#mhelp").innerHTML=HELP[m]||"";
+    $("#visitbox").classList.toggle("on",m==="visit");
+    $("#go").textContent = m==="visit" ? "Request my visit" : "Book my demo";
+    check();
+  }
   function check(){
-    var ok=S.time && S.mode && $("#fName").value.trim() && $("#fRest").value.trim() && /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test($("#fEmail").value.trim()) && (S.mode!=="phone" || $("#fPhone").value.trim());
+    var phone=$("#fPhone").value.trim(), visit=S.mode==="visit";
+    var ok=S.time && S.mode && $("#fName").value.trim() && $("#fRest").value.trim() && /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test($("#fEmail").value.trim())
+      && (S.mode!=="phone" || phone) && (!visit || (phone && $("#fAddr").value.trim() && $("#fTables").value && $("#fStart").value));
     $("#go").disabled=!ok;
-    $("#sum").textContent = S.time ? part(new Date(S.time),{weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"})+" · "+({phone:"phone call",video:"video call",visit:"visit at your restaurant"}[S.mode]||"choose how") : "";
-    if(S.mode==="phone" && !$("#fPhone").value.trim()) $("#sum").textContent+=" — add your phone number so I can call you";
+    $("#sum").textContent = S.time ? part(new Date(S.time),{weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"})+" · "+({phone:"phone call",video:"Zoom video call",visit:"visit request"}[S.mode]||"choose how") : "";
+    if(S.mode==="phone" && !phone) $("#sum").textContent+=" — add your phone number so I can call you";
+    if(visit && S.time && !ok) $("#sum").textContent+=" — add your address, tables, start time and phone number";
   }
   document.addEventListener("click",function(e){
     var d=e.target.closest("[data-day]"); if(d){ S.day=d.dataset.day; document.querySelectorAll("[data-day]").forEach(function(x){ x.setAttribute("aria-pressed",String(x===d)); }); times(); return; }
     var t=e.target.closest("[data-t]"); if(t){ S.time=t.dataset.t; document.querySelectorAll("[data-t]").forEach(function(x){ x.setAttribute("aria-pressed",String(x===t)); }); check(); return; }
-    var m=e.target.closest("[data-mode]"); if(m){ S.mode=m.dataset.mode; document.querySelectorAll("[data-mode]").forEach(function(x){ x.setAttribute("aria-pressed",String(x===m)); }); check(); }
+    var m=e.target.closest("[data-mode]"); if(m){ setMode(m.dataset.mode); }
   });
-  ["#fName","#fRest","#fEmail","#fPhone"].forEach(function(s){ $(s).addEventListener("input",check); });
+  ["#fName","#fRest","#fEmail","#fPhone","#fAddr"].forEach(function(s){ $(s).addEventListener("input",check); });
+  ["#fTables","#fStart"].forEach(function(s){ $(s).addEventListener("change",check); });
 
-  function icsLink(start){
+  function icsLink(start,zoom){
     var s=new Date(start), e=new Date(s.getTime()+(S.minutes||30)*60000);
     var f=function(d){ return d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,""); };
     var txt=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Webescapade//Restaurant Deluxe demo//EN","BEGIN:VEVENT","UID:"+Date.now()+"@webescapade.com",
-      "DTSTAMP:"+f(new Date()),"DTSTART:"+f(s),"DTEND:"+f(e),"SUMMARY:Restaurant Deluxe demo with Marc","DESCRIPTION:Questions? Call Marc on 0413 872 994","END:VEVENT","END:VCALENDAR"].join("\r\n");
+      "DTSTAMP:"+f(new Date()),"DTSTART:"+f(s),"DTEND:"+f(e),"SUMMARY:Restaurant Deluxe demo with Marc"].concat(zoom?["LOCATION:"+zoom,"URL:"+zoom,"DESCRIPTION:Join the Zoom call: "+zoom+" · Questions? Call Marc on 0413 872 994"]:["DESCRIPTION:Questions? Call Marc on 0413 872 994"]).concat(["END:VEVENT","END:VCALENDAR"]).join("\r\n");
     return "data:text/calendar;charset=utf-8,"+encodeURIComponent(txt);
   }
   $("#go").addEventListener("click",function(){
-    var b=this; b.disabled=true; b.textContent="Booking…"; $("#err").textContent="";
+    var b=this, label=b.textContent, visit=S.mode==="visit"; b.disabled=true; b.textContent=visit?"Sending…":"Booking…"; $("#err").textContent="";
     rpc("rd_demo_book",{p_start:S.time,p_mode:S.mode,p_name:$("#fName").value,p_restaurant:$("#fRest").value,
-      p_email:$("#fEmail").value,p_phone:$("#fPhone").value,p_note:$("#fNote").value}).then(function(r){
-      if(!r||!r.ok){ $("#err").textContent=(r&&r.error)||"Couldn’t book that time."; b.textContent="Book my demo"; load(); return; }
+      p_email:$("#fEmail").value,p_phone:$("#fPhone").value,p_note:$("#fNote").value,
+      p_address:visit?$("#fAddr").value:null,p_tables:visit?$("#fTables").value:null,p_start_when:visit?$("#fStart").value:null}).then(function(r){
+      if(!r||!r.ok){ $("#err").textContent=(r&&r.error)||"Couldn’t book that time."; b.textContent=label; load(); return; }
       $("#form").style.display="none"; $("#done").style.display="block";
-      $("#doneWhen").textContent=part(new Date(S.time),{weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"})+" (Sydney time) · "+({phone:"I’ll call you",video:"I’ll email you a video link",visit:"I’ll come to you"}[S.mode]);
-      $("#ics").href=icsLink(S.time);
+      var w=part(new Date(S.time),{weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"})+" (Sydney time)";
+      if(r.requested){
+        $("#doneH").textContent="Request sent — thank you.";
+        $("#doneWhen").textContent=w+" · visit at your restaurant";
+        $("#doneMsg").innerHTML='I’m holding this time for you and I’ll confirm by phone or email within one business day. Prefer to see it sooner? <a href="?m=video&amp;r='+encodeURIComponent($("#fRest").value)+'&amp;e='+encodeURIComponent($("#fEmail").value)+'&amp;n='+encodeURIComponent($("#fName").value)+'" style="color:var(--teal)">Book a Zoom video demo</a> too.';
+        $("#ics").style.display="none";
+      } else {
+        $("#doneWhen").textContent=w+" · "+({phone:"I’ll call you",video:"Zoom video call"}[S.mode]);
+        if(r.zoom){ $("#zoomBtn").href=r.zoom; $("#zoomBtn").style.display="inline-block";
+          $("#doneMsg").innerHTML='Your Zoom link is below and in your confirmation email, with a calendar invite. At the time, just tap it — no account needed. Need to change it? Reply to that email or call <a href="tel:0413872994" style="color:var(--teal)">0413 872 994</a>.'; }
+        $("#ics").href=icsLink(S.time, r.zoom||"");
+      }
       window.scrollTo(0,0);
-    }).catch(function(e){ $("#err").textContent=e.message||"Couldn’t book that time."; b.textContent="Book my demo"; check(); });
+    }).catch(function(e){ $("#err").textContent=e.message||"Couldn’t book that time."; b.textContent=label; check(); });
   });
   rpc("rd_demo_info").then(function(i){ var m=+(i&&i.minutes)||30; S.minutes=m;
     $("#len").textContent = m>=60 ? (m===60?"1 hour":m%60?Math.floor(m/60)+" h "+(m%60)+" min":(m/60)+" hours") : m+" minutes"; }).catch(function(){});
+  setMode(S.mode);
   load();
 })();
 </script>

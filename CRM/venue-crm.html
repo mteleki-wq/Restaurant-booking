@@ -252,6 +252,10 @@
   .slot.blocked{background:repeating-linear-gradient(135deg,rgba(255,143,143,.07) 0 6px,transparent 6px 12px);border-color:rgba(255,143,143,.4)}
   .slot.blocked span{color:var(--red)}
   .slot.booked{background:rgba(139,92,246,.18);border-color:var(--violet)} .slot.booked span{color:#d9ccff}
+  .slot.requested{background:rgba(240,205,139,.12);border-color:var(--gold);border-style:dashed} .slot.requested span{color:var(--gold)}
+  .bdetail.req{border-color:var(--gold);background:rgba(240,205,139,.07)}
+  .btn.zoom{background:#2D8CFF;border-color:#2D8CFF;color:#fff}
+  .reqtag{display:inline-block;font-family:var(--fmono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#1a1410;background:var(--gold);border-radius:999px;padding:2px 7px;margin-right:6px;vertical-align:1px}
   .slot.busy{border-style:dashed} .slot.past,.slot.beyond,.slot.full{opacity:.45;cursor:default}
   .slot[aria-pressed="true"]{outline:2px solid var(--cyan);outline-offset:2px}
   .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--faint);margin-top:12px}
@@ -364,6 +368,7 @@
             <span><i style="border-color:var(--teal)"></i>Free — tap to block</span>
             <span><i style="border-color:var(--red);background:rgba(255,143,143,.15)"></i>Blocked — tap to open</span>
             <span><i style="border-color:var(--violet);background:rgba(139,92,246,.3)"></i>Booked</span>
+            <span><i style="border-color:var(--gold);border-style:dashed;background:rgba(240,205,139,.15)"></i>Visit request — tap to answer</span>
             <span><i style="border-color:var(--line);border-style:dashed"></i>Gap next to a demo</span>
             <span><i style="border-color:var(--line);opacity:.5"></i>Too soon / past / full</span>
           </div>
@@ -381,6 +386,8 @@
             <div><label for="rGap">Gap between demos</label><select id="rGap"><option value="0">No gap</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hour</option></select></div>
             <div><label for="rNotice">Minimum notice</label><select id="rNotice"><option value="0">None</option><option value="1">1 hour</option><option value="2">2 hours</option><option value="4">4 hours</option><option value="12">12 hours</option><option value="24">1 day</option><option value="48">2 days</option></select></div>
             <div><label for="rAhead">Book up to</label><select id="rAhead"><option value="7">1 week ahead</option><option value="14">2 weeks ahead</option><option value="21">3 weeks ahead</option><option value="30">1 month ahead</option><option value="60">2 months ahead</option></select></div>
+            <div style="grid-column:1/-1"><label for="rZoom">Zoom link for video demos</label><input type="url" id="rZoom" placeholder="https://us04web.zoom.us/j/…?pwd=…" style="width:100%" autocomplete="off">
+              <p class="help" style="margin:4px 0 0">Sent automatically to every restaurant that books a video call, and put in their calendar invite.</p></div>
             <div><label for="rMax">Most demos a day</label><select id="rMax"><option value="0">No limit</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="8">8</option></select></div>
           </div>
           <div style="display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap">
@@ -1184,7 +1191,8 @@
       .formatToParts(new Date(iso)).forEach(function(x){ p[x.type]=x.value; });
     return p.year+"-"+p.month+"-"+p.day+"T"+(p.hour==="24"?"00":p.hour)+":"+p.minute;
   }
-  var MODE = {phone:"📞 Phone call",video:"💻 Video call",visit:"🏠 Visit at the restaurant"};
+  var MODE = {phone:"📞 Phone call",video:"🎥 Zoom video call",visit:"🏠 Visit at the restaurant"};
+  function telOf(p){ return String(p||"").replace(/[^\d+]/g,""); }
 
   function calLoad(keepSel){
     if(CAL.busy) return; CAL.busy=true;
@@ -1204,21 +1212,24 @@
 
   function renderCal(){
     var d=CAL.data; if(!d) return;
-    var upcoming=d.bookings.filter(function(b){ return Date.parse(b.start_at)>Date.now()-36e5; });
+    var upcoming=d.bookings.filter(function(b){ return Date.parse(b.start_at)>Date.now()-36e5; })
+      .sort(function(a,b){ return (a.status==="requested"?0:1)-(b.status==="requested"?0:1) || Date.parse(a.start_at)-Date.parse(b.start_at); });
     $("#ctCal").textContent=upcoming.length||"";
     $("#calPrev").disabled = CAL.from<=d.today;
     $("#calDays").innerHTML=d.days.map(function(x){
       var free=x.slots.filter(function(s){ return s.s==="free"; }).length;
       var booked=x.slots.filter(function(s){ return s.s==="booked"; }).length;
-      var cls = !x.slots.length||x.day_block ? "off" : booked ? "has" : "";
-      var lab = !x.slots.length ? "closed" : x.day_block ? "day off" : booked ? booked+" booked" : free ? free+" free" : "full";
+      var reqs=x.slots.filter(function(s){ return s.s==="requested"; }).length;
+      var cls = !x.slots.length||x.day_block ? "off" : (booked||reqs) ? "has" : "";
+      var lab = !x.slots.length ? "closed" : x.day_block ? "day off" : reqs ? reqs+" request" : booked ? booked+" booked" : free ? free+" free" : "full";
       var dd=x.date.split("-");
       return '<button type="button" class="daychip '+cls+'" data-day="'+x.date+'" aria-pressed="'+(x.date===CAL.sel)+'"><small>'+DOWS[x.dow]+'</small><b>'+(+dd[2])+'</b><i>'+lab+'</i></button>';
     }).join("");
     renderDay();
     $("#calBookings").innerHTML = upcoming.length ? '<div class="blist" style="margin-top:4px">'+upcoming.map(function(b){
-      return '<div><span><b>'+esc(dt(b.start_at))+' · '+esc(tm(b.start_at))+'</b> — '+esc(b.restaurant)+'<br><small style="color:var(--faint)">'+esc(b.name)+' · '+esc(MODE[b.mode]||b.mode)+(b.phone?' · '+esc(b.phone):'')+'</small></span>'+
-        '<button class="btn sm" type="button" data-goto="'+esc(b.start_at)+'">Show</button></div>';
+      var req=b.status==="requested";
+      return '<div'+(req?' style="border-color:var(--gold)"':'')+'><span>'+(req?'<i class="reqtag" style="font-style:normal">Visit request</i>':'')+'<b>'+esc(dt(b.start_at))+' · '+esc(tm(b.start_at))+'</b> — '+esc(b.restaurant)+'<br><small style="color:var(--faint)">'+esc(b.name)+' · '+esc(MODE[b.mode]||b.mode)+(b.phone?' · '+esc(b.phone):'')+'</small></span>'+
+        '<button class="btn sm" type="button" data-goto="'+esc(b.start_at)+'">'+(req?'Answer':'Show')+'</button></div>';
     }).join("")+'</div>' : '<p class="empty">No demos booked yet. The booking link is in every Email Studio template.</p>';
     $("#calBlocks").innerHTML = d.blocks.length ? d.blocks.map(function(k){
       var same = localInput(k.start_at).slice(0,10)===localInput(k.end_at).slice(0,10);
@@ -1240,7 +1251,7 @@
       return;
     }
     var html=x.slots.map(function(s){
-      var lab={free:"Free",blocked:s.l?s.l:"Blocked",booked:s.l||"Booked",busy:"Gap · "+(s.l||"demo"),past:"Too soon",beyond:"Not open yet",full:"Day full"}[s.s]||s.s;
+      var lab={free:"Free",blocked:s.l?s.l:"Blocked",booked:s.l||"Booked",requested:"Visit? "+(s.l||""),busy:"Gap · "+(s.l||"demo"),past:"Too soon",beyond:"Not open yet",full:"Day full"}[s.s]||s.s;
       var dis = /^(past|beyond|full)$/.test(s.s) ? ' disabled' : '';
       return '<button type="button" class="slot '+s.s+'" data-slot="'+esc(s.t)+'"'+dis+' aria-pressed="'+(CAL.pick===s.t)+'"><b>'+esc(tm(s.t))+'</b><span>'+esc(lab)+'</span></button>';
     }).join("");
@@ -1249,12 +1260,18 @@
     if(pk && pk.b){
       var b=d.bookings.filter(function(y){ return y.id===pk.b; })[0];
       if(b){
-        det='<div class="bdetail"><b style="font-size:15px">'+esc(b.restaurant)+'</b> — '+esc(dt(b.start_at))+', '+esc(tm(b.start_at))+' ('+b.minutes+' min)'+
+        var req=b.status==="requested", zoom=d.settings.zoom_url;
+        var facts=[b.address?'📍 '+esc(b.address):'', b.tables?'🍽️ '+esc(b.tables)+' tables':'', b.start_when?'🚀 Start: '+esc(b.start_when):''].filter(Boolean).join('<br>');
+        det='<div class="bdetail'+(req?' req':'')+'">'+(req?'<i class="reqtag" style="font-style:normal">Visit request</i>':'')+'<b style="font-size:15px">'+esc(b.restaurant)+'</b> — '+esc(dt(b.start_at))+', '+esc(tm(b.start_at))+' ('+b.minutes+' min)'+
           '<div style="color:var(--muted);margin-top:4px">'+esc(b.name)+' · '+esc(MODE[b.mode]||b.mode)+'<br>'+
-          '<a href="mailto:'+esc(b.email)+'" style="color:var(--cyan)">'+esc(b.email)+'</a>'+(b.phone?' · <a href="tel:'+esc(String(b.phone).replace(/[^\d+]/g,""))+'" style="color:var(--cyan)">'+esc(b.phone)+'</a>':'')+
-          (b.note?'<br>“'+esc(b.note)+'”':'')+'</div><div class="row">'+
-          (b.phone?'<a class="btn sm" href="tel:'+esc(String(b.phone).replace(/[^\d+]/g,""))+'">📞 Call</a>':'')+
-          '<button class="btn sm" type="button" data-cancel="'+b.id+'">Cancel this demo</button></div></div>';
+          '<a href="mailto:'+esc(b.email)+'" style="color:var(--cyan)">'+esc(b.email)+'</a>'+(b.phone?' · <a href="tel:'+esc(telOf(b.phone))+'" style="color:var(--cyan)">'+esc(b.phone)+'</a>':'')+
+          (facts?'<br>'+facts:'')+(b.note?'<br>“'+esc(b.note)+'”':'')+'</div>'+
+          (req?'<p class="help" style="margin:10px 0 0">The time is held for them. <b>Confirm visit</b> sends them a confirmation with a calendar invite. <b>Offer a video call</b> sends a friendly email with a link to book a Zoom demo and frees this time.</p>':'')+
+          '<div class="row">'+
+          (req?'<button class="btn sm primary" type="button" data-confirm="'+b.id+'">✅ Confirm visit</button><button class="btn sm" type="button" data-decline="'+b.id+'">🎥 Offer a video call</button>':'')+
+          (b.mode==="video"&&zoom?'<a class="btn sm zoom" href="'+esc(zoom)+'" target="_blank" rel="noopener">🎥 Start Zoom</a>':'')+
+          (b.phone?'<a class="btn sm" href="tel:'+esc(telOf(b.phone))+'">📞 Call</a>':'')+
+          '<button class="btn sm" type="button" data-cancel="'+b.id+'">'+(req?'Cancel request':'Cancel this demo')+'</button></div></div>';
       }
     }
     $("#calDay").innerHTML=head+'<div class="slots">'+html+'</div>'+det;
@@ -1264,7 +1281,7 @@
     var s=CAL.data.settings;
     function pick(sel,v){ var el=$(sel), has=[].some.call(el.options,function(o){ return +o.value===+v; });
       if(!has){ var o=document.createElement("option"); o.value=v; o.textContent=v; el.appendChild(o); } el.value=String(v); }
-    pick("#rLen",s.slot_minutes); pick("#rGap",s.buffer_minutes); pick("#rNotice",s.min_notice_hours); pick("#rAhead",s.days_ahead); pick("#rMax",s.max_per_day);
+    pick("#rLen",s.slot_minutes); pick("#rGap",s.buffer_minutes); pick("#rNotice",s.min_notice_hours); pick("#rAhead",s.days_ahead); pick("#rMax",s.max_per_day); $("#rZoom").value=s.zoom_url||"";
     var names=["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
     $("#calHours").innerHTML=[1,2,3,4,5,6,7].map(function(i){
       var w=s.weekly[String(i)]||{on:false,from:"10:00",to:"16:00"};
@@ -1310,7 +1327,7 @@
       }
       if(s.s==="busy"){ var bb=CAL.data.bookings.filter(function(y){ return y.id===s.b; })[0];
         toast(bb ? "Kept clear for the demo with "+(bb.restaurant||"a restaurant")+" at "+tm(bb.start_at) : "Kept clear next to a demo"); return; }
-      if(s.s==="booked"){ CAL.pick = CAL.pick===s.t ? null : s.t; renderDay(); return; }
+      if(s.s==="booked"||s.s==="requested"){ CAL.pick = CAL.pick===s.t ? null : s.t; renderDay(); return; }
       return;
     }
     if((t=e.target.closest("#calBlockDay"))){
@@ -1319,6 +1336,20 @@
       return calBlock(sydISO(CAL.sel,"00:00"),sydISO(addDays(CAL.sel,1),"00:00"),why||"Day off",longDay(CAL.sel)+" blocked");
     }
     if((t=e.target.closest("[data-unblock]"))){ return calUnblock(t.dataset.unblock,"Time off removed"); }
+    if((t=e.target.closest("[data-confirm]"))){
+      var bc=CAL.data.bookings.filter(function(y){ return y.id===t.dataset.confirm; })[0];
+      if(!confirm("Confirm your visit to "+(bc?bc.restaurant+" on "+dt(bc.start_at)+" at "+tm(bc.start_at):"this restaurant")+"?\n\nThey’ll get a confirmation email with a calendar invite.")) return;
+      t.disabled=true;
+      return callDemo("confirm",{id:t.dataset.confirm}).then(function(){ toast("Visit confirmed — they’ve been emailed"); calLoad(true); })
+        .catch(function(e2){ t.disabled=false; toast(e2.message); });
+    }
+    if((t=e.target.closest("[data-decline]"))){
+      var bd=CAL.data.bookings.filter(function(y){ return y.id===t.dataset.decline; })[0];
+      if(!confirm("Offer "+(bd?bd.restaurant:"them")+" a Zoom video call instead?\n\nThey’ll get a friendly email with a link to book a video demo, and this time becomes free again.")) return;
+      t.disabled=true;
+      return callDemo("decline",{id:t.dataset.decline}).then(function(){ toast("Video-call invitation sent — the time is free again"); CAL.pick=null; calLoad(true); })
+        .catch(function(e2){ t.disabled=false; toast(e2.message); });
+    }
     if((t=e.target.closest("[data-cancel]"))){
       var b=CAL.data.bookings.filter(function(y){ return y.id===t.dataset.cancel; })[0];
       if(!confirm("Cancel the demo with "+(b?b.restaurant+" on "+dt(b.start_at)+" at "+tm(b.start_at):"this restaurant")+"?\n\nThe time becomes free again and the prospect goes back to “Replied” in your pipeline. They are NOT emailed — give them a call or send a note.")) return;
@@ -1347,7 +1378,7 @@
     if(bad){ toast(bad+": the start time must be before the end time"); return; }
     b.disabled=true;
     callDemo("settings",{settings:{weekly:weekly,slot_minutes:+$("#rLen").value,buffer_minutes:+$("#rGap").value,
-      min_notice_hours:+$("#rNotice").value,days_ahead:+$("#rAhead").value,max_per_day:+$("#rMax").value}})
+      min_notice_hours:+$("#rNotice").value,days_ahead:+$("#rAhead").value,max_per_day:+$("#rMax").value,zoom_url:$("#rZoom").value.trim()}})
     .then(function(){ toast("Saved — the booking page now uses these hours"); calLoad(true); })
     .catch(function(e){ toast(e.message); }).then(function(){ b.disabled=false; });
   });

@@ -9,10 +9,12 @@
 //
 // Actions (POST JSON { action, ... }):
 //   get        { from?: "YYYY-MM-DD", days?: 14 }  -> settings, days with slot states, bookings, time off
-//   settings   { settings: {...} }                 -> save weekly hours and rules
+//   settings   { settings: {...} }                 -> save weekly hours, rules and the Zoom link
 //   block      { start, end, reason? }             -> add time off (ISO times)
 //   unblock    { id }                              -> remove time off
 //   cancel     { id }                              -> cancel a demo booking (frees the time)
+//   confirm    { id }                              -> confirm a visit request (restaurant gets the confirmation + invite)
+//   decline    { id }                              -> answer a visit request with a Zoom video-call invitation
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -76,6 +78,10 @@ Deno.serve(async (req) => {
         return json(await rpc("rd_demo_admin_unblock", { p_id: body.id }));
       case "cancel":
         return json(await rpc("rd_demo_admin_cancel", { p_id: body.id }));
+      case "confirm":
+        return json(await rpc("rd_demo_admin_confirm", { p_id: body.id }));
+      case "decline":
+        return json(await rpc("rd_demo_admin_decline", { p_id: body.id }));
       default:
         return json({ error: "Unknown action" }, 400);
     }

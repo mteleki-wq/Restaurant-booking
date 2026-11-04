@@ -29,3 +29,14 @@
 --   rd_demo_admin_get / _save_settings / _block / _unblock / _cancel   service role only,
 --                     called by the rd-demo-admin edge function (x-studio-secret)
 -- ===================================================================
+
+-- ===================================================================
+-- ZOOM + VISIT REQUESTS (migration: demo_zoom_and_visit_requests)
+--   rd_demo_settings.zoom_url   Marc's Zoom Personal Meeting Room link, sent with every video booking
+--   rd_demo_bookings.status     'requested' = visit asked for, holds the slot until Marc answers
+--   rd_demo_bookings.address / tables_count / start_when   visit qualifying details
+--   rd_demo_book(..., p_address, p_tables, p_start_when)   visits come in as 'requested'
+--   rd_demo_admin_confirm(id)  requested -> booked, emails confirmation + invite
+--   rd_demo_admin_decline(id)  requested -> cancelled, emails a "book a Zoom demo" invitation
+--   rd_demo_notify(id, kind)   posts to rd-demo-notify (booked | requested | confirmed | declined)
+-- ===================================================================
