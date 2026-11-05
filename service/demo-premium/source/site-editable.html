@@ -7,23 +7,23 @@
 <meta name="description" content="Relaxation, deep tissue and remedial massage, facials and infrared sauna. Book your treatment online in under a minute.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link id="lookFont" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F5F2EC;--paper:#FBF9F5;--ink:#1E2622;--muted:#69726D;--line:#E2DCD1;--accent:#4F6B5C;--accent2:#C9B79C;--soft:#E7EEE9;--ov:.38;--hlogo:120px}
+:root{--fh:"Instrument Serif",serif;--fb:Manrope,system-ui,-apple-system,sans-serif;--hw:400;--hls:-.01em;--ems:italic;--r-art:240px 240px 28px 28px;--r-about:28px 220px 28px 28px;--r-btn:999px;--r-card:24px;--r-visit:36px;--bg:#F5F2EC;--paper:#FBF9F5;--ink:#1E2622;--muted:#69726D;--line:#E2DCD1;--accent:#4F6B5C;--accent2:#C9B79C;--soft:#E7EEE9;--ov:.38;--hlogo:120px}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font:17px/1.6 var(--fb);-webkit-font-smoothing:antialiased;overflow-x:clip}
 a{color:inherit}
 img{max-width:100%;display:block}
 .w{max-width:1200px;margin:0 auto;padding:0 20px}
 .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
-h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.01em;margin:0}
+h1,h2,h3{font-family:var(--fh);font-weight:var(--hw);letter-spacing:var(--hls);margin:0}
 h1{font-size:clamp(48px,8.4vw,112px);line-height:.95}
 h2{font-size:clamp(36px,5vw,62px);line-height:1}
 h3{font-size:28px;line-height:1.1}
-em{font-style:italic;color:var(--accent)}
-.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:15px 26px;font:600 15px Manrope,sans-serif;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+em{font-style:var(--ems);color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;border:0;border-radius:var(--r-btn);padding:15px 26px;font:600 15px var(--fb);cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
 .btn:hover{transform:translateY(-1px)}
 .btn.dark{background:var(--ink);color:#fff}
 .btn.acc{background:var(--accent);color:#fff}
@@ -33,7 +33,7 @@ em{font-style:italic;color:var(--accent)}
 nav.n{position:fixed;inset:0 0 auto;z-index:30;transition:background .3s,box-shadow .3s,color .3s}
 nav.n.solid{background:rgba(245,242,236,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
 nav.n .w{display:flex;align-items:center;gap:28px;height:74px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:400 26px "Instrument Serif",serif}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:400 26px var(--fh)}
 .logo .dot{width:30px;height:30px;border-radius:50%;background:var(--accent);display:inline-block;position:relative;flex:none}
 .logo .dot:after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--bg)}
 .logo img{height:38px;width:auto}
@@ -41,6 +41,7 @@ nav .links{display:flex;gap:26px;margin-left:auto;font-size:15px;font-weight:500
 nav .links a{text-decoration:none;color:var(--muted)} nav .links a:hover{color:var(--ink)}
 nav .btn{padding:11px 20px}
 @media(max-width:860px){nav .links{display:none}nav .btn{margin-left:auto}}
+@media(max-width:520px){.logo{font-size:21px;white-space:nowrap;min-width:0}.logo span[data-edit]{overflow:hidden;text-overflow:ellipsis}nav .btn{white-space:nowrap;padding:10px 16px;font-size:14px}nav.n .w{gap:12px}}
 
 /* ============ HERO — four arrangements, chosen in the editor ============ */
 .hero{position:relative}
@@ -53,14 +54,14 @@ nav .btn{padding:11px 20px}
 .status{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;font-size:14px;color:var(--muted);background:var(--paper);border-radius:999px;padding:6px 14px 6px 10px;box-shadow:0 0 0 1px var(--line)}
 .status i{width:8px;height:8px;border-radius:50%;background:#B7B2A8;display:inline-block}
 .status.open i{background:#3E9B62;box-shadow:0 0 0 4px rgba(62,155,98,.15)}
-.art{position:relative;aspect-ratio:4/5;border-radius:240px 240px 28px 28px;overflow:hidden;background:var(--soft);isolation:isolate}
+.art{position:relative;aspect-ratio:4/5;border-radius:var(--r-art);overflow:hidden;background:var(--soft);isolation:isolate}
 .art .media{position:absolute;inset:-9% 0;will-change:transform;transform:translate3d(0,var(--py,0px),0)}
 .art .ph{position:absolute;inset:0;background-size:cover;background-position:center}
 .art .chip{position:absolute;left:18px;bottom:18px;right:18px;z-index:3;background:rgba(251,249,245,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-size:14px}
 .art .chip b{display:block;font-size:15px}
 .art .chip .ic{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;flex:none;font-size:18px}
 .hlogo{display:none;margin-bottom:26px}
-.hlogo .mk{display:inline-flex;align-items:center;gap:.32em;font:400 calc(var(--hlogo) * .52) "Instrument Serif",serif;line-height:1}
+.hlogo .mk{display:inline-flex;align-items:center;gap:.32em;font:400 calc(var(--hlogo) * .52) var(--fh);line-height:1}
 .hlogo .mk .dot{width:.9em;height:.9em;border-radius:50%;background:var(--accent);position:relative;display:inline-block}
 .hlogo .mk .dot:after{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--bg)}
 .hlogo img{height:var(--hlogo);width:auto;max-width:80vw}
@@ -76,7 +77,7 @@ body[data-hl="wide"] .hero .art .media,body[data-hl="full"] .hero .art .media{in
 body[data-hl="wide"] .hero .art:after,body[data-hl="full"] .hero .art:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(180deg,rgba(14,20,17,calc(var(--ov) * .9)) 0,rgba(14,20,17,calc(var(--ov) * .45)) 38%,rgba(14,20,17,calc(var(--ov) * 1.25)) 100%)}
 body[data-hl="wide"] .hero .art .chip,body[data-hl="full"] .hero .art .chip{display:none}
-body[data-hl="wide"] .htext,body[data-hl="full"] .htext{color:#fff;max-width:760px}
+body[data-hl="wide"] .htext,body[data-hl="full"] .htext{color:#fff;max-width:760px;text-shadow:0 2px 28px rgba(0,0,0,.22)}
 body[data-hl="wide"] .htext em,body[data-hl="full"] .htext em{color:color-mix(in srgb,var(--accent2) 70%,#fff)}
 body[data-hl="wide"] .hero p.sub,body[data-hl="full"] .hero p.sub{color:rgba(255,255,255,.86)}
 body[data-hl="wide"] .hero .btn.line,body[data-hl="full"] .hero .btn.line{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8)}
@@ -96,7 +97,7 @@ body[data-ht="right"][data-hl="wide"] .hero .ctas,body[data-ht="right"][data-hl=
 /* "with scroll" on full screen: the hero stays put while the photos play as you scroll */
 body[data-hl="full"][data-am="scroll"] .hero{height:250vh}
 body[data-hl="full"][data-am="scroll"] .hero .pin{position:sticky;top:0;height:100vh;height:100svh}
-.cue{display:none;position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;color:#fff;font:600 10px Manrope;letter-spacing:.3em;text-transform:uppercase;opacity:.85;transition:opacity .5s;pointer-events:none}
+.cue{display:none;position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;color:#fff;font:600 10px var(--fb);letter-spacing:.3em;text-transform:uppercase;opacity:.85;transition:opacity .5s;pointer-events:none}
 .cue:after{content:"";display:block;width:1px;height:28px;margin:8px auto 0;background:linear-gradient(#fff,transparent);animation:cue 1.6s ease-in-out infinite}
 @keyframes cue{50%{transform:translateY(8px);opacity:.4}}
 body[data-hl="full"] .cue{display:block}
@@ -111,7 +112,7 @@ body[data-hl="full"] .cue{display:block}
 .anim.cine .bar{height:9%}
 .intro{position:absolute;inset:0;z-index:4;display:grid;place-items:center;pointer-events:none;opacity:0}
 .intro.play{animation:intro 3s cubic-bezier(.2,.7,.2,1) forwards}
-.intro .mk{display:inline-flex;align-items:center;gap:.3em;color:#fff;font:400 clamp(54px,9vw,120px) "Instrument Serif",serif;text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.intro .mk{display:inline-flex;align-items:center;gap:.3em;color:#fff;font:400 clamp(54px,9vw,120px) var(--fh);text-shadow:0 2px 30px rgba(0,0,0,.25)}
 .intro .mk .dot{width:.85em;height:.85em;border-radius:50%;background:var(--accent);position:relative;display:inline-block}
 .intro .mk .dot:after{content:"";position:absolute;inset:26%;border-radius:50%;background:rgba(255,255,255,.9)}
 .intro img{max-width:min(60vw,420px);max-height:40vh;width:auto;filter:drop-shadow(0 6px 30px rgba(0,0,0,.25))}
@@ -128,14 +129,14 @@ body[data-hl="full"] .cue{display:block}
 .strip{border-block:1px solid var(--line);padding:26px 0;background:var(--bg);position:relative;z-index:2}
 .strip .w{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 @media(min-width:860px){.strip .w{grid-template-columns:repeat(4,1fr)}}
-.strip b{display:block;font:400 30px/1 "Instrument Serif",serif}
+.strip b{display:block;font:400 30px/1 var(--fh)}
 .strip span{font-size:14px;color:var(--muted)}
 section.s{padding:110px 0;position:relative}
 .head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:46px}
 .head p{max-width:34em;color:var(--muted);margin:16px 0 0}
 /* treatments */
 .cats{display:flex;gap:8px;flex-wrap:wrap}
-.cats button{border:0;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);padding:9px 16px;border-radius:999px;font:600 14px Manrope,sans-serif;cursor:pointer}
+.cats button{border:0;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);padding:9px 16px;border-radius:999px;font:600 14px var(--fb);cursor:pointer}
 .cats button.on{background:var(--ink);color:#fff;box-shadow:none}
 .tlist{display:grid;gap:0;border-top:1px solid var(--line)}
 .tr{display:grid;grid-template-columns:1fr auto;gap:8px 24px;padding:26px 4px;border-bottom:1px solid var(--line);align-items:center;transition:background .3s,padding .3s}
@@ -145,7 +146,7 @@ section.s{padding:110px 0;position:relative}
 .tr p{margin:0;color:var(--muted);font-size:15px;grid-column:1/-1}
 @media(min-width:760px){.tr p{grid-column:auto}}
 .tr .meta{text-align:right;white-space:nowrap}
-.tr .meta b{display:block;font:400 26px/1 "Instrument Serif",serif}
+.tr .meta b{display:block;font:400 26px/1 var(--fh)}
 .tr .meta span{font-size:13px;color:var(--muted)}
 .tr .btn{padding:11px 18px;font-size:14px;grid-column:1/-1;justify-self:start}
 @media(min-width:760px){.tr .btn{grid-column:auto}}
@@ -160,9 +161,9 @@ section.s{padding:110px 0;position:relative}
 .band .eyebrow{color:rgba(255,255,255,.75)}
 /* team */
 .team{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.pc{background:var(--paper);border-radius:24px;padding:12px 12px 22px;box-shadow:0 0 0 1px var(--line);transition:transform .4s}
+.pc{background:var(--paper);border-radius:var(--r-card);padding:12px 12px 22px;box-shadow:0 0 0 1px var(--line);transition:transform .4s}
 .pc:hover{transform:translateY(-4px)}
-.pc .pic{aspect-ratio:1;border-radius:16px;overflow:hidden;background-size:cover;background-position:center;display:grid;place-items:center;font:400 90px "Instrument Serif",serif;color:rgba(255,255,255,.85)}
+.pc .pic{aspect-ratio:1;border-radius:16px;overflow:hidden;background-size:cover;background-position:center;display:grid;place-items:center;font:400 90px var(--fh);color:rgba(255,255,255,.85)}
 .pc h3{margin:16px 8px 2px;font-size:28px}
 .pc .t{margin:0 8px;color:var(--muted);font-size:14px}
 .pc .bio{margin:10px 8px 14px;font-size:15px}
@@ -171,8 +172,8 @@ section.s{padding:110px 0;position:relative}
 .gal{padding:40px 0 120px}
 .gal .w{display:grid;gap:18px;grid-template-columns:1fr 1fr;align-items:start}
 @media(min-width:860px){.gal .w{grid-template-columns:1.1fr .8fr 1fr;gap:26px}}
-.gal .g{position:relative;overflow:hidden;border-radius:26px;aspect-ratio:3/4;background:var(--soft)}
-.gal .g:nth-child(2){aspect-ratio:4/5;margin-top:90px;border-radius:200px 200px 26px 26px}
+.gal .g{position:relative;overflow:hidden;border-radius:var(--r-card);aspect-ratio:3/4;background:var(--soft)}
+.gal .g:nth-child(2){aspect-ratio:4/5;margin-top:90px;border-radius:var(--r-art)}
 .gal .g:nth-child(3){aspect-ratio:1;margin-top:30px}
 @media(max-width:859px){.gal .g:nth-child(3){display:none}}
 .gal .media{position:absolute;inset:-14% 0;will-change:transform;transform:translate3d(0,var(--py,0px),0)}
@@ -181,13 +182,13 @@ section.s{padding:110px 0;position:relative}
 /* about */
 .about .w{display:grid;gap:50px;align-items:center}
 @media(min-width:960px){.about .w{grid-template-columns:.9fr 1.1fr}}
-.about .art{aspect-ratio:1;border-radius:28px 220px 28px 28px}
+.about .art{aspect-ratio:1;border-radius:var(--r-about)}
 .about p{color:var(--muted);font-size:18px}
 .ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px}
 .ticks li{display:flex;gap:12px;align-items:flex-start}
 .ticks li:before{content:"✦";color:var(--accent);flex:none}
 /* visit */
-.visit{background:var(--ink);color:#E9E6DF;border-radius:36px;margin:0 12px;padding:90px 0}
+.visit{background:var(--ink);color:#E9E6DF;border-radius:var(--r-visit);margin:0 12px;padding:90px 0}
 .visit .eyebrow{color:#9DA49F}
 .visit .w{display:grid;gap:40px}
 @media(min-width:900px){.visit .w{grid-template-columns:1fr 1fr 1fr}}
@@ -201,9 +202,9 @@ section.s{padding:110px 0;position:relative}
 /* faq */
 .faq{max-width:820px}
 details{border-bottom:1px solid var(--line);padding:22px 0}
-summary{cursor:pointer;list-style:none;font:400 26px "Instrument Serif",serif;display:flex;justify-content:space-between;gap:20px}
+summary{cursor:pointer;list-style:none;font:400 26px var(--fh);display:flex;justify-content:space-between;gap:20px}
 summary::-webkit-details-marker{display:none}
-summary:after{content:"+";font-family:Manrope;color:var(--muted)}
+summary:after{content:"+";font-family:var(--fb);color:var(--muted)}
 details[open] summary:after{content:"–"}
 details p{color:var(--muted);margin:12px 0 0}
 .final{text-align:center;padding:120px 0}
@@ -216,6 +217,37 @@ footer .w{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
 .reveal.in{opacity:1;transform:none}
 .reveal.d1{transition-delay:.12s}.reveal.d2{transition-delay:.24s}.reveal.d3{transition-delay:.36s}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}[data-par]{transform:none!important}.intro{display:none}.hero.intro-on .htext{animation:none}}
+
+/* ============ LOOKS — one per trade, chosen in 🎨 Theme ============ */
+body[data-look="salon"]{--fh:"Bodoni Moda",serif;--fb:"DM Sans",system-ui,sans-serif;--hw:500;--hls:-.025em;--ems:italic;
+  --r-art:2px;--r-about:2px;--r-btn:0;--r-card:2px;--r-visit:0;
+  --bg:#F3EDE8;--paper:#FBF8F5;--ink:#161312;--muted:#6E6662;--line:#E3D9D2;--soft:#EADBD1;--accent2:#E2B9A8}
+body[data-look="salon"] .btn{text-transform:uppercase;letter-spacing:.14em;font-size:13px;padding:16px 26px}
+body[data-look="salon"] nav .links{text-transform:uppercase;letter-spacing:.16em;font-size:12px}
+body[data-look="salon"] h1{font-size:clamp(50px,9vw,124px);line-height:.92}
+body[data-look="salon"] .eyebrow{letter-spacing:.32em}
+body[data-look="salon"] .visit{margin:0}
+body[data-look="salon"] .status{border-radius:0}
+body[data-look="salon"] .tr h3,body[data-look="salon"] summary{font-style:italic}
+body[data-look="clinic"]{--fh:"Plus Jakarta Sans",system-ui,sans-serif;--fb:"Plus Jakarta Sans",system-ui,sans-serif;--hw:700;--hls:-.035em;--ems:normal;
+  --r-art:32px;--r-about:32px;--r-btn:12px;--r-card:20px;--r-visit:28px;
+  --bg:#F3F7FA;--paper:#FFFFFF;--ink:#0F2537;--muted:#5A6B7B;--line:#DCE5EC;--soft:#E3EEF6;--accent2:#7CCFC3}
+body[data-look="clinic"] h1{font-size:clamp(42px,6.8vw,90px);line-height:1}
+body[data-look="clinic"] h2{font-size:clamp(32px,4.4vw,54px);line-height:1.05}
+body[data-look="clinic"] h3,body[data-look="clinic"] .tr h3{font-size:22px;letter-spacing:-.02em}
+body[data-look="clinic"] .tr .meta b,body[data-look="clinic"] .strip b{font-family:var(--fh);font-weight:700;font-size:24px}
+body[data-look="clinic"] summary{font-size:19px;font-weight:600}
+body[data-look="clinic"] .pc .pic{font-weight:700}
+body[data-look="dental"]{--fh:"Outfit",system-ui,sans-serif;--fb:"Outfit",system-ui,sans-serif;--hw:600;--hls:-.03em;--ems:normal;
+  --r-art:46% 54% 42% 58% / 54% 44% 56% 46%;--r-about:40px 120px 40px 40px;--r-btn:999px;--r-card:28px;--r-visit:40px;
+  --bg:#F2FAF8;--paper:#FFFFFF;--ink:#0D2B2A;--muted:#557170;--line:#D6EAE6;--soft:#DDF2EE;--accent2:#FFCF70}
+body[data-look="dental"] .art .chip{left:13%;right:13%;bottom:9%}
+body[data-look="dental"] h1{font-size:clamp(44px,7.4vw,98px);line-height:.98}
+body[data-look="dental"] h3,body[data-look="dental"] .tr h3{font-size:24px}
+body[data-look="dental"] .tr .meta b,body[data-look="dental"] .strip b{font-weight:600;font-size:26px}
+body[data-look="dental"] summary{font-size:20px;font-weight:500}
+body[data-look="dental"] em{background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent2) 70%,transparent) 62%);color:inherit}
+body[data-look="dental"][data-hl="wide"] .htext em,body[data-look="dental"][data-hl="full"] .htext em,body[data-look="dental"] .band h2 em{background:none;color:var(--accent2)}
 /*ENGINE-CSS-START*/
 #eng{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:4px;background:#111;color:#fff;border-radius:999px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 13px Manrope,sans-serif;max-width:calc(100% - 16px);overflow-x:auto}
 #eng button{border:0;background:none;color:#ddd;padding:8px 13px;border-radius:999px;cursor:pointer;font:inherit;white-space:nowrap}
@@ -253,6 +285,12 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
 #engp .th i{position:absolute;left:6px;top:5px;font:700 11px Manrope;color:#fff;background:rgba(0,0,0,.5);border-radius:6px;padding:1px 6px;font-style:normal}
 #engp .row2{display:flex;align-items:center;gap:10px}
 #engp .row2 span{font:600 12px Manrope;color:#666;min-width:48px;text-align:right}
+#engp .looks{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
+#engp .looks button{border:1.5px solid #e3e3e3;background:#fff;border-radius:12px;padding:8px 4px 9px;cursor:pointer;display:grid;gap:3px;justify-items:center;font:600 12px Manrope,sans-serif;color:#222}
+#engp .looks button.on{border-color:#4F6B5C;background:#EEF3F0}
+#engp .looks b{font-size:26px;line-height:1.1;color:#111}
+#engp .looks small{font-weight:500;color:#777;font-size:10.5px}
+#engp .looks .sw3{display:flex;gap:3px}#engp .looks .sw3 i{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
 #engp .chk{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;color:#333;margin:8px 0}
 #sbBox{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:16px}
 #sbBox .bx{background:#fff;color:#111;border-radius:18px;padding:22px;width:min(380px,100%);font:14px/1.45 Manrope,sans-serif}
@@ -274,10 +312,10 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
   data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE"
   data-accent="#4F6B5C"
   data-word="therapist"
-  data-hl="full" data-ht="left" data-hlogo="off" data-am="loop"
+  data-look="spa" data-hl="full" data-ht="left" data-hlogo="off" data-am="loop"
   data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-live="service/demo-premium/index.html" data-gh-master="service/demo-premium/source/site-editable.html">
 
-<script type="application/json" id="designData">{"layout":"full","text":"left","heroLogo":false,"logoSize":120,"overlay":0.38,"parallax":"gentle","anim":{"media":["https://webescapade.com/service/demo-premium/img/stones.jpg","https://webescapade.com/service/demo-premium/img/water.jpg","https://webescapade.com/service/demo-premium/img/linen.jpg","https://webescapade.com/service/demo-premium/img/glow.jpg","https://webescapade.com/service/demo-premium/img/leaves.jpg"],"vibe":"drift","per":5,"mode":"loop","logoIntro":true}}</script>
+<script type="application/json" id="designData">{"look":"spa","layout":"full","text":"left","heroLogo":false,"logoSize":120,"overlay":0.38,"parallax":"gentle","anim":{"media":["https://webescapade.com/service/demo-premium/img/stones.jpg","https://webescapade.com/service/demo-premium/img/water.jpg","https://webescapade.com/service/demo-premium/img/linen.jpg","https://webescapade.com/service/demo-premium/img/glow.jpg","https://webescapade.com/service/demo-premium/img/leaves.jpg"],"vibe":"drift","per":5,"mode":"loop","logoIntro":true}}</script>
 
 <nav class="n" id="nav"><div class="w">
   <a class="logo" href="#top" data-logo><span class="dot"></span><span data-edit="brand">Serenity</span></a>
@@ -292,7 +330,7 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
       <div class="status" id="status"><i></i><span>Opening hours</span></div>
       <h1 data-edit="h1">Slow down.<br><em>Breathe</em> out.</h1>
       <p class="sub" data-edit="sub">Massage, skin and wellness treatments in a calm, private space in the heart of the city. Choose your treatment, your therapist and your time — online, in under a minute.</p>
-      <div class="ctas"><a class="btn acc" href="#" data-book>Book a treatment <span class="ar">→</span></a><a class="btn line" href="#treatments" data-edit="cta2">View treatments</a></div>
+      <div class="ctas"><a class="btn acc" href="#" data-book><span data-edit="cta1">Book a treatment</span> <span class="ar">→</span></a><a class="btn line" href="#treatments" data-edit="cta2">View treatments</a></div>
     </div>
     <div class="art reveal d1">
       <div class="media" data-par="hero"><div class="ph" data-img="hero" style="background-image:url('https://webescapade.com/service/demo-premium/img/stones.jpg')"></div><div class="anim" id="anim" aria-hidden="true"></div></div>
@@ -373,7 +411,7 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
 <section class="final"><div class="w reveal">
   <h2 data-edit="zH">Your hour is <em>waiting</em>.</h2>
   <p data-edit="zP">See live availability for every therapist and room, and confirm in a few taps.</p>
-  <a class="btn dark" href="#" data-book>Book your treatment <span class="ar">→</span></a>
+  <a class="btn dark" href="#" data-book><span data-edit="zCta">Book your treatment</span> <span class="ar">→</span></a>
 </div></section>
 
 <footer><div class="w"><span data-edit="foot">© Serenity Day Spa</span><span data-edit="foot2">Website &amp; online booking by Webescapade</span></div></footer>
@@ -410,6 +448,9 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
     try { return JSON.parse(document.getElementById("designData").textContent || "{}") || {}; } catch (e) { return {}; }
   }
   var D = readDesign();
+  /* the fonts each look uses (Theme › Look) */
+  var LF = { spa: "family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700", salon: "family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=DM+Sans:opsz,wght@9..40,400..700",
+    clinic: "family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800", dental: "family=Outfit:wght@300..700" };
   var hero = document.querySelector(".hero"), hlogo = document.getElementById("hlogo"), cue = document.getElementById("cue");
   function logoMark(){
     var img = document.querySelector("[data-logo] img");
@@ -423,6 +464,9 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
     B.ht = ({ left: 1, center: 1, right: 1 })[D.text] ? D.text : "left";
     B.hlogo = D.heroLogo ? "on" : "off";
     B.am = D.anim && D.anim.mode === "scroll" ? "scroll" : "loop";
+    B.look = LF[D.look] ? D.look : "spa";
+    var lk = document.getElementById("lookFont"), want = "https://fonts.googleapis.com/css2?" + LF[B.look] + "&display=swap";
+    if (lk && lk.getAttribute("href") !== want) lk.setAttribute("href", want);
     var r = document.documentElement.style;
     r.setProperty("--ov", D.overlay == null ? .38 : Math.max(0, Math.min(.85, +D.overlay)));
     r.setProperty("--hlogo", Math.max(48, Math.min(260, +D.logoSize || 120)) + "px");
@@ -619,6 +663,10 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
 /* ===== editing engine — present only in the editable master; stripped when publishing ===== */
 (function () {
   var B = document.body.dataset;
+  /* editor only: load every look's font so the Look buttons preview properly (removed when saving) */
+  var ef = document.createElement("link"); ef.id = "engFonts"; ef.rel = "stylesheet";
+  ef.href = "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Bodoni+Moda:ital,wght@1,500&family=Plus+Jakarta+Sans:wght@800&family=Outfit:wght@700&display=swap";
+  document.head.appendChild(ef);
   var bar = document.createElement("div"); bar.id = "eng";
   bar.innerHTML = '<span class="tag">PREMIUM</span><button data-a="edit">✏️ Edit</button><button data-a="hero">🖼 Hero</button><button data-a="anim">🎬 Animation</button><button data-a="theme">🎨 Theme</button><button data-a="book">📅 Bookings</button><button data-a="deploy">🚀 Deploy</button><button data-a="save">💾 Save copy</button>';
   document.body.appendChild(bar);
@@ -821,10 +869,43 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
     panel.querySelector("#arep").onclick = function () { window.scrollTo({ top: 0, behavior: "smooth" }); window.SITE.replayIntro(); };
   }
 
+  /* ---- looks: one design per trade, with sample words and pictures ---- */
+  var LOOKS = {"spa": {"overlay": 0.38, "name": "Spa", "tag": "Calm & natural", "accent": "#4F6B5C", "word": "therapist", "sw": ["#F5F2EC", "#4F6B5C", "#C9B79C"], "aa": "font-family:'Instrument Serif',serif;font-style:italic", "title": "Serenity Day Spa · Massage, facials & wellness in Sydney", "desc": "Relaxation, deep tissue and remedial massage, facials and infrared sauna. Book your treatment online in under a minute.", "text": {"cta1": "Book a treatment", "zCta": "Book your treatment", "brand": "Serenity", "nav1": "Treatments", "nav2": "Our team", "nav3": "The space", "nav4": "Visit", "h1": "Slow down.<br><em>Breathe</em> out.", "sub": "Massage, skin and wellness treatments in a calm, private space in the heart of the city. Choose your treatment, your therapist and your time — online, in under a minute.", "cta2": "View treatments", "chipT": "Same-week appointments", "chipS": "Live availability for every therapist and room", "s1b": "10", "s1": "private treatment rooms", "s2b": "4", "s2": "qualified therapists", "s3b": "24/7", "s3": "online booking", "s4b": "HICAPS", "s4": "health fund rebates on remedial", "tEy": "Treatments", "tH": "Choose your <em>ritual</em>", "tP": "Every treatment includes a short consultation, warm towels and time to rest afterwards.", "bEy": "The Serenity ritual", "bH": "An hour that is <em>only yours</em>.", "bP": "Phones off, warm towels on. Every visit starts with a slow breath and ends with tea in the quiet room.", "mEy": "Our team", "mH": "Hands you can <em>trust</em>", "mP": "Pick a favourite therapist or choose “anyone available” for the most times.", "g1c": "Evening rituals", "g2c": "Natural oils", "g3c": "Hot stone massage", "aEy": "The space", "aH": "Quiet rooms, <em>warm</em> light, no rush.", "aP": "Seven treatment rooms, two facial suites and a private infrared sauna, each prepared fresh between guests. We build a short clean-up time into every booking so you're never hurried in or out.", "a1": "Heated tables, fresh linen and natural, fragrance-free oils on request", "a2": "Remedial treatments with health-fund rebates on the spot", "a3": "Gift vouchers for any treatment — ask at reception", "q1": "When should I arrive?", "a1q": "About ten minutes early so you can settle in and fill in a short health form.", "q2": "Can I change or cancel?", "a2q": "Yes — use the link in your confirmation email up to 24 hours before. After that, please give us a call.", "q3": "Do you offer health fund rebates?", "a3q": "Remedial massage with our qualified remedial therapists can be claimed on the spot with most health funds.", "q4": "Can I choose my therapist?", "a4q": "Of course. Pick a name when you book, or choose “anyone available” to see the most times.", "zH": "Your hour is <em>waiting</em>.", "zP": "See live availability for every therapist and room, and confirm in a few taps.", "foot": "© Serenity Day Spa"}, "img": {"hero": "https://webescapade.com/service/demo-premium/img/stones.jpg", "anim": ["https://webescapade.com/service/demo-premium/img/stones.jpg", "https://webescapade.com/service/demo-premium/img/water.jpg", "https://webescapade.com/service/demo-premium/img/linen.jpg", "https://webescapade.com/service/demo-premium/img/glow.jpg", "https://webescapade.com/service/demo-premium/img/leaves.jpg"], "band": "https://webescapade.com/service/demo-premium/img/water.jpg", "gal1": "https://webescapade.com/service/demo-premium/img/glow.jpg", "gal2": "https://webescapade.com/service/demo-premium/img/leaves.jpg", "gal3": "https://webescapade.com/service/demo-premium/img/stones.jpg", "about": "https://webescapade.com/service/demo-premium/img/linen.jpg"}}, "salon": {"overlay": 0.55, "name": "Salon", "tag": "Bold & editorial", "accent": "#A9503A", "word": "stylist", "sw": ["#F3EDE8", "#161312", "#A9503A"], "aa": "font-family:'Bodoni Moda',serif;font-style:italic;font-weight:500", "title": "Atelier Hair · Cuts, colour & styling", "desc": "Cuts, colour and styling by a small team who listen first. Book your stylist online in under a minute.", "text": {"cta1": "Book an appointment", "zCta": "Book your appointment", "brand": "Atelier", "nav1": "Services", "nav2": "Stylists", "nav3": "The salon", "nav4": "Visit", "h1": "Hair that feels<br><em>like you</em>.", "sub": "Cuts, colour and styling by a small team who listen first. Choose your service, your stylist and your time — online, in under a minute.", "cta2": "View services", "chipT": "Book your stylist", "chipS": "Live times for every stylist and chair", "s1b": "6", "s1": "styling chairs", "s2b": "5", "s2": "senior stylists", "s3b": "24/7", "s3": "online booking", "s4b": "Late", "s4": "nights Thursday and Friday", "tEy": "Services", "tH": "Choose your <em>service</em>", "tP": "Every appointment starts with a proper consultation, so you leave with hair you can style at home.", "bEy": "The Atelier way", "bH": "Colour, cut and <em>care</em>.", "bP": "We take our time, talk you through every step, and finish with a quick lesson in styling it yourself.", "mEy": "Stylists", "mH": "Meet your <em>stylists</em>", "mP": "Book with a favourite or choose “anyone available” for the most times.", "g1c": "Colour", "g2c": "Cut & finish", "g3c": "Our products", "aEy": "The salon", "aH": "Light, space and <em>good music</em>.", "aP": "Six chairs, a quiet basin room and natural light all day. We leave a little time between clients, so nobody is ever rushed.", "a1": "Free consultation before any colour change", "a2": "Professional, cruelty-free products", "a3": "Gift vouchers for any service — ask at reception", "q1": "Do I need a consultation first?", "a1q": "For a big colour change, yes — book a free 15-minute consultation and we’ll plan it together.", "q2": "Can I change or cancel?", "a2q": "Yes — use the link in your confirmation email up to 24 hours before. After that, please give us a call.", "q3": "How long does colour take?", "a3q": "Most colour services take two to three hours. The booking page shows the time for each service.", "q4": "Can I choose my stylist?", "a4q": "Of course. Pick a name when you book, or choose “anyone available” to see the most times.", "zH": "Your next cut is <em>a tap away</em>.", "zP": "See live times for every stylist and chair, and confirm in a few taps.", "foot": "© Atelier Hair"}, "img": {"hero": "https://webescapade.com/service/demo-premium/img/salon-1.jpg", "anim": ["https://webescapade.com/service/demo-premium/img/salon-1.jpg", "https://webescapade.com/service/demo-premium/img/salon-2.jpg", "https://webescapade.com/service/demo-premium/img/salon-4.jpg", "https://webescapade.com/service/demo-premium/img/salon-3.jpg"], "band": "https://webescapade.com/service/demo-premium/img/salon-3.jpg", "gal1": "https://webescapade.com/service/demo-premium/img/salon-4.jpg", "gal2": "https://webescapade.com/service/demo-premium/img/salon-2.jpg", "gal3": "https://webescapade.com/service/demo-premium/img/salon-1.jpg", "about": "https://webescapade.com/service/demo-premium/img/salon-2.jpg"}}, "clinic": {"overlay": 0.55, "name": "Clinic", "tag": "Clean & trusted", "accent": "#1F6FB2", "word": "doctor", "sw": ["#F3F7FA", "#0F2537", "#1F6FB2"], "aa": "font-family:'Plus Jakarta Sans',sans-serif;font-weight:800", "title": "Northside Medical · GPs and nurses, book online", "desc": "GPs and nurses who take the time to listen. Book your appointment online, day or night.", "text": {"cta1": "Book an appointment", "zCta": "Book an appointment", "brand": "Northside Medical", "nav1": "Appointments", "nav2": "Our doctors", "nav3": "The practice", "nav4": "Visit", "h1": "Good care,<br><em>on your time</em>.", "sub": "GPs and nurses who take the time to listen. Choose your appointment, your doctor and a time that suits — online, day or night.", "cta2": "View appointments", "chipT": "Same-day appointments", "chipS": "Live times for every doctor and room", "s1b": "8", "s1": "GPs and nurses", "s2b": "7 days", "s2": "open every week", "s3b": "24/7", "s3": "online booking", "s4b": "Parking", "s4": "free, on site", "tEy": "Appointments", "tH": "Choose your <em>appointment</em>", "tP": "Standard and long consultations, health checks and vaccinations. Choose the one that fits what you need.", "bEy": "Northside Medical", "bH": "Your health, <em>without the wait</em>.", "bP": "See the doctor you know, at a time that works for you, with a confirmation and a reminder the day before.", "mEy": "Our doctors", "mH": "Doctors who <em>listen</em>", "mP": "Book with your usual doctor, or choose “anyone available” for the earliest time.", "g1c": "Consult rooms", "g2c": "Our nurses", "g3c": "Kids welcome", "aEy": "The practice", "aH": "Calm rooms, <em>unhurried</em> care.", "aP": "Bright consult rooms, a quiet waiting room and a nurse on site every day. We keep a little time between appointments so we can run on time.", "a1": "Long appointments for more complex needs", "a2": "Children and families welcome", "a3": "Wheelchair access and free parking", "q1": "When should I arrive?", "a1q": "About five minutes early. If it’s your first visit, allow ten minutes for a short new-patient form.", "q2": "Can I change or cancel?", "a2q": "Yes — use the link in your confirmation email up to 2 hours before. After that, please give us a call.", "q3": "Which appointment should I book?", "a3q": "A standard appointment suits most visits. Choose a long appointment for several issues, a care plan or a mental health plan.", "q4": "Can I see my usual doctor?", "a4q": "Of course. Pick their name when you book, or choose “anyone available” for the earliest time.", "zH": "See a doctor <em>this week</em>.", "zP": "Live times for every doctor, confirmed in a few taps.", "foot": "© Northside Medical"}, "img": {"hero": "https://webescapade.com/service/demo-premium/img/clinic-1.jpg", "anim": ["https://webescapade.com/service/demo-premium/img/clinic-1.jpg", "https://webescapade.com/service/demo-premium/img/clinic-2.jpg", "https://webescapade.com/service/demo-premium/img/clinic-4.jpg", "https://webescapade.com/service/demo-premium/img/clinic-3.jpg"], "band": "https://webescapade.com/service/demo-premium/img/clinic-3.jpg", "gal1": "https://webescapade.com/service/demo-premium/img/clinic-2.jpg", "gal2": "https://webescapade.com/service/demo-premium/img/clinic-4.jpg", "gal3": "https://webescapade.com/service/demo-premium/img/clinic-1.jpg", "about": "https://webescapade.com/service/demo-premium/img/clinic-1.jpg"}}, "dental": {"overlay": 0.5, "name": "Dental", "tag": "Bright & friendly", "accent": "#0E9F97", "word": "dentist", "sw": ["#F2FAF8", "#0E9F97", "#FFCF70"], "aa": "font-family:'Outfit',sans-serif;font-weight:700", "title": "Brightside Dental · Family dentist, book online", "desc": "Check-ups, cleans and cosmetic dentistry for the whole family. Book your dentist online in under a minute.", "text": {"cta1": "Book a visit", "zCta": "Book your check-up", "brand": "Brightside Dental", "nav1": "Treatments", "nav2": "Our dentists", "nav3": "The clinic", "nav4": "Visit", "h1": "Healthy smiles,<br><em>gentle care</em>.", "sub": "Check-ups, cleans and cosmetic dentistry for the whole family. Choose your treatment, your dentist and a time that suits — online, in under a minute.", "cta2": "View treatments", "chipT": "Check-up and clean", "chipS": "Live times for every dentist and chair", "s1b": "4", "s1": "treatment rooms", "s2b": "5", "s2": "dentists and hygienists", "s3b": "24/7", "s3": "online booking", "s4b": "Family", "s4": "friendly, kids welcome", "tEy": "Treatments", "tH": "Choose your <em>treatment</em>", "tP": "From a quick check-up to whitening. Every visit starts with a chat about what you need.", "bEy": "Nervous? We get it.", "bH": "We go at <em>your pace</em>.", "bP": "We explain everything first, check in as we go, and you can stop at any time.", "mEy": "Our dentists", "mH": "Friendly, <em>gentle</em> hands", "mP": "Pick your dentist or hygienist, or choose “anyone available” for the most times.", "g1c": "Check-ups", "g2c": "Hygiene", "g3c": "Whitening", "aEy": "The clinic", "aH": "Bright rooms, <em>calm</em> chairs.", "aP": "Four modern treatment rooms, a relaxed waiting area and a kids’ corner. We build time into every booking so you never feel rushed.", "a1": "Gentle care for nervous patients", "a2": "Kids’ check-ups and family bookings", "a3": "Payment plans available — just ask", "q1": "How often should I have a check-up?", "a1q": "For most people, every six to twelve months. Your dentist will suggest what’s right for you.", "q2": "Can I change or cancel?", "a2q": "Yes — use the link in your confirmation email up to 24 hours before. After that, please give us a call.", "q3": "I’m nervous about the dentist.", "a3q": "You’re not alone. Tell us when you book and we’ll take extra time, explain each step and go at your pace.", "q4": "Can I choose my dentist?", "a4q": "Of course. Pick a name when you book, or choose “anyone available” to see the most times.", "zH": "Your smile, <em>looked after</em>.", "zP": "See live times for every dentist and chair, and confirm in a few taps.", "foot": "© Brightside Dental"}, "img": {"hero": "https://webescapade.com/service/demo-premium/img/dental-1.jpg", "anim": ["https://webescapade.com/service/demo-premium/img/dental-1.jpg", "https://webescapade.com/service/demo-premium/img/dental-3.jpg", "https://webescapade.com/service/demo-premium/img/dental-4.jpg", "https://webescapade.com/service/demo-premium/img/dental-2.jpg"], "band": "https://webescapade.com/service/demo-premium/img/dental-2.jpg", "gal1": "https://webescapade.com/service/demo-premium/img/dental-1.jpg", "gal2": "https://webescapade.com/service/demo-premium/img/dental-4.jpg", "gal3": "https://webescapade.com/service/demo-premium/img/dental-3.jpg", "about": "https://webescapade.com/service/demo-premium/img/dental-3.jpg"}}};
+  function sampleOf(){   /* which trade's sample words are on the page now, if any */
+    var h = (document.querySelector('[data-edit="h1"]') || {}).innerHTML || "";
+    for (var k in LOOKS) if (LOOKS[k].text.h1 === h) return k;
+    return "";
+  }
+  function useSample(k){
+    var L = LOOKS[k]; if (!L) return;
+    Object.keys(L.text).forEach(function (key) { var el = document.querySelector('[data-edit="' + key + '"]'); if (el) el.innerHTML = L.text[key]; });
+    var brand = document.querySelector("[data-logo]");
+    if (brand && brand.querySelector("img") == null) brand.innerHTML = '<span class="dot"></span><span data-edit="brand">' + L.text.brand + "</span>";
+    if (editing) document.querySelectorAll("[data-edit]").forEach(function (el) { el.setAttribute("contenteditable", "true"); });
+    ["hero", "band", "gal1", "gal2", "gal3", "about"].forEach(function (slot) {
+      var el = document.querySelector('[data-img="' + slot + '"]'); if (el && L.img[slot]) { el.classList.remove("gen"); el.style.backgroundImage = "url('" + L.img[slot] + "')"; }
+    });
+    document.title = L.title; var m = document.querySelector("meta[name=description]"); if (m) m.setAttribute("content", L.desc);
+    var d = design(); d.anim = d.anim || {}; d.anim.media = L.img.anim.slice(); if (L.overlay != null) d.overlay = L.overlay; saveDesign(d);
+  }
+  function setLook(k, withSample){
+    var L = LOOKS[k]; if (!L) return;
+    var d = design(); d.look = k; saveDesign(d);
+    B.accent = L.accent; window.SITE.setAccent(L.accent); B.word = L.word;
+    if (withSample) useSample(k);
+    window.SITE.applyDesign();
+  }
+
   /* ---- 🎨 theme ---- */
   var SW = ["#4F6B5C", "#7A5C4A", "#3F5E77", "#6B4F6B", "#2E3A35", "#8A6D3B", "#B4775A"];
   function themePanel(){
-    openPanel("theme", "<h4>Theme</h4><div class=\"note\">Accent colour is used for buttons, highlights and the booking page.</div><div class=\"sw\">" +
+    var curLook = design().look || "spa", samp = sampleOf();
+    var lookHtml = "<h5>Look — pick the style that suits the business</h5><div class=\"looks\">" + Object.keys(LOOKS).map(function (k) {
+      var L = LOOKS[k];
+      return '<button data-look="' + k + '" class="' + (k === curLook ? "on" : "") + '"><span class="sw3">' + L.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + '</span><b style="' + L.aa + '">Aa</b><span>' + L.name + "</span><small>" + L.tag + "</small></button>";
+    }).join("") + '</div><label class="chk"><input type="checkbox" id="lsamp"' + (samp ? " checked" : "") + '> Also use the sample words and pictures for this trade</label>' +
+      '<div class="note">' + (samp ? "The page is showing sample content, so it’s safe to swap." : "Leave this unticked to keep your own words and photos and only change the style.") + "</div>";
+    openPanel("theme", "<h4>Theme</h4>" + lookHtml + "<h5>Colour</h5><div class=\"note\">Accent colour is used for buttons, highlights and the booking page.</div><div class=\"sw\">" +
       SW.map(function (c) { return '<button style="background:' + c + '" data-c="' + c + '"></button>'; }).join("") +
       '</div><label>Custom colour<input type="color" id="eac" value="' + (B.accent || "#4F6B5C") + '"></label>' +
       '<label>Practitioner word<select id="ewd">' + ["therapist", "practitioner", "doctor", "dentist", "stylist", "trainer"].map(function (w) { return "<option" + (B.word === w ? " selected" : "") + ">" + w + "</option>"; }).join("") + "</select></label>" +
@@ -832,6 +913,13 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
       '<label>Page description (Google)<input id="eds" value="' + esc((document.querySelector('meta[name=description]') || {}).content || "") + '"></label>' +
       '<div class="note">Logo: hold Alt (⌥) and click the logo to upload one, or tap the button. Transparent PNGs look best.</div><div class="r"><button class="b" id="elogo">Upload logo</button><button class="b" id="enologo">Use the name instead</button><button class="b" data-close>Close</button></div>');
     var set = function (c) { B.accent = c; window.SITE.setAccent(c); panel.querySelector("#eac").value = c; };
+    panel.querySelectorAll("[data-look]").forEach(function (b) {
+      b.onclick = function () {
+        var k = b.getAttribute("data-look"), withS = panel.querySelector("#lsamp").checked;
+        if (withS && !sampleOf() && !confirm("Replace the words and photos on the page with the " + LOOKS[k].name + " samples?\n\nYour own words and photos will be overwritten (Save copy first if you want to keep them).")) return;
+        setLook(k, withS); themePanel();
+      };
+    });
     panel.querySelectorAll("[data-c]").forEach(function (b) { b.onclick = function () { set(b.getAttribute("data-c")); }; });
     panel.querySelector("#eac").oninput = function () { set(this.value); };
     panel.querySelector("#ewd").onchange = function () { B.word = this.value; };
@@ -877,7 +965,7 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
     var wasEditing = editing; if (wasEditing) setEditing(false);
     var root = document.documentElement.cloneNode(true);
     if (wasEditing) setEditing(true);
-    ["#eng", "#engp", "#sbBox", "#busy"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
+    ["#eng", "#engp", "#sbBox", "#busy", "#engFonts"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
     root.querySelectorAll("[contenteditable]").forEach(function (n) { n.removeAttribute("contenteditable"); });
     var body = root.querySelector("body"); body.classList.remove("editing"); if (!body.className) body.removeAttribute("class");
     root.querySelectorAll(".reveal.in").forEach(function (n) { n.classList.remove("in"); });
