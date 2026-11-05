@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v36</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v37</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v36 \u00b7 Restaurant + Service Deluxe';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v37 \u00b7 Service Deluxe email images';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2846,6 +2846,7 @@
   var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe'};
   var SVC_SITE  = "https://webescapade.com/service/demo/";   /* demo spa website */
   var SVC_PAGE  = "https://webescapade.com/service/";        /* Service Deluxe sales page */
+  var SVC_IMG   = "https://webescapade.com/service/img/email/";   /* email pictures, 1100px wide */
   var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
   var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
@@ -2886,12 +2887,16 @@
     ];
     return [
       P({ name:'Intro to Service Deluxe', desc:'First message to a spa, clinic or salon',
+        heroImage:SVC_IMG+'hero-calendar-phone.jpg', heroAlt:'The staff calendar and the booking page on a phone', heroLink:SVC_PAGE,
+        bandImage:SVC_IMG+'band-three-taps.jpg', bandAlt:'Booking on a phone in three steps', bandLink:SVC_BOOK, bandCaption:'Clients choose the service, the person and a time, and get a confirmation straight away.',
         cta2:'How it works', cta2url:SVC_PAGE,
         headline:'Let your clients book themselves — any time.',
         intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. I’ve built an online booking system for appointment businesses: clients choose the service, the practitioner and a free time, and your calendar fills itself.\n\nIt comes with a website you can edit yourself, and it costs one flat monthly price.',
         cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
         subject:'Let your clients book themselves', preheader:'Online bookings and a website you edit yourself. '+T+' days free.' }),
       P({ name:T+'-day free trial invite', desc:'Invite to start the trial',
+        heroImage:SVC_IMG+'hero-setup.jpg', heroAlt:'The setup screen: choose your type of business', heroLink:SVC_START,
+        bandImage:SVC_IMG+'band-email.jpg', bandAlt:'Automatic booking confirmation email', bandCaption:'Confirmation, cancellation and day-before reminder emails go out for you.',
         cta1:'Start your free trial', cta1url:SVC_START, cta2:'Plans and questions', cta2url:SVC_PAGE+'#pricing',
         headline:'Try online bookings free for '+T+' days.',
         intro:'Set up your services, your team and your hours in a few minutes from a ready-made template for your type of business. Your booking page works straight away.\n\nIf it isn’t right for you after '+T+' days, simply stop.',
@@ -2901,17 +2906,23 @@
         priceOn:false, plans:[],
         subject:'Online bookings, free for '+T+' days', preheader:'Set up in minutes from a template made for your business.' }),
       P({ name:'Website + bookings ('+svcPrice(M)+')', desc:'Lead with the main plan',
+        heroImage:SVC_IMG+'hero-website-phone.jpg', heroAlt:'An example spa website with its booking page on a phone', heroLink:SVC_SITE,
+        bandImage:SVC_IMG+'band-rooms.jpg', bandAlt:'The calendar viewed by treatment room', bandLink:SVC_PAGE, bandCaption:'Rooms and people are booked together, so nothing is booked twice.',
         headline:'A new website and online bookings, for '+svcPrice(M)+' a month.',
         intro:'Your services, prices, team and opening hours appear on your website straight from the booking system, so you only keep them up to date in one place.\n\nYou edit the words and photos yourself, whenever you like.',
         cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
         subject:'Website and bookings for '+svcPrice(M)+' a month', preheader:'One flat price, no commission, '+T+' days free.' }),
       P({ name:'Already have a website? Bookings only'+(B?' ('+svcPrice(B)+')':''), desc:'Keep their website, add the booking page',
+        heroImage:SVC_IMG+'band-three-taps.jpg', heroAlt:'Booking on a phone in three steps', heroLink:SVC_BOOK,
+        bandImage:SVC_IMG+'band-email.jpg', bandAlt:'Automatic booking confirmation email', bandCaption:'Every booking gets a confirmation and a reminder the day before.',
         headline:'Keep your website. Add online bookings.',
         intro:'Already happy with your website? Add a booking button that opens your own booking page, with live times for each practitioner and room.\n\nClients get a confirmation straight away and a reminder the day before.',
         cards:cardsCore, plans:B?[svcBox(B,true)]:[],
         priceOn:!!B,
         subject:'Add online bookings to your website', preheader:'A booking button for your site, Instagram and Google profile.' }),
       P({ name:'Booking demo follow-up', desc:'After someone tried the demo',
+        heroImage:SVC_IMG+'hero-team.jpg', heroAlt:'Setting a practitioner\u2019s working days and breaks', heroLink:SVC_PAGE,
+        bandImage:SVC_IMG+'band-rooms.jpg', bandAlt:'The calendar viewed by treatment room', bandCaption:'Your team, your rooms and your hours, set up the way you work.',
         headline:'What did you think of the booking page?',
         intro:'Thanks for trying the demo. I’d be glad to set it up with your own services and team so you can see it working for your business.',
         featOn:false, priceOn:false,
@@ -2919,6 +2930,7 @@
         finalCta:'Call Marc', finalUrl:'tel:0413872994',
         subject:'Want it set up with your services?', preheader:'I can set it up with your own team and services.' }),
       P({ name:'Follow-up 1 — clicked: call Marc', desc:'Journey: people who clicked, 1 day later',
+        heroImage:SVC_IMG+'hero-calendar-phone.jpg', heroAlt:'The staff calendar and the booking page on a phone', heroLink:SVC_PAGE,
         followup:'clicked', followDays:1, eyebrow:'A quick note from Marc',
         headline:'Shall I show you how it would work for you?',
         intro:'Thanks for taking a look at the booking system.\n\nI’m Marc, a web designer here in Sydney. If you have 15 minutes, I’ll show you how it would work with your own services, team and rooms.',
@@ -2926,6 +2938,7 @@
         featOn:false, spotOn:false, priceOn:false, finalOn:false,
         subject:'Shall I show you how it works?', preheader:'15 minutes, with your own services and team.' }),
       P({ name:'Follow-up 2 — opened: quick answers', desc:'Journey: opened but didn’t click, 3 days later',
+        heroImage:SVC_IMG+'hero-team.jpg', heroAlt:'Setting a practitioner\u2019s working days and breaks', heroLink:SVC_PAGE,
         followup:'openedNotClicked', followDays:3, eyebrow:'Straight answers',
         headline:'Will it work for my business? Short answers.',
         intro:'Here are short answers to the first questions most owners ask.',
