@@ -273,6 +273,7 @@
   var DEFAULT_GROUPS = [
     'Marketing',
     'Restaurant Deluxe',
+    'Service Deluxe',
     'Table Ordering',
     'Set up a client',
     'Behind the scenes'
@@ -281,7 +282,7 @@
   /* Links left blank are ones only Marc knows — the tile says so plainly
      rather than guessing an address that would 404. */
   var DEFAULT_TILES = [
-    { t:'Venue CRM', n:'Venue health, sales pipeline and AI campaign ideas', u:'../CRM/venue-crm.html', g:'Marketing', i:'📈', c:'cyan', b:'New' },
+    { t:'Venue CRM', n:'Restaurant & Service Deluxe: health, pipeline and AI campaign ideas', u:'../CRM/venue-crm.html', g:'Marketing', i:'📈', c:'cyan', b:'New' },
     { t:'Email Studio', n:'Write, send and report on campaigns — now with AI', u:'../CRM/restaurant-deluxe-email-studio.html', g:'Marketing', i:'✉️', c:'violet' },
     { t:'Resend', n:'Broadcasts, audiences and delivery logs', u:'https://resend.com', g:'Marketing', i:'📡', c:'violet' },
     { t:'Start your trial form', n:'Enquiries from the landing page', u:'https://form.jotform.com/262297536936067', g:'Marketing', i:'📝', c:'cyan' },
@@ -292,6 +293,13 @@
     { t:'Cafe Bojo demo', n:'The live example restaurant site', u:'https://mteleki-wq.github.io/Cafe-bojo/', g:'Restaurant Deluxe', i:'🍽️', c:'gold' },
     { t:'Booking demo and CRM', n:'The reservation flow guests see', u:'https://mteleki-wq.github.io/Booking/restaurant-booking-supabase-with-crm-12.html', g:'Restaurant Deluxe', i:'📖', c:'gold' },
     { t:'Alex, the AI assistant', n:'Agent settings, training and chats', u:'', g:'Restaurant Deluxe', i:'🤖', c:'violet', b:'Add link' },
+
+    { t:'Service Deluxe sales page', n:'Plans, prices and the enquiry form', u:'https://webescapade.com/service/', g:'Service Deluxe', i:'💆', c:'teal', b:'New' },
+    { t:'Spa demo website', n:'Serenity Day Spa — the editable demo site', u:'https://webescapade.com/service/demo/', g:'Service Deluxe', i:'🌿', c:'teal' },
+    { t:'Client booking page', n:'What clients see when they book', u:'https://webescapade.com/service/service-booking.html?venue=serenity-spa', g:'Service Deluxe', i:'📅', c:'cyan' },
+    { t:'Staff calendar', n:'Bookings by practitioner and room', u:'https://webescapade.com/service/service-staff.html', g:'Service Deluxe', i:'🗓️', c:'blue' },
+    { t:'Set up a business', n:'The self-setup link (with your code)', u:'https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC', g:'Service Deluxe', i:'➕', c:'violet' },
+    { t:'1-minute tour video', n:'Service Deluxe showcase on YouTube', u:'https://youtu.be/wEmL6nPHgO0', g:'Service Deluxe', i:'▶️', c:'pink' },
 
     { t:'Ordering platform', n:'All venues, staff and settings', u:'', g:'Table Ordering', i:'🧾', c:'teal', b:'Add link' },
     { t:'Menu manager', n:'Dishes, prices, photos and modifiers', u:'', g:'Table Ordering', i:'📋', c:'teal', b:'Add link' },
@@ -340,11 +348,19 @@
     /* Tiles added in later builds appear once, even for a saved layout,
        and stay deleted if Marc removes them. */
     state.seen = state.seen || [];
+    if(state.seen.indexOf('group:Service Deluxe')<0){
+      state.seen.push('group:Service Deluxe');
+      if(state.groups.indexOf('Service Deluxe')<0){
+        var at=state.groups.indexOf('Restaurant Deluxe');
+        state.groups.splice(at>=0?at+1:state.groups.length,0,'Service Deluxe');
+      }
+      save();
+    }
     DEFAULT_TILES.forEach(function(t){
-      if(t.t!=='Venue CRM' || state.seen.indexOf(t.t)>=0) return;
+      if((t.t!=='Venue CRM' && t.g!=='Service Deluxe') || state.seen.indexOf(t.t)>=0) return;
       state.seen.push(t.t);
       var has = state.tiles.some(function(x){ return x.t===t.t; });
-      if(!has) state.tiles.unshift(Object.assign({},t));
+      if(!has){ if(t.t==='Venue CRM') state.tiles.unshift(Object.assign({},t)); else state.tiles.push(Object.assign({},t)); }
       save();
     });
   }

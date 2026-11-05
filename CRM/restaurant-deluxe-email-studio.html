@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v42</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v43</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v42 \u00b7 separate send history per product';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v43 \u00b7 CRM hand-off opens the right product';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -3244,6 +3244,7 @@
     store.del(K_HANDOFF);
     var h; try{ h=JSON.parse(raw); }catch(e){ return; }
     if(!h || !h.at || Date.now()-h.at>864e5) return;
+    if(h.product && h.product!==PRODUCT){ try{ switchProduct(h.product,true); }catch(e){} }
     newFromBase(h.base||'', h.title, h.subject, h.preheader);
     if(h.brief) $('#aiBrief').value=h.brief;
     if(h.audience) $('#aiAudience').value=h.audience;

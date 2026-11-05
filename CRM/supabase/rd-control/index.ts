@@ -75,14 +75,15 @@ async function readAll(path: string, cap = 20000) {
 }
 
 async function snapshot() {
-  const [venues, prospects, campaigns, deliveries, optouts, badDeliveries, badEvents] = await Promise.all([
+  const [venues, prospects, campaigns, deliveries, optouts, badDeliveries, badEvents, svcVenues] = await Promise.all([
     db("rpc/rd_platform_health", { method: "POST", body: "{}" }),
-    readAll("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at,product&order=created_at.desc,id.desc"),
+    readAll("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at,product,source&order=created_at.desc,id.desc"),
     db("email_marketing_campaigns?select=name,subject,status,sent_at,created_at&order=created_at.desc&limit=12"),
     db(`crm_email_deliveries?select=status,campaign,subject,created_at&created_at=gte.${new Date(Date.now() - 60 * 864e5).toISOString()}&limit=1000`),
     readAll("email_optouts?select=email&order=id.asc"),
     readAll("crm_email_deliveries?select=recipient_email&status=in.(bounced,complained,suppressed)&order=id.asc"),
     readAll("email_events?select=to_email&event_type=in.(email.bounced,email.complained,email.suppressed)&order=id.asc"),
+    db("rpc/svc_platform_health", { method: "POST", body: "{}" }).catch(() => []),
   ]);
   // Addresses that must never be emailed again. Only prospects' own
   // addresses are returned, so restaurant guests' opt-outs never leave the server.
@@ -92,7 +93,7 @@ async function snapshot() {
     ...badEvents.map((r: any) => r.to_email),
   ].filter(Boolean).map((e: string) => String(e).trim().toLowerCase()));
   const blocked = [...new Set(prospects.map((p: any) => String(p.email || "").trim().toLowerCase()))].filter((e) => bad.has(e));
-  return { venues: venues || [], prospects, campaigns: campaigns || [], deliveries: deliveries || [], blocked };
+  return { venues: venues || [], svc_venues: svcVenues || [], prospects, campaigns: campaigns || [], deliveries: deliveries || [], blocked };
 }
 
 // Every email in the send log, for the CRM's per-restaurant history and
@@ -302,6 +303,29 @@ const clip = (v: unknown, n = 300) => {
 };
 
 // A compact, PII-free picture of the business for the model.
+// Service Deluxe businesses, as counts only (no client names), for the AI.
+function svcSummary(list: any[]) {
+  const today = Date.now();
+  return list.map((v: any) => {
+    const missing: string[] = [];
+    if (!+v.providers) missing.push("practitioners");
+    if (!+v.services) missing.push("services");
+    if (!+v.hours_rows) missing.push("opening hours");
+    if (!v.phone && !v.email) missing.push("contact details");
+    return {
+      name: v.name,
+      business_type: v.business_type,
+      stage: v.stage || "unknown",
+      plan: v.plan || null,
+      trial_days_left: v.trial_ends_on ? Math.ceil((Date.parse(v.trial_ends_on) - today) / 864e5) : null,
+      days_since_last_booking: v.last_booking_at ? Math.floor((today - Date.parse(v.last_booking_at)) / 864e5) : null,
+      bookings_this_week: v.bookings_7d, bookings_last_week: v.bookings_prev_7d,
+      upcoming_appointments: v.upcoming, practitioners: v.providers, rooms: v.rooms,
+      setup_missing: missing,
+    };
+  });
+}
+
 function summarise(s: Awaited<ReturnType<typeof snapshot>>) {
   const today = Date.now();
   const venues = s.venues.map((v: any) => {
@@ -653,7 +677,9 @@ Deno.serve(async (req) => {
           if (f[k] !== undefined) row[k] = f[k] || null;
         }
         if (f.founding !== undefined) row.founding = f.founding === true || f.founding === "true";
-        const rows = await db("rd_venue_accounts?on_conflict=venue_id", {
+        const svc = productKey(body.product) === "service";
+        if (svc) delete row.founding;
+        const rows = await db((svc ? "svc_accounts" : "rd_venue_accounts") + "?on_conflict=venue_id", {
           method: "POST",
           headers: { Prefer: "resolution=merge-duplicates,return=representation" },
           body: JSON.stringify(row),
@@ -666,8 +692,11 @@ Deno.serve(async (req) => {
         const P = await loadProduct(productKey(body.product));
         const snap = await snapshot();
         snap.prospects = (snap.prospects || []).filter((p: any) => (p.product || "restaurant") === P.key);
+        const svcMode = P.key === "service";
+        const svcV = svcMode ? svcSummary(snap.svc_venues || []) : [];
         if (P.key !== "restaurant") snap.venues = [];
-        const s = summarise(snap);
+        const s: any = summarise(snap);
+        if (svcMode) s.venues = svcV;
         const bases = (Array.isArray(body.bases) ? body.bases : []).map((x: unknown) => String(x).slice(0, 120)).filter(Boolean).slice(0, 30);
         const focus = String(body.focus || "").slice(0, 500);
         const out = await claude(
@@ -675,9 +704,10 @@ Deno.serve(async (req) => {
           `Here is the current state of the business (JSON):\n${JSON.stringify(s)}\n\n` +
           (focus ? `Marc's focus right now: ${focus}\n\n` : "") +
           `Product: ${P.name}. Suggest 4 email campaigns Marc could send in the next two weeks to promote ${P.name}, most valuable first. ` +
-          `Base each one on something specific in the data (a trial ending, a venue gone quiet, a drop in orders, prospects never contacted, a setup step missing, a past campaign to follow up). ` +
+          (svcMode ? `Base each one on something specific in the data (a trial ending, a business with few or no online bookings, a setup step missing, prospects never contacted, a past campaign to follow up). ` :
+          `Base each one on something specific in the data (a trial ending, a venue gone quiet, a drop in orders, prospects never contacted, a setup step missing, a past campaign to follow up). `) +
           `Name the venue(s) or group it is for. Keep it honest — if the data is thin, say so in "why".\n\n` +
-          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"${P.key === "restaurant" ? "one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues" : "one of: prospects_new | prospects_priority_a | prospects_followup"}","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: ${bases.length ? bases.join(" | ") : "Intro"}"}]}`,
+          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"${P.key === "restaurant" ? "one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues" : "one of: prospects_new | prospects_priority_a | prospects_followup" + (svcV.length ? " | trial_venues | quiet_venues | paying_venues | all_venues" : "")}","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: ${bases.length ? bases.join(" | ") : "Intro"}"}]}`,
           3000,
         );
         return json({ ok: true, ideas: out.ideas || [], snapshotSummary: s });

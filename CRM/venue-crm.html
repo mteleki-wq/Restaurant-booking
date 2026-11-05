@@ -34,6 +34,9 @@
   .title h1{margin:0;font-size:19px;font-weight:700;letter-spacing:-.02em}
   .title p{margin:0;font-family:var(--fmono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
   .grow{flex:1 1 auto}
+  .prodsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--glass)}
+  .prodsw button{border:0;background:transparent;color:var(--muted);font:600 13px var(--fdisp);padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .prodsw button.on{background:var(--grad);color:#fff}
   .status{display:inline-flex;align-items:center;gap:8px;font-family:var(--fmono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
   .status .d{width:7px;height:7px;border-radius:50%;background:var(--faint)}
   .status.on .d{background:var(--teal);box-shadow:0 0 10px var(--teal)}
@@ -296,10 +299,14 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="mark">RD</div>
+    <div class="mark" id="pMark">RD</div>
     <div class="title">
       <h1>Venue CRM</h1>
-      <p>Restaurant Deluxe · marketing · venues · pipeline · AI</p>
+      <p id="pSub">Restaurant Deluxe · marketing · venues · pipeline · AI</p>
+    </div>
+    <div class="prodsw" id="prodSw" role="tablist" aria-label="Product">
+      <button type="button" data-prod="restaurant" class="on" title="Restaurant Deluxe">Restaurant</button>
+      <button type="button" data-prod="service" title="Service Deluxe">Service</button>
     </div>
     <div class="grow"></div>
     <span class="status" id="conn"><span class="d"></span><span id="connLbl">Not connected</span></span>
@@ -311,7 +318,7 @@
   <nav class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-tab="home">🏠 Today<span class="ct" id="ctHome"></span></button>
     <button role="tab" aria-selected="false" data-tab="cal">📅 Demo calendar<span class="ct" id="ctCal"></span></button>
-    <button role="tab" aria-selected="false" data-tab="health">Venue health<span class="ct" id="ctHealth"></span></button>
+    <button role="tab" aria-selected="false" data-tab="health"><span id="tHealth">Venue health</span><span class="ct" id="ctHealth"></span></button>
     <button role="tab" aria-selected="false" data-tab="pipeline">Sales pipeline<span class="ct" id="ctPipe"></span></button>
     <button role="tab" aria-selected="false" data-tab="campaigns">📊 Campaign results</button>
     <button role="tab" aria-selected="false" data-tab="ai">✦ AI suggestions</button>
@@ -324,7 +331,7 @@
   <section id="tab-home">
     <span class="eyebrow">Marketing home</span>
     <h2>Today</h2>
-    <p class="sub">Who to call, which follow-up emails are due, your Founding 5 places and how this week is going — Email Studio and pipeline together.</p>
+    <p class="sub" id="xHomeSub">Who to call, which follow-up emails are due, your Founding 5 places and how this week is going — Email Studio and pipeline together.</p>
     <div class="kpis" id="homeKpis"></div>
     <div class="hgrid">
       <div>
@@ -338,7 +345,7 @@
         <div class="hcard"><h3>📅 Upcoming demos</h3><div id="homeDemos"></div>
           <p class="help" style="margin:10px 0 0">Restaurants book themselves at <a href="../Restaurant/demo.html" target="_blank" rel="noopener" style="color:var(--cyan)">webescapade.com/Restaurant/demo.html</a> — the link is in your emails.</p>
           <button class="btn sm" type="button" id="btnOpenCal" style="margin-top:10px">📅 Set my availability</button></div>
-        <div class="hcard"><h3>⭐ Founding 5</h3><div id="homeFounding"></div></div>
+        <div class="hcard" id="foundCard"><h3>⭐ Founding 5</h3><div id="homeFounding"></div></div>
         <div class="hcard"><h3>Recent activity</h3><div class="feed" id="homeFeed"></div></div>
         <div class="hcard"><h3>📬 Weekly report</h3>
           <p class="help" style="margin:0 0 10px">Emailed every Monday at 7:30 am to <b id="repTo">sales@webescapade.com</b>: emails, clicks, calls, new leads, follow-ups due and trials ending.</p>
@@ -411,9 +418,9 @@
   </section>
 
   <section id="tab-health" hidden>
-    <span class="eyebrow">Live venues</span>
-    <h2>How every restaurant is running</h2>
-    <p class="sub">Red needs you today, amber is worth a look this week. A venue going quiet is usually the first sign it's slipping away — catch it early with a call or an email.</p>
+    <span class="eyebrow" id="xHealthEye">Live venues</span>
+    <h2 id="xHealthH">How every restaurant is running</h2>
+    <p class="sub" id="xHealthSub">Red needs you today, amber is worth a look this week. A venue going quiet is usually the first sign it's slipping away — catch it early with a call or an email.</p>
     <div class="kpis" id="kpis"></div>
     <div class="cards" id="venueCards"><p class="empty">Connect to load your venues.</p></div>
   </section>
@@ -422,13 +429,13 @@
   <section id="tab-pipeline" hidden>
     <span class="eyebrow">Prospects</span>
     <h2>Sales pipeline</h2>
-    <p class="sub">Every restaurant you've imported as a lead. Move them along as you talk to them, set a follow-up date, and email a filtered group straight from the Email Studio.</p>
+    <p class="sub" id="xPipeSub">Every restaurant you've imported as a lead. Move them along as you talk to them, set a follow-up date, and email a filtered group straight from the Email Studio.</p>
     <div id="callToday"></div>
     <div class="funnel" id="funnel" aria-hidden="true"></div>
     <div class="chips" id="statusChips"></div>
     <div class="chips eng-chips" id="engChips"></div>
     <div class="toolbar">
-      <input type="search" id="pSearch" placeholder="Search restaurant, name, suburb…">
+      <input type="search" id="pSearch" placeholder="Search business, name, suburb…">
       <select id="pPriority" aria-label="Priority">
         <option value="">All priorities</option><option value="A">A only</option><option value="B">B only</option><option value="C">C only</option>
       </select>
@@ -442,7 +449,7 @@
   <section id="tab-campaigns" hidden>
     <span class="eyebrow">Email Studio results</span>
     <h2>What each campaign brought in</h2>
-    <p class="sub">Every email sent from the Email Studio, grouped by subject line: how many were delivered, opened and clicked, and where those restaurants are in your pipeline now. Results come straight from Resend each time you open the CRM.</p>
+    <p class="sub">Every email sent from the Email Studio, grouped by subject line: how many were delivered, opened and clicked, and where those businesses are in your pipeline now. Results come straight from Resend each time you open the CRM.</p>
     <div id="emailSync" class="help" style="margin:-6px 0 14px"></div>
     <div class="ctable" id="ctable"><p class="empty">Connect to load your campaigns.</p></div>
   </section>
@@ -575,7 +582,53 @@
   function banner(msg,cls){ $("#banner").innerHTML = msg ? '<div class="note '+(cls||"")+'" style="margin-bottom:18px">'+msg+'</div>' : ""; }
 
   /* ------------------------------------------------------------ data */
-  var DATA = null, EM = {}, SYNC = {at:null, busy:false, msg:""};
+  var DATA = null, RAW = null, EM = {}, SYNC = {at:null, busy:false, msg:""};
+  /* ---- product: Restaurant Deluxe or Service Deluxe. Each sees only its own
+     prospects, emails, calls and live businesses. ---- */
+  var PRODUCT = (store.get("rdcrm.product")==="service") ? "service" : "restaurant";
+  var PNAME = {restaurant:"Restaurant Deluxe", service:"Service Deluxe"};
+  var SVC_BASES = ["Intro to Service Deluxe","14-day free trial invite","Website + bookings ($59)","Already have a website? Bookings only ($39)","Booking demo follow-up"];
+  function lc(e){ return String(e||"").trim().toLowerCase(); }
+  function prodOf(p){ return p.product||"restaurant"; }
+  function view(){
+    if(!RAW) return null;
+    var svc=PRODUCT==="service", mine={}, other={}, ids={};
+    var ps=(RAW.prospects||[]).filter(function(p){ var e=lc(p.email), m=prodOf(p)===PRODUCT; if(e){ if(m) mine[e]=1; else other[e]=1; } if(m) ids[p.id]=1; return m; });
+    var vs=svc ? (RAW.svc_venues||[]) : (RAW.venues||[]);
+    vs.forEach(function(v){ var e=lc(v.contact_email); if(e) mine[e]=1; });
+    return Object.assign({}, RAW, {
+      prospects: ps, venues: vs,
+      emails: RAW.emails ? RAW.emails.filter(function(r){ var e=lc(r.recipient_email); return mine[e] || (!svc && !other[e]); }) : RAW.emails,
+      calls: RAW.calls ? RAW.calls.filter(function(c){ return ids[c.prospect_id]; }) : RAW.calls,
+      founding: svc ? [] : (RAW.founding||(RAW.founding=[]))
+    });
+  }
+  var XT = {   /* service wording; restaurant wording is whatever the page already says */
+    xHomeSub: "Who to call, which follow-up emails are due and how this week is going for Service Deluxe — Email Studio and pipeline together.",
+    xHealthEye: "Live businesses",
+    xHealthH: "How every business is running",
+    xHealthSub: "Spas, clinics and salons using Service Deluxe. Red needs you today, amber is worth a look this week. A business that stops getting online bookings is usually the first sign it's slipping away — catch it early with a call.",
+    xPipeSub: "Every spa, clinic or salon you've imported as a Service Deluxe lead. Move them along as you talk to them, set a follow-up date, and email a filtered group straight from the Email Studio.",
+    tHealth: "Business health"
+  }, XT0 = {};
+  function paintProduct(){
+    var svc=PRODUCT==="service";
+    document.querySelectorAll("#prodSw [data-prod]").forEach(function(b){ var on=b.getAttribute("data-prod")===PRODUCT; b.classList.toggle("on",on); b.setAttribute("aria-selected",on?"true":"false"); });
+    document.title=PNAME[PRODUCT]+" — Venue CRM";
+    $("#pMark").textContent=svc?"SD":"RD";
+    $("#pSub").textContent=PNAME[PRODUCT]+(svc?" · marketing · businesses · pipeline · AI":" · marketing · venues · pipeline · AI");
+    Object.keys(XT).forEach(function(id){ var el=document.getElementById(id); if(!el) return; if(!(id in XT0)) XT0[id]=el.innerHTML; el.innerHTML= svc ? esc(XT[id]) : XT0[id]; });
+    var fc=$("#foundCard"); if(fc) fc.hidden=svc;
+    $("#aiFocus").placeholder= svc ? "e.g. Get the spas on trial taking online bookings, or reach physios in the eastern suburbs" : "e.g. I want to convert the trials before Christmas, or push table ordering to cafés";
+  }
+  function switchProduct(p){
+    p=(p==="service")?"service":"restaurant"; if(p===PRODUCT) return;
+    PRODUCT=p; try{ store.set("rdcrm.product",p); }catch(e){}
+    paintProduct(); closeAll(); IDEAS=[]; $("#ideas").innerHTML="";
+    PF.status=""; PF.due=false; PF.eng=""; PF.limit=60;
+    if(RAW){ DATA=view(); indexEmails(); renderHealth(); renderPipeline(); renderCampaigns(); renderHome(); }
+    toast("Now showing "+PNAME[p]);
+  }
   function sendUrl(){ return /rd-control/.test(SET.url) ? SET.url.replace(/rd-control.*$/,"resend-send") : SET.url.replace(/\/functions\/v1\/.*$/,"/functions/v1/resend-send"); }
   function callSend(action,payload){
     return fetch(sendUrl(),{method:"POST",headers:{"Content-Type":"application/json","x-studio-secret":SET.secret},
@@ -585,7 +638,7 @@
   }
   function load(){
     return call("snapshot",{withEmails:true}).then(function(d){
-      DATA=d; indexEmails(); setConn("on","Connected"); banner("");
+      RAW=d; DATA=view(); indexEmails(); setConn("on","Connected"); banner("");
       renderHealth(); renderPipeline(); renderCampaigns(); renderHome();
     });
   }
@@ -670,6 +723,7 @@
 
   /* ------------------------------------------------------------ health rules */
   function assess(v){
+    if(PRODUCT==="service") return assessSvc(v);
     var f=[], lvl="green", stage=v.stage||"trial";
     function add(l,t){ f.push({l:l,t:t}); if(l==="red") lvl="red"; else if(l==="amber" && lvl!=="red") lvl="amber"; }
     if(stage==="churned"||stage==="paused"){ return {lvl:"grey",flags:[{l:"grey",t:STAGE_LABEL[stage]}]}; }
@@ -711,6 +765,7 @@
   }
 
   function renderHealth(){
+    if(PRODUCT==="service") return renderHealthSvc();
     var vs=(DATA&&DATA.venues)||[];
     var live=vs.filter(function(v){ return v.stage!=="churned"; });
     var a=live.map(function(v){ return {v:v,a:assess(v)}; });
@@ -756,11 +811,127 @@
       '</button>';
     }).join("");
   }
+  /* ---------------- Service Deluxe businesses ---------------- */
+  var SVC_TYPE={spa:"Day spa / massage",clinic:"Medical clinic",dental:"Dental",physio:"Physio / allied health",salon:"Hair & beauty",other:"Appointments"};
+  function assessSvc(v){
+    var f=[], lvl="green", stage=v.stage||"trial";
+    function add(l,t){ f.push({l:l,t:t}); if(l==="red") lvl="red"; else if(l==="amber" && lvl!=="red") lvl="amber"; }
+    if(stage==="churned"||stage==="paused"){ return {lvl:"grey",flags:[{l:"grey",t:STAGE_LABEL[stage]}]}; }
+    var last=daysSince(v.last_booking_at);
+    if(last==null) add(stage==="onboarding"?"amber":"red","No bookings yet");
+    else if(last>=14) add("red","No new bookings for "+last+" days");
+    else if(last>=7) add("amber","Quiet — last booking "+last+" days ago");
+    var o=+v.bookings_7d||0, p=+v.bookings_prev_7d||0;
+    if(p>=5 && o<p){ var drop=Math.round((1-o/p)*100);
+      if(drop>=70) add("red","Bookings down "+drop+"% on last week"); else if(drop>=40) add("amber","Bookings down "+drop+"% on last week"); }
+    if(last!=null && !+v.upcoming) add("amber","Nothing booked ahead");
+    if(+v.cancelled_7d>=3) add("amber",v.cancelled_7d+" cancellations this week");
+    var miss=[];
+    if(!+v.providers) miss.push(v.practitioner_word?v.practitioner_word+"s":"practitioners");
+    if(!+v.services) miss.push(v.service_word?v.service_word+"s":"services");
+    if(!+v.hours_rows) miss.push("opening hours");
+    if(!+v.staff) miss.push("staff login");
+    if(!v.phone && !v.email) miss.push("contact details");
+    if(miss.length) add("amber","Setup missing: "+miss.join(", "));
+    if(stage==="trial"){
+      var dl=daysUntil(v.trial_ends_on);
+      if(dl==null) add("amber","Set a trial end date");
+      else if(dl<0) add("red","Trial ended "+(-dl)+" day"+(dl===-1?"":"s")+" ago — convert or extend");
+      else if(dl<=3) add("amber","Trial ends in "+dl+" day"+(dl===1?"":"s"));
+    }
+    if(stage==="at_risk" && lvl==="green") add("amber","Marked at risk");
+    if(!f.length) f.push({l:"green",t:"All good"});
+    return {lvl:lvl,flags:f};
+  }
+  function renderHealthSvc(){
+    var vs=(DATA&&DATA.venues)||[];
+    var live=vs.filter(function(v){ return v.stage!=="churned"; });
+    var a=live.map(function(v){ return {v:v,a:assessSvc(v)}; });
+    var red=a.filter(function(x){ return x.a.lvl==="red"; }).length, amber=a.filter(function(x){ return x.a.lvl==="amber"; }).length;
+    var o7=0,p7=0,val=0,mrr=0,trialsSoon=0,up=0;
+    live.forEach(function(v){
+      o7+=+v.bookings_7d||0; p7+=+v.bookings_prev_7d||0; val+=+v.value_30d_cents||0; up+=+v.upcoming||0;
+      if(v.stage==="paying"||v.stage==="at_risk") mrr+=+v.monthly_fee||0;
+      var dl=daysUntil(v.trial_ends_on); if(v.stage==="trial" && dl!=null && dl>=0 && dl<=7) trialsSoon++;
+    });
+    var delta = p7 ? Math.round((o7/p7-1)*100) : null;
+    $("#kpis").innerHTML=[
+      kpi("Live businesses", live.length, vs.length-live.length? (vs.length-live.length)+" churned":""),
+      kpi("Need you today", red, amber+" to watch this week", red?"alert":"good"),
+      kpi("New bookings this week", o7, delta==null?(up+" upcoming"):'<span class="'+(delta>=0?"up":"down")+'">'+(delta>=0?"▲ ":"▼ ")+Math.abs(delta)+"%</span> vs last week"),
+      kpi("Booked value · 30 days", money(val), "appointments through Service Deluxe"),
+      kpi("Monthly recurring", "$"+mrr.toLocaleString("en-AU"), "from paying businesses"),
+      kpi("Trials ending ≤ 7 days", trialsSoon, trialsSoon?"time to convert":"none due", trialsSoon?"alert":"")
+    ].join("");
+    $("#ctHealth").textContent = red ? red+" red" : "";
+    var order={red:0,amber:1,green:2,grey:3};
+    a.sort(function(x,y){ return order[x.a.lvl]-order[y.a.lvl] || String(x.v.name).localeCompare(y.v.name); });
+    vs.filter(function(v){ return v.stage==="churned"; }).forEach(function(v){ a.push({v:v,a:assessSvc(v)}); });
+    if(!a.length){ $("#venueCards").innerHTML='<p class="empty">No Service Deluxe businesses yet. They appear here as soon as one is set up from the sign-up link.</p>'; return; }
+    $("#venueCards").innerHTML=a.map(function(x){
+      var v=x.v, o=+v.bookings_7d||0, p=+v.bookings_prev_7d||0;
+      var trend = p ? '<span class="'+(o>=p?"up":"down")+'">'+(o>=p?"▲":"▼")+'</span> ' : "";
+      var dl=daysUntil(v.trial_ends_on);
+      return '<button class="vcard" type="button" data-lvl="'+x.a.lvl+'" data-venue="'+esc(v.id)+'">'+
+        '<div class="vhead"><b>'+esc(v.name)+'</b><span class="chip '+esc(v.stage||"")+'">'+esc(STAGE_LABEL[v.stage]||"No stage")+'</span></div>'+
+        '<div class="vnums">'+
+          '<div><b>'+trend+o+'</b><span>bookings 7d</span></div>'+
+          '<div><b>'+(+v.upcoming||0)+'</b><span>upcoming</span></div>'+
+          '<div><b>'+esc(ago(v.last_booking_at))+'</b><span>last booking</span></div>'+
+        '</div>'+
+        '<ul class="flags">'+x.a.flags.slice(0,4).map(function(fl){ return '<li class="'+fl.l+'">'+esc(fl.t)+'</li>'; }).join("")+
+          (x.a.flags.length>4?'<li>+'+(x.a.flags.length-4)+' more</li>':'')+'</ul>'+
+        '<div class="vfoot"><span>'+esc(v.plan||"No plan set")+(v.monthly_fee?" · "+dollars(v.monthly_fee)+"/mo":"")+'</span>'+
+          '<span>'+(v.stage==="trial"&&dl!=null?(dl>=0?dl+"d left in trial":"trial over"):esc(SVC_TYPE[v.business_type]||v.slug))+'</span></div>'+
+      '</button>';
+    }).join("");
+  }
+  function openDrawerSvc(id){
+    var v=findVenue(id); if(!v) return;
+    var a=assessSvc(v), pw=v.practitioner_word||"practitioner";
+    var stages=Object.keys(STAGE_LABEL).map(function(k){ return '<option value="'+k+'"'+(v.stage===k?" selected":"")+'>'+STAGE_LABEL[k]+'</option>'; }).join("");
+    var book="https://webescapade.com/service/service-booking.html?venue="+encodeURIComponent(v.slug);
+    var mail=v.contact_email||v.email||"";
+    $("#drawer").innerHTML=
+      '<button class="btn sm x" type="button" data-close>✕</button>'+
+      '<span class="eyebrow">'+esc(SVC_TYPE[v.business_type]||"Service Deluxe")+' · '+esc(v.slug)+'</span><h3>'+esc(v.name)+'</h3>'+
+      '<ul class="flags" style="margin-top:12px">'+a.flags.map(function(f){ return '<li class="'+f.l+'">'+esc(f.t)+'</li>'; }).join("")+'</ul>'+
+      '<div class="facts">'+
+        fact("New bookings this week",(+v.bookings_7d||0)+" (last week "+(+v.bookings_prev_7d||0)+")")+
+        fact("Upcoming",(+v.upcoming||0)+" ("+(+v.next_7d||0)+" in the next 7 days)")+
+        fact("Booked value · 30 days",money(v.value_30d_cents))+
+        fact("Cancelled this week",v.cancelled_7d||0)+
+        fact(pw.charAt(0).toUpperCase()+pw.slice(1)+"s",v.providers||0)+fact("Services",v.services||0)+
+        fact("Rooms",v.rooms||0)+fact("Staff logins",(v.staff||0)+(v.login_email?" · "+v.login_email:""))+
+        fact("Business phone",v.phone||"—")+fact("Business email",v.email||"—")+
+        fact("Set up",String(v.created_at||"").slice(0,10))+fact("Last booking",ago(v.last_booking_at))+
+      '</div>'+
+      '<span class="eyebrow">Account</span>'+
+      '<div class="form" id="acctForm">'+
+        '<div><label>Stage</label><select name="stage">'+stages+'</select></div>'+
+        '<div><label>Plan</label><select name="plan">'+["","Bookings","Basic","Team","Custom"].map(function(p){ return '<option'+((v.plan||"")===p?" selected":"")+'>'+p+'</option>'; }).join("")+'</select></div>'+
+        '<div><label>Monthly fee ($)</label><input type="number" step="1" min="0" name="monthly_fee" value="'+esc(v.monthly_fee==null?"":v.monthly_fee)+'"></div>'+
+        '<div><label>Setup fee ($)</label><input type="number" step="1" min="0" name="setup_fee" value="'+esc(v.setup_fee==null?"":v.setup_fee)+'"></div>'+
+        '<div><label>Trial ends</label><input type="date" name="trial_ends_on" value="'+esc(v.trial_ends_on||"")+'"></div>'+
+        '<div><label>Started</label><input type="date" name="started_on" value="'+esc(v.started_on||"")+'"></div>'+
+        '<div><label>Contact name</label><input type="text" name="contact_name" value="'+esc(v.contact_name||"")+'"></div>'+
+        '<div><label>Contact phone</label><input type="text" name="contact_phone" value="'+esc(v.contact_phone||"")+'"></div>'+
+        '<div class="full"><label>Contact email</label><input type="email" name="contact_email" value="'+esc(v.contact_email||"")+'" placeholder="'+esc(v.email||v.login_email||"")+'"></div>'+
+        '<div class="full"><label>Notes</label><textarea name="notes" rows="4">'+esc(v.notes||"")+'</textarea></div>'+
+      '</div>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">'+
+        '<button class="btn primary" type="button" data-save="'+esc(v.id)+'">Save</button>'+
+        (mail?'<button class="btn" type="button" data-mailvenue="'+esc(v.id)+'">✉ Email in Studio</button>':'')+
+        '<a class="btn" target="_blank" rel="noopener" href="'+esc(book)+'">Booking page ↗</a>'+
+      '</div>';
+    $("#drawer").classList.add("on"); $("#scrim").classList.add("on");
+  }
   function kpi(l,b,s,cls){ return '<div class="kpi '+(cls||"")+'"><span>'+esc(l)+'</span><b>'+(typeof b==="number"?b:esc(b))+'</b><small>'+(s||"&nbsp;")+'</small></div>'; }
 
   /* ------------------------------------------------------------ drawer */
   function findVenue(id){ return ((DATA&&DATA.venues)||[]).filter(function(v){ return v.id===id; })[0]; }
   function openDrawer(id){
+    if(PRODUCT==="service") return openDrawerSvc(id);
     var v=findVenue(id); if(!v) return;
     var a=assess(v);
     var stages=Object.keys(STAGE_LABEL).map(function(k){ return '<option value="'+k+'"'+(v.stage===k?" selected":"")+'>'+STAGE_LABEL[k]+'</option>'; }).join("");
@@ -807,7 +978,7 @@
     $("#acctForm").querySelectorAll("[name]").forEach(function(el){ fields[el.name]= el.type==="checkbox" ? el.checked : el.value; });
     if(fields.contact_email && !validEmail(fields.contact_email)){ toast("That contact email doesn't look right"); return; }
     btn.disabled=true;
-    call("account_save",{venue_id:id,fields:fields}).then(function(){
+    call("account_save",{venue_id:id,fields:fields,product:PRODUCT}).then(function(){
       var v=findVenue(id); Object.keys(fields).forEach(function(k){ if(k!=="founding") v[k]= fields[k]===""?null:fields[k]; });
       var fl=DATA.founding||(DATA.founding=[]), at=fl.indexOf(id);
       if(fields.founding && at<0) fl.push(id); if(!fields.founding && at>=0) fl.splice(at,1);
@@ -1037,7 +1208,7 @@
     $("#homeWeb").innerHTML=web.length?'<div class="tl" style="display:grid;gap:8px;margin-top:8px">'+web.slice(0,8).map(function(p){
       return '<div class="trow" data-id="'+esc(p.id)+'"><div><b>'+esc(p.restaurant||"")+'</b><span class="why">'+esc([p.name,ago(p.created_at),p.crm_status].filter(Boolean).join(" · "))+'</span></div>'+
         '<div class="acts">'+(p.phone?'<a class="tel" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎ '+esc(p.phone)+'</a>':'')+'<button class="btn sm primary" type="button" data-logcall="'+esc(p.id)+'">📞 Log call</button></div></div>';
-    }).join("")+'</div>':'<p class="help" style="margin:6px 0 0">None yet. Enquiries from webescapade.com/Restaurant appear here and in your pipeline straight away, as hot leads to call.</p>';
+    }).join("")+'</div>':'<p class="help" style="margin:6px 0 0">None yet. Enquiries from webescapade.com/'+(PRODUCT==="service"?"service":"Restaurant")+' appear here and in your pipeline straight away, as hot leads to call.</p>';
 
     /* upcoming demos (booked online or logged after a call) */
     var demos=ps.filter(function(p){ return p.crm_status==="Demo booked" && p.follow_up_at && Date.parse(p.follow_up_at)>now-3*36e5; })
@@ -1085,7 +1256,7 @@
   function recipientsFor(segment){
     var ps=(DATA&&DATA.prospects)||[], vs=(DATA&&DATA.venues)||[];
     var open=function(p){ var s=p.crm_status||"New"; return s!=="Won"&&s!=="Lost"; };
-    var pick=function(arr){ return arr.map(function(x){ return String(x.email||x.contact_email||"").trim().toLowerCase(); }).filter(validEmail); };
+    var pick=function(arr){ return arr.map(function(x){ return String(x.contact_email||x.email||"").trim().toLowerCase(); }).filter(validEmail); };
     switch(segment){
       case "prospects_new": return pick(ps.filter(function(p){ return (p.crm_status||"New")==="New"; }));
       case "prospects_priority_a": return pick(ps.filter(function(p){ return prio(p.priority)==="A" && open(p); }));
@@ -1098,7 +1269,7 @@
     return [];
   }
   function handoff(h){
-    h.v=1; h.at=Date.now();
+    h.v=1; h.at=Date.now(); h.product=PRODUCT;
     h.to=Array.from(new Set(h.to||[]));
     store.set(K_HANDOFF,JSON.stringify(h));
     var w=window.open(STUDIO_URL,"rd-email-studio");
@@ -1110,10 +1281,11 @@
   var IDEAS=[];
   var SEG_LABEL={prospects_new:"New prospects",prospects_priority_a:"Priority A prospects",prospects_followup:"Prospects in conversation",
     trial_venues:"Venues on trial",quiet_venues:"Venues needing attention",paying_venues:"Paying venues",all_venues:"All live venues"};
+  function segLabel(k){ var l=SEG_LABEL[k]||""; return PRODUCT==="service" ? l.replace(/Venues/,"Businesses").replace(/venues/,"businesses") : l; }
   function suggest(){
     var btn=$("#btnIdeas"); btn.disabled=true;
     $("#ideas").innerHTML='<div class="thinking"><i></i>Claude is reading your figures…</div>';
-    call("ai_ideas",{focus:$("#aiFocus").value}).then(function(d){
+    call("ai_ideas",Object.assign({focus:$("#aiFocus").value,product:PRODUCT},PRODUCT==="service"?{bases:SVC_BASES}:{})).then(function(d){
       IDEAS=d.ideas||[]; renderIdeas();
     }).catch(function(e){
       $("#ideas").innerHTML='<div class="note bad">'+esc(e.message)+'</div>';
@@ -1124,12 +1296,12 @@
     $("#ideas").innerHTML='<div class="ideas">'+IDEAS.map(function(i,ix){
       var n=recipientsFor(i.segment).length;
       return '<article class="idea"><h3>'+esc(i.title)+'</h3><p class="why">'+esc(i.why)+'</p>'+
-        '<dl><dt>For</dt><dd>'+esc(i.audience||SEG_LABEL[i.segment]||"")+'</dd>'+
+        '<dl><dt>For</dt><dd>'+esc(i.audience||segLabel(i.segment)||"")+'</dd>'+
         '<dt>Goal</dt><dd>'+esc(i.goal||"")+'</dd>'+
         '<dt>Hook</dt><dd>'+esc(i.angle||"")+'</dd>'+
         '<dt>Subject</dt><dd><b>'+esc(i.subject||"")+'</b></dd>'+
         '<dt>Starts from</dt><dd>'+esc(i.base||"")+'</dd>'+
-        '<dt>Recipients</dt><dd>'+n+' with an email address'+(SEG_LABEL[i.segment]?' · '+esc(SEG_LABEL[i.segment]):'')+'</dd></dl>'+
+        '<dt>Recipients</dt><dd>'+n+' with an email address'+(segLabel(i.segment)?' · '+esc(segLabel(i.segment)):'')+'</dd></dl>'+
         '<div class="act"><button class="btn primary sm" type="button" data-idea="'+ix+'">Draft in Email Studio →</button></div></article>';
     }).join("")+'</div>';
   }
@@ -1137,7 +1309,7 @@
     var i=IDEAS[ix]; if(!i) return;
     handoff({kind:"idea",title:i.title,base:i.base,subject:i.subject,preheader:i.preheader,
       brief:[i.goal,i.angle,"Why now: "+i.why].filter(Boolean).join(". "),
-      audience:i.audience||SEG_LABEL[i.segment]||"", to:recipientsFor(i.segment), toLabel:SEG_LABEL[i.segment]||i.audience||""});
+      audience:i.audience||segLabel(i.segment)||"", to:recipientsFor(i.segment), toLabel:segLabel(i.segment)||i.audience||""});
   }
 
   /* ------------------------------------------------------------ modal */
@@ -1405,7 +1577,7 @@
     if(e.target.closest("[data-close]")) return closeAll();
     var s=e.target.closest("[data-save]"); if(s) return saveAccount(s.dataset.save,s);
     var m=e.target.closest("[data-mailvenue]");
-    if(m){ var v=findVenue(m.dataset.mailvenue); handoff({kind:"venue",title:"Email to "+v.name,to:[v.contact_email],toLabel:v.name,
+    if(m){ var v=findVenue(m.dataset.mailvenue); handoff({kind:"venue",title:"Email to "+v.name,to:[v.contact_email||v.email||""].filter(Boolean),toLabel:v.name,
       brief:"A personal note to "+v.name+" ("+(STAGE_LABEL[v.stage]||"")+"). "+assess(v).flags.map(function(f){ return f.t; }).join("; "),audience:v.name}); }
   });
   $("#statusChips").addEventListener("click",function(e){
@@ -1476,12 +1648,14 @@
     if(!to.length){ toast("Nobody in this group has an email address"); return; }
     var label=(PF.due?"Follow-up due":PF.status||"All prospects")+(PF.prio?" · priority "+PF.prio:"")+(PF.q?' · "'+PF.q+'"':"");
     if(to.length>100 && !confirm("Send "+to.length+" addresses to the Email Studio? You'll still review everything before anything is sent.")) return;
-    handoff({kind:"group",title:"Prospects — "+label,to:to,toLabel:label,audience:"Restaurant prospects ("+label+")"});
+    handoff({kind:"group",title:"Prospects — "+label,to:to,toLabel:label,audience:(PRODUCT==="service"?"Service Deluxe prospects (":"Restaurant prospects (")+label+")"});
   });
   $("#btnIdeas").addEventListener("click",suggest);
   $("#ideas").addEventListener("click",function(e){ var b=e.target.closest("[data-idea]"); if(b) useIdea(+b.dataset.idea); });
 
   /* ------------------------------------------------------------ boot */
+  $("#prodSw").addEventListener("click",function(e){ var b=e.target.closest("[data-prod]"); if(b) switchProduct(b.getAttribute("data-prod")); });
+  paintProduct();
   if(SET.secret){ refresh(); calLoad(); } else { setConn("off","Not connected"); openModal(); }
 })();
 </script>
