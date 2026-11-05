@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v45</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v46</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v45 \u00b7 Premium promo email with video';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v46 \u00b7 Salon promo email with video';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2873,6 +2873,10 @@
   var SVC_PREMIUM = "https://webescapade.com/service/demo-premium/";   /* Premium demo site */
   var SVC_PVIDEO = "https://youtu.be/GtzMh5USIoA";   /* Service Deluxe Premium tour */
   var SVC_PTHUMB = "https://webescapade.com/service/img/premium-video-thumb.jpg";
+  var SVC_SALON = "https://webescapade.com/service/demo-premium/salon/";   /* Premium salon demo (Atelier Hair) */
+  var SVC_SBOOK = "https://webescapade.com/service/service-booking.html?venue=atelier-hair&accent=A9503A&word=stylist";
+  var SVC_SVIDEO = "https://youtu.be/B-1hhWIhQh4";   /* Premium for salons tour */
+  var SVC_STHUMB = "https://webescapade.com/service/img/salon-video-thumb.jpg";
   var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
   var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
@@ -2954,6 +2958,21 @@
                {n:'03', t:'Parallax photos', d:'A photo band and gallery that drift gently as visitors scroll.'}],
         plans:PR?[svcBox(PR,true)]:[], priceOn:!!PR,
         subject:'A website that moves, with bookings built in', preheader:'Your own photos turned into a moving homepage. '+T+' days free.' }); })(),
+      (function(){ var PR=svcPlan('Premium'); return P({ name:'Premium for hair salons'+(PR?' ('+svcPrice(PR)+')':''), desc:'Salon promo: the Salon look, animated hero and stylist booking',
+        eyebrow:'Premium for hair salons', badge:T+'-DAY FREE TRIAL',
+        heroImage:SVC_IMG+'salon-hero.jpg', heroAlt:'A hair salon website with a full-screen animated hero, on a computer and a phone', heroLink:SVC_SALON,
+        bandImage:SVC_IMG+'salon-layouts.jpg', bandAlt:'The salon website in four layouts: full screen, full width, photo right and photo left', bandLink:SVC_SALON, bandCaption:'Full screen, full width, or the photo on either side. One tap in the editor.',
+        videoUrl:SVC_SVIDEO, videoThumb:SVC_STHUMB, videoTitle:'Watch the 1-minute salon tour',
+        cta1:'See the salon demo', cta1url:SVC_SALON, cta2:'Try booking a stylist', cta2url:SVC_SBOOK,
+        headline:'A website as stylish as your salon.',
+        intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. I’ve built a website for hair salons that looks as good as your work: a few photos of your salon become a moving, full-screen welcome, in a bold, editorial style.\n\nYour clients choose the service, their stylist and a time online, day or night, and get a confirmation straight away.',
+        featEyebrow:'Made for salons', featHeading:'Your salon, in motion.\nYour chairs, booked online.',
+        cards:[{n:'01', t:'An animated homepage', d:'Turn 2 to 8 photos of your salon into a moving welcome, with your logo.'},
+               {n:'02', t:'Book a stylist', d:'Clients pick the service, the stylist and a free time. Every chair is checked.'},
+               {n:'03', t:'Edit it yourself', d:'Change words, photos and layout from the page itself. No developer needed.'}],
+        plans:PR?[svcBox(PR,true)]:[], priceOn:!!PR,
+        finalCta:'Start your free trial', finalUrl:SVC_START,
+        subject:'A website as stylish as your salon', preheader:'A moving homepage and online stylist booking. '+T+' days free.' }); })(),
       P({ name:'Already have a website? Bookings only'+(B?' ('+svcPrice(B)+')':''), desc:'Keep their website, add the booking page',
         heroImage:SVC_IMG+'band-three-taps.jpg', heroAlt:'Booking on a phone in three steps', heroLink:SVC_BOOK,
         bandImage:SVC_IMG+'band-email.jpg', bandAlt:'Automatic booking confirmation email', bandCaption:'Every booking gets a confirmation and a reminder the day before.',
