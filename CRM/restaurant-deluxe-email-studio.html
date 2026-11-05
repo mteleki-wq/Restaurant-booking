@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v40</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v41</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -305,8 +305,8 @@
       <div class="rail-actions">
         <button class="btn" id="addCamp">+ New campaign</button>
         <button class="btn" id="dupCamp">Duplicate</button>
-        <button class="btn" id="exportAll">Export all</button>
-        <button class="btn" id="importAll">Import</button>
+        <button class="btn" id="exportAll" title="Save a backup file of all your campaigns">Back up campaigns</button>
+        <button class="btn" id="importAll" title="Restore a campaign backup (.json), or import an Excel/CSV contact list">Import…</button>
       </div>
     </aside>
 
@@ -852,7 +852,7 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<input type="file" id="fileIn" accept="application/json,.json" hidden>
+<input type="file" id="fileIn" accept="application/json,.json,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" hidden>
 
 <script>
 /* A visible banner for anything that goes wrong. Silent failure is the
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v40 \u00b7 separate lists and audiences per product';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v41 \u00b7 Import accepts Excel lists';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1790,6 +1790,11 @@
   $('#importAll').addEventListener('click',function(){ $('#fileIn').click(); });
   $('#fileIn').addEventListener('change',function(){
     var f=this.files&&this.files[0]; if(!f) return;
+    if(/\.(xlsx|xls|csv)$/i.test(f.name)){   /* a contact list, not a campaign backup: hand it to the prospect importer */
+      this.value=''; showTab('send'); var g=document.getElementById('grpPick'); if(g) g.open=true;
+      pkReadFile(f); setTimeout(function(){ var el=document.getElementById('grpPick'); if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'start'}); },60);
+      return;
+    }
     var r=new FileReader();
     r.onload=function(){
       try{
@@ -3284,7 +3289,9 @@
 
   /* ---- reading the file ---- */
   $('#pkFile').addEventListener('change',function(){
-    var f=this.files&&this.files[0]; this.value='';
+    var f=this.files&&this.files[0]; this.value=''; pkReadFile(f);
+  });
+  function pkReadFile(f){
     if(!f) return;
     if(f.size>15*1024*1024){ toast('That file is over 15 MB'); return; }
     $('#pkImport').innerHTML='<div class="ai-busy"><i></i>Reading '+esc(f.name)+'…</div>';
@@ -3302,7 +3309,7 @@
       PK.imp={file:f.name, sheets:sheets, sheet:best.name};
       pkPrepSheet(); pkRenderImport();
     }).catch(function(e){ $('#pkImport').innerHTML='<div class="note warn">'+esc((e&&e.message)||'Could not read that file')+'</div>'; });
-  });
+   }
 
   function pkPrepSheet(){
     var I=PK.imp, sh=I.sheets.filter(function(s){ return s.name===I.sheet; })[0], rows=sh.rows;
@@ -3363,7 +3370,7 @@
       (preview.length?'<table class="pk-tbl"><tr><th>Business</th><th>Email</th><th>Type</th><th>Suburb</th><th>Contact</th></tr>'+
         preview.map(function(r){ return '<tr><td>'+esc(r.restaurant)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.venue_type)+'</td><td>'+esc(r.suburb)+'</td><td>'+esc(r.name)+'</td></tr>'; }).join('')+'</table>':'')+
       '<label class="chk" style="margin:12px 0 0"><input type="checkbox" id="pkUpdate"'+(I.update?' checked':'')+'> Update venue type, suburb and details for people already saved</label>'+
-      '<div class="btnrow"><button class="btn primary" type="button" data-act="pk-save"'+((valid&&I.map.email!=null)?'':' disabled')+'>Save '+valid+' to prospects</button>'+
+      '<div class="btnrow"><button class="btn primary" type="button" data-act="pk-save"'+((valid&&I.map.email!=null)?'':' disabled')+'>Save '+valid+' to the '+PROD_NAME[PRODUCT]+' list</button>'+
         '<button class="btn" type="button" data-act="pk-cancel">Cancel</button></div></div>';
     var ss=$('#pkSheet'); if(ss) ss.addEventListener('change',function(){ I.sheet=this.value; pkPrepSheet(); pkRenderImport(); });
     $('#pkImport').querySelectorAll('[data-pkmap]').forEach(function(s){
