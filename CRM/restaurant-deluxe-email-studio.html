@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v44</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v45</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v44 \u00b7 Service Deluxe Premium plan';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v45 \u00b7 Premium promo email with video';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2870,6 +2870,9 @@
   var SVC_IMG   = "https://webescapade.com/service/img/email/";   /* email pictures, 1100px wide */
   var SVC_VIDEO = "https://youtu.be/wEmL6nPHgO0";   /* Service Deluxe 1-minute tour (YouTube link, or a page on your site) */
   var SVC_THUMB = "https://webescapade.com/service/img/video-thumb.jpg";
+  var SVC_PREMIUM = "https://webescapade.com/service/demo-premium/";   /* Premium demo site */
+  var SVC_PVIDEO = "https://youtu.be/GtzMh5USIoA";   /* Service Deluxe Premium tour */
+  var SVC_PTHUMB = "https://webescapade.com/service/img/premium-video-thumb.jpg";
   var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
   var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
@@ -2937,6 +2940,20 @@
         intro:'Your services, prices, team and opening hours appear on your website straight from the booking system, so you only keep them up to date in one place.\n\nYou edit the words and photos yourself, whenever you like.',
         cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
         subject:'Website and bookings for '+svcPrice(M)+' a month', preheader:'One flat price, no commission, '+T+' days free.' }),
+      (function(){ var PR=svcPlan('Premium'); return P({ name:'Premium website'+(PR?' ('+svcPrice(PR)+')':''), desc:'Promote the Premium website: animated hero, layouts, parallax',
+        eyebrow:'Service Deluxe Premium',
+        heroImage:SVC_IMG+'premium-hero.jpg', heroAlt:'The Premium spa website with a full-screen animated hero, on a computer and a phone', heroLink:SVC_PREMIUM,
+        bandImage:SVC_IMG+'premium-layouts.jpg', bandAlt:'Four hero layouts: full screen, full width, photo right and photo left', bandLink:SVC_PREMIUM, bandCaption:'Full screen, full width, or the photo on either side. One tap in the editor.',
+        videoUrl:SVC_PVIDEO, videoThumb:SVC_PTHUMB, videoTitle:'Watch the 1-minute Premium tour',
+        cta1:'See the Premium demo', cta1url:SVC_PREMIUM, cta2:'Start your free trial', cta2url:SVC_START,
+        headline:'A website that moves — and takes bookings.',
+        intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. Service Deluxe Premium turns a few of your own photos into a moving, full-screen welcome on your homepage, with your logo, so your business feels calm and special from the first second.\n\nYou choose the style and the layout yourself, and online booking by practitioner and room is built in.',
+        featEyebrow:'What Premium adds', featHeading:'Your photos, in motion.\nYour bookings, built in.',
+        cards:[{n:'01', t:'An animated hero', d:'Add 2 to 8 photos and choose a style: slow drift, soft dissolve, glide, reveal or cinema.'},
+               {n:'02', t:'Four layouts', d:'Full screen, full width, or the photo on the left or right. Change it with one tap.'},
+               {n:'03', t:'Parallax photos', d:'A photo band and gallery that drift gently as visitors scroll.'}],
+        plans:PR?[svcBox(PR,true)]:[], priceOn:!!PR,
+        subject:'A website that moves, with bookings built in', preheader:'Your own photos turned into a moving homepage. '+T+' days free.' }); })(),
       P({ name:'Already have a website? Bookings only'+(B?' ('+svcPrice(B)+')':''), desc:'Keep their website, add the booking page',
         heroImage:SVC_IMG+'band-three-taps.jpg', heroAlt:'Booking on a phone in three steps', heroLink:SVC_BOOK,
         bandImage:SVC_IMG+'band-email.jpg', bandAlt:'Automatic booking confirmation email', bandCaption:'Every booking gets a confirmation and a reminder the day before.',
