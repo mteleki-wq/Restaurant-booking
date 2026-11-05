@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v41</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v42</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v41 \u00b7 Import accepts Excel lists';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v42 \u00b7 separate send history per product';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1922,14 +1922,21 @@
   function finalHtml(c){ return addUtm(buildEmail(c), c.name); }
 
   /* ---- history --------------------------------------------------- */
+  /* each product has its own history; older entries without a tag are matched by campaign name */
+  function histProd(h){
+    if(h.product) return h.product;
+    try{ if(svcPresets().some(function(c){ return c.name===h.campaign; })) return 'service'; }catch(e){}
+    return 'restaurant';
+  }
+  function myHist(){ var p=(typeof PRODUCT!=='undefined'&&PRODUCT)||'restaurant'; return HIST.filter(function(h){ return histProd(h)===p; }); }
   function addHist(entry){
-    HIST.unshift(Object.assign({ when:new Date().toISOString() }, entry));
+    HIST.unshift(Object.assign({ when:new Date().toISOString(), product:(typeof PRODUCT!=='undefined'&&PRODUCT)||'restaurant' }, entry));
     saveHist(); renderHist();
   }
   function renderHist(){
-    var w=$('#histWrap');
-    if(!HIST.length){ w.innerHTML='<p class="empty">Nothing sent from this browser yet.</p>'; return; }
-    var rows=HIST.slice(0,25).map(function(h){
+    var w=$('#histWrap'), H=myHist();
+    if(!H.length){ w.innerHTML='<p class="empty">Nothing sent for '+esc(PROD_NAME[PRODUCT]||'this product')+' from this browser yet.</p>'; return; }
+    var rows=H.slice(0,25).map(function(h){
       var d=new Date(h.when);
       var when=d.toLocaleDateString(undefined,{day:'2-digit',month:'short'})+' '+
                d.toTimeString().slice(0,5);
@@ -2389,7 +2396,7 @@
   var LAST_BC = '';
 
   $('#btnCheck').addEventListener('click',function(){
-    var id = LAST_BC || (HIST.filter(function(h){return h.id;})[0]||{}).id;
+    var id = LAST_BC || (myHist().filter(function(h){return h.id;})[0]||{}).id;
     if(!id){ logLine('No broadcast has been created from this browser yet.','bad'); return; }
     logLine('Checking broadcast '+id+'\u2026');
     call('broadcast_get',{id:id}).then(function(d){
@@ -2829,23 +2836,24 @@
   });
 
   $('#btnHistCsv').addEventListener('click',function(){
-    if(!HIST.length){ toast('No history yet'); return; }
+    var H=myHist(); if(!H.length){ toast('No history yet'); return; }
     var rows=[['when','type','campaign','recipients','sent','failed','status','broadcast_id']];
-    HIST.forEach(function(h){
+    H.forEach(function(h){
       rows.push([h.when,h.kind||'',h.campaign||'',h.count==null?'':h.count,
                  h.sent==null?'':h.sent,h.failed==null?'':h.failed,h.status||'',h.id||'']);
     });
     var csv=rows.map(function(r){
       return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(',');
     }).join('\n');
-    download('email-studio-history.csv',csv,'text/csv;charset=utf-8');
+    download('email-studio-history-'+PRODUCT+'.csv',csv,'text/csv;charset=utf-8');
     toast('History exported');
   });
 
   $('#btnHistClear').addEventListener('click',function(){
-    if(!HIST.length) return;
-    if(!confirm('Clear the send history stored in this browser? Resend keeps its own record.')) return;
-    HIST=[]; saveHist(); renderHist(); toast('History cleared');
+    var H=myHist(); if(!H.length) return;
+    var nm=PROD_NAME[PRODUCT]||'this product';
+    if(!confirm('Clear the '+nm+' send history ('+H.length+' entr'+(H.length===1?'y':'ies')+')? The other product\u2019s history is kept. Resend keeps its own record.')) return;
+    HIST=HIST.filter(function(h){ return H.indexOf(h)<0; }); saveHist(); renderHist(); toast(nm+' history cleared');
   });
 
   /* ===================================================================
@@ -2989,6 +2997,7 @@
     ['#aiIdeasOut','#aiDraftOut','#aiSubjOut','#aiRewriteOut','#aiCheckOut'].forEach(function(id){ var el=$(id); if(el) el.innerHTML=''; });
     if(typeof PK!=='undefined' && PK.list){ try{ pkRender(); }catch(e){} }
     renderRail(); fillForm(); renderPreview(); pfShow();
+    try{ renderHist(); }catch(e){}
     if(!quiet) toast('Now working on '+PROD_NAME[p]);
   }
   document.getElementById('prodSw').addEventListener('click',function(e){
