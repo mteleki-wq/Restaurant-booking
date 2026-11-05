@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v39</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v40</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -701,7 +701,7 @@
         <details class="grp" open id="grpPick">
           <summary>Choose recipients from your prospects</summary>
           <div class="grp-body">
-            <p class="help" style="margin:0 0 12px">Import a spreadsheet of restaurants, then pick a group by venue type and suburb.
+            <p class="help" style="margin:0 0 12px"><b id="pkProdNote" style="color:var(--teal,#2dd4bf)">Restaurant Deluxe list.</b> Import a spreadsheet, then pick a group by type and suburb. Each product keeps its own list.
                Anyone who unsubscribed, bounced or complained is always left out.</p>
             <div class="btnrow" style="margin:0 0 12px">
               <label class="btn" for="pkFile" id="pkFileBtn">⬆ Import Excel or CSV</label>
@@ -740,7 +740,7 @@
           <summary>Broadcast to an audience</summary>
           <div class="grp-body">
             <div class="field">
-              <label for="sAudience">Audience</label>
+              <label for="sAudience">Audience <span style="color:var(--faint)">(remembered separately for each product)</span></label>
               <select id="sAudience" data-g="audienceId">
                 <option value="">Test the connection to load your audiences</option>
               </select>
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v39 \u00b7 Service Deluxe video tour';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v40 \u00b7 separate lists and audiences per product';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1873,7 +1873,7 @@
   function saveSettings(){
     if(!REMEMBER){ store.del(K_SET); return; }
     var keep={};
-    ['endpoint','secret','fromName','fromEmail','replyTo','audienceId','utmSource','utmMedium']
+    ['endpoint','secret','fromName','fromEmail','replyTo','audienceId','audienceBy','utmSource','utmMedium']
       .forEach(function(k){ keep[k]=SET[k]; });
     keep._utm = UTM_ON;
     store.set(K_SET, JSON.stringify(keep));
@@ -1884,8 +1884,15 @@
       var d=JSON.parse(raw);
       Object.keys(d).forEach(function(k){ if(k!=='_utm' && d[k]!=null) SET[k]=d[k]; });
       UTM_ON=!!d._utm; REMEMBER=true;
+      if(!SET.audienceBy || typeof SET.audienceBy!=='object') SET.audienceBy={restaurant:SET.audienceId||''};
     }catch(e){}
   }
+  /* each product broadcasts to its own Resend audience */
+  function audRemember(){ if(!SET.audienceBy || typeof SET.audienceBy!=='object') SET.audienceBy={};
+    SET.audienceBy[(typeof PRODUCT!=='undefined'&&PRODUCT)||'restaurant']=SET.audienceId||''; }
+  function audRecall(){ if(!SET.audienceBy || typeof SET.audienceBy!=='object') SET.audienceBy={restaurant:SET.audienceId||''};
+    var p=(typeof PRODUCT!=='undefined'&&PRODUCT)||'restaurant';
+    SET.audienceId=SET.audienceBy[p]||''; var sel=document.getElementById('sAudience'); if(sel) sel.value=SET.audienceId; }
   function saveHist(){ store.set(K_HIST, JSON.stringify(HIST.slice(0,60))); }
   function loadHist(){
     var raw=store.get(K_HIST); if(!raw) return;
@@ -1941,7 +1948,7 @@
       if(el.dataset.g==='list') $('#listCount').textContent = parseList(SET.list).length;
       saveSettings();
     });
-    el.addEventListener('change',function(){ SET[el.dataset.g]=el.value; saveSettings(); });
+    el.addEventListener('change',function(){ SET[el.dataset.g]=el.value; if(el.dataset.g==='audienceId') audRemember(); saveSettings(); });
   });
 
   $('#sRemember').addEventListener('change',function(){
@@ -2963,10 +2970,12 @@
     $('#prodName').textContent=PROD_NAME[PRODUCT]; $('#prodEyebrow').textContent=PROD_NAME[PRODUCT];
     document.title=PROD_NAME[PRODUCT]+' — Email Studio';
     var sl=document.getElementById('salesLink'); if(sl) sl.href=SALES_PAGE[PRODUCT];
+    var pn=document.getElementById('pkProdNote'); if(pn) pn.textContent=PROD_NAME[PRODUCT]+' list.';
+    try{ audRecall(); }catch(e){}
   }
   function switchProduct(p,quiet){
     p=(p==='service')?'service':'restaurant';
-    CUR_BY[PRODUCT]=cur;
+    CUR_BY[PRODUCT]=cur; try{ audRemember(); }catch(e){}
     if(!CAMPS_BY[p]) CAMPS_BY[p]=svcPresets().map(function(c){ return JSON.parse(JSON.stringify(c)); });
     PRODUCT=p; camps=CAMPS_BY[p]; cur=Math.min(CUR_BY[p]||0, camps.length-1);
     try{ store.set(K_PROD,p); }catch(e){}
