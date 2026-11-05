@@ -292,8 +292,9 @@
       <button type="button" data-prod="restaurant" class="on">Restaurant Deluxe</button>
       <button type="button" data-prod="service">Service Deluxe</button>
     </div>
+    <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v35</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v36</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -893,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v35 \u00b7 Restaurant + Service Deluxe';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v36 \u00b7 Restaurant + Service Deluxe';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2843,9 +2844,11 @@
   var K_PROD='rdes.product';
   var PRODUCT='restaurant';
   var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe'};
-  var SVC_SITE  = "https://webescapade.com/service/demo/";   /* demo spa website; the sales page is /service/ */
+  var SVC_SITE  = "https://webescapade.com/service/demo/";   /* demo spa website */
+  var SVC_PAGE  = "https://webescapade.com/service/";        /* Service Deluxe sales page */
+  var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
-  var SVC_START = "https://webescapade.com/service/service-start.html";
+  var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
   var SVC_OFFER = {trial_days:14, gst:true, plans:[
       {name:"Bookings", price:39, desc:"Online booking page, staff calendar and automatic emails. Keep your own website. Up to 3 practitioners."},
       {name:"Basic", price:59, desc:"Editable website plus online bookings, calendar and automatic emails. Up to 3 practitioners.", main:true},
@@ -2871,7 +2874,9 @@
       featHeading:'Built for your business.\nEasy for your clients.',
       priceEyebrow:'Simple monthly price', priceHeading:'One flat price. No commission.',
       finalHeading:'Try it free for '+T+' days.', finalSub:TERMS,
-      finalCta:'Set it up in minutes', finalUrl:SVC_START
+      finalCta:'Set it up in minutes', finalUrl:SVC_START,
+      siteUrl:SVC_PAGE,
+      priceFoot:'All plans, what is included and common questions: webescapade.com/service'
     };
     function P(o){ return preset(Object.assign({}, base, o)); }
     var cardsCore=[
@@ -2881,11 +2886,13 @@
     ];
     return [
       P({ name:'Intro to Service Deluxe', desc:'First message to a spa, clinic or salon',
+        cta2:'How it works', cta2url:SVC_PAGE,
         headline:'Let your clients book themselves — any time.',
         intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. I’ve built an online booking system for appointment businesses: clients choose the service, the practitioner and a free time, and your calendar fills itself.\n\nIt comes with a website you can edit yourself, and it costs one flat monthly price.',
         cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
         subject:'Let your clients book themselves', preheader:'Online bookings and a website you edit yourself. '+T+' days free.' }),
       P({ name:T+'-day free trial invite', desc:'Invite to start the trial',
+        cta1:'Start your free trial', cta1url:SVC_START, cta2:'Plans and questions', cta2url:SVC_PAGE+'#pricing',
         headline:'Try online bookings free for '+T+' days.',
         intro:'Set up your services, your team and your hours in a few minutes from a ready-made template for your type of business. Your booking page works straight away.\n\nIf it isn’t right for you after '+T+' days, simply stop.',
         cards:[{n:'01', t:'Pick your business type', d:'Spa, clinic, dental, physio, hair and beauty, or something else.'},
@@ -2938,6 +2945,7 @@
     document.querySelectorAll('#prodSw [data-prod]').forEach(function(b){ var on=b.getAttribute('data-prod')===PRODUCT; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
     $('#prodName').textContent=PROD_NAME[PRODUCT]; $('#prodEyebrow').textContent=PROD_NAME[PRODUCT];
     document.title=PROD_NAME[PRODUCT]+' — Email Studio';
+    var sl=document.getElementById('salesLink'); if(sl) sl.href=SALES_PAGE[PRODUCT];
   }
   function switchProduct(p,quiet){
     p=(p==='service')?'service':'restaurant';
