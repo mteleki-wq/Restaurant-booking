@@ -134,7 +134,7 @@ var CONFIG = {
 
 var q = new URLSearchParams(location.search);
 var VENUE = (q.get("venue") || CONFIG.venue || "").trim().toLowerCase();
-var WORD = q.get("word") || CONFIG.practitionerWord;
+var WORD = q.get("word") || CONFIG.practitionerWord, SW = "treatment";
 if (q.get("accent") && /^#?[0-9a-f]{6}$/i.test(q.get("accent"))) {
   var acc = q.get("accent").replace(/^#?/, "#");
   document.documentElement.style.setProperty("--accent", acc);
@@ -144,6 +144,7 @@ var BACK = q.get("back") || document.referrer || "";
 var CAT = null, TZ = "Australia/Sydney";
 var S = { step: 0, service: null, provider: null, date: null, slot: null, slotsCache: {} };
 var STEPS = ["Treatment", cap(WORD), "Time", "Details"];
+function words(){ STEPS = [cap(SW), cap(WORD), "Time", "Details"]; }
 var $ = function (id) { return document.getElementById(id); };
 function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
@@ -180,6 +181,9 @@ function boot(){
   rpc("svc_get_catalog", { p_venue: VENUE }).then(function (c) {
     if (!c || !c.ok) return fatal("We couldn't find this business. Please check the link.");
     CAT = c; TZ = c.venue.timezone || TZ;
+    if (!q.get("word") && c.settings.practitioner_word) WORD = c.settings.practitioner_word;
+    if (c.settings.service_word) SW = c.settings.service_word;
+    words();
     document.title = "Book · " + c.venue.name;
     $("vname").textContent = c.venue.name;
     $("mark").textContent = (c.venue.name || "·").trim().charAt(0).toUpperCase();
@@ -227,8 +231,8 @@ function shell(title, lead, body){
 }
 function sideHtml(){
   var s = S.service;
-  if (!s) return '<h3>Your booking</h3><p class="muted" style="margin:0">Choose a treatment to begin.</p>';
-  var rows = [["Treatment", esc(s.name)], ["Length", mins(s.duration_min)]];
+  if (!s) return '<h3>Your booking</h3><p class="muted" style="margin:0">Choose ' + (/^[aeiou]/i.test(SW) ? "an " : "a ") + SW + ' to begin.</p>';
+  var rows = [[cap(SW), esc(s.name)], ["Length", mins(s.duration_min)]];
   if (s.needs_provider) rows.push([cap(WORD), S.provider ? esc(S.provider.name) : "Anyone available"]);
   if (S.date) rows.push(["Date", fmtDay(S.date, { weekday: "short", day: "numeric", month: "short" })]);
   if (S.slot) rows.push(["Time", S.slot.time]);
@@ -238,16 +242,16 @@ function sideHtml(){
 function viewServices(){
   var cats = {}, order = [];
   var pool = S.pref ? CAT.services.filter(function (s) { return !s.needs_provider || S.pref.service_ids.indexOf(s.id) >= 0; }) : CAT.services;
-  pool.forEach(function (s) { var c = s.category || "Treatments"; if (!cats[c]) { cats[c] = []; order.push(c); } cats[c].push(s); });
-  if (!CAT.services.length) return shell("Nothing to book <em>yet</em>", "", '<div class="empty">No treatments are open for online booking right now. Please call us.</div>');
+  pool.forEach(function (s) { var c = s.category || cap(SW) + "s"; if (!cats[c]) { cats[c] = []; order.push(c); } cats[c].push(s); });
+  if (!CAT.services.length) return shell("Nothing to book <em>yet</em>", "", '<div class="empty">Nothing is open for online booking right now. Please call us.</div>');
   var body = order.map(function (c) {
     return '<div class="cat">' + esc(c) + '</div><div class="list">' + cats[c].map(function (s) {
       return '<button class="opt' + (S.service && S.service.id === s.id ? " sel" : "") + '" data-svc="' + s.id + '"><div><div class="t">' + esc(s.name) + "</div>" +
         (s.description ? '<div class="d">' + esc(s.description) + "</div>" : "") + '</div><div class="meta"><b>' + money(s.price_cents) + "</b><span>" + mins(s.duration_min) + "</span></div></button>";
     }).join("") + "</div>";
   }).join("");
-  if (S.pref) body = '<div class="note" style="margin-bottom:14px">Showing treatments with ' + esc(S.pref.name) + '. <a href="#" id="clrpref" style="color:inherit">Show everything</a></div>' + body;
-  return shell("Book your <em>time</em>", "Choose a treatment, then the " + esc(WORD) + " and time that suit you. You'll get a confirmation straight away.", body);
+  if (S.pref) body = '<div class="note" style="margin-bottom:14px">Showing ' + SW + 's with ' + esc(S.pref.name) + '. <a href="#" id="clrpref" style="color:inherit">Show everything</a></div>' + body;
+  return shell("Book your <em>time</em>", "Choose " + (/^[aeiou]/i.test(SW) ? "an " : "a ") + SW + ", then the " + esc(WORD) + " and time that suit you. You'll get a confirmation straight away.", body);
 }
 function viewProviders(){
   var s = S.service;
@@ -374,7 +378,7 @@ function detailsValid(){
 function updateBar(){
   var nx = $("next"), s = S.service, txt = "";
   if (s) txt = "<b>" + esc(s.name) + "</b>" + (s.price_cents != null ? " · " + money(s.price_cents) : "") + (S.date && S.step >= 2 ? " · " + fmtDay(S.date, { day: "numeric", month: "short" }) : "") + (S.slot && S.step >= 2 ? " " + S.slot.time : "");
-  $("barsum").innerHTML = txt || "Choose a treatment";
+  $("barsum").innerHTML = txt || "Choose " + (/^[aeiou]/i.test(SW) ? "an " : "a ") + SW;
   if (S.step === 0) { nx.textContent = "Continue"; nx.disabled = !s; }
   if (S.step === 1) { nx.textContent = "Continue"; nx.disabled = false; }
   if (S.step === 2) { nx.textContent = "Continue"; nx.disabled = !S.slot; }
@@ -416,7 +420,7 @@ function success(r){
   var link = manageUrl(r.ref, r.cancel_token);
   $("app").innerHTML = '<div class="done"><div class="tick">✓</div><h2>You\'re booked in</h2><p class="muted" style="margin:0">' +
     (S.service && $("f_email") ? "" : "") + "A confirmation is on its way" + (q.get("noemail") ? "" : " to your email") + '.</p><div class="ref">' + esc(r.ref) + "</div><dl>" +
-    "<dt>Treatment</dt><dd>" + esc(r.service) + "</dd>" + (r.provider ? "<dt>" + cap(WORD) + "</dt><dd>" + esc(r.provider) + "</dd>" : "") +
+    "<dt>" + cap(SW) + "</dt><dd>" + esc(r.service) + "</dd>" + (r.provider ? "<dt>" + cap(WORD) + "</dt><dd>" + esc(r.provider) + "</dd>" : "") +
     "<dt>When</dt><dd>" + esc(r.local_date) + " · " + esc(r.local_time) + "</dd><dt>Length</dt><dd>" + mins(r.duration_min) + "</dd>" +
     (r.price_cents != null ? "<dt>Price</dt><dd>" + money(r.price_cents) + "</dd>" : "") + "</dl>" +
     '<div class="actions"><button class="cta" id="ics">Add to calendar</button><button class="cta alt" id="cp">Copy manage link</button></div>' +
@@ -446,7 +450,7 @@ function manage(ref, tok){
     if (!b.ok) return fatal(b.error || "Booking not found.");
     var state = b.status === "cancelled" ? "This booking has been cancelled." : b.status === "confirmed" ? "" : "This booking is " + b.status.replace("_", " ") + ".";
     $("app").innerHTML = '<div class="done"><h2>Your booking</h2><div class="ref">' + esc(b.ref) + "</div><dl>" +
-      "<dt>Name</dt><dd>" + esc(b.client_name) + "</dd><dt>Treatment</dt><dd>" + esc(b.service) + "</dd>" +
+      "<dt>Name</dt><dd>" + esc(b.client_name) + "</dd><dt>" + cap(SW) + "</dt><dd>" + esc(b.service) + "</dd>" +
       (b.provider ? "<dt>" + cap(WORD) + "</dt><dd>" + esc(b.provider) + "</dd>" : "") +
       "<dt>When</dt><dd>" + esc(b.local_date) + " · " + esc(b.local_time) + "</dd></dl>" +
       (state ? '<p class="note">' + esc(state) + "</p>" :

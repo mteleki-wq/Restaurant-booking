@@ -160,12 +160,12 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
 </head>
 <body
   data-venue="serenity-spa"
-  data-booking-url="https://webescapade.com/service-booking.html"
+  data-booking-url="https://webescapade.com/service/service-booking.html"
   data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co"
   data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE"
   data-accent="#4F6B5C"
   data-word="therapist"
-  data-gh-owner="mteleki-wq" data-gh-repo="" data-gh-branch="main" data-gh-live="index.html" data-gh-master="source/site-editable.html">
+  data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-live="service/index.html" data-gh-master="service/source/site-editable.html">
 
 <nav class="n" id="nav"><div class="w">
   <a class="logo" href="#top" data-logo><span class="dot"></span><span data-edit="brand">Serenity</span></a>
@@ -543,6 +543,8 @@ body.editing [data-live]:before{content:attr(data-live-note);position:absolute;t
         .then(function () { if (panel) panel.querySelectorAll(".b").forEach(function (b) { b.disabled = false; }); });
     };
     panel.querySelector("#gpub").onclick = function () {
+      var lp = (panel.querySelector("#gl").value || "").trim().replace(/^\/+/, "");
+      if (lp.indexOf("/") < 0 && !confirm("Live page path is \"" + lp + "\" with no folder.\n\nIn a repo that hosts another website (like webescapade.com) this REPLACES its home page.\n\nPublish anyway?")) return;
       run(this, function () {
         var html = snapshot(true);
         return commit(B.ghLive, html, "Publish site").then(function () {

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Set up online bookings · Webescapade</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Service Deluxe — business setup / sign-in / join page. One copy for every business. */
+:root{--bg:#F5F2EC;--card:#fff;--ink:#1E2622;--muted:#6B746F;--line:#E4DED4;--accent:#4F6B5C;--soft:#E9EFEA;--warn:#9A3B2E}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px 80px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
+.brand{font:400 24px "Instrument Serif",serif;display:flex;align-items:center;gap:10px}
+.brand i{width:28px;height:28px;border-radius:50%;background:var(--accent);display:inline-block;position:relative}
+.brand i:after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--bg)}
+.who{font-size:13px;color:var(--muted)}
+.who button{margin-left:6px}
+h1{font:400 clamp(36px,6vw,54px)/1.02 "Instrument Serif",serif;margin:0 0 10px;letter-spacing:-.01em}
+h1 em{color:var(--accent)}
+h2{font:400 28px/1.1 "Instrument Serif",serif;margin:0 0 6px}
+.lead{color:var(--muted);margin:0 0 26px;max-width:36em}
+.card{background:var(--card);border-radius:20px;padding:22px;box-shadow:0 1px 2px rgba(0,0,0,.04);margin-bottom:16px}
+.tabs{display:inline-flex;background:var(--soft);border-radius:999px;padding:4px;margin-bottom:18px}
+.tabs button{border:0;background:none;border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+label{display:grid;gap:6px;font-size:14px;font-weight:600;margin-bottom:14px}
+label small{font-weight:400;color:var(--muted)}
+input[type=text],input[type=email],input[type=tel],input[type=password],input[type=number]{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;font-size:16px;font-weight:400}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+.row2{display:grid;gap:0 14px}
+@media(min-width:600px){.row2{grid-template-columns:1fr 1fr}}
+.types{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:4px 0 16px}
+@media(min-width:600px){.types{grid-template-columns:repeat(3,1fr)}}
+.type{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px;text-align:left;cursor:pointer}
+.type b{display:block;font-size:15px}
+.type span{font-size:12.5px;color:var(--muted)}
+.type.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px}
+.check input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}
+.btn{border:0;border-radius:999px;padding:14px 24px;font-weight:600;cursor:pointer;background:var(--ink);color:#fff;text-decoration:none;display:inline-block}
+.btn.alt{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.sm{padding:8px 14px;font-size:14px}
+.btn:disabled{opacity:.4}
+.err{color:var(--warn);font-size:14px;margin-top:10px;min-height:1px}
+.ok{color:var(--accent);font-size:14px;margin-top:10px}
+.list{display:grid;gap:8px}
+.biz{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:#fff}
+.biz b{display:block}
+.biz span{font-size:13px;color:var(--muted)}
+.biz .sp{flex:1}
+.links{display:grid;gap:10px;margin:14px 0}
+.lk{background:var(--bg);border-radius:12px;padding:12px 14px}
+.lk b{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.lk code{display:block;word-break:break-all;font-size:13.5px}
+.lk .r{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+ol.next{padding-left:20px;margin:10px 0 0}
+ol.next li{margin-bottom:8px}
+.muted{color:var(--muted)}
+.spin{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin:30px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand"><i></i>Webescapade Bookings</div><div class="who hide" id="who"><span id="whoem"></span><button class="btn sm alt" id="out">Sign out</button></div></div>
+  <main id="app"><div class="spin"></div></main>
+</div>
+
+<script>
+/* ======================= CONFIG ======================= */
+var CONFIG = {
+  supabaseUrl: "https://tehxobdokbvqtwtgqzrh.supabase.co",
+  supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE",
+  bookingPage: "service-booking.html",   // same folder, or a full URL
+  staffPage: "service-staff.html"
+};
+/* ====================================================== */
+var BASE = CONFIG.supabaseUrl.replace(/\/+$/, "").replace(/\/rest(\/v1)?$/, "");
+var q = new URLSearchParams(location.search);
+var SES = null, ME = null;
+var $ = function (id) { return document.getElementById(id); };
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function pageUrl(p, params){ var u = new URL(p, location.href); u.search = ""; for (var k in params) u.searchParams.set(k, params[k]); return u.toString(); }
+
+var TYPES = [
+  ["spa", "Day spa / massage", "Therapists, treatment rooms"],
+  ["clinic", "Medical clinic", "Doctors, consult rooms"],
+  ["dental", "Dental practice", "Dentists, chairs"],
+  ["physio", "Physio / allied health", "Practitioners, rooms"],
+  ["salon", "Hair & beauty", "Stylists, stations"],
+  ["other", "Something else", "Any appointment business"]
+];
+var ROOMWORD = { spa: "treatment rooms", clinic: "consult rooms", dental: "dental chairs", physio: "treatment rooms", salon: "stations / chairs", other: "rooms" };
+var DEFROOMS = { spa: 4, clinic: 3, dental: 2, physio: 2, salon: 0, other: 0 };
+
+/* ---------- session (shared with the staff page) ---------- */
+function saveSes(s){ SES = s; try { if (s) localStorage.setItem("svc_staff_session", JSON.stringify(s)); else localStorage.removeItem("svc_staff_session"); } catch (e) {} }
+function loadSes(){ try { return JSON.parse(localStorage.getItem("svc_staff_session") || "null"); } catch (e) { return null; } }
+function authCall(path, body){
+  return fetch(BASE + "/auth/v1/" + path, { method: "POST", headers: { apikey: CONFIG.supabaseKey, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(friendly(j.error_description || j.msg || j.message || "Something went wrong")); return j; }); });
+}
+function friendly(m){
+  if (/invalid login credentials/i.test(m)) return "That email and password don't match. Check them, or use “Forgot password”.";
+  if (/email not confirmed/i.test(m)) return "Please confirm your email first — open the link we sent you, then sign in.";
+  if (/already registered|already exists/i.test(m)) return "There's already an account with that email. Use “Sign in” instead.";
+  if (/password should be/i.test(m)) return "Please choose a password of at least 6 characters.";
+  return m;
+}
+function token(){
+  if (!SES) return Promise.reject(new Error("Not signed in"));
+  if (SES.expires_at && SES.expires_at * 1000 - Date.now() > 60000) return Promise.resolve(SES.access_token);
+  return authCall("token?grant_type=refresh_token", { refresh_token: SES.refresh_token }).then(function (s) { saveSes(s); return s.access_token; });
+}
+function rpc(fn, args){
+  return token().then(function (t) {
+    return fetch(BASE + "/rest/v1/rpc/" + fn, { method: "POST", headers: { apikey: CONFIG.supabaseKey, Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify(args || {}) });
+  }).then(function (r) { return r.text().then(function (t) { var j = null; try { j = JSON.parse(t); } catch (e) {} if (!r.ok) { if (r.status === 401) saveSes(null); throw new Error((j && j.message) || "Error " + r.status); } return j; }); });
+}
+function userInfo(){
+  return token().then(function (t) { return fetch(BASE + "/auth/v1/user", { headers: { apikey: CONFIG.supabaseKey, Authorization: "Bearer " + t } }); })
+    .then(function (r) { if (!r.ok) throw new Error("Session ended"); return r.json(); });
+}
+
+/* coming back from the confirmation or reset email: tokens arrive in the # part */
+function readHash(){
+  var h = new URLSearchParams(location.hash.slice(1));
+  if (h.get("access_token") && h.get("refresh_token")) {
+    saveSes({ access_token: h.get("access_token"), refresh_token: h.get("refresh_token"), expires_at: Math.floor(Date.now() / 1000) + (+h.get("expires_in") || 3600) });
+    var type = h.get("type");
+    history.replaceState(null, "", location.pathname + location.search);
+    return type;
+  }
+  if (h.get("error_description")) { history.replaceState(null, "", location.pathname + location.search); return "error:" + h.get("error_description").replace(/\+/g, " "); }
+  return null;
+}
+
+/* ---------- start ---------- */
+function boot(){
+  var back = readHash();
+  SES = SES || loadSes();
+  if (back && back.indexOf("error:") === 0) return authView("in", back.slice(6));
+  if (back === "recovery") return resetView();
+  if (!SES) return authView(q.get("join") ? "up" : (q.get("mode") === "signin" ? "in" : "up"));
+  userInfo().then(function (u) { ME = u; showWho(); route(); }).catch(function () { saveSes(null); authView("in", "Please sign in again."); });
+}
+function showWho(){ $("who").classList.remove("hide"); $("whoem").textContent = ME.email; }
+$("out").onclick = function () { saveSes(null); ME = null; $("who").classList.add("hide"); authView("in"); };
+function route(){
+  if (q.get("join") && q.get("k")) return joinFlow();
+  homeView();
+}
+
+/* ---------- sign up / sign in ---------- */
+function authView(mode, msg){
+  var joining = q.get("join");
+  var title = joining ? "Join your <em>team</em>" : "Online bookings for your <em>business</em>";
+  var lead = joining ? "Create your login (or sign in) to get access to the bookings calendar." :
+    "Set up in a few minutes: choose your type of business, and you'll get a booking page your clients can use straight away.";
+  $("app").innerHTML = "<h1>" + title + '</h1><p class="lead">' + lead + "</p>" +
+    '<div class="card"><div class="tabs"><button data-m="up" class="' + (mode === "up" ? "on" : "") + '">Create account</button><button data-m="in" class="' + (mode === "in" ? "on" : "") + '">Sign in</button></div>' +
+    '<form id="af">' +
+    (mode === "up" ? '<label>Your name<input type="text" id="an" autocomplete="name" required></label>' : "") +
+    '<label>Email<input type="email" id="ae" autocomplete="username" required></label>' +
+    '<label>Password' + (mode === "up" ? " <small>at least 6 characters</small>" : "") + '<input type="password" id="ap" autocomplete="' + (mode === "up" ? "new-password" : "current-password") + '" required minlength="6"></label>' +
+    '<button class="btn" type="submit">' + (mode === "up" ? "Create account" : "Sign in") + "</button>" +
+    (mode === "in" ? ' <button class="btn alt sm" type="button" id="forgot" style="margin-left:8px">Forgot password</button>' : "") +
+    '<div class="err" id="aerr">' + esc(msg || "") + "</div></form></div>";
+  document.querySelectorAll("[data-m]").forEach(function (b) { b.onclick = function () { authView(b.getAttribute("data-m")); }; });
+  var back = location.href.split("#")[0];
+  $("af").onsubmit = function (ev) {
+    ev.preventDefault();
+    var e = $("ae").value.trim(), p = $("ap").value, btn = this.querySelector("[type=submit]"); btn.disabled = true; $("aerr").textContent = "";
+    var done = function (s) { saveSes(s); return userInfo().then(function (u) { ME = u; showWho(); route(); }); };
+    var call = mode === "up"
+      ? authCall("signup?redirect_to=" + encodeURIComponent(back), { email: e, password: p, data: { full_name: $("an").value.trim() } })
+          .then(function (r) {
+            if (r.access_token) return done(r);
+            if (r.identities && !r.identities.length) throw new Error("There's already an account with that email. Use “Sign in” instead.");
+            $("app").innerHTML = '<h1>Check your <em>email</em></h1><div class="card"><p>We sent a confirmation link to <b>' + esc(e) + "</b>. Open it on this device and you'll come straight back here to finish.</p>" +
+              '<p class="muted" style="font-size:14px">Already confirmed? <a href="#" id="gosign">Sign in</a>. Nothing arrived after a few minutes? Check your junk folder.</p></div>';
+            $("gosign").onclick = function (x) { x.preventDefault(); authView("in"); };
+          })
+      : authCall("token?grant_type=password", { email: e, password: p }).then(done);
+    call.catch(function (x) { $("aerr").textContent = x.message; btn.disabled = false; });
+  };
+  var fg = $("forgot");
+  if (fg) fg.onclick = function () {
+    var e = $("ae").value.trim(); if (!e) { $("aerr").textContent = "Type your email first, then tap Forgot password."; return; }
+    authCall("recover?redirect_to=" + encodeURIComponent(back), { email: e })
+      .then(function () { $("aerr").className = "ok"; $("aerr").textContent = "If that email has an account, a reset link is on its way."; })
+      .catch(function (x) { $("aerr").textContent = x.message; });
+  };
+}
+function resetView(){
+  $("app").innerHTML = '<h1>New <em>password</em></h1><div class="card"><form id="rf"><label>New password<input type="password" id="rp" minlength="6" required autocomplete="new-password"></label><button class="btn">Save password</button><div class="err" id="rerr"></div></form></div>';
+  $("rf").onsubmit = function (ev) {
+    ev.preventDefault();
+    token().then(function (t) { return fetch(BASE + "/auth/v1/user", { method: "PUT", headers: { apikey: CONFIG.supabaseKey, Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify({ password: $("rp").value }) }); })
+      .then(function (r) { if (!r.ok) return r.json().then(function (j) { throw new Error(friendly(j.msg || j.message || "Couldn't save")); }); return userInfo(); })
+      .then(function (u) { ME = u; showWho(); route(); })
+      .catch(function (x) { $("rerr").textContent = x.message; });
+  };
+}
+
+/* ---------- join a team with an invite link ---------- */
+function joinFlow(){
+  $("app").innerHTML = '<div class="spin"></div>';
+  rpc("svc_join", { p_slug: q.get("join"), p_key: q.get("k") }).then(function (r) {
+    if (!r.ok) { $("app").innerHTML = '<h1>Invite <em>link</em></h1><div class="card"><p class="err">' + esc(r.error) + '</p><a class="btn alt" href="' + esc(pageUrl(location.pathname, {})) + '">Go to my businesses</a></div>'; return; }
+    location.href = pageUrl(CONFIG.staffPage, { venue: r.slug });
+  }).catch(function (e) { $("app").innerHTML = '<div class="card err">' + esc(e.message) + "</div>"; });
+}
+
+/* ---------- home: my businesses + add one ---------- */
+function homeView(){
+  $("app").innerHTML = '<div class="spin"></div>';
+  rpc("svc_my_venues").then(function (m) {
+    var list = m.venues || [];
+    var h = "";
+    if (list.length) {
+      h += '<h1>Your <em>businesses</em></h1><div class="card"><div class="list">' + list.map(function (v) {
+        return '<div class="biz"><div class="sp"><b>' + esc(v.name) + "</b><span>" + esc((TYPES.filter(function (t) { return t[0] === v.type; })[0] || ["", "Business"])[1]) + " · " + esc(v.role) + '</span></div><a class="btn sm" href="' + esc(pageUrl(CONFIG.staffPage, { venue: v.slug })) + '">Open</a></div>';
+      }).join("") + '</div></div><h2 style="margin-top:30px">Add another business</h2><p class="lead" style="margin-bottom:14px">Each business gets its own calendar, team, clients and booking page.</p>';
+    } else {
+      h += '<h1>Set up your <em>business</em></h1><p class="lead">Pick what fits best. You\'ll get a ready-made list of services and opening hours that you can change anytime.</p>';
+    }
+    $("app").innerHTML = h + createForm(m.admin);
+    bindCreate(m.admin);
+  }).catch(function (e) { $("app").innerHTML = '<div class="card err">' + esc(e.message) + "</div>"; });
+}
+function createForm(admin){
+  var name = (ME.user_metadata && ME.user_metadata.full_name) || "";
+  return '<div class="card"><form id="cf"><label>Business name<input type="text" id="cn" required placeholder="e.g. Harbour Physio"></label>' +
+    '<div style="font-size:14px;font-weight:600;margin-bottom:6px">Type of business</div><div class="types" id="ct">' + TYPES.map(function (t, i) {
+      return '<button type="button" class="type' + (i === 0 ? " on" : "") + '" data-t="' + t[0] + '"><b>' + t[1] + "</b><span>" + t[2] + "</span></button>";
+    }).join("") + "</div>" +
+    '<div class="row2"><label>Business phone<input type="tel" id="cph" autocomplete="tel"></label><label>Business email <small>gets a copy of each booking</small><input type="email" id="cem" value="' + esc(ME.email) + '"></label></div>' +
+    '<label><span id="rl">How many treatment rooms?</span> <small>0 if you don\'t need to book rooms</small><input type="number" id="cr" min="0" max="50" value="4"></label>' +
+    '<label class="check"><input type="checkbox" id="cw" checked> <span>I take appointments myself, as <input type="text" id="co" value="' + esc(name) + '" placeholder="your name" style="display:inline-block;width:auto;min-width:180px;padding:6px 10px;margin-left:4px"></span></label>' +
+    (admin ? '<p class="muted" style="font-size:13px">You\'re signed in as Webescapade admin, so no setup code is needed. Send the owner the invite link afterwards.</p>' :
+      '<label>Setup code <small>from Webescapade</small><input type="text" id="cc" value="' + esc(q.get("code") || "") + '" autocapitalize="characters" required></label>') +
+    '<button class="btn" type="submit" id="cgo">Create my booking system</button><div class="err" id="cerr"></div></form></div>';
+}
+function bindCreate(admin){
+  var type = "spa";
+  document.querySelectorAll("[data-t]").forEach(function (b) {
+    b.onclick = function () {
+      type = b.getAttribute("data-t");
+      document.querySelectorAll("[data-t]").forEach(function (x) { x.classList.toggle("on", x === b); });
+      $("rl").textContent = "How many " + ROOMWORD[type] + "?"; $("cr").value = DEFROOMS[type];
+    };
+  });
+  $("cf").onsubmit = function (ev) {
+    ev.preventDefault();
+    var b = $("cgo"); b.disabled = true; b.textContent = "Setting up…"; $("cerr").textContent = "";
+    rpc("svc_create_business", {
+      p_name: $("cn").value.trim(), p_type: type, p_phone: $("cph").value.trim(), p_email: $("cem").value.trim(),
+      p_owner_name: $("co").value.trim(), p_owner_works: $("cw").checked, p_rooms: +$("cr").value || 0, p_code: admin ? "" : $("cc").value.trim()
+    }).then(function (r) {
+      if (!r.ok) { $("cerr").textContent = r.error; b.disabled = false; b.textContent = "Create my booking system"; return; }
+      doneView(r);
+    }).catch(function (e) { $("cerr").textContent = e.message; b.disabled = false; b.textContent = "Create my booking system"; });
+  };
+}
+function doneView(r){
+  var book = pageUrl(CONFIG.bookingPage, { venue: r.slug }), staff = pageUrl(CONFIG.staffPage, { venue: r.slug });
+  var lk = function (t, url, open) { return '<div class="lk"><b>' + t + "</b><code>" + esc(url) + '</code><div class="r"><button class="btn sm alt" data-copy="' + esc(url) + '">Copy</button>' + (open ? '<a class="btn sm" href="' + esc(url) + '" target="_blank">Open</a>' : "") + "</div></div>"; };
+  $("app").innerHTML = "<h1><em>" + esc(r.name) + "</em> is ready</h1><p class=\"lead\">Clients can book online right now. Your next stop is the calendar, where you can change anything.</p>" +
+    '<div class="card"><div class="links">' + lk("Booking page — share with clients (website, Instagram, Google profile)", book, true) + lk("Your calendar & settings", staff, false) + "</div>" +
+    '<a class="btn" href="' + esc(staff) + '">Open my calendar</a></div>' +
+    '<div class="card"><h2>Next steps</h2><ol class="next"><li><b>Treatments / Services:</b> check names, lengths and prices.</li><li><b>Team:</b> add your other practitioners and their working days.</li><li><b>Hours &amp; closures:</b> set your real opening hours and holidays.</li><li><b>Settings:</b> copy the invite link to give your staff their own login.</li><li>Make a test booking on your booking page — you\'ll get the confirmation email.</li></ol></div>';
+  document.querySelectorAll("[data-copy]").forEach(function (b) {
+    b.onclick = function () {
+      var t = b.getAttribute("data-copy");
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = "Copied ✓"; }, function () { prompt("Copy this link:", t); });
+    };
+  });
+}
+
+boot();
+</script>
+</body>
+</html>

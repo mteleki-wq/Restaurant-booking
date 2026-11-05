@@ -132,13 +132,14 @@ var CONFIG = {
   supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE",
   venue: "serenity-spa",
   bookingPage: "service-booking.html",   // client booking page (relative or full URL)
+  startPage: "service-start.html",       // sign-up / add-a-business page
   practitionerWord: "therapist"
 };
 /* ====================================================== */
 var BASE = CONFIG.supabaseUrl.replace(/\/+$/, "").replace(/\/rest(\/v1)?$/, "");
 var q = new URLSearchParams(location.search);
 var VENUE = (q.get("venue") || CONFIG.venue).trim().toLowerCase();
-var WORD = q.get("word") || CONFIG.practitionerWord;
+var WORD = q.get("word") || CONFIG.practitionerWord, SW = "treatment", MINE = null;
 var TZ = "Australia/Sydney", VID = null, VENUE_ROW = null;
 var D = { services: [], providers: [], links: [], rooms: [], hours: [], timeoff: [], settings: null };
 var V = { tab: "cal", date: null, mode: "provider" };
@@ -219,6 +220,9 @@ function boot(){
     .then(function (c) {
       if (!c || !c.ok) { $("app").innerHTML = '<div class="card login"><h2>Unknown business</h2><p class="muted">No venue called “' + esc(VENUE) + '”. Check the ?venue= part of the link.</p></div>'; return; }
       VID = c.venue.id; VENUE_ROW = c.venue; TZ = c.venue.timezone || TZ;
+      if (!q.get("word") && c.settings.practitioner_word) WORD = c.settings.practitioner_word;
+      if (c.settings.service_word) SW = c.settings.service_word;
+      var tb = document.querySelector('[data-tab="svc"]'); if (tb) tb.textContent = cap(SW) + "s";
       $("vname").textContent = c.venue.name; document.title = "Staff · " + c.venue.name;
       V.date = today();
       if (SES) enter(); else loginView();
@@ -229,7 +233,8 @@ function loginView(msg){
   $("app").innerHTML = '<form class="card login" id="lf"><h2>Staff sign in</h2><p class="muted" style="text-align:center;margin:0">' + esc(VENUE_ROW.name) + '</p>' +
     '<label class="f">Email<input type="email" id="le" autocomplete="username" required></label>' +
     '<label class="f">Password<input type="password" id="lp" autocomplete="current-password" required></label>' +
-    '<button class="btn pri" type="submit">Sign in</button><div class="err" id="lerr">' + esc(msg || "") + "</div></form>";
+    '<button class="btn pri" type="submit">Sign in</button><div class="err" id="lerr">' + esc(msg || "") + "</div>" +
+    '<p class="muted" style="font-size:13px;text-align:center;margin:4px 0 0"><a href="' + esc(new URL(CONFIG.startPage, location.href).toString() + "?mode=signin") + '">Forgot password</a> · <a href="' + esc(new URL(CONFIG.startPage, location.href).toString()) + '">Set up a new business</a></p></form>';
   $("lf").onsubmit = function (ev) {
     ev.preventDefault();
     auth("token?grant_type=password", { email: $("le").value.trim(), password: $("lp").value })
@@ -239,13 +244,34 @@ function loginView(msg){
 }
 function enter(){
   rpc("svc_is_staff", { p_venue: VID }).then(function (ok) {
-    if (!ok) { saveSes(null); return loginView("This account isn't on the staff list for " + VENUE_ROW.name + "."); }
-    $("tabs").classList.remove("hide"); $("who").classList.remove("hide");
-    $("whoem").textContent = (SES.user && SES.user.email) || "";
-    return loadAll().then(show);
+    return rpc("svc_my_venues", {}).then(function (m) {
+      MINE = m;
+      $("who").classList.remove("hide"); $("whoem").textContent = (SES.user && SES.user.email) || "";
+      if (!ok) return notMine(m);
+      $("tabs").classList.remove("hide");
+      switcher(m);
+      return loadAll().then(show);
+    });
   }).catch(function (e) { saveSes(null); loginView(e.message); });
 }
-$("logout").onclick = function () { saveSes(null); loginView(); };
+$("logout").onclick = function () { saveSes(null); $("bizsw") && $("bizsw").remove(); loginView(); };
+function staffUrl(slug){ var u = new URL(location.href); u.search = ""; u.hash = ""; u.searchParams.set("venue", slug); return u.toString(); }
+function notMine(m){
+  var list = (m && m.venues) || [];
+  $("tabs").classList.add("hide");
+  $("app").innerHTML = '<div class="card login"><h2>Not on this team</h2><p class="muted">This login isn\'t on the staff list for ' + esc(VENUE_ROW.name) + '. Ask the owner for an invite link' + (list.length ? ", or open one of your businesses:" : ".") + "</p>" +
+    list.map(function (v) { return '<a class="btn" style="text-align:center;text-decoration:none" href="' + esc(staffUrl(v.slug)) + '">' + esc(v.name) + "</a>"; }).join("") +
+    '<a class="btn" style="text-align:center;text-decoration:none" href="' + esc(new URL(CONFIG.startPage, location.href).toString()) + '">Set up a new business</a></div>';
+}
+function switcher(m){
+  var list = (m && m.venues) || [];
+  if (list.length < 2 || $("bizsw")) return;
+  var s = document.createElement("select"); s.id = "bizsw"; s.title = "Switch business";
+  s.style.cssText = "max-width:200px;font-size:13px;padding:6px 8px";
+  s.innerHTML = list.map(function (v) { return '<option value="' + esc(v.slug) + '"' + (v.slug === VENUE ? " selected" : "") + ">" + esc(v.name) + "</option>"; }).join("");
+  s.onchange = function () { location.href = staffUrl(s.value); };
+  $("who").insertBefore(s, $("who").firstChild);
+}
 function loadAll(){
   var v = "venue_id=eq." + VID;
   return Promise.all([
@@ -367,7 +393,7 @@ function closeSheet(){ $("layer").innerHTML = ""; }
 function apptSheet(x){
   var pr = byId(D.providers, x.provider_id), rm = byId(D.rooms, x.room_id);
   openSheet('<button class="btn sm x">Close</button><h2>' + esc(x.client_name) + '</h2><span class="pill ' + x.status + '">' + x.status.replace("_", " ") + "</span>" +
-    "<dl><dt>Ref</dt><dd>" + esc(x.ref) + "</dd><dt>Treatment</dt><dd>" + esc(x.service_name) + (x.price_cents != null ? " · " + money(x.price_cents) : "") + "</dd>" +
+    "<dl><dt>Ref</dt><dd>" + esc(x.ref) + "</dd><dt>" + cap(SW) + "</dt><dd>" + esc(x.service_name) + (x.price_cents != null ? " · " + money(x.price_cents) : "") + "</dd>" +
     "<dt>When</dt><dd>" + fmtDay(localDate(x.starts_at), { weekday: "short", day: "numeric", month: "short" }) + " · " + localTime(x.starts_at) + "–" + localTime(x.ends_at) + "</dd>" +
     "<dt>" + cap(WORD) + "</dt><dd>" + (pr ? esc(pr.name) : "—") + "</dd><dt>Room</dt><dd>" + (rm ? esc(rm.name) : "—") + "</dd>" +
     "<dt>Email</dt><dd>" + (x.client_email ? '<a href="mailto:' + esc(x.client_email) + '">' + esc(x.client_email) + "</a>" : "—") + "</dd>" +
@@ -403,7 +429,7 @@ function notifyHook(){ /* emails are sent by the database itself (Supabase funct
 function bookingSheet(o){
   var sv = D.services.filter(function (s) { return s.active; });
   openSheet('<button class="btn sm x">Close</button><h2>' + (o.replace ? "Reschedule" : "New booking") + '</h2><p class="muted">Phone or walk-in booking. Availability rules apply; the custom time skips the online notice period.</p><div class="g2">' +
-    '<label class="f">Treatment<select id="bs">' + sv.map(function (s) { return '<option value="' + s.id + '"' + (s.id === o.service ? " selected" : "") + ">" + esc(s.name) + " (" + s.duration_min + " min)</option>"; }).join("") + "</select></label>" +
+    '<label class="f">' + cap(SW) + '<select id="bs">' + sv.map(function (s) { return '<option value="' + s.id + '"' + (s.id === o.service ? " selected" : "") + ">" + esc(s.name) + " (" + s.duration_min + " min)</option>"; }).join("") + "</select></label>" +
     '<label class="f">' + cap(WORD) + '<select id="bp"></select></label>' +
     '<label class="f">Date<input type="date" id="bd" value="' + (o.date || V.date) + '"></label>' +
     '<label class="f">Custom time<input type="time" id="bt" step="300"></label></div>' +
@@ -494,7 +520,7 @@ function viewList(){
   var draw = function () {
     var s = $("ls").value.trim().toLowerCase();
     var f = rows.filter(function (x) { return !s || [x.client_name, x.client_email, x.client_phone, x.ref, x.service_name].join(" ").toLowerCase().indexOf(s) >= 0; });
-    $("lt").innerHTML = f.length ? "<table><tr><th>When</th><th>Client</th><th>Treatment</th><th>" + cap(WORD) + "</th><th>Status</th></tr>" + f.map(function (x) {
+    $("lt").innerHTML = f.length ? "<table><tr><th>When</th><th>Client</th><th>" + cap(SW) + "</th><th>" + cap(WORD) + "</th><th>Status</th></tr>" + f.map(function (x) {
       return '<tr class="click" data-id="' + x.id + '"><td>' + fmtDay(localDate(x.starts_at), { weekday: "short", day: "numeric", month: "short" }) + " " + localTime(x.starts_at) + "</td><td><b>" + esc(x.client_name) + '</b><br><span class="muted">' + esc(x.client_phone || x.client_email || "") + "</span></td><td>" + esc(x.service_name) + "</td><td>" + esc((byId(D.providers, x.provider_id) || {}).name || "—") + '</td><td><span class="pill ' + x.status + '">' + x.status.replace("_", " ") + "</span></td></tr>";
     }).join("") + "</table>" : '<span class="muted">No bookings.</span>';
     $("lt").querySelectorAll("[data-id]").forEach(function (tr) { tr.onclick = function () { apptSheet(byId(rows, tr.getAttribute("data-id"))); }; });
@@ -514,20 +540,20 @@ function viewList(){
 /* =================== TREATMENTS =================== */
 function roomTypes(){ var t = {}; D.rooms.forEach(function (r) { if (r.room_type) t[r.room_type] = 1; }); return Object.keys(t); }
 function viewServices(){
-  $("app").innerHTML = '<div class="row" style="margin-bottom:12px"><h2>Treatments</h2><span class="sp"></span><button class="btn acc" id="addsv">+ Add treatment</button></div><div class="items">' +
+  $("app").innerHTML = '<div class="row" style="margin-bottom:12px"><h2>' + cap(SW) + 's</h2><span class="sp"></span><button class="btn acc" id="addsv">+ Add ' + SW + '</button></div><div class="items">' +
     (D.services.length ? D.services.map(function (s) {
       var who = D.links.filter(function (l) { return l.service_id === s.id; }).map(function (l) { return (byId(D.providers, l.provider_id) || {}).name; }).filter(Boolean);
       return '<div class="item"><div class="main"><b>' + esc(s.name) + "</b> " + (s.active ? "" : '<span class="pill cancelled">hidden</span>') + '<div class="muted">' + esc(s.category || "") + "</div><div class=\"chips\">" +
         '<span class="chip">' + s.duration_min + " min" + (s.buffer_min ? " + " + s.buffer_min + " clean-up" : "") + '</span><span class="chip">' + money(s.price_cents) + "</span>" +
         (s.needs_provider ? '<span class="chip">' + who.length + " " + WORD + (who.length === 1 ? "" : "s") + "</span>" : '<span class="chip">no ' + WORD + "</span>") +
         (s.needs_room ? '<span class="chip">room: ' + esc(s.room_type || "any") + "</span>" : '<span class="chip">no room</span>') + '</div></div><button class="btn sm" data-es="' + s.id + '">Edit</button></div>';
-    }).join("") : '<div class="card muted">No treatments yet.</div>') + "</div>";
+    }).join("") : '<div class="card muted">Nothing here yet.</div>') + "</div>";
   $("addsv").onclick = function () { serviceSheet({ active: true, needs_provider: true, needs_room: true, duration_min: 60, buffer_min: 15, sort: D.services.length + 1 }); };
   document.querySelectorAll("[data-es]").forEach(function (b) { b.onclick = function () { serviceSheet(byId(D.services, b.getAttribute("data-es"))); }; });
 }
 function serviceSheet(s){
   var rt = roomTypes();
-  openSheet('<button class="btn sm x">Close</button><h2>' + (s.id ? "Edit treatment" : "New treatment") + '</h2><div class="g2" style="margin-top:14px">' +
+  openSheet('<button class="btn sm x">Close</button><h2>' + (s.id ? "Edit " + SW : "New " + SW) + '</h2><div class="g2" style="margin-top:14px">' +
     '<label class="f">Name<input type="text" id="sn1" value="' + esc(s.name || "") + '"></label><label class="f">Category<input type="text" id="sc" value="' + esc(s.category || "") + '" placeholder="Massage, Skin…"></label>' +
     '<label class="f">Length (min)<input type="number" id="sd" min="5" step="5" value="' + (s.duration_min || 60) + '"></label><label class="f">Clean-up after (min)<input type="number" id="sb" min="0" step="5" value="' + (s.buffer_min || 0) + '"></label>' +
     '<label class="f">Price ($)<input type="number" id="spr" min="0" step="0.5" value="' + (s.price_cents != null ? s.price_cents / 100 : "") + '"></label><label class="f">Sort order<input type="number" id="so" value="' + (s.sort || 0) + '"></label></div>' +
@@ -612,7 +638,7 @@ function providerSheet(p){
     '<label class="f">Name<input type="text" id="pn" value="' + esc(p.name || "") + '"></label><label class="f">Title<input type="text" id="pt" value="' + esc(p.title || "") + '" placeholder="Remedial Therapist"></label>' +
     '<label class="f">Email (optional, for their copy)<input type="email" id="pe" value="' + esc(p.email || "") + '"></label><label class="f">Photo URL<input type="url" id="pph" value="' + esc(p.photo_url || "") + '"></label></div>' +
     '<label class="f" style="margin-top:12px">Short bio<textarea id="pb">' + esc(p.bio || "") + '</textarea></label><div class="checks" style="margin-top:10px"><label><input type="checkbox" id="pa"' + (p.active !== false ? " checked" : "") + "> Taking bookings</label></div>" +
-    '<h3 style="margin-top:16px">Treatments</h3><div class="checks">' + D.services.map(function (s) {
+    '<h3 style="margin-top:16px">' + cap(SW) + 's</h3><div class="checks">' + D.services.map(function (s) {
       var on = p.id && D.links.some(function (l) { return l.provider_id === p.id && l.service_id === s.id; });
       return '<label><input type="checkbox" data-ls="' + s.id + '"' + (on ? " checked" : "") + "> " + esc(s.name) + "</label>";
     }).join("") + "</div>" +
@@ -644,7 +670,7 @@ function providerSheet(p){
 /* =================== ROOMS =================== */
 function viewRooms(){
   $("app").innerHTML = '<div class="row" style="margin-bottom:12px"><h2>Rooms</h2><span class="sp"></span><button class="btn acc" id="addr">+ Add room</button></div>' +
-    '<p class="muted" style="margin-top:0">A treatment that needs a room gets the first free room of its room type. Leave the type blank on a treatment to allow any room.</p><div class="card"><table><tr><th>Name</th><th>Type</th><th>In use</th><th></th></tr>' +
+    '<p class="muted" style="margin-top:0">Anything that needs a room gets the first free room of its room type. Leave the type blank on a ' + SW + ' to allow any room.</p><div class="card"><table><tr><th>Name</th><th>Type</th><th>In use</th><th></th></tr>' +
     D.rooms.map(function (r) {
       return '<tr><td><input type="text" data-rn="' + r.id + '" value="' + esc(r.name) + '"></td><td><input type="text" data-rt="' + r.id + '" value="' + esc(r.room_type || "") + '"></td><td><input type="checkbox" data-ra="' + r.id + '"' + (r.active ? " checked" : "") + '></td><td><button class="btn sm" data-rs="' + r.id + '">Save</button> <button class="btn sm danger" data-rd="' + r.id + '">Delete</button></td></tr>';
     }).join("") + "</table>" + (D.rooms.length ? "" : '<p class="muted">No rooms yet.</p>') + "</div>";
@@ -687,20 +713,73 @@ function viewHours(){
 }
 
 /* =================== SETTINGS =================== */
+function copyBtn(id, text){ var b = $(id); if (!b) return; b.onclick = function () { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { b.textContent = "Copied ✓"; setTimeout(function () { b.textContent = "Copy"; }, 2000); }, function () { prompt("Copy this link:", text); }); }; }
 function viewSettings(){
   var s = D.settings || {};
-  var link = new URL(CONFIG.bookingPage, location.href); link.searchParams.set("venue", VENUE);
-  $("app").innerHTML = '<div class="g2"><div class="card"><h2>Online booking rules</h2><div class="g2" style="margin-top:14px">' +
+  var link = new URL(CONFIG.bookingPage, location.href); link.search = ""; link.searchParams.set("venue", VENUE);
+  var inv = new URL(CONFIG.startPage, location.href); inv.search = ""; inv.searchParams.set("join", VENUE); inv.searchParams.set("k", s.join_key || "");
+  var amOwner = (MINE && MINE.admin) || ((MINE && MINE.venues) || []).some(function (v) { return v.slug === VENUE && v.role === "owner"; });
+  $("app").innerHTML = '<div class="g2">' +
+    '<div class="card"><h2>Your business</h2><div class="g2" style="margin-top:14px">' +
+    '<label class="f">Business name<input type="text" id="bz1" value="' + esc(VENUE_ROW.name) + '"></label>' +
+    '<label class="f">Phone<input type="tel" id="bz2" value="' + esc(VENUE_ROW.phone || "") + '"></label>' +
+    '<label class="f">Email (gets booking copies)<input type="email" id="bz3" value="' + esc(VENUE_ROW.email || "") + '"></label>' +
+    '<label class="f">Word for your people<input type="text" id="bz4" value="' + esc(s.practitioner_word || WORD) + '" placeholder="therapist, doctor…"></label>' +
+    '<label class="f">Word for what you offer<input type="text" id="bz5" value="' + esc(s.service_word || SW) + '" placeholder="treatment, appointment…"></label></div>' +
+    '<div class="row" style="margin-top:14px"><button class="btn pri" id="bzsave"' + (amOwner ? "" : " disabled title=\"Owner only\"") + '>Save</button><span class="err" id="bzerr"></span></div></div>' +
+
+    '<div class="card"><h2>Links</h2><p class="muted" style="margin-bottom:6px">Booking page — put it on your website, Instagram and Google profile:</p>' +
+    '<p style="word-break:break-all;margin:0 0 8px"><a href="' + esc(link) + '" target="_blank">' + esc(link) + '</a></p><button class="btn sm" id="cpb">Copy</button>' +
+    '<p class="muted" style="margin:18px 0 6px">Staff invite link — whoever opens it and signs in joins your team:</p>' +
+    '<p style="word-break:break-all;margin:0 0 8px;font-size:13px"><code>' + esc(inv) + '</code></p><div class="row"><button class="btn sm" id="cpi">Copy</button>' +
+    (amOwner ? '<button class="btn sm" id="newinv">Make a new link</button>' : "") + '</div>' +
+    '<p class="muted" style="font-size:12px;margin-top:6px">Making a new link stops the old one working. People already on the team stay.</p></div>' +
+
+    '<div class="card"><h2>Team logins</h2><p class="muted">People who can open this calendar.</p><div id="logins"><div class="spin"></div></div></div>' +
+
+    '<div class="card"><h2>Online booking rules</h2><div class="g2" style="margin-top:14px">' +
     '<label class="f">Time steps (min)<select id="st1">' + [5, 10, 15, 20, 30, 60].map(function (v) { return "<option" + ((s.slot_step_min || 15) === v ? " selected" : "") + ">" + v + "</option>"; }).join("") + "</select></label>" +
     '<label class="f">Minimum notice (hours)<input type="number" id="st2" min="0" step="0.5" value="' + ((s.lead_time_min != null ? s.lead_time_min : 120) / 60) + '"></label>' +
     '<label class="f">Book up to (days ahead)<input type="number" id="st3" min="1" max="365" value="' + (s.max_days_ahead || 60) + '"></label>' +
     '<label class="f">Online cancel cut-off (hours)<input type="number" id="st4" min="0" value="' + (s.cancel_hours != null ? s.cancel_hours : 24) + '"></label></div>' +
     '<label class="f" style="margin-top:12px">Note shown before confirming<textarea id="st5">' + esc(s.booking_note || "") + "</textarea></label>" +
     '<p class="muted" style="margin:12px 0 0;font-size:13px">Confirmation, cancellation and day-before reminder emails are sent automatically.</p>' +
-    '<div class="row" style="margin-top:14px"><button class="btn pri" id="stsave">Save</button><span class="err" id="sterr"></span></div></div>' +
-    '<div class="card"><h2>Links</h2><p class="muted">Client booking page for ' + esc(VENUE_ROW.name) + ':</p><p><a href="' + esc(link) + '" target="_blank">' + esc(link) + "</a></p>" +
-    '<p class="muted">Link straight to one treatment by adding <code>&amp;service=&lt;id&gt;</code>. Treatment ids:</p><table>' + D.services.map(function (x) { return "<tr><td>" + esc(x.name) + '</td><td><code style="font-size:11px">' + x.id + "</code></td></tr>"; }).join("") + "</table>" +
-    '<p class="muted" style="margin-top:14px">Business name, phone and email come from the venue record.<br>Venue code: <b>' + esc(VENUE) + "</b> · time zone " + esc(TZ) + "</p></div></div>";
+    '<div class="row" style="margin-top:14px"><button class="btn pri" id="stsave">Save</button><span class="err" id="sterr"></span></div>' +
+    '<p class="muted" style="margin-top:14px;font-size:13px">Link straight to one ' + esc(SW) + ' by adding <code>&amp;service=&lt;id&gt;</code> to the booking link:</p><table>' + D.services.map(function (x) { return "<tr><td>" + esc(x.name) + '</td><td><code style="font-size:11px">' + x.id + "</code></td></tr>"; }).join("") + "</table>" +
+    '<p class="muted" style="margin-top:14px;font-size:13px">Business code: <b>' + esc(VENUE) + "</b> · time zone " + esc(TZ) + '<br><a href="' + esc(new URL(CONFIG.startPage, location.href).toString()) + '">Set up another business</a></p></div>' +
+    "</div>";
+  copyBtn("cpb", link.toString()); copyBtn("cpi", inv.toString());
+  var ni = $("newinv");
+  if (ni) ni.onclick = function () {
+    if (!confirm("Make a new invite link? The current one will stop working.")) return;
+    var k = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "10000000-1000-4000-8000-100000000000".replace(/[018]/g, function (c) { return (c ^ Math.random() * 16 >> c / 4).toString(16); });
+    patch("svc_settings?venue_id=eq." + VID, { join_key: k }).then(loadAll).then(function () { toast("New invite link made"); viewSettings(); }).catch(function (e) { alert(e.message); });
+  };
+  var drawLogins = function () {
+    rpc("svc_team_logins", { p_venue: VID }).then(function (list) {
+      $("logins").innerHTML = (list || []).length ? "<table>" + list.map(function (l) {
+        return "<tr><td>" + esc(l.email) + (l.me ? ' <span class="pill">you</span>' : "") + '</td><td><span class="pill">' + esc(l.role) + "</span></td><td>" +
+          (amOwner && !l.me ? '<button class="btn sm danger" data-rmu="' + l.user_id + '">Remove</button>' : "") + "</td></tr>";
+      }).join("") + "</table>" : '<p class="muted">Only Webescapade admin so far. Send the invite link to give staff their own login.</p>';
+      document.querySelectorAll("[data-rmu]").forEach(function (b) {
+        b.onclick = function () {
+          if (!confirm("Remove this login from " + VENUE_ROW.name + "?")) return;
+          rpc("svc_remove_login", { p_venue: VID, p_user: b.getAttribute("data-rmu") }).then(function (r) { if (!r.ok) return alert(r.error); toast("Removed"); drawLogins(); });
+        };
+      });
+    }).catch(function (e) { $("logins").innerHTML = '<span class="err">' + esc(e.message) + "</span>"; });
+  };
+  drawLogins();
+  $("bzsave").onclick = function () {
+    rpc("svc_update_business", { p_venue: VID, p_name: $("bz1").value, p_phone: $("bz2").value, p_email: $("bz3").value, p_word: $("bz4").value, p_service_word: $("bz5").value })
+      .then(function (r) {
+        if (!r.ok) { $("bzerr").textContent = r.error; return; }
+        VENUE_ROW.name = $("bz1").value.trim(); VENUE_ROW.phone = $("bz2").value.trim(); VENUE_ROW.email = $("bz3").value.trim();
+        WORD = $("bz4").value.trim().toLowerCase() || WORD; SW = $("bz5").value.trim().toLowerCase() || SW;
+        $("vname").textContent = VENUE_ROW.name; document.querySelector('[data-tab="svc"]').textContent = cap(SW) + "s";
+        return loadAll().then(function () { toast("Saved"); });
+      }).catch(function (e) { $("bzerr").textContent = e.message; });
+  };
   $("stsave").onclick = function () {
     var row = { venue_id: VID, slot_step_min: +$("st1").value, lead_time_min: Math.round(+$("st2").value * 60), max_days_ahead: +$("st3").value, cancel_hours: +$("st4").value, booking_note: $("st5").value.trim() || null, updated_at: new Date().toISOString() };
     api("POST", "svc_settings?on_conflict=venue_id", row, "resolution=merge-duplicates,return=representation")
