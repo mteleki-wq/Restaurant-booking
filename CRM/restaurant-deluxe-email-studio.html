@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v37</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v38</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v37 \u00b7 Service Deluxe email images';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v38 \u00b7 Service Deluxe video thumbnail';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2847,6 +2847,8 @@
   var SVC_SITE  = "https://webescapade.com/service/demo/";   /* demo spa website */
   var SVC_PAGE  = "https://webescapade.com/service/";        /* Service Deluxe sales page */
   var SVC_IMG   = "https://webescapade.com/service/img/email/";   /* email pictures, 1100px wide */
+  var SVC_VIDEO = "";   /* YouTube link of the Service Deluxe 1-minute tour; empty = no video block */
+  var SVC_THUMB = "https://webescapade.com/service/img/video-thumb.jpg";
   var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
   var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
@@ -2877,6 +2879,7 @@
       finalHeading:'Try it free for '+T+' days.', finalSub:TERMS,
       finalCta:'Set it up in minutes', finalUrl:SVC_START,
       siteUrl:SVC_PAGE,
+      videoUrl:SVC_VIDEO, videoThumb:SVC_THUMB, videoTitle:'Watch the 1-minute tour', videoPos:'hero',
       priceFoot:'All plans, what is included and common questions: webescapade.com/service'
     };
     function P(o){ return preset(Object.assign({}, base, o)); }
