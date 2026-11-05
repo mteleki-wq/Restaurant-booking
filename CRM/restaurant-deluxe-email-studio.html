@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v43</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v44</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -894,7 +894,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v43 \u00b7 CRM hand-off opens the right product';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v44 \u00b7 Service Deluxe Premium plan';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2876,6 +2876,7 @@
   var SVC_OFFER = {trial_days:14, gst:true, plans:[
       {name:"Bookings", price:39, desc:"Online booking page, staff calendar and automatic emails. Keep your own website. Up to 3 practitioners."},
       {name:"Basic", price:59, desc:"Editable website plus online bookings, calendar and automatic emails. Up to 3 practitioners.", main:true},
+      {name:"Premium", price:79, desc:"Everything in Basic with the Premium website: an animated photo hero made from your own photos, four hero layouts, a big logo option and parallax photos. Up to 3 practitioners."},
       {name:"Team", price:89, desc:"Everything in Basic for 4 to 10 practitioners."}],
     setup:{price:250, desc:"Optional: Webescapade builds the website for you with your services, team, photos and opening hours."}, notes:"Larger practices (more than 10 practitioners): price on request."};
   var PRODUCTS_INFO={};

@@ -109,7 +109,9 @@ section.s{padding:110px 0}
 .emailcard{max-width:420px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
 /* pricing */
 .plans{display:grid;gap:18px}
-@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:700px){.plans{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.plans{grid-template-columns:repeat(4,1fr)}}
+.plan .demo{display:inline-block;margin:-6px 0 16px;font-size:14px;font-weight:700;color:var(--clay);text-decoration:none}
 .plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;display:flex;flex-direction:column}
 .plan.hi{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:var(--shadow);position:relative}
 .plan.hi .tag{position:absolute;top:-13px;left:28px;background:var(--clay);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 12px}
@@ -303,6 +305,11 @@ body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cu
       <div class="pr"><span data-edit="pl2p">$59</span> <small data-edit="pl2u">/ month + GST</small></div>
       <ul><li data-edit="pl2a">Everything in Bookings</li><li data-edit="pl2b">A website you edit yourself</li><li data-edit="pl2c">Services, team and hours shown live</li><li data-edit="pl2e">Up to 3 practitioners</li></ul>
       <a class="btn light" href="#" data-link="trial"><span data-edit="pl2cta">Start free trial</span> <span class="ar">→</span></a></div>
+    <div class="plan rv"><h3 data-edit="pl5n">Premium</h3><p class="muted" data-edit="pl5d" style="margin:6px 0 0">A website that moves</p>
+      <div class="pr"><span data-edit="pl5p">$79</span> <small data-edit="pl5u">/ month + GST</small></div>
+      <ul><li data-edit="pl5a">Everything in Basic</li><li data-edit="pl5b">Animated hero from your own photos</li><li data-edit="pl5c">Full-screen, full-width or side photo layouts</li><li data-edit="pl5e">Parallax photo band and gallery</li></ul>
+      <a class="demo" href="https://webescapade.com/service/demo-premium/" target="_blank" rel="noopener" data-edit="pl5demo">See the Premium demo ↗</a>
+      <a class="btn line" href="#" data-link="trial"><span data-edit="pl5cta">Start free trial</span></a></div>
     <div class="plan rv"><h3 data-edit="pl3n">Team</h3><p class="muted" data-edit="pl3d" style="margin:6px 0 0">For larger practices</p>
       <div class="pr"><span data-edit="pl3p">$89</span> <small data-edit="pl3u">/ month + GST</small></div>
       <ul><li data-edit="pl3a">Everything in Basic</li><li data-edit="pl3b">4 to 10 practitioners</li><li data-edit="pl3c">Rooms, chairs and stations</li><li data-edit="pl3e">Priority support</li></ul>

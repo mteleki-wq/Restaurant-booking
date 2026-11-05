@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Serenity Day Spa · Massage, facials &amp; wellness in Sydney</title>
+<meta name="description" content="Relaxation, deep tissue and remedial massage, facials and infrared sauna. Book your treatment online in under a minute.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F2EC;--paper:#FBF9F5;--ink:#1E2622;--muted:#69726D;--line:#E2DCD1;--accent:#4F6B5C;--accent2:#C9B79C;--soft:#E7EEE9;--ov:.38;--hlogo:120px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+img{max-width:100%;display:block}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.01em;margin:0}
+h1{font-size:clamp(48px,8.4vw,112px);line-height:.95}
+h2{font-size:clamp(36px,5vw,62px);line-height:1}
+h3{font-size:28px;line-height:1.1}
+em{font-style:italic;color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:15px 26px;font:600 15px Manrope,sans-serif;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn.dark{background:var(--ink);color:#fff}
+.btn.acc{background:var(--accent);color:#fff}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
+/* nav */
+nav.n{position:fixed;inset:0 0 auto;z-index:30;transition:background .3s,box-shadow .3s,color .3s}
+nav.n.solid{background:rgba(245,242,236,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+nav.n .w{display:flex;align-items:center;gap:28px;height:74px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:400 26px "Instrument Serif",serif}
+.logo .dot{width:30px;height:30px;border-radius:50%;background:var(--accent);display:inline-block;position:relative;flex:none}
+.logo .dot:after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--bg)}
+.logo img{height:38px;width:auto}
+nav .links{display:flex;gap:26px;margin-left:auto;font-size:15px;font-weight:500}
+nav .links a{text-decoration:none;color:var(--muted)} nav .links a:hover{color:var(--ink)}
+nav .btn{padding:11px 20px}
+@media(max-width:860px){nav .links{display:none}nav .btn{margin-left:auto}}
+
+/* ============ HERO — four arrangements, chosen in the editor ============ */
+.hero{position:relative}
+.hero .pin{position:relative}
+.hero .w.hg{display:grid;gap:40px;align-items:center;padding-top:130px;padding-bottom:70px}
+@media(min-width:960px){.hero .w.hg{grid-template-columns:1.05fr .95fr;gap:60px}}
+.htext{position:relative;z-index:2}
+.hero p.sub{font-size:19px;color:var(--muted);max-width:30em;margin:26px 0 32px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.status{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;font-size:14px;color:var(--muted);background:var(--paper);border-radius:999px;padding:6px 14px 6px 10px;box-shadow:0 0 0 1px var(--line)}
+.status i{width:8px;height:8px;border-radius:50%;background:#B7B2A8;display:inline-block}
+.status.open i{background:#3E9B62;box-shadow:0 0 0 4px rgba(62,155,98,.15)}
+.art{position:relative;aspect-ratio:4/5;border-radius:240px 240px 28px 28px;overflow:hidden;background:var(--soft);isolation:isolate}
+.art .media{position:absolute;inset:-9% 0;will-change:transform;transform:translate3d(0,var(--py,0px),0)}
+.art .ph{position:absolute;inset:0;background-size:cover;background-position:center}
+.art .chip{position:absolute;left:18px;bottom:18px;right:18px;z-index:3;background:rgba(251,249,245,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-size:14px}
+.art .chip b{display:block;font-size:15px}
+.art .chip .ic{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;flex:none;font-size:18px}
+.hlogo{display:none;margin-bottom:26px}
+.hlogo .mk{display:inline-flex;align-items:center;gap:.32em;font:400 calc(var(--hlogo) * .52) "Instrument Serif",serif;line-height:1}
+.hlogo .mk .dot{width:.9em;height:.9em;border-radius:50%;background:var(--accent);position:relative;display:inline-block}
+.hlogo .mk .dot:after{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--bg)}
+.hlogo img{height:var(--hlogo);width:auto;max-width:80vw}
+body[data-hlogo="on"] .hlogo{display:block}
+/* photo on the left */
+@media(min-width:960px){body[data-hl="left"] .hero .w.hg{grid-template-columns:.95fr 1.05fr}body[data-hl="left"] .hero .art{order:-1}}
+/* full width and full screen: the photo or animation fills the hero behind the words */
+body[data-hl="wide"] .hero .pin,body[data-hl="full"] .hero .pin{min-height:84vh;display:flex;align-items:flex-end;overflow:hidden}
+body[data-hl="full"] .hero .pin{min-height:100vh;min-height:100svh;align-items:center}
+body[data-hl="wide"] .hero .w.hg,body[data-hl="full"] .hero .w.hg{position:static;display:block;width:100%;padding-top:150px;padding-bottom:84px}
+body[data-hl="wide"] .hero .art,body[data-hl="full"] .hero .art{position:absolute;inset:0;aspect-ratio:auto;border-radius:0;z-index:0}
+body[data-hl="wide"] .hero .art .media,body[data-hl="full"] .hero .art .media{inset:-6% 0 -14%}
+body[data-hl="wide"] .hero .art:after,body[data-hl="full"] .hero .art:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(14,20,17,calc(var(--ov) * .9)) 0,rgba(14,20,17,calc(var(--ov) * .45)) 38%,rgba(14,20,17,calc(var(--ov) * 1.25)) 100%)}
+body[data-hl="wide"] .hero .art .chip,body[data-hl="full"] .hero .art .chip{display:none}
+body[data-hl="wide"] .htext,body[data-hl="full"] .htext{color:#fff;max-width:760px}
+body[data-hl="wide"] .htext em,body[data-hl="full"] .htext em{color:color-mix(in srgb,var(--accent2) 70%,#fff)}
+body[data-hl="wide"] .hero p.sub,body[data-hl="full"] .hero p.sub{color:rgba(255,255,255,.86)}
+body[data-hl="wide"] .hero .btn.line,body[data-hl="full"] .hero .btn.line{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8)}
+body[data-hl="wide"] .status,body[data-hl="full"] .status{background:rgba(255,255,255,.16);color:#fff;box-shadow:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body[data-hl="wide"] .hlogo .mk .dot:after,body[data-hl="full"] .hlogo .mk .dot:after{background:rgba(20,26,23,.6)}
+body[data-hl="wide"] nav.n:not(.solid),body[data-hl="full"] nav.n:not(.solid){color:#fff}
+body[data-hl="wide"] nav.n:not(.solid) .links a,body[data-hl="full"] nav.n:not(.solid) .links a{color:rgba(255,255,255,.82)}
+body[data-hl="wide"] nav.n:not(.solid) .btn.dark,body[data-hl="full"] nav.n:not(.solid) .btn.dark{background:#fff;color:var(--ink)}
+body[data-hl="wide"] nav.n:not(.solid) .logo .dot:after,body[data-hl="full"] nav.n:not(.solid) .logo .dot:after{background:rgba(20,26,23,.55)}
+/* text alignment (full width / full screen, and centre also works beside a photo) */
+body[data-ht="center"] .htext{text-align:center;margin-left:auto;margin-right:auto}
+body[data-ht="center"] .hero p.sub{margin-left:auto;margin-right:auto}
+body[data-ht="center"] .hero .ctas{justify-content:center}
+body[data-ht="right"][data-hl="wide"] .htext,body[data-ht="right"][data-hl="full"] .htext{text-align:right;margin-left:auto}
+body[data-ht="right"][data-hl="wide"] .hero p.sub,body[data-ht="right"][data-hl="full"] .hero p.sub{margin-left:auto}
+body[data-ht="right"][data-hl="wide"] .hero .ctas,body[data-ht="right"][data-hl="full"] .hero .ctas{justify-content:flex-end}
+/* "with scroll" on full screen: the hero stays put while the photos play as you scroll */
+body[data-hl="full"][data-am="scroll"] .hero{height:250vh}
+body[data-hl="full"][data-am="scroll"] .hero .pin{position:sticky;top:0;height:100vh;height:100svh}
+.cue{display:none;position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;color:#fff;font:600 10px Manrope;letter-spacing:.3em;text-transform:uppercase;opacity:.85;transition:opacity .5s;pointer-events:none}
+.cue:after{content:"";display:block;width:1px;height:28px;margin:8px auto 0;background:linear-gradient(#fff,transparent);animation:cue 1.6s ease-in-out infinite}
+@keyframes cue{50%{transform:translateY(8px);opacity:.4}}
+body[data-hl="full"] .cue{display:block}
+.cue.gone{opacity:0}
+
+/* ============ animation layers (built by the page from your photos) ============ */
+.anim{position:absolute;inset:0;z-index:1;overflow:hidden;display:none}
+.anim.on{display:block}
+.anim .fr{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;will-change:transform,opacity;backface-visibility:hidden}
+.anim .bar{position:absolute;left:0;right:0;height:0;background:#0b0f0d;z-index:3;transition:height 1.2s cubic-bezier(.2,.7,.2,1)}
+.anim .bar.t{top:0}.anim .bar.b{bottom:0}
+.anim.cine .bar{height:9%}
+.intro{position:absolute;inset:0;z-index:4;display:grid;place-items:center;pointer-events:none;opacity:0}
+.intro.play{animation:intro 3s cubic-bezier(.2,.7,.2,1) forwards}
+.intro .mk{display:inline-flex;align-items:center;gap:.3em;color:#fff;font:400 clamp(54px,9vw,120px) "Instrument Serif",serif;text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.intro .mk .dot{width:.85em;height:.85em;border-radius:50%;background:var(--accent);position:relative;display:inline-block}
+.intro .mk .dot:after{content:"";position:absolute;inset:26%;border-radius:50%;background:rgba(255,255,255,.9)}
+.intro img{max-width:min(60vw,420px);max-height:40vh;width:auto;filter:drop-shadow(0 6px 30px rgba(0,0,0,.25))}
+@keyframes intro{0%{opacity:0;transform:scale(.92);filter:blur(8px)}22%{opacity:1;transform:scale(1);filter:blur(0)}70%{opacity:1;transform:scale(1.02)}100%{opacity:0;transform:scale(1.08);filter:blur(4px)}}
+.hero.intro-on .htext{animation:textIn 1.2s 2.3s both cubic-bezier(.2,.7,.2,1)}
+@keyframes textIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+/* generated artwork used until a photo is added */
+.gen{background:
+ radial-gradient(60% 45% at 30% 30%,color-mix(in srgb,var(--accent) 55%,#fff) 0,transparent 70%),
+ radial-gradient(50% 40% at 75% 65%,color-mix(in srgb,var(--accent2) 80%,#fff) 0,transparent 70%),
+ linear-gradient(160deg,#EDE7DC,#D9E2DA)}
+/* strip */
+.strip{border-block:1px solid var(--line);padding:26px 0;background:var(--bg);position:relative;z-index:2}
+.strip .w{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(min-width:860px){.strip .w{grid-template-columns:repeat(4,1fr)}}
+.strip b{display:block;font:400 30px/1 "Instrument Serif",serif}
+.strip span{font-size:14px;color:var(--muted)}
+section.s{padding:110px 0;position:relative}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:46px}
+.head p{max-width:34em;color:var(--muted);margin:16px 0 0}
+/* treatments */
+.cats{display:flex;gap:8px;flex-wrap:wrap}
+.cats button{border:0;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);padding:9px 16px;border-radius:999px;font:600 14px Manrope,sans-serif;cursor:pointer}
+.cats button.on{background:var(--ink);color:#fff;box-shadow:none}
+.tlist{display:grid;gap:0;border-top:1px solid var(--line)}
+.tr{display:grid;grid-template-columns:1fr auto;gap:8px 24px;padding:26px 4px;border-bottom:1px solid var(--line);align-items:center;transition:background .3s,padding .3s}
+.tr:hover{background:var(--paper);padding-left:14px;padding-right:14px}
+@media(min-width:760px){.tr{grid-template-columns:1.1fr 1.4fr auto auto}}
+.tr h3{font-size:30px}
+.tr p{margin:0;color:var(--muted);font-size:15px;grid-column:1/-1}
+@media(min-width:760px){.tr p{grid-column:auto}}
+.tr .meta{text-align:right;white-space:nowrap}
+.tr .meta b{display:block;font:400 26px/1 "Instrument Serif",serif}
+.tr .meta span{font-size:13px;color:var(--muted)}
+.tr .btn{padding:11px 18px;font-size:14px;grid-column:1/-1;justify-self:start}
+@media(min-width:760px){.tr .btn{grid-column:auto}}
+/* parallax band */
+.band{position:relative;min-height:78vh;display:flex;align-items:center;overflow:hidden;color:#fff;isolation:isolate}
+.band .media{position:absolute;inset:-18% 0;z-index:-2;will-change:transform;transform:translate3d(0,var(--py,0px),0)}
+.band .ph{position:absolute;inset:0;background-size:cover;background-position:center}
+.band:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(14,20,17,.62),rgba(14,20,17,.2))}
+.band h2{font-size:clamp(40px,6vw,84px);max-width:13em}
+.band h2 em{color:color-mix(in srgb,var(--accent2) 70%,#fff)}
+.band p{max-width:30em;color:rgba(255,255,255,.85);font-size:19px;margin:22px 0 0}
+.band .eyebrow{color:rgba(255,255,255,.75)}
+/* team */
+.team{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.pc{background:var(--paper);border-radius:24px;padding:12px 12px 22px;box-shadow:0 0 0 1px var(--line);transition:transform .4s}
+.pc:hover{transform:translateY(-4px)}
+.pc .pic{aspect-ratio:1;border-radius:16px;overflow:hidden;background-size:cover;background-position:center;display:grid;place-items:center;font:400 90px "Instrument Serif",serif;color:rgba(255,255,255,.85)}
+.pc h3{margin:16px 8px 2px;font-size:28px}
+.pc .t{margin:0 8px;color:var(--muted);font-size:14px}
+.pc .bio{margin:10px 8px 14px;font-size:15px}
+.pc a{margin:0 8px;font-weight:600;font-size:14px;text-decoration:none;color:var(--accent)}
+/* gallery — three photos drifting at different speeds */
+.gal{padding:40px 0 120px}
+.gal .w{display:grid;gap:18px;grid-template-columns:1fr 1fr;align-items:start}
+@media(min-width:860px){.gal .w{grid-template-columns:1.1fr .8fr 1fr;gap:26px}}
+.gal .g{position:relative;overflow:hidden;border-radius:26px;aspect-ratio:3/4;background:var(--soft)}
+.gal .g:nth-child(2){aspect-ratio:4/5;margin-top:90px;border-radius:200px 200px 26px 26px}
+.gal .g:nth-child(3){aspect-ratio:1;margin-top:30px}
+@media(max-width:859px){.gal .g:nth-child(3){display:none}}
+.gal .media{position:absolute;inset:-14% 0;will-change:transform;transform:translate3d(0,var(--py,0px),0)}
+.gal .ph{position:absolute;inset:0;background-size:cover;background-position:center}
+.gal figcaption{position:absolute;left:14px;bottom:14px;background:rgba(251,249,245,.9);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600}
+/* about */
+.about .w{display:grid;gap:50px;align-items:center}
+@media(min-width:960px){.about .w{grid-template-columns:.9fr 1.1fr}}
+.about .art{aspect-ratio:1;border-radius:28px 220px 28px 28px}
+.about p{color:var(--muted);font-size:18px}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px}
+.ticks li{display:flex;gap:12px;align-items:flex-start}
+.ticks li:before{content:"✦";color:var(--accent);flex:none}
+/* visit */
+.visit{background:var(--ink);color:#E9E6DF;border-radius:36px;margin:0 12px;padding:90px 0}
+.visit .eyebrow{color:#9DA49F}
+.visit .w{display:grid;gap:40px}
+@media(min-width:900px){.visit .w{grid-template-columns:1fr 1fr 1fr}}
+.visit h2{color:#fff}
+.visit table{border-collapse:collapse;width:100%;font-size:16px}
+.visit td{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.visit td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.visit tr.today td{color:#fff;font-weight:700}
+.visit a{color:#fff}
+.visit .btn.acc{margin-top:22px}
+/* faq */
+.faq{max-width:820px}
+details{border-bottom:1px solid var(--line);padding:22px 0}
+summary{cursor:pointer;list-style:none;font:400 26px "Instrument Serif",serif;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";font-family:Manrope;color:var(--muted)}
+details[open] summary:after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+.final{text-align:center;padding:120px 0}
+.final p{color:var(--muted);max-width:30em;margin:18px auto 30px}
+footer{border-top:1px solid var(--line);padding:30px 0 100px;font-size:14px;color:var(--muted)}
+footer .w{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
+.pill-book{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:25;transform:translateY(140%);transition:transform .35s}
+.pill-book.show{transform:none}
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.12s}.reveal.d2{transition-delay:.24s}.reveal.d3{transition-delay:.36s}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}[data-par]{transform:none!important}.intro{display:none}.hero.intro-on .htext{animation:none}}
+
+</style>
+</head>
+<body data-venue="serenity-spa" data-booking-url="https://webescapade.com/service/service-booking.html" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-accent="#4F6B5C" data-word="therapist" data-hl="full" data-ht="left" data-hlogo="off" data-am="loop">
+
+<script type="application/json" id="designData">{"layout":"full","text":"left","heroLogo":false,"logoSize":120,"overlay":0.38,"parallax":"gentle","anim":{"media":["https://webescapade.com/service/demo-premium/img/stones.jpg","https://webescapade.com/service/demo-premium/img/water.jpg","https://webescapade.com/service/demo-premium/img/linen.jpg","https://webescapade.com/service/demo-premium/img/glow.jpg","https://webescapade.com/service/demo-premium/img/leaves.jpg"],"vibe":"drift","per":5,"mode":"loop","logoIntro":true}}</script>
+
+<nav class="n" id="nav"><div class="w">
+  <a class="logo" href="#top" data-logo=""><span class="dot"></span><span data-edit="brand">Serenity</span></a>
+  <div class="links"><a href="#treatments" data-edit="nav1">Treatments</a><a href="#team" data-edit="nav2">Our team</a><a href="#about" data-edit="nav3">The space</a><a href="#visit" data-edit="nav4">Visit</a></div>
+  <a class="btn dark" href="#" data-book="">Book now <span class="ar">→</span></a>
+</div></nav>
+
+<header class="hero" id="top"><div class="pin">
+  <div class="w hg">
+    <div class="htext reveal">
+      <div class="hlogo" id="hlogo" aria-hidden="true"></div>
+      <div class="status" id="status"><i></i><span>Opening hours</span></div>
+      <h1 data-edit="h1">Slow down.<br><em>Breathe</em> out.</h1>
+      <p class="sub" data-edit="sub">Massage, skin and wellness treatments in a calm, private space in the heart of the city. Choose your treatment, your therapist and your time — online, in under a minute.</p>
+      <div class="ctas"><a class="btn acc" href="#" data-book="">Book a treatment <span class="ar">→</span></a><a class="btn line" href="#treatments" data-edit="cta2">View treatments</a></div>
+    </div>
+    <div class="art reveal d1">
+      <div class="media" data-par="hero"><div class="ph" data-img="hero" style="background-image:url('https://webescapade.com/service/demo-premium/img/stones.jpg')"></div><div class="anim" id="anim" aria-hidden="true"></div></div>
+      <div class="intro" id="intro" aria-hidden="true"></div>
+      <div class="chip"><span class="ic">✦</span><span><b data-edit="chipT">Same-week appointments</b><span data-edit="chipS">Live availability for every therapist and room</span></span></div>
+    </div>
+  </div>
+  <div class="cue" id="cue" data-edit="cue">Scroll</div>
+</div></header>
+
+<div class="strip"><div class="w">
+  <div class="reveal"><b data-edit="s1b">10</b><span data-edit="s1">private treatment rooms</span></div>
+  <div class="reveal d1"><b data-edit="s2b">4</b><span data-edit="s2">qualified therapists</span></div>
+  <div class="reveal d2"><b data-edit="s3b">24/7</b><span data-edit="s3">online booking</span></div>
+  <div class="reveal d3"><b data-edit="s4b">HICAPS</b><span data-edit="s4">health fund rebates on remedial</span></div>
+</div></div>
+
+<section class="s" id="treatments"><div class="w">
+  <div class="head reveal"><div><div class="eyebrow" data-edit="tEy">Treatments</div><h2 data-edit="tH">Choose your <em>ritual</em></h2><p data-edit="tP">Every treatment includes a short consultation, warm towels and time to rest afterwards.</p></div><div class="cats" id="cats"></div></div>
+  <div class="tlist" id="tlist" data-live="" data-live-note="Live from the booking system — edit treatments in the staff page">
+    <div class="tr"><h3>Relaxation Massage</h3><p>Long, flowing strokes to melt away tension.</p><div class="meta"><b>$120</b><span>60 min</span></div><a class="btn dark" href="#" data-book="">Book</a></div>
+    <div class="tr"><h3>Deep Tissue Massage</h3><p>Firm, focused pressure for tight muscles.</p><div class="meta"><b>$135</b><span>60 min</span></div><a class="btn dark" href="#" data-book="">Book</a></div>
+    <div class="tr"><h3>Signature Facial</h3><p>Cleanse, exfoliate, mask and massage.</p><div class="meta"><b>$130</b><span>60 min</span></div><a class="btn dark" href="#" data-book="">Book</a></div>
+  </div>
+</div></section>
+
+<section class="band" id="band">
+  <div class="media" data-par="band"><div class="ph" data-img="band" style="background-image:url('https://webescapade.com/service/demo-premium/img/water.jpg')"></div></div>
+  <div class="w reveal">
+    <div class="eyebrow" data-edit="bEy">The Serenity ritual</div>
+    <h2 data-edit="bH">An hour that is <em>only yours</em>.</h2>
+    <p data-edit="bP">Phones off, warm towels on. Every visit starts with a slow breath and ends with tea in the quiet room.</p>
+  </div>
+</section>
+
+<section class="s" id="team"><div class="w">
+  <div class="head reveal"><div><div class="eyebrow" data-edit="mEy">Our team</div><h2 data-edit="mH">Hands you can <em>trust</em></h2><p data-edit="mP">Pick a favourite therapist or choose “anyone available” for the most times.</p></div></div>
+  <div class="team" id="teamlist" data-live="" data-live-note="Live from the booking system — edit the team in the staff page"></div>
+</div></section>
+
+<section class="gal" id="gallery"><div class="w">
+  <figure class="g reveal" style="margin:0"><div class="media" data-par="g1"><div class="ph" data-img="gal1" style="background-image:url('https://webescapade.com/service/demo-premium/img/glow.jpg')"></div></div><figcaption data-edit="g1c">Evening rituals</figcaption></figure>
+  <figure class="g reveal d1" style="margin:0"><div class="media" data-par="g2"><div class="ph" data-img="gal2" style="background-image:url('https://webescapade.com/service/demo-premium/img/leaves.jpg')"></div></div><figcaption data-edit="g2c">Natural oils</figcaption></figure>
+  <figure class="g reveal d2" style="margin:0"><div class="media" data-par="g3"><div class="ph" data-img="gal3" style="background-image:url('https://webescapade.com/service/demo-premium/img/stones.jpg')"></div></div><figcaption data-edit="g3c">Hot stone massage</figcaption></figure>
+</div></section>
+
+<section class="s about" id="about"><div class="w">
+  <div class="art reveal"><div class="media" data-par="about"><div class="ph" data-img="about" style="background-image:url('https://webescapade.com/service/demo-premium/img/linen.jpg')"></div></div></div>
+  <div class="reveal d1">
+    <div class="eyebrow" data-edit="aEy">The space</div>
+    <h2 data-edit="aH">Quiet rooms, <em>warm</em> light, no rush.</h2>
+    <p data-edit="aP">Seven treatment rooms, two facial suites and a private infrared sauna, each prepared fresh between guests. We build a short clean-up time into every booking so you're never hurried in or out.</p>
+    <ul class="ticks">
+      <li data-edit="a1">Heated tables, fresh linen and natural, fragrance-free oils on request</li>
+      <li data-edit="a2">Remedial treatments with health-fund rebates on the spot</li>
+      <li data-edit="a3">Gift vouchers for any treatment — ask at reception</li>
+    </ul>
+  </div>
+</div></section>
+
+<section class="visit" id="visit"><div class="w">
+  <div><div class="eyebrow" data-edit="vEy">Visit</div><h2 data-edit="vH">Find <em style="color:var(--accent2)">us</em></h2>
+    <p data-edit="vAddr">Level 2, 120 George Street<br>Sydney NSW 2000</p>
+    <p><a href="#" id="maplink" data-edit="vMap">Open in Maps →</a></p></div>
+  <div><div class="eyebrow">Opening hours</div><table id="hours" data-live="" data-live-note="Live — set hours in the staff page"><tbody><tr><td>Monday – Friday</td><td>9:00 – 19:00</td></tr><tr><td>Saturday</td><td>9:00 – 17:00</td></tr><tr><td>Sunday</td><td>10:00 – 16:00</td></tr></tbody></table></div>
+  <div><div class="eyebrow">Contact</div><p><span id="cphone" data-edit="vPhone">02 9000 1234</span><br><span id="cemail" data-edit="vEmail">hello@serenityspa.example</span></p>
+    <a class="btn acc" href="#" data-book="">Book online <span class="ar">→</span></a></div>
+</div></section>
+
+<section class="s"><div class="w faq">
+  <div class="eyebrow" data-edit="fEy">Good to know</div><h2 data-edit="fH" style="margin-bottom:20px">Questions</h2>
+  <details><summary data-edit="q1">When should I arrive?</summary><p data-edit="a1q">About ten minutes early so you can settle in and fill in a short health form.</p></details>
+  <details><summary data-edit="q2">Can I change or cancel?</summary><p data-edit="a2q">Yes — use the link in your confirmation email up to 24 hours before. After that, please give us a call.</p></details>
+  <details><summary data-edit="q3">Do you offer health fund rebates?</summary><p data-edit="a3q">Remedial massage with our qualified remedial therapists can be claimed on the spot with most health funds.</p></details>
+  <details><summary data-edit="q4">Can I choose my therapist?</summary><p data-edit="a4q">Of course. Pick a name when you book, or choose “anyone available” to see the most times.</p></details>
+</div></section>
+
+<section class="final"><div class="w reveal">
+  <h2 data-edit="zH">Your hour is <em>waiting</em>.</h2>
+  <p data-edit="zP">See live availability for every therapist and room, and confirm in a few taps.</p>
+  <a class="btn dark" href="#" data-book="">Book your treatment <span class="ar">→</span></a>
+</div></section>
+
+<footer><div class="w"><span data-edit="foot">© Serenity Day Spa</span><span data-edit="foot2">Website &amp; online booking by Webescapade</span></div></footer>
+<a class="btn acc pill-book" id="pill" href="#" data-book="">Book now →</a>
+
+<script>
+/* ---------- site runtime (stays on the published page) ---------- */
+(function () {
+  var B = document.body.dataset;
+  var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function setAccent(c){ if (/^#[0-9a-f]{6}$/i.test(c || "")) document.documentElement.style.setProperty("--accent", c); }
+  setAccent(B.accent);
+  window.SITE = { setAccent: setAccent };
+
+  function bookingUrl(extra){
+    var u; try { u = new URL(B.bookingUrl || "service-booking.html", location.href); } catch (e) { return "#"; }
+    if (B.venue) u.searchParams.set("venue", B.venue);
+    if (B.accent) u.searchParams.set("accent", B.accent.replace("#", ""));
+    if (B.word && B.word !== "therapist") u.searchParams.set("word", B.word);
+    u.searchParams.set("back", location.href.split("#")[0].split("?")[0]);
+    for (var k in (extra || {})) if (extra[k]) u.searchParams.set(k, extra[k]);
+    return u.toString();
+  }
+  window.SITE.bookingUrl = bookingUrl;
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("[data-book]");
+    if (!a || document.body.classList.contains("editing")) return;
+    e.preventDefault();
+    location.href = bookingUrl({ service: a.getAttribute("data-service"), provider: a.getAttribute("data-provider") });
+  });
+
+  /* ================= design: hero arrangement, logo, parallax ================= */
+  function readDesign(){
+    try { return JSON.parse(document.getElementById("designData").textContent || "{}") || {}; } catch (e) { return {}; }
+  }
+  var D = readDesign();
+  var hero = document.querySelector(".hero"), hlogo = document.getElementById("hlogo"), cue = document.getElementById("cue");
+  function logoMark(){
+    var img = document.querySelector("[data-logo] img");
+    if (img) return '<img src="' + img.getAttribute("src") + '" alt="">';
+    var t = document.querySelector('[data-logo] [data-edit="brand"]');
+    return '<span class="mk"><span class="dot"></span>' + (t ? t.textContent.replace(/[<>&]/g, "") : "") + "</span>";
+  }
+  function applyDesign(){
+    D = readDesign();
+    B.hl = ({ left: 1, right: 1, wide: 1, full: 1 })[D.layout] ? D.layout : "right";
+    B.ht = ({ left: 1, center: 1, right: 1 })[D.text] ? D.text : "left";
+    B.hlogo = D.heroLogo ? "on" : "off";
+    B.am = D.anim && D.anim.mode === "scroll" ? "scroll" : "loop";
+    var r = document.documentElement.style;
+    r.setProperty("--ov", D.overlay == null ? .38 : Math.max(0, Math.min(.85, +D.overlay)));
+    r.setProperty("--hlogo", Math.max(48, Math.min(260, +D.logoSize || 120)) + "px");
+    hlogo.innerHTML = D.heroLogo ? logoMark() : "";
+    PAR = ({ off: 0, gentle: 1, strong: 1.8 })[D.parallax] != null ? ({ off: 0, gentle: 1, strong: 1.8 })[D.parallax] : 1;
+    startAnim();
+    onScroll();
+  }
+
+  /* ================= animated hero, built from the photos you add ================= */
+  var anim = document.getElementById("anim"), intro = document.getElementById("intro");
+  var A = null, raf = 0, visible = true, introDone = false;
+  function ease(x){ x = x < 0 ? 0 : x > 1 ? 1 : x; return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  var TR = { drift: 1.6, dissolve: 2.2, slide: 1.1, pulse: 1.0, cinema: 1.8, reveal: 1.5 };
+  function startAnim(){
+    cancelAnimationFrame(raf); raf = 0;
+    var cfg = D.anim || {}, media = (cfg.media || []).filter(Boolean);
+    anim.innerHTML = ""; anim.className = "anim"; A = null;
+    if (media.length < 2) return;
+    var vibe = TR[cfg.vibe] ? cfg.vibe : "drift";
+    anim.className = "anim on" + (vibe === "cinema" ? " cine" : "");
+    var frames = media.map(function (u) {
+      var f = document.createElement("div"); f.className = "fr"; f.style.backgroundImage = "url('" + String(u).replace(/'/g, "%27") + "')"; anim.appendChild(f);
+      var im = new Image(); im.src = u;   /* warm the cache */
+      return f;
+    });
+    if (vibe === "cinema") { var t1 = document.createElement("i"); t1.className = "bar t"; var t2 = document.createElement("i"); t2.className = "bar b"; anim.appendChild(t1); anim.appendChild(t2); }
+    A = { f: frames, n: frames.length, vibe: vibe, per: Math.max(2.5, Math.min(12, +cfg.per || 5)), tr: TR[vibe], mode: B.am, t0: performance.now() };
+    if (RM) { draw(0.0001); return; }
+    if (cfg.logoIntro && !introDone) playIntro();
+    if (A.mode === "loop") loop(); else draw(scrollTime());
+  }
+  function playIntro(){
+    introDone = true;
+    intro.innerHTML = logoMark(); intro.classList.remove("play"); void intro.offsetWidth; intro.classList.add("play");
+    hero.classList.add("intro-on");
+    setTimeout(function () { hero.classList.remove("intro-on"); }, 3600);
+  }
+  window.SITE.replayIntro = function () { introDone = false; startAnim(); };
+  function loop(){
+    if (!A) return;
+    raf = requestAnimationFrame(loop);
+    if (!visible || document.hidden) { A.t0 += 16; return; }
+    draw((performance.now() - A.t0) / 1000);
+  }
+  function scrollTime(){
+    if (!A) return 0;
+    var r = hero.getBoundingClientRect(), span = Math.max(1, hero.offsetHeight - innerHeight);
+    if (B.hl !== "full") span = Math.max(1, hero.offsetHeight);
+    var p = Math.max(0, Math.min(1, -r.top / span));
+    return p * ((A.n - 1) * A.per + A.per * .55);
+  }
+  function motion(i, p){   /* the slow move inside one photo, p = 0..1 */
+    var v = A.vibe, zin = i % 2 === 0, s, x = 0, y = 0;
+    if (v === "pulse") s = 1.03 + .05 * Math.sin(Math.PI * p);
+    else if (v === "cinema") { s = 1.14; x = (zin ? -1 : 1) * (4 - 8 * p); }
+    else if (v === "slide") { s = 1.08; x = (zin ? 1 : -1) * (1.5 - 3 * p); }
+    else { s = zin ? 1.04 + .12 * p : 1.16 - .12 * p; x = (zin ? 1 : -1) * 2.2 * (p - .5); y = (i % 3 - 1) * 1.4 * (p - .5); }
+    return "translate3d(" + x.toFixed(3) + "%," + y.toFixed(3) + "%,0) scale(" + s.toFixed(4) + ")";
+  }
+  function draw(t){
+    var n = A.n, per = A.per, tr = Math.min(A.tr, per * .5);
+    var seg = Math.floor(t / per), i = ((seg % n) + n) % n, local = t - seg * per, nx = (i + 1) % n;
+    if (A.mode === "scroll" && seg >= n - 1) { i = n - 1; local = Math.min(local + (seg - (n - 1)) * per, per); nx = -1; }
+    var k = nx < 0 ? 0 : ease((local - (per - tr)) / tr);
+    for (var j = 0; j < n; j++) {
+      var f = A.f[j], st = f.style;
+      if (j !== i && j !== nx) { if (st.opacity !== "0") { st.opacity = "0"; st.clipPath = ""; } continue; }
+      if (j === nx && k <= 0) { st.opacity = "0"; continue; }
+      var p = j === i ? (local + tr) / (per + tr) : k * tr / (per + tr);
+      var tf = motion(j, p), op = 1, zi = j === i ? 1 : 2, clip = "";
+      if (j === nx) {
+        if (A.vibe === "slide") tf = "translate3d(" + ((1 - k) * 100).toFixed(2) + "%,0,0) " + tf;
+        else if (A.vibe === "reveal") clip = "circle(" + (k * 76).toFixed(2) + "% at 50% 50%)";
+        else if (A.vibe === "dissolve") { op = k; tf += " scale(" + (1.05 - .05 * k).toFixed(4) + ")"; }
+        else op = k;
+      } else if (k > 0 && A.vibe === "slide") tf = "translate3d(" + (-k * 30).toFixed(2) + "%,0,0) " + tf;
+      st.zIndex = zi; st.opacity = op; st.transform = tf; st.clipPath = clip; st.webkitClipPath = clip;
+    }
+  }
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(hero);
+
+  /* ================= parallax + scroll effects ================= */
+  var PAR = 1, PE = [].slice.call(document.querySelectorAll("[data-par]"));
+  var nav = document.getElementById("nav"), pill = document.getElementById("pill"), ticking = false;
+  function onScroll(){
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var y = window.scrollY, vh = innerHeight;
+      nav.classList.toggle("solid", y > 20);
+      pill.classList.toggle("show", y > hero.offsetHeight - 100);
+      if (cue) cue.classList.toggle("gone", y > 40);
+      var m = RM ? 0 : PAR;
+      PE.forEach(function (el) {
+        if (!m) { el.style.removeProperty("--py"); return; }
+        var box = el.parentNode.getBoundingClientRect();
+        if (box.bottom < -200 || box.top > vh + 200) return;
+        var off, sp;
+        if (el.getAttribute("data-par") === "hero") {
+          if (B.hl === "wide" || B.hl === "full") { sp = .32; off = Math.max(0, -box.top); if (B.hl === "full" && B.am === "scroll") off = 0; el.style.setProperty("--py", (off * sp * m).toFixed(1) + "px"); return; }
+          sp = .08;
+        } else sp = ({ band: .22, about: .1, g1: .14, g2: .06, g3: .18 })[el.getAttribute("data-par")] || .1;
+        off = (box.top + box.height / 2) - vh / 2;
+        el.style.setProperty("--py", (-off * sp * m).toFixed(1) + "px");
+      });
+      if (A && A.mode === "scroll" && !RM) draw(scrollTime());
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  window.SITE.applyDesign = applyDesign;
+
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }); }, { threshold: .12 });
+    document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
+  applyDesign();
+
+  var addr = document.querySelector('[data-edit="vAddr"]');
+  document.getElementById("maplink").addEventListener("click", function (e) {
+    if (document.body.classList.contains("editing")) return;
+    e.preventDefault(); window.open("https://maps.google.com/?q=" + encodeURIComponent(addr.innerText.replace(/\n/g, ", ")), "_blank");
+  });
+
+  /* live treatments, team and hours from the booking system */
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function money(c){ return c == null ? "" : c === 0 ? "Free" : "$" + (c / 100).toFixed(c % 100 ? 2 : 0); }
+  function mins(m){ return m >= 60 ? Math.floor(m / 60) + " h" + (m % 60 ? " " + m % 60 : "") : m + " min"; }
+  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var CAT = null, curCat = "All";
+  function drawTreatments(){
+    var cats = ["All"]; CAT.services.forEach(function (s) { var c = s.category || "Treatments"; if (cats.indexOf(c) < 0) cats.push(c); });
+    var cb = document.getElementById("cats");
+    cb.innerHTML = cats.length > 2 ? cats.map(function (c) { return '<button class="' + (c === curCat ? "on" : "") + '" data-c="' + esc(c) + '">' + esc(c) + "</button>"; }).join("") : "";
+    cb.querySelectorAll("[data-c]").forEach(function (b) { b.onclick = function () { curCat = b.getAttribute("data-c"); drawTreatments(); }; });
+    var list = CAT.services.filter(function (s) { return curCat === "All" || (s.category || "Treatments") === curCat; });
+    document.getElementById("tlist").innerHTML = list.map(function (s) {
+      return '<div class="tr"><h3>' + esc(s.name) + "</h3><p>" + esc(s.description || "") + '</p><div class="meta"><b>' + money(s.price_cents) + "</b><span>" + mins(s.duration_min) + '</span></div><a class="btn dark" href="#" data-book data-service="' + s.id + '">Book</a></div>';
+    }).join("");
+  }
+  function drawTeam(){
+    var t = document.getElementById("teamlist");
+    if (!CAT.providers.length) { document.getElementById("team").style.display = "none"; return; }
+    t.innerHTML = CAT.providers.map(function (p, i) {
+      var bg = p.photo_url ? "background-image:url('" + esc(p.photo_url) + "')" : "background:linear-gradient(" + (140 + i * 35) + "deg,color-mix(in srgb,var(--accent) " + (70 - i * 10) + "%,#fff),color-mix(in srgb,var(--accent2) 80%,#fff))";
+      return '<div class="pc reveal in"><div class="pic" style="' + bg + '">' + (p.photo_url ? "" : esc(p.name.charAt(0))) + "</div><h3>" + esc(p.name) + '</h3><p class="t">' + esc(p.title || "") + '</p><p class="bio">' + esc(p.bio || "") + '</p><a href="#" data-book data-provider="' + p.id + '">Book with ' + esc(p.name.split(" ")[0]) + " →</a></div>";
+    }).join("");
+  }
+  function fmt(t){ return t.replace(/^0/, ""); }
+  function drawHours(){
+    var by = {}; CAT.hours.forEach(function (h) { (by[h.weekday] = by[h.weekday] || []).push(fmt(h.start) + " – " + fmt(h.end)); });
+    var now = new Intl.DateTimeFormat("en-AU", { timeZone: CAT.venue.timezone, weekday: "long" }).format(new Date());
+    var rows = [], order = [1, 2, 3, 4, 5, 6, 0], i = 0;
+    while (i < order.length) {
+      var j = i, v = (by[order[i]] || ["Closed"]).join(", ");
+      while (j + 1 < order.length && (by[order[j + 1]] || ["Closed"]).join(", ") === v) j++;
+      var days = order.slice(i, j + 1).map(function (d) { return DAYS[d]; });
+      rows.push('<tr class="' + (days.indexOf(now) >= 0 ? "today" : "") + '"><td>' + days[0] + (days.length > 1 ? " – " + days[days.length - 1] : "") + "</td><td>" + v + "</td></tr>");
+      i = j + 1;
+    }
+    document.getElementById("hours").innerHTML = rows.join("");
+    var p = {}; new Intl.DateTimeFormat("en-CA", { timeZone: CAT.venue.timezone, hourCycle: "h23", weekday: "short", hour: "2-digit", minute: "2-digit" }).formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+    var wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(p.weekday), hm = p.hour + ":" + p.minute;
+    var open = CAT.hours.filter(function (h) { return h.weekday === wd && h.start <= hm && h.end > hm; })[0];
+    var st = document.getElementById("status");
+    if (open) { st.classList.add("open"); st.querySelector("span").textContent = "Open now · until " + fmt(open.end); }
+    else {
+      var nxt = null;
+      for (var k = 0; k < 7 && !nxt; k++) { var d = (wd + k) % 7; var c = CAT.hours.filter(function (h) { return h.weekday === d && (k > 0 || h.start > hm); }).sort(function (a, b) { return a.start < b.start ? -1 : 1; })[0]; if (c) nxt = (k === 0 ? "today" : k === 1 ? "tomorrow" : DAYS[d]) + " at " + fmt(c.start); }
+      st.querySelector("span").textContent = "Closed now" + (nxt ? " · opens " + nxt : "");
+    }
+  }
+  if (B.venue && B.supabaseUrl && B.supabaseKey) {
+    fetch(B.supabaseUrl.replace(/\/+$/, "").replace(/\/rest(\/v1)?$/, "") + "/rest/v1/rpc/svc_get_catalog", {
+      method: "POST", headers: { apikey: B.supabaseKey, Authorization: "Bearer " + B.supabaseKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_venue: B.venue })
+    }).then(function (r) { return r.json(); }).then(function (c) {
+      if (!c || !c.ok) return;
+      CAT = c; window.SITE.catalog = c;
+      if (c.services.length) drawTreatments();
+      drawTeam();
+      if (c.hours.length) drawHours();
+    }).catch(function () { /* keep the static content */ }).then(function () {
+      if (!document.getElementById("teamlist").children.length) document.getElementById("team").style.display = "none";
+      onScroll();
+    });
+  } else document.getElementById("team").style.display = "none";
+})();
+</script>
+
+
+
+
+</body></html>
