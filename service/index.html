@@ -1,325 +1,377 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="en-AU"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Serenity Day Spa · Massage, facials &amp; wellness in Sydney</title>
-<meta name="description" content="Relaxation, deep tissue and remedial massage, facials and infrared sauna. Book your treatment online in under a minute.">
+<title>Service Deluxe · Online bookings for spas, clinics and salons | Webescapade</title>
+<meta name="description" content="Online bookings with live availability for every practitioner and room, automatic confirmation and reminder emails, and a website you edit yourself. One flat monthly price, no commission. 14 days free.">
+<meta property="og:title" content="Service Deluxe — online bookings for appointment businesses">
+<meta property="og:description" content="Clients pick the service, the practitioner and a free time. Rooms, reminders and your website included. 14 days free.">
+<meta property="og:image" content="https://webescapade.com/service/img/calendar.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F5F2EC;--paper:#FBF9F5;--ink:#1E2622;--muted:#69726D;--line:#E2DCD1;--accent:#4F6B5C;--accent2:#C9B79C;--soft:#E7EEE9}
+:root{
+  --paper:#F6F3EC; --paper2:#EFEAE0; --card:#FFFFFF; --ink:#18201C; --ink2:#2B3530; --muted:#66706A; --line:#E2DCD0;
+  --sage:#4F6B5C; --sage2:#6F8C7C; --mint:#E4ECE6; --clay:#C98C6B; --gold:#C9B79C;
+  --r:22px; --shadow:0 30px 60px -30px rgba(24,32,28,.35), 0 10px 24px -12px rgba(24,32,28,.18);
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
-img{max-width:100%;display:block}
 .w{max-width:1200px;margin:0 auto;padding:0 20px}
-.serif{font-family:"Instrument Serif",serif;font-weight:400}
-.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
-h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.01em;margin:0}
-h1{font-size:clamp(46px,8vw,104px);line-height:.95}
-h2{font-size:clamp(36px,5vw,62px);line-height:1}
-h3{font-size:28px;line-height:1.1}
-em{font-style:italic;color:var(--accent)}
-.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:15px 26px;font:600 15px Manrope,sans-serif;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.015em;margin:0}
+h1{font-size:clamp(46px,7.4vw,96px);line-height:.96}
+h2{font-size:clamp(36px,5vw,64px);line-height:1}
+h3{font-size:30px;line-height:1.1}
+h1 em,h2 em,h3 em{font-style:italic;color:var(--sage)}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--sage)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:16px 26px;font:700 15px Manrope,sans-serif;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
 .btn:hover{transform:translateY(-1px)}
-.btn.dark{background:var(--ink);color:#fff}
-.btn.acc{background:var(--accent);color:#fff}
+.btn.dark{background:var(--ink);color:#fff;box-shadow:0 10px 24px -10px rgba(24,32,28,.6)}
+.btn.sage{background:var(--sage);color:#fff}
 .btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.light{background:#fff;color:var(--ink)}
 .btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
 /* nav */
-nav.n{position:fixed;inset:0 0 auto;z-index:30;transition:background .3s,box-shadow .3s}
-nav.n.solid{background:rgba(245,242,236,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
-nav.n .w{display:flex;align-items:center;gap:28px;height:74px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:400 26px "Instrument Serif",serif}
-.logo .dot{width:30px;height:30px;border-radius:50%;background:var(--accent);display:inline-block;position:relative}
-.logo .dot:after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--bg)}
-.logo img{height:38px;width:auto}
-nav .links{display:flex;gap:26px;margin-left:auto;font-size:15px;font-weight:500}
-nav .links a{text-decoration:none;color:var(--muted)} nav .links a:hover{color:var(--ink)}
-nav .btn{padding:11px 20px}
-@media(max-width:860px){nav .links{display:none}nav .btn{margin-left:auto}}
+nav.top{position:sticky;top:0;z-index:30;background:rgba(246,243,236,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.top.s{border-bottom-color:var(--line)}
+nav.top .w{display:flex;align-items:center;gap:26px;height:72px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .m{width:34px;height:34px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font:400 22px "Instrument Serif",serif}
+.brand b{font:400 25px "Instrument Serif",serif;letter-spacing:-.01em}
+.brand small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+nav.top .links{display:flex;gap:24px;margin-left:auto;font-size:15px;font-weight:600}
+nav.top .links a{text-decoration:none;color:var(--muted)} nav.top .links a:hover{color:var(--ink)}
+nav.top .btn{padding:11px 20px;font-size:14px}
+@media(max-width:900px){nav.top .links{display:none}nav.top .btn{margin-left:auto}}
+@media(max-width:480px){nav.top .w{gap:12px}.brand b{font-size:21px}.brand .m{width:30px;height:30px;font-size:19px}nav.top .btn{padding:10px 14px;font-size:13px;white-space:nowrap}nav.top .btn .ar{display:none}}
 /* hero */
-.hero{padding:130px 0 70px;position:relative}
-.hero .w{display:grid;gap:40px;align-items:center}
-@media(min-width:960px){.hero .w{grid-template-columns:1.05fr .95fr;gap:60px}}
-.hero p.sub{font-size:19px;color:var(--muted);max-width:30em;margin:26px 0 32px}
-.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
-.status{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;font-size:14px;color:var(--muted);background:var(--paper);border-radius:999px;padding:6px 14px 6px 10px;box-shadow:0 0 0 1px var(--line)}
-.status i{width:8px;height:8px;border-radius:50%;background:#B7B2A8;display:inline-block}
-.status.open i{background:#3E9B62;box-shadow:0 0 0 4px rgba(62,155,98,.15)}
-.art{position:relative;aspect-ratio:4/5;border-radius:240px 240px 28px 28px;overflow:hidden;background:var(--soft)}
-.art .ph{position:absolute;inset:0;background-size:cover;background-position:center}
-.art .chip{position:absolute;left:18px;bottom:18px;right:18px;background:rgba(251,249,245,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-size:14px}
-.art .chip b{display:block;font-size:15px}
-.art .chip .ic{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;flex:none;font-size:18px}
-/* generated artwork used until a photo is added */
-.gen{background:
- radial-gradient(60% 45% at 30% 30%,color-mix(in srgb,var(--accent) 55%,#fff) 0,transparent 70%),
- radial-gradient(50% 40% at 75% 65%,color-mix(in srgb,var(--accent2) 80%,#fff) 0,transparent 70%),
- radial-gradient(70% 60% at 50% 100%,color-mix(in srgb,var(--accent) 35%,#000 10%) 0,transparent 70%),
- linear-gradient(160deg,#EDE7DC,#D9E2DA)}
-.gen.b{background:radial-gradient(55% 50% at 70% 30%,color-mix(in srgb,var(--accent2) 85%,#fff) 0,transparent 70%),radial-gradient(60% 50% at 25% 75%,color-mix(in srgb,var(--accent) 50%,#fff) 0,transparent 70%),linear-gradient(200deg,#E9E2D6,#DCE4DE)}
-.stones{pointer-events:none;position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:58%}
+.hero{padding:70px 0 40px;position:relative;overflow-x:clip}
+.hero .w{display:grid;gap:50px;align-items:center}
+@media(min-width:1020px){.hero .w{grid-template-columns:1fr 1.05fr}}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:13.5px;font-weight:600;color:var(--ink2);margin-bottom:24px}
+.pill i{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--sage);display:grid;place-items:center;font-style:normal;font-size:12px}
+.hero .lead{margin:24px 0 32px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted);font-weight:600}
+.trust span:before{content:"✓";color:var(--sage);margin-right:6px}
+.stage{position:relative;min-height:440px}
+.browser{background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.browser .bar{height:30px;background:#F1EEE7;display:flex;align-items:center;gap:6px;padding:0 12px}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:#D9D3C7}
+.browser .bar span{margin-left:10px;font-size:11px;color:var(--muted);background:#fff;border-radius:6px;padding:2px 10px}
+.phone{position:absolute;width:31%;min-width:150px;right:0;bottom:-8%;border-radius:34px;background:#111;padding:9px;box-shadow:var(--shadow)}
+.phone img{border-radius:26px}
+.hero .browser{transform:rotate(-1.2deg)}
+.hero .phone{transform:rotate(3deg)}
+@media(max-width:600px){.phone{width:40%;right:2%;bottom:-14%}}
 /* strip */
-.strip{border-block:1px solid var(--line);padding:26px 0}
-.strip .w{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-@media(min-width:860px){.strip .w{grid-template-columns:repeat(4,1fr)}}
-.strip b{display:block;font:400 30px/1 "Instrument Serif",serif}
-.strip span{font-size:14px;color:var(--muted)}
+.made{padding:56px 0 30px}
+.made p{text-align:center;color:var(--muted);font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.chips span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:600;font-size:15px}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:40px}
+@media(min-width:860px){.facts{grid-template-columns:repeat(4,1fr)}}
+.facts div{background:var(--card);border-radius:18px;padding:20px 22px;border:1px solid var(--line)}
+.facts b{display:block;font:400 34px/1.05 "Instrument Serif",serif}
+.facts span{font-size:14px;color:var(--muted)}
 section.s{padding:110px 0}
-.head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:46px}
-.head p{max-width:34em;color:var(--muted);margin:16px 0 0}
-/* treatments */
-.cats{display:flex;gap:8px;flex-wrap:wrap}
-.cats button{border:0;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);padding:9px 16px;border-radius:999px;font:600 14px Manrope,sans-serif;cursor:pointer}
-.cats button.on{background:var(--ink);color:#fff;box-shadow:none}
-.tlist{display:grid;gap:0;border-top:1px solid var(--line)}
-.tr{display:grid;grid-template-columns:1fr auto;gap:8px 24px;padding:26px 4px;border-bottom:1px solid var(--line);align-items:center}
-@media(min-width:760px){.tr{grid-template-columns:1.1fr 1.4fr auto auto}}
-.tr h3{font-size:30px}
-.tr p{margin:0;color:var(--muted);font-size:15px;grid-column:1/-1}
-@media(min-width:760px){.tr p{grid-column:auto}}
-.tr .meta{text-align:right;white-space:nowrap}
-.tr .meta b{display:block;font:400 26px/1 "Instrument Serif",serif}
-.tr .meta span{font-size:13px;color:var(--muted)}
-.tr .btn{padding:11px 18px;font-size:14px;grid-column:1/-1;justify-self:start}
-@media(min-width:760px){.tr .btn{grid-column:auto}}
-.hint{font-size:13px;color:var(--muted);margin-top:16px}
-/* team */
-.team{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.pc{background:var(--paper);border-radius:24px;padding:12px 12px 22px;box-shadow:0 0 0 1px var(--line)}
-.pc .pic{aspect-ratio:1;border-radius:16px;overflow:hidden;background-size:cover;background-position:center;display:grid;place-items:center;font:400 90px "Instrument Serif",serif;color:rgba(255,255,255,.85)}
-.pc h3{margin:16px 8px 2px;font-size:28px}
-.pc .t{margin:0 8px;color:var(--muted);font-size:14px}
-.pc .bio{margin:10px 8px 14px;font-size:15px}
-.pc a{margin:0 8px;font-weight:600;font-size:14px;text-decoration:none;color:var(--accent)}
-/* about */
-.about .w{display:grid;gap:50px;align-items:center}
-@media(min-width:960px){.about .w{grid-template-columns:.9fr 1.1fr}}
-.about .art{aspect-ratio:1;border-radius:28px 220px 28px 28px}
-.about p{color:var(--muted);font-size:18px}
-.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px}
+.head{max-width:760px;margin-bottom:52px}
+.head p{color:var(--muted);font-size:18px;margin:18px 0 0}
+/* steps */
+.steps{display:grid;gap:22px}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font:700 12px Manrope;letter-spacing:.16em;color:var(--sage)}
+.step h3{margin:8px 0 6px;font-size:28px}
+.step p{margin:0 0 20px;color:var(--muted);font-size:15.5px}
+.step .shot{margin-top:auto;border-radius:26px 26px 0 0;background:#111;padding:8px 8px 0;max-width:270px;align-self:center;width:100%}
+.step .shot img{border-radius:20px 20px 0 0;height:330px;object-fit:cover;object-position:top}
+/* split features */
+.split{display:grid;gap:44px;align-items:center}
+@media(min-width:980px){.split{grid-template-columns:.9fr 1.1fr}.split.flip{grid-template-columns:1.1fr .9fr}.split.flip .txt{order:2}}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
 .ticks li{display:flex;gap:12px;align-items:flex-start}
-.ticks li:before{content:"✦";color:var(--accent);flex:none}
-/* visit */
-.visit{background:var(--ink);color:#E9E6DF;border-radius:36px;margin:0 12px;padding:90px 0}
-.visit .eyebrow{color:#9DA49F}
-.visit .w{display:grid;gap:40px}
-@media(min-width:900px){.visit .w{grid-template-columns:1fr 1fr 1fr}}
-.visit h2{color:#fff}
-.visit table{border-collapse:collapse;width:100%;font-size:16px}
-.visit td{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1)}
-.visit td:last-child{text-align:right;font-variant-numeric:tabular-nums}
-.visit tr.today td{color:#fff;font-weight:700}
-.visit a{color:#fff}
-.visit .btn.acc{margin-top:22px}
+.ticks li:before{content:"";flex:none;width:22px;height:22px;margin-top:2px;border-radius:50%;background:var(--mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%234F6B5C' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.ticks b{display:block}
+.ticks span{color:var(--muted);font-size:15.5px}
+.dark{background:var(--ink);color:#EAE7E0;border-radius:40px;margin:0 12px}
+.dark .eyebrow{color:#9FB8AA}
+.dark h2 em{color:#9FB8AA}
+.dark .ticks span,.dark .head p,.dark .lead{color:#AEB5B0}
+.dark .ticks li:before{background-color:#2D3A33}
+.emailcard{max-width:420px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
+/* pricing */
+.plans{display:grid;gap:18px}
+@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;display:flex;flex-direction:column}
+.plan.hi{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:var(--shadow);position:relative}
+.plan.hi .tag{position:absolute;top:-13px;left:28px;background:var(--clay);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 12px}
+.plan h3{font-size:30px}
+.plan .pr{margin:16px 0 4px;font:400 64px/1 "Instrument Serif",serif}
+.plan .pr small{font:600 15px Manrope;color:var(--muted)}
+.plan.hi .pr small,.plan.hi .muted{color:#AEB5B0}
+.plan ul{list-style:none;padding:0;margin:22px 0 28px;display:grid;gap:10px;font-size:15.5px}
+.plan li:before{content:"✓";color:var(--sage);font-weight:800;margin-right:9px}
+.plan.hi li:before{color:#9FB8AA}
+.plan .btn{margin-top:auto}
+.muted{color:var(--muted)}
+.notes{display:flex;gap:10px 26px;flex-wrap:wrap;justify-content:center;margin-top:28px;color:var(--muted);font-size:14.5px;font-weight:600}
 /* faq */
-.faq{max-width:820px}
+.faq{max-width:860px}
 details{border-bottom:1px solid var(--line);padding:22px 0}
-summary{cursor:pointer;list-style:none;font:400 26px "Instrument Serif",serif;display:flex;justify-content:space-between;gap:20px}
+summary{cursor:pointer;list-style:none;font:400 27px/1.2 "Instrument Serif",serif;display:flex;justify-content:space-between;gap:20px}
 summary::-webkit-details-marker{display:none}
-summary:after{content:"+";font-family:Manrope;color:var(--muted)}
+summary:after{content:"+";font:400 26px Manrope;color:var(--sage)}
 details[open] summary:after{content:"–"}
 details p{color:var(--muted);margin:12px 0 0}
-.final{text-align:center;padding:120px 0}
-.final p{color:var(--muted);max-width:30em;margin:18px auto 30px}
-footer{border-top:1px solid var(--line);padding:30px 0 100px;font-size:14px;color:var(--muted)}
-footer .w{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
-.pill-book{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:25;transform:translateY(140%);transition:transform .35s}
-.pill-book.show{transform:none}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
-.reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+/* enquiry */
+.enq{display:grid;gap:40px}
+@media(min-width:980px){.enq{grid-template-columns:.9fr 1.1fr}}
+.form{background:var(--card);border-radius:var(--r);padding:28px;border:1px solid var(--line)}
+.form label{display:grid;gap:6px;font-size:14px;font-weight:700;margin-bottom:14px}
+.form input,.form select,.form textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font:400 16px Manrope,sans-serif;background:#fff;color:var(--ink)}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--sage);box-shadow:0 0 0 3px var(--mint)}
+.form .two{display:grid;gap:0 14px}
+@media(min-width:620px){.form .two{grid-template-columns:1fr 1fr}}
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .msg{margin-top:12px;font-size:15px;min-height:1px}
+.form .msg.ok{color:var(--sage);font-weight:700}.form .msg.err{color:#9A3B2E}
+.contact{display:grid;gap:12px;margin-top:26px}
+.contact a{display:flex;gap:12px;align-items:center;text-decoration:none;font-weight:700;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.contact a i{font-style:normal;width:34px;height:34px;border-radius:10px;background:var(--mint);display:grid;place-items:center}
+footer{padding:40px 0 60px;color:var(--muted);font-size:14px}
+footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.float{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:25;transform:translateY(150%);transition:transform .35s}
+.float.on{transform:none}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.btn,.btn .ar{transition:none}}
 
 </style>
 </head>
-<body data-venue="serenity-spa" data-booking-url="https://webescapade.com/service/service-booking.html" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-accent="#4F6B5C" data-word="therapist">
+<body data-trial-url="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-booking-demo-url="https://webescapade.com/service/service-booking.html?venue=serenity-spa" data-demo-site-url="https://webescapade.com/service/demo/" data-phone="0413 872 994" data-email="marc@webescapade.com" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE">
 
-<nav class="n" id="nav"><div class="w">
-  <a class="logo" href="#top" data-logo=""><span class="dot"></span><span data-edit="brand">Serenity</span></a>
-  <div class="links"><a href="#treatments" data-edit="nav1">Treatments</a><a href="#team" data-edit="nav2">Our team</a><a href="#about" data-edit="nav3">The space</a><a href="#visit" data-edit="nav4">Visit</a></div>
-  <a class="btn dark" href="#" data-book="">Book now <span class="ar">→</span></a>
+<nav class="top" id="nav"><div class="w">
+  <a class="brand" href="#top"><span class="m">S</span><span><b data-edit="brand">Service Deluxe</b><small>by Webescapade</small></span></a>
+  <div class="links"><a href="#how" data-edit="n1">How it works</a><a href="#features" data-edit="n2">Features</a><a href="#pricing" data-edit="n3">Pricing</a><a href="#faq" data-edit="n4">FAQ</a></div>
+  <a class="btn dark" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="navcta">Start free trial</span> <span class="ar">→</span></a>
 </div></nav>
 
 <header class="hero" id="top"><div class="w">
-  <div class="reveal">
-    <div class="status" id="status"><i></i><span>Opening hours</span></div>
-    <h1 data-edit="h1">Slow down.<br><em>Breathe</em> out.</h1>
-    <p class="sub" data-edit="sub">Massage, skin and wellness treatments in a calm, private space in the heart of the city. Choose your treatment, your therapist and your time — online, in under a minute.</p>
-    <div class="ctas"><a class="btn acc" href="#" data-book="">Book a treatment <span class="ar">→</span></a><a class="btn line" href="#treatments" data-edit="cta2">View treatments</a></div>
+  <div class="rv">
+    <div class="pill"><i>✦</i><span data-edit="pill">For spas, clinics, dental, physio and salons</span></div>
+    <h1 data-edit="h1">Your calendar, <em>booked</em> while you work.</h1>
+    <p class="lead" data-edit="lead">Clients choose the service, the practitioner and a free time — on their phone, any hour. You get a calendar that knows your people, your rooms and your breaks, and a website you can edit yourself.</p>
+    <div class="ctas">
+      <a class="btn dark" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="cta1">Start your 14-day free trial</span> <span class="ar">→</span></a>
+      <a class="btn line" href="https://webescapade.com/service/service-booking.html?venue=serenity-spa" data-link="booking" target="_blank"><span data-edit="cta2">Try the booking page</span></a>
+    </div>
+    <div class="trust"><span data-edit="t1">No commission</span><span data-edit="t2">Set up in minutes</span><span data-edit="t3">Works on any phone</span></div>
   </div>
-  <div class="art reveal">
-    <div class="ph gen" data-img="hero"></div>
-    <svg class="stones" data-art="" viewBox="0 0 200 220" aria-hidden="true"><ellipse cx="100" cy="190" rx="78" ry="22" fill="rgba(30,38,34,.55)"></ellipse><ellipse cx="100" cy="150" rx="60" ry="20" fill="rgba(30,38,34,.42)"></ellipse><ellipse cx="100" cy="116" rx="44" ry="16" fill="rgba(30,38,34,.32)"></ellipse><ellipse cx="100" cy="88" rx="30" ry="12" fill="rgba(30,38,34,.24)"></ellipse></svg>
-    <div class="chip"><span class="ic">✦</span><span><b data-edit="chipT">Same-week appointments</b><span data-edit="chipS">Live availability for every therapist and room</span></span></div>
+  <div class="stage rv">
+    <div class="browser"><div class="bar"><i></i><i></i><i></i><span>Staff calendar</span></div>
+      <img data-img="hero-calendar" src="/service/img/calendar.jpg" alt="Staff calendar showing each therapist's appointments for the day, with treatment rooms" width="1800" height="1125"></div>
+    <div class="phone"><img data-img="hero-phone" src="/service/img/phone-time.jpg" alt="Booking page on a phone, choosing a time with a chosen therapist" width="640" height="1385"></div>
   </div>
 </div></header>
 
-<div class="strip"><div class="w">
-  <div class="reveal"><b data-edit="s1b">10</b><span data-edit="s1">private treatment rooms</span></div>
-  <div class="reveal"><b data-edit="s2b">4</b><span data-edit="s2">qualified therapists</span></div>
-  <div class="reveal"><b data-edit="s3b">24/7</b><span data-edit="s3">online booking</span></div>
-  <div class="reveal"><b data-edit="s4b">HICAPS</b><span data-edit="s4">health fund rebates on remedial</span></div>
-</div></div>
-
-<section class="s" id="treatments"><div class="w">
-  <div class="head reveal"><div><div class="eyebrow" data-edit="tEy">Treatments</div><h2 data-edit="tH">Choose your <em>ritual</em></h2><p data-edit="tP">Every treatment includes a short consultation, warm towels and time to rest afterwards.</p></div><div class="cats" id="cats"></div></div>
-  <div class="tlist" id="tlist" data-live="" data-live-note="Live from the booking system — edit treatments in the staff page">
-    <div class="tr"><h3>Relaxation Massage</h3><p>Long, flowing strokes to melt away tension.</p><div class="meta"><b>$120</b><span>60 min</span></div><a class="btn dark" href="#" data-book="">Book</a></div>
-    <div class="tr"><h3>Deep Tissue Massage</h3><p>Firm, focused pressure for tight muscles.</p><div class="meta"><b>$135</b><span>60 min</span></div><a class="btn dark" href="#" data-book="">Book</a></div>
-    <div class="tr"><h3>Signature Facial</h3><p>Cleanse, exfoliate, mask and massage.</p><div class="meta"><b>$130</b><span>60 min</span></div><a class="btn dark" href="#" data-book="">Book</a></div>
+<section class="made"><div class="w">
+  <p data-edit="madefor">Made for appointment businesses</p>
+  <div class="chips">
+    <span data-edit="c1">Day spas</span><span data-edit="c2">Massage</span><span data-edit="c3">Physio &amp; allied health</span><span data-edit="c4">Medical clinics</span><span data-edit="c5">Dental practices</span><span data-edit="c6">Hair &amp; beauty</span>
+  </div>
+  <div class="facts rv">
+    <div><b data-edit="f1b">24/7</b><span data-edit="f1">clients book themselves, even after hours</span></div>
+    <div><b data-edit="f2b">0%</b><span data-edit="f2">commission or booking fees — one flat price</span></div>
+    <div><b data-edit="f3b">Rooms</b><span data-edit="f3">and practitioners booked together, never twice</span></div>
+    <div><b data-edit="f4b">14 days</b><span data-edit="f4">free to try — no card to start</span></div>
   </div>
 </div></section>
 
-<section class="s" id="team"><div class="w">
-  <div class="head reveal"><div><div class="eyebrow" data-edit="mEy">Our team</div><h2 data-edit="mH">Hands you can <em>trust</em></h2><p data-edit="mP">Pick a favourite therapist or choose “anyone available” for the most times.</p></div></div>
-  <div class="team" id="teamlist" data-live="" data-live-note="Live from the booking system — edit the team in the staff page"></div>
-</div></section>
-
-<section class="s about" id="about"><div class="w">
-  <div class="art reveal"><div class="ph gen b" data-img="about"></div></div>
-  <div class="reveal">
-    <div class="eyebrow" data-edit="aEy">The space</div>
-    <h2 data-edit="aH">Quiet rooms, <em>warm</em> light, no rush.</h2>
-    <p data-edit="aP">Seven treatment rooms, two facial suites and a private infrared sauna, each prepared fresh between guests. We build a short clean-up time into every booking so you're never hurried in or out.</p>
-    <ul class="ticks">
-      <li data-edit="a1">Heated tables, fresh linen and natural, fragrance-free oils on request</li>
-      <li data-edit="a2">Remedial treatments with health-fund rebates on the spot</li>
-      <li data-edit="a3">Gift vouchers for any treatment — ask at reception</li>
-    </ul>
+<section class="s" id="how"><div class="w">
+  <div class="head rv"><div class="eyebrow" data-edit="hEy">How clients book</div><h2 data-edit="hH">Three taps. <em>Booked.</em></h2>
+    <p data-edit="hP">Your booking page shows only the times that really work — when the practitioner is in, a room is free and there's time to reset between clients.</p></div>
+  <div class="steps">
+    <div class="step rv"><span class="n">01</span><h3 data-edit="s1h">Choose the service</h3><p data-edit="s1p">Prices and lengths are shown up front, grouped the way you like.</p>
+      <div class="shot"><img data-img="step1" src="/service/img/phone-services.jpg" alt="List of treatments with prices and lengths" loading="lazy" width="640" height="1385"></div></div>
+    <div class="step rv"><span class="n">02</span><h3 data-edit="s2h">Pick a person — or anyone</h3><p data-edit="s2p">Regulars choose their favourite; “anyone available” shows the most times.</p>
+      <div class="shot"><img data-img="step2" src="/service/img/phone-therapist.jpg" alt="Choosing a therapist or anyone available" loading="lazy" width="640" height="1385"></div></div>
+    <div class="step rv"><span class="n">03</span><h3 data-edit="s3h">Confirmed instantly</h3><p data-edit="s3p">A reference, an “add to calendar” button and a confirmation email straight away.</p>
+      <div class="shot"><img data-img="step3" src="/service/img/phone-done.jpg" alt="Booking confirmed screen with reference number" loading="lazy" width="640" height="1385"></div></div>
   </div>
 </div></section>
 
-<section class="visit" id="visit"><div class="w">
-  <div><div class="eyebrow" data-edit="vEy">Visit</div><h2 data-edit="vH">Find <em style="color:var(--accent2)">us</em></h2>
-    <p data-edit="vAddr">Level 2, 120 George Street<br>Sydney NSW 2000</p>
-    <p><a href="#" id="maplink" data-edit="vMap">Open in Maps →</a></p></div>
-  <div><div class="eyebrow">Opening hours</div><table id="hours" data-live="" data-live-note="Live — set hours in the staff page"><tbody><tr><td>Monday – Friday</td><td>9:00 – 19:00</td></tr><tr><td>Saturday</td><td>9:00 – 17:00</td></tr><tr><td>Sunday</td><td>10:00 – 16:00</td></tr></tbody></table></div>
-  <div><div class="eyebrow">Contact</div><p><span id="cphone" data-edit="vPhone">02 9000 1234</span><br><span id="cemail" data-edit="vEmail">hello@serenityspa.example</span></p>
-    <a class="btn acc" href="#" data-book="">Book online <span class="ar">→</span></a></div>
+<section class="s" id="features" style="padding-top:20px"><div class="w">
+  <div class="split">
+    <div class="txt rv"><div class="eyebrow" data-edit="r1Ey">People and rooms</div><h2 data-edit="r1H">Ten rooms, four therapists, <em>zero clashes.</em></h2>
+      <ul class="ticks">
+        <li><span><b data-edit="r1a">Each practitioner, their own hours</b><span data-edit="r1as">Working days, lunch breaks, leave and public holidays.</span></span></li>
+        <li><span><b data-edit="r1b">Rooms, chairs and stations</b><span data-edit="r1bs">A time is only offered when a suitable room is free too — the system won't book the same room or person twice.</span></span></li>
+        <li><span><b data-edit="r1c">Clean-up time built in</b><span data-edit="r1cs">Set a reset time per service so you're never rushed between clients.</span></span></li>
+        <li><span><b data-edit="r1d">Phone and walk-in bookings</b><span data-edit="r1ds">Add, move or reschedule from the calendar in seconds.</span></span></li>
+      </ul></div>
+    <div class="rv"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>Calendar · by room</span></div>
+      <img data-img="rooms" src="/service/img/calendar-rooms.jpg" alt="Calendar viewed by treatment room" loading="lazy" width="1800" height="1125"></div></div>
+  </div>
 </div></section>
 
-<section class="s"><div class="w faq">
-  <div class="eyebrow" data-edit="fEy">Good to know</div><h2 data-edit="fH" style="margin-bottom:20px">Questions</h2>
-  <details><summary data-edit="q1">When should I arrive?</summary><p data-edit="a1q">About ten minutes early so you can settle in and fill in a short health form.</p></details>
-  <details><summary data-edit="q2">Can I change or cancel?</summary><p data-edit="a2q">Yes — use the link in your confirmation email up to 24 hours before. After that, please give us a call.</p></details>
-  <details><summary data-edit="q3">Do you offer health fund rebates?</summary><p data-edit="a3q">Remedial massage with our qualified remedial therapists can be claimed on the spot with most health funds.</p></details>
-  <details><summary data-edit="q4">Can I choose my therapist?</summary><p data-edit="a4q">Of course. Pick a name when you book, or choose “anyone available” to see the most times.</p></details>
+<section class="s dark"><div class="w">
+  <div class="split flip">
+    <div class="rv"><div class="emailcard"><img data-img="email" src="/service/img/email.jpg" alt="Booking confirmation email with treatment, therapist, time and a View or cancel button" loading="lazy" width="900" height="1140"></div></div>
+    <div class="txt rv"><div class="eyebrow" data-edit="e1Ey">Automatic emails</div><h2 data-edit="e1H">The reminders <em>send themselves.</em></h2>
+      <p class="lead" data-edit="e1P" style="margin-top:18px">Every booking gets a confirmation, a reminder the day before, and a private link to view or cancel — within the cut-off you choose.</p>
+      <ul class="ticks">
+        <li><span><b data-edit="e1a">You get a copy of every booking</b><span data-edit="e1as">And so can each practitioner.</span></span></li>
+        <li><span><b data-edit="e1b">Fewer forgotten appointments</b><span data-edit="e1bs">Day-before reminders help reduce no-shows.</span></span></li>
+        <li><span><b data-edit="e1c">Cancellations free the time again</b><span data-edit="e1cs">The slot goes straight back on your booking page.</span></span></li>
+      </ul></div>
+  </div>
 </div></section>
 
-<section class="final"><div class="w reveal">
-  <h2 data-edit="zH">Your hour is <em>waiting</em>.</h2>
-  <p data-edit="zP">See live availability for every therapist and room, and confirm in a few taps.</p>
-  <a class="btn dark" href="#" data-book="">Book your treatment <span class="ar">→</span></a>
+<section class="s"><div class="w">
+  <div class="split">
+    <div class="txt rv"><div class="eyebrow" data-edit="w1Ey">Your website</div><h2 data-edit="w1H">A website that <em>keeps itself up to date.</em></h2>
+      <p class="lead" data-edit="w1P" style="margin-top:18px">Your services, prices, team and opening hours appear on your website straight from the booking system. Change a price once and it's right everywhere.</p>
+      <ul class="ticks">
+        <li><span><b data-edit="w1a">Edit words and photos yourself</b><span data-edit="w1as">Tap a heading to change it. Tap a photo to replace it.</span></span></li>
+        <li><span><b data-edit="w1b">“Book with Mia” buttons</b><span data-edit="w1bs">Each team member gets their own booking link.</span></span></li>
+        <li><span><b data-edit="w1c">Already have a website?</b><span data-edit="w1cs">Keep it — just add your booking button.</span></span></li>
+      </ul>
+      <div class="ctas" style="margin-top:28px"><a class="btn line" href="https://webescapade.com/service/demo/" data-link="demo" target="_blank"><span data-edit="w1cta">See a demo website</span> <span class="ar">→</span></a></div></div>
+    <div class="rv"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>yourbusiness.com.au</span></div>
+      <img data-img="site" src="/service/img/spa-site.jpg" alt="Example day spa website with a Book now button" loading="lazy" width="1800" height="1125"></div></div>
+  </div>
 </div></section>
 
-<footer><div class="w"><span data-edit="foot">© Serenity Day Spa</span><span data-edit="foot2">Website &amp; online booking by Webescapade</span></div></footer>
-<a class="btn acc pill-book" id="pill" href="#" data-book="">Book now →</a>
+<section class="s" style="padding-top:0"><div class="w">
+  <div class="split flip">
+    <div class="rv"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>Set up your business</span></div>
+      <img data-img="setup" src="/service/img/setup.jpg" alt="Setup screen: business name, type of business, phone, rooms" loading="lazy" width="1400" height="1273"></div></div>
+    <div class="txt rv"><div class="eyebrow" data-edit="u1Ey">Getting started</div><h2 data-edit="u1H">Set up in minutes — <em>or we'll do it.</em></h2>
+      <ul class="ticks">
+        <li><span><b data-edit="u1a">Pick your type of business</b><span data-edit="u1as">Spa, clinic, dental, physio, hair and beauty — each comes with ready-made services and hours.</span></span></li>
+        <li><span><b data-edit="u1b">Invite your team</b><span data-edit="u1bs">Each staff member gets their own login with a private invite link.</span></span></li>
+        <li><span><b data-edit="u1c">Share your booking link</b><span data-edit="u1cs">On your website, Instagram and Google Business Profile.</span></span></li>
+      </ul>
+      <div class="ctas" style="margin-top:28px"><a class="btn dark" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="u1cta">Start your free trial</span> <span class="ar">→</span></a></div></div>
+  </div>
+</div></section>
+
+<section class="s" id="pricing" style="background:var(--paper2)"><div class="w">
+  <div class="head rv" style="text-align:center;margin-left:auto;margin-right:auto"><div class="eyebrow" data-edit="pEy">Pricing</div><h2 data-edit="pH">One flat price. <em>No commission.</em></h2>
+    <p data-edit="pP">Every plan includes online bookings, the staff calendar, automatic emails and support. Try any plan free for 14 days.</p></div>
+  <div class="plans">
+    <div class="plan rv"><h3 data-edit="pl1n">Bookings</h3><p class="muted" data-edit="pl1d" style="margin:6px 0 0">Keep your own website</p>
+      <div class="pr"><span data-edit="pl1p">$39</span> <small data-edit="pl1u">/ month + GST</small></div>
+      <ul><li data-edit="pl1a">Your own booking page</li><li data-edit="pl1b">Staff calendar and logins</li><li data-edit="pl1c">Confirmation and reminder emails</li><li data-edit="pl1e">Up to 3 practitioners</li></ul>
+      <a class="btn line" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="pl1cta">Start free trial</span></a></div>
+    <div class="plan hi rv"><span class="tag" data-edit="pl2t">Most popular</span><h3 data-edit="pl2n">Basic</h3><p class="muted" data-edit="pl2d" style="margin:6px 0 0">Website + online bookings</p>
+      <div class="pr"><span data-edit="pl2p">$59</span> <small data-edit="pl2u">/ month + GST</small></div>
+      <ul><li data-edit="pl2a">Everything in Bookings</li><li data-edit="pl2b">A website you edit yourself</li><li data-edit="pl2c">Services, team and hours shown live</li><li data-edit="pl2e">Up to 3 practitioners</li></ul>
+      <a class="btn light" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="pl2cta">Start free trial</span> <span class="ar">→</span></a></div>
+    <div class="plan rv"><h3 data-edit="pl3n">Team</h3><p class="muted" data-edit="pl3d" style="margin:6px 0 0">For larger practices</p>
+      <div class="pr"><span data-edit="pl3p">$89</span> <small data-edit="pl3u">/ month + GST</small></div>
+      <ul><li data-edit="pl3a">Everything in Basic</li><li data-edit="pl3b">4 to 10 practitioners</li><li data-edit="pl3c">Rooms, chairs and stations</li><li data-edit="pl3e">Priority support</li></ul>
+      <a class="btn line" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="pl3cta">Start free trial</span></a></div>
+  </div>
+  <div class="notes"><span data-edit="pn1">Website set up for you: $250 + GST one-off (optional)</span><span data-edit="pn2">More than 10 practitioners: price on request</span></div>
+</div></section>
+
+<section class="s" id="faq"><div class="w faq">
+  <div class="eyebrow" data-edit="qEy">Questions</div><h2 data-edit="qH" style="margin-bottom:18px">Straight <em>answers.</em></h2>
+  <details><summary data-edit="q1">Do my clients need an app or an account?</summary><p data-edit="a1">No. The booking page opens in any phone or computer browser. Clients enter their name, email and mobile, and that's it.</p></details>
+  <details><summary data-edit="q2">Can it handle rooms as well as people?</summary><p data-edit="a2">Yes. Each service can need a practitioner, a room, or both. A time is only offered when everything it needs is free, and the system won't book the same room or person twice.</p></details>
+  <details><summary data-edit="q3">Can clients cancel themselves?</summary><p data-edit="a3">Yes, from the link in their confirmation email, up to the cut-off you set (for example 24 hours before). After that they're asked to call you.</p></details>
+  <details><summary data-edit="q4">Do you send SMS reminders or take payments?</summary><p data-edit="a4">Not at the moment. Reminders are sent by email, and payment happens at your business as usual. There's no commission or booking fee on anything.</p></details>
+  <details><summary data-edit="q5">Is it a practice-management system?</summary><p data-edit="a5">No — it's bookings, your calendar and your website. It doesn't hold clinical notes or process health-fund or Medicare claims, so it sits happily alongside the systems you already use.</p></details>
+  <details><summary data-edit="q6">What happens after the 14 days?</summary><p data-edit="a6">If you'd like to keep going, choose a plan. If not, simply stop — there's nothing to cancel and no card needed to start.</p></details>
+</div></section>
+
+<section class="s" id="enquire" style="padding-top:20px"><div class="w">
+  <div class="enq">
+    <div class="rv"><div class="eyebrow" data-edit="xEy">Talk to Marc</div><h2 data-edit="xH">Rather <em>talk it through?</em></h2>
+      <p class="lead" data-edit="xP" style="margin-top:18px">I'm Marc, a web designer here in Sydney with 50 years' experience in hospitality. Tell me a little about your business and I'll show you how it would work for you — or set it up with you.</p>
+      <div class="contact">
+        <a href="tel:0413872994" data-link="tel"><i>☎</i><span data-link-text="phone">0413 872 994</span></a>
+        <a href="mailto:marc@webescapade.com" data-link="mail"><i>✉</i><span data-link-text="email">marc@webescapade.com</span></a>
+      </div></div>
+    <form class="form rv" id="enqForm" novalidate="">
+      <div class="two"><label>Your name<input name="name" autocomplete="name" required=""></label>
+        <label>Business name<input name="business" autocomplete="organization" required=""></label></div>
+      <div class="two"><label>Email<input name="email" type="email" autocomplete="email" inputmode="email" required=""></label>
+        <label>Mobile<input name="phone" type="tel" autocomplete="tel" inputmode="tel"></label></div>
+      <div class="two"><label>Type of business<select name="type">
+          <option value="">Choose…</option><option>Day spa</option><option>Massage</option><option>Physio / allied health</option><option>Medical clinic</option><option>Dental practice</option><option>Hair &amp; beauty</option><option>Other</option></select></label>
+        <label>Suburb<input name="suburb" autocomplete="address-level2"></label></div>
+      <label>How many practitioners and rooms? Anything else?<textarea name="message" rows="3" style="resize:vertical"></textarea></label>
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="btn dark" type="submit" style="width:100%"><span data-edit="fbtn">Send my enquiry</span> <span class="ar">→</span></button>
+      <div class="msg" id="enqMsg" role="status"></div>
+    </form>
+  </div>
+</div></section>
+
+<footer><div class="w"><span data-edit="foot1">© Webescapade · Sydney, Australia</span><span data-edit="foot2">Service Deluxe — online bookings for appointment businesses</span></div></footer>
+<a class="btn dark float" id="float" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="floatcta">Start free trial</span> <span class="ar">→</span></a>
 
 <script>
-/* ---------- site runtime (stays on the published page) ---------- */
+/* ---------- page runtime (kept on the published page) ---------- */
 (function () {
   var B = document.body.dataset;
-  function setAccent(c){ if (/^#[0-9a-f]{6}$/i.test(c || "")) document.documentElement.style.setProperty("--accent", c); }
-  setAccent(B.accent);
-  window.SITE = { setAccent: setAccent };
-
-  function bookingUrl(extra){
-    var u; try { u = new URL(B.bookingUrl || "service-booking.html", location.href); } catch (e) { return "#"; }
-    if (B.venue) u.searchParams.set("venue", B.venue);
-    if (B.accent) u.searchParams.set("accent", B.accent.replace("#", ""));
-    if (B.word && B.word !== "therapist") u.searchParams.set("word", B.word);
-    u.searchParams.set("back", location.href.split("#")[0].split("?")[0]);
-    for (var k in (extra || {})) if (extra[k]) u.searchParams.set(k, extra[k]);
-    return u.toString();
+  var LINKS = {
+    trial: function () { return B.trialUrl; },
+    booking: function () { return B.bookingDemoUrl; },
+    demo: function () { return B.demoSiteUrl; },
+    tel: function () { return "tel:" + String(B.phone || "").replace(/[^0-9+]/g, ""); },
+    mail: function () { return "mailto:" + (B.email || ""); }
+  };
+  function applyLinks(){
+    document.querySelectorAll("[data-link]").forEach(function (a) { var f = LINKS[a.getAttribute("data-link")]; if (f && f()) a.setAttribute("href", f()); });
+    document.querySelectorAll('[data-link-text="phone"]').forEach(function (el) { el.textContent = B.phone || ""; });
+    document.querySelectorAll('[data-link-text="email"]').forEach(function (el) { el.textContent = B.email || ""; });
+    document.querySelectorAll('[data-link="trial"],[data-link="booking"],[data-link="demo"]').forEach(function (a) { if (/^https?:/.test(a.href) && a.getAttribute("data-link") !== "trial") a.target = "_blank"; });
   }
-  window.SITE.bookingUrl = bookingUrl;
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest("[data-book]");
-    if (!a || document.body.classList.contains("editing")) return;
-    e.preventDefault();
-    location.href = bookingUrl({ service: a.getAttribute("data-service"), provider: a.getAttribute("data-provider") });
-  });
+  applyLinks();
+  window.PAGE = { applyLinks: applyLinks };
 
-  var nav = document.getElementById("nav"), pill = document.getElementById("pill"), hero = document.querySelector(".hero");
-  function onScroll(){ var y = window.scrollY; nav.classList.toggle("solid", y > 20); pill.classList.toggle("show", y > hero.offsetHeight - 100); }
-  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  var nav = document.getElementById("nav"), fl = document.getElementById("float"), hero = document.querySelector(".hero");
+  function sc(){ var y = window.scrollY; nav.classList.toggle("s", y > 10); fl.classList.toggle("on", y > hero.offsetHeight && (window.innerHeight + y) < document.body.scrollHeight - 300); }
+  window.addEventListener("scroll", sc, { passive: true }); sc();
   if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }); }, { threshold: .12 });
-    document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
-  } else document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .1 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
 
-  var addr = document.querySelector('[data-edit="vAddr"]');
-  document.getElementById("maplink").addEventListener("click", function (e) {
+  /* enquiry form -> CRM as a Service Deluxe lead (svc_lead_submit) */
+  var f = document.getElementById("enqForm"), msg = document.getElementById("enqMsg");
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
     if (document.body.classList.contains("editing")) return;
-    e.preventDefault(); window.open("https://maps.google.com/?q=" + encodeURIComponent(addr.innerText.replace(/\n/g, ", ")), "_blank");
-  });
-
-  /* live treatments, team and hours from the booking system */
-  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function money(c){ return c == null ? "" : c === 0 ? "Free" : "$" + (c / 100).toFixed(c % 100 ? 2 : 0); }
-  function mins(m){ return m >= 60 ? Math.floor(m / 60) + " h" + (m % 60 ? " " + m % 60 : "") : m + " min"; }
-  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  var CAT = null, curCat = "All";
-  function drawTreatments(){
-    var cats = ["All"]; CAT.services.forEach(function (s) { var c = s.category || "Treatments"; if (cats.indexOf(c) < 0) cats.push(c); });
-    var cb = document.getElementById("cats");
-    cb.innerHTML = cats.length > 2 ? cats.map(function (c) { return '<button class="' + (c === curCat ? "on" : "") + '" data-c="' + esc(c) + '">' + esc(c) + "</button>"; }).join("") : "";
-    cb.querySelectorAll("[data-c]").forEach(function (b) { b.onclick = function () { curCat = b.getAttribute("data-c"); drawTreatments(); }; });
-    var list = CAT.services.filter(function (s) { return curCat === "All" || (s.category || "Treatments") === curCat; });
-    document.getElementById("tlist").innerHTML = list.map(function (s) {
-      return '<div class="tr"><h3>' + esc(s.name) + "</h3><p>" + esc(s.description || "") + '</p><div class="meta"><b>' + money(s.price_cents) + "</b><span>" + mins(s.duration_min) + '</span></div><a class="btn dark" href="#" data-book data-service="' + s.id + '">Book</a></div>';
-    }).join("");
-  }
-  function drawTeam(){
-    var t = document.getElementById("teamlist");
-    if (!CAT.providers.length) { document.getElementById("team").style.display = "none"; return; }
-    t.innerHTML = CAT.providers.map(function (p, i) {
-      var bg = p.photo_url ? "background-image:url('" + esc(p.photo_url) + "')" : "background:linear-gradient(" + (140 + i * 35) + "deg,color-mix(in srgb,var(--accent) " + (70 - i * 10) + "%,#fff),color-mix(in srgb,var(--accent2) 80%,#fff))";
-      return '<div class="pc reveal in"><div class="pic" style="' + bg + '">' + (p.photo_url ? "" : esc(p.name.charAt(0))) + "</div><h3>" + esc(p.name) + '</h3><p class="t">' + esc(p.title || "") + '</p><p class="bio">' + esc(p.bio || "") + '</p><a href="#" data-book data-provider="' + p.id + '">Book with ' + esc(p.name.split(" ")[0]) + " →</a></div>";
-    }).join("");
-  }
-  function fmt(t){ return t.replace(/^0/, ""); }
-  function drawHours(){
-    var by = {}; CAT.hours.forEach(function (h) { (by[h.weekday] = by[h.weekday] || []).push(fmt(h.start) + " – " + fmt(h.end)); });
-    var now = new Intl.DateTimeFormat("en-AU", { timeZone: CAT.venue.timezone, weekday: "long" }).format(new Date());
-    var rows = [], order = [1, 2, 3, 4, 5, 6, 0], i = 0;
-    while (i < order.length) {   // group consecutive days with the same hours
-      var j = i, v = (by[order[i]] || ["Closed"]).join(", ");
-      while (j + 1 < order.length && (by[order[j + 1]] || ["Closed"]).join(", ") === v) j++;
-      var days = order.slice(i, j + 1).map(function (d) { return DAYS[d]; });
-      rows.push('<tr class="' + (days.indexOf(now) >= 0 ? "today" : "") + '"><td>' + days[0] + (days.length > 1 ? " – " + days[days.length - 1] : "") + "</td><td>" + v + "</td></tr>");
-      i = j + 1;
-    }
-    document.getElementById("hours").innerHTML = rows.join("");
-    var p = {}; new Intl.DateTimeFormat("en-CA", { timeZone: CAT.venue.timezone, hourCycle: "h23", weekday: "short", hour: "2-digit", minute: "2-digit" }).formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
-    var wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(p.weekday), hm = p.hour + ":" + p.minute;
-    var open = CAT.hours.filter(function (h) { return h.weekday === wd && h.start <= hm && h.end > hm; })[0];
-    var st = document.getElementById("status");
-    if (open) { st.classList.add("open"); st.querySelector("span").textContent = "Open now · until " + fmt(open.end); }
-    else {
-      var nxt = null;
-      for (var k = 0; k < 7 && !nxt; k++) { var d = (wd + k) % 7; var c = CAT.hours.filter(function (h) { return h.weekday === d && (k > 0 || h.start > hm); }).sort(function (a, b) { return a.start < b.start ? -1 : 1; })[0]; if (c) nxt = (k === 0 ? "today" : k === 1 ? "tomorrow" : DAYS[d]) + " at " + fmt(c.start); }
-      st.querySelector("span").textContent = "Closed now" + (nxt ? " · opens " + nxt : "");
-    }
-  }
-  if (B.venue && B.supabaseUrl && B.supabaseKey) {
-    fetch(B.supabaseUrl.replace(/\/+$/, "").replace(/\/rest(\/v1)?$/, "") + "/rest/v1/rpc/svc_get_catalog", {
+    var d = {}; Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name] = el.value.trim(); });
+    msg.className = "msg";
+    if (!d.name || !d.business) { msg.className = "msg err"; msg.textContent = "Please add your name and your business name."; return; }
+    if (!/^\S+@\S+\.\S{2,}$/.test(d.email)) { msg.className = "msg err"; msg.textContent = "Please check your email address."; return; }
+    var btn = f.querySelector("button"); btn.disabled = true; msg.textContent = "Sending…";
+    var base = String(B.supabaseUrl || "").replace(/\/+$/, "").replace(/\/rest(\/v1)?$/, "");
+    fetch(base + "/rest/v1/rpc/svc_lead_submit", {
       method: "POST", headers: { apikey: B.supabaseKey, Authorization: "Bearer " + B.supabaseKey, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_venue: B.venue })
-    }).then(function (r) { return r.json(); }).then(function (c) {
-      if (!c || !c.ok) return;
-      CAT = c; window.SITE.catalog = c;
-      if (c.services.length) drawTreatments();
-      drawTeam();
-      if (c.hours.length) drawHours();
-    }).catch(function () { /* keep the static content */ }).then(function () {
-      if (!document.getElementById("teamlist").children.length) document.getElementById("team").style.display = "none";
-    });
-  } else document.getElementById("team").style.display = "none";
+      body: JSON.stringify({ p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: d.message, p_trap: d.website })
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || "Something went wrong"); return j; }); })
+      .then(function (j) {
+        if (!j.ok) { msg.className = "msg err"; msg.textContent = j.error || "Something went wrong."; btn.disabled = false; return; }
+        f.reset(); msg.className = "msg ok"; msg.textContent = "Thanks — I've got it. I'll be in touch shortly, usually within one business day.";
+        btn.disabled = false;
+      }).catch(function () {
+        msg.className = "msg err"; btn.disabled = false;
+        msg.innerHTML = "Sorry, that didn't send. Please email <a href=\"" + LINKS.mail() + "\">" + (B.email || "") + "</a> or call " + (B.phone || "") + ".";
+      });
+  });
 })();
 </script>
 
