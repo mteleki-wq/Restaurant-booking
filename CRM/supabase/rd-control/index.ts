@@ -77,7 +77,7 @@ async function readAll(path: string, cap = 20000) {
 async function snapshot() {
   const [venues, prospects, campaigns, deliveries, optouts, badDeliveries, badEvents] = await Promise.all([
     db("rpc/rd_platform_health", { method: "POST", body: "{}" }),
-    readAll("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at&order=created_at.desc,id.desc"),
+    readAll("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at,product&order=created_at.desc,id.desc"),
     db("email_marketing_campaigns?select=name,subject,status,sent_at,created_at&order=created_at.desc&limit=12"),
     db(`crm_email_deliveries?select=status,campaign,subject,created_at&created_at=gte.${new Date(Date.now() - 60 * 864e5).toISOString()}&limit=1000`),
     readAll("email_optouts?select=email&order=id.asc"),
@@ -264,11 +264,12 @@ async function weeklyReport(send: boolean) {
     `<h3 style="font:700 16px ${F};color:#1b1730;margin:22px 0 8px">${h(title)}</h3>` +
     (rows.length ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">${rows.join("")}</table>` : `<p style="font:13px ${F};color:#8a86a3;margin:0">${h(empty)}</p>`);
   const row = (a: string, b: string) => `<tr><td style="padding:8px 0;border-bottom:1px solid #eeecf6;font:14px ${F};color:#1b1730">${a}</td><td style="padding:8px 0;border-bottom:1px solid #eeecf6;font:13px ${F};color:#6b6788;text-align:right">${b}</td></tr>`;
+  const tag = (p: any) => (p?.product === "service" ? ` <span style="font:700 10px ${F};color:#0f8f7e;background:#e6f6f3;border-radius:6px;padding:1px 6px">SERVICE</span>` : "");
   const phone = (p: any) => (p?.phone ? `<a href="tel:${h(String(p.phone).replace(/[^0-9+]/g, ""))}" style="color:#0f8f7e;text-decoration:none;font-weight:700">${h(p.phone)}</a>` : "no phone");
 
   const html = `<!doctype html><html><body style="margin:0;background:#f3f2f8"><div style="max-width:640px;margin:0 auto;padding:24px 16px">
   <div style="background:#ffffff;border-radius:14px;padding:24px;border:1px solid #e6e3f3">
-  <div style="font:700 11px ${F};letter-spacing:.16em;text-transform:uppercase;color:#7c5cf0">Restaurant Deluxe \u00b7 weekly report</div>
+  <div style="font:700 11px ${F};letter-spacing:.16em;text-transform:uppercase;color:#7c5cf0">Webescapade \u00b7 weekly report</div>
   <h1 style="font:700 24px ${F};color:#1b1730;margin:6px 0 2px">Your week in marketing</h1>
   <div style="font:13px ${F};color:#6b6788">${h(range)}</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr>
@@ -276,21 +277,21 @@ async function weeklyReport(send: boolean) {
   </tr><tr>
     ${kpi("Calls logged", callsW.length, diff(callsW.length, callsLW.length))}${kpi("Demos booked", demos, "from calls this week")}${kpi("New leads", newLeads.length, web.length + " from the website")}
   </tr></table>
-  ${list("\u{1F525} Call these first \u2014 they clicked", hot.slice(0, 10).map((x) => row(`<b>${h(x.p.restaurant || x.p.name || "")}</b><br><span style="font-size:12px;color:#6b6788">clicked \u201c${h(x.r.subject)}\u201d</span>`, phone(x.p))), "Nobody clicked an email this week.")}
-  ${list("\u{1F310} New website enquiries", web.slice(0, 10).map((p) => row(`<b>${h(p.restaurant)}</b>${p.name ? " \u00b7 " + h(p.name) : ""}`, phone(p))), "No website enquiries this week.")}
-  ${list("\u23F0 Follow-ups due (today and tomorrow)", due.slice(0, 12).map((p) => row(`<b>${h(p.restaurant || p.name || "")}</b> <span style="font-size:12px;color:#6b6788">${h(p.crm_status || "New")}</span>`, phone(p))), "No follow-ups due.")}
+  ${list("\u{1F525} Call these first \u2014 they clicked", hot.slice(0, 10).map((x) => row(`<b>${h(x.p.restaurant || x.p.name || "")}</b>${tag(x.p)}<br><span style="font-size:12px;color:#6b6788">clicked \u201c${h(x.r.subject)}\u201d</span>`, phone(x.p))), "Nobody clicked an email this week.")}
+  ${list("\u{1F310} New website enquiries", web.slice(0, 10).map((p) => row(`<b>${h(p.restaurant)}</b>${tag(p)}${p.name ? " \u00b7 " + h(p.name) : ""}`, phone(p))), "No website enquiries this week.")}
+  ${list("\u23F0 Follow-ups due (today and tomorrow)", due.slice(0, 12).map((p) => row(`<b>${h(p.restaurant || p.name || "")}</b>${tag(p)} <span style="font-size:12px;color:#6b6788">${h(p.crm_status || "New")}</span>`, phone(p))), "No follow-ups due.")}
   ${trials.length ? list("\u23F3 Trials ending within 7 days", trials.map((x: any) => row(`<b>${h(x.v.name)}</b>`, x.d < 0 ? "ended " + -x.d + " days ago" : x.d === 0 ? "ends today" : "ends in " + x.d + " days")), "") : ""}
   <h3 style="font:700 16px ${F};color:#1b1730;margin:22px 0 8px">Founding 5 and pipeline</h3>
   <p style="font:14px ${F};color:#1b1730;margin:0 0 6px"><b>${founding.length} of 5</b> founding places taken.</p>
   <p style="font:13px ${F};color:#6b6788;margin:0">${["New", "Contacted", "Replied", "Demo booked", "Trial", "Won", "Lost"].map((k) => `${k}: <b style="color:#1b1730">${status[k] || 0}</b>`).join(" \u00b7 ")}</p>
   <div style="margin-top:24px"><a href="${CRM_LINK}" style="display:inline-block;background:#6d4df2;color:#ffffff;font:700 14px ${F};padding:12px 20px;border-radius:10px;text-decoration:none">Open the Venue CRM \u2192</a></div>
-  </div><p style="font:11px ${F};color:#9a96b3;text-align:center;margin:14px 0 0">Sent automatically every Monday morning by your Restaurant Deluxe CRM.</p></div></body></html>`;
+  </div><p style="font:11px ${F};color:#9a96b3;text-align:center;margin:14px 0 0">Sent automatically every Monday morning by your Webescapade CRM.</p></div></body></html>`;
   const subject = `Your marketing week: ${tw.sent} sent \u00b7 ${tw.clicked} clicked \u00b7 ${hot.length + web.length} to call`;
   if (!send) return { ok: true, subject, html, to: REPORT_TO };
   const domains = await resendApi("/domains");
   const dom = ((domains?.data ?? []) as any[]).find((d) => d?.status === "verified")?.name;
   if (!dom) throw new Error("No verified sending domain in Resend");
-  const sent = await resendApi("/emails", { method: "POST", body: JSON.stringify({ from: `Restaurant Deluxe CRM <reports@${dom}>`, to: [REPORT_TO], subject, html }) });
+  const sent = await resendApi("/emails", { method: "POST", body: JSON.stringify({ from: `Webescapade CRM <reports@${dom}>`, to: [REPORT_TO], subject, html }) });
   return { ok: true, subject, to: REPORT_TO, id: sent?.id || null };
 }
 
@@ -379,6 +380,35 @@ RULES — follow all of them:
 - Do not write links, URLs, phone numbers or unsubscribe text — the studio adds those.
 - Respond with ONLY valid JSON matching the requested shape. No commentary, no code fences.
 `;
+
+// ------------------------------------------------------------- products
+// Each product the studio sells (Restaurant Deluxe, Service Deluxe) keeps its
+// own facts, rules and offer (prices) in public.crm_products, edited from the
+// studio. The restaurant row falls back to FACTS/RULES above until edited.
+const PRODUCTS = ["restaurant", "service"];
+function productKey(v: unknown) { return PRODUCTS.includes(String(v)) ? String(v) : "restaurant"; }
+const money = (n: unknown) => { const x = Number(n); return isFinite(x) ? "$" + (Number.isInteger(x) ? x : x.toFixed(2)) : String(n ?? ""); };
+function offerText(o: any) {
+  if (!o || typeof o !== "object") return "";
+  const gst = o.gst ? " + GST" : "";
+  const L: string[] = [];
+  const plans = Array.isArray(o.plans) ? o.plans.filter((p: any) => p && p.name) : [];
+  if (plans.length) L.push(`PRICES (${o.currency || "AUD"}, per month${gst}): ` + plans.map((p: any) =>
+    `${p.name} ${money(p.price)}${p.desc ? " (" + p.desc + ")" : ""}${p.main ? " [main plan to lead with]" : ""}`).join("; ") + ".");
+  if (o.trial_days) L.push(`TRIAL: ${o.trial_days}-day free trial.`);
+  if (o.setup && o.setup.price != null && o.setup.price !== "") L.push(`SETUP (optional, one-off${gst}): ${money(o.setup.price)}. ${o.setup.desc || ""}`.trim());
+  if (o.notes) L.push(`ALSO: ${o.notes}`);
+  return "OFFER:\n" + L.join("\n");
+}
+async function loadProduct(key: string) {
+  let row: any = null;
+  try { row = (await db(`crm_products?key=eq.${key}&select=key,name,facts,rules,offer,updated_at`))?.[0] || null; } catch { row = null; }
+  const name = row?.name || (key === "service" ? "Service Deluxe" : "Restaurant Deluxe");
+  const facts = (row?.facts && row.facts.trim()) || (key === "restaurant" ? FACTS : "");
+  const rules = (row?.rules && row.rules.trim()) || RULES;
+  const offer = row?.offer || null;
+  return { key, name, facts, rules, offer, system: rules + "\nFACTS:\n" + facts + (offer ? "\n" + offerText(offer) : ""), updated_at: row?.updated_at || null };
+}
 
 async function claude(system: string, user: string, maxTokens = 2500) {
   const key = Deno.env.get("ANTHROPIC_API_KEY");
@@ -482,6 +512,36 @@ Deno.serve(async (req) => {
           stages: STAGES, prospectStatuses: PROSPECT_STATUSES });
       }
 
+      case "products_get": {
+        const rows = await db("crm_products?select=key,name,facts,rules,offer,updated_at&order=key.asc");
+        const out = await Promise.all(PRODUCTS.map((k) => loadProduct(k)));
+        return json({ ok: true, products: out.map((p) => ({ key: p.key, name: p.name, facts: p.facts, offer: p.offer, updated_at: p.updated_at, saved: (rows || []).some((r: any) => r.key === p.key) })) });
+      }
+
+      case "product_save": {
+        const key = productKey(body.key);
+        const row: any = { key, updated_at: new Date().toISOString() };
+        if (body.name !== undefined) { const n = clip(body.name, 80); if (!n) return json({ error: "The product needs a name" }, 400); row.name = n; }
+        if (body.facts !== undefined) row.facts = String(body.facts || "").slice(0, 12000);
+        if (body.offer !== undefined) {
+          const o = body.offer || {};
+          const plans = (Array.isArray(o.plans) ? o.plans : []).slice(0, 6).map((p: any) => ({
+            name: clip(p?.name, 60), price: p?.price === "" || p?.price == null ? null : Number(p.price), desc: clip(p?.desc, 300), main: !!p?.main,
+          })).filter((p: any) => p.name);
+          if (plans.some((p: any) => p.price != null && (!isFinite(p.price) || p.price < 0))) return json({ error: "Prices must be numbers" }, 400);
+          row.offer = {
+            currency: "AUD", gst: o.gst !== false,
+            trial_days: o.trial_days === "" || o.trial_days == null ? null : Math.max(0, Math.min(90, Math.round(Number(o.trial_days) || 0))),
+            plans,
+            setup: o.setup && (o.setup.price !== "" && o.setup.price != null) ? { price: Number(o.setup.price), desc: clip(o.setup.desc, 300) } : null,
+            notes: clip(o.notes, 500),
+          };
+        }
+        const saved = await db("crm_products?on_conflict=key", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=representation" }, body: JSON.stringify(row) });
+        const p = await loadProduct(key);
+        return json({ ok: true, product: { key: p.key, name: p.name, facts: p.facts, offer: p.offer, updated_at: saved?.[0]?.updated_at || p.updated_at } });
+      }
+
       case "call_log":
         return json(await logCall(body));
 
@@ -502,6 +562,7 @@ Deno.serve(async (req) => {
         const fileName = clip(body.fileName, 200);
         const source = clip(body.source, 120) || ("Excel import" + (fileName ? " · " + fileName : ""));
         const update = body.updateExisting === true;
+        const product = productKey(body.product);
         const seen = new Set<string>();
         let invalid = 0, dupInFile = 0;
         const clean: any[] = [];
@@ -513,7 +574,7 @@ Deno.serve(async (req) => {
           clean.push({
             email,
             restaurant: clip(r.restaurant, 200) || clip(r.name, 200) || email.split("@")[1],
-            name: clip(r.name, 200) || "Restaurant team",
+            name: clip(r.name, 200) || (product === "service" ? "Team" : "Restaurant team"),
             phone: clip(r.phone, 60) || "",
             website: clip(r.website, 300),
             suburb: clip(r.suburb, 120),
@@ -522,6 +583,7 @@ Deno.serve(async (req) => {
             why_it_fits: clip(r.notes, 1000),
             source,
             import_file_name: fileName,
+            product,
           });
         }
         if (!clean.length) return json({ ok: true, added: 0, updated: 0, existing: 0, invalid, dupInFile });
@@ -547,7 +609,7 @@ Deno.serve(async (req) => {
           for (const r of clean.filter((x) => existing.has(x.email))) {
             const patch: any = {};
             for (const k of ["restaurant", "phone", "website", "suburb", "venue_type", "priority"]) if (r[k]) patch[k] = r[k];
-            if (r.name && r.name !== "Restaurant team") patch.name = r.name;
+            if (r.name && r.name !== "Restaurant team" && r.name !== "Team") patch.name = r.name;
             if (!Object.keys(patch).length) continue;
             await db(`crm_prospects?email_normalized=eq.${encodeURIComponent(r.email)}`, {
               method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(patch),
@@ -568,6 +630,7 @@ Deno.serve(async (req) => {
         }
         if (body.follow_up_at !== undefined) patch.follow_up_at = body.follow_up_at || null;
         if (body.crm_notes !== undefined) patch.crm_notes = String(body.crm_notes || "").slice(0, 5000);
+        if (body.product !== undefined) patch.product = productKey(body.product);
         const rows = await db(`crm_prospects?id=eq.${id}`, {
           method: "PATCH", headers: { Prefer: "return=representation" }, body: JSON.stringify(patch),
         });
@@ -600,27 +663,33 @@ Deno.serve(async (req) => {
 
       // ------------------------------------------------------------ AI
       case "ai_ideas": {
-        const s = summarise(await snapshot());
+        const P = await loadProduct(productKey(body.product));
+        const snap = await snapshot();
+        snap.prospects = (snap.prospects || []).filter((p: any) => (p.product || "restaurant") === P.key);
+        if (P.key !== "restaurant") snap.venues = [];
+        const s = summarise(snap);
+        const bases = (Array.isArray(body.bases) ? body.bases : []).map((x: unknown) => String(x).slice(0, 120)).filter(Boolean).slice(0, 30);
         const focus = String(body.focus || "").slice(0, 500);
         const out = await claude(
-          RULES + "\nFACTS:\n" + FACTS,
+          P.system,
           `Here is the current state of the business (JSON):\n${JSON.stringify(s)}\n\n` +
           (focus ? `Marc's focus right now: ${focus}\n\n` : "") +
-          `Suggest 4 email campaigns Marc could send in the next two weeks, most valuable first. ` +
+          `Product: ${P.name}. Suggest 4 email campaigns Marc could send in the next two weeks to promote ${P.name}, most valuable first. ` +
           `Base each one on something specific in the data (a trial ending, a venue gone quiet, a drop in orders, prospects never contacted, a setup step missing, a past campaign to follow up). ` +
           `Name the venue(s) or group it is for. Keep it honest — if the data is thin, say so in "why".\n\n` +
-          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: Founding 5 — 28-day free trial | Intro to Restaurant Deluxe | Cafés: order at the table | Digital waitlist — early access | Table ordering launch | 14-day free trial invite | Standalone ordering ($109) | Add-on for existing clients ($69) | Booking demo follow-up | Already take bookings? One screen"}]}`,
+          `Return JSON: {"ideas":[{"title":"","why":"one or two sentences citing the data","audience":"who receives it","segment":"${P.key === "restaurant" ? "one of: prospects_new | prospects_priority_a | prospects_followup | trial_venues | quiet_venues | paying_venues | all_venues" : "one of: prospects_new | prospects_priority_a | prospects_followup"}","goal":"","angle":"the hook in one line","subject":"","preheader":"","base":"one of: ${bases.length ? bases.join(" | ") : "Intro"}"}]}`,
           3000,
         );
         return json({ ok: true, ideas: out.ideas || [], snapshotSummary: s });
       }
 
       case "ai_draft": {
+        const P = await loadProduct(productKey(body.product));
         const brief = String(body.brief || "").slice(0, 2000);
         if (!brief) return json({ error: "Describe what the email should do first" }, 400);
         const base = copyOnly(body.campaign || {});
         const out = await claude(
-          RULES + "\nFACTS:\n" + FACTS,
+          P.system,
           `Rewrite this email campaign to match the brief. Keep the same JSON keys as the starting campaign (you may change any value, add or remove cards — 3 cards is ideal — and turn the spotlight on or off with spotOn). ` +
           `Card "n" is a two-digit number like "01". Card "d" is one short sentence. "intro" may contain a blank line between paragraphs.\n\n` +
           `BRIEF: ${brief}\n` +
@@ -633,12 +702,13 @@ Deno.serve(async (req) => {
       }
 
       case "ai_rewrite": {
+        const P = await loadProduct(productKey(body.product));
         const text = String(body.text || "").slice(0, 3000);
         const instruction = String(body.instruction || "Make it clearer and warmer").slice(0, 300);
         const field = String(body.field || "text");
         if (!text.trim()) return json({ error: "That field is empty" }, 400);
         const out = await claude(
-          RULES + "\nFACTS:\n" + FACTS,
+          P.system,
           `Field: ${field}\nInstruction: ${instruction}\nOriginal:\n${text}\n\n` +
           `Give 3 alternative versions. Respect length limits for the field (subject < 50 chars, preheader < 90, headline < 80). ` +
           `Return JSON: {"options":["","",""]}`,
@@ -648,9 +718,10 @@ Deno.serve(async (req) => {
       }
 
       case "ai_subjects": {
+        const P = await loadProduct(productKey(body.product));
         const base = copyOnly(body.campaign || {});
         const out = await claude(
-          RULES + "\nFACTS:\n" + FACTS,
+          P.system,
           `Campaign (JSON): ${JSON.stringify(base)}\n\nWrite 6 subject lines with matching preheaders, each a different approach (curious, direct benefit, question, personal from Marc, practical, timely). ` +
           `Return JSON: {"subjects":[{"subject":"","preheader":"","approach":""}]}`,
           1200,
@@ -659,11 +730,12 @@ Deno.serve(async (req) => {
       }
 
       case "ai_check": {
+        const P = await loadProduct(productKey(body.product));
         const base = copyOnly(body.campaign || {});
         const plans = Array.isArray(body.campaign?.plans) ? body.campaign.plans.map((p: any) => ({ tier: p.tier, price: p.price, desc: p.desc })) : [];
         const out = await claude(
-          RULES + "\nFACTS:\n" + FACTS,
-          `Review this campaign before it is sent. Check every claim and price against FACTS, and flag: anything not supported by FACTS, wrong prices, POS-replacement claims, "prevent" claims, spam-trigger wording, subject/preheader too long, unclear call to action, American spelling. ` +
+          P.system,
+          `Review this campaign before it is sent. Check every claim and price against FACTS and OFFER, and flag: anything not supported by them, wrong prices, POS-replacement claims, "prevent" claims, spam-trigger wording, subject/preheader too long, unclear call to action, American spelling. ` +
           `If it is fine, say so.\n\nCampaign: ${JSON.stringify({ ...base, plans })}\n\n` +
           `Return JSON: {"verdict":"ready | fix first","issues":[{"field":"","problem":"","suggestion":""}]}`,
           1500,

@@ -71,6 +71,12 @@
   .tab:hover{color:var(--ink)}
   .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--cyan)}
   .pane[hidden]{display:none}
+  .prodsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--glass)}
+  .prodsw button{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer;opacity:.65}
+  .prodsw button.on{background:var(--grad);color:#fff;opacity:1}
+  .offer-row{display:grid;grid-template-columns:1.2fr .6fr 2fr auto auto;gap:6px;align-items:center;margin-bottom:6px}
+  .offer-row input{min-width:0}
+  @media(max-width:700px){.offer-row{grid-template-columns:1fr 1fr}.offer-row .d{grid-column:1/-1}}
   details.grp{border:1px solid var(--line);border-radius:12px;margin-bottom:12px;background:var(--glass);overflow:hidden}
   details.grp>summary{cursor:pointer;list-style:none;padding:13px 15px;font-weight:600;font-size:14px;
     display:flex;align-items:center;gap:10px}
@@ -279,11 +285,15 @@
   <header class="top">
     <div class="logo">WE</div>
     <div class="brand">
-      <h1>Restaurant Deluxe — Email Studio</h1>
+      <h1><span id="prodName">Restaurant Deluxe</span> — Email Studio</h1>
       <p>Broadcast campaigns for Resend</p>
     </div>
+    <div class="prodsw" id="prodSw" role="tablist" aria-label="Product">
+      <button type="button" data-prod="restaurant" class="on">Restaurant Deluxe</button>
+      <button type="button" data-prod="service">Service Deluxe</button>
+    </div>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v34</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v35</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -300,7 +310,7 @@
     </aside>
 
     <section class="editor">
-      <span class="eyebrow">Restaurant Deluxe</span>
+      <span class="eyebrow" id="prodEyebrow">Restaurant Deluxe</span>
       <h2 class="sec">Edit your campaign</h2>
       <p class="sub">Every band can be switched off. The preview updates as you type.</p>
 
@@ -584,6 +594,32 @@
           <div id="aiCheckOut"></div>
         </div>
 
+        <details class="grp" id="prodFactsGrp">
+          <summary>Product facts &amp; prices — what the AI may say</summary>
+          <div class="grp-body">
+            <p class="help">The AI only writes and checks against what is here, for the product selected at the top (<b id="pfWhich">Restaurant Deluxe</b>). Change a price here and every new AI draft and check uses it.</p>
+            <div class="field"><label for="pfName">Product name</label><input type="text" id="pfName"></div>
+            <div id="pfOffer">
+              <div class="grid2">
+                <div class="field"><label for="pfTrial">Free trial (days)</label><input type="text" inputmode="numeric" id="pfTrial"></div>
+                <div class="field"><label><input type="checkbox" id="pfGst"> Prices are + GST</label></div>
+              </div>
+              <label style="font-weight:600;font-size:13px">Monthly plans <span class="help">(name · price · what's included · lead plan)</span></label>
+              <div id="pfPlans"></div>
+              <div class="btnrow"><button class="btn" type="button" data-act="pf-addplan">+ Add a plan</button></div>
+              <div class="grid2">
+                <div class="field"><label for="pfSetup">Optional setup fee ($, one-off)</label><input type="text" inputmode="decimal" id="pfSetup" placeholder="leave empty for none"></div>
+                <div class="field"><label for="pfSetupDesc">What the setup includes</label><input type="text" id="pfSetupDesc"></div>
+              </div>
+              <div class="field"><label for="pfNotes">Anything else about price</label><input type="text" id="pfNotes" placeholder="e.g. Larger practices: price on request"></div>
+            </div>
+            <div class="field"><label for="pfFacts">Product facts (features, what it is NOT, contact)</label><textarea id="pfFacts" rows="12" style="font-size:12.5px"></textarea>
+              <p class="help" id="pfFactsHelp"></p></div>
+            <div class="btnrow"><button class="btn primary" type="button" data-act="pf-save">Save product facts</button><button class="btn" type="button" data-act="pf-load">Reload</button></div>
+            <div id="pfOut"></div>
+          </div>
+        </details>
+
         <details class="grp">
           <summary>AI connection</summary>
           <div class="grp-body">
@@ -857,7 +893,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v34 \u00b7 Scan & Queue landing page';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v35 \u00b7 Restaurant + Service Deluxe';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2201,7 +2237,7 @@
     $('#listCount').textContent=x.todo.length;
     JRN.send={ids:JRN.ids.slice(), seg:k, subject:camps[cur].subject};
     var g=$('#grpList'); if(g){ g.open=true; try{ g.scrollIntoView({block:'start',behavior:'smooth'}); }catch(e){} }
-    logLine('Follow-up loaded: '+x.todo.length+' restaurant'+(x.todo.length===1?'':'s')+' \u2014 '+JR_GROUPS.filter(function(gg){ return gg.k===k; })[0].t+'.','ok');
+    logLine('Follow-up loaded: '+x.todo.length+' business'+(x.todo.length===1?'':'es')+' \u2014 '+JR_GROUPS.filter(function(gg){ return gg.k===k; })[0].t+'.','ok');
     if(k==='notOpened' && camps[cur].subject===JRN.source.subject){
       logLine('Change the subject line in the Content tab before sending \u2014 the same subject was not opened last time.','warn');
       JRN.send.subject=null;
@@ -2799,12 +2835,201 @@
   });
 
   /* ===================================================================
+     PRODUCTS (v35) — one studio, two products.
+     The switch at the top swaps the campaign templates, the AI's product
+     facts and prices, and which prospects can be picked. Restaurant
+     campaigns and prospects are never mixed with Service Deluxe ones.
+     =================================================================== */
+  var K_PROD='rdes.product';
+  var PRODUCT='restaurant';
+  var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe'};
+  var SVC_SITE  = "https://webescapade.com/service/";
+  var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
+  var SVC_START = "https://webescapade.com/service/service-start.html";
+  var SVC_OFFER = {trial_days:14, gst:true, plans:[
+      {name:"Bookings", price:39, desc:"Online booking page, staff calendar and automatic emails. Keep your own website. Up to 3 practitioners."},
+      {name:"Basic", price:59, desc:"Editable website plus online bookings, calendar and automatic emails. Up to 3 practitioners.", main:true},
+      {name:"Team", price:89, desc:"Everything in Basic for 4 to 10 practitioners."}],
+    setup:{price:250, desc:"Optional: Webescapade builds the website for you with your services, team, photos and opening hours."}, notes:"Larger practices (more than 10 practitioners): price on request."};
+  var PRODUCTS_INFO={};
+  var CAMPS_BY={restaurant:camps};
+  var CUR_BY={restaurant:0};
+
+  function svcPlan(name){ return (SVC_OFFER.plans||[]).filter(function(p){ return p.name===name; })[0]; }
+  function svcMain(){ var ps=SVC_OFFER.plans||[]; return ps.filter(function(p){ return p.main; })[0] || ps[0] || {name:'Basic',price:59,desc:''}; }
+  function svcPrice(p){ return p && p.price!=null && p.price!=='' ? '$'+p.price : ''; }
+  function svcPer(){ return SVC_OFFER.gst ? '/ month + GST' : '/ month'; }
+  function svcBox(p,hi){ return p ? {tier:String(p.name||'').toUpperCase(), price:svcPrice(p), per:svcPer(), desc:p.desc||'', hi:!!hi} : null; }
+  function svcPresets(){
+    var T=SVC_OFFER.trial_days||14, M=svcMain(), B=svcPlan('Bookings');
+    var TERMS='Free '+T+'-day trial. Flat monthly price, no commission and no booking fees.';
+    var base={
+      badge:T+'-DAY FREE TRIAL', eyebrow:'Service Deluxe',
+      cta1:'Try the booking page', cta1url:SVC_BOOK,
+      cta2:'See the demo website', cta2url:SVC_SITE,
+      featEyebrow:'One connected system',
+      featHeading:'Built for your business.\nEasy for your clients.',
+      priceEyebrow:'Simple monthly price', priceHeading:'One flat price. No commission.',
+      finalHeading:'Try it free for '+T+' days.', finalSub:TERMS,
+      finalCta:'Set it up in minutes', finalUrl:SVC_START
+    };
+    function P(o){ return preset(Object.assign({}, base, o)); }
+    var cardsCore=[
+      {n:'01', t:'Clients book themselves', d:'They pick the service, the practitioner and a free time, day or night.'},
+      {n:'02', t:'Rooms and people together', d:'A time is only offered when both the practitioner and a room are free.'},
+      {n:'03', t:'Emails go out for you', d:'Confirmation, cancellation and a reminder the day before, automatically.'}
+    ];
+    return [
+      P({ name:'Intro to Service Deluxe', desc:'First message to a spa, clinic or salon',
+        headline:'Let your clients book themselves — any time.',
+        intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. I’ve built an online booking system for appointment businesses: clients choose the service, the practitioner and a free time, and your calendar fills itself.\n\nIt comes with a website you can edit yourself, and it costs one flat monthly price.',
+        cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
+        subject:'Let your clients book themselves', preheader:'Online bookings and a website you edit yourself. '+T+' days free.' }),
+      P({ name:T+'-day free trial invite', desc:'Invite to start the trial',
+        headline:'Try online bookings free for '+T+' days.',
+        intro:'Set up your services, your team and your hours in a few minutes from a ready-made template for your type of business. Your booking page works straight away.\n\nIf it isn’t right for you after '+T+' days, simply stop.',
+        cards:[{n:'01', t:'Pick your business type', d:'Spa, clinic, dental, physio, hair and beauty, or something else.'},
+               {n:'02', t:'Check your services', d:'Change names, lengths and prices whenever you like.'},
+               {n:'03', t:'Share your booking link', d:'On your website, Instagram and Google profile.'}],
+        priceOn:false, plans:[],
+        subject:'Online bookings, free for '+T+' days', preheader:'Set up in minutes from a template made for your business.' }),
+      P({ name:'Website + bookings ('+svcPrice(M)+')', desc:'Lead with the main plan',
+        headline:'A new website and online bookings, for '+svcPrice(M)+' a month.',
+        intro:'Your services, prices, team and opening hours appear on your website straight from the booking system, so you only keep them up to date in one place.\n\nYou edit the words and photos yourself, whenever you like.',
+        cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
+        subject:'Website and bookings for '+svcPrice(M)+' a month', preheader:'One flat price, no commission, '+T+' days free.' }),
+      P({ name:'Already have a website? Bookings only'+(B?' ('+svcPrice(B)+')':''), desc:'Keep their website, add the booking page',
+        headline:'Keep your website. Add online bookings.',
+        intro:'Already happy with your website? Add a booking button that opens your own booking page, with live times for each practitioner and room.\n\nClients get a confirmation straight away and a reminder the day before.',
+        cards:cardsCore, plans:B?[svcBox(B,true)]:[],
+        priceOn:!!B,
+        subject:'Add online bookings to your website', preheader:'A booking button for your site, Instagram and Google profile.' }),
+      P({ name:'Booking demo follow-up', desc:'After someone tried the demo',
+        headline:'What did you think of the booking page?',
+        intro:'Thanks for trying the demo. I’d be glad to set it up with your own services and team so you can see it working for your business.',
+        featOn:false, priceOn:false,
+        finalHeading:'Easier to talk it through?', finalSub:'Call Marc on 0413 872 994 or simply reply to this email.',
+        finalCta:'Call Marc', finalUrl:'tel:0413872994',
+        subject:'Want it set up with your services?', preheader:'I can set it up with your own team and services.' }),
+      P({ name:'Follow-up 1 — clicked: call Marc', desc:'Journey: people who clicked, 1 day later',
+        followup:'clicked', followDays:1, eyebrow:'A quick note from Marc',
+        headline:'Shall I show you how it would work for you?',
+        intro:'Thanks for taking a look at the booking system.\n\nI’m Marc, a web designer here in Sydney. If you have 15 minutes, I’ll show you how it would work with your own services, team and rooms.',
+        cta1:'Call Marc · 0413 872 994', cta1url:'tel:0413872994', cta2:'Try the booking page', cta2url:SVC_BOOK,
+        featOn:false, spotOn:false, priceOn:false, finalOn:false,
+        subject:'Shall I show you how it works?', preheader:'15 minutes, with your own services and team.' }),
+      P({ name:'Follow-up 2 — opened: quick answers', desc:'Journey: opened but didn’t click, 3 days later',
+        followup:'openedNotClicked', followDays:3, eyebrow:'Straight answers',
+        headline:'Will it work for my business? Short answers.',
+        intro:'Here are short answers to the first questions most owners ask.',
+        featEyebrow:'Four quick answers', featHeading:'Your team, your rooms,\nyour clients, the price.',
+        cards:[{n:'01', t:'Several practitioners', d:'Each has their own days, hours and breaks.'},
+               {n:'02', t:'Rooms and chairs', d:'Times are only offered when a room is free too.'},
+               {n:'03', t:'What it costs', d:svcPrice(M)+' a month'+(SVC_OFFER.gst?' + GST':'')+'. No commission or booking fees.'},
+               {n:'04', t:'Getting started', d:'Set it up yourself in minutes, or I can do it for you.'}],
+        priceOn:false, finalHeading:'Easier to talk it through?', finalSub:'Call Marc on 0413 872 994 or simply reply to this email.',
+        finalCta:'Call Marc', finalUrl:'tel:0413872994',
+        subject:'Will it work for my business?', preheader:'Practitioners, rooms, price and set-up in four answers.' })
+    ];
+  }
+  function curPresets(){ return PRODUCT==='service' ? svcPresets() : PRESETS; }
+
+  function paintProduct(){
+    document.querySelectorAll('#prodSw [data-prod]').forEach(function(b){ var on=b.getAttribute('data-prod')===PRODUCT; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
+    $('#prodName').textContent=PROD_NAME[PRODUCT]; $('#prodEyebrow').textContent=PROD_NAME[PRODUCT];
+    document.title=PROD_NAME[PRODUCT]+' — Email Studio';
+  }
+  function switchProduct(p,quiet){
+    p=(p==='service')?'service':'restaurant';
+    CUR_BY[PRODUCT]=cur;
+    if(!CAMPS_BY[p]) CAMPS_BY[p]=svcPresets().map(function(c){ return JSON.parse(JSON.stringify(c)); });
+    PRODUCT=p; camps=CAMPS_BY[p]; cur=Math.min(CUR_BY[p]||0, camps.length-1);
+    try{ store.set(K_PROD,p); }catch(e){}
+    paintProduct();
+    if(typeof AI!=='undefined'){ AI.undo=[]; var ub=$('#aiUndoBtn'); if(ub) ub.disabled=true; }
+    ['#aiIdeasOut','#aiDraftOut','#aiSubjOut','#aiRewriteOut','#aiCheckOut'].forEach(function(id){ var el=$(id); if(el) el.innerHTML=''; });
+    if(typeof PK!=='undefined' && PK.list){ try{ pkRender(); }catch(e){} }
+    renderRail(); fillForm(); renderPreview(); pfShow();
+    if(!quiet) toast('Now working on '+PROD_NAME[p]);
+  }
+  document.getElementById('prodSw').addEventListener('click',function(e){
+    var b=e.target.closest('[data-prod]'); if(!b || b.getAttribute('data-prod')===PRODUCT) return;
+    switchProduct(b.getAttribute('data-prod'));
+  });
+
+  /* ---- product facts & prices editor ---- */
+  function pfPlanRow(pl){
+    return '<div class="offer-row"><input type="text" data-pf="name" placeholder="Plan name" value="'+esc(pl.name||'')+'">'+
+      '<input type="text" inputmode="decimal" data-pf="price" placeholder="$" value="'+esc(pl.price==null?'':pl.price)+'">'+
+      '<input class="d" type="text" data-pf="desc" placeholder="What is included" value="'+esc(pl.desc||'')+'">'+
+      '<label title="Lead with this plan" style="font-size:12px;white-space:nowrap"><input type="radio" name="pfMain" data-pf="main"'+(pl.main?' checked':'')+'> lead</label>'+
+      '<button class="btn" type="button" data-act="pf-rmplan" title="Remove">✕</button></div>';
+  }
+  function pfShow(){
+    var info=PRODUCTS_INFO[PRODUCT]||{};
+    $('#pfWhich').textContent=PROD_NAME[PRODUCT];
+    $('#pfName').value=info.name||PROD_NAME[PRODUCT];
+    $('#pfFacts').value=info.facts||'';
+    var o=PRODUCT==='service' ? (info.offer||SVC_OFFER) : null;
+    $('#pfOffer').hidden=!o;
+    $('#pfFactsHelp').textContent=o ? 'Prices live in the boxes above; keep them out of the facts.' : 'Restaurant Deluxe prices and setup terms are written inside these facts.';
+    if(o){
+      $('#pfTrial').value=o.trial_days==null?'':o.trial_days; $('#pfGst').checked=o.gst!==false;
+      $('#pfPlans').innerHTML=(o.plans||[]).map(pfPlanRow).join('');
+      $('#pfSetup').value=o.setup&&o.setup.price!=null?o.setup.price:''; $('#pfSetupDesc').value=(o.setup&&o.setup.desc)||'';
+      $('#pfNotes').value=o.notes||'';
+    }
+    if(!info.facts && !$('#pfOut').innerHTML) $('#pfOut').innerHTML='<p class="help">Tap <b>Reload</b> to load the saved facts (needs the studio secret).</p>';
+  }
+  function pfLoad(quiet){
+    return aiCall('products_get',{}).then(function(d){
+      (d.products||[]).forEach(function(p){ PRODUCTS_INFO[p.key]=p; });
+      if(PRODUCTS_INFO.service && PRODUCTS_INFO.service.offer){
+        SVC_OFFER=PRODUCTS_INFO.service.offer;
+        if(CAMPS_BY.service && !CAMPS_BY.service.__touched){ CAMPS_BY.service=svcPresets().map(function(c){ return JSON.parse(JSON.stringify(c)); }); if(PRODUCT==='service'){ camps=CAMPS_BY.service; cur=Math.min(cur,camps.length-1); renderRail(); fillForm(); renderPreview(); } }
+      }
+      PROD_NAME.service=(PRODUCTS_INFO.service&&PRODUCTS_INFO.service.name)||PROD_NAME.service;
+      PROD_NAME.restaurant=(PRODUCTS_INFO.restaurant&&PRODUCTS_INFO.restaurant.name)||PROD_NAME.restaurant;
+      document.querySelector('#prodSw [data-prod="service"]').textContent=PROD_NAME.service;
+      paintProduct(); $('#pfOut').innerHTML=''; pfShow();
+      if(!quiet) toast('Product facts loaded');
+    }).catch(function(e){ if(!quiet) $('#pfOut').innerHTML='<div class="note warn">'+esc((e&&e.message)||e)+'</div>'; });
+  }
+  act('pf-load',function(){ pfLoad(false); });
+  act('pf-addplan',function(){ $('#pfPlans').insertAdjacentHTML('beforeend',pfPlanRow({})); });
+  document.getElementById('pfPlans').addEventListener('click',function(e){ var b=e.target.closest('[data-act="pf-rmplan"]'); if(b){ e.stopPropagation(); b.closest('.offer-row').remove(); } },true);
+  act('pf-rmplan',function(){});
+  act('pf-save',function(btn){
+    var body={key:PRODUCT, name:$('#pfName').value.trim(), facts:$('#pfFacts').value};
+    if(PRODUCT==='service'){
+      body.offer={trial_days:$('#pfTrial').value, gst:$('#pfGst').checked,
+        plans:Array.prototype.map.call(document.querySelectorAll('#pfPlans .offer-row'),function(r){
+          return {name:r.querySelector('[data-pf="name"]').value.trim(), price:r.querySelector('[data-pf="price"]').value, desc:r.querySelector('[data-pf="desc"]').value.trim(), main:r.querySelector('[data-pf="main"]').checked};
+        }).filter(function(p){ return p.name; }),
+        setup:{price:$('#pfSetup').value, desc:$('#pfSetupDesc').value.trim()}, notes:$('#pfNotes').value.trim()};
+    }
+    if(!body.name){ toast('Give the product a name'); return; }
+    aiLock(btn,true); $('#pfOut').innerHTML='<div class="ai-busy"><i></i>Saving…</div>';
+    aiCall('product_save',body).then(function(d){
+      PRODUCTS_INFO[PRODUCT]=d.product;
+      if(PRODUCT==='service' && d.product.offer) SVC_OFFER=d.product.offer;
+      PROD_NAME[PRODUCT]=d.product.name; if(PRODUCT==='service') document.querySelector('#prodSw [data-prod="service"]').textContent=d.product.name;
+      paintProduct(); pfShow();
+      $('#pfOut').innerHTML='<div class="ai-issue ai-ok"><b>Saved.</b> The AI now uses these facts and prices. Campaigns already open keep their own price boxes — new ones from templates use the new prices after a reload.</div>';
+    }).catch(function(e){ $('#pfOut').innerHTML='<div class="note warn">'+esc((e&&e.message)||e)+'</div>'; }).then(function(){ aiLock(btn,false); });
+  });
+
+  /* ===================================================================
      AI CO-PILOT (v14)
      Talks to the rd-control Edge Function, which holds the Claude key.
      Uses the same studio secret as sending. Every AI change can be
      undone, and nothing is ever sent by the AI — only drafted.
      =================================================================== */
   var K_AI='rdes.ai', K_HANDOFF='rd.handoff';
+  setTimeout(function(){
+    try{ if(store.get(K_PROD)==='service') switchProduct('service',true); else { paintProduct(); pfShow(); } }catch(e){}
+    if(SET.secret) pfLoad(true);
+  },0);
   var AI={ url:'', undo:[] };
   try{ var _ai=JSON.parse(store.get(K_AI)||'null'); if(_ai && _ai.url) AI.url=_ai.url; }catch(e){}
 
@@ -2817,7 +3042,7 @@
     if(!SET.secret) return Promise.reject(new Error('Add the studio secret in the Send tab first — the AI uses the same one.'));
     return fetch(aiUrl(),{method:'POST',
       headers:{'Content-Type':'application/json','x-studio-secret':SET.secret},
-      body:JSON.stringify(Object.assign({action:action},payload||{}))
+      body:JSON.stringify(Object.assign({action:action},(/^ai_|^prospects_import$/.test(action)?{product:PRODUCT}:{}),payload||{}))
     }).then(function(r){
       return r.json().catch(function(){ return {error:'The AI function replied with something that was not JSON'}; })
         .then(function(d){ if(!r.ok||d.error) throw new Error(d.error||('HTTP '+r.status)); return d; });
@@ -2837,6 +3062,7 @@
     $('#aiUndoBtn').disabled=false;
   }
   function refreshAll(){ renderRail(); fillForm(); renderPreview(); }
+  document.addEventListener('input',function(e){ if(PRODUCT==='service' && CAMPS_BY.service && e.target && e.target.closest && e.target.closest('.editor')) CAMPS_BY.service.__touched=true; });
   function applyCopy(fields){
     pushUndo();
     var c=camps[cur];
@@ -2874,7 +3100,7 @@
   var AI_IDEAS=[];
   act('ai-ideas',function(btn){
     aiLock(btn,true); aiBusy('#aiIdeasOut','Claude is reading your figures…');
-    aiCall('ai_ideas',{}).then(function(d){
+    aiCall('ai_ideas',{bases:curPresets().filter(function(p){ return !p.followup; }).map(function(p){ return p.name; })}).then(function(d){
       AI_IDEAS=d.ideas||[];
       if(!AI_IDEAS.length){ $('#aiIdeasOut').innerHTML='<p class="empty">No ideas came back. Try again.</p>'; return; }
       $('#aiIdeasOut').innerHTML='<div class="ai-opts">'+AI_IDEAS.map(function(i,ix){
@@ -2893,7 +3119,7 @@
   });
 
   function newFromBase(baseName,title,subject,preheader){
-    var base=PRESETS.filter(function(p){ return p.name===baseName; })[0] || PRESETS[0];
+    var PR=curPresets(); var base=PR.filter(function(p){ return p.name===baseName; })[0] || PR[0];
     var c=JSON.parse(JSON.stringify(base));
     c.name=title||('AI — '+base.name); c.desc='Drafted with AI';
     if(subject) c.subject=subject; if(preheader) c.preheader=preheader;
@@ -3167,6 +3393,7 @@
     var selT=Object.keys(PK.types).filter(function(k){ return PK.types[k]; });
     var selS=Object.keys(PK.subs).filter(function(k){ return PK.subs[k]; });
     (PK.list||[]).forEach(function(p){
+      if((p.product||'restaurant')!==PRODUCT) return;
       if(PK.skipWonLost && (p.crm_status==='Won'||p.crm_status==='Lost')) return;
       if(selT.length && !pkTypes(p.venue_type).some(function(t){ return selT.indexOf(t)>=0; })) return;
       if(selS.length && selS.indexOf(pkSub(p.suburb))<0) return;
@@ -3202,6 +3429,7 @@
   function pkFill(){
     var list=PK.list||[], tc={}, sc={};
     list.forEach(function(p){
+      if((p.product||'restaurant')!==PRODUCT) return;
       if(PK.skipWonLost && (p.crm_status==='Won'||p.crm_status==='Lost')) return;
       pkTypes(p.venue_type).forEach(function(t){ tc[t]=(tc[t]||0)+1; });
       var s=pkSub(p.suburb); sc[s]=(sc[s]||0)+1;
