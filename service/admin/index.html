@@ -105,6 +105,13 @@ input[type=checkbox]{width:auto}
 .note{background:var(--mint);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--ink2)}
 .note.warn{background:#FFF4DE}
 textarea{min-height:90px;resize:vertical}
+.ed{display:grid;gap:10px}
+.er{display:flex;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.er .ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--mint);display:grid;place-items:center;font-size:19px}
+.er div{flex:1;min-width:0}.er b{display:block;font-size:15px}.er span{display:block;font-size:13px;color:var(--muted)}
+.er .act{flex:none;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.egrp{margin:26px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.egrp h3{font-size:24px}.egrp p{margin:0;font-size:13px;color:var(--muted)}
+@media(max-width:600px){.er{flex-wrap:wrap}.er .act{width:calc(100% - 52px);justify-content:flex-start;margin-left:52px}}
 [hidden]{display:none!important}
 @media(max-width:760px){.top .w{height:auto;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:10px}.tabs{order:3;width:100%;margin:0;overflow-x:auto}.tabs button{flex:1}.who{margin-left:auto}#whoE{display:none}.drawer .hd,.drawer .bd{padding-left:16px;padding-right:16px}.ck{flex-wrap:wrap}.ck .act{margin-left:36px}h1{font-size:30px}}
 </style>
@@ -112,7 +119,7 @@ textarea{min-height:90px;resize:vertical}
 <body>
 <header class="top"><div class="w">
   <a class="brand" href="./"><span class="m">S</span><span><b>Service Deluxe</b><small>Client setup</small></span></a>
-  <nav class="tabs" id="tabs" hidden><button data-t="clients" class="on">Clients</button><button data-t="new">+ New client</button><button data-t="res">Resources</button></nav>
+  <nav class="tabs" id="tabs" hidden><button data-t="clients" class="on">Clients</button><button data-t="new">+ New client</button><button data-t="edit">✏️ Edit</button><button data-t="res">Resources</button></nav>
   <div class="who" id="who" hidden><span id="whoE"></span><button class="btn sm" id="out">Sign out</button></div>
 </div></header>
 <main class="w" id="app"></main>
@@ -262,7 +269,7 @@ function stageTag(c){
 /* ---------- views ---------- */
 function show(t){
   TAB = t; app.onclick = null; document.querySelectorAll("#tabs button").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-t") === t); });
-  ({ clients: viewClients, "new": viewNew, res: viewRes })[t]();
+  ({ clients: viewClients, "new": viewNew, edit: viewEdit, res: viewRes })[t]();
   scrollTo(0, 0);
 }
 $("#tabs").onclick = function (e) { var b = e.target.closest("button"); if (b) show(b.getAttribute("data-t")); };
@@ -454,6 +461,45 @@ function stepPlan(c, owner, email, phone){
       .then(function () { show("clients"); openClient(c.id); })
       .catch(function (e) { m.className = "msg err"; m.textContent = e.message; });
   };
+}
+
+
+/* ---------- edit pages ---------- */
+function viewEdit(){
+  var row = function (ic, title, note, edit, live, extra) {
+    return '<div class="er"><span class="ic">' + ic + '</span><div><b>' + title + '</b><span>' + note + '</span></div><div class="act">' +
+      (edit ? '<a class="btn sm p" target="_blank" rel="noopener" href="' + esc(edit) + '">✏️ Edit</a>' : "") +
+      (live ? '<a class="btn sm" target="_blank" rel="noopener" href="' + esc(live) + '">View live</a>' : "") + (extra || "") + '</div></div>';
+  };
+  var DEMO = [
+    { slug: "serenity-spa", name: "Serenity Day Spa", ic: "🌿", note: "Spa demo · Ivy" },
+    { slug: "atelier-hair", name: "Atelier Hair", ic: "✂️", note: "Salon demo · Rosa" },
+    { slug: "northside-medical", name: "Northside Medical", ic: "🩺", note: "Clinic demo · Max" },
+    { slug: "brightside-dental", name: "Brightside Dental", ic: "🦷", note: "Dental demo · Pip" }
+  ];
+  var sites = DATA.filter(function (c) { return links(c).editor; });
+  app.innerHTML = '<h1>Edit <em>pages</em></h1><p class="muted" style="margin:6px 0 4px">Open any page in its editor. Websites save with Deploy (your GitHub token); services, team, hours and the AI assistant save straight away.</p>' +
+    '<div class="egrp"><h3>Websites</h3><p>Sales page and the templates you copy for clients</p></div><div class="ed">' +
+      row("📣", "Service Deluxe sales page", "webescapade.com/service · words, photos, videos, look, AI chat wording", SITE + "/service/source/landing-editable.html", L.sales) +
+      row("🌐", "Basic website template", "Copied for Basic & Team clients · also the Basic demo", SITE + "/" + L.tplBasic, L.demoBasic) +
+      row("✨", "Premium website template", "Copied for Premium clients · also the spa Premium demo · 🤖 Assistant panel", SITE + "/" + L.tplPremium, L.demoPrem) +
+      row("🎬", "Video page", "webescapade.com/service/tour · edited in the code (ask Claude)", "", L.videos) +
+    '</div>' +
+    '<div class="egrp"><h3>Bookings</h3><p>Services, prices, team, rooms and opening hours for each demo business</p></div><div class="ed">' +
+      DEMO.map(function (d) {
+        return row(d.ic, d.name, d.note + " · staff calendar to edit services, team & hours", L.staff + "?venue=" + d.slug, L.booking + "?venue=" + d.slug,
+          '<a class="btn sm" target="_blank" rel="noopener" href="' + esc(L.demoPrem + (PREM_DEMO[{ "serenity-spa": "spa", "atelier-hair": "salon", "northside-medical": "clinic", "brightside-dental": "dental" }[d.slug]] || "")) + '">Premium demo</a>');
+      }).join("") +
+      row("📅", "Booking page (all businesses)", "One page for every business, opened with ?venue=their-code", "", L.booking + "?venue=serenity-spa") +
+      row("👋", "Sign-up / add a business", "Where clients create their business and staff join with an invite link", "", L.start) +
+    '</div>' +
+    '<div class="egrp"><h3>Client websites</h3><p>Websites made with Create website</p></div><div class="ed">' +
+      (sites.length ? sites.map(function (c) { var ln = links(c); return row("🏷", esc(c.name), esc(c.plan || "") + " · " + esc(c.website_url), ln.editor, ln.website, '<a class="btn sm" target="_blank" rel="noopener" href="' + esc(ln.staff) + '">Bookings</a>'); }).join("")
+        : '<div class="empty" style="padding:18px">No client websites yet. Open a client and use <b>Create website</b>.</div>') +
+    '</div>' +
+    '<div class="egrp"><h3>Client bookings</h3><p>Staff calendar for every business</p></div><div class="ed">' +
+      DATA.filter(function (c) { return DEMO.every(function (d) { return d.slug !== c.slug; }); }).map(function (c) { var ln = links(c); return row("📋", esc(c.name), esc(TYPES[c.business_type] || "") + (c.plan ? " · " + esc(c.plan) : ""), ln.staff, ln.booking); }).join("") || '<div class="empty" style="padding:18px">No clients yet — add one with + New client.</div>' +
+    '</div>';
 }
 
 /* ---------- resources ---------- */
