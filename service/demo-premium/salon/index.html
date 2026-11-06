@@ -248,6 +248,41 @@ body[data-look="dental"] summary{font-size:20px;font-weight:500}
 body[data-look="dental"] em{background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent2) 70%,transparent) 62%);color:inherit}
 body[data-look="dental"][data-hl="wide"] .htext em,body[data-look="dental"][data-hl="full"] .htext em,body[data-look="dental"] .band h2 em{background:none;color:var(--accent2)}
 
+/*ASSISTANT*/
+.ast-fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--accent);color:#fff;border-radius:var(--r-btn,999px);padding:8px 18px 8px 8px;font:600 15px var(--fb);box-shadow:0 16px 34px -12px rgba(0,0,0,.45);transition:transform .2s}
+.ast-fab:hover{transform:translateY(-2px)}
+.ast-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;position:relative;font:400 20px var(--fh)}
+.ast-fab .ci:after{content:"";position:absolute;right:0;top:0;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid var(--accent)}
+.ast.open .ast-fab{display:none}
+.ast-tip{position:fixed;right:20px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:60;max-width:270px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font:400 14px/1.45 var(--fb);box-shadow:0 20px 40px -18px rgba(0,0,0,.35);cursor:pointer;animation:astIn .35s ease}
+.ast-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;padding:4px;line-height:1}
+.ast-box{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:61;width:min(380px,calc(100vw - 36px));height:min(600px,calc(100svh - 100px));display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:astIn .3s ease;font-family:var(--fb)}
+.ast [hidden]{display:none!important}
+@keyframes astIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.ast-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--accent);color:#fff}
+.ast-hd .av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;font:400 21px var(--fh);flex:none}
+.ast-hd b{display:block;font-size:15px}.ast-hd small{display:block;font-size:12px;opacity:.8}
+.ast-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.18);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.ast-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.ast-m{max-width:86%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
+.ast-m.a{align-self:flex-start;background:var(--paper);border:1px solid var(--line);border-bottom-left-radius:5px}
+.ast-m.u{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:5px}
+.ast-m p{margin:0 0 6px}.ast-m p:last-child{margin:0}.ast-m ul{margin:4px 0 6px;padding-left:18px}.ast-m li{margin:2px 0}
+.ast-m a{color:var(--accent);font-weight:700}
+.ast-m a.bk{display:inline-flex;align-items:center;gap:6px;margin:4px 4px 2px 0;background:var(--accent);color:#fff;text-decoration:none;border-radius:var(--r-btn,999px);padding:7px 14px;font-size:13.5px}
+.ast-m.typing{display:flex;gap:4px;padding:14px}.ast-m.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.4;animation:astDot 1s infinite}
+.ast-m.typing i:nth-child(2){animation-delay:.15s}.ast-m.typing i:nth-child(3){animation-delay:.3s}
+@keyframes astDot{50%{opacity:1;transform:translateY(-3px)}}
+.ast-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
+.ast-q button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 13px var(--fb);cursor:pointer}
+.ast-q button:hover{border-color:var(--accent);color:var(--accent)}
+.ast-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--paper)}
+.ast-f input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font:400 16px var(--fb);background:var(--bg);color:var(--ink)}
+.ast-f input:focus{outline:none;border-color:var(--accent)}
+.ast-f button{border:0;border-radius:999px;background:var(--ink);color:var(--bg);font:700 14px var(--fb);padding:0 16px;cursor:pointer}
+.ast-f button:disabled{opacity:.5}
+.ast-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--paper)}
+@media(max-width:600px){.ast-fab{padding:8px}.ast-fab .tx{display:none}.ast-box{right:0;left:0;bottom:0;width:100%;height:calc(100svh - 56px);border-radius:22px 22px 0 0}}
 </style>
 </head>
 <body data-venue="atelier-hair" data-booking-url="https://webescapade.com/service/service-booking.html" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-accent="#A9503A" data-word="stylist" data-look="salon" data-hl="full" data-ht="left" data-hlogo="off" data-am="loop">
@@ -598,4 +633,68 @@ body[data-look="dental"][data-hl="wide"] .htext em,body[data-look="dental"][data
 
 
 
+<script>/*ASSISTANT-JS*/
+(function(){
+  var B=document.body.dataset, CFG=null, root=null, st={id:"",msgs:[]}, busy=false;
+  function base(){ return String(B.supabaseUrl||"").replace(/\/+$/,"").replace(/\/rest(\/v1)?$/,""); }
+  function hdr(){ return {"Content-Type":"application/json",apikey:B.supabaseKey||"",Authorization:"Bearer "+(B.supabaseKey||"")}; }
+  var KEY=function(){ return "svcAst:"+(B.venue||""); };
+  function load(){ try{ st=JSON.parse(sessionStorage.getItem(KEY()))||st; }catch(e){} if(!st.id) st.id="v-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10); }
+  function save(){ try{ sessionStorage.setItem(KEY(),JSON.stringify(st)); }catch(e){} }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function bookHref(sid,pid){ try{ return window.SITE&&window.SITE.bookingUrl ? window.SITE.bookingUrl({service:sid,provider:pid||null}) : "#"; }catch(e){ return "#"; } }
+  function md(t){
+    var h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+      .replace(/\[([^\]]+)\]\(book:([0-9a-f-]{36})(?::([0-9a-f-]{36}))?\)/gi,function(_,a,s,p){ return '<a class="bk" href="'+esc(bookHref(s,p))+'">'+a+' →</a>'; })
+      .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:)[^\s)]+)\)/g,function(_,a,u){ return '<a href="'+u+'"'+(/^https?:/.test(u)?' target="_blank" rel="noopener"':'')+'>'+a+'</a>'; });
+    var out=[],list=false;
+    h.split(/\n/).forEach(function(l){ var m=l.match(/^\s*(?:[-•*]|\d+\.)\s+(.*)/);
+      if(m){ if(!list){out.push("<ul>");list=true;} out.push("<li>"+m[1]+"</li>"); } else { if(list){out.push("</ul>");list=false;} if(l.trim()) out.push("<p>"+l+"</p>"); } });
+    if(list) out.push("</ul>"); return out.join("");
+  }
+  function build(){
+    if(root) root.remove();
+    root=document.createElement("div"); root.className="ast"; root.id="ast";
+    var nm=esc(CFG.name||"Assistant"), ini=esc((CFG.name||"A").trim().charAt(0).toUpperCase());
+    var chips=["What do you offer?","How much is it?","Next free time","Opening hours"].concat(CFG.messages?["Leave a message"]:[]);
+    root.innerHTML='<button class="ast-fab" type="button" aria-label="Chat with '+nm+'"><span class="ci">'+ini+'</span><span class="tx">Ask '+nm+'</span></button>'+
+      '<div class="ast-tip" hidden><button type="button" aria-label="Close">×</button><span></span></div>'+
+      '<div class="ast-box" role="dialog" aria-label="Chat" hidden><div class="ast-hd"><span class="av">'+ini+'</span><div><b>'+nm+'</b><small>Usually replies in seconds</small></div><button class="x" type="button" aria-label="Close chat">×</button></div>'+
+      '<div class="ast-log" aria-live="polite"></div><div class="ast-q">'+chips.map(function(c){return '<button type="button">'+c+'</button>';}).join("")+'</div>'+
+      '<form class="ast-f"><input placeholder="Type your question…" maxlength="500" autocomplete="off" aria-label="Your question"><button type="submit">Send</button></form>'+
+      '<div class="ast-ft">AI assistant — please check important details with us.</div></div>';
+    document.body.appendChild(root);
+    var $=function(s){ return root.querySelector(s); }, box=$(".ast-box"), log=$(".ast-log"), q=$(".ast-q"), inp=$(".ast-f input"), tip=$(".ast-tip");
+    function greet(){ return CFG.greeting || ("Hi! I'm "+(CFG.name||"the assistant")+". Ask me about our services, prices or the next free time."); }
+    function bubble(role,text){ var d=document.createElement("div"); d.className="ast-m "+(role==="user"?"u":"a"); d.innerHTML=role==="user"?esc(text):md(text); log.appendChild(d); log.scrollTop=log.scrollHeight; }
+    function render(){ log.innerHTML=""; bubble("assistant",greet()); st.msgs.forEach(function(m){ bubble(m.role,m.content); }); q.hidden=st.msgs.length>2; }
+    function open(){ tip.hidden=true; try{sessionStorage.setItem(KEY()+":tip","1");}catch(e){} render(); box.hidden=false; root.classList.add("open"); if(matchMedia("(pointer:fine)").matches) inp.focus(); }
+    function close(){ box.hidden=true; root.classList.remove("open"); }
+    $(".ast-fab").onclick=open; $(".ast-hd .x").onclick=close;
+    tip.querySelector("span").textContent=greet();
+    tip.onclick=function(e){ if(e.target.tagName==="BUTTON"){ tip.hidden=true; try{sessionStorage.setItem(KEY()+":tip","1");}catch(x){} return; } open(); };
+    q.onclick=function(e){ var b=e.target.closest("button"); if(b) send(b.textContent); };
+    $(".ast-f").onsubmit=function(e){ e.preventDefault(); send(inp.value); };
+    function send(text){
+      text=String(text||"").trim(); if(!text||busy) return;
+      inp.value=""; st.msgs.push({role:"user",content:text.slice(0,500)}); save(); bubble("user",text); q.hidden=true; busy=true; $(".ast-f button").disabled=true;
+      var t=document.createElement("div"); t.className="ast-m a typing"; t.innerHTML="<i></i><i></i><i></i>"; log.appendChild(t); log.scrollTop=log.scrollHeight;
+      fetch(base()+"/functions/v1/svc-assistant",{method:"POST",headers:hdr(),body:JSON.stringify({venue:B.venue,session:st.id,messages:st.msgs.slice(-14)})})
+        .then(function(r){ return r.json(); }).then(function(j){ if(!j||!j.ok||!j.reply) throw 0; return j.reply; })
+        .catch(function(){ var c=(window.SITE&&window.SITE.catalog&&window.SITE.catalog.venue)||{}; return "Sorry, I can't answer right now."+(c.phone?" Please call us on "+c.phone+".":"")+(c.email?" Or email "+c.email+".":""); })
+        .then(function(r){ t.remove(); st.msgs.push({role:"assistant",content:r}); st.msgs=st.msgs.slice(-24); save(); bubble("assistant",r); busy=false; $(".ast-f button").disabled=false; });
+    }
+    var seen=false; try{ seen=!!sessionStorage.getItem(KEY()+":tip"); }catch(e){}
+    if(!seen) setTimeout(function(){ if(box.hidden&&!document.body.classList.contains("editing")) tip.hidden=false; },8000);
+    window.SITE.assistant.open=open;
+  }
+  function init(){
+    if(!B.venue||!B.supabaseUrl||!B.supabaseKey) return Promise.resolve();
+    return fetch(base()+"/rest/v1/rpc/svc_assistant_public",{method:"POST",headers:hdr(),body:JSON.stringify({p_venue:B.venue})})
+      .then(function(r){ return r.json(); }).then(function(c){ CFG=c&&c.ok&&c.enabled?c:null; if(CFG){ load(); build(); } else if(root){ root.remove(); root=null; } }).catch(function(){});
+  }
+  window.SITE=window.SITE||{}; window.SITE.assistant={ reload:init, open:function(){}, reset:function(){ st={id:"",msgs:[]}; try{sessionStorage.removeItem(KEY());}catch(e){} load(); } };
+  init();
+})();
+</script>
 </body></html>
