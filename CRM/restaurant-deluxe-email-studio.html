@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v47</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v48</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -919,7 +919,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v47 \u00b7 Second video: Premium getting started';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v48 \u00b7 Salon email: getting-started video';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -3005,6 +3005,8 @@
         heroImage:SVC_IMG+'salon-hero.jpg', heroAlt:'A hair salon website with a full-screen animated hero, on a computer and a phone', heroLink:SVC_SALON,
         bandImage:SVC_IMG+'salon-layouts.jpg', bandAlt:'The salon website in four layouts: full screen, full width, photo right and photo left', bandLink:SVC_SALON, bandCaption:'Full screen, full width, or the photo on either side. One tap in the editor.',
         videoUrl:SVC_SVIDEO, videoThumb:SVC_STHUMB, videoTitle:'Watch the 1-minute salon tour',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Note:'Love the look? Here’s how to get started.\nOnline stylist booking is free to try for '+T+' days. For the website, we set it up for you with your salon’s words and photos (a one-off $250 + GST), then it’s yours to edit.',
         cta1:'See the salon demo', cta1url:SVC_SALON, cta2:'Try booking a stylist', cta2url:SVC_SBOOK,
         headline:'A website as stylish as your salon.',
         intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. I’ve built a website for hair salons that looks as good as your work: a few photos of your salon become a moving, full-screen welcome, in a bold, editorial style.\n\nYour clients choose the service, their stylist and a time online, day or night, and get a confirmation straight away.',
