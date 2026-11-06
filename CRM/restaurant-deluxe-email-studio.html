@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v48</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v49</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -919,7 +919,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v48 \u00b7 Salon email: getting-started video';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v49 \u00b7 New Premium hero picture';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2986,7 +2986,7 @@
         subject:'Website and bookings for '+svcPrice(M)+' a month', preheader:'One flat price, no commission, '+T+' days free.' }),
       (function(){ var PR=svcPlan('Premium'); return P({ name:'Premium website'+(PR?' ('+svcPrice(PR)+')':''), desc:'Promote the Premium website: animated hero, layouts, parallax',
         eyebrow:'Service Deluxe Premium',
-        heroImage:SVC_IMG+'premium-hero.jpg', heroAlt:'The Premium spa website with a full-screen animated hero, on a computer and a phone', heroLink:SVC_PREMIUM,
+        heroImage:SVC_IMG+'premium-hero-spa.jpg', heroAlt:'The Premium spa website with a warm, candle-lit animated hero, on a computer and a phone', heroLink:SVC_PREMIUM,
         bandImage:SVC_IMG+'premium-layouts.jpg', bandAlt:'Four hero layouts: full screen, full width, photo right and photo left', bandLink:SVC_PREMIUM, bandCaption:'Full screen, full width, or the photo on either side. One tap in the editor.',
         videoUrl:SVC_PVIDEO, videoThumb:SVC_PTHUMB, videoTitle:'Watch the 1-minute Premium tour',
         video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
