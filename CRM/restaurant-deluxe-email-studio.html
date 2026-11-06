@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v52</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v53</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -919,7 +919,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v52 \u00b7 Follow-up emails with the editor tour';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v53 \u00b7 Restaurant Deluxe full tour video';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -959,6 +959,10 @@
   var QUEUE_PAGE   = "https://webescapade.com/Queue-board/";   /* Scan & Queue landing page */
   var WAITLIST_TRY = "https://webescapade.com/Resto-order-test/waitlist.html?v=sunset-grill&w=769d94ba39f4";   /* live demo queue at Sunset Grill */
   var TRIAL_DAYS   = 14;   /* standard free trial */
+  var RD_TOUR = "https://youtu.be/FE4Zdnh7T-U";   /* Restaurant Deluxe 2-minute full tour */
+  var RD_TOUR_THUMB = "https://webescapade.com/Restaurant/tour-video-email.jpg";
+  var RD_TOUR2 = {video2Url:RD_TOUR, video2Thumb:RD_TOUR_THUMB, video2Title:"Watch the 2-minute full tour", video2Pos:"end",
+    video2Note:"Want the full picture?\nSee the website editor, online bookings, ordering at the table and the digital queue working together at a real restaurant, in two minutes."};
   var FOUNDER_DAYS = 28;   /* founding offer for the first 5 restaurants */
   var FOUNDING     = "Founding offer: the first 5 restaurants get a "+FOUNDER_DAYS+"-day free trial with free setup on screen.";
   var FOUNDER_WHAT = "We connect you, import your menu, switch on your online bookings and get ordering working on your own screens (kitchen, bar and front counter). Compatible printers you already have are connected free.";
@@ -1007,7 +1011,7 @@
       eyebrow:"New: waitlist, bookings and ordering on one screen",
       headline:"Order at the table — and now a digital waitlist at the door.",
       intro:"Restaurant Deluxe already lets your guests order from their table on their own phone — friendly, simple, no app — and lets your staff take orders on a tablet too.\n\nNow the same system looks after your door. When you are full, guests scan a QR code, add a first name and party size, and wait anywhere. Their phone buzzes when their table is ready and asks “Coming?”. No app, no phone number, no shouting names across a busy room.\n\nAnd it now works with your online bookings. Booked tables show as reserved on the front counter and are kept for those guests, so walk-ins aren’t offered a table someone has booked. If a booking doesn’t turn up, one tap marks the no-show and the table goes back to the waitlist.\n\nOur first 5 restaurants get all three free for "+FOUNDER_DAYS+" days, set up for you on your own screens.",
-      videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch bookings, waitlist and ordering in action", videoPos:"hero",
+      videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch bookings, waitlist and ordering in action", videoPos:"hero", video2Url:RD_TOUR2.video2Url, video2Thumb:RD_TOUR2.video2Thumb, video2Title:RD_TOUR2.video2Title, video2Pos:RD_TOUR2.video2Pos, video2Note:RD_TOUR2.video2Note,
       cta1:"Call me about a founding place", cta1url:"tel:0413872994",
       cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"What the "+FOUNDER_DAYS+" days include",
@@ -1039,7 +1043,7 @@
       eyebrow:"Bookings, waitlist and ordering — together",
       headline:"Your bookings, your waitlist and your table orders. Finally on one screen.",
       intro:"Most restaurants juggle a bookings diary, a crowd at the door and orders on paper. Restaurant Deluxe puts all three on one front-counter screen.\n\nToday’s bookings show next to the waitlist. Booked tables are kept for their guests, so walk-ins aren’t offered a table someone has booked, and you get a warning before seats due for bookings are given away. A no-show is one tap, and the table goes straight back to the waitlist.\n\nWalk-ins scan a QR code at the door and wait anywhere. At the table, guests order from their own phone. No app, and no commission on bookings or orders.",
-      videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch bookings, waitlist and ordering in action", videoPos:"hero",
+      videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch bookings, waitlist and ordering in action", videoPos:"hero", video2Url:RD_TOUR2.video2Url, video2Thumb:RD_TOUR2.video2Thumb, video2Title:RD_TOUR2.video2Title, video2Pos:RD_TOUR2.video2Pos, video2Note:RD_TOUR2.video2Note,
       cta1:"Call me about a founding place", cta1url:"tel:0413872994",
       cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"How it works together",
@@ -1068,6 +1072,7 @@
     preset({
       name:"Intro to Restaurant Deluxe", desc:"First message to a new restaurant",
       cta2:"Book a demo time", cta2url:DEMO_BOOK,
+      videoUrl:RD_TOUR, videoThumb:RD_TOUR_THUMB, videoTitle:"Watch the 2-minute full tour", videoPos:"hero",
       eyebrow:"Introducing Restaurant Deluxe",
       headline:"Turn your restaurant website into direct bookings.",
       intro:"Webescapade builds elegant, fully editable restaurant websites connected to online reservations, live availability and an optional AI-powered customer experience — and now to ordering at the table.\n\nOne flat monthly price. No commission on bookings or orders.",
@@ -1289,6 +1294,29 @@
     }),
     /* ---- follow-up journey templates (loaded by the Follow-up journey panel) ---- */
     preset({
+      name:"Follow-up: the full tour", desc:"For people who opened or clicked: 2-minute tour of everything",
+      badge:TRIAL_DAYS+"-DAY FREE TRIAL",
+      eyebrow:"See it working",
+      headline:"See Restaurant Deluxe working, from start to finish.",
+      intro:"Thanks for taking a look at Restaurant Deluxe. Here’s a 2-minute tour at a real restaurant, so you can see exactly how it works before you try it.",
+      videoUrl:RD_TOUR, videoThumb:RD_TOUR_THUMB, videoTitle:"Watch the 2-minute full tour", videoPos:"hero",
+      cta1:"Call Marc · 0413 872 994", cta1url:"tel:0413872994",
+      cta2:"Reply with a question", cta2url:CONTACT,
+      featEyebrow:"In the tour", featHeading:"One system.\nFour things it does for you.",
+      cards:[
+        {n:"01", t:"Your website", d:"Tap any words or photos to change them, pick a theme and publish."},
+        {n:"02", t:"Online bookings", d:"Guests book any time; bookings appear straight away for your team."},
+        {n:"03", t:"Order at the table", d:"Guests scan, order from their phone, and it goes straight to the kitchen."},
+        {n:"04", t:"Digital queue", d:"Walk-ins scan at the door and wait anywhere. Booked tables stay protected."}
+      ],
+      spotOn:false, priceOn:false,
+      finalHeading:"Try it free for "+TRIAL_DAYS+" days.",
+      finalSub:"One flat monthly price, with no commission on bookings or orders. Or simply reply to this email.",
+      finalCta:"Call Marc", finalUrl:"tel:0413872994",
+      subject:"See it working: a 2-minute tour",
+      preheader:"Website, bookings, table ordering and a digital queue, in one system."
+    }),
+    preset({
       name:"Follow-up 1 — clicked: call Marc", desc:"Journey: people who clicked, 1 day later",
       followup:"clicked", followDays:1,
       badge:"FOUNDING OFFER — 5 PLACES",
@@ -1308,7 +1336,7 @@
       eyebrow:"Straight answers",
       headline:"Will it work with what you already have? Yes.",
       intro:"Here are short answers to the first questions most owners ask about Restaurant Deluxe.",
-      videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch the 1-minute video", videoPos:"hero",
+      videoUrl:"https://youtu.be/zOAUiGqmXOk", videoThumb:"https://webescapade.com/Restaurant/video-thumb.jpg", videoTitle:"Watch the 1-minute video", videoPos:"hero", video2Url:RD_TOUR2.video2Url, video2Thumb:RD_TOUR2.video2Thumb, video2Title:RD_TOUR2.video2Title, video2Pos:RD_TOUR2.video2Pos, video2Note:RD_TOUR2.video2Note,
       cta1:"Call Marc · 0413 872 994", cta1url:"tel:0413872994",
       cta2:"Book a 30-minute demo", cta2url:DEMO_BOOK,
       featEyebrow:"Four quick answers", featHeading:"Your screens, your POS,\nyour bookings, the price.",
