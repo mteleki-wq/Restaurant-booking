@@ -256,7 +256,7 @@ body[data-look="dental"][data-hl="wide"] .htext em,body[data-look="dental"][data
 .ast.open .ast-fab{display:none}
 .ast-tip{position:fixed;right:20px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:60;max-width:270px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font:400 14px/1.45 var(--fb);box-shadow:0 20px 40px -18px rgba(0,0,0,.35);cursor:pointer;animation:astIn .35s ease}
 .ast-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;padding:4px;line-height:1}
-.ast-box{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:61;width:min(380px,calc(100vw - 36px));height:min(600px,calc(100svh - 100px));display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:astIn .3s ease;font-family:var(--fb)}
+.ast-box{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:200;width:min(380px,calc(100vw - 36px));height:min(600px,calc(100svh - 100px));display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:astIn .3s ease;font-family:var(--fb)}
 .ast [hidden]{display:none!important}
 @keyframes astIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .ast-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--accent);color:#fff}
@@ -282,7 +282,8 @@ body[data-look="dental"][data-hl="wide"] .htext em,body[data-look="dental"][data
 .ast-f button{border:0;border-radius:999px;background:var(--ink);color:var(--bg);font:700 14px var(--fb);padding:0 16px;cursor:pointer}
 .ast-f button:disabled{opacity:.5}
 .ast-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--paper)}
-@media(max-width:600px){.pill-book{left:14px;max-width:calc(100% - 96px)}.ast-fab{padding:8px}.ast-fab .tx{display:none}.ast-box{right:0;left:0;bottom:0;width:100%;height:calc(100svh - 56px);border-radius:22px 22px 0 0}}
+@media(max-width:600px){.pill-book{left:14px;max-width:calc(100% - 96px)}.ast-fab{padding:8px}.ast-fab .tx{display:none}.ast-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.ast-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+body:has(.ast.open) .pill-book{visibility:hidden}
 </style>
 </head>
 <body data-venue="brightside-dental" data-booking-url="https://webescapade.com/service/service-booking.html" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-accent="#0E9F97" data-word="dentist" data-look="dental" data-hl="full" data-ht="left" data-hlogo="off" data-am="loop">

@@ -200,7 +200,7 @@ body.editing .hero .w{pointer-events:none}body.editing .hero .w *{pointer-events
 .chat.open .chat-fab{display:none}
 .chat-tip{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;max-width:260px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font-size:14px;line-height:1.45;box-shadow:var(--shadow);cursor:pointer;animation:chatIn .35s ease}
 .chat-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;padding:4px}
-.chat-box{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:41;width:min(392px,calc(100vw - 32px));height:min(620px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:chatIn .3s ease}
+.chat-box{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:200;width:min(392px,calc(100vw - 32px));height:min(620px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:chatIn .3s ease}
 .chat-box[hidden]{display:none}
 @keyframes chatIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
 .chat-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--deep);color:#fff}
@@ -229,7 +229,8 @@ body.editing .hero .w{pointer-events:none}body.editing .hero .w *{pointer-events
 .chat-f button:disabled{opacity:.5}
 .chat-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--card)}
 .chat-ft a{color:var(--muted)}
-@media(max-width:600px){.chat-fab{padding:8px}.chat-fab .tx{display:none}.chat-box{right:0;left:0;bottom:0;width:100%;height:calc(100svh - 56px);border-radius:22px 22px 0 0}}
+@media(max-width:600px){.chat-fab{padding:8px}.chat-fab .tx{display:none}.chat-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.chat-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+body:has(.chat.open) #float{visibility:hidden}
 /*VIDEOS*/
 .vids{display:grid;gap:22px;margin-top:34px}
 @media(min-width:980px){.vids{grid-template-columns:1.6fr 1fr;align-items:start}}
