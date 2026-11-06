@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v46</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v47</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -383,6 +383,31 @@
                 <input type="url" id="fVidThumb" data-k="videoThumb" placeholder="Uses YouTube's picture; needed for your own page"></div>
             </div>
             <p class="help" id="vidStatus" style="margin:0"></p>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary>Second video <span style="color:var(--faint);font-weight:400">(optional)</span></summary>
+          <div class="grp-body">
+            <p class="help" style="margin:0 0 12px">A second video with a short line above it, for example how to get started. Leave the link empty for none.</p>
+            <div class="field"><label for="fVid2Note">Line above the video</label>
+              <textarea id="fVid2Note" data-k="video2Note" rows="2" placeholder="Ready to try it? Here's how to get started."></textarea></div>
+            <div class="field"><label for="fVid2Url">Video link (YouTube or your page)</label>
+              <input type="url" id="fVid2Url" data-k="video2Url" placeholder="https://youtu.be/…"></div>
+            <div class="field"><label for="fVid2Title">Title under the video</label>
+              <input type="text" id="fVid2Title" data-k="video2Title" placeholder="Watch how to get started"></div>
+            <div class="grid2">
+              <div class="field"><label for="fVid2Pos">Where in the email</label>
+                <select id="fVid2Pos" data-k="video2Pos">
+                  <option value="hero">Right after the opening</option>
+                  <option value="features">After the feature cards</option>
+                  <option value="price">Just before the prices</option>
+                  <option value="end">After the prices</option>
+                </select></div>
+              <div class="field"><label for="fVid2Thumb">Own cover picture <span style="color:var(--faint)">(optional)</span></label>
+                <input type="url" id="fVid2Thumb" data-k="video2Thumb" placeholder="Uses YouTube's picture; needed for your own page"></div>
+            </div>
+            <p class="help" id="vid2Status" style="margin:0"></p>
           </div>
         </details>
 
@@ -894,7 +919,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v46 \u00b7 Salon promo email with video';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v47 \u00b7 Second video: Premium getting started';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -969,6 +994,7 @@
       address:"Webescapade \u2022 Sydney, Australia",
       heroImage:"", heroLink:"", heroAlt:"", bandImage:"", bandAlt:"", bandLink:"", bandCaption:"",
       videoUrl:"", videoTitle:"", videoThumb:"", videoPos:"hero",
+      video2Url:"", video2Title:"", video2Thumb:"", video2Note:"", video2Pos:"end",
       resendUnsub:true, unsubUrl:"",
       subject:"", preheader:"", to:"", theme:"alt"
     }, o);
@@ -1323,12 +1349,16 @@
   }
   function pageVid(u){ u=String(u||'').trim(); return (!ytId(u) && /^https?:\/\/[^\s]+\.[^\s]+/i.test(u)) ? u : ''; }   /* a video page on your own site */
   function videoLink(c){ var id=ytId(c.videoUrl); if(id) return 'https://www.youtube.com/watch?v='+id; return (pageVid(c.videoUrl) && url(c.videoThumb)) ? pageVid(c.videoUrl) : ''; }
+  function vid2(c){ return {videoUrl:c.video2Url, videoThumb:c.video2Thumb, videoTitle:c.video2Title||'Watch how to get started', videoNote:c.video2Note}; }
   function videoBlock(c, P){
     var F="Arial,Helvetica,sans-serif";
     var id=ytId(c.videoUrl), link=videoLink(c); if(!link) return '';
     var thumb=url(c.videoThumb)||('https://i.ytimg.com/vi/'+id+'/hqdefault.jpg');
     var title=c.videoTitle||'Watch the video';
-    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:26px;">'+
+    var nt=String(c.videoNote||'').split('\n'), n1=nt.shift(), n2=nt.join('\n').trim();
+    var note=c.videoNote ? '<tr><td style="padding-bottom:16px;"><div style="font:700 22px/29px '+F+';color:'+(P&&P.ink||'#fff')+';">'+escKeepTags(n1)+'</div>'+
+      (n2?'<div style="padding-top:9px;font:400 15px/24px '+F+';color:'+(P&&P.mut||'#c7cada')+';">'+nl(n2)+'</div>':'')+'</td></tr>' : '';
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:26px;">'+note+
       '<tr><td><a href="'+esc(link)+'" style="text-decoration:none;display:block;">'+
       '<img src="'+esc(thumb)+'" width="544" alt="'+esc('Video: '+title)+'" '+
       'style="display:block;width:100%;max-width:544px;height:auto;border:0;border-radius:14px;" /></a></td></tr>'+
@@ -1432,6 +1462,7 @@
       o.push('<div style="padding-top:22px;max-width:520px;font:400 17px/28px '+F+';color:'+H.mut+';">'+escKeepTags(p)+'</div>');
     });
     if((c.videoPos||'hero')==='hero') o.push(videoBlock(c,H));
+    if(c.video2Pos==='hero') o.push(videoBlock(vid2(c),H));
     if(c.cta1||c.cta2){
       o.push('<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;"><tr>');
       if(c.cta1){
@@ -1472,12 +1503,13 @@
       o.push('</tr></table></td></tr>');
     }
 
-    function videoBand(){
-      if(!videoLink(c)) return;
+    function videoBand(v){
+      v=v||c; if(!videoLink(v)) return;
       var vd=bandDark(band++), V=vd?DARK:LIGHT;
-      o.push('<tr><td class="pad" style="padding:34px 42px 40px;background:'+V.band2+';">'+videoBlock(c,V)+'</td></tr>');
+      o.push('<tr><td class="pad" style="padding:34px 42px 40px;background:'+V.band2+';">'+videoBlock(v,V)+'</td></tr>');
     }
     if(c.videoPos==='features') videoBand();
+    if(c.video2Pos==='features') videoBand(vid2(c));
 
     /* ---- spotlight ---- */
     if(c.spotOn && (c.boxes||[]).length){
@@ -1517,6 +1549,7 @@
     }
 
     if(c.videoPos==='price') videoBand();
+    if(c.video2Pos==='price') videoBand(vid2(c));
 
     /* ---- pricing ---- */
     if(c.priceOn && (c.plans||[]).length){
@@ -1543,6 +1576,8 @@
       }
       o.push('</td></tr>');
     }
+
+    if((c.video2Pos||'end')==='end') videoBand(vid2(c));
 
     /* ---- final CTA ---- */
     if(c.finalOn && (c.finalHeading||c.finalCta)){
@@ -1610,6 +1645,7 @@
     }
     if(c.bandCaption) L.push('', c.bandCaption);
     if(videoLink(c)) L.push('', (c.videoTitle||'Watch the video')+': '+videoLink(c));
+    if(videoLink(vid2(c))){ if(c.video2Note) L.push('', c.video2Note.replace(/\n/g,' ')); L.push((c.video2Note?'':'\n')+vid2(c).videoTitle+': '+videoLink(vid2(c))); }
     if(c.cta1 && url(c.cta1url)) L.push('', c.cta1+': '+url(c.cta1url));
     if(c.cta2 && url(c.cta2url)) L.push(c.cta2+': '+url(c.cta2url));
     if(c.finalOn && c.finalHeading) L.push('', c.finalHeading.replace(/\n/g,' '));
@@ -1723,6 +1759,8 @@
   function renderPreview(){
     var c=camps[cur];
     var vs=document.getElementById('vidStatus');
+    var vs2=document.getElementById('vid2Status'), v2=vid2(c);
+    if(vs2) vs2.textContent = !c.video2Url ? '' : (videoLink(v2) ? '\u2713 Second video shown in the preview.' : (pageVid(c.video2Url) ? 'For a video on your own site, add a cover picture below.' : 'That doesn\u2019t look like a YouTube link or web page yet.'));
     if(vs) vs.textContent = !c.videoUrl ? '' : (ytId(c.videoUrl) ? '\u2713 YouTube video found \u2014 shown in the preview.' : (videoLink(c) ? '\u2713 Video page on your site \u2014 shown in the preview.' : (pageVid(c.videoUrl) ? 'For a video on your own site, add a cover picture below.' : 'That doesn\u2019t look like a YouTube link or web page yet.')));
     $('#pvSubject').textContent = c.subject || '(no subject yet)';
     $('#pvPre').textContent     = c.preheader || '';
@@ -2873,6 +2911,8 @@
   var SVC_PREMIUM = "https://webescapade.com/service/demo-premium/";   /* Premium demo site */
   var SVC_PVIDEO = "https://youtu.be/GtzMh5USIoA";   /* Service Deluxe Premium tour */
   var SVC_PTHUMB = "https://webescapade.com/service/img/premium-video-thumb.jpg";
+  var SVC_GVIDEO = "https://youtu.be/51BuhoHoZ5k";   /* Premium getting-started (setup) video */
+  var SVC_GTHUMB = "https://webescapade.com/service/img/setup-video-thumb.jpg";
   var SVC_SALON = "https://webescapade.com/service/demo-premium/salon/";   /* Premium salon demo (Atelier Hair) */
   var SVC_SBOOK = "https://webescapade.com/service/service-booking.html?venue=atelier-hair&accent=A9503A&word=stylist";
   var SVC_SVIDEO = "https://youtu.be/B-1hhWIhQh4";   /* Premium for salons tour */
@@ -2949,6 +2989,8 @@
         heroImage:SVC_IMG+'premium-hero.jpg', heroAlt:'The Premium spa website with a full-screen animated hero, on a computer and a phone', heroLink:SVC_PREMIUM,
         bandImage:SVC_IMG+'premium-layouts.jpg', bandAlt:'Four hero layouts: full screen, full width, photo right and photo left', bandLink:SVC_PREMIUM, bandCaption:'Full screen, full width, or the photo on either side. One tap in the editor.',
         videoUrl:SVC_PVIDEO, videoThumb:SVC_PTHUMB, videoTitle:'Watch the 1-minute Premium tour',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Note:'Like what you see? Here’s how to get started.\nThe booking system is free to try for '+T+' days. For the website, we set it up for you with your words and photos (a one-off $250 + GST), then it’s yours to edit.',
         cta1:'See the Premium demo', cta1url:SVC_PREMIUM, cta2:'Start your free trial', cta2url:SVC_START,
         headline:'A website that moves — and takes bookings.',
         intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. Service Deluxe Premium turns a few of your own photos into a moving, full-screen welcome on your homepage, with your logo, so your business feels calm and special from the first second.\n\nYou choose the style and the layout yourself, and online booking by practitioner and room is built in.',
