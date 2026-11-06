@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Client Setup · Service Deluxe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F3EC;--paper:#fff;--paper2:#EFEAE0;--ink:#18201C;--ink2:#2B3530;--muted:#66706A;--line:#E2DCD0;--sage:#4F6B5C;--mint:#E4ECE6;--clay:#C98C6B;--ok:#2F7D55;--warn:#B7791F;--bad:#B42318;--r:16px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Manrope,system-ui,sans-serif}
+a{color:var(--sage)}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.01em;margin:0}
+h1{font-size:34px}h2{font-size:28px}h3{font-size:22px}
+em{font-style:italic;color:var(--sage)}
+button,input,select,textarea{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .w{display:flex;align-items:center;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand .m{width:32px;height:32px;border-radius:9px;background:var(--sage);color:#fff;display:grid;place-items:center;font:400 20px "Instrument Serif",serif}
+.brand b{font:400 21px "Instrument Serif",serif}.brand small{display:block;font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-top:-3px}
+.tabs{display:flex;gap:4px;margin-left:auto;background:var(--paper2);border-radius:999px;padding:4px}
+.tabs button{border:0;background:none;border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer}
+.tabs button.on{background:var(--ink);color:#fff}
+.who{font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:center}
+.w{max-width:1180px;margin:0 auto;padding:0 20px}
+main{padding:28px 0 80px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;background:var(--paper2);color:var(--ink);white-space:nowrap}
+.btn.p{background:var(--ink);color:#fff}.btn.s{background:var(--sage);color:#fff}.btn.sm{padding:6px 11px;font-size:12.5px}
+.btn:disabled{opacity:.5;cursor:default}
+label{display:grid;gap:5px;font-size:12.5px;font-weight:700;color:var(--ink2)}
+input,select,textarea{border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;font-size:15px;font-weight:500;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sage)}
+input[type=checkbox]{width:auto}
+.g2{display:grid;gap:14px}@media(min-width:700px){.g2{grid-template-columns:1fr 1fr}}
+.g3{display:grid;gap:14px}@media(min-width:900px){.g3{grid-template-columns:repeat(3,1fr)}}
+.muted{color:var(--muted)}.small{font-size:13px}
+.msg{font-size:14px;margin-top:10px;min-height:20px}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.login{max-width:420px;margin:60px auto}
+.login h1{margin-bottom:6px}
+.login form{display:grid;gap:12px;margin-top:18px}
+/* overview */
+.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin:18px 0 22px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.stat b{display:block;font:400 34px/1 "Instrument Serif",serif}.stat span{font-size:12.5px;color:var(--muted);font-weight:600}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.bar input{max-width:280px}
+.bar select{max-width:180px}
+.clients{display:grid;gap:12px}
+.cl{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.cl:hover{border-color:var(--sage);box-shadow:0 10px 24px -18px rgba(0,0,0,.4)}
+.cl h3{font-size:22px}
+.cl .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--paper2);color:var(--ink2)}
+.tag.prem{background:#F3E8D8;color:#8A5A2B}.tag.trial{background:#E6EEF8;color:#2A5A8C}.tag.active{background:#E2F2E8;color:var(--ok)}.tag.bad{background:#FBE9E7;color:var(--bad)}.tag.warn{background:#FFF4DE;color:var(--warn)}
+.prog{width:170px}
+.prog .t{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted)}
+.prog .b{height:8px;border-radius:9px;background:var(--paper2);overflow:hidden;margin-top:5px}
+.prog .b i{display:block;height:100%;background:var(--sage);border-radius:9px}
+@media(max-width:640px){.cl{grid-template-columns:1fr}.prog{width:100%}}
+/* drawer */
+.dim{position:fixed;inset:0;background:rgba(10,14,12,.4);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(760px,100%);background:var(--bg);z-index:41;overflow-y:auto;box-shadow:-20px 0 60px -20px rgba(0,0,0,.4);animation:slide .25s ease}
+@keyframes slide{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
+.drawer .hd{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:16px 22px;display:flex;align-items:center;gap:12px;z-index:2}
+.drawer .hd .x{margin-left:auto;border:0;background:var(--paper2);width:38px;height:38px;border-radius:50%;font-size:20px;cursor:pointer}
+.drawer .bd{padding:20px 22px 60px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+.drawer .bd>*,.lk,.ck>div{min-width:0}
+.ck>div:not(.act){flex:1}
+.sec h4{margin:0 0 10px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.check{display:grid;gap:2px}
+.ck{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}
+.ck:last-child{border:0}
+.ck .ic{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:var(--paper2);color:var(--muted)}
+.ck.done .ic{background:var(--mint);color:var(--ok)}
+.ck b{display:block;font-size:14.5px}.ck span{font-size:13px;color:var(--muted)}
+.ck .act{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.ck input[type=checkbox]{width:20px;height:20px;margin:2px 2px 0;accent-color:var(--sage);flex:none}
+.links{display:grid;gap:8px}
+.lk{display:flex;gap:10px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.lk b{font-size:13.5px;min-width:130px}
+.lk code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;color:var(--muted)}
+@media(max-width:560px){.lk{flex-wrap:wrap}.lk code{flex-basis:100%;order:3}}
+.plans{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.plan{position:relative;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:#fff;cursor:pointer}
+.plan input{position:absolute;opacity:0}
+.plan b{display:block;font:400 22px "Instrument Serif",serif}
+.plan span{font-size:13px;color:var(--muted)}
+.plan:has(input:checked){border-color:var(--sage);box-shadow:0 0 0 2px var(--sage) inset;background:var(--mint)}
+.steps{display:flex;gap:8px;margin:0 0 18px;flex-wrap:wrap}
+.steps span{font-size:12.5px;font-weight:800;color:var(--muted);background:var(--paper2);border-radius:999px;padding:6px 12px}
+.steps span.on{background:var(--ink);color:#fff}
+.res{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.res .card h3{margin-bottom:10px}
+.res ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.res li{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:14px;border-bottom:1px solid var(--line);padding:6px 0}
+.res li:last-child{border:0}
+.res li a{font-weight:700;text-decoration:none}
+.res li span{color:var(--muted);font-size:12.5px;text-align:right}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 18px;font-weight:700;font-size:14px;z-index:60}
+.empty{text-align:center;padding:40px 10px;color:var(--muted)}
+.note{background:var(--mint);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--ink2)}
+.note.warn{background:#FFF4DE}
+textarea{min-height:90px;resize:vertical}
+[hidden]{display:none!important}
+@media(max-width:760px){.top .w{height:auto;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:10px}.tabs{order:3;width:100%;margin:0;overflow-x:auto}.tabs button{flex:1}.who{margin-left:auto}#whoE{display:none}.drawer .hd,.drawer .bd{padding-left:16px;padding-right:16px}.ck{flex-wrap:wrap}.ck .act{margin-left:36px}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="w">
+  <a class="brand" href="./"><span class="m">S</span><span><b>Service Deluxe</b><small>Client setup</small></span></a>
+  <nav class="tabs" id="tabs" hidden><button data-t="clients" class="on">Clients</button><button data-t="new">+ New client</button><button data-t="res">Resources</button></nav>
+  <div class="who" id="who" hidden><span id="whoE"></span><button class="btn sm" id="out">Sign out</button></div>
+</div></header>
+<main class="w" id="app"></main>
+
+<script>
+(function(){
+var SB = "https://tehxobdokbvqtwtgqzrh.supabase.co";
+var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE";
+var SITE = "https://webescapade.com";
+var L = {
+  booking: SITE + "/service/service-booking.html",
+  staff: SITE + "/service/service-staff.html",
+  start: SITE + "/service/service-start.html",
+  trial: SITE + "/service/service-start.html?code=ESCAPADE-01AC",
+  sales: SITE + "/service/",
+  videos: SITE + "/service/tour/",
+  vSetup: SITE + "/service/tour/?v=setup", vEditor: SITE + "/service/tour/?v=editor", vPremium: SITE + "/service/tour/?v=premium", vSalon: SITE + "/service/tour/?v=salon",
+  ytTour: "https://youtu.be/wEmL6nPHgO0", ytSetup: "https://youtu.be/TIrD-DhMVDw", ytEditor: "https://youtu.be/6OuMtkKCxrw", ytPremium: "https://youtu.be/GtzMh5USIoA", ytSalon: "https://youtu.be/B-1hhWIhQh4",
+  demoBasic: SITE + "/service/demo/", demoPrem: SITE + "/service/demo-premium/",
+  tplBasic: "service/demo/source/site-editable.html", tplPremium: "service/demo-premium/source/site-editable.html",
+  crm: SITE + "/CRM/", studio: SITE + "/CRM/restaurant-deluxe-email-studio.html",
+  supa: "https://supabase.com/dashboard/project/tehxobdokbvqtwtgqzrh", repo: "https://github.com/mteleki-wq/Restaurant-booking"
+};
+var PREM_DEMO = { spa: "", salon: "salon/", clinic: "clinic/", physio: "clinic/", dental: "dental/", other: "" };
+var PLANS = [
+  { k: "Bookings", price: 39, d: "Booking page, calendar, emails. Keeps their own website. Up to 3." },
+  { k: "Basic", price: 59, d: "Editable website + bookings. Up to 3." },
+  { k: "Premium", price: 79, d: "Premium website + AI assistant. Up to 3." },
+  { k: "Team", price: 89, d: "Basic for 4–10 practitioners." }
+];
+var SETUPS = [{ k: "self", label: "They set it up themselves", fee: 0 }, { k: "quick", label: "Quick connect — $40 + GST", fee: 40 }, { k: "done", label: "Done for you — $250 + GST", fee: 250 }];
+var TYPES = { spa: "Day spa / massage", salon: "Hair & beauty", clinic: "Medical clinic", dental: "Dental", physio: "Physio / allied health", other: "Other" };
+var MANUAL = [
+  ["welcome", "Welcome email sent", "Invite link, booking page and the setup video."],
+  ["domain", "Domain connected", "Their website on their own domain (Quick connect / Done for you)."],
+  ["content", "Words & photos loaded", "Done for you: services, team, photos and text in the website."],
+  ["share", "Booking link shared", "On their website, Google Business Profile and Instagram."],
+  ["call", "Walk-through call done", "Show the staff calendar, emails and the editor."],
+  ["billing", "Billing set up", "First invoice sent / payment arranged."]
+];
+
+var $ = function (s, r) { return (r || document).querySelector(s); };
+var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+var app = $("#app"), DATA = [], TAB = "clients", OPEN = null;
+function toast(t){ var d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(function () { d.remove(); }, 2200); }
+function copy(t){ (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { toast("Copied"); }, function () { prompt("Copy this:", t); }); }
+
+/* ---------- auth ---------- */
+var S = {};
+try { S = JSON.parse(localStorage.getItem("svcAdminSess") || "{}") || {}; } catch (e) {}
+function saveS(){ try { localStorage.setItem("svcAdminSess", JSON.stringify(S)); } catch (e) {} }
+function authFetch(path, body){
+  return fetch(SB + "/auth/v1/token?grant_type=" + path, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); });
+}
+function refresh(){
+  if (!S.refresh) return Promise.reject(new Error("signin"));
+  return authFetch("refresh_token", { refresh_token: S.refresh }).then(function (d) {
+    if (!d.access_token) throw new Error("signin");
+    S.token = d.access_token; S.refresh = d.refresh_token; S.exp = Date.now() + (d.expires_in || 3600) * 1000; saveS();
+  });
+}
+function rpc(fn, args, retried){
+  var go = function () {
+    return fetch(SB + "/rest/v1/rpc/" + fn, { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + S.token, "Content-Type": "application/json" }, body: JSON.stringify(args || {}) })
+      .then(function (r) {
+        if (r.status === 401 && !retried) return refresh().then(function () { return rpc(fn, args, true); });
+        return r.json().then(function (j) { if (!r.ok) throw new Error((j && (j.message || j.error)) || ("Error " + r.status)); return j; });
+      });
+  };
+  if (S.exp && Date.now() > S.exp - 60000 && !retried) return refresh().then(go);
+  return go();
+}
+function signOut(){ S = {}; saveS(); $("#tabs").hidden = true; $("#who").hidden = true; login(); }
+$("#out").onclick = signOut;
+
+function login(msg){
+  app.innerHTML = '<div class="card login"><h1>Client <em>setup</em></h1><p class="muted">Sign in with your Webescapade admin login.</p>' +
+    '<form id="lf"><label>Email<input id="le" type="email" autocomplete="username" required></label><label>Password<input id="lp" type="password" autocomplete="current-password" required></label>' +
+    '<button class="btn p" type="submit">Sign in</button><div class="msg err" id="lm">' + esc(msg || "") + '</div></form></div>';
+  $("#lf").onsubmit = function (e) {
+    e.preventDefault(); var m = $("#lm"); m.className = "msg"; m.textContent = "Signing in…";
+    authFetch("password", { email: $("#le").value.trim(), password: $("#lp").value }).then(function (d) {
+      if (!d.access_token) { m.className = "msg err"; m.textContent = d.error_description || d.msg || "That didn't match."; return; }
+      S = { token: d.access_token, refresh: d.refresh_token, exp: Date.now() + (d.expires_in || 3600) * 1000, email: (d.user && d.user.email) || $("#le").value.trim() }; saveS();
+      start();
+    }).catch(function () { m.className = "msg err"; m.textContent = "Couldn't reach the server."; });
+  };
+}
+
+function start(){
+  app.innerHTML = '<div class="empty">Loading your clients…</div>';
+  load().then(function () {
+    $("#tabs").hidden = false; $("#who").hidden = false; $("#whoE").textContent = S.email || "";
+    show(TAB);
+  }).catch(function (e) {
+    if (e.message === "signin") return login("Please sign in again.");
+    if (/admin only/i.test(e.message)) { S = {}; saveS(); return login("This login isn't a Webescapade admin."); }
+    app.innerHTML = '<div class="card"><h3>Something went wrong</h3><p class="muted">' + esc(e.message) + '</p><button class="btn" onclick="location.reload()">Try again</button></div>';
+  });
+}
+function load(){
+  return rpc("svc_admin_overview").then(function (d) { if (!d || !d.ok) throw new Error((d && d.error) || "Couldn't load"); DATA = d.clients || []; });
+}
+
+/* ---------- helpers ---------- */
+function links(c){
+  var inv = L.start + "?join=" + encodeURIComponent(c.slug) + "&k=" + encodeURIComponent(c.join_key || "");
+  var prem = /premium/i.test(c.plan || "");
+  return {
+    booking: L.booking + "?venue=" + encodeURIComponent(c.slug),
+    staff: L.staff + "?venue=" + encodeURIComponent(c.slug),
+    invite: inv,
+    website: c.website_url || "",
+    editor: c.website_url && /webescapade\.com\/service\/sites\//.test(c.website_url) ? c.website_url.replace(/\/?$/, "/") + "source/site-editable.html" : "",
+    demo: prem ? L.demoPrem + (PREM_DEMO[c.business_type] || "") : L.demoBasic
+  };
+}
+function steps(c){
+  var prem = /premium/i.test(c.plan || ""), noSite = /bookings/i.test(c.plan || ""), ck = c.checklist || {}, ln = links(c);
+  var setup = c.setup_option || "self";
+  var A = [
+    { k: "biz", t: "Business created", s: "Booking system ready: " + esc(c.slug), done: true },
+    { k: "plan", t: "Plan & trial set", s: c.plan ? esc(c.plan) + (c.stage ? " · " + esc(c.stage) : "") + (c.trial_ends_on ? " · trial ends " + fmtD(c.trial_ends_on) : "") : "Choose their plan below.", done: !!c.plan },
+    { k: "owner", t: "Owner has their own login", s: c.owner_logins ? "Joined with the invite link." : "Send them the invite link.", done: c.owner_logins > 0, act: '<button class="btn sm" data-copy="' + esc(ln.invite) + '">Copy invite link</button>' },
+    { k: "svc", t: "Services & prices", s: c.services + " services, " + c.priced_services + " with a price.", done: c.services > 0 && c.priced_services === c.services, act: '<a class="btn sm" target="_blank" href="' + esc(ln.staff) + '">Open staff page</a>' },
+    { k: "team", t: "Team added", s: c.providers + " " + esc(c.practitioner_word || "practitioner") + (c.providers === 1 ? "" : "s") + (c.rooms ? ", " + c.rooms + " rooms/chairs" : ""), done: c.providers > 0 },
+    { k: "hours", t: "Opening hours", s: c.hours_rows ? c.hours_rows + " opening times set." : "No opening hours yet.", done: c.hours_rows > 0 },
+  ];
+  if (!noSite) A.push({ k: "site", t: "Website live", s: c.website_url ? esc(c.website_url) : "Create it from the " + (prem ? "Premium" : "Basic") + " template below, or add their address.", done: !!c.website_url });
+  if (prem) A.push({ k: "ast", t: "AI assistant on", s: c.assistant ? (c.assistant.enabled ? "On as “" + esc(c.assistant.name) + "” · " + c.assistant.notes + " characters of notes · " + c.assistant_month + " questions this month" : "Set up but switched off.") : "Owner (or you) sets it up in the website editor › 🤖 Assistant.", done: !!(c.assistant && c.assistant.enabled) });
+  A.push({ k: "first", t: "First booking", s: c.last_booking_at ? "Last booking " + fmtD(c.last_booking_at) + " · " + c.upcoming + " upcoming" : "No bookings yet.", done: !!c.last_booking_at });
+  var M = MANUAL.filter(function (m) { if (m[0] === "domain" && (noSite || setup === "self")) return false; if (m[0] === "content" && setup !== "done") return false; return true; })
+    .map(function (m) { return { k: m[0], t: m[1], s: m[2], done: !!ck[m[0]], manual: true }; });
+  return A.concat(M);
+}
+function pct(c){ var s = steps(c); return Math.round(100 * s.filter(function (x) { return x.done; }).length / s.length); }
+function fmtD(d){ try { return new Date(d).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }); } catch (e) { return d; } }
+function daysTo(d){ return Math.ceil((new Date(d + "T23:59:59") - new Date()) / 864e5); }
+function stageTag(c){
+  if (!c.stage && !c.plan) return '<span class="tag">Demo / not set</span>';
+  if (c.stage === "trial") { var n = c.trial_ends_on ? daysTo(c.trial_ends_on) : null; return '<span class="tag ' + (n != null && n <= 3 ? "warn" : "trial") + '">Trial' + (n != null ? (n >= 0 ? " · " + n + " day" + (n === 1 ? "" : "s") + " left" : " · ended") : "") + "</span>"; }
+  if (c.stage === "active") return '<span class="tag active">Active</span>';
+  return '<span class="tag ' + (c.stage === "cancelled" ? "bad" : "") + '">' + esc(c.stage || "") + "</span>";
+}
+
+/* ---------- views ---------- */
+function show(t){
+  TAB = t; app.onclick = null; document.querySelectorAll("#tabs button").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-t") === t); });
+  ({ clients: viewClients, "new": viewNew, res: viewRes })[t]();
+  scrollTo(0, 0);
+}
+$("#tabs").onclick = function (e) { var b = e.target.closest("button"); if (b) show(b.getAttribute("data-t")); };
+
+function viewClients(){
+  var trial = DATA.filter(function (c) { return c.stage === "trial"; }), active = DATA.filter(function (c) { return c.stage === "active"; });
+  var mrr = active.reduce(function (s, c) { return s + (+c.monthly_fee || 0); }, 0);
+  var ending = trial.filter(function (c) { return c.trial_ends_on && daysTo(c.trial_ends_on) <= 3; }).length;
+  var todo = DATA.filter(function (c) { return (c.plan || c.stage) && pct(c) < 100; }).length;
+  app.innerHTML = '<div class="bar" style="justify-content:space-between"><h1>Your <em>clients</em></h1><button class="btn p" id="addc">+ New client</button></div>' +
+    '<div class="stats"><div class="stat"><b>' + DATA.length + '</b><span>Businesses</span></div><div class="stat"><b>' + trial.length + '</b><span>On free trial' + (ending ? " · " + ending + " ending soon" : "") + '</span></div>' +
+    '<div class="stat"><b>' + active.length + '</b><span>Paying</span></div><div class="stat"><b>$' + mrr.toLocaleString() + '</b><span>Monthly (+ GST)</span></div><div class="stat"><b>' + todo + '</b><span>Setups to finish</span></div></div>' +
+    '<div class="bar"><input id="q" placeholder="Search name, suburb, email…"><select id="f"><option value="">All stages</option><option value="trial">Trial</option><option value="active">Active</option><option value="paused">Paused</option><option value="cancelled">Cancelled</option><option value="none">Demo / not set</option></select><select id="o"><option value="new">Newest first</option><option value="todo">Most to do</option><option value="trial">Trial ending first</option><option value="name">A–Z</option></select></div>' +
+    '<div class="clients" id="list"></div>';
+  $("#addc").onclick = function () { show("new"); };
+  var draw = function () {
+    var q = $("#q").value.trim().toLowerCase(), f = $("#f").value, o = $("#o").value;
+    var L2 = DATA.filter(function (c) {
+      if (f === "none" ? (c.stage || c.plan) : (f && c.stage !== f)) return false;
+      return !q || [c.name, c.slug, c.email, c.contact_name, c.contact_email, c.login_email, c.notes].join(" ").toLowerCase().indexOf(q) >= 0;
+    });
+    L2.sort(function (a, b) {
+      if (o === "todo") return pct(a) - pct(b);
+      if (o === "trial") return (a.trial_ends_on || "9999") < (b.trial_ends_on || "9999") ? -1 : 1;
+      if (o === "name") return a.name.localeCompare(b.name);
+      return a.created_at < b.created_at ? 1 : -1;
+    });
+    $("#list").innerHTML = L2.length ? L2.map(function (c) {
+      var p = pct(c);
+      return '<div class="cl" data-id="' + c.id + '"><div><h3>' + esc(c.name) + '</h3><div class="meta"><span class="tag">' + esc(TYPES[c.business_type] || c.business_type) + '</span>' +
+        (c.plan ? '<span class="tag ' + (/premium/i.test(c.plan) ? "prem" : "") + '">' + esc(c.plan) + (c.monthly_fee ? " · $" + (+c.monthly_fee) : "") + '</span>' : "") + stageTag(c) +
+        (c.assistant && c.assistant.enabled ? '<span class="tag">🤖 ' + esc(c.assistant.name) + '</span>' : "") +
+        '<span class="tag">' + c.bookings_7d + ' bookings this week</span></div></div>' +
+        '<div class="prog"><div class="t"><span>Setup</span><span>' + p + '%</span></div><div class="b"><i style="width:' + p + '%"></i></div></div></div>';
+    }).join("") : '<div class="empty">No clients match.</div>';
+  };
+  $("#q").oninput = draw; $("#f").onchange = draw; $("#o").onchange = draw; draw();
+  $("#list").onclick = function (e) { var r = e.target.closest(".cl"); if (r) openClient(r.getAttribute("data-id")); };
+}
+
+/* ---------- client drawer ---------- */
+function openClient(id){
+  var c = DATA.filter(function (x) { return x.id === id; })[0]; if (!c) return;
+  OPEN = id; closeDrawer(true);
+  var ln = links(c), prem = /premium/i.test(c.plan || ""), noSite = /bookings/i.test(c.plan || "");
+  var dim = document.createElement("div"); dim.className = "dim"; dim.id = "dim";
+  var d = document.createElement("div"); d.className = "drawer"; d.id = "drawer";
+  var ck = steps(c);
+  var lk = function (label, url, open) { return url ? '<div class="lk"><b>' + label + '</b><code>' + esc(url) + '</code><button class="btn sm" data-copy="' + esc(url) + '">Copy</button>' + (open !== false ? '<a class="btn sm" target="_blank" rel="noopener" href="' + esc(url) + '">Open</a>' : "") + '</div>' : ""; };
+  d.innerHTML = '<div class="hd"><div><h2>' + esc(c.name) + '</h2><div class="meta" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><span class="tag">' + esc(TYPES[c.business_type] || "") + '</span>' + (c.plan ? '<span class="tag ' + (prem ? "prem" : "") + '">' + esc(c.plan) + '</span>' : "") + stageTag(c) + '</div></div><button class="x" id="dx" aria-label="Close">×</button></div>' +
+    '<div class="bd">' +
+    '<div class="card sec"><h4>Setup checklist · ' + pct(c) + '% done</h4><div class="check">' + ck.map(function (s) {
+      return '<div class="ck' + (s.done ? " done" : "") + '">' + (s.manual ? '<input type="checkbox" data-ck="' + s.k + '"' + (s.done ? " checked" : "") + '>' : '<span class="ic">' + (s.done ? "✓" : "·") + '</span>') +
+        '<div><b>' + s.t + '</b><span>' + s.s + '</span></div>' + (s.act && !s.done ? '<div class="act">' + s.act + '</div>' : "") + '</div>';
+    }).join("") + '</div></div>' +
+    '<div class="card sec"><h4>Links for this client</h4><div class="links">' +
+      lk("Booking page", ln.booking) + lk("Staff calendar", ln.staff) + lk("Owner invite link", ln.invite, false) + lk("Website", ln.website) + lk("Website editor", ln.editor) + lk(prem ? "Premium demo" : "Demo site", ln.demo) +
+    '</div><div class="bar" style="margin:12px 0 0"><button class="btn s" id="wel">✉️ Welcome email</button><button class="btn" id="wcopy">Copy welcome text</button></div></div>' +
+    (noSite ? "" : '<div class="card sec"><h4>Website</h4>' + (c.website_url ? '<p class="small muted" style="margin:0 0 10px">Live at <a target="_blank" href="' + esc(c.website_url) + '">' + esc(c.website_url) + '</a>' + (ln.editor ? ' · <a target="_blank" href="' + esc(ln.editor) + '">open the editor</a> to change words, photos, look' + (prem ? ", the 🤖 assistant" : "") + ' and Deploy.' : ".") + '</p>' : "") +
+      '<div class="note" style="margin-bottom:12px">Make a ' + (prem ? "<b>Premium</b>" : "<b>Basic</b>") + ' website for ' + esc(c.name) + ' from your template. It is connected to their booking system and saved at <code>service/sites/' + esc(c.slug) + '/</code>. Then open the editor: choose the look, add their words and photos, and Deploy.</div>' +
+      '<div class="g2"><label>Template<select id="wtpl"><option value="premium"' + (prem ? " selected" : "") + '>Premium (animated hero, AI assistant)</option><option value="basic"' + (prem ? "" : " selected") + '>Basic</option></select></label>' +
+      '<label>GitHub token (kept on this device)<input id="wtok" type="password" placeholder="github_pat_…"></label></div>' +
+      '<div class="bar" style="margin:12px 0 0"><button class="btn p" id="wmake">' + (c.website_url ? "Re-create website (overwrites)" : "Create website") + '</button><span class="msg small" id="wmsg"></span></div></div>') +
+    (prem ? '<div class="card sec"><h4>🤖 AI assistant</h4><p class="small" style="margin:0 0 8px">' + (c.assistant ? (c.assistant.enabled ? "On as <b>" + esc(c.assistant.name) + "</b>" : "Switched off") + " · " + c.assistant.notes + " characters of owner notes · " + c.assistant_month + " questions this month · " + c.assistant_msgs + " messages in 30 days" : "Not set up yet.") + '</p><p class="small muted" style="margin:0">Set it up in the website editor › 🤖 Assistant (sign in with your admin login). Add their parking, policies, health funds and FAQs; it already knows their services, prices, team and hours.</p>' + (ln.editor ? '<div class="bar" style="margin:12px 0 0"><a class="btn s" target="_blank" href="' + esc(ln.editor) + '">Open editor</a></div>' : "") + '</div>' : "") +
+    '<div class="card sec"><h4>Account</h4><div class="plans" id="aplan">' + PLANS.map(function (p) { return '<label class="plan"><input type="radio" name="plan" value="' + p.k + '"' + ((c.plan || "") === p.k ? " checked" : "") + '><b>' + p.k + '</b><span>$' + p.price + '/mo + GST</span></label>'; }).join("") + '</div>' +
+      '<div class="g3" style="margin-top:14px"><label>Stage<select id="astage">' + ["", "trial", "active", "paused", "cancelled"].map(function (s) { return '<option value="' + s + '"' + ((c.stage || "") === s ? " selected" : "") + '>' + (s ? s.charAt(0).toUpperCase() + s.slice(1) : "Not set") + '</option>'; }).join("") + '</select></label>' +
+      '<label>Monthly fee ($ + GST)<input id="afee" type="number" min="0" step="1" value="' + esc(c.monthly_fee == null ? "" : +c.monthly_fee) + '"></label>' +
+      '<label>Website setup<select id="asetup">' + SETUPS.map(function (s) { return '<option value="' + s.k + '"' + ((c.setup_option || "self") === s.k ? " selected" : "") + '>' + s.label + '</option>'; }).join("") + '</select></label>' +
+      '<label>Trial ends<input id="atrial" type="date" value="' + esc(c.trial_ends_on || "") + '"></label><label>Paying from<input id="astart" type="date" value="' + esc(c.started_on || "") + '"></label>' +
+      '<label>Setup fee ($ + GST)<input id="asfee" type="number" min="0" value="' + esc(c.setup_fee == null ? "" : +c.setup_fee) + '"></label></div>' +
+      '<div class="g3" style="margin-top:14px"><label>Contact name<input id="acn" value="' + esc(c.contact_name || "") + '"></label><label>Contact email<input id="ace" type="email" value="' + esc(c.contact_email || c.email || "") + '"></label><label>Contact phone<input id="acp" value="' + esc(c.contact_phone || c.phone || "") + '"></label></div>' +
+      '<label style="margin-top:14px">Website address<input id="aweb" placeholder="https://their-domain.com.au" value="' + esc(c.website_url || "") + '"></label>' +
+      '<label style="margin-top:14px">Notes<textarea id="anotes">' + esc(c.notes || "") + '</textarea></label>' +
+      '<div class="bar" style="margin:14px 0 0"><button class="btn p" id="asave">Save account</button><span class="msg small" id="amsg"></span></div></div>' +
+    '<div class="card sec"><h4>Booking system</h4><p class="small muted" style="margin:0 0 10px">Login: ' + esc(c.login_email || "—") + ' · ' + c.staff + ' logins · ' + c.upcoming + ' upcoming bookings · $' + Math.round((c.value_30d_cents || 0) / 100).toLocaleString() + ' booked in the last 30 days</p><div class="bar" style="margin:0"><a class="btn" target="_blank" href="' + esc(ln.staff) + '">Services, team & hours</a><a class="btn" target="_blank" href="' + esc(ln.booking) + '">Test a booking</a></div></div>' +
+    '</div>';
+  document.body.appendChild(dim); document.body.appendChild(d);
+  dim.onclick = closeDrawer; $("#dx").onclick = closeDrawer;
+  d.addEventListener("click", function (e) { var b = e.target.closest("[data-copy]"); if (b) copy(b.getAttribute("data-copy")); });
+  try { $("#wtok") && ($("#wtok").value = localStorage.getItem("svcsite_gh_token") || ""); } catch (e) {}
+  // plan radio -> default fee
+  $("#aplan").onchange = function () { var p = PLANS.filter(function (x) { return x.k === $('#aplan input:checked').value; })[0]; if (p) $("#afee").value = p.price; };
+  $("#asetup").onchange = function () { var s = SETUPS.filter(function (x) { return x.k === $("#asetup").value; })[0]; $("#asfee").value = s ? s.fee : ""; };
+  // manual checklist
+  d.querySelectorAll("[data-ck]").forEach(function (b) {
+    b.onchange = function () {
+      var k = b.getAttribute("data-ck"), list = Object.assign({}, c.checklist || {}); if (b.checked) list[k] = new Date().toISOString().slice(0, 10); else delete list[k];
+      rpc("svc_admin_account_save", { p_venue: c.id, p: { checklist: list } }).then(function (r) { if (!r.ok) throw new Error(r.error); c.checklist = list; toast("Saved"); reopen(); }).catch(function (e) { alert(e.message); b.checked = !b.checked; });
+    };
+  });
+  $("#asave").onclick = function () {
+    var m = $("#amsg"); m.className = "msg small"; m.textContent = "Saving…";
+    var plan = $('#aplan input:checked'); var setup = $("#asetup").value;
+    var p = { plan: plan ? plan.value : "", stage: $("#astage").value, monthly_fee: $("#afee").value, setup_option: setup, setup_fee: $("#asfee").value, trial_ends_on: $("#atrial").value, started_on: $("#astart").value,
+      contact_name: $("#acn").value, contact_email: $("#ace").value, contact_phone: $("#acp").value, website_url: $("#aweb").value, notes: $("#anotes").value };
+    rpc("svc_admin_account_save", { p_venue: c.id, p: p }).then(function (r) { if (!r.ok) throw new Error(r.error); return load(); })
+      .then(function () { toast("Account saved"); reopen(); }).catch(function (e) { m.className = "msg small err"; m.textContent = e.message; });
+  };
+  var welcome = function () {
+    var first = (c.contact_name || "").trim().split(/\s+/)[0] || "there", site = !noSite;
+    var body = "Hi " + first + ",\n\nWelcome to Service Deluxe! " + c.name + " is set up and ready.\n\n" +
+      "1. Create your login (takes a minute) — this link adds you as the owner:\n" + ln.invite + "\n\n" +
+      "2. Your staff calendar — services, prices, team and opening hours:\n" + ln.staff + "\n\n" +
+      "3. Your booking page — share it on your website, Google Business Profile and Instagram:\n" + ln.booking + "\n\n" +
+      (site && ln.website ? "4. Your website:\n" + ln.website + (ln.editor ? "\nTo edit it, open " + ln.editor + " and sign in with your login." : "") + "\n\n" : "") +
+      "Short videos that walk you through it:\n• Getting started: " + L.ytSetup + "\n" + (site ? "• Editing your website: " + L.ytEditor + "\n" : "") + (prem ? "• Your Premium website: " + L.ytPremium + "\n" : "") +
+      (prem ? "\nYour website also has an AI assistant that answers clients 24/7. Open the editor and tap 🤖 Assistant to add things like parking, policies and FAQs.\n" : "") +
+      (c.stage === "trial" && c.trial_ends_on ? "\nYour free trial runs until " + fmtD(c.trial_ends_on) + ".\n" : "") +
+      "\nAny questions, just reply or call me on 0413 872 994.\n\nMarc\nWebescapade";
+    return { subject: "Welcome to Service Deluxe — " + c.name, body: body };
+  };
+  $("#wel").onclick = function () { var w = welcome(); location.href = "mailto:" + encodeURIComponent(c.contact_email || c.email || "") + "?subject=" + encodeURIComponent(w.subject) + "&body=" + encodeURIComponent(w.body); };
+  $("#wcopy").onclick = function () { var w = welcome(); copy(w.subject + "\n\n" + w.body); };
+  if ($("#wmake")) $("#wmake").onclick = function () { makeSite(c, $("#wtpl").value, $("#wtok").value.trim(), $("#wmsg")); };
+}
+function reopen(){ if (OPEN) openClient(OPEN); if (TAB === "clients") { var keep = OPEN; viewClients(); OPEN = keep; } }
+function closeDrawer(silent){ ["#dim", "#drawer"].forEach(function (s) { var n = $(s); if (n) n.remove(); }); if (silent !== true) OPEN = null; }
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDrawer(); });
+
+/* ---------- create a website from the template (GitHub) ---------- */
+function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
+function makeSite(c, tpl, token, m){
+  if (!token) { m.className = "msg small err"; m.textContent = "Add your GitHub token first (the same one you use to Deploy)."; return; }
+  try { localStorage.setItem("svcsite_gh_token", token); } catch (e) {}
+  var dir = "service/sites/" + c.slug, master = dir + "/source/site-editable.html", live = dir + "/index.html";
+  var api = "https://api.github.com/repos/mteleki-wq/Restaurant-booking/contents/";
+  var H = { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" };
+  var getSha = function (p) { return fetch(api + p + "?ref=main", { headers: H }).then(function (r) { return r.status === 404 ? null : r.json().then(function (j) { if (!r.ok) throw new Error(j.message || r.status); return j.sha; }); }); };
+  var put = function (p, html, msg) { return getSha(p).then(function (sha) { var b = { message: msg, content: b64(html), branch: "main" }; if (sha) b.sha = sha; return fetch(api + p, { method: "PUT", headers: H, body: JSON.stringify(b) }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.message || r.status); }); }); }); };
+  if (c.website_url && !confirm("This replaces the website files in " + dir + ". Continue?")) return;
+  m.className = "msg small"; m.textContent = "Copying the " + tpl + " template…";
+  fetch(SITE + "/" + (tpl === "premium" ? L.tplPremium : L.tplBasic) + "?v=" + Date.now()).then(function (r) { if (!r.ok) throw new Error("Couldn't read the template (" + r.status + ")"); return r.text(); })
+    .then(function (h) {
+      var set = function (attr, val) { var re = new RegExp('(\\s' + attr + '=")[^"]*(")'); if (re.test(h)) h = h.replace(re, "$1" + val + "$2"); else h = h.replace("<body", "<body " + attr + '="' + val + '"'); };
+      set("data-venue", c.slug); set("data-gh-live", live); set("data-gh-master", master); set("data-gh-owner", "mteleki-wq"); set("data-gh-repo", "Restaurant-booking"); set("data-gh-branch", "main");
+      if (tpl === "premium" && /^(spa|salon|clinic|dental)$/.test(c.business_type)) { set("data-look", c.business_type); h = h.replace(/("look":")[a-z]+(")/, "$1" + c.business_type + "$2"); }
+      if (tpl === "premium" && c.business_type === "physio") { set("data-look", "clinic"); h = h.replace(/("look":")[a-z]+(")/, "$1clinic$2"); }
+      h = h.replace(/<title>[^<]*<\/title>/, "<title>" + esc(c.name) + "</title>");
+      var pub = h.replace(/<!--ENGINE-START-->[\s\S]*?<!--ENGINE-END-->/g, "").replace(/\/\*ENGINE-CSS-START\*\/[\s\S]*?\/\*ENGINE-CSS-END\*\//g, "").replace(/\sdata-gh-[a-z]+="[^"]*"/g, "");
+      m.textContent = "Saving the editable master…";
+      return put(master, h, "New client website: " + c.name + " (master)").then(function () { m.textContent = "Publishing the first live version…"; return put(live, pub, "New client website: " + c.name); });
+    })
+    .then(function () {
+      var url = SITE + "/" + dir + "/";
+      return rpc("svc_admin_account_save", { p_venue: c.id, p: { website_url: url } }).then(load).then(function () {
+        m.className = "msg small ok"; m.innerHTML = "✓ Created. GitHub publishes it in about a minute: <a target=\"_blank\" href=\"" + url + "source/site-editable.html\">open the editor</a>.";
+        setTimeout(reopen, 2500);
+      });
+    })
+    .catch(function (e) { m.className = "msg small err"; m.textContent = "✗ " + e.message; });
+}
+
+/* ---------- new client ---------- */
+function viewNew(){
+  app.innerHTML = '<h1>New <em>client</em></h1><p class="muted" style="margin:6px 0 18px">Creates their booking system with starter services for their trade, then sets their plan. You can finish the rest from their checklist.</p>' +
+    '<div class="steps"><span class="on">1 · Business</span><span>2 · Plan</span><span>3 · Checklist</span></div>' +
+    '<form class="card" id="nf"><div class="g2"><label>Business name<input id="nn" required placeholder="e.g. Harbour Day Spa"></label><label>Type of business<select id="nt">' + Object.keys(TYPES).map(function (k) { return '<option value="' + k + '">' + TYPES[k] + '</option>'; }).join("") + '</select></label>' +
+    '<label>Business phone<input id="np" placeholder="02 9000 0000"></label><label>Business email (gets booking copies)<input id="ne" type="email" placeholder="hello@business.com.au"></label>' +
+    '<label>Owner name<input id="no" placeholder="First and last name"></label><label>Rooms, chairs or stations<input id="nr" type="number" min="0" max="50" value="0"></label></div>' +
+    '<label style="display:flex;gap:8px;align-items:center;margin-top:14px;font-size:14px"><input type="checkbox" id="nw" checked> The owner also takes appointments (add them to the team)</label>' +
+    '<div class="note" style="margin-top:14px">Starter services, opening hours (Mon–Fri 9–5, plus Saturday for spas and salons) and rooms are added for their trade. Prices for clinics, dental and physio start empty — fill them in on the staff page.</div>' +
+    '<div class="bar" style="margin:16px 0 0"><button class="btn p" type="submit">Create business →</button><span class="msg" id="nm"></span></div></form>';
+  $("#nf").onsubmit = function (e) {
+    e.preventDefault(); var m = $("#nm"); m.className = "msg"; m.textContent = "Creating…";
+    rpc("svc_create_business", { p_name: $("#nn").value.trim(), p_type: $("#nt").value, p_phone: $("#np").value.trim(), p_email: $("#ne").value.trim(), p_owner_name: $("#no").value.trim(), p_owner_works: $("#nw").checked, p_rooms: +$("#nr").value || 0, p_code: "" })
+      .then(function (r) { if (!r.ok) throw new Error(r.error); return load().then(function () { return r; }); })
+      .then(function (r) { var c = DATA.filter(function (x) { return x.slug === r.slug; })[0]; stepPlan(c, $("#no").value.trim(), $("#ne").value.trim(), $("#np").value.trim()); })
+      .catch(function (e) { m.className = "msg err"; m.textContent = e.message; });
+  };
+}
+function stepPlan(c, owner, email, phone){
+  var t = new Date(); t.setDate(t.getDate() + 14); var trial = t.toISOString().slice(0, 10);
+  app.innerHTML = '<h1>' + esc(c.name) + ' <em>is created</em></h1><p class="muted" style="margin:6px 0 18px">Booking page: <a target="_blank" href="' + esc(links(c).booking) + '">' + esc(links(c).booking) + '</a></p>' +
+    '<div class="steps"><span>1 · Business ✓</span><span class="on">2 · Plan</span><span>3 · Checklist</span></div>' +
+    '<form class="card" id="pf"><div class="plans">' + PLANS.map(function (p, i) { return '<label class="plan"><input type="radio" name="plan" value="' + p.k + '"' + (i === 2 ? " checked" : "") + '><b>' + p.k + '</b><span>$' + p.price + '/mo + GST<br>' + p.d + '</span></label>'; }).join("") + '</div>' +
+    '<div class="g3" style="margin-top:16px"><label>Website setup<select id="ps">' + SETUPS.map(function (s) { return '<option value="' + s.k + '">' + s.label + '</option>'; }).join("") + '</select></label>' +
+    '<label>Stage<select id="pst"><option value="trial">Free trial</option><option value="active">Paying</option></select></label><label>Trial ends<input id="pt" type="date" value="' + trial + '"></label></div>' +
+    '<div class="g3" style="margin-top:14px"><label>Contact name<input id="pcn" value="' + esc(owner) + '"></label><label>Contact email<input id="pce" type="email" value="' + esc(email) + '"></label><label>Contact phone<input id="pcp" value="' + esc(phone) + '"></label></div>' +
+    '<label style="margin-top:14px">Notes<textarea id="pn" placeholder="How you met, what they need, follow-ups…"></textarea></label>' +
+    '<div class="bar" style="margin:16px 0 0"><button class="btn p" type="submit">Save & open checklist →</button><button class="btn" type="button" id="pskip">Skip for now</button><span class="msg" id="pm"></span></div></form>';
+  $("#pskip").onclick = function () { show("clients"); openClient(c.id); };
+  $("#pf").onsubmit = function (e) {
+    e.preventDefault(); var m = $("#pm"); m.className = "msg"; m.textContent = "Saving…";
+    var plan = $('#pf input[name=plan]:checked').value, P = PLANS.filter(function (x) { return x.k === plan; })[0], S2 = SETUPS.filter(function (x) { return x.k === $("#ps").value; })[0];
+    var stage = $("#pst").value;
+    rpc("svc_admin_account_save", { p_venue: c.id, p: { plan: plan, monthly_fee: P.price, setup_option: S2.k, setup_fee: S2.fee, stage: stage, trial_ends_on: stage === "trial" ? $("#pt").value : "", started_on: stage === "active" ? new Date().toISOString().slice(0, 10) : "",
+      contact_name: $("#pcn").value, contact_email: $("#pce").value, contact_phone: $("#pcp").value, notes: $("#pn").value } })
+      .then(function (r) { if (!r.ok) throw new Error(r.error); return load(); })
+      .then(function () { show("clients"); openClient(c.id); })
+      .catch(function (e) { m.className = "msg err"; m.textContent = e.message; });
+  };
+}
+
+/* ---------- resources ---------- */
+function viewRes(){
+  var li = function (label, url, note) { return '<li><a target="_blank" rel="noopener" href="' + esc(url) + '">' + label + ' ↗</a><span>' + (note || "") + '</span></li>'; };
+  var cp = function (label, text, note) { return '<li><b style="font-size:14px">' + label + '</b><span>' + (note || "") + ' <button class="btn sm" data-copy="' + esc(text) + '">Copy</button></span></li>'; };
+  app.innerHTML = '<h1>Everything you <em>need</em></h1><p class="muted" style="margin:6px 0 20px">Links, prices and videos for selling and setting up Service Deluxe.</p><div class="res">' +
+    '<div class="card"><h3>Prices (+ GST)</h3><ul>' + PLANS.map(function (p) { return '<li><b style="font-size:14px">' + p.k + ' · $' + p.price + '/mo</b><span>' + p.d + '</span></li>'; }).join("") +
+      '<li><b style="font-size:14px">Quick connect · $40</b><span>One-off: connect their domain, they fill it in</span></li><li><b style="font-size:14px">Done for you · $250</b><span>One-off: we load words, photos, services, team</span></li><li><b style="font-size:14px">Free trial</b><span>14 days, no card. More than 10 practitioners: price on request</span></li></ul></div>' +
+    '<div class="card"><h3>Selling</h3><ul>' + li("Sales page (with AI chat)", L.sales) + li("Video page", L.videos, "All 5 videos in one place") + li("Try a booking (demo spa)", L.booking + "?venue=serenity-spa") + li("Basic demo website", L.demoBasic) +
+      li("Premium demo · spa", L.demoPrem, "Ivy assistant") + li("Premium demo · salon", L.demoPrem + "salon/", "Rosa") + li("Premium demo · clinic", L.demoPrem + "clinic/", "Max") + li("Premium demo · dental", L.demoPrem + "dental/", "Pip") +
+      cp("Self sign-up link", L.trial, "Client sets up alone") + '</ul></div>' +
+    '<div class="card"><h3>Videos (YouTube)</h3><ul>' + li("1-minute tour", L.ytTour) + li("Getting started (setup)", L.ytSetup, "Send to every new client") + li("Website editor tour", L.ytEditor, "Basic & Premium") + li("Premium website", L.ytPremium) + li("Premium for hair salons", L.ytSalon) + '</ul></div>' +
+    '<div class="card"><h3>Templates</h3><ul>' + li("Basic website — editable master", SITE + "/" + L.tplBasic, "Copy for Basic & Team") + li("Premium website — editable master", SITE + "/" + L.tplPremium, "Copy for Premium") + li("Booking page", L.booking) + li("Staff calendar", L.staff) + li("Sign-up / add a business", L.start) + '</ul></div>' +
+    '<div class="card"><h3>Your tools</h3><ul>' + li("Control room (CRM)", L.crm) + li("Email Studio", L.studio) + li("Supabase dashboard", L.supa) + li("GitHub repository", L.repo) + '</ul></div>' +
+    '<div class="card"><h3>Setup steps</h3><ul style="font-size:14px">' +
+      '<li><b style="font-size:14px">1 · Create</b><span>+ New client: business, type, rooms, plan</span></li><li><b style="font-size:14px">2 · Invite</b><span>Welcome email with their owner invite link</span></li>' +
+      '<li><b style="font-size:14px">3 · Fill in</b><span>Services & prices, team, hours on the staff page</span></li><li><b style="font-size:14px">4 · Website</b><span>Create from template, choose look, Deploy</span></li>' +
+      '<li><b style="font-size:14px">5 · Premium</b><span>🤖 Assistant notes in the editor</span></li><li><b style="font-size:14px">6 · Share</b><span>Booking link on Google, Instagram, website</span></li></ul></div>' +
+    '</div>';
+  app.onclick = function (e) { var b = e.target.closest("[data-copy]"); if (b) copy(b.getAttribute("data-copy")); };
+}
+
+if (S.token) start(); else login();
+})();
+</script>
+</body>
+</html>
