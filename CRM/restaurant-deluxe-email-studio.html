@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v51</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v52</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -919,7 +919,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v51 \u00b7 New setup video (both setup choices)';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v52 \u00b7 Follow-up emails with the editor tour';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2911,6 +2911,8 @@
   var SVC_PREMIUM = "https://webescapade.com/service/demo-premium/";   /* Premium demo site */
   var SVC_PVIDEO = "https://youtu.be/GtzMh5USIoA";   /* Service Deluxe Premium tour */
   var SVC_PTHUMB = "https://webescapade.com/service/img/premium-video-thumb.jpg";
+  var SVC_EVIDEO = "https://youtu.be/6OuMtkKCxrw";   /* Premium editor tour */
+  var SVC_ETHUMB = "https://webescapade.com/service/img/editor-video-email.jpg";
   var SVC_GVIDEO = "https://youtu.be/TIrD-DhMVDw";   /* Premium getting-started (setup) video */
   var SVC_GTHUMB = "https://webescapade.com/service/img/setup-video-thumb.jpg";
   var SVC_SALON = "https://webescapade.com/service/demo-premium/salon/";   /* Premium salon demo (Atelier Hair) */
@@ -2963,7 +2965,7 @@
         bandImage:SVC_IMG+'band-three-taps.jpg', bandAlt:'Booking on a phone in three steps', bandLink:SVC_BOOK, bandCaption:'Clients choose the service, the person and a time, and get a confirmation straight away.',
         cta2:'How it works', cta2url:SVC_PAGE,
         headline:'Let your clients book themselves — any time.',
-        intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. I’ve built an online booking system for appointment businesses: clients choose the service, the practitioner and a free time, and your calendar fills itself.\n\nIt comes with a website you can edit yourself, and it costs one flat monthly price.',
+        intro:'I’m Marc, a web designer here in Sydney. I’ve built an online booking system for appointment businesses: clients choose the service, the practitioner and a free time, and your calendar fills itself.\n\nIt comes with a website you can edit yourself, and it costs one flat monthly price.',
         cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
         subject:'Let your clients book themselves', preheader:'Online bookings and a website you edit yourself. '+T+' days free.' }),
       P({ name:T+'-day free trial invite', desc:'Invite to start the trial',
@@ -2993,7 +2995,7 @@
         video2Note:'Like what you see? Here’s how to get started.\nThe booking system is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your words and photos for you ($250 + GST). Either way, it’s yours to edit.',
         cta1:'See the Premium demo', cta1url:SVC_PREMIUM, cta2:'Start your free trial', cta2url:SVC_START,
         headline:'A website that moves — and takes bookings.',
-        intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. Service Deluxe Premium turns a few of your own photos into a moving, full-screen welcome on your homepage, with your logo, so your business feels calm and special from the first second.\n\nYou choose the style and the layout yourself, and online booking by practitioner and room is built in.',
+        intro:'I’m Marc, a web designer here in Sydney. Service Deluxe Premium turns a few of your own photos into a moving, full-screen welcome on your homepage, with your logo, so your business feels calm and special from the first second.\n\nYou choose the style and the layout yourself, and online booking by practitioner and room is built in.',
         featEyebrow:'What Premium adds', featHeading:'Your photos, in motion.\nYour bookings, built in.',
         cards:[{n:'01', t:'An animated hero', d:'Add 2 to 8 photos and choose a style: slow drift, soft dissolve, glide, reveal or cinema.'},
                {n:'02', t:'Four layouts', d:'Full screen, full width, or the photo on the left or right. Change it with one tap.'},
@@ -3009,7 +3011,7 @@
         video2Note:'Love the look? Here’s how to get started.\nOnline stylist booking is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your salon’s words and photos for you ($250 + GST). Either way, it’s yours to edit.',
         cta1:'See the salon demo', cta1url:SVC_SALON, cta2:'Try booking a stylist', cta2url:SVC_SBOOK,
         headline:'A website as stylish as your salon.',
-        intro:'Hello,\n\nI’m Marc, a web designer here in Sydney. I’ve built a website for hair salons that looks as good as your work: a few photos of your salon become a moving, full-screen welcome, in a bold, editorial style.\n\nYour clients choose the service, their stylist and a time online, day or night, and get a confirmation straight away.',
+        intro:'I’m Marc, a web designer here in Sydney. I’ve built a website for hair salons that looks as good as your work: a few photos of your salon become a moving, full-screen welcome, in a bold, editorial style.\n\nYour clients choose the service, their stylist and a time online, day or night, and get a confirmation straight away.',
         featEyebrow:'Made for salons', featHeading:'Your salon, in motion.\nYour chairs, booked online.',
         cards:[{n:'01', t:'An animated homepage', d:'Turn 2 to 8 photos of your salon into a moving welcome, with your logo.'},
                {n:'02', t:'Book a stylist', d:'Clients pick the service, the stylist and a free time. Every chair is checked.'},
@@ -3017,6 +3019,36 @@
         plans:PR?[svcBox(PR,true)]:[], priceOn:!!PR,
         finalCta:'Start your free trial', finalUrl:SVC_START,
         subject:'A website as stylish as your salon', preheader:'A moving homepage and online stylist booking. '+T+' days free.' }); })(),
+      (function(){ var PR=svcPlan('Premium'); return P({ name:'Follow-up: see it working', desc:'For people who opened or clicked the intro: editor tour + setup video',
+        eyebrow:'See it working', badge:T+'-DAY FREE TRIAL',
+        heroImage:'', videoUrl:SVC_EVIDEO, videoThumb:SVC_ETHUMB, videoTitle:'Watch the 2-minute editor tour', videoPos:'hero',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Note:'Ready? You can be set up in minutes.\nOnline booking is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your words and photos for you ($250 + GST).',
+        cta1:'Start your free trial', cta1url:SVC_START, cta2:'See the Premium demo', cta2url:SVC_PREMIUM,
+        headline:'See exactly how it works.',
+        intro:'Thanks for taking a look at Service Deluxe. Before you try it, here’s a short tour, so you can see exactly what you can do yourself: change any words or photos, turn your photos into a moving homepage, and pick a look made for your business.',
+        featEyebrow:'In the tour', featHeading:'Everything you can change,\nright on the page.',
+        cards:[{n:'01', t:'Words and photos', d:'Tap any text and type. Tap any photo to swap it.'},
+               {n:'02', t:'A moving homepage', d:'Your own photos, six motion styles, four layouts and your logo.'},
+               {n:'03', t:'Publish in one tap', d:'Your changes go live on your own domain in about a minute.'}],
+        plans:PR?[svcBox(PR,true)]:[], priceOn:!!PR,
+        finalCta:'Start your free trial', finalUrl:SVC_START,
+        subject:'See it working, set up in minutes', preheader:'A 2-minute tour of the editor, and how to get started.' }); })(),
+      (function(){ var PR=svcPlan('Premium'); return P({ name:'Follow-up for hair salons', desc:'Salon follow-up for people who opened or clicked: editor tour + setup video',
+        eyebrow:'See it working', badge:T+'-DAY FREE TRIAL',
+        heroImage:'', videoUrl:SVC_EVIDEO, videoThumb:SVC_ETHUMB, videoTitle:'Watch the 2-minute editor tour', videoPos:'hero',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Note:'Ready? You can be set up in minutes.\nOnline stylist booking is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your salon’s words and photos for you ($250 + GST).',
+        cta1:'Start your free trial', cta1url:SVC_START, cta2:'See the salon demo', cta2url:SVC_SALON,
+        headline:'See exactly how your salon website works.',
+        intro:'Thanks for taking a look at Service Deluxe for salons. Here’s a short tour, so you can see what you can do yourself: change any words or photos, turn photos of your salon into a moving homepage, and switch to the bold Salon look in one tap.',
+        featEyebrow:'In the tour', featHeading:'Your salon website,\nedited by you.',
+        cards:[{n:'01', t:'Words and photos', d:'Tap any text and type. Tap any photo to swap it.'},
+               {n:'02', t:'A moving homepage', d:'Photos of your salon, six motion styles and your logo.'},
+               {n:'03', t:'Stylist booking built in', d:'Clients pick the service, the stylist and a free time.'}],
+        plans:PR?[svcBox(PR,true)]:[], priceOn:!!PR,
+        finalCta:'Start your free trial', finalUrl:SVC_START,
+        subject:'See your salon website working', preheader:'A 2-minute tour of the editor, and how to get started.' }); })(),
       P({ name:'Already have a website? Bookings only'+(B?' ('+svcPrice(B)+')':''), desc:'Keep their website, add the booking page',
         heroImage:SVC_IMG+'band-three-taps.jpg', heroAlt:'Booking on a phone in three steps', heroLink:SVC_BOOK,
         bandImage:SVC_IMG+'band-email.jpg', bandAlt:'Automatic booking confirmation email', bandCaption:'Every booking gets a confirmation and a reminder the day before.',
