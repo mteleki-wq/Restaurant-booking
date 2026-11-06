@@ -210,7 +210,7 @@ details p{color:var(--muted);margin:12px 0 0}
 .final p{color:var(--muted);max-width:30em;margin:18px auto 30px}
 footer{border-top:1px solid var(--line);padding:30px 0 100px;font-size:14px;color:var(--muted)}
 footer .w{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
-.pill-book{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:25;transform:translateY(140%);transition:transform .35s}
+.pill-book{position:fixed;left:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:25;transform:translateY(140%);transition:transform .35s}
 .pill-book.show{transform:none}
 .reveal{opacity:0;transform:translateY(34px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
@@ -282,7 +282,7 @@ body[data-look="dental"][data-hl="wide"] .htext em,body[data-look="dental"][data
 .ast-f button{border:0;border-radius:999px;background:var(--ink);color:var(--bg);font:700 14px var(--fb);padding:0 16px;cursor:pointer}
 .ast-f button:disabled{opacity:.5}
 .ast-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--paper)}
-@media(max-width:600px){.ast-fab{padding:8px}.ast-fab .tx{display:none}.ast-box{right:0;left:0;bottom:0;width:100%;height:calc(100svh - 56px);border-radius:22px 22px 0 0}}
+@media(max-width:600px){.pill-book{left:14px;max-width:calc(100% - 96px)}.ast-fab{padding:8px}.ast-fab .tx{display:none}.ast-box{right:0;left:0;bottom:0;width:100%;height:calc(100svh - 56px);border-radius:22px 22px 0 0}}
 </style>
 </head>
 <body data-venue="atelier-hair" data-booking-url="https://webescapade.com/service/service-booking.html" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-accent="#A9503A" data-word="stylist" data-look="salon" data-hl="full" data-ht="left" data-hlogo="off" data-am="loop">
