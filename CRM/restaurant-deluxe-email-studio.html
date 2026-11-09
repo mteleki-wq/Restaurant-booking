@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v53</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v54</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -919,7 +919,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v53 \u00b7 Restaurant Deluxe full tour video';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v54 \u00b7 Service: AI assistant news email';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2941,6 +2941,8 @@
   var SVC_PTHUMB = "https://webescapade.com/service/img/premium-video-thumb.jpg";
   var SVC_EVIDEO = "https://youtu.be/6OuMtkKCxrw";   /* Premium editor tour */
   var SVC_ETHUMB = "https://webescapade.com/service/img/editor-video-email.jpg";
+  var SVC_AVIDEO = "https://youtu.be/RvDm7b_jDX0";   /* AI assistant + Email Studio (coming soon) promo */
+  var SVC_ATHUMB = "https://webescapade.com/service/img/ai-assistant-video-thumb.jpg";
   var SVC_GVIDEO = "https://youtu.be/TIrD-DhMVDw";   /* Premium getting-started (setup) video */
   var SVC_GTHUMB = "https://webescapade.com/service/img/setup-video-thumb.jpg";
   var SVC_SALON = "https://webescapade.com/service/demo-premium/salon/";   /* Premium salon demo (Atelier Hair) */
@@ -2988,6 +2990,31 @@
       {n:'03', t:'Emails go out for you', d:'Confirmation, cancellation and a reminder the day before, automatically.'}
     ];
     return [
+      (function(){ var PR=svcPlan('Premium'); return P({ name:'What’s new: AI assistant + more to come', desc:'News email with the 1-minute video: AI assistant, messages, Email Studio coming soon',
+        badge:'NEW · AI ASSISTANT', eyebrow:'New at Service Deluxe',
+        headline:'Your website just got a receptionist.',
+        heroImage:'', videoUrl:SVC_AVIDEO, videoThumb:SVC_ATHUMB, videoTitle:'Watch the AI assistant in 1 minute', videoPos:'hero',
+        video2Url:'', video2Thumb:'', video2Title:'',
+        intro:'You’re with a client, the phone rings, and another booking slips away. So we gave Service Deluxe websites a helping hand.\n\nEvery Premium website now comes with its own AI assistant. It answers your clients’ questions about your services and prices, checks your real free times and sends them straight to booking — day and night. Busy or closed? It takes a message for you.\n\nWatch the 1-minute video below, then try it yourself on our demo spa: tap “Ask Ivy” and ask for a massage tomorrow.',
+        cta1:'Ask the demo assistant', cta1url:SVC_PREMIUM, cta2:'Start your free trial', cta2url:SVC_START,
+        featEyebrow:'What’s new', featHeading:'Answers. Free times.\nMessages.',
+        cards:[
+          {n:'01', t:'Answers your clients', d:'Services, prices, opening hours — in your own words. You edit what it knows in your website editor.'},
+          {n:'02', t:'Real free times', d:'It checks your calendar and your team, then links straight to booking with the right person.'},
+          {n:'03', t:'Takes messages', d:'Busy or after hours? Clients leave a message, waiting for you on your staff page with call and reply buttons.'}
+        ],
+        spotOn:true, spotEyebrow:'Coming soon', spotHeading:'Email Studio for your business',
+        spotSub:'Next up: send friendly offers and news to your own clients. Pick a template, add your offer, send it in a few taps — then see who opened it and watch the bookings come back.',
+        boxes:[{l:'TEMPLATES', v:'Friendly & ready'},{l:'SENDING', v:'A few taps'},{l:'RESULTS', v:'See who opened'}],
+        bandImage:SVC_IMG+'email-studio-coming-soon.jpg', bandAlt:'Coming soon: the Email Studio, with a spa offer ready to send', bandLink:SVC_AVIDEO,
+        bandCaption:'Coming soon: your offer, to your clients, in a few taps.',
+        priceEyebrow:'Included with Premium', priceHeading:'The AI assistant is included.\nNo extra cost.',
+        plans:[PR?{tier:'PREMIUM', price:svcPrice(PR), per:svcPer(), desc:'Premium website with animated photo hero, online bookings, calendar, automatic emails — and now your own AI assistant. New features are added along the way at no extra cost.', hi:true}:null].filter(Boolean),
+        priceFoot:'More to come from Webescapade. All plans and questions: webescapade.com/service',
+        finalHeading:'Try it free for '+T+' days.', finalSub:'Set up your booking page and website in minutes, switch the assistant on, and see what your clients ask. '+TERMS,
+        finalCta:'Start your free trial', finalUrl:SVC_START,
+        subject:'New: your website can now answer your clients', resendSubject:'Have you met your new AI assistant?',
+        preheader:'Watch the 1-minute video — and see what’s coming next.' }); })(),
       P({ name:'Intro to Service Deluxe', desc:'First message to a spa, clinic or salon',
         heroImage:SVC_IMG+'hero-calendar-phone.jpg', heroAlt:'The staff calendar and the booking page on a phone', heroLink:SVC_PAGE,
         bandImage:SVC_IMG+'band-three-taps.jpg', bandAlt:'Booking on a phone in three steps', bandLink:SVC_BOOK, bandCaption:'Clients choose the service, the person and a time, and get a confirmation straight away.',
