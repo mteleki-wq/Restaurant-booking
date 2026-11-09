@@ -294,7 +294,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v55</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v56</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -919,7 +919,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v55 \u00b7 Restaurant: Live menu news email';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v56 \u00b7 Restaurant promo video updated';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1004,14 +1004,14 @@
     }, o);
   }
 
-  var LIVE_VIDEO = "https://youtu.be/0Drr6G2AsE8";   /* Live menu: website + table ordering connected (1 min) */
+  var LIVE_VIDEO = "https://youtu.be/CQgsbNhttqw";   /* Restaurant Deluxe promo: new website template + Live menu + table ordering (1 min) */
   var PRESETS = [
     preset({
       name:"What’s new: Live menu + more to come", desc:"News email with the 1-minute video: website and table ordering share one menu; Email Studio coming soon",
       badge:"NEW · LIVE MENU", eyebrow:"New in Restaurant Deluxe",
       headline:"One menu. Everywhere.",
-      intro:"Your website and your table ordering are now connected.\n\nIn the website editor, tap “Live menu” once and your menu section comes straight from your ordering system. Run out of a dish? Mark it sold out in the Menu Manager. New price? Change it and save. Your website and the menu on every table update by themselves — no re-publishing, no out-of-date menus, no typing the same menu twice.\n\nWatch the 1-minute video below to see it working at a real restaurant.",
-      videoUrl:LIVE_VIDEO, videoThumb:"https://webescapade.com/Restaurant/live-menu-video-email.jpg", videoTitle:"Watch Live menu in 1 minute", videoPos:"hero",
+      intro:"Your website and your table ordering are now connected.\n\nIt starts with a beautiful website you edit yourself: tap any text to rewrite it, tap a photo to replace it. Then, in the website editor, tap “Live menu” once and your menu section comes straight from your ordering system. Run out of a dish? Mark it sold out in the Menu Manager. New price? Change it and save. Your website and the menu on every table update by themselves — no re-publishing, no out-of-date menus, no typing the same menu twice.\n\nWatch the 1-minute video below to see it all working together.",
+      videoUrl:LIVE_VIDEO, videoThumb:"https://webescapade.com/Restaurant/restaurant-deluxe-promo-email.jpg", videoTitle:"Watch Restaurant Deluxe in 1 minute", videoPos:"hero",
       video2Url:RD_TOUR2.video2Url, video2Thumb:RD_TOUR2.video2Thumb, video2Title:RD_TOUR2.video2Title, video2Pos:RD_TOUR2.video2Pos, video2Note:RD_TOUR2.video2Note,
       cta1:"Book a demo time", cta1url:DEMO_BOOK,
       cta2:"Call Marc", cta2url:"tel:0413872994",
@@ -1025,7 +1025,7 @@
       spotHeading:"Email Studio for your restaurant",
       spotSub:"Next up: send friendly offers and news to your own guests. Pick a template, add your offer — a new menu, a special night, a quiet-Tuesday deal — and send it in a few taps. Then see who opened it and watch the bookings come back.",
       boxes:[{l:"TEMPLATES", v:"Friendly & ready"},{l:"SENDING", v:"A few taps"},{l:"RESULTS", v:"See who opened"}],
-      bandImage:"https://webescapade.com/Restaurant/restaurant-deluxe-one-system.jpg", bandAlt:"Restaurant Deluxe: order at the table, kitchen and bar screens, digital waitlist, bookings and walk-ins",
+      bandImage:"https://webescapade.com/Restaurant/restaurant-deluxe-one-system-v2.jpg", bandAlt:"Restaurant Deluxe: order at the table, kitchen and bar screens, digital waitlist, bookings and walk-ins",
       bandCaption:"One system for your whole restaurant — ordering, kitchen screens, waitlist, bookings and now your website menu.", bandLink:LIVE_VIDEO,
       priceEyebrow:"After your "+FOUNDER_DAYS+" days", priceHeading:"One flat price. No commission.",
       plans:[{tier:"BOOKINGS + ORDERING + WAITLIST", price:"$149", per:"/ month", desc:"Everything working together on the tablets you already have. Ordering and waitlist only: $109 / month. New features like Live menu are added along the way.", hi:true}],
