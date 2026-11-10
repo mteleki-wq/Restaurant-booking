@@ -478,7 +478,7 @@ function defaultTemplates(){
    {id:uid(),name:"First approach — hospitality & cookery",buttons:true,
     subject:"Hospitality & Commercial Cookery trainer available — {my_name}",
     body:"<p>{greeting},</p>"+
-      "<p>I'm a French-trained chef and VET trainer based in Sydney, writing to introduce myself in case {college} has hospitality or commercial cookery delivery coming up.</p>"+
+      "<p>I'm a Swiss-trained chef and VET trainer based in Sydney, writing to introduce myself in case {college} has hospitality or commercial cookery delivery coming up.</p>"+
       "<p>I hold a Certificate IV in Training and Assessment (TAE40110) and a Certificate IV in Commercial Cookery, and I've delivered accredited hospitality since 2008 — currently at Le Culinaire Hospitality Institute and Apex International College, Certificate II through to Advanced Diploma. Behind that sit 35 years in commercial kitchens: Geneva-trained, former head chef and function centre manager.</p>"+
       "<p>Beyond the training package I bring current industry practice. I design and build the systems venues now run on — online bookings, QR ordering at the table, kitchen display screens and guest CRM — and bring them into class as live case studies.</p>"+
       "<p>Over the past year I've also built the classroom material to match: interactive role-plays students work through in the browser — a guest complaint, a dietary request, a function enquiry — plus practice quizzes and costing exercises. Assessment stays with the RTO's validated tools; this is practice, and students get far more of it.</p>"+
@@ -594,14 +594,21 @@ for(var ti=0;ti<tabBtns.length;ti++){
 }
 
 /* ---------------- merge + email building ---------------- */
+// "College team", "HR Department", "info" are not people — greet those without a name.
+function isGeneric(n){
+  if(!n) return true;
+  if(/@/.test(n)) return true;
+  if(/\b(team|dept|department|office|reception|admin|administration|enquiries|enquiry|info|careers|recruitment|hr|human resources|staff|to whom|sir|madam|manager|coordinator|college|institute|academy|school|campus)\b/i.test(n)) return true;
+  return false;
+}
 function firstName(c){
   var n=(c.contact||"").trim();
-  if(!n) return "there";
+  if(isGeneric(n)) return "there";
   return n.split(/\s+/)[0];
 }
 function greeting(c){
   var n=(c.contact||"").trim();
-  return n ? "Hello "+n.split(/\s+/)[0] : "Hello";
+  return isGeneric(n) ? "Hello" : "Hello "+n.split(/\s+/)[0];
 }
 function merge(str, c){
   var p=DB.profile;
@@ -730,8 +737,9 @@ function renderTable(){
     var html="";
     for(var i=0;i<rows.length;i++){
       var c=rows[i], s=c.status||"new";
-      var who = c.contact ? esc(c.contact)+(c.role?'<span>'+esc(c.role)+"</span>":"")
-                          : '<span style="color:#B07A12;font-weight:600">no name yet</span>';
+      var who = (c.contact && !isGeneric(c.contact))
+        ? esc(c.contact)+(c.role?'<span>'+esc(c.role)+"</span>":"")
+        : '<span style="color:#B07A12;font-weight:600">'+(c.contact?esc(c.contact)+" \u2014 not a person":"no name yet")+"</span>";
       html+='<tr data-id="'+c.id+'">'+
         '<td class="nm"><b>'+esc(c.name||"(no name)")+"</b>"+(c.suburb||c.state?"<span>"+esc([c.suburb,c.state].filter(Boolean).join(", "))+"</span>":"")+"</td>"+
         '<td class="nm">'+who+"</td>"+
