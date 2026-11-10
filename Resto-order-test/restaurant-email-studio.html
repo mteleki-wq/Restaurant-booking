@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<meta name="robots" content="noindex">
+<title>Email Studio · Restaurant Deluxe</title>
+<!-- ==================================================================
+     RESTAURANT DELUXE - RESTAURANT EMAIL STUDIO (Phase 1)   10 Nov 2026
+
+     Beautiful guest emails in the restaurant's own colours, in five
+     ready-made designs: New menu, Dish of the week, Event night,
+     Special offer, We miss you.
+
+     Works two ways:
+       * On its own - design, then Copy or Download and send with any
+         email app (Gmail, Outlook, Mailchimp...).
+       * Connected - a Restaurant Deluxe manager signs in: real dishes and
+         photos come from the Menu Manager, and the email is sent to the
+         guests who ticked "Keep me posted", through rd-crm-email (which
+         checks consent, opt-outs and adds the unsubscribe link itself).
+
+     Nothing secret lives in this page: the key below is the public,
+     read-only one every Restaurant Deluxe page uses.
+     ================================================================== -->
+<script>
+  var SUPABASE_URL = 'https://tehxobdokbvqtwtgqzrh.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE';
+  var BOOKING_PAGE = 'https://webescapade.com/restaurant-booking-supabase-with-crm-final.html';
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0b0806; --panel:#151009; --panel-2:#1c150c; --ink:#f6efe2; --muted:#b3a488;
+  --line:rgba(179,164,136,.22); --gold:#f0cf85; --grad:linear-gradient(100deg,#f2d187,#df9f52 55%,#b8783c);
+  --good:#7fd6a3; --bad:#ff8a75; --warn:#ffd479;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Sora',-apple-system,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;overflow-x:hidden}
+h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;font-weight:700}
+.mono{font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:var(--muted)}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+input[type=text],input[type=email],input[type=password],input[type=url],input[type=search],select,textarea{
+  width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);padding:10px 13px;outline:none;font-size:16px}
+textarea{min-height:110px;resize:vertical;line-height:1.5}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input[type=color]{width:52px;height:46px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);padding:4px;flex:none}
+label{display:block;font-size:12.5px;font-weight:600;margin:13px 0 6px}
+label small{font-weight:400;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:11px 18px;border-radius:100px;
+  background:var(--grad);color:#241703;font-weight:700;font-size:14px;transition:transform .12s}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.quiet{background:none;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.btn.sm{min-height:40px;padding:8px 14px;font-size:13px}
+.top{position:sticky;top:0;z-index:30;background:rgba(11,8,6,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:12px;padding:12px 18px;flex-wrap:wrap;max-width:1400px;margin:0 auto}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--grad);display:grid;place-items:center;color:#241703;font-weight:800;font-size:13px;flex:none}
+.top h1{font-size:15px}
+.spacer{flex:1}
+.conn{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:6px 12px}
+.conn i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.conn.on i{background:var(--good);box-shadow:0 0 8px var(--good)}
+.layout{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:22px;padding:20px 18px calc(30px + var(--safe-b));max-width:1400px;margin:0 auto}
+@media (max-width:980px){.layout{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:14px}
+.card h2{font-size:14px;display:flex;align-items:center;gap:10px}
+.card h2 .n{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:11px;color:var(--gold);font-family:'Space Mono',monospace}
+.hint{color:var(--muted);font-size:12.5px;line-height:1.5;margin:6px 0 0}
+.designs{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:12px}
+.dz{border:1px solid var(--line);border-radius:14px;padding:12px;text-align:left;min-height:74px;display:flex;flex-direction:column;gap:4px;background:var(--panel-2)}
+.dz b{font-size:13px}
+.dz small{color:var(--muted);font-size:11.5px;line-height:1.35}
+.dz.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.row{display:flex;gap:10px;align-items:flex-end}
+.row>div{flex:1;min-width:0}
+.dishes{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-height:270px;overflow:auto;-webkit-overflow-scrolling:touch;padding-right:2px}
+.dsh{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;cursor:pointer;min-height:48px}
+.dsh input{width:20px;height:20px;flex:none;accent-color:#df9f52}
+.dsh .ph{width:36px;height:36px;border-radius:8px;background:var(--panel-2) center/cover no-repeat;flex:none}
+.dsh span{flex:1;min-width:0;font-size:13.5px}
+.dsh em{font-style:normal;color:var(--muted);font-size:12.5px;flex:none}
+.dsh.on{border-color:var(--gold)}
+.manual{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:8px}
+.preview{position:sticky;top:76px;align-self:start}
+@media (max-width:980px){.preview{position:static}}
+.pv-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:100px;padding:3px}
+.seg button{padding:7px 14px;border-radius:100px;font-size:13px;color:var(--muted);min-height:36px}
+.seg button.on{background:var(--panel-2);color:var(--ink)}
+.subj{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:10px;font-size:13px}
+.subj b{display:block;font-size:14.5px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.subj span{color:var(--muted)}
+.frame{background:#e9e3d8;border-radius:18px;padding:14px;display:flex;justify-content:center;border:1px solid var(--line)}
+.frame iframe{width:100%;max-width:640px;height:760px;border:0;border-radius:10px;background:#fff;transition:max-width .25s}
+.frame.phone iframe{max-width:380px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.send{border:1px solid rgba(240,207,133,.45)}
+.aud{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.aud label{display:flex;align-items:center;gap:10px;margin:0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:600;cursor:pointer;min-height:48px}
+.aud label input{width:20px;height:20px;accent-color:#df9f52}
+.aud label span{flex:1}
+.aud label em{font-style:normal;color:var(--gold);font-family:'Space Mono',monospace;font-size:13px}
+.camps{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.cp{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;flex-wrap:wrap}
+.cp b{flex:1;min-width:140px;font-weight:600}
+.cp em{font-style:normal;color:var(--muted)}
+.note{border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.5;margin-top:10px;border:1px solid var(--line);color:var(--muted)}
+.note.warn{border-color:rgba(255,212,121,.45);color:var(--warn)}
+.note.good{border-color:rgba(127,214,163,.45);color:var(--good)}
+.modal{position:fixed;inset:0;z-index:80;background:rgba(4,3,2,.78);display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:20px;width:100%;max-width:420px;padding:22px}
+.sheet h3{font-size:17px}
+.toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));transform:translate(-50%,16px);opacity:0;pointer-events:none;background:var(--panel-2);
+  border:1px solid var(--gold);padding:12px 18px;border-radius:100px;font-size:13.5px;z-index:100;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <span class="logo">RD</span><h1>Email Studio</h1><span class="mono" id="vTitle"></span>
+  <span class="spacer"></span>
+  <span class="conn" id="conn"><i></i><span id="connTxt">Not connected — design &amp; copy</span></span>
+  <button class="btn quiet sm" id="signBtn">Sign in to send</button>
+</div></div>
+
+<div class="layout">
+  <div>
+    <div class="card">
+      <h2><span class="n">1</span>Choose a design</h2>
+      <div class="designs" id="designs"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">2</span>Your restaurant</h2>
+      <div class="row">
+        <div><label for="rName">Restaurant name</label><input type="text" id="rName" maxlength="60" placeholder="Sunset Grill"></div>
+        <div style="flex:0 0 auto"><label for="rAccent">Colour</label><input type="color" id="rAccent" value="#b8783c"></div>
+      </div>
+      <label for="rSlug">Restaurant Deluxe short name <small>(optional — loads your real dishes &amp; photos)</small></label>
+      <div class="row"><div><input type="text" id="rSlug" placeholder="sunset-grill" autocapitalize="off" spellcheck="false"></div>
+        <div style="flex:0 0 auto"><button class="btn quiet sm" id="loadMenu" style="min-height:46px">Load menu</button></div></div>
+      <label for="rLogo">Logo <small>(web address of the image, optional)</small></label>
+      <input type="url" id="rLogo" placeholder="https://…/logo.png">
+      <label for="rBook">Booking link</label>
+      <input type="url" id="rBook" placeholder="https://…">
+      <label for="rAddr">Address &amp; phone <small>(required by law in every email)</small></label>
+      <input type="text" id="rAddr" maxlength="140" placeholder="12 Harbour St, Sydney · 02 9000 0000">
+      <label for="rReply">Replies go to</label>
+      <input type="email" id="rReply" placeholder="bookings@yourrestaurant.com.au">
+    </div>
+
+    <div class="card">
+      <h2><span class="n">3</span>Words</h2>
+      <label for="fSubject">Subject line</label><input type="text" id="fSubject" maxlength="120">
+      <label for="fPre">Preview text <small>(shown after the subject in the inbox)</small></label><input type="text" id="fPre" maxlength="140">
+      <label for="fHead">Headline</label><input type="text" id="fHead" maxlength="90">
+      <label for="fBody">Message</label><textarea id="fBody" maxlength="1500"></textarea>
+      <div id="evBox" class="hide">
+        <label for="fEvName">Event</label><input type="text" id="fEvName" maxlength="80">
+        <label for="fEvWhen">Date &amp; time</label><input type="text" id="fEvWhen" maxlength="80" placeholder="Friday 28 November · 7 PM">
+      </div>
+      <div id="ofBox" class="hide">
+        <label for="fOffer">The offer</label><input type="text" id="fOffer" maxlength="70">
+        <label for="fOfferSmall">Details <small>(conditions, how to claim)</small></label><input type="text" id="fOfferSmall" maxlength="160">
+        <label for="fOfferEnd">Valid until</label><input type="text" id="fOfferEnd" maxlength="40" placeholder="30 November">
+      </div>
+      <div class="row">
+        <div><label for="fBtn">Button</label><input type="text" id="fBtn" maxlength="30"></div>
+        <div><label for="fBtnUrl">Button link</label><input type="url" id="fBtnUrl" placeholder="(your booking link)"></div>
+      </div>
+    </div>
+
+    <div class="card" id="dishCard">
+      <h2><span class="n">4</span><span id="dishTitle">Dishes</span></h2>
+      <p class="hint" id="dishHint"></p>
+      <input type="search" id="dishFind" class="hide" placeholder="Find a dish…" style="margin-top:10px">
+      <div class="dishes" id="dishList"></div>
+      <div class="manual" id="manual"></div>
+      <label for="fHero" id="heroLbl">Main photo <small>(web address — or pick a dish photo above)</small></label>
+      <input type="url" id="fHero" placeholder="https://…/photo.jpg">
+    </div>
+  </div>
+
+  <div class="preview">
+    <div class="pv-bar">
+      <span class="mono">Preview</span><span class="spacer"></span>
+      <div class="seg" role="group" aria-label="Preview size"><button id="pvDesk" class="on">Computer</button><button id="pvPhone">Phone</button></div>
+    </div>
+    <div class="subj"><span>Subject</span><b id="pvSubj"></b><span id="pvPre"></span></div>
+    <div class="frame" id="frame"><iframe id="pv" title="Email preview" sandbox="allow-same-origin"></iframe></div>
+    <div class="actions">
+      <button class="btn" id="copyBtn">Copy email</button>
+      <button class="btn quiet" id="dlBtn">Download</button>
+    </div>
+    <p class="hint">Copy, then paste into a new email in Gmail or Outlook. Download gives the email as a file for Mailchimp or similar.</p>
+
+    <div class="card send" id="sendCard" style="margin-top:16px">
+      <h2><span class="n">5</span>Send to your guests</h2>
+      <div id="sendOff">
+        <p class="hint">Sign in with your Restaurant Deluxe manager account to send to the guests who ticked <b>“Keep me posted”</b> when they booked online.</p>
+        <button class="btn quiet sm" id="signBtn2" style="margin-top:10px">Sign in to send</button>
+      </div>
+      <div id="sendOn" class="hide">
+        <div class="aud" id="aud"></div>
+        <p class="hint">Only guests who said yes, are still subscribed and haven’t opted out receive it. Each email gets its own unsubscribe link.</p>
+        <label for="fFrom">From</label>
+        <input type="text" id="fFrom" readonly>
+        <div class="actions">
+          <button class="btn quiet" id="testBtn">Send me a test</button>
+          <button class="btn" id="sendBtn">Send to guests</button>
+        </div>
+        <div class="note hide" id="sendNote"></div>
+        <div id="campWrap" class="hide"><div class="mono" style="margin-top:16px">Recent emails</div><div class="camps" id="camps"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="mSign"><div class="sheet">
+  <h3>Sign in</h3>
+  <p class="hint">Your Restaurant Deluxe manager email and password.</p>
+  <label for="em">Email</label><input type="email" id="em" autocomplete="username" autocapitalize="off" spellcheck="false">
+  <label for="pw">Password</label><input type="password" id="pw" autocomplete="current-password">
+  <div id="pick" class="hide"><label for="venuePick">Restaurant</label><select id="venuePick"></select></div>
+  <p class="hint" id="signMsg" style="color:var(--warn);min-height:18px"></p>
+  <div class="actions"><button class="btn quiet" id="signX">Cancel</button><button class="btn" id="signGo">Sign in</button></div>
+</div></div>
+
+<div class="modal" id="mConfirm"><div class="sheet">
+  <h3 id="cfTitle">Send now?</h3>
+  <p class="hint" id="cfText" style="font-size:14px"></p>
+  <div class="actions"><button class="btn quiet" id="cfNo">Not yet</button><button class="btn" id="cfYes">Send</button></div>
+</div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+var TT=null;
+function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(TT); TT=setTimeout(function(){ t.classList.remove('on'); },4500); }
+function store(k,v){ try{ if(v==null) localStorage.removeItem(k); else localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function load(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+function safeUrl(u){ u=String(u||'').trim(); return /^(https:\/\/|mailto:|tel:)/i.test(u) ? u : ''; }
+function safeImg(u){ u=String(u||'').trim(); return /^https:\/\//i.test(u) ? u : ''; }
+function money(c){ if(c==null) return ''; var d=c/100; return '$'+(c%100 ? d.toFixed(2) : String(Math.round(d))); }
+
+/* ===================== the five designs ===================== */
+var DESIGNS = [
+  { id:'menu', label:'New menu', blurb:'Show off new dishes', eyebrow:'New menu', dishes:3, audience:'all',
+    subject:'Our new menu has landed', pre:'A few new dishes we can’t wait for you to try.',
+    head:'A new menu, fresh from our kitchen', btn:'Book a table',
+    body:'Our chefs have been busy. The new season’s menu is here, built around the best produce we can find right now.\n\nHere are a few of the dishes we’re most excited about — come in and taste them while they last.' },
+  { id:'dish', label:'Dish of the week', blurb:'One dish, one big photo', eyebrow:'Dish of the week', dishes:1, hero:true, audience:'all',
+    subject:'This week’s dish is worth the trip', pre:'One plate our kitchen is very proud of.',
+    head:'This week, we’re cooking…', btn:'Book your table',
+    body:'Every week our kitchen picks one dish to put in the spotlight. This is the one everyone is talking about.' },
+  { id:'event', label:'Event night', blurb:'Invite guests to a night', eyebrow:'You’re invited', event:true, audience:'all',
+    subject:'You’re invited — a night to remember', pre:'Seats are limited, so we’re telling you first.',
+    head:'Join us for a special night', btn:'Reserve your seat', evName:'Wine dinner', evWhen:'',
+    body:'We’re hosting something special and we’d love you to be there. Good food, great wine and a room full of friendly faces.\n\nSeats are limited, so we’re letting our favourite guests know first.' },
+  { id:'offer', label:'Special offer', blurb:'A treat to bring them in', eyebrow:'Just for you', offer:true, audience:'all',
+    subject:'A little something, just for you', pre:'A thank-you from all of us.',
+    head:'A treat on us', btn:'Book & claim', offer:'Free dessert', offerSmall:'With any main course. Mention this email when you book.', offerEnd:'',
+    body:'Thank you for being one of our guests. To say thanks, here’s a little something for your next visit.' },
+  { id:'miss', label:'We miss you', blurb:'Win back past guests', eyebrow:'We miss you', dishes:2, audience:'lapsed',
+    subject:'It’s been a while — we saved you a table', pre:'Come back and see what’s new.',
+    head:'We’ve missed you at our tables', btn:'Book a table',
+    body:'It’s been a little while since your last visit, and we’d love to see you again.\n\nThe kitchen has been busy since you were last in — here are a couple of dishes you haven’t tried yet.' }
+];
+var S = { d: DESIGNS[0], menu: [], picked: [], manual: [], venue: null, crm: false, counts: {}, from: '', audience: 'all' };
+
+/* ===================== the email itself =====================
+   Table-based with inline styles - the only layout every email app
+   (Gmail, Outlook, Apple Mail) shows the same way. Every word typed is
+   escaped; links must be https / mailto / tel. */
+function lum(hex){
+  var m=/^#?([0-9a-f]{6})$/i.exec(hex||''); if(!m) return .3;
+  var n=parseInt(m[1],16), c=[(n>>16)&255,(n>>8)&255,n&255].map(function(v){ v/=255; return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4); });
+  return .2126*c[0]+.7152*c[1]+.0722*c[2];
+}
+function darken(hex,f){ var n=parseInt(String(hex).slice(1),16); var r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  function h(v){ return ('0'+Math.round(v*f).toString(16)).slice(-2); } return '#'+h(r)+h(g)+h(b); }
+function para(t,style){ return esc(t).replace(/\n{2,}/g,'</p><p style="'+style+'">').replace(/\n/g,'<br>'); }
+function chosenDishes(){
+  var n=S.d.dishes||0; if(!n) return [];
+  var list=S.picked.map(function(id){ return S.menu.filter(function(x){ return x.id===id; })[0]; }).filter(Boolean);
+  if(!S.menu.length) list=S.manual.filter(function(m){ return m.name; });
+  return list.slice(0,n);
+}
+function V(){
+  return { name:$('rName').value.trim()||'Your restaurant', accent:$('rAccent').value||'#b8783c', logo:safeImg($('rLogo').value),
+    book:safeUrl($('rBook').value), addr:$('rAddr').value.trim(), reply:$('rReply').value.trim(),
+    subject:$('fSubject').value.trim(), pre:$('fPre').value.trim(), head:$('fHead').value.trim(), body:$('fBody').value,
+    evName:$('fEvName').value.trim(), evWhen:$('fEvWhen').value.trim(), offer:$('fOffer').value.trim(),
+    offerSmall:$('fOfferSmall').value.trim(), offerEnd:$('fOfferEnd').value.trim(),
+    btn:$('fBtn').value.trim(), btnUrl:safeUrl($('fBtnUrl').value)||safeUrl($('rBook').value), hero:safeImg($('fHero').value) };
+}
+/* mode 'send': {{first_name}} and {{unsubscribe_url}} are filled in per guest by rd-crm-email.
+   mode 'copy': for sending yourself - a friendly greeting and an email-reply unsubscribe. */
+function buildEmail(mode){
+  var v=V(), d=S.d, a=v.accent, aText=lum(a)>.45?darken(a,.55):a, btnInk=lum(a)>.5?'#1a1410':'#ffffff';
+  var serif="Georgia,'Times New Roman',serif", sans="Helvetica,Arial,sans-serif";
+  var greet = mode==='send' ? 'Hi {{first_name}},' : 'Hi there,';
+  var unsub = mode==='send' ? '{{unsubscribe_url}}' :
+    (v.reply ? 'mailto:'+encodeURIComponent(v.reply)+'?subject='+encodeURIComponent('Unsubscribe') : '');
+  var dishes=chosenDishes(), hero=v.hero;
+  if(d.hero && !hero && dishes[0] && dishes[0].photo) hero=dishes[0].photo;
+  var h='';
+  h+='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+     '<meta name="color-scheme" content="light"><title>'+esc(v.subject||v.head)+'</title></head>'+
+     '<body style="margin:0;padding:0;background:#f4efe6;-webkit-text-size-adjust:100%">'+
+     '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#f4efe6">'+esc(v.pre)+'&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>'+
+     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4efe6"><tr><td align="center" style="padding:24px 12px">'+
+     '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden">';
+  /* header */
+  h+='<tr><td align="center" style="padding:26px 28px 18px;border-bottom:3px solid '+a+'">'+
+     (v.logo ? '<img src="'+esc(v.logo)+'" alt="'+esc(v.name)+'" width="140" style="display:block;width:140px;max-width:60%;height:auto;border:0">'
+             : '<div style="font:700 24px/1.2 '+serif+';color:#1a1410;letter-spacing:.02em">'+esc(v.name)+'</div>')+
+     '</td></tr>';
+  if(hero) h+='<tr><td><img src="'+esc(hero)+'" alt="" width="600" style="display:block;width:100%;height:auto;border:0"></td></tr>';
+  /* words */
+  h+='<tr><td style="padding:30px 34px 6px">'+
+     '<div style="font:700 12px/1 '+sans+';letter-spacing:.18em;text-transform:uppercase;color:'+aText+'">'+esc(d.eyebrow)+'</div>'+
+     '<h1 style="margin:12px 0 18px;font:700 30px/1.2 '+serif+';color:#1a1410">'+esc(v.head)+'</h1>'+
+     '<p style="margin:0 0 16px;font:16px/1.65 '+sans+';color:#3a3027">'+greet+'</p>'+
+     '<p style="margin:0 0 16px;font:16px/1.65 '+sans+';color:#3a3027">'+para(v.body,'margin:0 0 16px;font:16px/1.65 '+sans+';color:#3a3027')+'</p>'+
+     '</td></tr>';
+  if(d.event && (v.evName||v.evWhen)){
+    h+='<tr><td style="padding:6px 34px 10px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e6dccb;border-radius:12px;background:#fbf7ef">'+
+       '<tr><td style="padding:18px 20px"><div style="font:700 20px/1.3 '+serif+';color:#1a1410">'+esc(v.evName)+'</div>'+
+       (v.evWhen?'<div style="margin-top:6px;font:600 15px/1.5 '+sans+';color:'+aText+'">'+esc(v.evWhen)+'</div>':'')+'</td></tr></table></td></tr>';
+  }
+  if(d.offer && v.offer){
+    h+='<tr><td style="padding:6px 34px 10px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:2px dashed '+a+';border-radius:12px">'+
+       '<tr><td align="center" style="padding:22px 20px"><div style="font:700 28px/1.2 '+serif+';color:#1a1410">'+esc(v.offer)+'</div>'+
+       (v.offerSmall?'<div style="margin-top:8px;font:14px/1.5 '+sans+';color:#5a4b3a">'+esc(v.offerSmall)+'</div>':'')+
+       (v.offerEnd?'<div style="margin-top:8px;font:700 12px/1.4 '+sans+';letter-spacing:.12em;text-transform:uppercase;color:'+aText+'">Valid until '+esc(v.offerEnd)+'</div>':'')+
+       '</td></tr></table></td></tr>';
+  }
+  /* dishes */
+  if(dishes.length){
+    if(d.hero && dishes.length===1){
+      var x=dishes[0];
+      h+='<tr><td style="padding:8px 34px 6px"><div style="font:700 24px/1.25 '+serif+';color:#1a1410">'+esc(x.name)+
+         (x.price?' <span style="font:700 18px '+sans+';color:'+aText+'">'+esc(x.price)+'</span>':'')+'</div>'+
+         (x.desc?'<p style="margin:8px 0 0;font:15px/1.6 '+sans+';color:#5a4b3a">'+esc(x.desc)+'</p>':'')+'</td></tr>';
+    } else {
+      h+='<tr><td style="padding:8px 34px 4px">';
+      dishes.forEach(function(x,i){
+        h+='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="'+(i?'border-top:1px solid #eee6d8;':'')+'"><tr>'+
+           (x.photo?'<td width="96" valign="top" style="padding:14px 16px 14px 0"><img src="'+esc(x.photo)+'" alt="" width="96" height="96" style="display:block;width:96px;height:96px;object-fit:cover;border-radius:10px;border:0"></td>':'')+
+           '<td valign="top" style="padding:14px 0"><div style="font:700 17px/1.35 '+serif+';color:#1a1410">'+esc(x.name)+
+           (x.price?'<span style="font:700 15px '+sans+';color:'+aText+'"> &nbsp;'+esc(x.price)+'</span>':'')+'</div>'+
+           (x.desc?'<div style="margin-top:5px;font:14px/1.55 '+sans+';color:#5a4b3a">'+esc(x.desc)+'</div>':'')+'</td></tr></table>';
+      });
+      h+='</td></tr>';
+    }
+  }
+  /* button */
+  if(v.btn && v.btnUrl){
+    h+='<tr><td align="center" style="padding:22px 34px 34px"><table role="presentation" cellpadding="0" cellspacing="0"><tr>'+
+       '<td align="center" bgcolor="'+a+'" style="border-radius:40px;background:'+a+'"><a href="'+esc(v.btnUrl)+'" target="_blank" '+
+       'style="display:inline-block;padding:15px 34px;font:700 16px/1 '+sans+';color:'+btnInk+';text-decoration:none;border-radius:40px">'+esc(v.btn)+'</a></td>'+
+       '</tr></table></td></tr>';
+  } else h+='<tr><td style="padding:0 0 22px"></td></tr>';
+  /* footer: who it's from, how to reach them, how to stop (Spam Act) */
+  h+='<tr><td align="center" style="padding:22px 28px 26px;background:#faf6ee;border-top:1px solid #eee6d8;font:12.5px/1.6 '+sans+';color:#7a6a55">'+
+     '<div style="font:700 14px/1.4 '+serif+';color:#3a3027">'+esc(v.name)+'</div>'+
+     (v.addr?'<div>'+esc(v.addr)+'</div>':'')+
+     '<div style="margin-top:10px">You’re receiving this because you asked '+esc(v.name)+' to keep you posted.'+
+     (unsub?' <a href="'+esc(unsub)+'" style="color:#7a6a55;text-decoration:underline">Unsubscribe</a>':'')+'</div>'+
+     '</td></tr></table></td></tr></table></body></html>';
+  return h;
+}
+
+/* ===================== form ===================== */
+function paintDesigns(){
+  $('designs').innerHTML=DESIGNS.map(function(d){
+    return '<button class="dz'+(d===S.d?' on':'')+'" data-d="'+d.id+'" aria-pressed="'+(d===S.d)+'"><b>'+esc(d.label)+'</b><small>'+esc(d.blurb)+'</small></button>';
+  }).join('');
+}
+function setDesign(d, keepWords){
+  S.d=d;
+  if(!keepWords){
+    $('fSubject').value=d.subject; $('fPre').value=d.pre; $('fHead').value=d.head; $('fBody').value=d.body; $('fBtn').value=d.btn;
+    $('fEvName').value=d.evName||''; $('fEvWhen').value=d.evWhen||'';
+    $('fOffer').value=d.offer||''; $('fOfferSmall').value=d.offerSmall||''; $('fOfferEnd').value=d.offerEnd||'';
+    S.audience=d.audience||'all';
+  }
+  $('evBox').classList.toggle('hide',!d.event); $('ofBox').classList.toggle('hide',!d.offer);
+  topUp();
+  paintDesigns(); paintDishes(); paintAudience(); render();
+}
+function topUp(){
+  var n=S.d.dishes||0; if(!S.menu.length) return;
+  for(var i=0;i<S.menu.length && S.picked.length<n;i++) if(S.picked.indexOf(S.menu[i].id)<0) S.picked.push(S.menu[i].id);
+}
+function paintDishes(){
+  var n=S.d.dishes||0, card=$('dishCard');
+  $('dishTitle').textContent = n ? (n===1?'Pick the dish':'Pick '+n+' dishes') : 'Photo';
+  $('heroLbl').classList.toggle('hide', !(S.d.hero || !n)); $('fHero').classList.toggle('hide', !(S.d.hero || !n));
+  if(!n){ $('dishHint').textContent='Add a photo to make the email stand out (optional).'; $('dishList').innerHTML=''; $('manual').innerHTML=''; $('dishFind').classList.add('hide'); return; }
+  if(S.menu.length){
+    $('dishFind').classList.toggle('hide', S.menu.length<8);
+    $('dishHint').textContent='From your live menu — tick up to '+n+'. Photos and prices come straight from the Menu Manager.';
+    var q=$('dishFind').value.trim().toLowerCase();
+    $('dishList').innerHTML=S.menu.filter(function(x){ return !q || x.name.toLowerCase().indexOf(q)>=0 || x.cat.toLowerCase().indexOf(q)>=0; }).map(function(x){
+      var on=S.picked.slice(0,n).indexOf(x.id)>=0;
+      return '<label class="dsh'+(on?' on':'')+'"><input type="checkbox" data-dish="'+esc(x.id)+'"'+(on?' checked':'')+'>'+
+        '<span class="ph" style="'+(x.photo?'background-image:url(&quot;'+esc(x.photo)+'&quot;)':'')+'"></span>'+
+        '<span>'+esc(x.name)+'<br><em>'+esc(x.cat)+'</em></span><em>'+esc(x.price)+'</em></label>';
+    }).join('');
+    $('manual').innerHTML='';
+  } else {
+    $('dishFind').classList.add('hide'); $('dishList').innerHTML='';
+    $('dishHint').innerHTML='Type your dishes below — or enter your <b>Restaurant Deluxe short name</b> above and tap <b>Load menu</b> to use your real dishes and photos.';
+    while(S.manual.length<n) S.manual.push({name:'',price:'',desc:'',photo:''});
+    $('manual').innerHTML=S.manual.slice(0,n).map(function(m,i){
+      return '<div style="border:1px solid var(--line);border-radius:12px;padding:10px">'+
+        '<div class="mrow"><input type="text" data-m="'+i+'" data-k="name" placeholder="Dish name" value="'+esc(m.name)+'" aria-label="Dish '+(i+1)+' name">'+
+        '<input type="text" data-m="'+i+'" data-k="price" placeholder="$24" value="'+esc(m.price)+'" aria-label="Dish '+(i+1)+' price"></div>'+
+        '<input type="text" data-m="'+i+'" data-k="desc" placeholder="Short description" value="'+esc(m.desc)+'" style="margin-top:8px" aria-label="Dish '+(i+1)+' description">'+
+        '<input type="url" data-m="'+i+'" data-k="photo" placeholder="Photo web address (optional)" value="'+esc(m.photo)+'" style="margin-top:8px" aria-label="Dish '+(i+1)+' photo"></div>';
+    }).join('');
+  }
+}
+var RT=null;
+function render(){
+  clearTimeout(RT);
+  RT=setTimeout(function(){
+    var v=V();
+    $('pvSubj').textContent=v.subject||'(no subject)'; $('pvPre').textContent=v.pre;
+    var doc=$('pv'); doc.srcdoc=buildEmail('send').replace(/\{\{first_name\}\}/g, 'Alex').replace(/\{\{unsubscribe_url\}\}/g,'#');
+    saveDraft();
+  },120);
+}
+function saveDraft(){
+  var ids=['rName','rAccent','rSlug','rLogo','rBook','rAddr','rReply','fSubject','fPre','fHead','fBody','fEvName','fEvWhen','fOffer','fOfferSmall','fOfferEnd','fBtn','fBtnUrl','fHero'];
+  var o={d:S.d.id, picked:S.picked, manual:S.manual}; ids.forEach(function(i){ o[i]=$(i).value; });
+  store('rd_mail_draft',o);
+}
+function loadDraft(){
+  var o=load('rd_mail_draft'); if(!o) return false;
+  Object.keys(o).forEach(function(k){ var el=$(k); if(el && typeof o[k]==='string') el.value=o[k]; });
+  S.picked=o.picked||[]; S.manual=o.manual||[];
+  var d=DESIGNS.filter(function(x){ return x.id===o.d; })[0]||DESIGNS[0];
+  setDesign(d,true); return true;
+}
+
+$('designs').addEventListener('click',function(e){
+  var b=e.target.closest('[data-d]'); if(!b) return;
+  var d=DESIGNS.filter(function(x){ return x.id===b.dataset.d; })[0];
+  if(d && d!==S.d) setDesign(d,false);
+});
+document.addEventListener('input',function(e){
+  if(e.target.dataset && e.target.dataset.m!=null){ S.manual[+e.target.dataset.m][e.target.dataset.k]=e.target.value; render(); return; }
+  if(e.target.id==='dishFind'){ paintDishes(); return; }
+  if(e.target.closest('.layout') && e.target.id!=='rSlug') render();
+});
+$('dishList').addEventListener('change',function(e){
+  var id=e.target.dataset.dish; if(!id) return;
+  var n=S.d.dishes||0;
+  S.picked=S.picked.slice(0,n);
+  var i=S.picked.indexOf(id);
+  if(e.target.checked){ if(i<0){ if(S.picked.length>=n) S.picked.shift(); S.picked.push(id); } }
+  else if(i>=0) S.picked.splice(i,1);
+  paintDishes(); render();
+});
+
+/* ===================== live menu (public, read-only) ===================== */
+function loadMenu(slug, quiet){
+  slug=String(slug||'').trim().toLowerCase();
+  if(!slug){ if(!quiet) toast('Type your Restaurant Deluxe short name first'); return Promise.resolve(); }
+  return fetch(SUPABASE_URL+'/rest/v1/rpc/rd_menu',{method:'POST',headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({p_venue_slug:slug})}).then(function(r){ return r.ok?r.json():null; }).then(function(m){
+      if(!m || !m.ok){ if(!quiet) toast('No restaurant called “'+slug+'” in Restaurant Deluxe'); return; }
+      var list=[];
+      (m.categories||[]).forEach(function(c){ (c.items||[]).forEach(function(it){
+        if(it.sold_out) return;
+        list.push({ id:it.id, name:it.name, cat:c.name, price:money(it.price_cents), desc:it.description||'', photo:safeImg(it.photo_url) });
+      }); });
+      S.menu=list;
+      /* dishes with photos first: they make the best emails */
+      S.menu.sort(function(a,b){ return (b.photo?1:0)-(a.photo?1:0); });
+      S.picked=S.picked.filter(function(id){ return list.some(function(x){ return x.id===id; }); });
+      topUp();
+      if(!$('rBook').value) $('rBook').value=BOOKING_PAGE+'?venue='+encodeURIComponent(slug);
+      paintDishes(); render();
+      if(!quiet) toast(list.length+' dishes loaded from your menu');
+    }).catch(function(){ if(!quiet) toast('Couldn’t reach the menu just now'); });
+}
+$('loadMenu').addEventListener('click',function(){ loadMenu($('rSlug').value,false); });
+$('rSlug').addEventListener('keydown',function(e){ if(e.key==='Enter') loadMenu($('rSlug').value,false); });
+
+/* ===================== copy / download (works without signing in) ===================== */
+$('copyBtn').addEventListener('click',function(){
+  var html=buildEmail('copy');
+  if(!$('rAddr').value.trim()){ toast('Add your address & phone first — the law asks for it in every email'); $('rAddr').focus(); return; }
+  try{
+    if(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+      navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([$('fBody').value],{type:'text/plain'})})])
+        .then(function(){ toast('Copied — paste it into a new email in Gmail or Outlook'); }, function(){ fallbackCopy(); });
+      return;
+    }
+  }catch(e){}
+  fallbackCopy();
+  function fallbackCopy(){
+    var f=$('pv'), d=f.contentDocument; f.srcdoc=html;
+    setTimeout(function(){ try{ d=f.contentDocument; var r=d.createRange(); r.selectNodeContents(d.body); var s=d.getSelection(); s.removeAllRanges(); s.addRange(r);
+      d.execCommand('copy'); s.removeAllRanges(); toast('Copied — paste it into a new email'); }catch(e){ toast('Copy isn’t allowed here — use Download instead'); } render(); },150);
+  }
+});
+$('dlBtn').addEventListener('click',function(){
+  if(!$('rAddr').value.trim()){ toast('Add your address & phone first — the law asks for it in every email'); $('rAddr').focus(); return; }
+  var blob=new Blob([buildEmail('copy')],{type:'text/html'}), a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=(($('rName').value||'email').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-')||'email')+'-'+S.d.id+'.html';
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },800);
+  toast('Downloaded');
+});
+$('pvDesk').addEventListener('click',function(){ $('frame').classList.remove('phone'); this.classList.add('on'); $('pvPhone').classList.remove('on'); });
+$('pvPhone').addEventListener('click',function(){ $('frame').classList.add('phone'); this.classList.add('on'); $('pvDesk').classList.remove('on'); });
+
+/* ===================== connected: sign in, audience, send ===================== */
+var SESSION=load('rd_mail_session'), REFRESHING=null;
+function authPost(grant, body){
+  return fetch(SUPABASE_URL+'/auth/v1/token?grant_type='+grant,{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw {status:r.status,data:d}; return d; }); })
+    .then(function(d){ SESSION={access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Date.now()+((d.expires_in||3600)*1000),email:(d.user&&d.user.email)||(SESSION&&SESSION.email)||''};
+      store('rd_mail_session',SESSION); return SESSION; });
+}
+function fresh(){
+  if(!SESSION) return Promise.reject({status:401});
+  if(SESSION.expires_at-Date.now()>120000 || !SESSION.refresh_token) return Promise.resolve(SESSION);
+  if(!REFRESHING) REFRESHING=authPost('refresh_token',{refresh_token:SESSION.refresh_token})
+    .then(function(s){ REFRESHING=null; return s; },function(e){ REFRESHING=null; throw {status:401}; });
+  return REFRESHING;
+}
+function api(path,opts){
+  opts=opts||{};
+  return fresh().then(function(){
+    var h={apikey:SUPABASE_KEY,Authorization:'Bearer '+SESSION.access_token,'Content-Type':'application/json'};
+    for(var k in (opts.headers||{})) h[k]=opts.headers[k];
+    return fetch(SUPABASE_URL+path,{method:opts.method||'GET',headers:h,body:opts.body});
+  }).then(function(r){ return r.text().then(function(t){ var d=null; try{ d=t?JSON.parse(t):null; }catch(x){}
+    if(!r.ok) throw {status:r.status,data:d}; return {data:d, res:r}; }); });
+}
+function fn(body){ return api('/functions/v1/rd-crm-email',{method:'POST',body:JSON.stringify(body)}).then(function(x){ return x.data; }); }
+function errText(e){
+  var m=(e&&e.data&&(e.data.error||e.data.message))||'';
+  if(e&&e.status===401) return 'Your sign-in has expired — sign in again.';
+  if(!e||!e.status) return 'Couldn’t reach Restaurant Deluxe. Check the connection.';
+  return m||'That didn’t work. Please try again.';
+}
+function openSign(){ $('mSign').classList.add('on'); $('signMsg').textContent=''; setTimeout(function(){ $('em').focus(); },50); }
+$('signBtn').addEventListener('click',function(){ if(S.venue){ signOut(); } else openSign(); });
+$('signBtn2').addEventListener('click',openSign);
+$('signX').addEventListener('click',function(){ $('mSign').classList.remove('on'); });
+$('pw').addEventListener('keydown',function(e){ if(e.key==='Enter') $('signGo').click(); });
+var VENUES=[];
+$('signGo').addEventListener('click',function(){
+  var b=this;
+  if(!$('pick').classList.contains('hide')){ chooseVenue($('venuePick').value); return; }
+  var e=$('em').value.trim(), p=$('pw').value;
+  if(!e||!p){ $('signMsg').textContent='Enter your email and password.'; return; }
+  b.disabled=true;
+  authPost('password',{email:e,password:p}).then(function(){ $('pw').value=''; return afterSignIn(); })
+    .catch(function(err){ $('signMsg').textContent= err&&err.status===400 ? 'That email and password didn’t match.' : errText(err); })
+    .then(function(){ b.disabled=false; });
+});
+function afterSignIn(){
+  return api('/rest/v1/rpc/rd_my_venues',{method:'POST',body:'{}'}).then(function(x){
+    VENUES=(x.data||[]).filter(function(v){ return ['owner','manager','platform'].indexOf(v.role)>=0; });
+    if(!VENUES.length){ $('signMsg').textContent='Sending needs a manager account. Ask the restaurant owner to make you a manager.'; return; }
+    var last=load('rd_mail_venue');
+    if(VENUES.length===1) return chooseVenue(VENUES[0].id);
+    if(last && VENUES.some(function(v){ return v.id===last; })) return chooseVenue(last);
+    $('pick').classList.remove('hide'); $('signGo').textContent='Continue';
+    $('venuePick').innerHTML=VENUES.map(function(v){ return '<option value="'+esc(v.id)+'">'+esc(v.name||v.slug)+'</option>'; }).join('');
+    $('mSign').classList.add('on');
+  });
+}
+function chooseVenue(id){
+  var v=VENUES.filter(function(x){ return x.id===id; })[0]; if(!v) return;
+  store('rd_mail_venue',id); $('mSign').classList.remove('on'); $('pick').classList.add('hide'); $('signGo').textContent='Sign in';
+  return api('/rest/v1/rd_venues?id=eq.'+encodeURIComponent(id)+'&select=id,name,slug,brand_accent,logo_url').then(function(x){
+    var r=(x.data||[])[0]||{}; S.venue={id:id,name:r.name||v.name,slug:r.slug||v.slug};
+    $('rName').value=S.venue.name; $('rSlug').value=S.venue.slug;
+    if(r.brand_accent && /^#[0-9a-f]{6}$/i.test(r.brand_accent) && !load('rd_mail_accent_'+id)) $('rAccent').value=r.brand_accent;
+    if(r.logo_url && !$('rLogo').value) $('rLogo').value=r.logo_url;
+    $('rBook').value=$('rBook').value||BOOKING_PAGE+'?venue='+encodeURIComponent(S.venue.slug);
+    $('vTitle').textContent=S.venue.name; $('conn').classList.add('on'); $('connTxt').textContent='Connected · '+S.venue.name;
+    $('signBtn').textContent='Sign out';
+    $('sendOff').classList.add('hide'); $('sendOn').classList.remove('hide');
+    loadMenu(S.venue.slug,true);
+    return api('/rest/v1/rd_crm_config?restaurant_id=eq.'+encodeURIComponent(id)+'&select=restaurant_id,status');
+  }).then(function(x){
+    S.crm=!!(x && x.data && x.data.length && x.data[0].status==='active');
+    if(!S.crm){ note('warn','Guest emails aren’t switched on for '+esc(S.venue.name)+' yet. You can still design, copy and download — ask Webescapade to switch on the guest list.'); paintAudience(); return; }
+    return Promise.all([counts(), sender(), recent()]);
+  }).catch(function(e){ note('warn',esc(errText(e))); });
+}
+function signOut(){ store('rd_mail_session',null); store('rd_mail_venue',null); location.reload(); }
+function note(kind,html){ var n=$('sendNote'); n.className='note '+(kind||''); n.innerHTML=html; n.classList.remove('hide'); }
+
+var AUD=[{id:'all',label:'Everyone who said yes'},{id:'regulars',label:'Regulars (2+ visits)'},{id:'lapsed',label:'Not back in 60+ days'}];
+function audQuery(id){
+  var q='/rest/v1/rd_crm_customers?select=id&restaurant_id=eq.'+encodeURIComponent(S.venue.id)+'&marketing_consent=is.true&email_status=eq.subscribed&status=eq.active&email=not.is.null';
+  if(id==='regulars') q+='&visits=gte.2';
+  if(id==='lapsed') q+='&last_visit=lt.'+new Date(Date.now()-60*86400000).toISOString().slice(0,10);
+  return q;
+}
+function counts(){
+  return Promise.all(AUD.map(function(a){
+    return api(audQuery(a.id)+'&limit=1',{headers:{Prefer:'count=exact'}}).then(function(x){
+      var cr=x.res.headers.get('content-range')||''; S.counts[a.id]=parseInt(cr.split('/')[1],10)||0;
+    }).catch(function(){ S.counts[a.id]=null; });
+  })).then(paintAudience);
+}
+function paintAudience(){
+  if(!S.venue){ return; }
+  $('aud').innerHTML=AUD.map(function(a){
+    var n=S.counts[a.id];
+    return '<label><input type="radio" name="aud" value="'+a.id+'"'+(S.audience===a.id?' checked':'')+(S.crm?'':' disabled')+'><span>'+esc(a.label)+'</span><em>'+(n==null?'–':n)+'</em></label>';
+  }).join('');
+  var n=S.counts[S.audience];
+  $('sendBtn').disabled=!S.crm || !n;
+  $('sendBtn').textContent = n ? 'Send to '+n+' guest'+(n===1?'':'s') : 'Send to guests';
+}
+$('aud').addEventListener('change',function(e){ if(e.target.name==='aud'){ S.audience=e.target.value; paintAudience(); } });
+function sender(){
+  return fn({action:'health',restaurant_id:S.venue.id}).then(function(r){
+    var dom=(r&&r.verified_domains||[])[0];
+    if(!r || !r.connected || !dom){ S.from=''; $('fFrom').value='Email sending isn’t set up yet'; note('warn','Sending isn’t set up on the server yet (no verified sending domain). Copy and Download still work.'); return; }
+    var nm=(S.venue.name||'Restaurant').replace(/["<>\r\n]/g,'');
+    S.from='"'+nm+'" <hello@'+dom+'>'; $('fFrom').value=nm+' · hello@'+dom;
+  }).catch(function(e){ S.from=''; $('fFrom').value='Can’t reach the sender'; note('warn', /Failed to fetch|NetworkError/i.test(String(e&&e.message))||!e||!e.status ?
+      'Can’t reach the email sender from this page yet. It needs the updated <b>rd-crm-email</b> that allows webescapade.com.' : esc(errText(e))); });
+}
+function content(){
+  var v=V();
+  return { from:S.from, reply_to:v.reply||undefined, subject:v.subject, html:buildEmail('send'), audience:S.audience, template:S.d.id, preheader:v.pre };
+}
+function ready(){
+  var v=V();
+  if(!v.subject){ toast('Add a subject line'); $('fSubject').focus(); return false; }
+  if(!v.addr){ toast('Add your address & phone — the law asks for it in every email'); $('rAddr').focus(); return false; }
+  if(!S.from){ toast('Sending isn’t set up yet — use Copy or Download'); return false; }
+  return true;
+}
+$('testBtn').addEventListener('click',function(){
+  if(!ready()) return;
+  var b=this, to=SESSION&&SESSION.email; b.disabled=true;
+  fn({action:'test',restaurant_id:S.venue.id,test_email:to,content:content()})
+    .then(function(){ toast('Test sent to '+to+' — check your inbox'); }, function(e){ toast(errText(e)); })
+    .then(function(){ b.disabled=false; });
+});
+var PENDING=null;
+$('sendBtn').addEventListener('click',function(){
+  if(!ready()) return;
+  var n=S.counts[S.audience]||0, a=AUD.filter(function(x){ return x.id===S.audience; })[0];
+  $('cfTitle').textContent='Send to '+n+' guest'+(n===1?'':'s')+'?';
+  $('cfText').innerHTML='<b>'+esc(V().subject)+'</b><br>To: '+esc(a.label)+'.<br><br>Guests who have since unsubscribed are left out automatically. This can’t be undone.';
+  PENDING=true; $('mConfirm').classList.add('on');
+});
+$('cfNo').addEventListener('click',function(){ PENDING=null; $('mConfirm').classList.remove('on'); });
+$('cfYes').addEventListener('click',function(){
+  if(!PENDING) return; PENDING=null;
+  var b=this; b.disabled=true; $('sendBtn').disabled=true;
+  var c=content(), name=S.d.label+' · '+new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+  api('/rest/v1/rd_crm_campaigns',{method:'POST',headers:{Prefer:'return=representation'},
+    body:JSON.stringify({restaurant_id:S.venue.id,name:name,status:'draft',content:c})})
+    .then(function(x){ var id=x.data&&x.data[0]&&x.data[0].id; if(!id) throw {status:500,data:{error:'Could not save the email'}}; return fn({action:'send',campaign_id:id}); })
+    .then(function(r){
+      $('mConfirm').classList.remove('on');
+      note('good','Sent to <b>'+(r.sent||0)+'</b> guest'+(r.sent===1?'':'s')+'.'+(r.excluded_optouts?' '+r.excluded_optouts+' left out because they unsubscribed.':''));
+      toast('Sent!'); return recent();
+    }, function(e){ $('mConfirm').classList.remove('on'); note('warn','Not sent: '+esc(errText(e))); })
+    .then(function(){ b.disabled=false; paintAudience(); });
+});
+function recent(){
+  return api('/rest/v1/rd_crm_campaigns?restaurant_id=eq.'+encodeURIComponent(S.venue.id)+'&select=id,name,status,stats,created_at&order=created_at.desc&limit=5').then(function(x){
+    var rows=x.data||[]; $('campWrap').classList.toggle('hide',!rows.length);
+    $('camps').innerHTML=rows.map(function(c){
+      var st=c.stats||{}, sent=st.sent!=null?st.sent+' sent':'';
+      return '<div class="cp"><b>'+esc(c.name||'Email')+'</b><em>'+esc(c.status==='sent'?sent:c.status)+'</em>'+
+        (c.status==='sent'?'<button class="btn quiet sm" data-stats="'+esc(c.id)+'">Results</button>':'')+'<span class="hide" data-out="'+esc(c.id)+'"></span></div>';
+    }).join('');
+  }).catch(function(){});
+}
+$('camps').addEventListener('click',function(e){
+  var b=e.target.closest('[data-stats]'); if(!b) return;
+  b.disabled=true;
+  fn({action:'stats',campaign_id:b.dataset.stats}).then(function(r){
+    var s=r.stats||{}, o=document.querySelector('[data-out="'+b.dataset.stats+'"]');
+    o.textContent='Delivered '+(s.delivered||0)+' · Opened '+(s.opened||0)+' · Clicked '+(s.clicked||0); o.classList.remove('hide'); o.style.cssText='width:100%;color:var(--gold);font-size:12.5px';
+    b.remove();
+  },function(e){ b.disabled=false; toast(errText(e)); });
+});
+
+/* ===================== start ===================== */
+paintDesigns();
+if(!loadDraft()) setDesign(DESIGNS[0],false);
+$('rAccent').addEventListener('change',function(){ if(S.venue) store('rd_mail_accent_'+S.venue.id,1); });
+if($('rSlug').value) loadMenu($('rSlug').value,true);
+if(SESSION && SESSION.access_token) afterSignIn().catch(function(e){ if(e&&e.status===401){ store('rd_mail_session',null); SESSION=null; } });
+})();
+</script>
+</body>
+</html>
