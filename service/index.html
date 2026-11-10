@@ -257,6 +257,7 @@ body:has(.chat.open) #float{visibility:hidden}
 .dark .eyebrow{color:var(--soft)}
 .dark h2 em{color:var(--soft)}
 .dark .ticks span,.dark .head p,.dark .lead{color:rgba(255,255,255,.66)}
+.dark .btn.line{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.7)}
 .dark .ticks li:before{background-color:rgba(255,255,255,.1);color:var(--soft)}
 .emailcard{max-width:420px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
 /* pricing */
@@ -314,7 +315,7 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
 
 <nav class="top" id="nav"><div class="w">
   <a class="brand" href="#top"><span class="m">S</span><span><b data-edit="brand">Service Deluxe</b><small>by Webescapade</small></span></a>
-  <div class="links"><a href="#types" data-edit="n6">Your look</a><a href="#how" data-edit="n1">How it works</a><a href="#videos" data-edit="n5">Videos</a><a href="#features" data-edit="n2">Features</a><a href="#pricing" data-edit="n3">Pricing</a><a href="#faq" data-edit="n4">FAQ</a></div>
+  <div class="links"><a href="#types" data-edit="n6">Your look</a><a href="#how" data-edit="n1">How it works</a><a href="#videos" data-edit="n5">Videos</a><a href="#assistant" data-edit="n7">AI assistant</a><a href="#features" data-edit="n2">Features</a><a href="#pricing" data-edit="n3">Pricing</a><a href="#faq" data-edit="n4">FAQ</a></div>
   <a class="btn dark" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="navcta">Start free trial</span> <span class="ar">→</span></a>
 </div></nav>
 
@@ -350,10 +351,25 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
 
 <section class="s" id="videos" data-sec="spa" style="padding-bottom:20px"><div class="w">
   <div class="head rv"><div class="eyebrow" data-edit="vEy">Watch it work</div><h2 data-edit="vH">See how it works. <em>Set up in minutes.</em></h2>
-    <p data-edit="vP">Short videos: how clients book, how you edit your website, and how to get started.</p></div>
+    <p data-edit="vP">Short videos: your new AI assistant, how clients book, how you edit your website, and how to get started.</p></div>
   <div class="vids rv">
-    <div class="vmain" id="vmain"><button class="vp" type="button" id="vplay" aria-label="Play video"><span id="vnow">Service Deluxe in one minute</span><span>▶ Play</span></button></div>
+    <div class="vmain" id="vmain"><button class="vp" type="button" id="vplay" aria-label="Play video"><span id="vnow">NEW: Your AI assistant</span><span>▶ Play</span></button></div>
     <div><div class="vlist" id="vlist"></div><a class="vall" href="/service/tour/" target="_blank" rel="noopener" data-edit="vall">All videos on one page ↗</a></div>
+  </div>
+</div></section>
+
+<section class="s dark" id="assistant" data-sec="clinic"><div class="w">
+  <div class="split flip">
+    <div class="rv"><div class="emailcard" data-par="-0.06"><img data-img="assistant" src="/service/img/ai-assistant-chat.jpg" alt="The AI assistant on a day spa website answering “Do you have a relaxation massage free tomorrow after work?” with real free times and Book buttons" loading="lazy" width="900" height="1140"></div></div>
+    <div class="txt rv"><div class="eyebrow" data-edit="ai1Ey">New · AI assistant</div><h2 data-edit="ai1H">Your front desk, <em>open day and night.</em></h2>
+      <p class="lead" data-edit="ai1P" style="margin-top:18px">Every Premium website now comes with its own AI assistant. It chats with your clients while you're busy with someone else — and at 10 pm on a Sunday.</p>
+      <ul class="ticks">
+        <li><span><b data-edit="ai1a">Answers in your words</b><span data-edit="ai1as">Services, prices, opening hours and your policies. You edit what it knows in the website editor.</span></span></li>
+        <li><span><b data-edit="ai1b">Real free times, straight to booking</b><span data-edit="ai1bs">It checks your calendar and your team, then links to booking with the right person.</span></span></li>
+        <li><span><b data-edit="ai1c">Takes messages when you can't</b><span data-edit="ai1cs">Clients leave their name and number — it's waiting on your staff page with call and reply buttons.</span></span></li>
+        <li><span><b data-edit="ai1d">Included with Premium</b><span data-edit="ai1ds">No extra cost. It only uses what you tell it, and clients can always reach you directly.</span></span></li>
+      </ul>
+      <div class="ctas" style="margin-top:28px"><a class="btn light" href="/service/demo-premium/" target="_blank" rel="noopener"><span data-edit="ai1cta">Ask Ivy on our demo spa</span> <span class="ar">→</span></a><a class="btn line" href="/service/tour/?v=assistant" target="_blank" rel="noopener"><span data-edit="ai1cta2">▶ Watch the 1-minute video</span></a></div></div>
   </div>
 </div></section>
 
@@ -668,6 +684,7 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
 <script>/*VIDEOS-JS*/
 (function(){
 var V=[
+ {id:'RvDm7b_jDX0',t:'NEW: Your AI assistant',d:'Answers clients day and night, shows real free times and takes messages.',img:'/service/img/ai-assistant-video-thumb.jpg'},
  {id:'wEmL6nPHgO0',t:'Service Deluxe in one minute',d:'Booking in three taps, automatic emails and your own website.',img:'/service/img/video-thumb.jpg'},
  {id:'TIrD-DhMVDw',t:'Getting started',d:'Sign up, set up your business and go live, step by step.',img:'/service/img/setup-video-thumb.jpg'},
  {id:'6OuMtkKCxrw',t:'The website editor',d:'Change words, photos, layouts, animation and colours yourself.',img:'/service/img/editor-video-thumb.jpg'},
