@@ -278,6 +278,13 @@
     .btn{flex:1 1 auto}
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .thms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .thm{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:inherit;font:inherit;font-size:12.5px;cursor:pointer;text-align:left;min-height:44px}
+  .thm i{flex:0 0 auto;width:22px;height:22px;border-radius:7px;border:1px solid rgba(255,255,255,.3)}
+  .thm b{flex:0 0 auto;width:10px;height:10px;border-radius:50%;margin-left:-14px;margin-top:14px;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+  .thm span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .thm[aria-pressed="true"]{border-color:#6fe6e0;background:rgba(111,230,224,.12)}
+  @media(max-width:520px){.thms{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -294,7 +301,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v56</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v57</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -324,6 +331,22 @@
 
       <!-- ============ CONTENT ============ -->
       <div class="pane" id="pane-content">
+        <div class="field">
+          <label>Email theme</label>
+          <select id="fTheme" data-k="theme" hidden aria-hidden="true">
+            <option value="alt">Dark &amp; light</option><option value="dark">All dark</option><option value="light">Light</option>
+            <option value="cream">Cream &amp; olive</option><option value="terra">Cream &amp; terracotta</option><option value="sage">Soft sage</option>
+          </select>
+          <div class="thms" id="thms" role="group" aria-label="Email theme">
+            <button type="button" class="thm" data-thm="alt"><i style="background:linear-gradient(90deg,#0c0f24 50%,#ffffff 50%)"></i><b style="background:#7b3cff"></b><span>Dark &amp; light</span></button>
+            <button type="button" class="thm" data-thm="dark"><i style="background:#0c0f24"></i><b style="background:#2fe1db"></b><span>All dark</span></button>
+            <button type="button" class="thm" data-thm="light"><i style="background:#ffffff"></i><b style="background:#7b3cff"></b><span>Light</span></button>
+            <button type="button" class="thm" data-thm="cream"><i style="background:#fbf8f1"></i><b style="background:#5f7038"></b><span>Cream &amp; olive</span></button>
+            <button type="button" class="thm" data-thm="terra"><i style="background:#fffaf4"></i><b style="background:#b3532e"></b><span>Cream &amp; terracotta</span></button>
+            <button type="button" class="thm" data-thm="sage"><i style="background:#fbfcfa"></i><b style="background:#3f6b55"></b><span>Soft sage</span></button>
+          </div>
+          <p style="margin:6px 0 0;font-size:12px;opacity:.7">Changes this email’s colours. Light themes suit restaurants and spas.</p>
+        </div>
         <div class="field">
           <label for="fName">Campaign name</label>
           <input type="text" id="fName" data-k="name">
@@ -673,14 +696,7 @@
             <label for="fTo">Test recipient</label>
             <input type="email" id="fTo" data-k="to" placeholder="marc@webescapade.com">
           </div>
-          <div class="field">
-            <label for="fTheme">Palette</label>
-            <select id="fTheme" data-k="theme">
-              <option value="alt">Alternating dark and light</option>
-              <option value="light">All light</option>
-              <option value="dark">All dark</option>
-            </select>
-          </div>
+
         </div>
         <div class="btnrow">
           <button class="btn primary" id="copyHtml">Copy HTML for Resend</button>
@@ -919,7 +935,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v56 \u00b7 Restaurant promo video updated';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v57 \u00b7 Email themes: cream, terracotta, sage';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1435,10 +1451,31 @@
       ink:'#ffffff',mut:'#c7cada',faint:'#a9adbf',line:'#202643',line2:'#353b5a',eye:'#6fe6e0',cardbg:'#171a36'};
     var LIGHT={bg:'#eceaf6',shell:'#ffffff',band:'#ffffff',band2:'#f8f5ff',head:'#f8f5ff',foot:'#f2f0fa',
       ink:'#17192b',mut:'#5c6072',faint:'#7c8095',line:'#e4e1ef',line2:'#e4e1ef',eye:'#6e36d9',cardbg:'#f8f5ff'};
-    function bandDark(i){ return mode==='dark' ? true : mode==='light' ? false : (i%2===0); }
-    var S = mode==='light' ? LIGHT : DARK;
+    /* Light colour themes: own background, ink and accents (accents also used on the dark bands of 'alt'). */
+    var THEMES={
+      cream:{bg:'#efe9dc',shell:'#fbf8f1',band:'#fbf8f1',band2:'#f4efe3',head:'#f4efe3',foot:'#ece5d6',
+        ink:'#22201a',mut:'#5d5848',faint:'#7d7766',line:'#e3dccb',line2:'#e3dccb',eye:'#5f7038',cardbg:'#f4efe3',
+        a1:'#5f7038',a2:'#8a9a55',a3:'#c9a45e',g1:'rgba(176,138,74,.16)',g2:'rgba(95,112,56,.13)',deep:'#2c331e'},
+      terra:{bg:'#f1e8de',shell:'#fffaf4',band:'#fffaf4',band2:'#f8efe5',head:'#f8efe5',foot:'#efe4d7',
+        ink:'#2a1d16',mut:'#68564a',faint:'#8a7668',line:'#eadbcb',line2:'#eadbcb',eye:'#b3532e',cardbg:'#f8efe5',
+        a1:'#b3532e',a2:'#d07a45',a3:'#d9ab5c',g1:'rgba(201,154,75,.16)',g2:'rgba(179,83,46,.12)',deep:'#3a2219'},
+      sage:{bg:'#e6ece6',shell:'#fbfcfa',band:'#fbfcfa',band2:'#f1f5f0',head:'#f1f5f0',foot:'#e8eee7',
+        ink:'#1d2a23',mut:'#526158',faint:'#748278',line:'#dde6de',line2:'#dde6de',eye:'#3f6b55',cardbg:'#f1f5f0',
+        a1:'#3f6b55',a2:'#6e9a83',a3:'#c7ae7c',g1:'rgba(180,154,106,.14)',g2:'rgba(63,107,85,.13)',deep:'#1d3127'}
+    };
+    var TH=THEMES[mode]||null;
+    function bandDark(i){ return TH ? false : mode==='dark' ? true : mode==='light' ? false : (i%2===0); }
+    var S = TH ? TH : mode==='light' ? LIGHT : DARK;
     var F="Arial,Helvetica,sans-serif";
-    var GR="linear-gradient(135deg,#8d38ff,#4f7dff 52%,#2fe1db)";
+    var A1 = TH ? TH.a1 : '#7b3cff';
+    var GR = TH ? 'linear-gradient(135deg,'+TH.a1+','+TH.a2+')' : "linear-gradient(135deg,#8d38ff,#4f7dff 52%,#2fe1db)";
+    var BAR = TH ? 'linear-gradient(90deg,'+TH.a1+','+TH.a3+')' : 'linear-gradient(90deg,#8d38ff,#2fe1db)';
+    var SHIM = TH ? 'linear-gradient(110deg,'+TH.a1+' 0%,'+TH.a1+' 40%,'+TH.a2+' 50%,'+TH.a1+' 60%,'+TH.a1+' 100%)' : 'linear-gradient(110deg,#7b3cff 0%,#7b3cff 40%,#35d9dd 50%,#7b3cff 60%,#7b3cff 100%)';
+    var BTN2 = TH ? 'linear-gradient(100deg,'+TH.a1+','+TH.a2+')' : 'linear-gradient(100deg,#8438ff,#3479f6,#2fd7d2)';
+    var CARDACC = TH ? [TH.a1,TH.a2,TH.a3] : ['#7b3cff','#4d70ef','#1db9ba'];
+    var SPOTACC = TH ? [TH.a1,TH.a2,TH.a3] : ['#a576ff','#54ddd8','#f0cd8b'];
+    var DOT = TH ? TH.a2 : '#39ddd3';
+    var LT = TH || LIGHT;
     var o=[];
 
     o.push('<!doctype html><html lang="en"><head>');
@@ -1476,26 +1513,26 @@
     o.push('<tr><td class="pad" style="padding:23px 38px;background:'+S.head+';border-bottom:1px solid '+S.line+';">'+
       '<table role="presentation" width="100%"><tr><td><table role="presentation"><tr>'+
       '<td width="46" height="46" align="center" style="width:46px;height:46px;border-radius:12px;'+
-      'background:#7b3cff;background-image:'+GR+';font:800 16px '+F+';color:#fff;">WE</td>'+
+      'background:'+A1+';background-image:'+GR+';font:800 16px '+F+';color:#fff;">WE</td>'+
       '<td style="padding-left:13px;">'+
       '<div style="font:700 18px '+F+';color:'+S.ink+';">Webescapade</div>'+
       '<div style="padding-top:4px;font:500 9px '+F+';letter-spacing:2.3px;color:'+S.eye+';">AI-POWERED WEB EXPERIENCES</div>'+
       '</td></tr></table></td>');
     if(c.badge){
       o.push('<td align="right"><span class="pulse" style="display:inline-block;width:8px;height:8px;'+
-        'border-radius:50%;background:#39ddd3;vertical-align:middle;"></span>'+
+        'border-radius:50%;background:'+DOT+';vertical-align:middle;"></span>'+
         '<span style="padding-left:7px;font:600 10px '+F+';letter-spacing:1.2px;color:'+S.mut+';">'+
         escKeepTags(c.badge)+'</span></td>');
     }
     o.push('</tr></table></td></tr>');
 
     /* ---- hero ---- */
-    var hd=bandDark(0), H=hd?DARK:LIGHT;
+    var hd=bandDark(0), H=hd?DARK:LT;
     o.push('<tr><td class="pad" style="padding:52px 48px 48px;background:'+H.band+';background-image:'+
-      'radial-gradient(circle at 88% 17%,rgba(24,199,195,.17),transparent 34%),'+
-      'radial-gradient(circle at 12% 10%,rgba(129,55,255,.23),transparent 38%),'+
-      'linear-gradient(rgba(86,100,150,.08) 1px,transparent 1px),'+
-      'linear-gradient(90deg,rgba(86,100,150,.08) 1px,transparent 1px);'+
+      'radial-gradient(circle at 88% 17%,'+(TH?TH.g1:'rgba(24,199,195,.17)')+',transparent 34%),'+
+      'radial-gradient(circle at 12% 10%,'+(TH?TH.g2:'rgba(129,55,255,.23)')+',transparent 38%),'+
+      'linear-gradient('+(TH?'rgba(0,0,0,.035)':'rgba(86,100,150,.08)')+' 1px,transparent 1px),'+
+      'linear-gradient(90deg,'+(TH?'rgba(0,0,0,.035)':'rgba(86,100,150,.08)')+' 1px,transparent 1px);'+
       'background-size:auto,auto,28px 28px,28px 28px;">');
     if(c.greeting){
       o.push('<div style="font:600 15px '+F+';color:'+H.mut+';margin-bottom:20px;">'+escKeepTags(c.greeting)+'</div>');
@@ -1515,8 +1552,8 @@
         'style="display:block;width:100%;max-width:544px;height:auto;border:0;border-radius:14px;" />'+
         (c.heroLink?'</a>':'')+'</td></tr></table>');
     }
-    o.push('<div style="margin-top:24px;width:93px;height:4px;border-radius:4px;background:#7b3cff;'+
-      'background-image:linear-gradient(90deg,#8d38ff,#2fe1db);"></div>');
+    o.push('<div style="margin-top:24px;width:93px;height:4px;border-radius:4px;background:'+A1+';'+
+      'background-image:'+BAR+';"></div>');
     para(c.intro).forEach(function(p){
       o.push('<div style="padding-top:22px;max-width:520px;font:400 17px/28px '+F+';color:'+H.mut+';">'+escKeepTags(p)+'</div>');
     });
@@ -1525,8 +1562,8 @@
     if(c.cta1||c.cta2){
       o.push('<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;"><tr>');
       if(c.cta1){
-        o.push('<td class="shimmer" style="border-radius:11px;background:#7b3cff;background-image:'+
-          'linear-gradient(110deg,#7b3cff 0%,#7b3cff 40%,#35d9dd 50%,#7b3cff 60%,#7b3cff 100%);">'+
+        o.push('<td class="shimmer" style="border-radius:11px;background:'+A1+';background-image:'+
+          SHIM+';">'+
           '<a href="'+esc(url(c.cta1url)||'#')+'" style="display:inline-block;padding:16px 23px;font:700 13px '+F+';color:#fff;">'+
           escKeepTags(c.cta1).toUpperCase()+'&nbsp;&nbsp;&rarr;</a></td>');
       }
@@ -1543,7 +1580,7 @@
 
     /* ---- feature cards ---- */
     if(c.featOn && (c.cards||[]).length){
-      var fd=bandDark(band++), B=fd?DARK:LIGHT;
+      var fd=bandDark(band++), B=fd?DARK:LT;
       o.push('<tr><td class="pad" style="padding:46px 42px;background:'+B.band2+';">');
       if(c.featEyebrow) o.push('<div style="font:700 11px '+F+';letter-spacing:2px;color:'+B.eye+';">'+escKeepTags(c.featEyebrow).toUpperCase()+'</div>');
       if(c.featHeading) o.push('<div style="padding-top:11px;font:700 29px/36px '+F+';color:'+B.ink+';">'+nl(c.featHeading)+'</div>');
@@ -1552,7 +1589,7 @@
       o.push('<table role="presentation" width="100%" style="margin-top:26px;"><tr>');
       c.cards.forEach(function(cd,i){
         if(i) o.push('<td class="gap" width="'+gp+'%"></td>');
-        var accent=['#7b3cff','#4d70ef','#1db9ba'][i%3];
+        var accent=CARDACC[i%3];
         o.push('<td class="stack" width="'+w+'%" valign="top" style="width:'+w+'%;padding:20px 17px;'+
           'background:'+B.shell+';border:1px solid '+B.line+';border-radius:15px;">'+
           (cd.n?'<div style="font:800 22px '+F+';color:'+accent+';">'+escKeepTags(cd.n)+'</div>':'')+
@@ -1564,7 +1601,7 @@
 
     function videoBand(v){
       v=v||c; if(!videoLink(v)) return;
-      var vd=bandDark(band++), V=vd?DARK:LIGHT;
+      var vd=bandDark(band++), V=vd?DARK:LT;
       o.push('<tr><td class="pad" style="padding:34px 42px 40px;background:'+V.band2+';">'+videoBlock(v,V)+'</td></tr>');
     }
     if(c.videoPos==='features') videoBand();
@@ -1572,8 +1609,8 @@
 
     /* ---- spotlight ---- */
     if(c.spotOn && (c.boxes||[]).length){
-      var sd=bandDark(band++), P=sd?DARK:LIGHT;
-      o.push('<tr><td class="pad" style="padding:44px 42px;background:'+(sd?DARK.band2:LIGHT.band2)+';">');
+      var sd=bandDark(band++), P=sd?DARK:LT;
+      o.push('<tr><td class="pad" style="padding:44px 42px;background:'+(sd?DARK.band2:LT.band2)+';">');
       if(c.spotEyebrow) o.push('<div style="font:700 11px '+F+';letter-spacing:2px;color:'+P.eye+';">'+escKeepTags(c.spotEyebrow).toUpperCase()+'</div>');
       if(c.spotHeading) o.push('<div style="padding-top:11px;font:700 28px/35px '+F+';color:'+P.ink+';">'+nl(c.spotHeading)+'</div>');
       if(c.spotSub)     o.push('<div style="padding-top:13px;font:400 15px/24px '+F+';color:'+P.mut+';">'+escKeepTags(c.spotSub)+'</div>');
@@ -1581,7 +1618,7 @@
       o.push('<table role="presentation" width="100%" style="margin-top:24px;"><tr>');
       c.boxes.slice(0,3).forEach(function(bx,i){
         if(i) o.push('<td class="gap" width="4%"></td>');
-        var ac=['#a576ff','#54ddd8','#f0cd8b'][i%3];
+        var ac=SPOTACC[i%3];
         o.push('<td class="stack" width="'+bw+'%" style="width:'+bw+'%;padding:19px;border:1px solid '+P.line2+';border-radius:14px;">'+
           '<div style="font:700 10px '+F+';letter-spacing:1.6px;color:'+ac+';">'+escKeepTags(bx.l).toUpperCase()+'</div>'+
           '<div style="padding-top:8px;font:700 22px '+F+';color:'+P.ink+';">'+escKeepTags(bx.v)+'</div></td>');
@@ -1591,7 +1628,7 @@
 
     /* ---- feature image band ---- */
     if(c.bandImage){
-      var idk=bandDark(band++), I=idk?DARK:LIGHT;
+      var idk=bandDark(band++), I=idk?DARK:LT;
       var img='<img src="'+esc(url(c.bandImage))+'" width="556" alt="'+esc(c.bandAlt||'')+'" '+
               'style="display:block;width:100%;max-width:556px;height:auto;border:0;border-radius:14px;" />';
       o.push('<tr><td class="pad" style="padding:40px 42px;background:'+I.band2+';">'+
@@ -1612,7 +1649,7 @@
 
     /* ---- pricing ---- */
     if(c.priceOn && (c.plans||[]).length){
-      var pd=bandDark(band++), Q=pd?DARK:LIGHT;
+      var pd=bandDark(band++), Q=pd?DARK:LT;
       o.push('<tr><td class="pad" style="padding:46px 42px;background:'+Q.band2+';">');
       if(c.priceEyebrow) o.push('<div style="font:700 11px '+F+';letter-spacing:2px;color:'+Q.eye+';">'+escKeepTags(c.priceEyebrow).toUpperCase()+'</div>');
       if(c.priceHeading) o.push('<div style="padding-top:11px;font:700 27px/34px '+F+';color:'+Q.ink+';">'+nl(c.priceHeading)+'</div>');
@@ -1621,10 +1658,10 @@
       c.plans.forEach(function(pl,i){
         if(i) o.push('<td class="gap" width="'+pg+'%"></td>');
         var hi=!!pl.hi;
-        var bgv = hi ? '#171a36;background-image:radial-gradient(circle at 100% 0,rgba(45,218,211,.2),transparent 45%)' : Q.shell;
+        var bgv = hi ? (TH ? TH.deep+';background-image:radial-gradient(circle at 100% 0,rgba(255,255,255,.10),transparent 45%)' : '#171a36;background-image:radial-gradient(circle at 100% 0,rgba(45,218,211,.2),transparent 45%)') : Q.shell;
         o.push('<td class="stack" width="'+pw+'%" valign="top" style="width:'+pw+'%;padding:22px 19px;'+
           'background:'+bgv+';border:1px solid '+(hi?'transparent':Q.line)+';border-radius:16px;">'+
-          '<div style="font:700 11px '+F+';letter-spacing:1.5px;color:'+(hi?'#58e0da':Q.eye)+';">'+escKeepTags(pl.tier).toUpperCase()+'</div>'+
+          '<div style="font:700 11px '+F+';letter-spacing:1.5px;color:'+(hi?(TH?TH.a3:'#58e0da'):Q.eye)+';">'+escKeepTags(pl.tier).toUpperCase()+'</div>'+
           '<div style="padding-top:9px;font:800 33px '+F+';color:'+(hi?'#fff':Q.ink)+';">'+escKeepTags(pl.price)+
           '<span style="font:400 12px '+F+';color:'+(hi?'#c8cad8':Q.mut)+';"> '+escKeepTags(pl.per)+'</span></div>'+
           '<div style="padding-top:12px;font:400 14px/22px '+F+';color:'+(hi?'#d4d6e3':Q.mut)+';">'+escKeepTags(pl.desc)+'</div></td>');
@@ -1640,14 +1677,14 @@
 
     /* ---- final CTA ---- */
     if(c.finalOn && (c.finalHeading||c.finalCta)){
-      o.push('<tr><td class="pad" align="center" style="padding:47px 42px;background:#151936;background-image:'+
-        'radial-gradient(circle at 15% 0,rgba(129,55,255,.35),transparent 45%),'+
-        'radial-gradient(circle at 90% 100%,rgba(37,211,208,.25),transparent 43%);">');
+      o.push('<tr><td class="pad" align="center" style="padding:47px 42px;background:'+(TH?TH.deep:'#151936')+';background-image:'+
+        (TH ? 'radial-gradient(circle at 15% 0,rgba(255,255,255,.10),transparent 45%),radial-gradient(circle at 90% 100%,'+TH.g1+',transparent 43%);">'
+            : 'radial-gradient(circle at 15% 0,rgba(129,55,255,.35),transparent 45%),radial-gradient(circle at 90% 100%,rgba(37,211,208,.25),transparent 43%);">'));
       if(c.finalHeading) o.push('<div style="font:700 28px/35px '+F+';color:#fff;">'+nl(c.finalHeading)+'</div>');
       if(c.finalSub)     o.push('<div style="padding-top:13px;font:400 15px/24px '+F+';color:#c8cad8;">'+escKeepTags(c.finalSub)+'</div>');
       if(c.finalCta){
         o.push('<table role="presentation" align="center" style="margin-top:25px;"><tr>'+
-          '<td style="border-radius:10px;background:#7b3cff;background-image:linear-gradient(100deg,#8438ff,#3479f6,#2fd7d2);">'+
+          '<td style="border-radius:10px;background:'+A1+';background-image:'+BTN2+';">'+
           '<a href="'+esc(url(c.finalUrl)||'#')+'" style="display:inline-block;padding:16px 27px;font:700 13px '+F+';color:#fff;">'+
           escKeepTags(c.finalCta).toUpperCase()+'&nbsp;&nbsp;&rarr;</a></td></tr></table>');
       }
@@ -1655,11 +1692,11 @@
     }
 
     /* ---- footer ---- */
-    var Fo = mode==='light' ? LIGHT : DARK;
+    var Fo = TH ? TH : mode==='light' ? LIGHT : DARK;
     o.push('<tr><td class="pad" align="center" style="padding:30px 42px;background:'+Fo.foot+';">'+
       '<table role="presentation" align="center" cellpadding="0" cellspacing="0"><tr>'+
       '<td width="37" height="37" align="center" style="width:37px;height:37px;border-radius:10px;'+
-      'background:#7b3cff;background-image:'+GR+';font:800 13px '+F+';color:#fff;">WE</td>'+
+      'background:'+A1+';background-image:'+GR+';font:800 13px '+F+';color:#fff;">WE</td>'+
       '<td style="padding-left:10px;font:700 16px '+F+';color:'+Fo.ink+';">Webescapade</td></tr></table>');
     var bits=[];
     if(c.phone)  bits.push('<a href="tel:'+esc(c.phone.replace(/\s/g,''))+'" style="color:'+Fo.faint+';">'+esc(c.phone)+'</a>');
@@ -1811,6 +1848,7 @@
       else el.value = c[el.dataset.k]==null ? '' : c[el.dataset.k];
     });
     $('#subjLen').textContent=(c.subject||'').length;
+    paintThemes();
     renderRepeaters();
     paintImages();
   }
@@ -1826,6 +1864,16 @@
     $('#subjLen').textContent   = (c.subject||'').length;
     $('#pv').srcdoc = buildEmail(c);
   }
+
+  function paintThemes(){
+    var v=(camps[cur]&&camps[cur].theme)||'alt';
+    document.querySelectorAll('[data-thm]').forEach(function(x){ x.setAttribute('aria-pressed',String(x.dataset.thm===v)); });
+  }
+  document.getElementById('thms').addEventListener('click',function(e){
+    var b=e.target.closest('[data-thm]'); if(!b) return;
+    var sel=document.getElementById('fTheme'); sel.value=b.dataset.thm;
+    sel.dispatchEvent(new Event('change',{bubbles:true})); paintThemes();
+  });
 
   document.querySelectorAll('[data-k]').forEach(function(el){
     var ev = el.type==='checkbox' ? 'change' : (el.tagName==='SELECT' ? 'change' : 'input');
