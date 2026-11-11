@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Unsubscribe</title>
+<style>
+:root{--bg:#F3F0EA;--ink:#18201C;--muted:#66706A;--line:#E2DCD0;--sage:#4F6B5C}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:16px/1.55 Helvetica,Arial,sans-serif;padding:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 30px;max-width:460px;width:100%;text-align:center}
+h1{font:400 30px/1.15 Georgia,serif;margin:0 0 12px}
+p{margin:0 0 10px;color:var(--muted)}
+.ic{width:56px;height:56px;border-radius:50%;background:#E4ECE6;color:var(--sage);display:grid;place-items:center;font-size:26px;margin:0 auto 16px}
+.sm{font-size:13px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="card" id="c"><div class="ic">✉️</div><h1>One moment…</h1><p>Updating your email settings.</p></div>
+<script>
+(function(){
+  var SB = "https://tehxobdokbvqtwtgqzrh.supabase.co";
+  var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE";
+  var c = document.getElementById("c"), t = new URLSearchParams(location.search).get("t") || "";
+  var esc = function (s) { return String(s || "").replace(/[&<>"]/g, function (x) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[x]; }); };
+  var show = function (ic, h, p) { c.innerHTML = '<div class="ic">' + ic + '</div><h1>' + h + '</h1>' + p; };
+  if (!/^[0-9a-f-]{36}$/i.test(t)) { show("⚠️", "Link not recognised", "<p>This unsubscribe link looks incomplete. Please use the link from the email, or reply to the email and ask to be removed.</p>"); return; }
+  fetch(SB + "/rest/v1/rpc/svc_email_unsubscribe", { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_token: t }) })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok) throw new Error();
+      show("✓", "You're unsubscribed", "<p><b>" + esc(d.email) + "</b> won't receive news or offers from <b>" + esc(d.venue) + "</b> any more.</p><p>You'll still get confirmations and reminders for bookings you make.</p><p class=\"sm\">Changed your mind? Tick “Keep me posted” next time you book.</p>");
+    })
+    .catch(function () { show("⚠️", "Something went wrong", "<p>We couldn't update your settings just now. Please try the link again in a minute, or reply to the email and ask to be removed.</p>"); });
+})();
+</script>
+</body>
+</html>

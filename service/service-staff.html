@@ -109,6 +109,26 @@ tr.click{cursor:pointer} tr.click:hover td{background:#FAF9F6}
 .mbadge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:#C2410C;color:#fff;font-size:11px;font-weight:800;vertical-align:1px}
 .mbadge[hidden]{display:none}
 .mcard{margin-bottom:10px}.mcard.done{opacity:.6}
+.row2{display:grid;gap:12px;grid-template-columns:1fr}@media(min-width:620px){.row2{grid-template-columns:1fr 1fr}}
+.emhead{margin:10px 0 14px}
+.emstats{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:10px}
+.emstats div{background:var(--card);border-radius:14px;padding:12px 14px}.emstats b{display:block;font:400 28px/1 "Instrument Serif",serif}.emstats span{font-size:12.5px;color:var(--muted)}
+.emnote{background:var(--soft);border-radius:12px;padding:11px 14px;font-size:14px;margin:8px 0}.emnote.warn{background:#FBEFE0;color:#7A4A12}
+.emgrid{display:grid;gap:16px;align-items:start}@media(min-width:1100px){.emgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.empv{position:sticky;top:12px}}
+.emform{display:grid;gap:12px}.emstart{display:flex;flex-wrap:wrap;gap:6px}
+.emai,.emoffer{border:1px dashed var(--line);border-radius:12px;padding:10px 12px}.emai summary,.emoffer summary{cursor:pointer;font-weight:700}.emai[open],.emoffer[open]{display:grid;gap:10px}
+.emh{margin:6px 0 0;font:400 22px "Instrument Serif",serif}
+.emsubj{font-size:14px;margin-bottom:8px;word-break:break-word}
+.emframe{background:#F3F0EA;border-radius:12px;overflow:hidden;border:1px solid var(--line)}.emframe iframe{display:block;width:100%;height:640px;border:0;background:#F3F0EA}
+.emframe.phone{max-width:390px;margin:0 auto;border-radius:28px;border:8px solid #1E2622}.emframe.phone iframe{height:600px}
+.emauto{margin-bottom:12px}.emauto-b{display:grid;gap:10px;margin-top:12px}
+#emBody input:not([type=checkbox]):not([type=color]),#emBody select,#emBody textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;font-size:15px;font-weight:400;background:#fff}
+#emBody textarea{line-height:1.5;resize:vertical}
+#emBody input:focus,#emBody select:focus,#emBody textarea:focus{outline:none;border-color:var(--accent)}
+.emauto-b .btn{justify-self:start}
+#emBody input[type=color]{width:100%;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+.sw{position:relative;width:46px;height:26px;flex:none}.sw input{opacity:0;width:0;height:0}.sw span{position:absolute;inset:0;border-radius:99px;background:#CFCAC0;transition:.2s;cursor:pointer}.sw span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s}.sw input:checked+span{background:var(--accent)}.sw input:checked+span:before{transform:translateX(20px)}
+.sheetpv{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:50;display:grid;place-items:center;padding:16px}.sheetpv[hidden]{display:none}.sheetpv .card{width:min(440px,100%);max-height:calc(100vh - 32px);overflow:auto}
 </style>
 </head>
 <body>
@@ -118,6 +138,7 @@ tr.click{cursor:pointer} tr.click:hover td{background:#FAF9F6}
     <button data-tab="cal" class="on">Calendar</button>
     <button data-tab="list">Bookings</button>
     <button data-tab="msg">Messages<span id="msgBadge" class="mbadge" hidden></span></button>
+    <button data-tab="email">Email</button>
     <button data-tab="svc">Treatments</button>
     <button data-tab="team">Team</button>
     <button data-tab="rooms">Rooms</button>
@@ -146,7 +167,7 @@ var VENUE = (q.get("venue") || CONFIG.venue).trim().toLowerCase();
 var WORD = q.get("word") || CONFIG.practitionerWord, SW = "treatment", MINE = null;
 var TZ = "Australia/Sydney", VID = null, VENUE_ROW = null;
 var D = { services: [], providers: [], links: [], rooms: [], hours: [], timeoff: [], settings: null };
-var V = { tab: (function () { var t = new URLSearchParams(location.search).get("tab") || ""; return /^(cal|list|msg|svc|team|rooms|hours|set)$/.test(t) ? t : "cal"; })(), date: null, mode: "provider" };
+var V = { tab: (function () { var t = new URLSearchParams(location.search).get("tab") || ""; return /^(cal|list|msg|email|svc|team|rooms|hours|set)$/.test(t) ? t : "cal"; })(), date: null, mode: "provider" };
 var SES = null;
 var $ = function (id) { return document.getElementById(id); };
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
@@ -294,7 +315,7 @@ document.querySelectorAll("[data-tab]").forEach(function (b) {
 document.querySelectorAll("[data-tab]").forEach(function (x) { x.classList.toggle("on", x.getAttribute("data-tab") === V.tab); });
 function show(){
   closeSheet();
-  ({ cal: viewCal, list: viewList, msg: viewMessages, svc: viewServices, team: viewTeam, rooms: viewRooms, hours: viewHours, set: viewSettings })[V.tab]();
+  ({ cal: viewCal, list: viewList, msg: viewMessages, email: viewEmail, svc: viewServices, team: viewTeam, rooms: viewRooms, hours: viewHours, set: viewSettings })[V.tab]();
 }
 function byId(list, id){ return list.filter(function (x) { return x.id === id; })[0]; }
 
@@ -579,6 +600,236 @@ function viewMessages(){
     }).catch(function (e) { $("ml").innerHTML = '<span class="err">' + esc(e.message) + "</span>"; });
   };
   $("mf").onchange = draw; load();
+}
+
+/* Service Deluxe — client email renderer (shared by the staff-page Email Studio preview and the svc-email function) */
+function svcEmailHtml(c, v, o) {
+  c = c || {}; v = v || {}; o = o || {};
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (x) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[x]; }); };
+  var first = String(o.first_name || "").trim() || "there";
+  var fill = function (t) {
+    return String(t == null ? "" : t).replace(/\{first_name\}/g, first).replace(/\{business\}/g, v.name || "")
+      .replace(/\{service\}/g, o.service || "your last visit").replace(/\{weeks\}/g, String(o.weeks || "")).replace(/\{months\}/g, String(o.months || ""));
+  };
+  var col = /^#[0-9A-Fa-f]{6}$/.test(v.colour || "") ? v.colour : "#4F6B5C";
+  var para = function (t) {
+    return fill(t).split(/\n{2,}/).map(function (p) { return p.trim(); }).filter(Boolean).map(function (p) {
+      return '<p style="margin:0 0 14px;font-size:16px;line-height:1.6;color:#2B3530">' + esc(p).replace(/\n/g, "<br>") + "</p>";
+    }).join("");
+  };
+  var btn = c.button_text && c.button_url ? '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px 0 6px"><tr><td style="border-radius:999px;background:' + col + '"><a href="' + esc(c.button_url) + '" style="display:inline-block;padding:14px 28px;font:600 16px Helvetica,Arial,sans-serif;color:#ffffff;text-decoration:none;border-radius:999px">' + esc(fill(c.button_text)) + "</a></td></tr></table>" : "";
+  var offer = c.offer_title ? '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0 8px;border:2px dashed ' + col + ';border-radius:16px"><tr><td style="padding:18px 20px;text-align:center">' +
+    '<div style="font:700 11px Helvetica,Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:' + col + '">Offer</div>' +
+    '<div style="font:400 26px/1.2 Georgia,serif;color:#18201C;margin:6px 0 4px">' + esc(fill(c.offer_title)) + "</div>" +
+    (c.offer_details ? '<div style="font:400 14px/1.5 Helvetica,Arial,sans-serif;color:#66706A">' + esc(fill(c.offer_details)) + "</div>" : "") +
+    (c.offer_until ? '<div style="font:600 13px Helvetica,Arial,sans-serif;color:#18201C;margin-top:8px">Valid until ' + esc(c.offer_until) + "</div>" : "") + "</td></tr></table>" : "";
+  var img = c.image_url ? '<tr><td><img src="' + esc(c.image_url) + '" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>' : "";
+  var logo = v.logo_url ? '<img src="' + esc(v.logo_url) + '" alt="' + esc(v.name) + '" height="44" style="display:block;height:44px;width:auto;border:0;margin:0 auto">'
+    : '<div style="font:400 26px Georgia,serif;color:#18201C;text-align:center">' + esc(v.name || "") + "</div>";
+  var pre = c.preheader ? '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">' + esc(fill(c.preheader)) + "</div>" : "";
+  var foot = '<p style="margin:0 0 6px">' + esc(v.name || "") + (v.address ? " · " + esc(v.address) : "") + (v.phone ? " · " + esc(v.phone) : "") + "</p>" +
+    '<p style="margin:0">You\'re receiving this because you asked to hear from ' + esc(v.name || "us") + " when you booked. " +
+    (o.unsub_url ? '<a href="' + esc(o.unsub_url) + '" style="color:#66706A">Unsubscribe</a>' : '<span style="text-decoration:underline">Unsubscribe</span>') + "</p>";
+  return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(fill(c.subject || "")) + "</title></head>" +
+    '<body style="margin:0;padding:0;background:#F3F0EA">' + pre +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3F0EA"><tr><td align="center" style="padding:26px 12px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:20px;overflow:hidden">' +
+    '<tr><td style="padding:24px 28px 18px;border-bottom:4px solid ' + col + '">' + logo + "</td></tr>" + img +
+    '<tr><td style="padding:30px 32px 26px;font-family:Helvetica,Arial,sans-serif">' +
+    (c.headline ? '<h1 style="margin:0 0 16px;font:400 32px/1.15 Georgia,serif;color:#18201C">' + esc(fill(c.headline)) + "</h1>" : "") +
+    para(c.message) + offer + btn + "</td></tr>" +
+    '<tr><td style="padding:18px 32px 24px;background:#FAF8F4;font:400 12px/1.5 Helvetica,Arial,sans-serif;color:#66706A">' + foot + "</td></tr>" +
+    "</table></td></tr></table></body></html>";
+}
+
+/* =================== EMAIL STUDIO =================== */
+var EM = { tab: "write", data: null, c: null, aud: { kind: "all" }, dev: "desktop" };
+var EM_STARTERS = function () {
+  var sw = SW || "service", Sw = cap(sw);
+  return {
+    "new": { label: "✨ Something new", c: { subject: "New at {business}", preheader: "Book online in a few taps.", headline: "Something new for you, {first_name}", message: "We're excited to share something new at {business}.\n\nTell your clients what it is, who it's for and why they'll love it.\n\nBook online any time — it only takes a minute.", button_text: "Book now" } },
+    offer: { label: "🎁 Special offer", c: { subject: "A little something for you", preheader: "A thank-you offer for our clients.", headline: "A thank-you for you, {first_name}", message: "As one of our clients, we'd like to offer you something special this month.\n\nBook online and mention the offer when you arrive.", offer_title: "Write your offer here", offer_details: "Say how to claim it and any conditions.", offer_until: "", button_text: "Book now" } },
+    spots: { label: "⏰ Free spots this week", c: { subject: "A few free spots this week", preheader: "Grab one before they go.", headline: "We have a few spots open", message: "Hi {first_name},\n\nWe've had a few openings come up this week. If you've been meaning to book your next " + sw + ", now's a great time.\n\nTimes go quickly — book online to grab one.", button_text: "See free times" } },
+    news: { label: "📣 News & opening hours", c: { subject: "News from {business}", preheader: "", headline: "A quick update from us", message: "Hi {first_name},\n\nWrite your news here — new team members, holiday opening hours, a move, or anything your clients should know.\n\nThank you for being part of {business}.", button_text: "Book online" } },
+    blank: { label: "Blank", c: { subject: "", preheader: "", headline: "", message: "", button_text: "Book now" } }
+  };
+};
+function emCall(action, body){
+  return fresh().then(function (tok) {
+    return fetch(BASE + "/functions/v1/svc-email", { method: "POST", headers: { apikey: CONFIG.supabaseKey, Authorization: "Bearer " + tok, "Content-Type": "application/json" },
+      body: JSON.stringify(Object.assign({ action: action, venue: VENUE }, body || {})) });
+  }).then(function (r) { return r.json(); });
+}
+function emLook(){ var s = (EM.data && EM.data.settings) || {}; return { name: s.from_name || (VENUE_ROW && VENUE_ROW.name), colour: s.colour, logo_url: s.logo_url, address: s.address || "Your business address", phone: VENUE_ROW && VENUE_ROW.phone }; }
+function emBook(sid){ return new URL(CONFIG.bookingPage || "service-booking.html", location.href).toString().split("?")[0] + "?venue=" + encodeURIComponent(VENUE) + (sid ? "&service=" + sid : ""); }
+function emPreview(frame, c, o){
+  var x = Object.assign({}, c); if (x.button_text && !x.button_url) x.button_url = emBook(x.service_id);
+  frame.srcdoc = svcEmailHtml(x, emLook(), Object.assign({ first_name: "Sophie", service: (D.services[0] || {}).name || "your last visit", weeks: 6, months: 4 }, o || {}));
+}
+function viewEmail(){
+  $("app").innerHTML = '<div class="row" style="margin-bottom:6px"><h2>Email</h2><span class="sp"></span><div class="seg" id="emTabs">' +
+    [["write", "✏️ Write"], ["auto", "🔁 Automatic"], ["sent", "📬 Sent"], ["set", "⚙️ Settings"]].map(function (t) { return '<button data-et="' + t[0] + '"' + (EM.tab === t[0] ? ' class="on"' : "") + ">" + t[1] + "</button>"; }).join("") +
+    '</div></div><div id="emHead" class="emhead"><div class="spin"></div></div><div id="emBody"></div>';
+  $("emTabs").onclick = function (e) { var b = e.target.closest("[data-et]"); if (!b) return; EM.tab = b.getAttribute("data-et"); viewEmail(); };
+  rpc("svc_email_overview", { p_venue: VENUE }).then(function (d) {
+    if (!d || !d.ok) throw new Error((d && d.error) || "Couldn't load");
+    EM.data = d;
+    var s = d.settings;
+    $("emHead").innerHTML = (!d.allowed ? '<div class="emnote warn">The Email Studio comes with the Basic, Premium and Team plans. Talk to Webescapade to switch plans.</div>' : "") +
+      '<div class="emstats"><div><b>' + d.subscribers + '</b><span>clients said yes to emails</span></div><div><b>' + d.clients + '</b><span>clients in your bookings</span></div>' +
+      '<div><b>' + d.sent_month + '</b><span>emails sent this month (of ' + d.cap.toLocaleString() + ')</span></div><div><b>' + d.unsubscribed + '</b><span>unsubscribed</span></div></div>' +
+      (!s.address ? '<div class="emnote warn">Add your business address in <a href="#" data-goset>⚙️ Settings</a> before sending — the law requires it in every marketing email.</div>' : "") +
+      (!d.subscribers ? '<div class="emnote">Clients join your list by ticking <b>“Keep me posted”</b> when they book online. Only those clients receive these emails, and each email has an unsubscribe link. Booking confirmations and reminders still go to everyone.</div>' : "");
+    var gs = $("emHead").querySelector("[data-goset]"); if (gs) gs.onclick = function (e) { e.preventDefault(); EM.tab = "set"; viewEmail(); };
+    ({ write: emWrite, auto: emAuto, sent: emSent, set: emSettings })[EM.tab]();
+  }).catch(function (e) { $("emHead").innerHTML = '<span class="err">' + esc(e.message) + "</span>"; });
+}
+
+/* ---- write ---- */
+function emWrite(){
+  var ST = EM_STARTERS();
+  if (!EM.c) EM.c = Object.assign({}, ST["new"].c);
+  var c = EM.c;
+  var svcOpts = D.services.map(function (s) { return '<option value="' + s.id + '"' + (c.service_id === s.id ? " selected" : "") + ">" + esc(s.name) + "</option>"; }).join("");
+  $("emBody").innerHTML = '<div class="emgrid"><div class="card emform">' +
+    '<div class="emstart">' + Object.keys(ST).map(function (k) { return '<button class="btn" data-st="' + k + '">' + ST[k].label + "</button>"; }).join("") + "</div>" +
+    '<details class="emai"><summary>✨ Write it for me</summary><label class="f">Tell us what the email is about<textarea id="eBrief" rows="3" placeholder="e.g. We now offer hot stone massage, 75 minutes, perfect for winter. Book this month and get a free scalp massage."></textarea></label><button class="btn pri" id="eDraft">Write my email</button> <span class="muted" id="eDm"></span></details>' +
+    '<label class="f">Subject<input id="eSub" maxlength="150" value="' + esc(c.subject || "") + '"></label>' +
+    '<label class="f">Preview text <span class="muted">(shown after the subject in the inbox)</span><input id="ePre" maxlength="160" value="' + esc(c.preheader || "") + '"></label>' +
+    '<label class="f">Headline<input id="eHead" maxlength="140" value="' + esc(c.headline || "") + '"></label>' +
+    '<label class="f">Message <span class="muted">— use {first_name} for the client\'s name</span><textarea id="eMsg" rows="8">' + esc(c.message || "") + "</textarea></label>" +
+    '<details class="emoffer"' + (c.offer_title ? " open" : "") + '><summary>🎁 Add an offer box</summary><label class="f">Offer<input id="eOt" maxlength="120" value="' + esc(c.offer_title || "") + '" placeholder="e.g. Free scalp massage with any 60-min treatment"></label>' +
+      '<label class="f">How to claim / conditions<input id="eOd" maxlength="300" value="' + esc(c.offer_details || "") + '"></label><label class="f">Valid until<input id="eOu" maxlength="40" value="' + esc(c.offer_until || "") + '" placeholder="30 November"></label></details>' +
+    '<div class="row2"><label class="f">Button<input id="eBtn" maxlength="50" value="' + esc(c.button_text || "") + '" placeholder="Book now"></label>' +
+    '<label class="f">Button opens booking for<select id="eSvc"><option value="">Any ' + esc(SW) + "</option>" + svcOpts + "</select></label></div>" +
+    '<label class="f">Picture <span class="muted">(optional — web address of a photo, https://…)</span><input id="eImg" value="' + esc(c.image_url || "") + '" placeholder="https://"></label>' +
+    '<h3 class="emh">Who gets it</h3><div class="row2"><label class="f">Send to<select id="eAud"><option value="all">Everyone who said yes</option><option value="service">Clients who had a…</option><option value="lapsed">Clients not seen for a while</option><option value="new">New clients (one visit)</option></select></label>' +
+      '<label class="f" id="eAudS" hidden>' + esc(cap(SW)) + '<select id="eAudSv">' + D.services.map(function (s) { return '<option value="' + s.id + '">' + esc(s.name) + "</option>"; }).join("") + "</select></label>" +
+      '<label class="f" id="eAudM" hidden>Not seen for<select id="eAudMo"><option value="2">2+ months</option><option value="3" selected>3+ months</option><option value="6">6+ months</option><option value="12">12+ months</option></select></label></div>' +
+    '<div class="row" style="margin-top:14px"><button class="btn" id="eTest">Send me a test</button><button class="btn pri" id="eSend">Send</button><span class="muted" id="eMsgOut"></span></div>' +
+    '</div><div class="card empv"><div class="row" style="margin-bottom:10px"><b>Preview</b><span class="sp"></span><div class="seg" id="eDev"><button data-d="desktop"' + (EM.dev === "desktop" ? ' class="on"' : "") + '>Computer</button><button data-d="phone"' + (EM.dev === "phone" ? ' class="on"' : "") + '>Phone</button></div></div>' +
+    '<div class="emsubj"><span class="muted">Subject:</span> <b id="pSub"></b></div><div class="emframe ' + EM.dev + '"><iframe id="eFrame" title="Email preview"></iframe></div></div></div>';
+  var read = function () {
+    EM.c = { subject: $("eSub").value, preheader: $("ePre").value, headline: $("eHead").value, message: $("eMsg").value,
+      offer_title: $("eOt").value, offer_details: $("eOd").value, offer_until: $("eOu").value, button_text: $("eBtn").value, service_id: $("eSvc").value, image_url: $("eImg").value.trim() };
+    return EM.c;
+  };
+  var t; var upd = function () { clearTimeout(t); t = setTimeout(function () { var x = read(); emPreview($("eFrame"), x); $("pSub").textContent = x.subject.replace(/\{first_name\}/g, "Sophie").replace(/\{business\}/g, emLook().name); }, 120); };
+  $("emBody").querySelectorAll("input,textarea,select").forEach(function (n) { if (!/^eAud|eBrief/.test(n.id)) n.addEventListener("input", upd); });
+  $("emBody").querySelector(".emstart").onclick = function (e) { var b = e.target.closest("[data-st]"); if (!b) return; if ((EM.c.message || "").trim() && !confirm("Replace what you've written with this starter?")) return; EM.c = Object.assign({}, ST[b.getAttribute("data-st")].c); emWrite(); };
+  $("eDev").onclick = function (e) { var b = e.target.closest("[data-d]"); if (!b) return; EM.dev = b.getAttribute("data-d"); read(); emWrite(); };
+  // audience
+  var audRead = function () {
+    var k = $("eAud").value; $("eAudS").hidden = k !== "service"; $("eAudM").hidden = k !== "lapsed";
+    EM.aud = k === "service" ? { kind: k, service_id: $("eAudSv").value } : k === "lapsed" ? { kind: k, months: +$("eAudMo").value } : { kind: k };
+    $("eSend").disabled = true; $("eSend").textContent = "Counting…";
+    rpc("svc_email_count", { p_venue: VENUE, p_filter: EM.aud }).then(function (r) { var n = (r && r.count) || 0; EM.n = n; $("eSend").disabled = !n || !EM.data.allowed; $("eSend").textContent = n ? "Send to " + n + " client" + (n === 1 ? "" : "s") : "No clients match yet"; });
+  };
+  $("eAud").value = EM.aud.kind || "all"; if (EM.aud.service_id) $("eAudSv").value = EM.aud.service_id; if (EM.aud.months) $("eAudMo").value = String(EM.aud.months);
+  ["eAud", "eAudSv", "eAudMo"].forEach(function (id) { $(id).onchange = audRead; }); audRead();
+  // AI draft
+  $("eDraft").onclick = function () {
+    var brief = $("eBrief").value.trim(); if (brief.length < 8) { $("eDm").textContent = "Tell us a little more first."; return; }
+    $("eDraft").disabled = true; $("eDm").textContent = "Writing…";
+    emCall("draft", { brief: brief, kind: "news or offer" }).then(function (r) {
+      $("eDraft").disabled = false;
+      if (!r.ok) { $("eDm").textContent = r.error || "Couldn't write it just now."; return; }
+      EM.c = Object.assign({}, r.content); emWrite(); toast("Draft ready — check and edit it");
+    }).catch(function () { $("eDraft").disabled = false; $("eDm").textContent = "Couldn't reach the writer."; });
+  };
+  var out = $("eMsgOut");
+  $("eTest").onclick = function () {
+    out.textContent = "Sending a test…"; $("eTest").disabled = true;
+    emCall("test", { content: read() }).then(function (r) { $("eTest").disabled = false; out.textContent = r.ok ? "✓ Test sent to " + r.to : "✗ " + (r.error || "Couldn't send"); });
+  };
+  $("eSend").onclick = function () {
+    var x = read(); if (!x.subject.trim() || !(x.headline.trim() || x.message.trim())) { out.textContent = "Add a subject and a message first."; return; }
+    if (!confirm("Send “" + x.subject + "” to " + EM.n + " client" + (EM.n === 1 ? "" : "s") + " now?")) return;
+    out.textContent = "Sending…"; $("eSend").disabled = true;
+    emCall("send", { content: x, audience: EM.aud }).then(function (r) {
+      if (!r.ok) { out.textContent = "✗ " + (r.error || "Couldn't send"); $("eSend").disabled = false; return; }
+      toast("Sent to " + r.sent + " client" + (r.sent === 1 ? "" : "s")); EM.tab = "sent"; viewEmail();
+    }).catch(function () { out.textContent = "✗ Couldn't reach the email service."; $("eSend").disabled = false; });
+  };
+  upd();
+}
+
+/* ---- automatic ---- */
+function emAuto(){
+  var s = EM.data.settings, n = EM.data.auto_30d;
+  var card = function (k, title, when, extra, subj, txt, defS, defT) {
+    return '<div class="card emauto" data-k="' + k + '"><div class="row"><label class="sw"><input type="checkbox" id="a_' + k + '"' + (s["auto_" + k] ? " checked" : "") + '><span></span></label><div style="flex:1;min-width:200px"><b style="font-size:17px">' + title + '</b><div class="muted" style="font-size:13.5px">' + when + '</div></div><span class="pill">' + n[k] + ' sent in 30 days</span></div>' +
+      '<div class="emauto-b">' + extra + '<label class="f">Subject<input id="as_' + k + '" maxlength="150" value="' + esc(s[subj] || "") + '" placeholder="' + esc(defS) + '"></label>' +
+      '<label class="f">Message <span class="muted">— leave empty for our wording · {first_name} {service} {business}</span><textarea id="at_' + k + '" rows="5" placeholder="' + esc(defT) + '">' + esc(s[txt] || "") + '</textarea></label>' +
+      '<button class="btn" data-pv="' + k + '">Preview</button></div></div>';
+  };
+  var review = s.review_url ? "" : '<div class="emnote">Add your Google review link in ⚙️ Settings so the button asks for a review. Without it, the button says “Book again”.</div>';
+  $("emBody").innerHTML = '<p class="muted" style="margin:4px 0 14px">These go out by themselves each morning, only to clients who said yes to emails, and never to anyone who already has a booking coming up.</p>' +
+    card("thanks", "💛 Thank you + review", "The day after their appointment.", review, "thanks_subject", "thanks_text", "Thank you for visiting {business}", "Hi {first_name},\n\nThank you for coming in for your {service}. We hope you loved it…") +
+    card("rebook", "🔁 Time to rebook", "When it's time for the same " + esc(SW) + " again, with a button to book it.", '<label class="f" style="max-width:260px">Send after<select id="aw_rebook">' + [2, 3, 4, 5, 6, 8, 10, 12, 16, 26, 52].map(function (w) { return '<option value="' + w + '"' + (+s.rebook_weeks === w ? " selected" : "") + ">" + (w === 26 ? "6 months" : w === 52 ? "12 months" : w + " weeks") + "</option>"; }).join("") + "</select></label>",
+      "rebook_subject", "rebook_text", "Time for your next {service}?", "Hi {first_name},\n\nIt's been about {weeks} weeks since your {service}…") +
+    card("miss", "👋 We miss you", "To clients who haven't been back for a while (once every 6 months at most).", '<div class="row2"><label class="f">Not seen for<select id="am_miss">' + [2, 3, 4, 6, 9, 12].map(function (m) { return '<option value="' + m + '"' + (+s.miss_months === m ? " selected" : "") + ">" + m + " months</option>"; }).join("") + '</select></label><label class="f">Offer <span class="muted">(optional)</span><input id="ao_miss" maxlength="300" value="' + esc(s.miss_offer || "") + '" placeholder="e.g. 15% off your next visit"></label></div>',
+      "miss_subject", "miss_text", "We miss you at {business}", "Hi {first_name},\n\nIt's been a while since your last visit…") +
+    '<div class="row" style="margin-top:6px"><button class="btn pri" id="aSave">Save automatic emails</button><span class="muted" id="aMsg"></span></div>' +
+    '<div class="sheetpv" id="aPv" hidden><div class="card"><div class="row"><b id="aPvT"></b><span class="sp"></span><button class="btn" id="aPvX">Close</button></div><div class="emframe phone" style="margin-top:10px"><iframe id="aFrame" title="Preview"></iframe></div></div></div>';
+  var DEF = { thanks: ["Thank you for visiting {business}", "Thank you, {first_name}", "Hi {first_name},\n\nThank you for coming in for your {service}. We hope you loved it and we'd be glad to see you again soon.\n\nIf you have a minute, a short review helps other people find us — it means a lot to a small business."],
+    rebook: ["Time for your next {service}?", "Ready for your next {service}?", "Hi {first_name},\n\nIt's been about {weeks} weeks since your {service}, so it might be time for the next one.\n\nBook online in a few taps — pick the time that suits you."],
+    miss: ["We miss you at {business}", "We'd love to see you again", "Hi {first_name},\n\nIt's been a while since your last visit and we'd love to see you again.\n\nBook online any time — it only takes a minute."] };
+  $("emBody").querySelectorAll("[data-pv]").forEach(function (b) {
+    b.onclick = function () {
+      var k = b.getAttribute("data-pv"), d = DEF[k];
+      var c = { subject: $("as_" + k).value || d[0], headline: d[1], message: $("at_" + k).value || d[2],
+        offer_title: k === "miss" ? $("ao_miss").value : "", button_text: k === "thanks" ? (s.review_url ? "Leave a review" : "Book again") : k === "rebook" ? "Book " + ((D.services[0] || {}).name || "now") : "Book a visit", button_url: k === "thanks" && s.review_url ? s.review_url : emBook(null) };
+      $("aPvT").textContent = c.subject.replace(/\{first_name\}/g, "Sophie").replace(/\{business\}/g, emLook().name).replace(/\{service\}/g, (D.services[0] || {}).name || "");
+      emPreview($("aFrame"), c, { weeks: $("aw_rebook").value, months: $("am_miss").value }); $("aPv").hidden = false;
+    };
+  });
+  $("aPvX").onclick = function () { $("aPv").hidden = true; };
+  $("aSave").onclick = function () {
+    var p = {}; ["thanks", "rebook", "miss"].forEach(function (k) { p["auto_" + k] = $("a_" + k).checked; p[k + "_subject"] = $("as_" + k).value; p[k + "_text"] = $("at_" + k).value; });
+    p.rebook_weeks = +$("aw_rebook").value; p.miss_months = +$("am_miss").value; p.miss_offer = $("ao_miss").value;
+    $("aMsg").textContent = "Saving…";
+    rpc("svc_email_settings_save", { p_venue: VENUE, p: p }).then(function (r) {
+      if (!r || !r.ok) throw new Error((r && r.error) || "Couldn't save");
+      $("aMsg").textContent = r.warning ? "⚠️ " + r.warning : "✓ Saved"; toast("Saved");
+      Object.assign(EM.data.settings, p);
+    }).catch(function (e) { $("aMsg").textContent = "✗ " + e.message; });
+  };
+}
+
+/* ---- sent ---- */
+function emSent(){
+  var L = EM.data.campaigns || [];
+  var audTxt = function (a) { a = a || {}; if (a.kind === "service") { var s = byId(D.services, a.service_id); return "Clients who had " + (s ? s.name : "a " + SW); } if (a.kind === "lapsed") return "Not seen for " + a.months + "+ months"; if (a.kind === "new") return "New clients"; return "Everyone who said yes"; };
+  $("emBody").innerHTML = L.length ? L.map(function (c, i) {
+    return '<div class="card" style="margin-bottom:10px"><div class="row"><div style="flex:1;min-width:200px"><b style="font-size:16px">' + esc(c.subject || "(no subject)") + '</b><div class="muted" style="font-size:13px">' +
+      esc(new Date(c.at).toLocaleString("en-AU", { weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })) + " · " + esc(audTxt(c.audience)) + "</div></div>" +
+      '<span class="pill">' + c.sent + " sent" + (c.failed ? " · " + c.failed + " failed" : "") + '</span><button class="btn" data-again="' + i + '">Use again</button></div></div>';
+  }).join("") : '<div class="card muted">No emails sent yet. Write your first one in ✏️ Write.</div>';
+  $("emBody").querySelectorAll("[data-again]").forEach(function (b) { b.onclick = function () { var c = L[+b.getAttribute("data-again")]; EM.c = Object.assign({}, c.content || { subject: c.subject }); EM.aud = c.audience || { kind: "all" }; EM.tab = "write"; viewEmail(); }; });
+}
+
+/* ---- settings ---- */
+function emSettings(){
+  var s = EM.data.settings;
+  $("emBody").innerHTML = '<div class="card" style="max-width:640px"><div class="row2"><label class="f">From name<input id="sFn" maxlength="80" value="' + esc(s.from_name || "") + '"></label>' +
+    '<label class="f">Replies go to<input id="sRt" type="email" value="' + esc(s.reply_to || "") + '"></label></div>' +
+    '<label class="f">Business address <span class="muted">(required by law in every marketing email)</span><input id="sAd" maxlength="200" value="' + esc(s.address || "") + '" placeholder="12 Bay Street, Double Bay NSW 2028"></label>' +
+    '<div class="row2"><label class="f">Colour<input id="sCo" type="color" value="' + esc(s.colour || "#4F6B5C") + '" style="height:42px;padding:4px"></label>' +
+    '<label class="f">Logo <span class="muted">(web address, optional)</span><input id="sLo" value="' + esc(s.logo_url || "") + '" placeholder="https://"></label></div>' +
+    '<label class="f">Google review link <span class="muted">(for the thank-you email)</span><input id="sRv" value="' + esc(s.review_url || "") + '" placeholder="https://g.page/r/…/review"></label>' +
+    '<div class="row" style="margin-top:12px"><button class="btn pri" id="sSave">Save settings</button><span class="muted" id="sMsg"></span></div>' +
+    '<p class="muted" style="font-size:13px;margin:14px 0 0">Emails are sent by Webescapade on behalf of your business, with replies going straight to you.</p></div>';
+  $("sSave").onclick = function () {
+    var p = { from_name: $("sFn").value, reply_to: $("sRt").value, address: $("sAd").value, colour: $("sCo").value, logo_url: $("sLo").value, review_url: $("sRv").value };
+    if (p.review_url && !/^https:\/\//.test(p.review_url)) { $("sMsg").textContent = "The review link should start with https://"; return; }
+    if (p.logo_url && !/^https:\/\//.test(p.logo_url)) { $("sMsg").textContent = "The logo address should start with https://"; return; }
+    $("sMsg").textContent = "Saving…";
+    rpc("svc_email_settings_save", { p_venue: VENUE, p: p }).then(function (r) {
+      if (!r || !r.ok) throw new Error((r && r.error) || "Couldn't save");
+      toast("Saved"); viewEmail();
+    }).catch(function (e) { $("sMsg").textContent = "✗ " + e.message; });
+  };
 }
 
 /* =================== TREATMENTS =================== */

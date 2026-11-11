@@ -289,6 +289,7 @@ function viewDetails(){
     '<label>Mobile<input type="tel" id="f_phone" autocomplete="tel" inputmode="tel" value="' + esc(saved.phone || "") + '"></label></div>' +
     '<label>Anything we should know? <span class="opt-l">Optional — injuries, pressure preference, allergies</span><textarea id="f_notes"></textarea></label>' +
     '<label class="check"><input type="checkbox" id="f_ok"> <span>I understand bookings can be cancelled online up to ' + ch + " hours before. Later changes, please call" + (CAT.venue.phone ? " " + esc(CAT.venue.phone) : " us") + ".</span></label>" +
+    '<label class="check"><input type="checkbox" id="f_news"> <span>Keep me posted: news, offers and reminders when it\'s time to book again from ' + esc(CAT.venue.name) + '. <span class="opt-l">Optional — unsubscribe any time.</span></span></label>' +
     '<div class="err" id="f_err"></div></div>';
   return shell("Your <em>details</em>", esc(s.name) + " · " + fmtDay(S.date, { weekday: "long", day: "numeric", month: "long" }) + " at " + S.slot.time, body);
 }
@@ -399,7 +400,7 @@ function submit(){
   try { localStorage.setItem("svc_client", JSON.stringify(d)); } catch (e) {}
   rpc("svc_book", {
     p_venue: VENUE, p_service: S.service.id, p_start: S.slot.start, p_provider: S.provider ? S.provider.id : null,
-    p_name: d.name, p_email: d.email, p_phone: d.phone, p_notes: $("f_notes").value.trim(), p_source: "online"
+    p_name: d.name, p_email: d.email, p_phone: d.phone, p_notes: $("f_notes").value.trim(), p_source: "online", p_marketing: !!($("f_news") && $("f_news").checked)
   }).then(function (r) {
     if (!r.ok) {
       $("f_err").textContent = r.error || "Something went wrong.";
