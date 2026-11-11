@@ -301,7 +301,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v57</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v58</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -935,7 +935,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v57 \u00b7 Email themes: cream, terracotta, sage';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v58 \u00b7 New preset: Email Studio is here';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1021,6 +1021,7 @@
   }
 
   var LIVE_VIDEO = "https://youtu.be/CQgsbNhttqw";   /* Restaurant Deluxe promo: new website template + Live menu + table ordering (1 min) */
+  var ES_VIDEO = "https://youtu.be/qxH-vK9O28s";     /* Restaurant Deluxe: Email Studio is here (1 min) */
   var PRESETS = [
     preset({
       name:"What’s new: Live menu + more to come", desc:"News email with the 1-minute video: website and table ordering share one menu; Email Studio coming soon",
@@ -1051,6 +1052,37 @@
       finalCta:"Book a demo time", finalUrl:DEMO_BOOK,
       subject:"New: change your menu once, it updates everywhere", resendSubject:"Have you seen Live menu yet?",
       preheader:"Website and table ordering, now one menu — watch the 1-minute video."
+    }),
+    preset({
+      name:"Email Studio is here + tell us what’s next", desc:"Follow-up to the Live menu email: Email Studio is now in Restaurant Deluxe (1-minute video), and we ask what they want next",
+      badge:"NOW IN RESTAURANT DELUXE", eyebrow:"We said it was coming. It’s here.",
+      headline:"Email Studio is here.",
+      intro:"Last time we told you Email Studio was on its way. It’s now part of Restaurant Deluxe.\n\nTell your guests about a new menu, a special night or a quiet-Tuesday deal in just a few minutes. Not sure what to write? Say what you want in one sentence, tap “Draft it”, and your email is written for you. Pick a look, add your photos, check it on a phone, and send it to your guests.",
+      videoUrl:ES_VIDEO, videoThumb:"https://webescapade.com/Restaurant/email-studio-video-thumb.jpg", videoTitle:"Watch Email Studio in 1 minute", videoPos:"hero",
+      video2Url:RD_TOUR2.video2Url, video2Thumb:RD_TOUR2.video2Thumb, video2Title:RD_TOUR2.video2Title, video2Pos:RD_TOUR2.video2Pos, video2Note:RD_TOUR2.video2Note,
+      cta1:"Book a demo time", cta1url:DEMO_BOOK,
+      cta2:"Call Marc", cta2url:"tel:0413872994",
+      featEyebrow:"How it works", featHeading:"Your news, in every inbox.\nIn a few minutes.",
+      cards:[
+        {n:"01", t:"Say it in a sentence", d:"“Tell our guests about the new spring menu.” Tap “Draft it” and the email is written for you."},
+        {n:"02", t:"Pick a look", d:"Cream and terracotta, olive or soft sage. Your photos, your dishes, and a button to book a table."},
+        {n:"03", t:"Send in a few taps", d:"Check it on a phone, then send it to your guests."},
+        {n:"04", t:"See who opened", d:"See who opened your email, and watch the bookings come in."}
+      ],
+      spotOn:true, spotEyebrow:"We’re listening",
+      spotHeading:"What should we build next?",
+      spotSub:"Restaurant Deluxe keeps growing, and we want it to grow the way you need. A feature, a report, something that would make your week easier: just reply to this email. Marc reads every reply, and your ideas shape what comes next.",
+      boxes:[{l:"YOUR IDEA", v:"Reply to this email"},{l:"WE LISTEN", v:"Marc reads every reply"},{l:"WHAT’S NEXT", v:"Shaped by you"}],
+      bandImage:"https://webescapade.com/Restaurant/email-studio-looks.jpg", bandAlt:"Email Studio: the same new-menu email in three looks on a phone",
+      bandCaption:"Three looks, your photos, your dishes — and a button to book a table.", bandLink:ES_VIDEO,
+      priceEyebrow:"After your "+FOUNDER_DAYS+" days", priceHeading:"One flat price. No commission.",
+      plans:[{tier:"BOOKINGS + ORDERING + WAITLIST", price:"$149", per:"/ month", desc:"Everything working together on the tablets you already have. Ordering and waitlist only: $109 / month. New features like Live menu and Email Studio are added along the way.", hi:true}],
+      priceFoot:"More to come from Webescapade. "+FOUNDING,
+      finalHeading:"Tell us what you’d like next.",
+      finalSub:CALL_ME+" Or book a demo time — or simply reply to this email with your idea.",
+      finalCta:"Book a demo time", finalUrl:DEMO_BOOK,
+      subject:"It’s here: Email Studio for your restaurant", resendSubject:"Have you seen Email Studio yet?",
+      preheader:"Send your new menu to your guests in minutes — watch the 1-minute video."
     }),
     preset({
       name:"Founding 5 — 28-day free trial", desc:"Waitlist + ordering + bookings, first 5 restaurants",
