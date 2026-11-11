@@ -113,6 +113,7 @@ tr.click{cursor:pointer} tr.click:hover td{background:#FAF9F6}
 .emhead{margin:10px 0 14px}
 .emstats{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:10px}
 .emstats div{background:var(--card);border-radius:14px;padding:12px 14px}.emstats b{display:block;font:400 28px/1 "Instrument Serif",serif}.emstats span{font-size:12.5px;color:var(--muted)}
+.emstudio{display:flex;gap:14px;align-items:center;text-decoration:none;color:#fff;background:linear-gradient(120deg,#6d4ad8,#3f6ae0 60%,#1aa9c4);border-radius:16px;padding:14px 18px;margin:10px 0}.emstudio>span:first-child{font-size:26px}.emstudio b{display:block;font-size:16px}.emstudio small{display:block;opacity:.88;font-size:13px;line-height:1.4}.emstudio .go{margin-left:auto;font-weight:700;white-space:nowrap;background:rgba(255,255,255,.18);padding:8px 14px;border-radius:999px}
 .emnote{background:var(--soft);border-radius:12px;padding:11px 14px;font-size:14px;margin:8px 0}.emnote.warn{background:#FBEFE0;color:#7A4A12}
 .emgrid{display:grid;gap:16px;align-items:start}@media(min-width:1100px){.emgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.empv{position:sticky;top:12px}}
 .emform{display:grid;gap:12px}.emstart{display:flex;flex-wrap:wrap;gap:6px}
@@ -679,6 +680,7 @@ function viewEmail(){
       '<div class="emstats"><div><b>' + d.subscribers + '</b><span>clients said yes to emails</span></div><div><b>' + d.clients + '</b><span>clients in your bookings</span></div>' +
       '<div><b>' + d.sent_month + '</b><span>emails sent this month (of ' + d.cap.toLocaleString() + ')</span></div><div><b>' + d.unsubscribed + '</b><span>unsubscribed</span></div></div>' +
       (!s.address ? '<div class="emnote warn">Add your business address in <a href="#" data-goset>⚙️ Settings</a> before sending — the law requires it in every marketing email.</div>' : "") +
+      '<a class="emstudio" href="email-studio.html?venue=' + encodeURIComponent(VENUE) + '"><span>🎨</span><span><b>Open the Email Studio</b><small>Design emails with pictures, sections, your ' + esc(SW) + 's and prices, offers, team and reviews — with live preview and AI.</small></span><span class="go">Open →</span></a>' +
       (!d.subscribers ? '<div class="emnote">Clients join your list by ticking <b>“Keep me posted”</b> when they book online. Only those clients receive these emails, and each email has an unsubscribe link. Booking confirmations and reminders still go to everyone.</div>' : "");
     var gs = $("emHead").querySelector("[data-goset]"); if (gs) gs.onclick = function (e) { e.preventDefault(); EM.tab = "set"; viewEmail(); };
     ({ write: emWrite, auto: emAuto, sent: emSent, set: emSettings })[EM.tab]();
@@ -804,7 +806,7 @@ function emSent(){
   $("emBody").innerHTML = L.length ? L.map(function (c, i) {
     return '<div class="card" style="margin-bottom:10px"><div class="row"><div style="flex:1;min-width:200px"><b style="font-size:16px">' + esc(c.subject || "(no subject)") + '</b><div class="muted" style="font-size:13px">' +
       esc(new Date(c.at).toLocaleString("en-AU", { weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })) + " · " + esc(audTxt(c.audience)) + "</div></div>" +
-      '<span class="pill">' + c.sent + " sent" + (c.failed ? " · " + c.failed + " failed" : "") + '</span><button class="btn" data-again="' + i + '">Use again</button></div></div>';
+      '<span class="pill">' + c.sent + " sent" + (c.failed ? " · " + c.failed + " failed" : "") + '</span>' + (c.content && c.content.v === 2 ? '<a class="btn" href="email-studio.html?venue=' + encodeURIComponent(VENUE) + '">Open in Email Studio</a>' : '<button class="btn" data-again="' + i + '">Use again</button>') + "</div></div>";
   }).join("") : '<div class="card muted">No emails sent yet. Write your first one in ✏️ Write.</div>';
   $("emBody").querySelectorAll("[data-again]").forEach(function (b) { b.onclick = function () { var c = L[+b.getAttribute("data-again")]; EM.c = Object.assign({}, c.content || { subject: c.subject }); EM.aud = c.audience || { kind: "all" }; EM.tab = "write"; viewEmail(); }; });
 }

@@ -254,7 +254,7 @@ function tabUrl(c, t){ return L.staff + "?venue=" + encodeURIComponent(c.slug) +
 function editLinks(c){
   var sw = (c.service_word || "service"), Sw = sw.charAt(0).toUpperCase() + sw.slice(1) + "s", ln = links(c);
   var A = [["📅", "Calendar", tabUrl(c, "cal")], ["📋", "Bookings", tabUrl(c, "list")], ["💬", "Messages", tabUrl(c, "msg")], ["✂️", Sw + " & prices", tabUrl(c, "svc")], ["👥", "Team", tabUrl(c, "team")],
-    ["🚪", "Rooms & chairs", tabUrl(c, "rooms")], ["🕘", "Hours & closures", tabUrl(c, "hours")], ["⚙️", "Settings", tabUrl(c, "set")]];
+    ["🚪", "Rooms & chairs", tabUrl(c, "rooms")], ["🕘", "Hours & closures", tabUrl(c, "hours")], ["⚙️", "Settings", tabUrl(c, "set")], ["✉️", "Email Studio", tabUrl(c, "cal").replace("service-staff.html", "email-studio.html").replace(/[?&]tab=cal/, "")]];
   if (ln.editor) A.push(["🌐", "Website editor", ln.editor]);
   A.push(["🧪", "Test a booking", ln.booking]);
   return A;
