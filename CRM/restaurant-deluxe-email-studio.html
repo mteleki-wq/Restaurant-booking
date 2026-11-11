@@ -301,7 +301,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v58</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v59</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -935,7 +935,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v58 \u00b7 New preset: Email Studio is here';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v59 \u00b7 Service preset: Email Studio is here';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -3053,6 +3053,8 @@
   var SVC_EVIDEO = "https://youtu.be/6OuMtkKCxrw";   /* Premium editor tour */
   var SVC_ETHUMB = "https://webescapade.com/service/img/editor-video-email.jpg";
   var SVC_AVIDEO = "https://youtu.be/RvDm7b_jDX0";   /* AI assistant + Email Studio (coming soon) promo */
+  var SVC_EVIDEO = "https://youtu.be/yIXYHlhIdnM";   /* Service Deluxe: Email Studio is here (1 min) */
+  var SVC_ETHUMB = "https://webescapade.com/service/img/email-studio-video-thumb.jpg";
   var SVC_ATHUMB = "https://webescapade.com/service/img/ai-assistant-video-thumb.jpg";
   var SVC_GVIDEO = "https://youtu.be/TIrD-DhMVDw";   /* Premium getting-started (setup) video */
   var SVC_GTHUMB = "https://webescapade.com/service/img/setup-video-thumb.jpg";
@@ -3101,6 +3103,31 @@
       {n:'03', t:'Emails go out for you', d:'Confirmation, cancellation and a reminder the day before, automatically.'}
     ];
     return [
+      P({ name:'Email Studio is here + tell us what’s next', desc:'Follow-up to the AI assistant email: Email Studio is now in Service Deluxe (1-minute video) — market and remind your clients, and tell us what you want next',
+        badge:'NOW IN SERVICE DELUXE', eyebrow:'We said it was coming. It’s here.',
+        headline:'Email Studio is here.',
+        heroImage:'', videoUrl:SVC_EVIDEO, videoThumb:SVC_ETHUMB, videoTitle:'Watch Email Studio in 1 minute', videoPos:'hero',
+        video2Url:'', video2Thumb:'', video2Title:'',
+        intro:'Last time we told you Email Studio was on its way. It’s now part of Service Deluxe.\n\nStay close to your regular clients: tell them about a new treatment, a quiet-day offer or a gentle reminder that it’s time to book again — and share helpful tips between visits. Not sure what to write? Say what you want in one sentence, tap “Draft it”, and your email is written for you. Pick a look, add your photos, check it on a phone, and send it to your clients.',
+        cta1:'Start your free trial', cta1url:SVC_START, cta2:'See the demo spa', cta2url:SVC_PREMIUM,
+        featEyebrow:'How it works', featHeading:'Your news, your tips, your reminders.\nIn a few minutes.',
+        cards:[
+          {n:'01', t:'Say it in a sentence', d:'“Tell our clients about our new hot stone massage and share three tips for a healthy back.” Tap “Draft it” and it’s written.'},
+          {n:'02', t:'Pick a look', d:'Cream and olive, terracotta or soft sage. Your photos, your tips, and a “Book now” button.'},
+          {n:'03', t:'Remind and send', d:'Remind clients it’s time to book again, or share an offer. Check it on a phone, then send it in a few taps.'},
+          {n:'04', t:'See who opened', d:'See who opened your email — and when clients tap “Book now”, they pick a time and go straight into your calendar.'}
+        ],
+        spotOn:true, spotEyebrow:'We’re listening', spotHeading:'What should we build next?',
+        spotSub:'Service Deluxe keeps growing, and we want it to grow the way you need. A feature, a report, something that would make your week easier: just reply to this email. Marc reads every reply, and your ideas shape what comes next.',
+        boxes:[{l:'YOUR IDEA', v:'Reply to this email'},{l:'WE LISTEN', v:'Marc reads every reply'},{l:'WHAT’S NEXT', v:'Shaped by you'}],
+        bandImage:SVC_IMG+'email-studio-looks.jpg', bandAlt:'Email Studio: the same spa email in three looks on a phone', bandLink:SVC_EVIDEO,
+        bandCaption:'Three looks, your photos, your tips — and a button to book.',
+        plans:[svcBox(M,true)].filter(Boolean),
+        priceFoot:'New features like your AI assistant and Email Studio are added along the way. All plans and questions: webescapade.com/service',
+        finalHeading:'Tell us what you’d like next.', finalSub:'Simply reply to this email with your idea. '+TERMS,
+        finalCta:'Start your free trial', finalUrl:SVC_START,
+        subject:'It’s here: Email Studio for your business', resendSubject:'Have you seen Email Studio yet?',
+        preheader:'Market and remind your clients in minutes — watch the 1-minute video.' }),
       (function(){ var PR=svcPlan('Premium'); return P({ name:'What’s new: AI assistant + more to come', desc:'News email with the 1-minute video: AI assistant, messages, Email Studio coming soon',
         badge:'NEW · AI ASSISTANT', eyebrow:'New at Service Deluxe',
         headline:'Your website just got a receptionist.',
