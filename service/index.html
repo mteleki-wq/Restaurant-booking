@@ -246,6 +246,7 @@ body:has(.chat.open) #float{visibility:hidden}
 .vc span{display:block;font-size:13px;line-height:1.4;color:var(--muted);margin-top:2px}
 .vall{display:inline-block;margin-top:6px;font-weight:700;font-size:14px;color:var(--ink)}
 .watch{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none}
+.watches{display:flex;flex-wrap:wrap;gap:4px 22px}
 .watch i{width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:grid;place-items:center;font-style:normal;font-size:10px;padding-left:2px}
 @media(max-width:480px){.vc .im{width:96px}}
 .ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
@@ -315,7 +316,7 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
 
 <nav class="top" id="nav"><div class="w">
   <a class="brand" href="#top"><span class="m">S</span><span><b data-edit="brand">Service Deluxe</b><small>by Webescapade</small></span></a>
-  <div class="links"><a href="#types" data-edit="n6">Your look</a><a href="#how" data-edit="n1">How it works</a><a href="#videos" data-edit="n5">Videos</a><a href="#assistant" data-edit="n7">AI assistant</a><a href="#features" data-edit="n2">Features</a><a href="#pricing" data-edit="n3">Pricing</a><a href="#faq" data-edit="n4">FAQ</a></div>
+  <div class="links"><a href="#types" data-edit="n6">Your look</a><a href="#how" data-edit="n1">How it works</a><a href="#videos" data-edit="n5">Videos</a><a href="#assistant" data-edit="n7">AI assistant</a><a href="#features" data-edit="n2">Features</a><a href="#pricing" data-edit="n3">Pricing</a><a href="/service/demo.html" data-edit="n8">Book a demo</a><a href="#faq" data-edit="n4">FAQ</a></div>
   <a class="btn dark" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="navcta">Start free trial</span> <span class="ar">→</span></a>
 </div></nav>
 
@@ -330,7 +331,7 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
       <a class="btn dark" href="https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC" data-link="trial"><span data-edit="cta1">Start your 14-day free trial</span> <span class="ar">→</span></a>
       <a class="btn line" href="https://webescapade.com/service/service-booking.html?venue=serenity-spa" data-link="booking" target="_blank"><span data-edit="cta2">Try the booking page</span></a>
     </div>
-    <a class="watch" href="#videos"><i>▶</i><span data-edit="watch">Watch the 1-minute tour</span></a>
+    <div class="watches"><a class="watch" href="#videos"><i>▶</i><span data-edit="watch">Watch the 3-minute tour</span></a><a class="watch" href="/service/demo.html"><i>📅</i><span data-edit="watch2">Book a free Zoom demo</span></a></div>
     <div class="trust"><span data-edit="t1">No commission</span><span data-edit="t2">Set up in minutes</span><span data-edit="t3">Works on any phone</span></div>
     <div class="looks" role="group" aria-label="See it for your business"><span class="lab" data-edit="looklab">See it for</span><button type="button" data-k="all" class="on">All</button><button type="button" data-k="spa"><i style="background:#4F6B5C"></i>Spa</button><button type="button" data-k="salon"><i style="background:#B4533A"></i>Salon</button><button type="button" data-k="dental"><i style="background:#0F8B8D"></i>Dental</button><button type="button" data-k="clinic"><i style="background:#2563A8"></i>Clinic</button></div>
   </div>
@@ -351,9 +352,9 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
 
 <section class="s" id="videos" data-sec="spa" style="padding-bottom:20px"><div class="w">
   <div class="head rv"><div class="eyebrow" data-edit="vEy">Watch it work</div><h2 data-edit="vH">See how it works. <em>Set up in minutes.</em></h2>
-    <p data-edit="vP">Short videos: your new AI assistant, how clients book, how you edit your website, and how to get started.</p></div>
+    <p data-edit="vP">The full tour, then short videos: Email Studio, your AI assistant, how clients book, how you edit your website, and how to get started.</p></div>
   <div class="vids rv">
-    <div class="vmain" id="vmain"><button class="vp" type="button" id="vplay" aria-label="Play video"><span id="vnow">NEW: Your AI assistant</span><span>▶ Play</span></button></div>
+    <div class="vmain" id="vmain"><button class="vp" type="button" id="vplay" aria-label="Play video"><span id="vnow">The full tour (under 3 min)</span><span>▶ Play</span></button></div>
     <div><div class="vlist" id="vlist"></div><a class="vall" href="/service/tour/" target="_blank" rel="noopener" data-edit="vall">All videos on one page ↗</a></div>
   </div>
 </div></section>
@@ -487,6 +488,7 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
       <div class="contact">
         <a href="tel:0413872994" data-link="tel"><i>☎</i><span data-link-text="phone">0413 872 994</span></a>
         <a href="mailto:marc@webescapade.com" data-link="mail"><i>✉</i><span data-link-text="email">marc@webescapade.com</span></a>
+        <a href="/service/demo.html" style="background:var(--sage);color:#fff;border-color:var(--sage)"><i style="background:rgba(255,255,255,.18)">📅</i><span data-edit="xDemo">Book a free Zoom demo — pick a time that suits you</span></a>
       </div></div>
     <form class="form rv" id="enqForm" novalidate="">
       <div class="two"><label>Your name<input name="name" autocomplete="name" required=""></label>
@@ -685,7 +687,9 @@ footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
 <script>/*VIDEOS-JS*/
 (function(){
 var V=[
- {id:'RvDm7b_jDX0',t:'NEW: Your AI assistant',d:'Answers clients day and night, shows real free times and takes messages.',img:'/service/img/ai-assistant-video-thumb.jpg'},
+ {id:'dgAGQn4IeB4',t:'The full tour (under 3 min)',d:'Your website, online bookings, Ivy the AI assistant and Email Studio, all in one place.',img:'/service/img/full-tour-video-thumb.jpg'},
+ {id:'yIXYHlhIdnM',t:'NEW: Email Studio',d:'Market and remind your clients: say it in a sentence and your email is written.',img:'/service/img/email-studio-video-thumb.jpg'},
+ {id:'RvDm7b_jDX0',t:'Your AI assistant',d:'Answers clients day and night, shows real free times and takes messages.',img:'/service/img/ai-assistant-video-thumb.jpg'},
  {id:'wEmL6nPHgO0',t:'Service Deluxe in one minute',d:'Booking in three taps, automatic emails and your own website.',img:'/service/img/video-thumb.jpg'},
  {id:'TIrD-DhMVDw',t:'Getting started',d:'Sign up, set up your business and go live, step by step.',img:'/service/img/setup-video-thumb.jpg'},
  {id:'6OuMtkKCxrw',t:'The website editor',d:'Change words, photos, layouts, animation and colours yourself.',img:'/service/img/editor-video-thumb.jpg'},

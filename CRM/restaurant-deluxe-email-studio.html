@@ -301,7 +301,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v60</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v61</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -935,7 +935,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v60 \u00b7 Service preset: Why we built Service Deluxe';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v61 \u00b7 Service: book a Zoom demo';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -3050,6 +3050,7 @@
   var SVC_PREMIUM = "https://webescapade.com/service/demo-premium/";   /* Premium demo site */
   var SVC_PVIDEO = "https://youtu.be/GtzMh5USIoA";   /* Service Deluxe Premium tour */
   var SVC_PTHUMB = "https://webescapade.com/service/img/premium-video-thumb.jpg";
+  var SVC_DEMO = "https://webescapade.com/service/demo.html";   /* book a Zoom demo with Marc (same calendar as Restaurant Deluxe) */
   var SVC_FVIDEO = "https://youtu.be/dgAGQn4IeB4";   /* Service Deluxe: full tour (2:40) */
   var SVC_FTHUMB = "https://webescapade.com/service/img/full-tour-video-thumb.jpg";
   var SVC_EVIDEO = "https://youtu.be/6OuMtkKCxrw";   /* Premium editor tour */
@@ -3111,7 +3112,7 @@
         heroImage:'', videoUrl:SVC_FVIDEO, videoThumb:SVC_FTHUMB, videoTitle:'Watch the full tour — under 3 minutes', videoPos:'hero',
         video2Url:'', video2Thumb:'', video2Title:'',
         intro:'We believe the people who look after others (therapists, practitioners, stylists) should spend their day with their clients. Not chasing bookings, answering the same questions twice, or wondering how to fill a quiet Tuesday.\n\nThat’s why we built Service Deluxe. I’m Marc, a web designer with 50 years’ experience in hospitality, and I’ve watched too many great small businesses lose hours to admin. So we made one simple system that does the busy work for you, and gives you your time back.\n\nThe full tour takes under 3 minutes.',
-        cta1:'Start your free trial', cta1url:SVC_START, cta2:'Watch the full tour', cta2url:SVC_FVIDEO,
+        cta1:'Start your free trial', cta1url:SVC_START, cta2:'Book a Zoom demo', cta2url:SVC_DEMO,
         featEyebrow:'How we do it', featHeading:'Everything you need.\nNothing you don’t.',
         cards:[
           {n:'01', t:'A website you change yourself', d:'Tap Edit, click, type. Your treatments, team and prices come live from your bookings, so they’re always up to date.'},
@@ -3128,7 +3129,7 @@
         bandCaption:'Your website, bookings, AI assistant and Email Studio, all in one place.',
         plans:[svcBox(M,true), svcBox(PR,false)].filter(Boolean),
         priceFoot:'One flat monthly price. No commission, no booking fees, and new features added along the way. All plans: webescapade.com/service',
-        finalHeading:'Your clients. Your craft.\nWe’ll handle the rest.', finalSub:'Or simply reply and tell us what your business needs. '+TERMS,
+        finalHeading:'Your clients. Your craft.\nWe’ll handle the rest.', finalSub:'Book a free Zoom demo at a time that suits you, or simply reply and tell us what your business needs. '+TERMS,
         finalCta:'Start your free trial', finalUrl:SVC_START,
         subject:'Why we built Service Deluxe (and a question for you)', resendSubject:'What would make your week easier?',
         preheader:'The full tour in under 3 minutes — and we’d love to hear what you need next.' }); })(),
@@ -3138,7 +3139,7 @@
         heroImage:'', videoUrl:SVC_EVIDEO, videoThumb:SVC_ETHUMB, videoTitle:'Watch Email Studio in 1 minute', videoPos:'hero',
         video2Url:'', video2Thumb:'', video2Title:'',
         intro:'Last time we told you Email Studio was on its way. It’s now part of Service Deluxe.\n\nStay close to your regular clients: tell them about a new treatment, a quiet-day offer or a gentle reminder that it’s time to book again — and share helpful tips between visits. Not sure what to write? Say what you want in one sentence, tap “Draft it”, and your email is written for you. Pick a look, add your photos, check it on a phone, and send it to your clients.',
-        cta1:'Start your free trial', cta1url:SVC_START, cta2:'See the demo spa', cta2url:SVC_PREMIUM,
+        cta1:'Start your free trial', cta1url:SVC_START, cta2:'Book a Zoom demo', cta2url:SVC_DEMO,
         featEyebrow:'How it works', featHeading:'Your news, your tips, your reminders.\nIn a few minutes.',
         cards:[
           {n:'01', t:'Say it in a sentence', d:'“Tell our clients about our new hot stone massage and share three tips for a healthy back.” Tap “Draft it” and it’s written.'},
@@ -3153,7 +3154,7 @@
         bandCaption:'Three looks, your photos, your tips — and a button to book.',
         plans:[svcBox(M,true)].filter(Boolean),
         priceFoot:'New features like your AI assistant and Email Studio are added along the way. All plans and questions: webescapade.com/service',
-        finalHeading:'Tell us what you’d like next.', finalSub:'Simply reply to this email with your idea. '+TERMS,
+        finalHeading:'Tell us what you’d like next.', finalSub:'Simply reply to this email with your idea, or book a free Zoom demo: webescapade.com/service/demo.html. '+TERMS,
         finalCta:'Start your free trial', finalUrl:SVC_START,
         subject:'It’s here: Email Studio for your business', resendSubject:'Have you seen Email Studio yet?',
         preheader:'Market and remind your clients in minutes — watch the 1-minute video.' }),

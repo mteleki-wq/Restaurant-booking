@@ -1400,7 +1400,7 @@
     renderDay();
     $("#calBookings").innerHTML = upcoming.length ? '<div class="blist" style="margin-top:4px">'+upcoming.map(function(b){
       var req=b.status==="requested";
-      return '<div'+(req?' style="border-color:var(--gold)"':'')+'><span>'+(req?'<i class="reqtag" style="font-style:normal">Visit request</i>':'')+'<b>'+esc(dt(b.start_at))+' · '+esc(tm(b.start_at))+'</b> — '+esc(b.restaurant)+'<br><small style="color:var(--faint)">'+esc(b.name)+' · '+esc(MODE[b.mode]||b.mode)+(b.phone?' · '+esc(b.phone):'')+'</small></span>'+
+      return '<div'+(req?' style="border-color:var(--gold)"':'')+'><span>'+(req?'<i class="reqtag" style="font-style:normal">Visit request</i>':'')+'<b>'+esc(dt(b.start_at))+' · '+esc(tm(b.start_at))+'</b> — '+esc(b.restaurant)+(b.product==="service"?' <i class="reqtag" style="font-style:normal;background:#4F6B5C;color:#fff">Service Deluxe</i>':'')+'<br><small style="color:var(--faint)">'+esc(b.name)+' · '+esc(MODE[b.mode]||b.mode)+(b.phone?' · '+esc(b.phone):'')+'</small></span>'+
         '<button class="btn sm" type="button" data-goto="'+esc(b.start_at)+'">'+(req?'Answer':'Show')+'</button></div>';
     }).join("")+'</div>' : '<p class="empty">No demos booked yet. The booking link is in every Email Studio template.</p>';
     $("#calBlocks").innerHTML = d.blocks.length ? d.blocks.map(function(k){
