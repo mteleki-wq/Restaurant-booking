@@ -40,7 +40,8 @@ header.top .w{display:flex;align-items:center;gap:14px;height:64px}
 header.top nav{margin-left:auto;display:flex;gap:22px;font-size:14.5px;font-weight:600}
 header.top nav a{text-decoration:none;color:var(--muted)} header.top nav a:hover{color:var(--navy)}
 #print{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font:600 13.5px Figtree,sans-serif;cursor:pointer;color:var(--navy)}
-@media(max-width:860px){header.top nav{display:none}#print{margin-left:auto}}
+@media(max-width:860px){header.top nav{display:none}}
+@media(max-width:520px){#print{display:none}}
 /* hero */
 .hero{padding:84px 0 56px;position:relative;overflow:hidden}
 .hero:before{content:"";position:absolute;right:-180px;top:-160px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,var(--gold2),transparent 65%);opacity:.65;z-index:-1}
@@ -156,15 +157,16 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
 .modal .x{position:absolute;top:-46px;right:0;border:0;background:#fff;color:var(--navy);width:38px;height:38px;border-radius:50%;font-size:22px;cursor:pointer}
 .rv{opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
-@media print{
-  @page{size:A4;margin:12mm 13mm}
+.sheet{background:var(--paper)}
+.contactline{display:none}
+.hbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font:600 13.5px Figtree,sans-serif;cursor:pointer;color:var(--navy);text-decoration:none}
+.hbtn.dark{background:var(--navy);color:#fff;border-color:var(--navy)}
+#dl{margin-left:auto}
+@media print, screen and (min-width:900px){
   html{font-size:10pt}
-  body{background:#fff;font-size:10pt;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  header.top,#print,.modal,.ctas,.visit[href^="/service"],.hero:before{display:none!important}
   .rv{opacity:1!important;transform:none!important}
   .w{max-width:none;padding:0}
   section{padding:0 0 6mm!important;border:0!important;background:#fff!important}
-  .pb{break-before:page}
   .hero{padding:0 0 4mm!important}
   h1{font-size:30pt} h2{font-size:21pt} h3{font-size:15pt}
   .eyebrow{font-size:7.5pt}
@@ -181,13 +183,16 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   .card h3{font-size:13pt;margin:1mm 0 1.5mm}
   .card p{font-size:9pt}
   #cases{padding-top:0!important}
-  .case{grid-template-columns:.85fr 1.15fr!important;gap:6mm;padding:5mm 0!important;break-inside:avoid}
+  .case{grid-template-columns:.85fr 1.15fr!important;gap:6mm;padding:3.5mm 0!important;break-inside:avoid}
   .case.flip .media{order:0}
   .case h3{font-size:16pt;margin-bottom:1.5mm}
-  .case .lead{font-size:9.5pt}
+  .case .lead{font-size:9pt;line-height:1.45}
+  #cases .head{margin-bottom:1mm} #cases .head p{font-size:9.5pt}
+  .learn span,.learn b{line-height:1.42}
   .tag{margin-bottom:2mm;font-size:7pt}
-  .learn{gap:1.5mm;margin-top:3mm} .learn span{font-size:9pt} .learn li:before{margin-top:6px}
-  .task{margin-top:3mm;padding:2.5mm 3.5mm;font-size:9pt}
+  .learn{gap:1mm;margin-top:2.5mm} .learn span{font-size:9pt} .learn li:before{margin-top:6px}
+  .task{margin-top:2.5mm;padding:2mm 3.5mm;font-size:9pt}
+  .visit{margin-top:2mm;font-size:8.5pt}
   .units{margin-top:2.5mm} .units span{font-size:7.5pt;padding:1px 7px}
   .media .main{box-shadow:none} .media .main span,.media .main:after{display:none}
   .mlink{display:block;font:600 8pt Figtree,sans-serif;color:#14304F;margin-top:1.5mm;text-decoration:none}
@@ -210,8 +215,30 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   .about{padding:6mm;margin-top:2mm;max-width:none;break-inside:avoid} .about h2{font-size:18pt!important} .about p{font-size:9.5pt;margin-top:2mm}
   .facts3{margin-top:3mm;gap:2mm 8mm} .facts3 b{font-size:16pt} .facts3 span{font-size:8pt}
   .close{padding-top:6mm!important;break-inside:avoid} .close .lead{margin:2mm auto 0}
-  .close .w:after{content:"marc@webescapade.com  ·  0413 872 994";display:block;text-align:center;font:600 11pt Figtree,sans-serif;color:#14304F;margin-top:3mm}
   footer{padding:4mm 0 0;font-size:8pt}
+  .ctas{display:none!important}
+  .contactline{display:block;text-align:center;font:600 11pt Figtree,sans-serif;margin:3mm 0 0}
+  .contactline a{color:#14304F;text-decoration:none}
+  .hero:before{display:none}
+  .sheet{background:#fff}
+  .note,.card,.sess,.vids a,.inside a{background:#fff}
+}
+@media screen and (min-width:900px){
+  body{background:#E6E9ED}
+  header.top{background:rgba(255,255,255,.92)}
+  header.top nav{display:none}
+  .sheet{width:210mm;min-height:297mm;margin:26px auto;padding:12mm 13mm;box-shadow:0 18px 40px -18px rgba(20,48,79,.35),0 2px 6px rgba(20,48,79,.08);border-radius:3px}
+  .sheet:first-of-type{margin-top:30px}
+  .media .main span{display:none} .media .main:after{display:none}
+  footer{padding-bottom:0}
+}
+@media print{
+  @page{size:A4;margin:12mm 13mm}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header.top,.modal{display:none!important}
+  .sheet{break-after:page;width:auto;min-height:0;margin:0;padding:0;box-shadow:none}
+  .sheet:last-of-type{break-after:auto}
+  .media .main span,.media .main:after{display:none}
 }
 </style>
 </head>
@@ -220,9 +247,10 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
 <header class="top"><div class="w">
   <span class="mono">MT</span><span class="who"><b>Marc Teleki</b><small>Teaching proposal · for discussion</small></span>
   <nav><a href="#why">Why</a><a href="#cases">Case studies</a><a href="#sessions">Sessions</a><a href="#units">Units</a><a href="#delivery">Delivery</a></nav>
-  <button id="print" type="button">Save as PDF</button>
+  <a id="dl" class="hbtn dark" href="/Resume/AI-in-Marketing-teaching-proposal-Marc-Teleki.pdf" download>Download PDF</a><button id="print" class="hbtn" type="button">Print</button>
 </div></header>
 
+<div class="sheet">
 <section class="hero"><div class="w">
   <div class="rv">
     <div class="eyebrow">A teaching proposal · AI in marketing and business</div>
@@ -248,7 +276,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
     <div class="card rv"><span class="n">03</span><h3>Judgement, not just tools</h3><p>Checking facts, protecting privacy, getting consent and keeping a human in charge. The habits that make AI safe to use at work.</p></div>
   </div>
 </div></section>
+</div>
 
+<div class="sheet">
 <section id="cases" class="pb" style="padding-top:20px"><div class="w">
   <div class="head rv"><div class="eyebrow">Three live case studies</div><h2>Three businesses. <em>Three marketing lessons.</em></h2>
     <p>Each case study comes with short videos students can watch in class, plus a live example they can try on their own phones.</p></div>
@@ -302,7 +332,12 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
     </div>
   </article>
 
-  <article class="case rv pb" id="c3">
+</div></section>
+</div>
+
+<div class="sheet">
+<section id="cases3"><div class="w">
+  <article class="case rv" id="c3">
     <div class="media">
       <div class="cl"><small>Case 3 · A two-sided marketplace</small><b>ChefLink Sydney</b><p>A platform that connects professional chefs with venues that need them, with chef portfolios, an approval step and a CRM for outreach.</p><div class="two"><span>Audience 1 · Chefs</span><span>Audience 2 · Venues</span></div></div>
     </div>
@@ -322,6 +357,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   </article>
 </div></section>
 
+
 <section id="sessions" class="pbx" style="background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="w">
   <div class="head rv"><div class="eyebrow">Session plan</div><h2>Four sessions, <em>or one workshop.</em></h2>
     <p>Each session pairs a short video with hands-on work, and each one produces evidence that can support assessment.</p></div>
@@ -332,7 +368,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
     <div class="sess rv"><span class="n">4</span><h3>Plan, measure, improve</h3><p>Build a small communication plan: audience, channel, message, timing and the measure of success (opens, bookings, replies), with a responsible-AI checklist.</p><div class="ev"><b>Evidence:</b> one-page marketing communication plan</div></div>
   </div>
 </div></section>
+</div>
 
+<div class="sheet">
 <section class="pb"><div class="w">
   <div class="dark" style="margin:0;padding:56px 28px">
     <div class="head rv"><div class="eyebrow">Running through every session</div><h2>Using AI <em style="color:var(--gold2)">responsibly.</em></h2>
@@ -366,7 +404,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   </table></div>
   <p class="fine">Unit codes from BSB40820 Certificate IV and BSB50620 Diploma of Marketing and Communication (training.gov.au). Final mapping to be confirmed with the college’s training and assessment strategy.</p>
 </div></section>
+</div>
 
+<div class="sheet">
 <section id="delivery" class="pb" style="padding-top:20px"><div class="w">
   <div class="head rv"><div class="eyebrow">Delivery</div><h2>Easy to <em>try first.</em></h2>
     <p>Start small with one workshop. If it works well for the students, it can grow into a short module.</p></div>
@@ -391,9 +431,11 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   <div class="eyebrow">Next step</div><h2>A 20-minute <em>walkthrough.</em></h2>
   <p class="lead">I’d be glad to show you the case studies and the session plan, and to shape them around our current classes and timetable.</p>
   <div class="ctas"><a class="btn dark" href="mailto:marc@webescapade.com?subject=AI%20in%20marketing%20%E2%80%94%20teaching%20proposal">Email Marc</a><a class="btn line" href="tel:+61413872994">0413 872 994</a></div>
+  <p class="contactline"><a href="mailto:marc@webescapade.com?subject=AI%20in%20marketing%20%E2%80%94%20teaching%20proposal">marc@webescapade.com</a> · <a href="tel:+61413872994">0413 872 994</a></p>
 </div></section>
 
 <footer>Marc Teleki · Teaching proposal: AI in Marketing and Business · November 2026</footer>
+</div>
 
 <div class="modal" id="modal" hidden><div class="box"><button class="x" id="mx" type="button" aria-label="Close video">×</button><div id="mv" style="width:100%;height:100%"></div></div></div>
 
