@@ -65,6 +65,7 @@ section{padding:84px 0}
 .case:first-of-type{border-top:0;padding-top:10px}
 @media(min-width:960px){.case{grid-template-columns:1.05fr .95fr}.case.flip .media{order:2}}
 .media .main{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#0d1520 center/cover no-repeat;box-shadow:var(--shadow);cursor:pointer;border:0;padding:0;width:100%;display:block}
+.media .main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .media .main:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,20,32,.55))}
 .media .main span{position:absolute;left:18px;bottom:14px;z-index:2;color:#fff;font:600 15px Figtree,sans-serif;display:flex;align-items:center;gap:10px}
 .media .main span i{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--navy);display:grid;place-items:center;font-style:normal;font-size:14px;padding-left:3px}
@@ -87,6 +88,17 @@ section{padding:84px 0}
 .task{margin-top:18px;background:var(--mist);border-radius:14px;padding:14px 16px;font-size:15px;color:var(--ink)}
 .task b{color:var(--navy)}
 .visit{display:inline-block;margin-top:14px;font-weight:600;font-size:14.5px;color:var(--navy)}
+.inside{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px;max-width:900px}
+.inside a{display:block;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 14px 30px -22px rgba(20,48,79,.5)}
+.inside img{aspect-ratio:16/9;width:100%;object-fit:cover}
+.inside span{display:block;padding:10px 12px 12px;font:500 16px/1.25 Newsreader,serif;color:var(--navy)}
+.inside small{display:block;font:700 10px Figtree;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+.inside .clmini b{display:grid;place-items:center;aspect-ratio:16/9;background:#1C1C1C;color:#fff;font:400 22px Newsreader,serif;border-bottom:3px solid #C9A84C}
+@media(max-width:640px){.inside{grid-template-columns:1fr 1fr}.inside a:last-child{grid-column:1/-1}}
+.facts3{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:18px}
+.facts3 div{border-left:3px solid var(--gold);padding-left:12px}
+.facts3 b{display:block;font:400 28px/1 Newsreader,serif;color:var(--navy)}
+.facts3 span{font-size:13.5px;color:var(--muted)}
 /* chef link visual */
 .cl{aspect-ratio:16/9;border-radius:16px;background:#1C1C1C;color:#F3EBDD;box-shadow:var(--shadow);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:28px}
 .cl:before{content:"";position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;border:1px solid rgba(201,168,76,.45)}
@@ -129,8 +141,7 @@ td .q{display:block;color:var(--muted);font-size:13px}
 .needs span:before{content:"✓";color:var(--gold);font-weight:700;margin-right:8px}
 /* about */
 .about{display:grid;gap:30px;align-items:center}
-@media(min-width:860px){.about{grid-template-columns:.35fr 1fr}}
-.about .badge{width:170px;height:170px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font:400 54px Newsreader,serif;margin:0 auto;box-shadow:var(--shadow)}
+.about{max-width:860px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);padding:30px}
 .about p{color:var(--muted);margin:12px 0 0}
 .close{text-align:center}
 .close .lead{margin:16px auto 26px}
@@ -145,13 +156,55 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
 .rv{opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 @media print{
-  header.top,#print,.modal,.ctas,.vids{display:none!important}
-  .rv{opacity:1;transform:none}
-  body{background:#fff;font-size:12pt}
-  section{padding:28px 0;break-inside:avoid-page}
-  .dark{background:#fff;color:var(--ink);border:1px solid var(--line)} .dark h2,.resp b{color:var(--navy)} .resp span,.dark .head p{color:var(--muted)} .resp div{border-color:var(--line)}
-  .case{break-inside:avoid}
-  .media .main:after{display:none}
+  @page{size:A4;margin:12mm 13mm}
+  html{font-size:10pt}
+  body{background:#fff;font-size:10pt;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header.top,#print,.modal,.ctas,.vids,.visit[href^="/service"],.hero:before{display:none!important}
+  .rv{opacity:1!important;transform:none!important}
+  .w{max-width:none;padding:0}
+  section{padding:0 0 6mm!important;border:0!important;background:#fff!important}
+  .pb{break-before:page}
+  .hero{padding:0 0 4mm!important}
+  h1{font-size:30pt} h2{font-size:21pt} h3{font-size:15pt}
+  .eyebrow{font-size:7.5pt}
+  .lead,.head p{font-size:10.5pt;margin-top:3mm!important}
+  .hero .lead{margin:4mm 0 0}
+  .meta{margin-top:4mm;font-size:8.5pt}
+  .note{margin-top:5mm;font-size:9pt;padding:3mm 4mm}
+  .inside{margin-top:6mm;gap:4mm;max-width:none}
+  .inside span{font-size:11pt;padding:2.5mm 3mm}
+  .head{margin-bottom:4mm;max-width:none}
+  #why{padding-top:6mm!important}
+  .why{grid-template-columns:repeat(3,1fr);gap:4mm}
+  .card{padding:4mm;border-radius:10px}
+  .card h3{font-size:13pt;margin:1mm 0 1.5mm}
+  .card p{font-size:9pt}
+  #cases{padding-top:0!important}
+  .case{grid-template-columns:.85fr 1.15fr!important;gap:6mm;padding:5mm 0!important;break-inside:avoid}
+  .case.flip .media{order:0}
+  .case h3{font-size:16pt;margin-bottom:1.5mm}
+  .case .lead{font-size:9.5pt}
+  .tag{margin-bottom:2mm;font-size:7pt}
+  .learn{gap:1.5mm;margin-top:3mm} .learn span{font-size:9pt} .learn li:before{margin-top:6px}
+  .task{margin-top:3mm;padding:2.5mm 3.5mm;font-size:9pt}
+  .units{margin-top:2.5mm} .units span{font-size:7.5pt;padding:1px 7px}
+  .media .main{box-shadow:none} .media .main span{font-size:9pt}
+  .cl{box-shadow:none;padding:6mm;aspect-ratio:auto;min-height:50mm} .cl b{font-size:22pt} .cl p{font-size:9pt}
+  .case.pb{border-top:0}
+  .sessions{grid-template-columns:repeat(2,1fr);gap:4mm}
+  .sess{padding:4mm 4.5mm;break-inside:avoid;border-radius:10px} .sess h3{font-size:13pt} .sess p{font-size:9pt;margin-bottom:2mm} .sess .ev{font-size:8.5pt;padding-top:2mm} .sess .n{font-size:30pt;top:3mm;right:4mm}
+  .dark{border-radius:14px;padding:6mm 6mm!important} .dark .head{margin-bottom:3mm}
+  .resp{grid-template-columns:repeat(3,1fr);gap:2.5mm} .resp div{padding:2.8mm 3.2mm;border-radius:10px} .resp b{font-size:12pt} .resp span{font-size:8.5pt}
+  #units{padding-top:4mm!important} #units .head p{display:none}
+  table{font-size:8pt;line-height:1.3} th,td{padding:1.4mm 2.5mm} th{font-size:6.5pt} td .q{font-size:7pt} tr{break-inside:avoid} .tw{overflow:visible}
+  .fine{font-size:7.5pt;margin-top:2mm}
+  .opts{grid-template-columns:repeat(3,1fr);gap:4mm} .opts .card h3{font-size:13pt}
+  .needs{margin-top:3mm;font-size:9pt}
+  .about{padding:6mm;margin-top:2mm;max-width:none;break-inside:avoid} .about h2{font-size:18pt!important} .about p{font-size:9.5pt;margin-top:2mm}
+  .facts3{margin-top:3mm;gap:2mm 8mm} .facts3 b{font-size:16pt} .facts3 span{font-size:8pt}
+  .close{padding-top:6mm!important;break-inside:avoid} .close .lead{margin:2mm auto 0}
+  .close .w:after{content:"marc@webescapade.com  ·  0413 872 994";display:block;text-align:center;font:600 11pt Figtree,sans-serif;color:#14304F;margin-top:3mm}
+  footer{padding:4mm 0 0;font-size:8pt}
 }
 </style>
 </head>
@@ -170,6 +223,11 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
     <p class="lead">A short, practical module built around three real platforms designed and built here in Sydney. Students watch them working, test them, and critique them, so the marketing theory they’re learning becomes visible, and they learn to use AI with good judgement.</p>
     <div class="ctas"><a class="btn dark" href="#cases">Watch the case studies</a><a class="btn line" href="#sessions">See the session plan</a></div>
     <div class="meta"><span>Prepared by <b>Marc Teleki</b>, Trainer, Business and Hospitality</span><span>For: <b>Marketing and Business</b> classes</span><span><b>November 2026</b></span></div>
+    <div class="inside">
+      <a href="#c1"><img src="/Restaurant/tour-video-thumb.jpg" alt=""><span><small>Case 1 · Hospitality</small>A restaurant and its guest journey</span></a>
+      <a href="#c2"><img src="/service/img/full-tour-video-thumb.jpg" alt=""><span><small>Case 2 · Services</small>AI customer service</span></a>
+      <a href="#c3" class="clmini"><b>ChefLink Sydney</b><span><small>Case 3 · Marketplace</small>Marketing to two audiences</span></a>
+    </div>
     <div class="note"><span>🎓</span><span><b>Purely educational.</b> The platforms are used as case studies only. Nothing is sold to students or the college, students need no accounts, and no student data is collected.</span></div>
   </div>
 </div></section>
@@ -184,13 +242,13 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   </div>
 </div></section>
 
-<section id="cases" style="padding-top:20px"><div class="w">
+<section id="cases" class="pb" style="padding-top:20px"><div class="w">
   <div class="head rv"><div class="eyebrow">Three live case studies</div><h2>Three businesses. <em>Three marketing lessons.</em></h2>
     <p>Each case study comes with short videos students can watch in class, plus a live example they can try on their own phones.</p></div>
 
-  <article class="case rv">
+  <article class="case rv" id="c1">
     <div class="media">
-      <button class="main" type="button" data-v="FE4Zdnh7T-U" style="background-image:url(/Restaurant/tour-video-thumb.jpg)"><span><i>▶</i>Restaurant · full tour (2 min)</span></button>
+      <button class="main" type="button" data-v="FE4Zdnh7T-U"><img src="/Restaurant/tour-video-thumb.jpg" alt="Restaurant Deluxe full tour video"><span><i>▶</i>Restaurant · full tour (2 min)</span></button>
       <div class="vids">
         <button type="button" data-v="qxH-vK9O28s"><span class="im" style="background-image:url(/Restaurant/email-studio-video-thumb.jpg)"></span><span><b>Email marketing with AI</b><small>A new-menu email, written and sent in minutes · 1 min</small></span></button>
         <button type="button" data-v="CQgsbNhttqw"><span class="im" style="background-image:url(/Restaurant/restaurant-deluxe-promo-email.jpg)"></span><span><b>One menu, every channel</b><small>Website, table menu and emails stay consistent · 1 min</small></span></button>
@@ -211,9 +269,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
     </div>
   </article>
 
-  <article class="case flip rv">
+  <article class="case flip rv" id="c2">
     <div class="media">
-      <button class="main" type="button" data-v="dgAGQn4IeB4" style="background-image:url(/service/img/full-tour-video-thumb.jpg)"><span><i>▶</i>Service business · full tour (under 3 min)</span></button>
+      <button class="main" type="button" data-v="dgAGQn4IeB4"><img src="/service/img/full-tour-video-thumb.jpg" alt="Service Deluxe full tour video"><span><i>▶</i>Service business · full tour (under 3 min)</span></button>
       <div class="vids">
         <button type="button" data-v="RvDm7b_jDX0"><span class="im" style="background-image:url(/service/img/ai-assistant-video-thumb.jpg)"></span><span><b>An AI assistant as the front desk</b><small>Answers questions, finds times, takes messages · 1 min</small></span></button>
         <button type="button" data-v="yIXYHlhIdnM"><span class="im" style="background-image:url(/service/img/email-studio-video-thumb.jpg)"></span><span><b>Reminders and tips that bring clients back</b><small>Retention email for a day spa · 1 min</small></span></button>
@@ -235,7 +293,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
     </div>
   </article>
 
-  <article class="case rv">
+  <article class="case rv pb" id="c3">
     <div class="media">
       <div class="cl"><small>Case 3 · A two-sided marketplace</small><b>ChefLink Sydney</b><p>A platform that connects professional chefs with venues that need them, with chef portfolios, an approval step and a CRM for outreach.</p><div class="two"><span>Audience 1 · Chefs</span><span>Audience 2 · Venues</span></div></div>
     </div>
@@ -255,7 +313,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   </article>
 </div></section>
 
-<section id="sessions" style="background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="w">
+<section id="sessions" class="pbx" style="background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="w">
   <div class="head rv"><div class="eyebrow">Session plan</div><h2>Four sessions, <em>or one workshop.</em></h2>
     <p>Each session pairs a short video with hands-on work, and each one produces evidence that can support assessment.</p></div>
   <div class="sessions">
@@ -266,7 +324,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   </div>
 </div></section>
 
-<section><div class="w">
+<section class="pb"><div class="w">
   <div class="dark" style="margin:0;padding:56px 28px">
     <div class="head rv"><div class="eyebrow">Running through every session</div><h2>Using AI <em style="color:var(--gold2)">responsibly.</em></h2>
       <p>Students learn the habits that make AI safe to use in a business, not just the buttons.</p></div>
@@ -300,7 +358,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   <p class="fine">Unit codes from BSB40820 Certificate IV and BSB50620 Diploma of Marketing and Communication (training.gov.au). Final mapping to be confirmed with the college’s training and assessment strategy.</p>
 </div></section>
 
-<section id="delivery" style="padding-top:20px"><div class="w">
+<section id="delivery" class="pb" style="padding-top:20px"><div class="w">
   <div class="head rv"><div class="eyebrow">Delivery</div><h2>Easy to <em>try first.</em></h2>
     <p>Start small with one workshop. If it works well for the students, it can grow into a short module.</p></div>
   <div class="opts">
@@ -312,9 +370,10 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
 </div></section>
 
 <section style="padding-top:20px"><div class="w">
-  <div class="about rv"><div class="badge">MT</div>
+  <div class="about rv">
     <div><div class="eyebrow">About the trainer</div><h2 style="font-size:clamp(30px,3.6vw,42px)">Marc Teleki</h2>
       <p>Swiss-trained chef and former head chef, and a VET trainer in business and hospitality since 2008. Through my design studio I built the three platforms in this proposal, using AI as a working partner, so I can show students not only what AI does but how it is used to build and run a real business.</p>
+      <div class="facts3"><div><b>2008</b><span>VET trainer since</span></div><div><b>Geneva</b><span>Swiss-trained chef</span></div><div><b>3</b><span>platforms designed and built</span></div><div><b>AI</b><span>used daily as a working partner</span></div></div>
       <p><a class="visit" href="/Resume/">See my full profile ↗</a></p></div>
   </div>
 </div></section>
