@@ -301,7 +301,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v61</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v62</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -935,7 +935,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v61 \u00b7 Service: book a Zoom demo';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v62 \u00b7 Restaurant promos point to the new Restaurant Deluxe page';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -959,7 +959,8 @@
   });
 
   var SITE    = "https://webescapade.com";
-  var CONTACT = "https://webescapade.com/connect.html#contact";
+  var RD_PAGE = "https://webescapade.com/Restaurant/";   /* Restaurant Deluxe landing page (new, same style as Service Deluxe) */
+  var CONTACT = RD_PAGE+"#enquire";   /* enquiry form on the landing page -> CRM */
   var BOOKING = "https://mteleki-wq.github.io/Booking/restaurant-booking-supabase-with-crm-12.html";
   var DEMO    = "https://mteleki-wq.github.io/Cafe-bojo/";
   var FIRST   = "{{{contact.first_name|there}}}";
@@ -998,8 +999,8 @@
       badge:"14-DAY FREE TRIAL",
       greeting:"Hello "+FIRST+",",
       eyebrow:"Restaurant Deluxe", headline:"", intro:"",
-      cta1:"Test the booking form", cta1url:BOOKING,
-      cta2:"View restaurant demo",  cta2url:DEMO,
+      cta1:"See Restaurant Deluxe", cta1url:RD_PAGE,
+      cta2:"Book a Zoom demo",  cta2url:DEMO_BOOK,
       featOn:true, featEyebrow:"One connected experience",
       featHeading:"Built for the restaurant.\nEffortless for the customer.",
       featSub:"", cards:[],
@@ -1010,7 +1011,7 @@
       finalOn:true, finalHeading:"Test the complete experience free for "+TRIAL_DAYS+" days.",
       finalSub:TERMS_SHORT,
       finalCta:"Request a free demo", finalUrl:CONTACT,
-      phone:"0413 872 994", email:"marc@webescapade.com", siteUrl:SITE,
+      phone:"0413 872 994", email:"marc@webescapade.com", siteUrl:RD_PAGE,
       address:"Webescapade \u2022 Sydney, Australia",
       heroImage:"", heroLink:"", heroAlt:"", bandImage:"", bandAlt:"", bandLink:"", bandCaption:"",
       videoUrl:"", videoTitle:"", videoThumb:"", videoPos:"hero",
@@ -1260,7 +1261,7 @@
       eyebrow:"New — Restaurant Deluxe Table Ordering",
       headline:"Let guests order from the table, without waiting to catch someone's eye.",
       intro:"Every table gets its own QR code. The guest scans it, confirms the table number, browses the menu and sends the order. Food goes to the kitchen, drinks go to the bar, and the counter keeps the running total.\n\nNo commission on orders — one flat monthly price. New, in early access: a digital waitlist, included at no extra cost.",
-      cta1:"See how table ordering works", cta1url:SITE,
+      cta1:"See how table ordering works", cta1url:RD_PAGE+"#ordering",
       cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"From QR code to kitchen",
       featHeading:"Simple for the guest.\nClear for the restaurant.",
@@ -1313,7 +1314,7 @@
       eyebrow:"Keep your website",
       headline:"Add table ordering without touching your current site.",
       intro:"You do not have to move your website to use table ordering. Standalone Table Ordering works alongside whatever you have now — QR codes, digital menu, kitchen and bar displays and shift records, with no migration and no redesign.",
-      cta1:"See what is included", cta1url:SITE,
+      cta1:"See what is included", cta1url:RD_PAGE+"#pricing",
       cta2:"Book a demo time", cta2url:DEMO_BOOK,
       featEyebrow:"What you get",
       featHeading:"Ordering, routing and records.\nYour website stays as it is.",
