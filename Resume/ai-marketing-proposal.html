@@ -70,9 +70,10 @@ section{padding:84px 0}
 .media .main span{position:absolute;left:18px;bottom:14px;z-index:2;color:#fff;font:600 15px Figtree,sans-serif;display:flex;align-items:center;gap:10px}
 .media .main span i{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--navy);display:grid;place-items:center;font-style:normal;font-size:14px;padding-left:3px}
 .vids{display:grid;gap:8px;margin-top:12px}
-.vids button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;font:inherit;color:inherit}
-.vids button:hover{border-color:var(--navy2)}
-.vids .im{flex:none;width:104px;aspect-ratio:16/9;border-radius:8px;background:#ccd center/cover no-repeat}
+.vids a{text-decoration:none;display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;font:inherit;color:inherit}
+.vids a:hover{border-color:var(--navy2)}
+.vids .im{flex:none;width:104px;aspect-ratio:16/9;border-radius:8px;object-fit:cover;background:#ccd}
+.vids .yt,.mlink{display:none}
 .vids b{display:block;font-size:14.5px;line-height:1.3;color:var(--ink)}
 .vids small{display:block;font-size:12.5px;color:var(--muted)}
 .tag{display:inline-block;font:700 11px Figtree;letter-spacing:.16em;text-transform:uppercase;color:var(--navy2);background:var(--mist);border-radius:999px;padding:5px 11px;margin-bottom:12px}
@@ -159,7 +160,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   @page{size:A4;margin:12mm 13mm}
   html{font-size:10pt}
   body{background:#fff;font-size:10pt;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  header.top,#print,.modal,.ctas,.vids,.visit[href^="/service"],.hero:before{display:none!important}
+  header.top,#print,.modal,.ctas,.visit[href^="/service"],.hero:before{display:none!important}
   .rv{opacity:1!important;transform:none!important}
   .w{max-width:none;padding:0}
   section{padding:0 0 6mm!important;border:0!important;background:#fff!important}
@@ -188,7 +189,13 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   .learn{gap:1.5mm;margin-top:3mm} .learn span{font-size:9pt} .learn li:before{margin-top:6px}
   .task{margin-top:3mm;padding:2.5mm 3.5mm;font-size:9pt}
   .units{margin-top:2.5mm} .units span{font-size:7.5pt;padding:1px 7px}
-  .media .main{box-shadow:none} .media .main span{font-size:9pt}
+  .media .main{box-shadow:none} .media .main span,.media .main:after{display:none}
+  .mlink{display:block;font:600 8pt Figtree,sans-serif;color:#14304F;margin-top:1.5mm;text-decoration:none}
+  .vids{grid-template-columns:1fr 1fr;gap:2.5mm;margin-top:2.5mm}
+  .vids a{flex-direction:column;align-items:stretch;gap:1.5mm;padding:1.5mm;border-radius:8px;break-inside:avoid}
+  .vids .im{width:100%;border-radius:5px}
+  .vids b{font-size:8pt} .vids small{display:none}
+  .vids .yt{display:block;font:600 7pt Figtree,sans-serif;font-style:normal;color:#B8862B}
   .cl{box-shadow:none;padding:6mm;aspect-ratio:auto;min-height:50mm} .cl b{font-size:22pt} .cl p{font-size:9pt}
   .case.pb{border-top:0}
   .sessions{grid-template-columns:repeat(2,1fr);gap:4mm}
@@ -248,10 +255,11 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
 
   <article class="case rv" id="c1">
     <div class="media">
-      <button class="main" type="button" data-v="FE4Zdnh7T-U"><img src="/Restaurant/tour-video-thumb.jpg" alt="Restaurant Deluxe full tour video"><span><i>▶</i>Restaurant · full tour (2 min)</span></button>
+      <a class="main" href="https://youtu.be/FE4Zdnh7T-U" target="_blank" rel="noopener" data-v="FE4Zdnh7T-U"><img src="/Restaurant/tour-video-thumb.jpg" alt="Restaurant Deluxe full tour video"><span><i>▶</i>Restaurant · full tour (2 min)</span></a>
+      <a class="mlink" href="https://youtu.be/FE4Zdnh7T-U">▶ Watch: youtu.be/FE4Zdnh7T-U</a>
       <div class="vids">
-        <button type="button" data-v="qxH-vK9O28s"><span class="im" style="background-image:url(/Restaurant/email-studio-video-thumb.jpg)"></span><span><b>Email marketing with AI</b><small>A new-menu email, written and sent in minutes · 1 min</small></span></button>
-        <button type="button" data-v="CQgsbNhttqw"><span class="im" style="background-image:url(/Restaurant/restaurant-deluxe-promo-email.jpg)"></span><span><b>One menu, every channel</b><small>Website, table menu and emails stay consistent · 1 min</small></span></button>
+        <a href="https://youtu.be/qxH-vK9O28s" target="_blank" rel="noopener" data-v="qxH-vK9O28s"><img class="im" src="/Restaurant/email-studio-video-thumb.jpg" alt=""><span><b>Email marketing with AI</b><small>A new-menu email, written and sent in minutes · 1 min</small><em class="yt">youtu.be/qxH-vK9O28s</em></span></a>
+        <a href="https://youtu.be/CQgsbNhttqw" target="_blank" rel="noopener" data-v="CQgsbNhttqw"><img class="im" src="/Restaurant/restaurant-deluxe-promo-email.jpg" alt=""><span><b>One menu, every channel</b><small>Website, table menu and emails stay consistent · 1 min</small><em class="yt">youtu.be/CQgsbNhttqw</em></span></a>
       </div>
     </div>
     <div>
@@ -271,10 +279,11 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
 
   <article class="case flip rv" id="c2">
     <div class="media">
-      <button class="main" type="button" data-v="dgAGQn4IeB4"><img src="/service/img/full-tour-video-thumb.jpg" alt="Service Deluxe full tour video"><span><i>▶</i>Service business · full tour (under 3 min)</span></button>
+      <a class="main" href="https://youtu.be/dgAGQn4IeB4" target="_blank" rel="noopener" data-v="dgAGQn4IeB4"><img src="/service/img/full-tour-video-thumb.jpg" alt="Service Deluxe full tour video"><span><i>▶</i>Service business · full tour (under 3 min)</span></a>
+      <a class="mlink" href="https://youtu.be/dgAGQn4IeB4">▶ Watch: youtu.be/dgAGQn4IeB4</a>
       <div class="vids">
-        <button type="button" data-v="RvDm7b_jDX0"><span class="im" style="background-image:url(/service/img/ai-assistant-video-thumb.jpg)"></span><span><b>An AI assistant as the front desk</b><small>Answers questions, finds times, takes messages · 1 min</small></span></button>
-        <button type="button" data-v="yIXYHlhIdnM"><span class="im" style="background-image:url(/service/img/email-studio-video-thumb.jpg)"></span><span><b>Reminders and tips that bring clients back</b><small>Retention email for a day spa · 1 min</small></span></button>
+        <a href="https://youtu.be/RvDm7b_jDX0" target="_blank" rel="noopener" data-v="RvDm7b_jDX0"><img class="im" src="/service/img/ai-assistant-video-thumb.jpg" alt=""><span><b>An AI assistant as the front desk</b><small>Answers questions, finds times, takes messages · 1 min</small><em class="yt">youtu.be/RvDm7b_jDX0</em></span></a>
+        <a href="https://youtu.be/yIXYHlhIdnM" target="_blank" rel="noopener" data-v="yIXYHlhIdnM"><img class="im" src="/service/img/email-studio-video-thumb.jpg" alt=""><span><b>Reminders and tips that bring clients back</b><small>Retention email for a day spa · 1 min</small><em class="yt">youtu.be/yIXYHlhIdnM</em></span></a>
       </div>
     </div>
     <div>
@@ -393,7 +402,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;text-align:center
   var modal=document.getElementById("modal"), mv=document.getElementById("mv");
   function open(id){ mv.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Video"></iframe>'; modal.hidden=false; }
   function close(){ modal.hidden=true; mv.innerHTML=""; }
-  document.addEventListener("click",function(e){ var b=e.target.closest("[data-v]"); if(b){ open(b.getAttribute("data-v")); } });
+  document.addEventListener("click",function(e){ var b=e.target.closest("[data-v]"); if(b){ e.preventDefault(); open(b.getAttribute("data-v")); } });
   document.getElementById("mx").onclick=close; modal.addEventListener("click",function(e){ if(e.target===modal) close(); });
   document.addEventListener("keydown",function(e){ if(e.key==="Escape"&&!modal.hidden) close(); });
   document.getElementById("print").onclick=function(){ window.print(); };
