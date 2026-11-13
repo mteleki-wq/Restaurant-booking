@@ -1,0 +1,15 @@
+# webescapade.com
+User-agent: *
+Allow: /
+Disallow: /CRM/
+Disallow: /source/
+Disallow: /Restaurant/source/
+Disallow: /service/source/
+Disallow: /tests/
+Disallow: /Control-room/
+Disallow: /Ordercrm/
+Disallow: /POS/
+Disallow: /POS2/
+Disallow: /Invoice/
+
+Sitemap: https://webescapade.com/sitemap.xml
