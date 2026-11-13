@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+<html lang="en-AU"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Restaurant Deluxe · Website, live menu, bookings, table ordering and Email Studio | Webescapade</title>
+<meta content="One connected system for restaurants, cafés and bars: a website you edit yourself with a live menu, direct bookings, order at the table, a digital waitlist and Email Studio to bring guests back. No commission. Book a free Zoom demo." name="description"/>
+<meta content="Restaurant Deluxe — your restaurant, all in one place" property="og:title"/>
+<meta content="Website and live menu, bookings, order at the table, Scan &amp; Queue and Email Studio. No commission, ever. Book a free Zoom demo." property="og:description"/>
+<meta content="https://webescapade.com/Restaurant/tour-video-thumb.jpg" property="og:image"/>
+<link href="https://webescapade.com/Restaurant/" rel="canonical"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#F7F2EA; --paper2:#EFE6D8; --card:#FFFFFF; --ink:#1F1A15; --ink2:#3A3128; --muted:#6F655B; --line:#E6DCCC;
+  --acc:#9A4A2C; --acc2:#C0704D; --mint:#F5E3D7; --clay:#C9963F; --gold:#D7B072;
+  --deep:#1C1713; --soft:#E9BE86; --btn:#1F1A15; --btnink:#fff; --glow1:#F2CDB3; --glow2:#E9D9A9;
+  --r:22px; --shadow:0 30px 60px -30px rgba(31,26,21,.38), 0 10px 24px -12px rgba(31,26,21,.18);
+}
+[data-sec=olive]{--paper:#F4F3EA;--paper2:#E8E7D8;--line:#DEDCCB;--acc:#5C6B34;--acc2:#7D8C52;--mint:#E7EBD6;--muted:#676A5A;--glow1:#DDE5BF;--glow2:#F1DDB9}
+[data-sec=terra]{--paper:#F9F0EA;--paper2:#F1E1D6;--line:#ECD8CB;--acc:#A8462C;--acc2:#C9694B;--mint:#F8DFD2;--muted:#76625A}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.015em;margin:0}
+h1{font-size:clamp(46px,5.6vw,84px);line-height:.98}
+h2{font-size:clamp(36px,5vw,64px);line-height:1}
+h3{font-size:30px;line-height:1.1}
+h1 em,h2 em,h3 em{font-style:italic;color:var(--acc)}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--acc)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:16px 26px;font:700 15px Manrope,sans-serif;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn.dark{background:var(--btn);color:var(--btnink);box-shadow:0 10px 24px -10px rgba(31,26,21,.6)}
+.btn.acc{background:var(--acc);color:#fff}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.light{background:#fff;color:var(--ink)}
+.btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
+body,[data-sec]{background:var(--paper);color:var(--ink)}
+/* nav */
+nav.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.top.s{border-bottom-color:var(--line)}
+nav.top .w{display:flex;align-items:center;gap:26px;height:72px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .m{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center;font:400 22px "Instrument Serif",serif}
+.brand b{font:400 25px "Instrument Serif",serif;letter-spacing:-.01em;white-space:nowrap}
+.brand small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+nav.top .links{display:flex;gap:22px;margin-left:auto;font-size:15px;font-weight:600}
+nav.top .links a{text-decoration:none;color:var(--muted);white-space:nowrap} nav.top .links a:hover{color:var(--ink)}
+nav.top .btn{padding:11px 20px;font-size:14px;white-space:nowrap}
+@media(max-width:1200px){nav.top .links{display:none}nav.top .btn{margin-left:auto}}
+@media(max-width:480px){nav.top .w{gap:12px}.brand b{font-size:21px}.brand .m{width:30px;height:30px;font-size:19px}nav.top .btn{padding:10px 14px;font-size:13px}nav.top .btn .ar{display:none}}
+/* hero */
+.hero{position:relative;min-height:min(calc(100svh - 72px),900px);display:flex;align-items:center;padding:56px 0 70px;overflow:hidden;isolation:isolate}
+.hero>.w{width:100%;position:relative;z-index:2;display:grid;gap:50px;align-items:center}
+@media(min-width:1020px){.hero>.w{grid-template-columns:1.1fr .9fr}}
+.hero>.w>.rv:first-child{position:relative;z-index:4}
+.hbg{position:absolute;inset:-12% 0 -12% 34%;z-index:-2;will-change:transform}
+.hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity 1.1s ease,transform 6s ease}
+.hbg img.on{opacity:1;transform:scale(1)}
+.hfade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--paper) 38%,color-mix(in srgb,var(--paper) 72%,transparent) 52%,color-mix(in srgb,var(--paper) 8%,transparent) 78%);pointer-events:none}
+.hglow{position:absolute;border-radius:50%;filter:blur(60px);z-index:-1;pointer-events:none;will-change:transform}
+.hglow.g1{width:520px;height:520px;left:-160px;top:-140px;background:var(--glow1);opacity:.75}
+.hglow.g2{width:420px;height:420px;left:30%;bottom:-220px;background:var(--glow2);opacity:.6}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:13.5px;font-weight:600;color:var(--ink2);margin-bottom:24px}
+.pill i{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-style:normal;font-size:12px}
+.hero .lead{max-width:31em;margin:20px 0 28px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.watches{display:flex;flex-wrap:wrap;gap:4px 22px}
+.watch{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none}
+.watch i{width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-style:normal;font-size:10px;padding-left:2px}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px;font-size:14px;color:var(--muted);font-weight:600}
+.trust span:before{content:"✓";color:var(--acc);margin-right:6px}
+.hstage{position:relative;height:600px;max-width:560px;margin:0 auto;width:100%}
+.hs-in{position:absolute;inset:0;will-change:transform}
+.mphone{position:absolute;left:50%;top:10px;width:290px;margin-left:-145px;border-radius:44px;background:#0d0c0b;padding:11px;box-shadow:0 50px 80px -30px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.06) inset;transform:rotate(-4deg);transition:transform .25s ease-out}
+.mphone .scr{border-radius:34px;background:#171310;overflow:hidden;height:560px;padding:44px 14px 0;position:relative;font-family:Manrope,sans-serif;color:#F3EDE4}
+.mphone .scr:before{content:"";position:absolute;top:12px;left:50%;width:84px;height:24px;margin-left:-42px;border-radius:20px;background:#0d0c0b}
+.mh small{display:block;font-size:8.5px;letter-spacing:.16em;color:#B9A994;font-weight:700}
+.mh b{display:block;font:400 21px/1.1 "Instrument Serif",serif}
+.mtabs{display:flex;gap:5px;margin:12px 0 10px}
+.mtabs span{font-size:9.5px;font-weight:800;letter-spacing:.06em;border:1px solid #3A3029;border-radius:999px;padding:5px 9px;color:#CDBFAE}
+.mtabs span.on{background:#E5A65B;border-color:#E5A65B;color:#1d150e}
+.mi{display:flex;gap:10px;align-items:center;background:#211B16;border:1px solid #2F2721;border-radius:14px;padding:7px;margin-bottom:8px}
+.mi img{width:62px;height:62px;border-radius:10px;object-fit:cover;flex:none}
+.mi b{display:block;font-size:12.5px;line-height:1.25}
+.mi span{display:block;font-size:10px;color:#A99A87;line-height:1.35}
+.mi i{font-style:normal;font-weight:800;font-size:11.5px;color:#E5A65B}
+.mi .add{margin-left:auto;flex:none;width:26px;height:26px;border-radius:50%;background:#E5A65B;color:#1d150e;display:grid;place-items:center;font-weight:800;font-size:16px;transition:transform .3s}
+.mi.pop .add{transform:scale(1.25)}
+.mb{position:absolute;left:10px;right:10px;bottom:12px;padding:12px 16px;background:#E5A65B;color:#1d150e;border-radius:999px;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:800}
+.fc{position:absolute;z-index:3;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;padding:12px 16px;box-shadow:0 24px 44px -22px rgba(0,0,0,.35);font-size:13px;color:var(--muted);line-height:1.35;will-change:transform}
+.fc b{display:block;color:var(--ink);font-size:14px}
+.fc .ic{float:left;width:30px;height:30px;border-radius:10px;background:var(--mint);color:var(--acc);display:grid;place-items:center;margin-right:10px;font-weight:800}
+.fc.f1{right:-10%;top:3%;max-width:240px}
+.fc.f2{left:2%;top:56%;max-width:230px}
+.fc.f3{right:0;bottom:4%;text-align:center;padding:14px 20px}
+.fc.f3 b{font:400 40px/1 "Instrument Serif",serif;color:var(--acc)}
+@media(max-width:1019px){.hero{min-height:0;padding-top:36px}.hbg{inset:auto 0 -6% 0;height:62%}.hfade{background:linear-gradient(180deg,var(--paper) 52%,color-mix(in srgb,var(--paper) 40%,transparent) 72%,color-mix(in srgb,var(--paper) 0%,transparent))}.hstage{height:560px;margin-top:10px}}
+@media(max-width:600px){.hstage{height:500px}.mphone{width:250px;margin-left:-125px}.mphone .scr{height:480px}.fc.f1{right:-2%;top:2%;max-width:200px}.fc.f2{left:-2%;top:58%;max-width:185px}.fc{font-size:12px;padding:10px 12px}}
+/* system grid */
+.made{padding:56px 0 30px}
+.made>.w>p{text-align:center;color:var(--muted);font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px}
+.made h2{text-align:center;margin:0 auto 34px;max-width:820px}
+.inds{display:grid;gap:16px}
+@media(min-width:700px){.inds{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.inds{grid-template-columns:repeat(3,1fr)}}
+.icard{position:relative;border-radius:24px;overflow:hidden;background:var(--card);color:var(--ink);border:1px solid var(--line);display:flex;flex-direction:column;text-decoration:none;transition:transform .35s,box-shadow .35s}
+.icard:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.icard .ph{position:relative;height:210px;overflow:hidden;background:#211B16}
+.icard .ph .pi{position:absolute;inset:-14% 0;will-change:transform}
+.icard .ph img{width:100%;height:100%;object-fit:cover}
+.icard .ph img.top{object-position:top}
+.icard .tx{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.icard .k{font:700 11px Manrope;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
+.icard h3{font-size:30px;margin:6px 0 6px}
+.icard p{margin:0;color:var(--muted);font-size:15px}
+.icard .go{margin-top:auto;padding-top:14px;font:700 14px Manrope;color:var(--ink)}
+.icard .new{position:absolute;top:14px;left:14px;z-index:2;background:var(--acc);color:#fff;font:800 10.5px Manrope;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;padding:5px 11px}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:40px}
+@media(min-width:860px){.facts{grid-template-columns:repeat(4,1fr)}}
+.facts div{background:var(--card);border-radius:18px;padding:20px 22px;border:1px solid var(--line)}
+.facts b{display:block;font:400 34px/1.05 "Instrument Serif",serif}
+.facts span{font-size:14px;color:var(--muted)}
+section.s{padding:110px 0}
+.head{max-width:760px;margin-bottom:52px}
+.head p{color:var(--muted);font-size:18px;margin:18px 0 0}
+/* steps */
+.steps{display:grid;gap:22px}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font:700 12px Manrope;letter-spacing:.16em;color:var(--acc)}
+.step h3{margin:8px 0 6px;font-size:28px}
+.step p{margin:0 0 20px;color:var(--muted);font-size:15.5px}
+.step .shot{margin-top:auto;border-radius:26px 26px 0 0;background:#111;padding:8px 8px 0;max-width:270px;align-self:center;width:100%}
+.step .shot img{border-radius:20px 20px 0 0;height:330px;width:100%;object-fit:cover;object-position:top}
+.steps.txt .step{padding-bottom:22px}
+/* splits */
+.split{display:grid;gap:44px;align-items:center}
+@media(min-width:980px){.split{grid-template-columns:.9fr 1.1fr}.split.flip{grid-template-columns:1.1fr .9fr}.split.flip .txt{order:2}}
+.browser{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.browser .bar{height:30px;background:var(--paper2);display:flex;align-items:center;gap:6px;padding:0 12px}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.browser .bar span{margin-left:10px;font-size:11px;color:var(--muted);background:var(--card);border-radius:6px;padding:2px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
+.ticks li{display:flex;gap:12px;align-items:flex-start}
+.ticks li:before{content:"✓";flex:none;width:22px;height:22px;margin-top:2px;border-radius:50%;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-size:12px;font-weight:800}
+.ticks b{display:block}
+.ticks span{color:var(--muted);font-size:15.5px}
+.dark{background:var(--deep)!important;color:#F1ECE4!important;border-radius:40px;margin:0 12px}
+.dark .eyebrow{color:var(--soft)}
+.dark h2 em{color:var(--soft)}
+.dark .ticks span,.dark .head p,.dark .lead{color:rgba(255,255,255,.66)}
+.dark .ticks b{color:#fff}
+.dark .btn.line{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.7)}
+.dark .ticks li:before{background-color:rgba(255,255,255,.1);color:var(--soft)}
+.dark .incl{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:#fff}
+.incl{display:inline-flex;gap:8px;align-items:center;margin-top:22px;font-size:14px;font-weight:700;border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--card)}
+.emailcard{max-width:400px;margin:0 auto;border-radius:22px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
+.duo{display:flex;gap:18px;justify-content:center;align-items:flex-start}
+.duo .ph2{width:46%;max-width:250px;border-radius:30px;background:#0d0c0b;padding:8px;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
+.duo .ph2 img{border-radius:23px}
+.duo .ph2:nth-child(2){margin-top:60px}
+/* videos */
+.vids{display:grid;gap:22px;margin-top:34px}
+@media(min-width:980px){.vids{grid-template-columns:1.6fr 1fr;align-items:start}}
+.vmain{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#111 center/cover no-repeat;box-shadow:var(--shadow);border:1px solid var(--line)}
+.vmain button.vp{position:absolute;inset:0;width:100%;border:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45));cursor:pointer;display:flex;align-items:flex-end;justify-content:space-between;padding:18px 20px;color:#fff;font:700 15px Manrope,sans-serif;text-align:left}
+.vmain iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vlist{display:grid;gap:10px}
+.vc{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:9px;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,box-shadow .2s}
+.vc:hover{border-color:var(--ink2)}
+.vc.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.vc .im{flex:none;width:118px;aspect-ratio:16/9;border-radius:9px;background:#ddd center/cover no-repeat}
+.vc b{display:block;font-size:15px;line-height:1.3}
+.vc span{display:block;font-size:13px;line-height:1.4;color:var(--muted);margin-top:2px}
+@media(max-width:480px){.vc .im{width:96px}}
+/* feature grid */
+.fgrid{display:grid;gap:16px}
+@media(min-width:700px){.fgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1050px){.fgrid{grid-template-columns:repeat(3,1fr)}}
+.fg{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
+.fg .ic{width:44px;height:44px;border-radius:14px;background:var(--mint);display:grid;place-items:center;font-size:21px;margin-bottom:14px}
+.fg h3{font-size:26px;margin:0 0 6px}
+.fg p{margin:0;color:var(--muted);font-size:15px}
+.fg .pl{display:inline-block;margin-top:12px;font:700 11px Manrope;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+/* pricing */
+.plans{display:grid;gap:18px}
+@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;display:flex;flex-direction:column}
+.plan.hi{background:var(--deep);color:#fff;border-color:var(--deep);box-shadow:var(--shadow);position:relative}
+.plan.hi .tag{position:absolute;top:-13px;left:28px;background:var(--acc);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 12px}
+.plan h3{font-size:30px}
+.plan .pr{margin:16px 0 4px;font:400 64px/1 "Instrument Serif",serif}
+.plan .pr small{font:600 15px Manrope;color:var(--muted)}
+.plan.hi .pr small,.plan.hi .muted{color:rgba(255,255,255,.62)}
+.plan ul{list-style:none;padding:0;margin:22px 0 28px;display:grid;gap:10px;font-size:15.5px}
+.plan li:before{content:"✓";color:var(--acc);font-weight:800;margin-right:9px}
+.plan.hi li:before{color:var(--soft)}
+.plan li.es{font-weight:700}
+.plan .btn{margin-top:auto}
+.muted{color:var(--muted)}
+.notes{display:flex;gap:10px 26px;flex-wrap:wrap;justify-content:center;margin-top:28px;color:var(--muted);font-size:14.5px;font-weight:600;text-align:center}
+.founding{margin-top:34px;display:grid;gap:18px;align-items:center;background:linear-gradient(120deg,var(--mint),var(--card));border:1px solid var(--line);border-radius:26px;padding:28px}
+@media(min-width:900px){.founding{grid-template-columns:1.3fr .7fr}}
+.founding h3{font-size:34px}
+.founding p{margin:8px 0 0;color:var(--muted);font-size:15.5px}
+.founding .ctas{justify-content:flex-start}
+@media(min-width:900px){.founding .ctas{justify-content:flex-end}}
+.setup{max-width:900px;margin:22px auto 0;color:var(--muted);font-size:14.5px;text-align:center}
+/* faq */
+.faq{max-width:860px}
+details{border-bottom:1px solid var(--line);padding:22px 0}
+summary{cursor:pointer;list-style:none;font:400 27px/1.2 "Instrument Serif",serif;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";font:400 26px Manrope;color:var(--acc)}
+details[open] summary:after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+/* enquiry */
+.enq{display:grid;gap:40px}
+@media(min-width:980px){.enq{grid-template-columns:.9fr 1.1fr}}
+.form{background:var(--card);border-radius:var(--r);padding:28px;border:1px solid var(--line)}
+.form label{display:grid;gap:6px;font-size:14px;font-weight:700;margin-bottom:14px}
+.form input,.form select,.form textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font:400 16px Manrope,sans-serif;background:var(--card);color:var(--ink)}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--mint)}
+.form .two{display:grid;gap:0 14px}
+@media(min-width:620px){.form .two{grid-template-columns:1fr 1fr}}
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .msg{margin-top:12px;font-size:15px;min-height:1px}
+.form .msg.ok{color:#2F6B45;font-weight:700}.form .msg.err{color:#9A3B2E}
+.contact{display:grid;gap:12px;margin-top:26px}
+.contact a{display:flex;gap:12px;align-items:center;text-decoration:none;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.contact a i{font-style:normal;width:34px;height:34px;border-radius:10px;background:var(--mint);display:grid;place-items:center}
+.contact a.zoom{background:var(--acc);color:#fff;border-color:var(--acc)}
+.contact a.zoom i{background:rgba(255,255,255,.18)}
+footer{padding:40px 0 60px;color:var(--muted);font-size:14px}
+footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
+footer a{color:var(--muted)}
+.float{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:25;transform:translateY(150%);transition:transform .35s}
+.float.on{transform:none}
+@media(max-width:600px){.float{right:84px;justify-content:center}}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.btn,.btn .ar{transition:none}.hbg img{transition:opacity .3s}.mphone{transform:none}}
+/*CHAT*/
+.chat-q[hidden],.chat-tip[hidden]{display:none}
+.chat-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--acc);color:#fff;border-radius:999px;padding:8px 18px 8px 8px;font:700 15px Manrope,sans-serif;box-shadow:0 16px 34px -12px rgba(0,0,0,.45);transition:transform .2s}
+.chat-fab:hover{transform:translateY(-2px)}
+.chat-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;position:relative}
+.chat-fab .ci svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-fab .ci:after{content:"";position:absolute;right:1px;top:1px;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid var(--acc)}
+.chat.open .chat-fab{display:none}
+.chat-tip{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;max-width:260px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font-size:14px;line-height:1.45;box-shadow:var(--shadow);cursor:pointer;animation:chatIn .35s ease}
+.chat-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;padding:4px}
+.chat-box{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:200;width:min(392px,calc(100vw - 32px));height:min(620px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:chatIn .3s ease}
+.chat-box[hidden]{display:none}
+@keyframes chatIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.chat-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--deep);color:#fff}
+.chat-hd .av{width:38px;height:38px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font:400 21px "Instrument Serif",serif;flex:none}
+.chat-hd b{display:block;font-size:15px}
+.chat-hd small{display:block;font-size:12px;color:rgba(255,255,255,.7);margin-top:1px}
+.chat-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.12);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.chat-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.cm{max-width:86%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
+.cm.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.cm.u{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:5px}
+.cm a{color:var(--acc);font-weight:700}.cm.u a{color:#fff}
+.cm p{margin:0 0 6px}.cm p:last-child{margin:0}
+.cm ul{margin:4px 0 6px;padding-left:18px}.cm li{margin:2px 0}
+.cm.typing{display:flex;gap:4px;padding:14px}
+.cm.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.4;animation:cdot 1s infinite}
+.cm.typing i:nth-child(2){animation-delay:.15s}.cm.typing i:nth-child(3){animation-delay:.3s}
+@keyframes cdot{50%{opacity:1;transform:translateY(-3px)}}
+.chat-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
+.chat-q button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 13px Manrope,sans-serif;cursor:pointer}
+.chat-q button:hover{border-color:var(--acc);color:var(--acc)}
+.chat-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--card)}
+.chat-f input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font:400 16px Manrope,sans-serif;background:var(--paper);color:var(--ink)}
+.chat-f input:focus{outline:none;border-color:var(--acc)}
+.chat-f button{border:0;border-radius:999px;background:var(--btn);color:var(--btnink);font:700 14px Manrope,sans-serif;padding:0 16px;cursor:pointer}
+.chat-f button:disabled{opacity:.5}
+.chat-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--card)}
+.chat-ft a{color:var(--muted)}
+@media(max-width:600px){.chat-fab{padding:8px}.chat-fab .tx{display:none}.chat-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.chat-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+body:has(.chat.open) #float{visibility:hidden}
+/*ENGINE-CSS-START*/
+#eng{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:4px;background:#111;color:#fff;border-radius:999px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 13px Manrope,sans-serif;max-width:calc(100% - 16px);overflow-x:auto}
+#eng button{border:0;background:none;color:#ddd;padding:8px 13px;border-radius:999px;cursor:pointer;font:inherit;white-space:nowrap}
+#eng button.on,#eng button:hover{background:#fff;color:#111}
+body.editing nav.top{top:58px}
+body.editing [data-edit]{outline:1.5px dashed rgba(154,74,44,.6);outline-offset:4px;border-radius:4px;cursor:text}
+body.editing [data-edit]:focus{outline:2px solid var(--acc);background:rgba(255,255,255,.6)}
+body.editing .dark [data-edit]:focus{background:rgba(255,255,255,.08)}
+body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cursor:pointer}
+#engp{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:101;width:min(480px,calc(100% - 20px));max-height:calc(100vh - 80px);overflow:auto;background:#fff;color:#111;border-radius:18px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);font:14px/1.45 Manrope,sans-serif}
+#engp h4{margin:0 0 10px;font-size:16px}
+#engp label{display:grid;gap:4px;font-weight:600;font-size:12px;color:#555;margin-bottom:10px}
+#engp input{border:1px solid #ddd;border-radius:9px;padding:8px 10px;font:15px Manrope,sans-serif;color:#111;width:100%}
+#engp .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+#engp .b{border:0;border-radius:9px;padding:9px 14px;font:600 14px Manrope,sans-serif;cursor:pointer;background:#eee;color:#111}
+#engp .b.p{background:#111;color:#fff}
+#engp .b:disabled{opacity:.4}
+#engp .msg{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+#engp .note{background:#F3F5F4;border-radius:10px;padding:10px 12px;color:#444;font-size:13px;margin-bottom:10px}
+/*ENGINE-CSS-END*/
+</style>
+</head>
+<body data-email="marc@webescapade.com" data-gh-branch="main" data-gh-live="Restaurant/index.html" data-gh-master="Restaurant/source/landing-editable.html" data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-phone="0413 872 994" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co">
+<nav class="top" id="nav"><div class="w">
+<a class="brand" href="#top"><span class="m">R</span><span><b>Restaurant Deluxe</b><small>by Webescapade</small></span></a>
+<div class="links"><a href="#videos">Videos</a><a href="#website">Website</a><a href="#email-studio">Email Studio</a><a href="#ordering">Ordering</a><a href="#queue">Scan &amp; Queue</a><a href="#pricing">Pricing</a><a href="/Restaurant/demo.html">Book a demo</a><a href="#faq">FAQ</a></div>
+<a class="btn dark" href="/Restaurant/demo.html"><span data-edit="e189">Book a free demo</span><span class="ar">→</span></a>
+</div></nav>
+<header class="hero" data-sec="terra" id="top">
+<div class="hbg" data-par="0.32"><img alt="" class="on" data-img="i0" height="1308" src="/Restaurant/img/dish-snapper.jpg" width="1202"/><img alt="" data-img="i1" height="1536" loading="lazy" src="/Restaurant/img/maison-front.jpg" width="1024"/><img alt="" data-img="i2" height="1254" loading="lazy" src="/Restaurant/img/dish-apple-tart.jpg" width="1254"/><img alt="" data-img="i3" height="1299" loading="lazy" src="/Restaurant/img/dish-lemon-tart.jpg" width="1211"/></div><div class="hfade"></div><div class="hglow g1" data-par="-0.18"></div><div class="hglow g2" data-par="0.22"></div>
+<div class="w">
+<div class="rv">
+<div class="pill"><i>✦</i><span data-edit="e113">For restaurants, cafés and bars · now with Email Studio</span></div>
+<h1 data-edit="e1">Your restaurant,<br/><em>all in one place.</em></h1>
+<p class="lead" data-edit="e50">A website you edit yourself with a live menu, direct bookings, order at the table, a digital queue at the door — and Email Studio to bring your guests back. One flat monthly price. No commission, ever.</p>
+<div class="ctas">
+<a class="btn dark" href="/Restaurant/demo.html"><span data-edit="e190">Book a free Zoom demo</span><span class="ar">→</span></a>
+<a class="btn line" href="#enquire"><span data-edit="e191">Start your free trial</span></a>
+</div>
+<div class="watches"><a class="watch" href="#videos"><i>▶</i><span data-edit="e187">Watch the 2-minute tour</span></a><a class="watch" href="#chat" id="heroAsk"><i>?</i><span data-edit="e188">Ask our assistant</span></a></div>
+<div class="trust"><span data-edit="e114">No commission</span><span data-edit="e115">No app for guests</span><span data-edit="e116">Works on the tablets you have</span></div>
+</div>
+<div class="hstage rv"><div class="hs-in" data-par="-0.10"><div aria-hidden="true" class="mphone" id="mphone"><div class="scr">
+<div class="mh"><small data-edit="e220">MAISON ESCAPADE · TABLE 12</small><b data-edit="e221">Order at your table</b></div>
+<div class="mtabs"><span>ENTRÉES</span><span class="on">MAINS</span><span>DESSERTS</span><span>DRINKS</span></div>
+<div class="mi" id="hm1"><img alt="" data-img="i4" src="/Restaurant/img/dish-snapper.jpg"/><div><b data-edit="e222">Snapper, blue risotto</b><span data-edit="e226">Saffron butter, herbs</span><i data-edit="e230">$38</i></div><span class="add">+</span></div>
+<div class="mi" id="hm2"><img alt="" data-img="i5" src="/Restaurant/img/dish-sardine-tart.jpg"/><div><b data-edit="e223">Sardine &amp; onion tart</b><span data-edit="e227">Confit onion, herb oil</span><i data-edit="e231">$24</i></div><span class="add">+</span></div>
+<div class="mi" id="hm3"><img alt="" data-img="i6" src="/Restaurant/img/dish-apple-tart.jpg"/><div><b data-edit="e224">Apple rose tart</b><span data-edit="e228">Vanilla custard, coulis</span><i data-edit="e232">$18</i></div><span class="add">+</span></div>
+<div class="mi" id="hm4"><img alt="" data-img="i7" src="/Restaurant/img/dish-lemon-tart.jpg"/><div><b data-edit="e225">Lemon meringue</b><span data-edit="e229">Torched meringue, lemon</span><i data-edit="e233">$16</i></div><span class="add">+</span></div>
+<div class="mb"><span id="hpBar">2 items · $62</span><span>Send order →</span></div>
+</div></div>
+<div class="fc f1" data-par="-0.22"><span class="ic">✓</span><b id="hc1">Order sent</b><span id="hc1s">Kitchen &amp; bar · Table 12</span></div>
+<div class="fc f2" data-par="0.16"><span class="ic">✉</span><b data-edit="e212">“Our new menu has landed”</b><span data-edit="e215">sent to your guests with Email Studio</span></div>
+<div class="fc f3" data-par="-0.06"><b data-edit="e213">0%</b><span data-edit="e216">commission, ever</span></div></div></div>
+</div></header>
+<section class="made" data-sec="olive" id="system"><div class="w">
+<p data-edit="e51">One connected system</p>
+<h2 data-edit="e2">Everything your restaurant runs on. <em>Working together.</em></h2>
+<div class="inds">
+<a class="icard rv" href="#website"><div class="ph"><div class="pi" data-par="-0.07"><img alt="" class="top" data-img="i8" height="1125" loading="lazy" src="/Restaurant/img/site-hero.jpg" width="1800"/></div></div><div class="tx"><span class="k" data-edit="e99">Website &amp; live menu</span><h3 data-edit="e15">A website you edit</h3><p data-edit="e52">Change words, photos and dishes yourself. The menu updates itself everywhere.</p><span class="go" data-edit="e105"><span>See how →</span></span></div></a>
+<a class="icard rv" href="#email-studio"><span class="new" data-edit="e217">New</span><div class="ph"><div class="pi" data-par="-0.07"><img alt="" class="top" data-img="i9" height="1640" loading="lazy" src="/Restaurant/img/email-phone.jpg" width="800"/></div></div><div class="tx"><span class="k" data-edit="e100">Email Studio</span><h3 data-edit="e16">Bring guests back</h3><p data-edit="e53">New menu, event night, special offer — beautiful emails to your guests in minutes.</p><span class="go" data-edit="e106"><span>See how →</span></span></div></a>
+<a class="icard rv" href="#bookings-walkins"><div class="ph"><div class="pi" data-par="-0.07"><img alt="" class="top" data-img="i10" height="1349" loading="lazy" src="/Restaurant/img/front-counter.jpg" width="1800"/></div></div><div class="tx"><span class="k" data-edit="e101">Bookings &amp; walk-ins</span><h3 data-edit="e17">Direct bookings</h3><p data-edit="e54">Guests book straight with you. Booked tables are kept — never given to walk-ins.</p><span class="go" data-edit="e107"><span>See how →</span></span></div></a>
+<a class="icard rv" href="#ordering"><div class="ph"><div class="pi" data-par="-0.07"><img alt="" class="top" data-img="i11" height="1688" loading="lazy" src="/Restaurant/img/phone-order-menu.jpg" width="780"/></div></div><div class="tx"><span class="k" data-edit="e102">Order at the table</span><h3 data-edit="e18">Scan. Order. Enjoy.</h3><p data-edit="e55">Guests order from their phone when they’re ready. No app, no payment on the phone.</p><span class="go" data-edit="e108"><span>See how →</span></span></div></a>
+<a class="icard rv" href="#kitchen"><div class="ph"><div class="pi" data-par="-0.07"><img alt="" class="top" data-img="i12" height="1349" loading="lazy" src="/Restaurant/img/kitchen-display.jpg" width="1800"/></div></div><div class="tx"><span class="k" data-edit="e103">Kitchen &amp; counter</span><h3 data-edit="e19">The right station</h3><p data-edit="e56">Food to the kitchen, drinks to the bar, totals at the counter — in sync.</p><span class="go" data-edit="e109"><span>See how →</span></span></div></a>
+<a class="icard rv" href="#queue"><div class="ph"><div class="pi" data-par="-0.07"><img alt="" data-img="i13" height="612" loading="lazy" src="/Restaurant/scan-queue-hero.jpg" width="1088"/></div></div><div class="tx"><span class="k" data-edit="e104">Scan &amp; Queue</span><h3 data-edit="e20">Skip the queue</h3><p data-edit="e57">Guests scan at the door, wait anywhere, and their phone buzzes when the table is ready.</p><span class="go" data-edit="e110"><span>See how →</span></span></div></a>
+</div>
+<div class="facts rv">
+<div><b data-edit="e120">0%</b><span data-edit="e124">commission on orders or bookings — one flat price</span></div>
+<div><b data-edit="e121">No app</b><span data-edit="e125">guests just scan or tap — nothing to download</span></div>
+<div><b data-edit="e122">Your tablets</b><span data-edit="e126">runs in the browser on screens you already have</span></div>
+<div><b data-edit="e123">28 days</b><span data-edit="e127">free for our first 5 restaurants, set up for you</span></div>
+</div>
+</div></section>
+<section class="s" data-sec="terra" id="videos" style="padding-bottom:20px"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e37">Watch it work</div><h2 data-edit="e3">See it working <em>at a real restaurant.</em></h2>
+<p data-edit="e58">The 2-minute tour, then short videos: the new Email Studio, the website with its live menu, and ordering at the table with the digital queue.</p></div>
+<div class="vids rv">
+<div class="vmain" id="vmain"><button aria-label="Play video" class="vp" id="vplay" type="button"><span id="vnow">The full tour (2 min)</span><span>▶ Play</span></button></div>
+<div><div class="vlist" id="vlist"></div></div>
+</div>
+</div></section>
+<section class="s" data-sec="olive" id="website"><div class="w">
+<div class="split">
+<div class="txt rv"><div class="eyebrow" data-edit="e38">Your website · live menu</div><h2 data-edit="e4">Change the menu once. <em>It’s right everywhere.</em></h2>
+<p class="lead" data-edit="e59" style="margin-top:18px">Your website, your table-ordering menu and your emails all read from one menu. Change a price, add a dish or mark it sold out — it updates on your website and at every table straight away. No re-publishing.</p>
+<ul class="ticks">
+<li><span><b data-edit="e128">Tap any words or photo to change them</b><span data-edit="e147">Themes, logo, hero video or animated hero, sections — all in the browser. No developer.</span></span></li>
+<li><span><b data-edit="e129">A menu manager made for service</b><span data-edit="e148">Dishes, prices, photos, modifiers, sold out, kitchen or bar — and printable table QR codes.</span></span></li>
+<li><span><b data-edit="e130">Bookings built in</b><span data-edit="e149">A “Book a table” button that books straight with you, not a booking site.</span></span></li>
+</ul>
+<div class="ctas" style="margin-top:28px"><a class="btn line" href="https://webescapade.com/Resto-order-test/restaurant-signature-w-menu-live.html" rel="noopener" target="_blank"><span data-edit="e192">See the demo website</span><span class="ar">↗</span></a><a class="btn line" href="https://youtu.be/CQgsbNhttqw" rel="noopener" target="_blank"><span data-edit="e193">▶ Watch the 1-minute video</span></a></div></div>
+<div class="rv"><div class="browser" data-par="0.05"><div class="bar"><i></i><i></i><i></i><span>yourrestaurant.com.au · editing</span></div>
+<img alt="Restaurant website in edit mode with the editing toolbar" data-img="i14" height="1125" loading="lazy" src="/Restaurant/img/site-edit.jpg" width="1800"/></div>
+<div class="browser" data-par="-0.04" style="margin:-60px 0 0 18%;position:relative"><div class="bar"><i></i><i></i><i></i><span>Live menu</span></div>
+<img alt="The live menu on the website, with a dish just marked sold out" data-img="i15" height="1125" loading="lazy" src="/Restaurant/img/site-live-menu.jpg" width="1800"/></div></div>
+</div>
+</div></section>
+<section class="s dark" data-sec="terra" id="email-studio"><div class="w">
+<div class="split flip">
+<div class="rv"><div class="emailcard" data-par="-0.06"><img alt="A “new menu” email from Maison Escapade on a phone, with three dishes and a Book a table button" data-img="i16" height="1640" loading="lazy" src="/Restaurant/img/email-phone.jpg" width="800"/></div></div>
+<div class="txt rv"><div class="eyebrow" data-edit="e39">New · Email Studio</div><h2 data-edit="e5">Your new menu, <em>in every inbox.</em></h2>
+<p class="lead" data-edit="e60" style="margin-top:18px">Your best marketing is the guests who already love you. Email Studio turns your bookings into a guest list and lets you send them something beautiful in a few minutes.</p>
+<ul class="ticks">
+<li><span><b data-edit="e131">Five ready designs</b><span data-edit="e150">New menu, Dish of the week, Event night, Special offer and We miss you — for guests who haven’t been back.</span></span></li>
+<li><span><b data-edit="e132">Your real dishes and photos</b><span data-edit="e151">They load straight from your menu. Pick the ones to show; prices and photos are filled in.</span></span></li>
+<li><span><b data-edit="e133">Only guests who said yes</b><span data-edit="e152">Guests who ticked “Keep me posted” when they booked. Every email has an unsubscribe link and your address.</span></span></li>
+<li><span><b data-edit="e134">Check it, then send</b><span data-edit="e153">Preview on a computer and a phone, send yourself a test, then send to your guests.</span></span></li>
+</ul>
+<span class="incl" data-edit="e111">✓ Included with the Deluxe and Complete plans</span>
+<div class="ctas" style="margin-top:24px"><a class="btn light" href="https://youtu.be/qxH-vK9O28s" rel="noopener" target="_blank"><span data-edit="e194">▶ Watch the 1-minute video</span></a><a class="btn line" href="/Restaurant/demo.html"><span data-edit="e195">See it on a Zoom demo</span></a></div></div>
+</div>
+</div></section>
+<section class="s" data-sec="terra" id="ordering"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e40">Order at the table</div><h2 data-edit="e6">Scan. Order. <em>Enjoy.</em></h2>
+<p data-edit="e61">Every table has its own QR code. Guests browse the live menu, choose their options and send the order when they’re ready — then pay at the counter or table, as usual.</p></div>
+<div class="steps">
+<div class="step rv"><span class="n">01</span><h3 data-edit="e21">Browse the live menu</h3><p data-edit="e62">Photos, prices, search and dietary filters. Sold-out dishes are already hidden.</p>
+<div class="shot"><img alt="Table ordering menu on a phone" data-img="i17" height="1688" loading="lazy" src="/Restaurant/img/phone-order-menu.jpg" width="780"/></div></div>
+<div class="step rv"><span class="n">02</span><h3 data-edit="e22">Choose and customise</h3><p data-edit="e63">Options, modifiers and allergy notes go straight to the kitchen with the order.</p>
+<div class="shot"><img alt="The guest’s order before sending" data-img="i18" height="1688" loading="lazy" src="/Restaurant/img/phone-order-cart.jpg" width="780"/></div></div>
+<div class="step rv"><span class="n">03</span><h3 data-edit="e23">Sent — order again anytime</h3><p data-edit="e64">Another drink or dessert later? One more tap. No account, no card on the phone.</p>
+<div class="shot"><img alt="Order received screen with order number" data-img="i19" height="1688" loading="lazy" src="/Restaurant/img/phone-order-sent.jpg" width="780"/></div></div>
+</div>
+</div></section>
+<section class="s" data-sec="olive" id="kitchen"><div class="w">
+<div class="split flip">
+<div class="rv"><div class="browser" data-par="-0.05"><div class="bar"><i></i><i></i><i></i><span>Kitchen display</span></div>
+<img alt="Kitchen display with orders by table" data-img="i20" height="1349" loading="lazy" src="/Restaurant/img/kitchen-display.jpg" width="1800"/></div></div>
+<div class="txt rv"><div class="eyebrow" data-edit="e41">Kitchen · bar · counter</div><h2 data-edit="e7">One order. <em>The right station.</em></h2>
+<ul class="ticks">
+<li><span><b data-edit="e135">Kitchen and bar displays</b><span data-edit="e154">Table number, quantities, modifiers and notes, clearly — no re-typing orders.</span></span></li>
+<li><span><b data-edit="e136">The front counter sees everything</b><span data-edit="e155">Open tables and totals, ready to settle at the counter or table.</span></span></li>
+<li><span><b data-edit="e137">Staff can take orders too</b><span data-edit="e156">For guests who prefer normal service. Compatible printers you already have can be connected.</span></span></li>
+<li><span><b data-edit="e138">Finish the shift with clean records</b><span data-edit="e157">X and Z readings, cash and card records, history and an Excel-compatible export.</span></span></li>
+<li><span><b data-edit="e139">Runs alongside your POS</b><span data-edit="e158">It doesn’t replace it — it saves your team the running and the re-entry.</span></span></li>
+</ul></div>
+</div>
+</div></section>
+<section class="s dark" data-sec="terra" id="queue"><div class="w">
+<div class="split">
+<div class="txt rv"><div class="eyebrow" data-edit="e42">Scan &amp; Queue · digital waitlist</div><h2 data-edit="e8">No more crowd <em>at the door.</em></h2>
+<p class="lead" data-edit="e65" style="margin-top:18px">Guests scan a QR code at the door, enter a first name and party size, and wait wherever they like. When their table is ready, their phone buzzes and asks “Coming?”.</p>
+<ul class="ticks">
+<li><span><b data-edit="e140">No app and no phone number</b><span data-edit="e159">They see their place in the line, live.</span></span></li>
+<li><span><b data-edit="e141">Works with your bookings</b><span data-edit="e160">Guests in the queue can choose to book a time instead.</span></span></li>
+<li><span><b data-edit="e142">Included with table ordering</b><span data-edit="e161">And free to try during your trial.</span></span></li>
+</ul>
+<div class="ctas" style="margin-top:28px"><a class="btn light" href="https://webescapade.com/Resto-order-test/waitlist.html?v=sunset-grill&amp;w=769d94ba39f4" rel="noopener" target="_blank"><span data-edit="e196">Try the queue as a guest</span><span class="ar">↗</span></a><a class="btn line" href="/Queue-board/"><span data-edit="e197">About Scan &amp; Queue</span></a></div></div>
+<div class="rv"><div class="duo"><div class="ph2"><img alt="Join the waitlist screen" data-img="i21" height="1688" loading="lazy" src="/Restaurant/img/phone-queue-join.jpg" width="780"/></div><div class="ph2"><img alt="Your table is ready screen" data-img="i22" height="1688" loading="lazy" src="/Restaurant/img/phone-queue-ready.jpg" width="780"/></div></div></div>
+</div>
+</div></section>
+<section class="s" data-sec="olive" id="bookings-walkins"><div class="w">
+<div class="split">
+<div class="txt rv"><div class="eyebrow" data-edit="e43">Bookings + walk-ins</div><h2 data-edit="e9">Never give away <em>a booked table.</em></h2>
+<p class="lead" data-edit="e66" style="margin-top:18px">Guests book straight with you — choosing a sitting and an exact arrival time that fits your capacity. Today’s bookings sit on the front counter, right next to the queue.</p>
+<ul class="ticks">
+<li><span><b data-edit="e143">Booked tables are kept</b><span data-edit="e162">They show as reserved and aren’t offered to walk-ins.</span></span></li>
+<li><span><b data-edit="e144">A warning before it’s too late</b><span data-edit="e163">Staff are told if seating a walk-in would leave too few seats for bookings due soon.</span></span></li>
+<li><span><b data-edit="e145">No-shows freed in one tap</b><span data-edit="e164">The table goes straight back to the waitlist. Big parties can have joined tables, like 5 + 6.</span></span></li>
+<li><span><b data-edit="e146">Large parties protected</b><span data-edit="e165">Parties of 8 or more can confirm with a secure Stripe card guarantee — cards are never stored by us.</span></span></li>
+</ul></div>
+<div class="rv"><div class="browser" data-par="0.05"><div class="bar"><i></i><i></i><i></i><span>Front counter · bookings and waitlist</span></div>
+<img alt="Front counter screen with today’s bookings, reserved tables and the waitlist" data-img="i23" height="1349" loading="lazy" src="/Restaurant/img/front-counter.jpg" width="1800"/></div></div>
+</div>
+</div></section>
+<section class="s" data-sec="terra" id="features" style="padding-top:40px"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e44">And everything around it</div><h2 data-edit="e10">Built for how <em>restaurants really work.</em></h2></div>
+<div class="fgrid">
+<div class="fg rv"><div class="ic">👥</div><h3 data-edit="e24">Guest CRM</h3><p data-edit="e67">Your guests and their bookings in one place — the list Email Studio sends to.</p><span class="pl" data-edit="e207">Deluxe &amp; Complete</span></div>
+<div class="fg rv"><div class="ic">💬</div><h3 data-edit="e25">AI customer assistant</h3><p data-edit="e68">Answers your guests’ common questions on your website, day and night.</p><span class="pl" data-edit="e208">Deluxe &amp; Complete</span></div>
+<div class="fg rv"><div class="ic">📋</div><h3 data-edit="e26">Menu manager</h3><p data-edit="e69">Sections, dishes, photos, modifiers, sold out and table QR codes — in minutes, not days.</p></div>
+<div class="fg rv"><div class="ic">📈</div><h3 data-edit="e27">Shift records</h3><p data-edit="e70">Open and settled tables, X and Z readings, history and an Excel-compatible export.</p><span class="pl" data-edit="e209">Complete</span></div>
+<div class="fg rv"><div class="ic">🛡️</div><h3 data-edit="e28">Large-party guarantees</h3><p data-edit="e71">Secure Stripe card guarantees for bookings of 8 or more help reduce costly no-shows.</p><span class="pl" data-edit="e210">Deluxe &amp; Complete</span></div>
+<div class="fg rv"><div class="ic">🤝</div><h3 data-edit="e29">Set up with you</h3><p data-edit="e72">We connect your venue, load your menu and train your team with short videos. Ongoing support in every plan.</p></div>
+</div>
+</div></section>
+<section class="s" data-sec="olive" id="how" style="padding-top:40px"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e45">How it works</div><h2 data-edit="e11">From hello <em>to your first order.</em></h2></div>
+<div class="steps txt">
+<div class="step rv"><span class="n">01</span><h3 data-edit="e30">See it on Zoom</h3><p data-edit="e73">Book a free 30-minute demo at a time that suits you. I’ll show you everything working, set up for a restaurant like yours.</p></div>
+<div class="step rv"><span class="n">02</span><h3 data-edit="e31">We prepare it</h3><p data-edit="e74">We set up your branding, menu, booking rules, kitchen and bar stations and your table QR codes.</p></div>
+<div class="step rv"><span class="n">03</span><h3 data-edit="e32">Test it, then go live</h3><p data-edit="e75">Try it with your own team, place sample orders, then put the QR codes on your tables and switch on bookings.</p></div>
+</div>
+</div></section>
+<section class="s" data-sec="terra" id="pricing"><div class="w">
+<div class="head rv" style="text-align:center;margin-left:auto;margin-right:auto"><div class="eyebrow" data-edit="e46">Pricing</div><h2 data-edit="e12">One flat price. <em>No commission.</em></h2>
+<p data-edit="e76">Every plan includes your setup support and ongoing help. Try it free for 14 days — or 28 days, set up for you, if you’re one of our first 5 restaurants.</p></div>
+<div class="plans">
+<div class="plan rv"><h3 data-edit="e33">Standard</h3><p class="muted" data-edit="e77" style="margin:6px 0 0">Website + bookings</p>
+<div class="pr" data-edit="e184">$68 <small>/ month AUD</small></div>
+<ul><li data-edit="e166">Editable restaurant website</li><li data-edit="e167">Menu, content and photo updates</li><li data-edit="e168">Direct online bookings</li><li data-edit="e169">Availability and capacity settings</li><li data-edit="e170">Online video training and support</li></ul>
+<a class="btn line" data-plan="Standard" href="#enquire"><span data-edit="e198">Start free trial</span></a></div>
+<div class="plan rv"><h3 data-edit="e34">Deluxe</h3><p class="muted" data-edit="e78" style="margin:6px 0 0">Bring your guests back</p>
+<div class="pr" data-edit="e185">$98 <small>/ month AUD</small></div>
+<ul><li data-edit="e171">Everything in Standard</li><li class="es" data-edit="e172">Email Studio</li><li data-edit="e173">Guest CRM</li><li data-edit="e174">AI customer assistant</li><li data-edit="e175">Large-party card guarantees</li><li data-edit="e176">Enhanced booking management</li></ul>
+<a class="btn line" data-plan="Deluxe" href="#enquire"><span data-edit="e199">Start free trial</span></a></div>
+<div class="plan hi rv"><span class="tag" data-edit="e112">Best value</span><h3 data-edit="e35">Complete</h3><p class="muted" data-edit="e79" style="margin:6px 0 0">The whole restaurant</p>
+<div class="pr" data-edit="e186">$149 <small>/ month AUD</small></div>
+<ul><li data-edit="e177">Everything in Deluxe</li><li class="es" data-edit="e178">Email Studio</li><li data-edit="e179">Order at the table, live digital menu</li><li data-edit="e180">Kitchen and bar displays, counter</li><li data-edit="e181">Scan &amp; Queue digital waitlist</li><li data-edit="e182">Shift records and Excel export</li><li data-edit="e183">Table QR setup</li></ul>
+<a class="btn light" data-plan="Complete" href="#enquire"><span data-edit="e200">Start free trial</span><span class="ar">→</span></a></div>
+</div>
+<div class="notes rv"><span data-edit="e117">Already on Restaurant Deluxe? Add table ordering for $69 / month</span><span data-edit="e118">Keeping your website? Table ordering on its own: $109 / month</span><span data-edit="e119">No commission on orders or bookings — ever</span></div>
+<div class="founding rv"><div><span class="eyebrow" data-edit="e47">Founding offer · first 5 restaurants</span><h3 data-edit="e36">28 days free, <em>set up for you.</em></h3>
+<p data-edit="e80">We connect your venue, import your menu and get ordering working on your own screens — kitchen, bar and front counter — with the digital queue and online bookings switched on. Compatible printers you already have are connected free. We supply software only, no hardware; paying by phone can be demonstrated but isn’t part of the free trial.</p></div>
+<div class="ctas"><a class="btn dark" href="/Restaurant/demo.html"><span data-edit="e201">Book a Zoom demo</span><span class="ar">→</span></a><a class="btn line" href="tel:0413872994"><span data-edit="e202">Call Marc</span></a></div></div>
+<p class="setup rv" data-edit="e81">Quick Start setup $150 + GST (free for founding restaurants): we load your menu, photos and add-ons and send training videos. Setup when you choose a plan: $400 + GST table ordering, $500 + GST with card payments, $600 + GST with your website and online bookings — pay in one go or over your first 3 months.</p>
+</div></section>
+<section class="s" data-sec="olive" id="faq"><div class="w faq">
+<div class="eyebrow" data-edit="e48">Questions</div><h2 data-edit="e13" style="margin-bottom:18px">Straight <em>answers.</em></h2>
+<details><summary data-edit="e91">Do you take a commission on orders or bookings?</summary><p data-edit="e82">No. You pay one flat monthly fee and every sale stays yours.</p></details>
+<details><summary data-edit="e92">Do guests need an app, or pay on their phone?</summary><p data-edit="e83">No app and no account. Guests scan the table QR code and order; the order goes to the restaurant and the bill is paid at the counter or table, as usual.</p></details>
+<details><summary data-edit="e93">Does it replace our POS?</summary><p data-edit="e84">No. Restaurant Deluxe runs alongside your existing POS. It handles ordering, the kitchen and bar flow, bookings, the queue and your website.</p></details>
+<details><summary data-edit="e94">Who receives the Email Studio emails?</summary><p data-edit="e85">Only guests who ticked “Keep me posted” when they booked online and are still subscribed. Every email carries your address and its own unsubscribe link. Email Studio comes with the Deluxe and Complete plans.</p></details>
+<details><summary data-edit="e95">Can we change the menu and prices ourselves?</summary><p data-edit="e86">Yes — dishes, descriptions, photos, prices, modifiers and availability. Mark a dish sold out and it disappears from the website and the table menu straight away.</p></details>
+<details><summary data-edit="e96">Do bookings and walk-ins work together?</summary><p data-edit="e87">Yes. Today’s bookings show on the front counter next to the waitlist; booked tables are kept, staff are warned before giving away seats a booking will need, and no-shows go back to the queue in one tap.</p></details>
+<details><summary data-edit="e97">What does the free trial include?</summary><p data-edit="e88">For 14 days we connect your restaurant at no cost so you can try it with your own team. Loading your menu, photos and add-ons isn’t part of the free trial — choose the Quick Start if you’d like us to do it. Our first 5 restaurants get 28 days with setup done for them.</p></details>
+<details><summary data-edit="e98">What hardware do we need?</summary><p data-edit="e89">None from us — it runs in a web browser on the tablets, phones and computers you already have. Compatible printers you already own can be connected.</p></details>
+</div></section>
+<section class="s" data-sec="terra" id="enquire"><div class="w">
+<div class="enq">
+<div class="rv"><div class="eyebrow" data-edit="e49">Talk to Marc</div><h2 data-edit="e14">Let’s see it <em>with your menu.</em></h2>
+<p class="lead" data-edit="e90" style="margin-top:18px">I’m Marc, a web designer here in Sydney with 50 years’ experience in hospitality. Tell me a little about your restaurant — I’ll show you how it would work for you, or set up your free trial.</p>
+<div class="contact">
+<a class="zoom" href="/Restaurant/demo.html"><i>📅</i><span data-edit="e204">Book a free Zoom demo — pick a time that suits you</span></a>
+<a href="tel:0413872994"><i>☎</i><span data-edit="e205">0413 872 994</span></a>
+<a href="mailto:marc@webescapade.com"><i>✉</i><span data-edit="e206">marc@webescapade.com</span></a>
+</div></div>
+<form class="form rv" id="enqForm" novalidate="">
+<div class="two"><label>Your name<input autocomplete="name" name="name" required=""/></label>
+<label>Restaurant name<input autocomplete="organization" name="business" required=""/></label></div>
+<div class="two"><label>Email<input autocomplete="email" inputmode="email" name="email" required="" type="email"/></label>
+<label>Mobile<input autocomplete="tel" inputmode="tel" name="phone" type="tel"/></label></div>
+<div class="two"><label>Type of venue<select name="type">
+<option value="">Choose…</option><option>Restaurant</option><option>Café</option><option>Bar / wine bar</option><option>Pub / bistro</option><option>Pizzeria / casual</option><option>Other</option></select></label>
+<label>Suburb<input autocomplete="address-level2" name="suburb"/></label></div>
+<label>What would you like? <select id="fWant" name="want"><option>A free trial</option><option>The founding offer (28 days, set up for you)</option><option>Email Studio</option><option>Table ordering only</option><option>Just a question</option></select></label>
+<label>How many tables? Anything else?<textarea name="message" rows="3" style="resize:vertical"></textarea></label>
+<div aria-hidden="true" class="hp"><label>Leave this empty<input autocomplete="off" name="website" tabindex="-1"/></label></div>
+<button class="btn dark" style="width:100%" type="submit">Send my enquiry <span class="ar">→</span></button>
+<div class="msg" id="enqMsg" role="status"></div>
+</form>
+</div>
+</div></section>
+<footer data-sec="terra"><div class="w"><span data-edit="e218">© Webescapade · Sydney, Australia</span><span data-edit="e219">Restaurant Deluxe · <a href="/service/">Service Deluxe</a> · <a href="/Queue-board/">Scan &amp; Queue</a> · <a href="/Restaurant/old.html">Previous page</a></span></div></footer>
+<div class="chat" id="chat">
+<button aria-label="Open the chat assistant" class="chat-fab" id="chatFab" type="button"><span class="ci"><svg viewbox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span><span class="tx">Questions? Ask me</span></button>
+<div class="chat-tip" hidden="" id="chatTip"><button aria-label="Close" type="button">×</button><span>Got a question about prices, table ordering or Email Studio? I can answer in seconds.</span></div>
+<div aria-label="Chat assistant" class="chat-box" hidden="" id="chatBox" role="dialog">
+<div class="chat-hd"><span class="av">R</span><div><b>Restaurant Deluxe assistant</b><small>Prices, ordering, bookings — ask away</small></div><button aria-label="Close chat" class="x" id="chatX" type="button">×</button></div>
+<div aria-live="polite" class="chat-log" id="chatLog"></div>
+<div class="chat-q" id="chatQ"><button type="button">How much does it cost?</button><button type="button">How does table ordering work?</button><button type="button">What is Email Studio?</button><button type="button">What’s the founding offer?</button><button type="button">I’d like Marc to call me</button></div>
+<form class="chat-f" id="chatF"><input aria-label="Your question" autocomplete="off" id="chatIn" maxlength="600" placeholder="Type your question…"/><button id="chatSend" type="submit">Send</button></form>
+<div class="chat-ft">AI assistant — answers can be wrong. <a href="#enquire" id="chatHuman">Talk to Marc</a></div>
+<template id="chatHi">Hi! 👋 I’m the Restaurant Deluxe assistant. Ask me about prices, the free trial, table ordering, bookings or Email Studio.</template>
+</div>
+</div>
+<a class="btn dark float" href="/Restaurant/demo.html" id="float"><span data-edit="e203">Book a free demo</span><span class="ar">→</span></a>
+<script>
+(function () {
+  var B = document.body.dataset;
+  var nav = document.getElementById("nav"), fl = document.getElementById("float"), hero = document.querySelector(".hero");
+  function sc(){ var y = window.scrollY; nav.classList.toggle("s", y > 10); fl.classList.toggle("on", y > hero.offsetHeight && (window.innerHeight + y) < document.body.scrollHeight - 300); }
+  window.addEventListener("scroll", sc, { passive: true }); sc();
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .1 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+
+  /* plan buttons pre-select the enquiry */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-plan]"); if (!a) return;
+    var w = document.getElementById("fWant"), m = document.querySelector("#enqForm textarea");
+    if (w) w.value = "A free trial"; if (m && !m.value) m.value = "I'm interested in the " + a.getAttribute("data-plan") + " plan.";
+  });
+
+  /* enquiry form -> CRM as a Restaurant Deluxe lead (rd_lead_submit) + email to Marc */
+  var f = document.getElementById("enqForm"), msg = document.getElementById("enqMsg");
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (document.body.classList.contains("editing")) return;
+    var d = {}; Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name] = el.value.trim(); });
+    msg.className = "msg";
+    if (!d.name || !d.business) { msg.className = "msg err"; msg.textContent = "Please add your name and your restaurant name."; return; }
+    if (!/^\S+@\S+\.\S{2,}$/.test(d.email)) { msg.className = "msg err"; msg.textContent = "Please check your email address."; return; }
+    var btn = f.querySelector("button"); btn.disabled = true; msg.textContent = "Sending…";
+    var base = String(B.supabaseUrl || "").replace(/\/+$/, "");
+    var text = "Wants: " + (d.want || "-") + (d.message ? "\n" + d.message : "");
+    fetch(base + "/rest/v1/rpc/rd_lead_submit", {
+      method: "POST", headers: { apikey: B.supabaseKey, Authorization: "Bearer " + B.supabaseKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: text, p_trap: d.website })
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || "Something went wrong"); return j; }); })
+      .then(function (j) {
+        if (!j.ok) { msg.className = "msg err"; msg.textContent = j.error || "Something went wrong."; btn.disabled = false; return; }
+        f.reset(); msg.className = "msg ok"; msg.textContent = "Thanks — I've got it. I'll be in touch shortly, usually within one business day. A receipt is on its way to your inbox.";
+        btn.disabled = false;
+      }).catch(function () {
+        msg.className = "msg err"; btn.disabled = false;
+        msg.innerHTML = "Sorry, that didn't send. Please email <a href=\"mailto:" + B.email + "\">" + B.email + "</a> or call " + B.phone + ".";
+      });
+  });
+
+  /* hero: rotating photos + a little live ordering on the phone */
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var imgs = [].slice.call(document.querySelectorAll(".hbg img")), hi = 0;
+  var steps = [
+    { item: "hm1", bar: "1 item · $38", c: "Order sent", cs: "Kitchen & bar · Table 12" },
+    { item: "hm2", bar: "2 items · $62", c: "Table for 4 booked", cs: "Saturday 7:30 pm · online" },
+    { item: "hm3", bar: "3 items · $80", c: "Your table is ready", cs: "Sophie, party of 2 · Scan & Queue" },
+    { item: "hm4", bar: "4 items · $96", c: "Dish sold out", cs: "Hidden on the website and every table" }
+  ], si = 0;
+  function tick() {
+    if (document.body.classList.contains("editing")) return;
+    imgs[hi].classList.remove("on"); hi = (hi + 1) % imgs.length; if (imgs[hi].loading === "lazy") imgs[hi].loading = "eager"; imgs[hi].classList.add("on");
+    var s = steps[si]; si = (si + 1) % steps.length;
+    document.querySelectorAll(".mi").forEach(function (m) { m.classList.toggle("pop", m.id === s.item); });
+    document.getElementById("hpBar").textContent = s.bar;
+    document.getElementById("hc1").textContent = s.c; document.getElementById("hc1s").textContent = s.cs;
+  }
+  if (!reduce) setInterval(tick, 3800);
+
+  /* parallax */
+  var els = [].slice.call(document.querySelectorAll("[data-par]")), ph = document.getElementById("mphone"), ticking = false;
+  function frame() {
+    ticking = false; if (reduce) return; var vh = innerHeight, y = scrollY;
+    els.forEach(function (el) {
+      var f = parseFloat(el.getAttribute("data-par")), r;
+      if (el.closest(".hero")) { if (y > vh * 1.2) return; el.style.transform = "translate3d(0," + (y * f).toFixed(1) + "px,0)"; return; }
+      r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > vh + 200) return;
+      el.style.transform = "translate3d(0," + ((r.top + r.height / 2 - vh / 2) * f).toFixed(1) + "px,0)";
+    });
+  }
+  function req() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+  addEventListener("scroll", req, { passive: true }); addEventListener("resize", req); frame();
+  if (ph && !reduce && matchMedia("(hover:hover) and (pointer:fine)").matches) hero.addEventListener("mousemove", function (e) {
+    var x = e.clientX / innerWidth - .5, yy = e.clientY / innerHeight - .5;
+    ph.style.transform = "perspective(900px) rotateY(" + (x * 10).toFixed(2) + "deg) rotateX(" + (-yy * 8).toFixed(2) + "deg) rotate(-4deg)";
+  });
+})();
+</script>
+<script>/*CHAT-JS — Restaurant Deluxe assistant (edge function rd-chat)*/
+(function(){
+  var B=document.body.dataset, box=document.getElementById("chatBox"), fab=document.getElementById("chatFab"), log=document.getElementById("chatLog"),
+      f=document.getElementById("chatF"), inp=document.getElementById("chatIn"), q=document.getElementById("chatQ"), tip=document.getElementById("chatTip"), wrap=document.getElementById("chat");
+  if(!box||!fab) return;
+  var KEY="rdChat", st={id:"",msgs:[]}, busy=false;
+  try{ st=JSON.parse(sessionStorage.getItem(KEY))||st; }catch(e){}
+  if(!st.id) st.id="r-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function md(t){
+    var h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+      .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:|#)[^\s)]+)\)/g,function(_,a,u){ var ext=/^https?:/.test(u); return '<a href="'+u+'"'+(ext?' target="_blank" rel="noopener"':' data-in')+'>'+a+'</a>'; })
+      .replace(/(^|[\s(])(https:\/\/(?:webescapade\.com|youtu\.be)\/[^\s<)]*)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+    var out=[], list=false;
+    h.split(/\n/).forEach(function(l){
+      var m=l.match(/^\s*(?:[-•*]|\d+\.)\s+(.*)/);
+      if(m){ if(!list){ out.push("<ul>"); list=true; } out.push("<li>"+m[1]+"</li>"); }
+      else { if(list){ out.push("</ul>"); list=false; } if(l.trim()) out.push("<p>"+l+"</p>"); }
+    });
+    if(list) out.push("</ul>");
+    return out.join("");
+  }
+  function hi(){ var t=document.getElementById("chatHi"); return t ? t.content.textContent.trim() : "Hi! Ask me anything."; }
+  function bubble(role,text){ var d=document.createElement("div"); d.className="cm "+(role==="user"?"u":"a"); d.innerHTML=role==="user"?esc(text).replace(/\n/g,"<br>"):md(text); log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
+  function render(){ log.innerHTML=""; bubble("assistant",hi()); st.msgs.forEach(function(m){ bubble(m.role,m.content); }); q.hidden=st.msgs.length>2; }
+  function open(){ if(document.body.classList.contains("editing")) return; tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(e){} render(); box.hidden=false; wrap.classList.add("open"); if(matchMedia("(pointer:fine)").matches) inp.focus(); }
+  function close(){ box.hidden=true; wrap.classList.remove("open"); }
+  fab.addEventListener("click",open);
+  var ha=document.getElementById("heroAsk"); if(ha) ha.addEventListener("click",function(e){ e.preventDefault(); open(); });
+  document.getElementById("chatX").addEventListener("click",close);
+  tip.addEventListener("click",function(e){ if(e.target.tagName==="BUTTON"){ tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(x){} return; } open(); });
+  log.addEventListener("click",function(e){ var a=e.target.closest("a[data-in]"); if(a&&innerWidth<600) close(); });
+  document.getElementById("chatHuman").addEventListener("click",function(){ if(innerWidth<600) close(); });
+  q.addEventListener("click",function(e){ var b=e.target.closest("button"); if(b) send(b.textContent.trim()); });
+  f.addEventListener("submit",function(e){ e.preventDefault(); send(inp.value); });
+  function send(text){
+    text=String(text||"").trim(); if(!text||busy) return;
+    inp.value=""; st.msgs.push({role:"user",content:text.slice(0,600)}); save(); bubble("user",text); q.hidden=true;
+    busy=true; document.getElementById("chatSend").disabled=true;
+    var t=document.createElement("div"); t.className="cm a typing"; t.innerHTML="<i></i><i></i><i></i>"; log.appendChild(t); log.scrollTop=log.scrollHeight;
+    var base=String(B.supabaseUrl||"").replace(/\/+$/,"");
+    fetch(base+"/functions/v1/rd-chat",{method:"POST",headers:{"Content-Type":"application/json",apikey:B.supabaseKey||"",Authorization:"Bearer "+(B.supabaseKey||"")},
+      body:JSON.stringify({session:st.id,messages:st.msgs.slice(-16)})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!j||!j.ok||!j.reply) throw new Error(); return j.reply; })
+      .catch(function(){ return "Sorry — I can't answer right now. You can email [marc@webescapade.com](mailto:marc@webescapade.com), call [0413 872 994](tel:0413872994), or [book a free Zoom demo](https://webescapade.com/Restaurant/demo.html)."; })
+      .then(function(reply){ t.remove(); st.msgs.push({role:"assistant",content:reply}); st.msgs=st.msgs.slice(-24); save(); bubble("assistant",reply); busy=false; document.getElementById("chatSend").disabled=false; });
+  }
+  var seen=false; try{ seen=!!sessionStorage.getItem(KEY+"Tip"); }catch(e){}
+  if(!seen) setTimeout(function(){ if(box.hidden) tip.hidden=false; },9000);
+})();
+</script>
+<!--ENGINE-START-->
+<script>
+/* ===== editing engine (same as Service Deluxe) — only in the editable master; removed when publishing ===== */
+window.RD_HERO0 = { hpBar: (document.getElementById('hpBar')||{}).textContent, hc1: (document.getElementById('hc1')||{}).textContent, hc1s: (document.getElementById('hc1s')||{}).textContent };
+(function () {
+  var B = document.body.dataset;
+  var bar = document.createElement("div"); bar.id = "eng";
+  bar.innerHTML = '<button data-a="edit">✏️ Edit</button><button data-a="links">🔗 Links</button><button data-a="deploy">🚀 Deploy</button><button data-a="save">💾 Save copy</button>';
+  document.body.appendChild(bar);
+  var panel = null, editing = false;
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function closePanel(){ if (panel) { panel.remove(); panel = null; } bar.querySelectorAll("[data-a]").forEach(function (b) { if (b.getAttribute("data-a") !== "edit") b.classList.remove("on"); }); }
+  function openPanel(name, html){ closePanel(); panel = document.createElement("div"); panel.id = "engp"; panel.innerHTML = html; document.body.appendChild(panel); bar.querySelector('[data-a="' + name + '"]').classList.add("on"); var x = panel.querySelector("[data-close]"); if (x) x.onclick = closePanel; }
+
+  function setEditing(on){
+    editing = on; document.body.classList.toggle("editing", on);
+    var b = bar.querySelector('[data-a="edit"]'); b.classList.toggle("on", on); b.textContent = on ? "✓ Done" : "✏️ Edit";
+    document.querySelectorAll("[data-edit]").forEach(function (el) { if (on) el.setAttribute("contenteditable", "true"); else el.removeAttribute("contenteditable"); });
+    document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+  }
+  document.addEventListener("click", function (e) {
+    if (!editing) return;
+    var a = e.target.closest("a"); if (a && !a.closest("#eng") && !a.closest("#engp")) e.preventDefault();
+    var img = e.target.closest("img[data-img]"); if (img) replaceImage(img);
+  }, true);
+  document.addEventListener("paste", function (e) {
+    if (!editing || !e.target.closest || !e.target.closest("[data-edit]")) return;
+    e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text/plain"));
+  });
+  document.addEventListener("keydown", function (e) { if (editing && e.key === "Enter" && e.target.closest && e.target.closest("[data-edit]") && !e.shiftKey) { e.preventDefault(); e.target.blur(); } });
+
+  /* photos: shrink in the browser (max 1600px, JPEG) before placing */
+  function replaceImage(img){
+    var i = document.createElement("input"); i.type = "file"; i.accept = "image/*";
+    i.onchange = function () {
+      var file = i.files[0]; if (!file) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        var im = new Image();
+        im.onload = function () {
+          var max = img.closest(".shot,.ph2,.mi,.emailcard") ? 800 : 1600, s = Math.min(1, max / Math.max(im.width, im.height));
+          var c = document.createElement("canvas"); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+          img.src = c.toDataURL("image/jpeg", 0.74); img.setAttribute("width", c.width); img.setAttribute("height", c.height);
+          var alt = prompt("Short description of the new photo (for Google and screen readers):", img.alt || ""); if (alt != null) img.alt = alt;
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    };
+    i.click();
+  }
+
+  function linksPanel(){
+    openPanel("links", '<h4>Links &amp; contact</h4><div class="note">Phone and email used in the “Talk to Marc” section and by the enquiry form. To change the words on any button, tap ✏️ Edit and type on it.</div>' +
+      '<label>Phone<input id="l4" value="' + esc(B.phone) + '"></label><label>Email<input id="l5" value="' + esc(B.email) + '"></label>' +
+      '<div class="note" style="margin-top:6px">To change where a button goes: type part of its words, then the new web address.</div>' +
+      '<label>Button words (e.g. “Book a free Zoom demo”)<input id="lw"></label><label>New web address<input id="lu" placeholder="https://…"></label>' +
+      '<div class="r"><button class="b p" id="lsave">Apply</button><button class="b" data-close>Close</button></div><div class="msg" id="lmsg"></div>');
+    panel.querySelector("#lsave").onclick = function () {
+      var m = panel.querySelector("#lmsg"), out = [];
+      B.phone = panel.querySelector("#l4").value.trim(); B.email = panel.querySelector("#l5").value.trim();
+      document.querySelectorAll('a[href^="tel:"]').forEach(function (x) { x.href = "tel:" + B.phone.replace(/[^0-9+]/g, ""); var s = x.querySelector("span"); if (s && /^[0-9 +]+$/.test(s.textContent.trim())) s.textContent = B.phone; });
+      document.querySelectorAll('a[href^="mailto:"]').forEach(function (x) { x.href = "mailto:" + B.email; var s = x.querySelector("span"); if (s && s.textContent.indexOf("@") > 0) s.textContent = B.email; });
+      out.push("Phone and email applied.");
+      var w = panel.querySelector("#lw").value.trim().toLowerCase(), u = panel.querySelector("#lu").value.trim();
+      if (w && u) { var c = 0; document.querySelectorAll("a").forEach(function (x) { if (!x.closest("#eng,#engp,#chat") && x.textContent.toLowerCase().indexOf(w) >= 0) { x.setAttribute("href", u); c++; } }); out.push(c + " button(s) now go to " + u + "."); }
+      m.textContent = out.join(" ") + " Use Deploy to publish.";
+    };
+  }
+
+  /* ---- snapshot and publish ---- */
+  function snapshot(forPublish){
+    var was = editing; if (was) setEditing(false);
+    var root = document.documentElement.cloneNode(true);
+    if (was) setEditing(true);
+    ["#eng", "#engp"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
+    root.querySelectorAll("[contenteditable]").forEach(function (n) { n.removeAttribute("contenteditable"); });
+    var body = root.querySelector("body"); body.classList.remove("editing"); if (!body.className) body.removeAttribute("class");
+    root.querySelectorAll(".rv.in").forEach(function (n) { n.classList.remove("in"); });
+    root.querySelector("#nav").classList.remove("s"); root.querySelector("#float").classList.remove("on");
+    var m = root.querySelector("#enqMsg"); if (m) { m.textContent = ""; m.className = "msg"; }
+    var vl = root.querySelector("#vlist"); if (vl) vl.innerHTML = ""; var vm = root.querySelector("#vmain"); if (vm) { vm.removeAttribute("style"); vm.querySelectorAll("iframe").forEach(function (f) { f.remove(); }); var vb = vm.querySelector("#vplay"); if (vb) vb.removeAttribute("style"); }
+    root.querySelectorAll("[data-par]").forEach(function (n) { n.style.transform = ""; if (!n.getAttribute("style")) n.removeAttribute("style"); });
+    var cl = root.querySelector("#chatLog"); if (cl) cl.innerHTML = ""; ["#chatBox", "#chatTip"].forEach(function (k) { var n = root.querySelector(k); if (n) n.setAttribute("hidden", ""); });
+    var cw = root.querySelector("#chat"); if (cw) cw.className = "chat"; var cqq = root.querySelector("#chatQ"); if (cqq) cqq.removeAttribute("hidden");
+    var mp = root.querySelector("#mphone"); if (mp) mp.removeAttribute("style");
+    root.querySelectorAll(".mi.pop").forEach(function (n) { n.classList.remove("pop"); });
+    var R0 = window.RD_HERO0 || {}; ["hpBar", "hc1", "hc1s"].forEach(function (k) { var n = root.querySelector("#" + k); if (n && R0[k] != null) n.textContent = R0[k]; });
+    root.querySelectorAll(".hbg img").forEach(function (i, ix) { i.classList.toggle("on", ix === 0); if (ix) i.setAttribute("loading", "lazy"); else i.removeAttribute("loading"); if (!i.className) i.removeAttribute("class"); });
+    var html = "<!doctype html>\n" + root.outerHTML;
+    if (forPublish) {
+      var M = "ENGINE", a1 = "<!--" + M + "-START-->", a2 = "<!--" + M + "-END-->", c1 = "/*" + M + "-CSS-START*/", c2 = "/*" + M + "-CSS-END*/";
+      var cut = function (h, o, c) { var i, j; while ((i = h.indexOf(o)) >= 0 && (j = h.indexOf(c, i)) >= 0) h = h.slice(0, i) + h.slice(j + c.length); return h; };
+      html = cut(cut(html, a1, a2), c1, c2).replace(new RegExp("\\sdata-gh-[a-z]+=\"[^\"]*\"", "g"), "");
+    }
+    return html;
+  }
+  function download(name, text){ var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/html" })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800); }
+  function b64(s){ var bytes = new TextEncoder().encode(s), bin = ""; for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+  function gh(method, path, body){
+    var tok = ""; try { tok = localStorage.getItem("svcsite_gh_token") || ""; } catch (e) {}
+    if (!tok) return Promise.reject(new Error("Add your GitHub token first."));
+    return fetch("https://api.github.com/repos/" + B.ghOwner + "/" + B.ghRepo + "/" + path, { method: method, headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || ("GitHub " + r.status)); return j; }, function () { if (!r.ok) throw new Error("GitHub " + r.status); return {}; }); });
+  }
+  function getSha(path){
+    var dir = path.indexOf("/") >= 0 ? path.slice(0, path.lastIndexOf("/")) : "", name = path.slice(path.lastIndexOf("/") + 1);
+    return gh("GET", "contents/" + dir + "?ref=" + encodeURIComponent(B.ghBranch || "main")).then(function (list) { var f = (list || []).filter(function (x) { return x.name === name; })[0]; return f ? f.sha : null; }, function (e) { if (/Not Found/i.test(e.message)) return null; throw e; });
+  }
+  function commit(path, html, msg){ return getSha(path).then(function (sha) { var b = { message: msg, content: b64(html), branch: B.ghBranch || "main" }; if (sha) b.sha = sha; return gh("PUT", "contents/" + path, b); }); }
+  function deployPanel(){
+    var tok = ""; try { tok = localStorage.getItem("svcsite_gh_token") || ""; } catch (e) {}
+    openPanel("deploy", '<h4>Deploy to GitHub</h4><div class="note">Publish writes the clean live page (no editor). Save master keeps this editable version so you can come back to it.</div>' +
+      '<label>Owner<input id="go" value="' + esc(B.ghOwner) + '"></label><label>Repository<input id="gr" value="' + esc(B.ghRepo) + '"></label>' +
+      '<label>Branch<input id="gb" value="' + esc(B.ghBranch || "main") + '"></label><label>Live page path<input id="gl" value="' + esc(B.ghLive) + '"></label>' +
+      '<label>Editable master path<input id="gm" value="' + esc(B.ghMaster) + '"></label>' +
+      '<label>Fine-grained token (kept on this device only)<input id="gt" type="password" value="' + esc(tok) + '" placeholder="github_pat_…"></label>' +
+      '<div class="r"><button class="b p" id="gpub">Publish live page</button><button class="b" id="gmas">Save editable master</button><button class="b" data-close>Close</button></div><div class="msg" id="gmsg"></div>');
+    var keep = function () {
+      B.ghOwner = panel.querySelector("#go").value.trim(); B.ghRepo = panel.querySelector("#gr").value.trim(); B.ghBranch = panel.querySelector("#gb").value.trim() || "main";
+      B.ghLive = panel.querySelector("#gl").value.trim().replace(/^\/+/, ""); B.ghMaster = panel.querySelector("#gm").value.trim().replace(/^\/+/, "");
+      try { localStorage.setItem("svcsite_gh_token", panel.querySelector("#gt").value.trim()); } catch (e) {}
+      if (!B.ghOwner || !B.ghRepo) throw new Error("Fill in owner and repository.");
+    };
+    var run = function (fn) {
+      var m = panel.querySelector("#gmsg"); try { keep(); } catch (e) { m.textContent = "✗ " + e.message; return; }
+      panel.querySelectorAll(".b").forEach(function (b) { b.disabled = true; }); m.textContent = "Working…";
+      fn().then(function (t) { m.textContent = "✓ " + t; }, function (e) { m.textContent = "✗ " + e.message; }).then(function () { if (panel) panel.querySelectorAll(".b").forEach(function (b) { b.disabled = false; }); });
+    };
+    panel.querySelector("#gpub").onclick = function () {
+      var lp = (panel.querySelector("#gl").value || "").trim().replace(/^\/+/, "");
+      if (lp.indexOf("/") < 0 && !confirm("Live page path is \"" + lp + "\" with no folder.\n\nIn a repo that hosts another website (like webescapade.com) this REPLACES its home page.\n\nPublish anyway?")) return;
+      run(function () { var h = snapshot(true); return commit(B.ghLive, h, "Publish Restaurant Deluxe page").then(function () { return "Published " + B.ghLive + " (" + Math.round(h.length / 1024) + " KB). Live within a minute."; }); });
+    };
+    panel.querySelector("#gmas").onclick = function () { run(function () { var h = snapshot(false); return commit(B.ghMaster, h, "Save Restaurant Deluxe page master").then(function () { return "Saved " + B.ghMaster + " (" + Math.round(h.length / 1024) + " KB)."; }); }); };
+  }
+  window.ENGINE_SNAPSHOT = snapshot;
+  bar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-a]"); if (!b) return; var a = b.getAttribute("data-a");
+    if (a === "edit") { closePanel(); return setEditing(!editing); }
+    if (a === "save") { closePanel(); return download("landing-editable.html", snapshot(false)); }
+    if (panel && b.classList.contains("on")) return closePanel();
+    ({ links: linksPanel, deploy: deployPanel })[a]();
+  });
+})();
+</script>
+<!--ENGINE-END-->
+<script>/*VIDEOS-JS*/
+(function(){
+var V=[
+ {id:'FE4Zdnh7T-U',t:'The full tour (2 min)',d:'Website, bookings, ordering at the table and the digital queue, at a real restaurant.',img:'/Restaurant/tour-video-thumb.jpg'},
+ {id:'qxH-vK9O28s',t:'NEW: Email Studio',d:'Send your new menu, an event or an offer to your guests in a few minutes.',img:'/Restaurant/email-studio-video-thumb.jpg'},
+ {id:'CQgsbNhttqw',t:'One menu. Everywhere.',d:'The new website and its live menu, connected to ordering at the table.',img:'/Restaurant/restaurant-deluxe-promo-email.jpg'},
+ {id:'0Drr6G2AsE8',t:'The live menu',d:'Change a dish once — the website and every table update straight away.',img:'/Restaurant/live-menu-video-email.jpg'},
+ {id:'zOAUiGqmXOk',t:'Skip the queue. Order at the table.',d:'Scan & Queue and table ordering, working with your bookings.',img:'/Restaurant/video-thumb.jpg'}];
+var m=document.getElementById('vmain'),l=document.getElementById('vlist');if(!m||!l)return;l.innerHTML='';var cur=V[0];
+function sel(v){cur=v;var f=m.querySelector('iframe');if(f)f.remove();var b=document.getElementById('vplay');if(b)b.style.display='';m.style.backgroundImage='url('+v.img+')';document.getElementById('vnow').textContent=v.t;
+ [].forEach.call(l.children,function(c,i){c.classList.toggle('on',V[i]===v);});}
+function play(){var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+cur.id+'?rel=0&modestbranding=1&autoplay=1&playsinline=1';f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=cur.t;document.getElementById('vplay').style.display='none';m.appendChild(f);}
+V.forEach(function(v){var b=document.createElement('button');b.type='button';b.className='vc';b.innerHTML='<div class="im" style="background-image:url('+v.img+')"></div><div><b>'+v.t+'</b><span>'+v.d+'</span></div>';
+ b.onclick=function(){sel(v);play();if(innerWidth<980)m.scrollIntoView({behavior:'smooth',block:'center'});};l.appendChild(b);});
+document.getElementById('vplay').onclick=play;sel(V[0]);
+})();
+</script>
+</body></html>
