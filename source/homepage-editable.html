@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+
+<html lang="en-AU"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Webescapade · Websites with bookings, table ordering, AI assistants and Email Studio · Sydney</title>
+<meta content="Webescapade builds websites that do real work for small and medium businesses: edit it yourself, online bookings, ordering at the table, an AI assistant that answers 24/7 and Email Studio. Restaurant Deluxe, Service Deluxe and custom websites. No commission. Book a free Zoom chat." name="description"/>
+<meta content="Webescapade — booked, ordered, answered. Your business, online." property="og:title"/>
+<meta content="Websites you edit yourself, with bookings, table ordering, an AI assistant and Email Studio. No commission. Book a free Zoom chat." property="og:description"/>
+<meta content="https://webescapade.com/home/og.jpg" property="og:image"/>
+<link href="https://webescapade.com/" rel="canonical"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#F7F5F1; --paper2:#EEEAE3; --card:#FFFFFF; --ink:#17151F; --ink2:#34303F; --muted:#6A6577; --line:#E6E1D9;
+  --acc:#6C3BD6; --acc2:#14968F; --mint:#EEE8FB; --gold:#D7B072;
+  --deep:#17131F; --soft:#B9A3FF; --btn:#17151F; --btnink:#fff; --glow1:#E3D5FF; --glow2:#CFF3EC;
+  --grad:linear-gradient(110deg,#8B3DFF 0%,#4F7BFF 52%,#18C3AE 100%);
+  --r:22px; --shadow:0 30px 60px -30px rgba(23,21,31,.38), 0 10px 24px -12px rgba(23,21,31,.16);
+}
+[data-sec=lav]{--paper:#F6F3FB;--paper2:#ECE6F7;--line:#E4DCF2;--mint:#ECE4FC;--muted:#655F75;--glow1:#DCCBFF;--glow2:#C9F1EA}
+[data-sec=aqua]{--paper:#F0F7F5;--paper2:#E2EFEB;--line:#D6E8E3;--mint:#DDF2EE;--muted:#5D6B68;--acc:#0F8C86;--glow1:#C9F1EA;--glow2:#E3D5FF}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.015em;margin:0}
+h1{font-size:clamp(46px,5.6vw,84px);line-height:.98}
+h2{font-size:clamp(36px,5vw,64px);line-height:1}
+h3{font-size:30px;line-height:1.1}
+h1 em,h2 em,h3 em{font-style:italic;color:var(--acc)}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--acc)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:16px 26px;font:700 15px Manrope,sans-serif;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn.dark{background:var(--btn);color:var(--btnink);box-shadow:0 10px 24px -10px rgba(31,26,21,.6)}
+.btn.acc{background:var(--acc);color:#fff}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.light{background:#fff;color:var(--ink)}
+.btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
+body,[data-sec]{background:var(--paper);color:var(--ink)}
+/* nav */
+nav.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.top.s{border-bottom-color:var(--line)}
+nav.top .w{display:flex;align-items:center;gap:26px;height:72px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .m{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center;font:400 22px "Instrument Serif",serif}
+.brand b{font:400 25px "Instrument Serif",serif;letter-spacing:-.01em;white-space:nowrap}
+.brand small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+nav.top .links{display:flex;gap:22px;margin-left:auto;font-size:15px;font-weight:600}
+nav.top .links a{text-decoration:none;color:var(--muted);white-space:nowrap} nav.top .links a:hover{color:var(--ink)}
+nav.top .btn{padding:11px 20px;font-size:14px;white-space:nowrap}
+@media(max-width:1200px){nav.top .links{display:none}nav.top .btn{margin-left:auto}}
+@media(max-width:480px){nav.top .w{gap:12px}.brand b{font-size:21px}.brand .m{width:30px;height:30px;font-size:19px}nav.top .btn{padding:10px 14px;font-size:13px}nav.top .btn .ar{display:none}}
+/* hero */
+.hero{position:relative;min-height:min(calc(100svh - 72px),900px);display:flex;align-items:center;padding:56px 0 70px;overflow:hidden;isolation:isolate}
+.hero>.w{width:100%;position:relative;z-index:2;display:grid;gap:50px;align-items:center}
+@media(min-width:1020px){.hero>.w{grid-template-columns:1.1fr .9fr}}
+.hero>.w>.rv:first-child{position:relative;z-index:4}
+.hbg{position:absolute;inset:-12% 0 -12% 34%;z-index:-2;will-change:transform}
+.hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity 1.1s ease,transform 6s ease}
+.hbg img.on{opacity:1;transform:scale(1)}
+.hfade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--paper) 38%,color-mix(in srgb,var(--paper) 72%,transparent) 52%,color-mix(in srgb,var(--paper) 8%,transparent) 78%);pointer-events:none}
+.hglow{position:absolute;border-radius:50%;filter:blur(60px);z-index:-1;pointer-events:none;will-change:transform}
+.hglow.g1{width:520px;height:520px;left:-160px;top:-140px;background:var(--glow1);opacity:.75}
+.hglow.g2{width:420px;height:420px;left:30%;bottom:-220px;background:var(--glow2);opacity:.6}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:13.5px;font-weight:600;color:var(--ink2);margin-bottom:24px}
+.pill i{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-style:normal;font-size:12px}
+.hero .lead{max-width:31em;margin:20px 0 28px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.watches{display:flex;flex-wrap:wrap;gap:4px 22px}
+.watch{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none}
+.watch i{width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-style:normal;font-size:10px;padding-left:2px}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px;font-size:14px;color:var(--muted);font-weight:600}
+.trust span:before{content:"✓";color:var(--acc);margin-right:6px}
+.hstage{position:relative;height:600px;max-width:560px;margin:0 auto;width:100%}
+.hs-in{position:absolute;inset:0;will-change:transform}
+.mphone{position:absolute;left:50%;top:10px;width:290px;margin-left:-145px;border-radius:44px;background:#0d0c0b;padding:11px;box-shadow:0 50px 80px -30px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.06) inset;transform:rotate(-4deg);transition:transform .25s ease-out}
+.mphone .scr{border-radius:34px;background:#171310;overflow:hidden;height:560px;padding:44px 14px 0;position:relative;font-family:Manrope,sans-serif;color:#F3EDE4}
+.mphone .scr:before{content:"";position:absolute;top:12px;left:50%;width:84px;height:24px;margin-left:-42px;border-radius:20px;background:#0d0c0b}
+.mh small{display:block;font-size:8.5px;letter-spacing:.16em;color:#B9A994;font-weight:700}
+.mh b{display:block;font:400 21px/1.1 "Instrument Serif",serif}
+.mtabs{display:flex;gap:5px;margin:12px 0 10px}
+.mtabs span{font-size:9.5px;font-weight:800;letter-spacing:.06em;border:1px solid #3A3029;border-radius:999px;padding:5px 9px;color:#CDBFAE}
+.mtabs span.on{background:#E5A65B;border-color:#E5A65B;color:#1d150e}
+.mi{display:flex;gap:10px;align-items:center;background:#211B16;border:1px solid #2F2721;border-radius:14px;padding:7px;margin-bottom:8px}
+.mi img{width:62px;height:62px;border-radius:10px;object-fit:cover;flex:none}
+.mi b{display:block;font-size:12.5px;line-height:1.25}
+.mi span{display:block;font-size:10px;color:#A99A87;line-height:1.35}
+.mi i{font-style:normal;font-weight:800;font-size:11.5px;color:#E5A65B}
+.mi .add{margin-left:auto;flex:none;width:26px;height:26px;border-radius:50%;background:#E5A65B;color:#1d150e;display:grid;place-items:center;font-weight:800;font-size:16px;transition:transform .3s}
+.mi.pop .add{transform:scale(1.25)}
+.mb{position:absolute;left:10px;right:10px;bottom:12px;padding:12px 16px;background:#E5A65B;color:#1d150e;border-radius:999px;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:800}
+.fc{position:absolute;z-index:3;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;padding:12px 16px;box-shadow:0 24px 44px -22px rgba(0,0,0,.35);font-size:13px;color:var(--muted);line-height:1.35;will-change:transform}
+.fc b{display:block;color:var(--ink);font-size:14px}
+.fc .ic{float:left;width:30px;height:30px;border-radius:10px;background:var(--mint);color:var(--acc);display:grid;place-items:center;margin-right:10px;font-weight:800}
+.fc.f1{right:-10%;top:3%;max-width:240px}
+.fc.f2{left:2%;top:56%;max-width:230px}
+.fc.f3{right:0;bottom:4%;text-align:center;padding:14px 20px}
+.fc.f3 b{font:400 40px/1 "Instrument Serif",serif;color:var(--acc)}
+@media(max-width:1019px){.hero{min-height:0;padding-top:36px}.hbg{inset:auto 0 -6% 0;height:62%}.hfade{background:linear-gradient(180deg,var(--paper) 52%,color-mix(in srgb,var(--paper) 40%,transparent) 72%,color-mix(in srgb,var(--paper) 0%,transparent))}.hstage{height:560px;margin-top:10px}}
+@media(max-width:600px){.hstage{height:500px}.mphone{width:250px;margin-left:-125px}.mphone .scr{height:480px}.fc.f1{right:-2%;top:2%;max-width:200px}.fc.f2{left:-2%;top:58%;max-width:185px}.fc{font-size:12px;padding:10px 12px}}
+/* system grid */
+.made{padding:56px 0 30px}
+.made>.w>p{text-align:center;color:var(--muted);font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px}
+.made h2{text-align:center;margin:0 auto 34px;max-width:820px}
+.inds{display:grid;gap:16px}
+@media(min-width:700px){.inds{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.inds{grid-template-columns:repeat(3,1fr)}}
+.icard{position:relative;border-radius:24px;overflow:hidden;background:var(--card);color:var(--ink);border:1px solid var(--line);display:flex;flex-direction:column;text-decoration:none;transition:transform .35s,box-shadow .35s}
+.icard:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.icard .ph{position:relative;height:210px;overflow:hidden;background:#211B16}
+.icard .ph .pi{position:absolute;inset:-14% 0;will-change:transform}
+.icard .ph img{width:100%;height:100%;object-fit:cover}
+.icard .ph img.top{object-position:top}
+.icard .tx{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.icard .k{font:700 11px Manrope;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
+.icard h3{font-size:30px;margin:6px 0 6px}
+.icard p{margin:0;color:var(--muted);font-size:15px}
+.icard .go{margin-top:auto;padding-top:14px;font:700 14px Manrope;color:var(--ink)}
+.icard .new{position:absolute;top:14px;left:14px;z-index:2;background:var(--acc);color:#fff;font:800 10.5px Manrope;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;padding:5px 11px}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:40px}
+@media(min-width:860px){.facts{grid-template-columns:repeat(4,1fr)}}
+.facts div{background:var(--card);border-radius:18px;padding:20px 22px;border:1px solid var(--line)}
+.facts b{display:block;font:400 34px/1.05 "Instrument Serif",serif}
+.facts span{font-size:14px;color:var(--muted)}
+section.s{padding:110px 0}
+.head{max-width:760px;margin-bottom:52px}
+.head p{color:var(--muted);font-size:18px;margin:18px 0 0}
+/* steps */
+.steps{display:grid;gap:22px}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font:700 12px Manrope;letter-spacing:.16em;color:var(--acc)}
+.step h3{margin:8px 0 6px;font-size:28px}
+.step p{margin:0 0 20px;color:var(--muted);font-size:15.5px}
+.step .shot{margin-top:auto;border-radius:26px 26px 0 0;background:#111;padding:8px 8px 0;max-width:270px;align-self:center;width:100%}
+.step .shot img{border-radius:20px 20px 0 0;height:330px;width:100%;object-fit:cover;object-position:top}
+.steps.txt .step{padding-bottom:22px}
+/* splits */
+.split{display:grid;gap:44px;align-items:center}
+@media(min-width:980px){.split{grid-template-columns:.9fr 1.1fr}.split.flip{grid-template-columns:1.1fr .9fr}.split.flip .txt{order:2}}
+.browser{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.browser .bar{height:30px;background:var(--paper2);display:flex;align-items:center;gap:6px;padding:0 12px}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.browser .bar span{margin-left:10px;font-size:11px;color:var(--muted);background:var(--card);border-radius:6px;padding:2px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
+.ticks li{display:flex;gap:12px;align-items:flex-start}
+.ticks li:before{content:"✓";flex:none;width:22px;height:22px;margin-top:2px;border-radius:50%;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-size:12px;font-weight:800}
+.ticks b{display:block}
+.ticks span{color:var(--muted);font-size:15.5px}
+.dark{background:var(--deep)!important;color:#F1ECE4!important;border-radius:40px;margin:0 12px}
+.dark .eyebrow{color:var(--soft)}
+.dark h2 em{color:var(--soft)}
+.dark .ticks span,.dark .head p,.dark .lead{color:rgba(255,255,255,.66)}
+.dark .ticks b{color:#fff}
+.dark .btn.line{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.7)}
+.dark .ticks li:before{background-color:rgba(255,255,255,.1);color:var(--soft)}
+.dark .incl{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:#fff}
+.incl{display:inline-flex;gap:8px;align-items:center;margin-top:22px;font-size:14px;font-weight:700;border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--card)}
+.emailcard{max-width:400px;margin:0 auto;border-radius:22px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
+.duo{display:flex;gap:18px;justify-content:center;align-items:flex-start}
+.duo .ph2{width:46%;max-width:250px;border-radius:30px;background:#0d0c0b;padding:8px;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
+.duo .ph2 img{border-radius:23px}
+.duo .ph2:nth-child(2){margin-top:60px}
+/* videos */
+.vids{display:grid;gap:22px;margin-top:34px}
+@media(min-width:980px){.vids{grid-template-columns:1.6fr 1fr;align-items:start}}
+.vmain{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#111 center/cover no-repeat;box-shadow:var(--shadow);border:1px solid var(--line)}
+.vmain button.vp{position:absolute;inset:0;width:100%;border:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45));cursor:pointer;display:flex;align-items:flex-end;justify-content:space-between;padding:18px 20px;color:#fff;font:700 15px Manrope,sans-serif;text-align:left}
+.vmain iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vlist{display:grid;gap:10px}
+.vc{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:9px;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,box-shadow .2s}
+.vc:hover{border-color:var(--ink2)}
+.vc.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.vc .im{flex:none;width:118px;aspect-ratio:16/9;border-radius:9px;background:#ddd center/cover no-repeat}
+.vc b{display:block;font-size:15px;line-height:1.3}
+.vc span{display:block;font-size:13px;line-height:1.4;color:var(--muted);margin-top:2px}
+@media(max-width:480px){.vc .im{width:96px}}
+/* feature grid */
+.fgrid{display:grid;gap:16px}
+@media(min-width:700px){.fgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1050px){.fgrid{grid-template-columns:repeat(3,1fr)}}
+.fg{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
+.fg .ic{width:44px;height:44px;border-radius:14px;background:var(--mint);display:grid;place-items:center;font-size:21px;margin-bottom:14px}
+.fg h3{font-size:26px;margin:0 0 6px}
+.fg p{margin:0;color:var(--muted);font-size:15px}
+.fg .pl{display:inline-block;margin-top:12px;font:700 11px Manrope;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+/* pricing */
+.plans{display:grid;gap:18px}
+@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;display:flex;flex-direction:column}
+.plan.hi{background:var(--deep);color:#fff;border-color:var(--deep);box-shadow:var(--shadow);position:relative}
+.plan.hi .tag{position:absolute;top:-13px;left:28px;background:var(--acc);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 12px}
+.plan h3{font-size:30px}
+.plan .pr{margin:16px 0 4px;font:400 64px/1 "Instrument Serif",serif}
+.plan .pr small{font:600 15px Manrope;color:var(--muted)}
+.plan.hi .pr small,.plan.hi .muted{color:rgba(255,255,255,.62)}
+.plan ul{list-style:none;padding:0;margin:22px 0 28px;display:grid;gap:10px;font-size:15.5px}
+.plan li:before{content:"✓";color:var(--acc);font-weight:800;margin-right:9px}
+.plan.hi li:before{color:var(--soft)}
+.plan li.es{font-weight:700}
+.plan .btn{margin-top:auto}
+.muted{color:var(--muted)}
+.notes{display:flex;gap:10px 26px;flex-wrap:wrap;justify-content:center;margin-top:28px;color:var(--muted);font-size:14.5px;font-weight:600;text-align:center}
+.founding{margin-top:34px;display:grid;gap:18px;align-items:center;background:linear-gradient(120deg,var(--mint),var(--card));border:1px solid var(--line);border-radius:26px;padding:28px}
+@media(min-width:900px){.founding{grid-template-columns:1.3fr .7fr}}
+.founding h3{font-size:34px}
+.founding p{margin:8px 0 0;color:var(--muted);font-size:15.5px}
+.founding .ctas{justify-content:flex-start}
+@media(min-width:900px){.founding .ctas{justify-content:flex-end}}
+.setup{max-width:900px;margin:22px auto 0;color:var(--muted);font-size:14.5px;text-align:center}
+/* faq */
+.faq{max-width:860px}
+details{border-bottom:1px solid var(--line);padding:22px 0}
+summary{cursor:pointer;list-style:none;font:400 27px/1.2 "Instrument Serif",serif;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";font:400 26px Manrope;color:var(--acc)}
+details[open] summary:after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+/* enquiry */
+.enq{display:grid;gap:40px}
+@media(min-width:980px){.enq{grid-template-columns:.9fr 1.1fr}}
+.form{background:var(--card);border-radius:var(--r);padding:28px;border:1px solid var(--line)}
+.form label{display:grid;gap:6px;font-size:14px;font-weight:700;margin-bottom:14px}
+.form input,.form select,.form textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font:400 16px Manrope,sans-serif;background:var(--card);color:var(--ink)}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--mint)}
+.form .two{display:grid;gap:0 14px}
+@media(min-width:620px){.form .two{grid-template-columns:1fr 1fr}}
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .msg{margin-top:12px;font-size:15px;min-height:1px}
+.form .msg.ok{color:#2F6B45;font-weight:700}.form .msg.err{color:#9A3B2E}
+.contact{display:grid;gap:12px;margin-top:26px}
+.contact a{display:flex;gap:12px;align-items:center;text-decoration:none;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.contact a i{font-style:normal;width:34px;height:34px;border-radius:10px;background:var(--mint);display:grid;place-items:center}
+.contact a.zoom{background:var(--acc);color:#fff;border-color:var(--acc)}
+.contact a.zoom i{background:rgba(255,255,255,.18)}
+footer{padding:40px 0 60px;color:var(--muted);font-size:14px}
+footer .w{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
+footer a{color:var(--muted)}
+.float{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:25;transform:translateY(150%);transition:transform .35s}
+.float.on{transform:none}
+@media(max-width:600px){.float{right:84px;justify-content:center}}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.btn,.btn .ar{transition:none}.hbg img{transition:opacity .3s}.mphone{transform:none}}
+/*CHAT*/
+.chat-q[hidden],.chat-tip[hidden]{display:none}
+.chat-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--acc);color:#fff;border-radius:999px;padding:8px 18px 8px 8px;font:700 15px Manrope,sans-serif;box-shadow:0 16px 34px -12px rgba(0,0,0,.45);transition:transform .2s}
+.chat-fab:hover{transform:translateY(-2px)}
+.chat-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;position:relative}
+.chat-fab .ci svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-fab .ci:after{content:"";position:absolute;right:1px;top:1px;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid var(--acc)}
+.chat.open .chat-fab{display:none}
+.chat-tip{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;max-width:260px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font-size:14px;line-height:1.45;box-shadow:var(--shadow);cursor:pointer;animation:chatIn .35s ease}
+.chat-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;padding:4px}
+.chat-box{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:200;width:min(392px,calc(100vw - 32px));height:min(620px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:chatIn .3s ease}
+.chat-box[hidden]{display:none}
+@keyframes chatIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.chat-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--deep);color:#fff}
+.chat-hd .av{width:38px;height:38px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font:400 21px "Instrument Serif",serif;flex:none}
+.chat-hd b{display:block;font-size:15px}
+.chat-hd small{display:block;font-size:12px;color:rgba(255,255,255,.7);margin-top:1px}
+.chat-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.12);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.chat-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.cm{max-width:86%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
+.cm.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.cm.u{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:5px}
+.cm a{color:var(--acc);font-weight:700}.cm.u a{color:#fff}
+.cm p{margin:0 0 6px}.cm p:last-child{margin:0}
+.cm ul{margin:4px 0 6px;padding-left:18px}.cm li{margin:2px 0}
+.cm.typing{display:flex;gap:4px;padding:14px}
+.cm.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.4;animation:cdot 1s infinite}
+.cm.typing i:nth-child(2){animation-delay:.15s}.cm.typing i:nth-child(3){animation-delay:.3s}
+@keyframes cdot{50%{opacity:1;transform:translateY(-3px)}}
+.chat-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
+.chat-q button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 13px Manrope,sans-serif;cursor:pointer}
+.chat-q button:hover{border-color:var(--acc);color:var(--acc)}
+.chat-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--card)}
+.chat-f input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font:400 16px Manrope,sans-serif;background:var(--paper);color:var(--ink)}
+.chat-f input:focus{outline:none;border-color:var(--acc)}
+.chat-f button{border:0;border-radius:999px;background:var(--btn);color:var(--btnink);font:700 14px Manrope,sans-serif;padding:0 16px;cursor:pointer}
+.chat-f button:disabled{opacity:.5}
+.chat-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--card)}
+.chat-ft a{color:var(--muted)}
+@media(max-width:600px){.chat-fab{padding:8px}.chat-fab .tx{display:none}.chat-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.chat-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+body:has(.chat.open) #float{visibility:hidden}
+
+/* ---- Webescapade homepage additions ---- */
+.brand .m{background:var(--grad);font:800 14px Manrope,sans-serif;letter-spacing:.02em;box-shadow:0 8px 18px -8px rgba(108,59,214,.6)}
+h1 em,h2 em{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
+.dark h2 em{background:linear-gradient(110deg,#C4A8FF,#7FE7DA);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn.grad{background:var(--grad);color:#fff;box-shadow:0 12px 26px -12px rgba(108,59,214,.7)}
+.watch i{background:var(--grad)}
+.pill i{background:var(--grad);color:#fff}
+/* hero stage: website + AI chat phone */
+.hero .hbrowser{position:absolute;left:0;top:40px;width:86%;transform:rotate(-2.5deg);border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.hero .hbrowser .bar{height:28px;background:var(--paper2);display:flex;align-items:center;gap:6px;padding:0 12px}
+.hero .hbrowser .bar i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.hero .hbrowser .bar span{margin-left:8px;font-size:10.5px;color:var(--muted);background:var(--card);border-radius:6px;padding:2px 10px}
+.hero .hbrowser img{width:100%;height:300px;object-fit:cover;object-position:top}
+.cphone{position:absolute;right:0;top:120px;width:268px;border-radius:40px;background:#121019;padding:10px;box-shadow:0 50px 80px -30px rgba(30,15,60,.5);transform:rotate(3deg)}
+.cphone .scr{border-radius:31px;background:var(--paper);height:425px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.cphone .scr:before{content:"";position:absolute;top:10px;left:50%;width:78px;height:22px;margin-left:-39px;border-radius:20px;background:#121019;z-index:2}
+.cphone .chd{background:#17131F;color:#fff;padding:40px 14px 12px;display:flex;gap:9px;align-items:center}
+.cphone .chd .av{width:30px;height:30px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font:800 11px Manrope}
+.cphone .chd b{display:block;font-size:12.5px}.cphone .chd small{display:block;font-size:10px;color:#9BE9DD}
+.cphone .clog{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:8px;font-size:11.5px;line-height:1.45}
+.cphone .q,.cphone .a{max-width:86%;padding:8px 10px;border-radius:13px}
+.cphone .q{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:4px}
+.cphone .a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px;color:var(--ink)}
+.cphone .a .chip{display:inline-block;margin-top:6px;background:var(--ink);color:#fff;border-radius:999px;padding:4px 10px;font-weight:700;font-size:10.5px}
+.cphone .cin{margin:0 10px 12px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:9px 12px;font-size:11px;color:var(--muted)}
+.fc .ic{background:var(--mint);color:var(--acc)}
+.fc.f1{right:auto;left:-4%;top:auto;bottom:6%;max-width:250px}
+.fc.f2{left:auto;right:-6%;top:2%;max-width:220px}
+.fc.f3{right:auto;left:30%;bottom:-2%;display:none}
+@media(max-width:1019px){.hstage{max-width:520px}}
+@media(max-width:600px){.hero .hbrowser{width:92%;top:10px}.hero .hbrowser img{height:220px}.cphone{width:226px;top:130px}.cphone .scr{height:390px}.cphone .clog{font-size:10.5px}.fc.f1{left:-2%;bottom:2%;max-width:200px}.fc.f2{right:-2%;top:-4%;max-width:190px}}
+/* products */
+.prods{display:grid;gap:20px}
+@media(min-width:960px){.prods{grid-template-columns:1fr 1fr}}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .35s,transform .35s}
+.pcard:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.pcard .ph{position:relative;height:270px;overflow:hidden;background:#1d1a24}
+.pcard .ph img{width:100%;height:100%;object-fit:cover;object-position:top}
+.pcard .ph .lbl{position:absolute;left:16px;top:16px;background:rgba(255,255,255,.92);border-radius:999px;padding:6px 13px;font:800 11px Manrope;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.pcard .tx{padding:26px 26px 28px;display:flex;flex-direction:column;flex:1}
+.pcard h3{font-size:38px}
+.pcard>.tx>p{color:var(--muted);margin:8px 0 0;font-size:16px}
+.pcard ul{list-style:none;padding:0;margin:18px 0 22px;display:grid;gap:8px;font-size:15px}
+.pcard li:before{content:"✓";color:var(--acc);font-weight:800;margin-right:9px}
+.pcard .from{margin-top:auto;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.pcard .from b{font:400 40px/1 "Instrument Serif",serif}
+.pcard .from span{color:var(--muted);font-size:14px;font-weight:600}
+.pcard .ctas .btn{padding:13px 20px;font-size:14px}
+.pnote{margin-top:20px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;background:var(--grad);color:#fff;border-radius:24px;padding:22px 26px}
+.pnote b{font:400 28px/1.15 "Instrument Serif",serif;display:block}
+.pnote span{opacity:.9;font-size:15px}
+/* tags under building blocks */
+.fg .pl{color:var(--acc2)}
+.fg .ic{background:var(--mint)}
+/* AI section chat mock */
+.aibox{background:#201B2B;border:1px solid rgba(255,255,255,.1);border-radius:24px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.6);max-width:460px;margin:0 auto}
+.aibox .hd{display:flex;align-items:center;gap:10px;padding:14px 16px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
+.aibox .hd .av{width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font:800 12px Manrope;color:#fff}
+.aibox .hd b{display:block;font-size:14px;color:#fff}.aibox .hd small{font-size:12px;color:#9BE9DD}
+.aibox .lg{padding:16px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.5}
+.aibox .q{align-self:flex-end;max-width:82%;background:#6C3BD6;color:#fff;padding:10px 13px;border-radius:15px 15px 4px 15px}
+.aibox .a{align-self:flex-start;max-width:86%;background:rgba(255,255,255,.08);color:#EDE9F5;padding:10px 13px;border-radius:15px 15px 15px 4px}
+.aibox .lead{align-self:stretch;max-width:none;margin:4px 0 0;display:flex;gap:10px;align-items:center;background:rgba(127,231,218,.12);border:1px solid rgba(127,231,218,.3);color:#CFF7F1;border-radius:14px;padding:10px 12px;font-size:13px}
+.aibox .lead i{font-style:normal;width:26px;height:26px;border-radius:8px;background:rgba(127,231,218,.2);display:grid;place-items:center;flex:none}
+/* custom builds */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.chips span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:700;color:var(--ink2)}
+.cbox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:0 20px 40px -30px rgba(23,21,31,.35)}
+.cbox h3{font-size:32px;margin-bottom:6px}
+.cbox .ticks{margin-top:18px}
+.cbox .q{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:15px}
+/* work */
+.work{display:grid;gap:18px}
+@media(min-width:760px){.work{grid-template-columns:1fr 1fr}}
+.wcard{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .35s,box-shadow .35s}
+.wcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.wcard .im{height:250px;overflow:hidden;background:#1d1a24}
+.wcard .im img{width:100%;height:100%;object-fit:cover;object-position:top}
+.wcard .tx{padding:18px 22px 22px}
+.wcard small{display:block;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.wcard h3{font-size:28px;margin:4px 0 6px}
+.wcard p{margin:0;color:var(--muted);font-size:15px}
+.wcard .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.wcard .tags span{font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;background:var(--mint);color:var(--acc)}
+/* about */
+.about{display:grid;gap:40px;align-items:center}
+@media(min-width:980px){.about{grid-template-columns:1fr 1fr}}
+.quote{font:400 clamp(28px,3.4vw,40px)/1.15 "Instrument Serif",serif;margin:0;padding:30px;border-radius:28px;background:var(--card);border:1px solid var(--line);position:relative}
+.quote:before{content:"“";position:absolute;left:22px;top:-26px;font-size:110px;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.quote small{display:block;margin-top:16px;font:600 14px Manrope;color:var(--muted)}
+.vals{display:grid;gap:12px;margin-top:22px}
+@media(min-width:600px){.vals{grid-template-columns:1fr 1fr}}
+.vals div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.vals b{display:block;font-size:15px}
+.vals span{font-size:14px;color:var(--muted)}
+.contact a.zoom{background:var(--grad);border-color:transparent}
+.brand small{white-space:nowrap}
+@media(max-width:600px){.hstage{height:560px}}
+
+/*ENGINE-CSS-START*/
+#eng{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:4px;background:#111;color:#fff;border-radius:999px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 13px Manrope,sans-serif;max-width:calc(100% - 16px);overflow-x:auto}
+#eng button{border:0;background:none;color:#ddd;padding:8px 13px;border-radius:999px;cursor:pointer;font:inherit;white-space:nowrap}
+#eng button.on,#eng button:hover{background:#fff;color:#111}
+body.editing nav.top{top:58px}
+body.editing [data-edit]{outline:1.5px dashed rgba(108,59,214,.6);outline-offset:4px;border-radius:4px;cursor:text}
+body.editing [data-edit]:focus{outline:2px solid var(--acc);background:rgba(255,255,255,.6)}
+body.editing .dark [data-edit]:focus{background:rgba(255,255,255,.08)}
+body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cursor:pointer}
+#engp{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:101;width:min(480px,calc(100% - 20px));max-height:calc(100vh - 80px);overflow:auto;background:#fff;color:#111;border-radius:18px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);font:14px/1.45 Manrope,sans-serif}
+#engp h4{margin:0 0 10px;font-size:16px}
+#engp label{display:grid;gap:4px;font-weight:600;font-size:12px;color:#555;margin-bottom:10px}
+#engp input{border:1px solid #ddd;border-radius:9px;padding:8px 10px;font:15px Manrope,sans-serif;color:#111;width:100%}
+#engp .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+#engp .b{border:0;border-radius:9px;padding:9px 14px;font:600 14px Manrope,sans-serif;cursor:pointer;background:#eee;color:#111}
+#engp .b.p{background:#111;color:#fff}
+#engp .b:disabled{opacity:.4}
+#engp .msg{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+#engp .note{background:#F3F5F4;border-radius:10px;padding:10px 12px;color:#444;font-size:13px;margin-bottom:10px}
+/*ENGINE-CSS-END*/
+</style>
+</head>
+<body data-email="marc@webescapade.com" data-gh-branch="main" data-gh-live="index.html" data-gh-master="source/homepage-editable.html" data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-phone="0413 872 994" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co">
+<nav class="top" id="nav"><div class="w">
+<a class="brand" href="#top"><span class="m">WE</span><span><b data-edit="e203">Webescapade</b><small data-edit="e204">Sydney web studio</small></span></a>
+<div class="links"><a data-edit="e205" href="#products">Restaurant &amp; Service Deluxe</a><a data-edit="e206" href="#build">What we build</a><a data-edit="e207" href="#ai">AI assistant</a><a data-edit="e208" href="#custom">Custom websites</a><a data-edit="e209" href="#work">Our work</a><a data-edit="e210" href="#about">About</a><a data-edit="e211" href="#faq">FAQ</a></div>
+<a class="btn dark" href="/demo.html"><span data-edit="e87">Book a free Zoom chat</span><span class="ar">→</span></a>
+</div></nav>
+<header class="hero" data-sec="lav" id="top">
+<div class="hfade" style="background:none"></div><div class="hglow g1" data-par="-0.18"></div><div class="hglow g2" data-par="0.22"></div>
+<div class="w">
+<div class="rv">
+<div class="pill"><i>✦</i><span data-edit="e83">Websites · bookings · AI assistants · for small and medium businesses</span></div>
+<h1 data-edit="e1">Booked. Ordered. Answered.<br/><em>Your business, online.</em></h1>
+<p class="lead" data-edit="e41">Webescapade builds websites that do real work: you edit them yourself, customers book or order straight from them, an AI assistant answers questions day and night — and Email Studio brings people back. One flat monthly price. No commission, ever.</p>
+<div class="ctas">
+<a class="btn dark" href="/demo.html"><span data-edit="e88">Book a free Zoom chat</span><span class="ar">→</span></a>
+<a class="btn line" href="#products"><span data-edit="e89">See our two systems</span></a>
+</div>
+<div class="watches"><a class="watch" href="#videos"><i>▶</i><span data-edit="e100">Watch the videos</span></a><a class="watch" href="#chat" id="heroAsk"><i>?</i><span data-edit="e101">Ask our AI assistant</span></a></div>
+<div class="trust"><span data-edit="e84">No commission</span><span data-edit="e85">You edit it yourself</span><span data-edit="e86">Your customers stay yours</span></div>
+</div>
+<div class="hstage rv"><div class="hs-in" data-par="-0.10">
+<div class="hbrowser" data-par="0.05"><div class="bar"><i></i><i></i><i></i><span data-edit="e202">yourbusiness.com.au</span></div><img alt="A day spa website built with Service Deluxe" data-img="i0" height="1000" src="/service/img/spa-site.jpg" width="1600"/></div>
+<div aria-hidden="true" class="cphone" id="cphone"><div class="scr">
+<div class="chd"><span class="av">AI</span><div><b data-edit="e193">Your AI assistant</b><small data-edit="e194">● Online · replies in seconds</small></div></div>
+<div class="clog">
+<div class="q" data-edit="e189">Do you have anything Saturday morning?</div>
+<div class="a" data-edit="e191">Yes! Sophie has 9:30 and 11:00 free for a 60-minute facial.<br/><span class="chip">Book Saturday 9:30 →</span></div>
+<div class="q" data-edit="e190">Is there parking nearby?</div>
+<div class="a" data-edit="e192">Free parking behind the building, off Elm Lane. See you Saturday!</div>
+</div>
+<div class="cin" data-edit="e195">Ask a question…</div>
+</div></div>
+<div class="fc f1" data-par="-0.22"><span class="ic">✓</span><b id="hc1">New booking</b><span id="hc1s">Facial · Sat 9:30 with Sophie</span></div>
+<div class="fc f2" data-par="0.16"><span class="ic">✦</span><b data-edit="e115">0% commission</b><span data-edit="e117">one flat monthly price</span></div>
+</div></div>
+</div></header>
+<section class="s" data-sec="paper" id="products" style="padding-top:90px"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e31">Ready to go</div><h2 data-edit="e2">Two systems, <em>already working.</em></h2>
+<p data-edit="e42">Built with real businesses, used every day and improved from their feedback. Pick the one made for your kind of business — or ask us to build something around you.</p></div>
+<div class="prods">
+<div class="pcard rv"><div class="ph"><img alt="Restaurant Deluxe: the Maison Escapade website" data-img="i1" height="788" loading="lazy" src="/home/img/maison-site.jpg" width="1100"/><span class="lbl" data-edit="e132">Restaurants · cafés · bars</span></div>
+<div class="tx"><h3 data-edit="e12">Restaurant Deluxe</h3><p data-edit="e43">Your restaurant, all in one place — from the first click to the last order.</p>
+<ul><li data-edit="e118">A website you edit, with a live menu</li><li data-edit="e119">Direct bookings, kept apart from walk-ins</li><li data-edit="e120">Order at the table by QR code, to the kitchen and bar</li><li data-edit="e121">Scan &amp; Queue: a digital queue at the door</li><li data-edit="e122">Email Studio and an AI assistant for your guests</li></ul>
+<div class="from"><b data-edit="e128">From $68</b><span data-edit="e130">a month AUD · 14 days free</span></div>
+<div class="ctas"><a class="btn dark" href="/Restaurant/"><span data-edit="e90">Explore Restaurant Deluxe</span><span class="ar">→</span></a><a class="btn line" href="https://youtu.be/FE4Zdnh7T-U" rel="noopener" target="_blank"><span data-edit="e91">▶ 2-minute tour</span></a></div></div></div>
+<div class="pcard rv"><div class="ph"><img alt="Service Deluxe: the Serenity Day Spa website" data-img="i2" height="1000" loading="lazy" src="/service/img/spa-site.jpg" width="1600"/><span class="lbl" data-edit="e133">Spas · salons · clinics</span></div>
+<div class="tx"><h3 data-edit="e13">Service Deluxe</h3><p data-edit="e44">Your calendar, booked while you work — for any business that runs on appointments.</p>
+<ul><li data-edit="e123">A website you edit yourself</li><li data-edit="e124">Online bookings by practitioner and room</li><li data-edit="e125">Ivy, the AI assistant that answers your clients 24/7</li><li data-edit="e126">Automatic confirmations and reminders</li><li data-edit="e127">Email Studio for offers, news and rebooking</li></ul>
+<div class="from"><b data-edit="e129">From $39</b><span data-edit="e131">a month + GST · 14 days free</span></div>
+<div class="ctas"><a class="btn dark" href="/service/"><span data-edit="e92">Explore Service Deluxe</span><span class="ar">→</span></a><a class="btn line" href="https://youtu.be/dgAGQn4IeB4" rel="noopener" target="_blank"><span data-edit="e93">▶ 3-minute tour</span></a></div></div></div>
+</div>
+<div class="pnote rv"><div><b data-edit="e134">Not a restaurant or a salon?</b><span data-edit="e135">We build the same pieces around your business — and quote after a free chat.</span></div><a class="btn light" href="#custom"><span data-edit="e94">Custom websites</span><span class="ar" data-edit="e136">→</span></a></div>
+</div></section>
+<section class="s" data-sec="lav" id="videos" style="padding-bottom:40px"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e32">Watch it work</div><h2 data-edit="e3">See it working <em>in real businesses.</em></h2>
+<p data-edit="e45">Short videos of both systems — the websites, bookings, ordering at the table, the AI assistant and Email Studio.</p></div>
+<div class="vids rv">
+<div class="vmain" id="vmain"><button aria-label="Play video" class="vp" id="vplay" type="button"><span id="vnow">Restaurant Deluxe · the full tour</span><span>▶ Play</span></button></div>
+<div><div class="vlist" id="vlist"></div></div>
+</div>
+</div></section>
+<section class="s" data-sec="paper" id="build"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e33">What we build</div><h2 data-edit="e4">The pieces that <em>do the work.</em></h2>
+<p data-edit="e46">Every Webescapade website is built from the same proven building blocks. Use the ones your business needs — they all work together and feed one customer list.</p></div>
+<div class="fgrid">
+<div class="fg rv"><div class="ic">✏️</div><h3 data-edit="e14">A website you edit</h3><p data-edit="e47">Tap any words or photo to change them. Themes, sections and photos — no developer, no waiting.</p><span class="pl" data-edit="e105">Every website</span></div>
+<div class="fg rv"><div class="ic">📅</div><h3 data-edit="e15">Online bookings</h3><p data-edit="e48">Customers pick a service, a person and a time. You see it all in one calendar, with automatic emails.</p><span class="pl" data-edit="e106">Restaurants · appointments</span></div>
+<div class="fg rv"><div class="ic">📱</div><h3 data-edit="e16">Scan &amp; order</h3><p data-edit="e49">A QR code on every table or counter. Orders go straight to the right screen — kitchen, bar or front.</p><span class="pl" data-edit="e107">Restaurants · cafés · venues</span></div>
+<div class="fg rv"><div class="ic">⏳</div><h3 data-edit="e17">Scan &amp; Queue</h3><p data-edit="e50">A digital queue at the door. People wait wherever they like; their phone buzzes when it’s their turn.</p><span class="pl" data-edit="e108">Busy venues</span></div>
+<div class="fg rv"><div class="ic">💬</div><h3 data-edit="e18">An AI assistant</h3><p data-edit="e51">Answers your customers day and night from your own information — and passes you their details when they’re ready.</p><span class="pl" data-edit="e109">Any website</span></div>
+<div class="fg rv"><div class="ic">✉️</div><h3 data-edit="e19">Email Studio</h3><p data-edit="e52">New menu, special offer, reminder or newsletter — a beautiful email to your customers in minutes.</p><span class="pl" data-edit="e110">Any website</span></div>
+<div class="fg rv"><div class="ic">👥</div><h3 data-edit="e20">Your customer list</h3><p data-edit="e53">Bookings, enquiries and chats land in one simple CRM. Your customers stay yours — not a booking site’s.</p><span class="pl" data-edit="e111">Any website</span></div>
+<div class="fg rv"><div class="ic">🎥</div><h3 data-edit="e21">“Book a Zoom call” pages</h3><p data-edit="e54">Let prospects pick a time for a video call or phone call, with the Zoom link and calendar invite sent for you.</p><span class="pl" data-edit="e112">Sales &amp; consultations</span></div>
+<div class="fg rv"><div class="ic">🌐</div><h3 data-edit="e22">Your domain, set up</h3><p data-edit="e55">We connect your own web address and get you live — then help you keep improving it.</p><span class="pl" data-edit="e113">Every website</span></div>
+</div>
+</div></section>
+<section class="s dark" data-sec="lav" id="ai"><div class="w">
+<div class="split">
+<div class="txt rv"><div class="eyebrow" data-edit="e34">AI assistant</div><h2 data-edit="e5">A helper that knows <em>your business.</em></h2>
+<p class="lead" data-edit="e56" style="margin-top:18px">Most customer questions are the same ten questions. Your AI assistant answers them in seconds, at 11 pm on a Sunday, using your real services, prices and opening hours — then hands you the people who are ready to buy.</p>
+<ul class="ticks">
+<li><span><b data-edit="e145">Answers from your own information</b><span data-edit="e154">Change a price or a service once, and the assistant knows straight away.</span></span></li>
+<li><span><b data-edit="e146">Turns chats into enquiries</b><span data-edit="e155">It asks for a name and email, saves them to your customer list and emails you.</span></span></li>
+<li><span><b data-edit="e147">Honest when it doesn’t know</b><span data-edit="e156">It says so and offers to pass the question to you, instead of guessing.</span></span></li>
+<li><span><b data-edit="e148">You see every conversation</b><span data-edit="e157">Learn what customers really ask — and improve your website from it.</span></span></li>
+</ul>
+<div class="ctas" style="margin-top:28px"><a class="btn light" href="#chat" id="aiAsk"><span data-edit="e95">Try it — ask ours a question</span></a><a class="btn line" href="https://youtu.be/RvDm7b_jDX0" rel="noopener" target="_blank"><span data-edit="e96">▶ Watch the 1-minute video</span></a></div></div>
+<div class="rv"><div class="aibox" data-par="-0.05">
+<div class="hd"><span class="av">AI</span><div><b data-edit="e200">Harbour Physio · assistant</b><small>● Online</small></div></div>
+<div class="lg">
+<div class="q" data-edit="e196">How much is a first appointment, and do you do weekends?</div>
+<div class="a" data-edit="e198">A first consultation is 45 minutes. You’ll see the price and every free time — including Saturday mornings — on our booking page. Would you like me to ask the team to call you?</div>
+<div class="q" data-edit="e197">Yes please — I’m Dan, dan@email.com</div>
+<div class="a" data-edit="e199">Thanks Dan! I’ve passed your details on. The team will be in touch, usually within one business day.</div>
+<div class="lead"><i>✓</i><span data-edit="e201">New enquiry saved to your customer list and emailed to you</span></div>
+</div></div></div>
+</div>
+</div></section>
+<section class="s" data-sec="aqua" id="custom"><div class="w">
+<div class="split">
+<div class="txt rv"><div class="eyebrow" data-edit="e35">Custom websites</div><h2 data-edit="e6">Not a restaurant or a salon? <em>We build it around you.</em></h2>
+<p class="lead" data-edit="e57" style="margin-top:18px">The same building blocks work for almost any local business. We design your website around your brand and the way you work, connect the pieces you need, and hand you a site you can change yourself.</p>
+<div class="chips"><span data-edit="e137">Trades &amp; home services</span><span data-edit="e138">Real estate</span><span data-edit="e139">Gyms &amp; studios</span><span data-edit="e140">Allied health</span><span data-edit="e141">Retail &amp; local shops</span><span data-edit="e142">Events &amp; catering</span><span data-edit="e143">Schools &amp; training</span><span data-edit="e144">Professional services</span></div>
+<div class="ctas" style="margin-top:28px"><a class="btn dark" href="/demo.html?p=custom"><span data-edit="e97">Book a free Zoom chat</span><span class="ar">→</span></a><a class="btn line" href="#enquire"><span data-edit="e98">Send an enquiry</span></a></div></div>
+<div class="rv"><div class="cbox">
+<h3 data-edit="e23">What a custom build includes</h3>
+<ul class="ticks">
+<li><span><b data-edit="e149">Designed for your business</b><span data-edit="e158">Your brand, your photos, your words — modern and fast on every phone.</span></span></li>
+<li><span><b data-edit="e150">Editable by you</b><span data-edit="e159">The same tap-to-edit tools as Restaurant and Service Deluxe.</span></span></li>
+<li><span><b data-edit="e151">The pieces you need</b><span data-edit="e160">Bookings or quote requests, an AI assistant, Email Studio, a “Book a Zoom call” page.</span></span></li>
+<li><span><b data-edit="e152">One customer list</b><span data-edit="e161">Every enquiry, booking and chat in a simple CRM.</span></span></li>
+<li><span><b data-edit="e153">Live on your domain</b><span data-edit="e162">We set up your web address and stay with you after launch.</span></span></li>
+</ul>
+<p class="q" data-edit="e58">Every business is different, so custom work is quoted after a free Zoom chat — you’ll know exactly what you get before you decide.</p>
+</div></div>
+</div>
+</div></section>
+<section class="s" data-sec="paper" id="work"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e36">Our work</div><h2 data-edit="e7">Websites <em>we’ve built.</em></h2>
+<p data-edit="e59">Real platforms and demo businesses you can open and try — every one of them editable by its owner.</p></div>
+<div class="work">
+<a class="wcard rv" href="/Restaurant/"><div class="im"><img alt="Maison Escapade restaurant website with the live menu" data-img="i3" height="1125" loading="lazy" src="/Restaurant/img/site-live-menu.jpg" width="1800"/></div><div class="tx"><small data-edit="e163">webescapade.com/Restaurant</small><h3 data-edit="e24">Maison Escapade</h3><p data-edit="e60">Our demo restaurant on Restaurant Deluxe: website, live menu, bookings, table ordering and the queue.</p><div class="tags"><span data-edit="e167">Restaurant Deluxe</span><span data-edit="e168">Order at the table</span></div></div></a>
+<a class="wcard rv" href="/service/demo-premium/"><div class="im"><img alt="Serenity Day Spa website" data-img="i4" height="1000" loading="lazy" src="/service/img/spa-treatments.jpg" width="1600"/></div><div class="tx"><small data-edit="e164">webescapade.com/service</small><h3 data-edit="e25">Serenity Day Spa</h3><p data-edit="e61">Our demo spa on Service Deluxe: treatments, therapists and rooms, online booking and Ivy the AI assistant.</p><div class="tags"><span data-edit="e169">Service Deluxe</span><span data-edit="e170">AI assistant</span></div></div></a>
+<a class="wcard rv" href="https://cheflinksydney.com" rel="noopener" target="_blank"><div class="im"><img alt="ChefLink Sydney website" data-img="i5" height="791" loading="lazy" src="/home/img/cheflink.jpg" width="1100"/></div><div class="tx"><small data-edit="e165">cheflinksydney.com ↗</small><h3 data-edit="e26">ChefLink Sydney</h3><p data-edit="e62">A platform where professional chefs show their work and connect with Sydney venues.</p><div class="tags"><span data-edit="e171">Platform</span><span data-edit="e172">Profiles</span><span data-edit="e173">CRM</span></div></div></a>
+<a class="wcard rv" href="/Portfolio/"><div class="im"><img alt="Portfolio website for a chef" data-img="i6" height="653" loading="lazy" src="/home/img/portfolio.jpg" width="1100"/></div><div class="tx"><small data-edit="e166">webescapade.com/Portfolio</small><h3 data-edit="e27">Portfolio websites</h3><p data-edit="e63">Single-page portfolio sites for chefs, trainers and creatives — try before you buy, then edit your own.</p><div class="tags"><span data-edit="e174">Editable</span><span data-edit="e175">Try before you buy</span></div></div></a>
+</div>
+</div></section>
+<section class="s" data-sec="lav" id="how" style="padding-top:60px"><div class="w">
+<div class="head rv"><div class="eyebrow" data-edit="e37">How it works</div><h2 data-edit="e8">From a chat <em>to your website.</em></h2></div>
+<div class="steps txt">
+<div class="step rv"><span class="n" data-edit="e185">01</span><h3 data-edit="e28">A free Zoom chat</h3><p data-edit="e64">Pick a time that suits you. I’ll show you everything working and we’ll talk about what your business needs.</p></div>
+<div class="step rv"><span class="n" data-edit="e186">02</span><h3 data-edit="e29">We build and set it up</h3><p data-edit="e65">Your website, your content and the pieces you chose — connected, tested and live on your own domain.</p></div>
+<div class="step rv"><span class="n" data-edit="e187">03</span><h3 data-edit="e30">You run it — it keeps growing</h3><p data-edit="e66">Change it yourself any time. Tell us what you need next: our systems grow from our clients’ feedback.</p></div>
+</div>
+</div></section>
+<section class="s" data-sec="paper" id="about"><div class="w">
+<div class="about">
+<div class="rv"><div class="eyebrow" data-edit="e38">Why we do what we do</div><h2 data-edit="e9">Small businesses <em>deserve better tools.</em></h2>
+<p class="lead" data-edit="e67" style="margin-top:18px">I’m Marc Teleki, a web designer here in Sydney with 50 years’ experience in hospitality. I’ve seen good businesses hand a slice of every booking to someone else, lose their customer list, and wait weeks for a simple website change. Webescapade exists so you don’t have to.</p>
+<div class="vals">
+<div><b data-edit="e176">No commission</b><span data-edit="e180">One flat monthly price. Every sale is yours.</span></div>
+<div><b data-edit="e177">You stay in control</b><span data-edit="e181">Edit your website yourself, whenever you like.</span></div>
+<div><b data-edit="e178">Your customers stay yours</b><span data-edit="e182">Your list, your emails, your relationship.</span></div>
+<div><b data-edit="e179">A real person in Sydney</b><span data-edit="e183">Talk to Marc — not a ticket system.</span></div>
+</div></div>
+<div class="rv"><blockquote class="quote" data-edit="e184">A website should look beautiful, be easy to change — and quietly do the work while you look after your customers.<small>Marc Teleki · Webescapade</small></blockquote></div>
+</div>
+</div></section>
+<section class="s" data-sec="lav" id="faq"><div class="w faq">
+<div class="eyebrow" data-edit="e39">Questions</div><h2 data-edit="e10" style="margin-bottom:18px">Straight <em>answers.</em></h2>
+<details><summary data-edit="e76">Which one is right for my business?</summary><p data-edit="e68">Restaurants, cafés and bars: Restaurant Deluxe. Spas, salons, clinics and other appointment businesses: Service Deluxe. Anything else: a custom website built from the same pieces. Not sure? Ask our assistant or book a free Zoom chat.</p></details>
+<details><summary data-edit="e77">Do you take a commission on bookings or orders?</summary><p data-edit="e69">No. You pay one flat monthly price and every sale stays yours.</p></details>
+<details><summary data-edit="e78">Can I change the website myself?</summary><p data-edit="e70">Yes. Tap any words or photo to change them, right in your browser — no developer needed. We’re here if you’d like a hand.</p></details>
+<details><summary data-edit="e79">How much does a custom website cost?</summary><p data-edit="e71">It depends on what your business needs, so we quote after a free Zoom chat. Restaurant Deluxe starts from $68 a month (AUD) and Service Deluxe from $39 a month + GST, both with 14 days free.</p></details>
+<details><summary data-edit="e80">Can the AI assistant get things wrong?</summary><p data-edit="e72">It answers only from the information you give it and says when it isn’t sure, offering to pass the question to you. Like any AI it can occasionally make a mistake, so it’s clearly labelled as an AI assistant on your website.</p></details>
+<details><summary data-edit="e81">Who owns my customer list?</summary><p data-edit="e73">You do. Bookings, enquiries and email subscribers are your customers, kept in your own list.</p></details>
+<details><summary data-edit="e82">Do you set up my domain and hosting?</summary><p data-edit="e74">Yes — we connect your own web address and get you live, and we stay with you after launch.</p></details>
+</div></section>
+<section class="s" data-sec="paper" id="enquire"><div class="w">
+<div class="enq">
+<div class="rv"><div class="eyebrow" data-edit="e40">Talk to Marc</div><h2 data-edit="e11">Let’s talk about <em>your business.</em></h2>
+<p class="lead" data-edit="e75" style="margin-top:18px">Tell me a little about what you do and what you’d like your website to do for you. I’ll come back with ideas, options and next steps — usually within one business day.</p>
+<div class="contact">
+<a class="zoom" href="/demo.html"><i>📅</i><span data-edit="e102">Book a free Zoom chat — pick a time that suits you</span></a>
+<a href="tel:0413872994"><i>☎</i><span data-edit="e103">0413 872 994</span></a>
+<a href="mailto:marc@webescapade.com"><i>✉</i><span data-edit="e104">marc@webescapade.com</span></a>
+</div></div>
+<form class="form rv" id="enqForm" novalidate="">
+<div class="two"><label>Your name<input autocomplete="name" name="name" required=""/></label>
+<label>Business name<input autocomplete="organization" name="business" required=""/></label></div>
+<div class="two"><label>Email<input autocomplete="email" inputmode="email" name="email" required="" type="email"/></label>
+<label>Mobile<input autocomplete="tel" inputmode="tel" name="phone" type="tel"/></label></div>
+<div class="two"><label>Type of business<input name="type" placeholder="e.g. café, day spa, plumber"/></label>
+<label>Suburb<input autocomplete="address-level2" name="suburb"/></label></div>
+<label>What are you interested in?<select id="fWant" name="want"><option value="webescapade">A custom website</option><option value="restaurant">Restaurant Deluxe</option><option value="service">Service Deluxe</option><option value="webescapade-ai">An AI assistant for my website</option><option value="webescapade-unsure">Not sure yet</option></select></label>
+<label>Tell me about your business<textarea name="message" rows="3" style="resize:vertical"></textarea></label>
+<div aria-hidden="true" class="hp"><label>Leave this empty<input autocomplete="off" name="website" tabindex="-1"/></label></div>
+<button class="btn dark" style="width:100%" type="submit">Send my enquiry <span class="ar">→</span></button>
+<div class="msg" id="enqMsg" role="status"></div>
+</form>
+</div>
+</div></section>
+<footer data-sec="paper"><div class="w"><span data-edit="e188">© Webescapade · Sydney, Australia</span><span><a href="/Restaurant/">Restaurant Deluxe</a> · <a href="/service/">Service Deluxe</a> · <a href="/Queue-board/">Scan &amp; Queue</a> · <a href="/demo.html">Book a Zoom chat</a> · <a href="/old.html">Previous homepage</a></span></div></footer>
+<div class="chat" id="chat">
+<button aria-label="Open the chat assistant" class="chat-fab" id="chatFab" type="button"><span class="ci"><svg viewbox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span><span class="tx">Questions? Ask me</span></button>
+<div class="chat-tip" hidden="" id="chatTip"><button aria-label="Close" type="button">×</button><span>Not sure which fits your business? Ask me — prices, bookings, AI assistants, custom websites.</span></div>
+<div aria-label="Chat assistant" class="chat-box" hidden="" id="chatBox" role="dialog">
+<div class="chat-hd"><span class="av">WE</span><div><b>Webescapade assistant</b><small>Websites, bookings, AI — ask away</small></div><button aria-label="Close chat" class="x" id="chatX" type="button">×</button></div>
+<div aria-live="polite" class="chat-log" id="chatLog"></div>
+<div class="chat-q" id="chatQ"><button type="button">What do you build?</button><button type="button">Which one suits my business?</button><button type="button">How much does it cost?</button><button type="button">Can I edit the website myself?</button><button type="button">I’d like Marc to call me</button></div>
+<form class="chat-f" id="chatF"><input aria-label="Your question" autocomplete="off" id="chatIn" maxlength="600" placeholder="Type your question…"/><button id="chatSend" type="submit">Send</button></form>
+<div class="chat-ft">AI assistant — answers can be wrong. <a href="#enquire" id="chatHuman">Talk to Marc</a></div>
+<template id="chatHi">Hi! 👋 I’m the Webescapade assistant. Tell me what kind of business you run and I’ll point you to the right fit — or ask about prices, bookings, AI assistants and custom websites.</template>
+</div>
+</div>
+<a class="btn dark float" href="/demo.html" id="float"><span data-edit="e99">Book a free Zoom chat</span><span class="ar">→</span></a>
+<script>
+(function () {
+  var B = document.body.dataset;
+  var nav = document.getElementById("nav"), fl = document.getElementById("float"), hero = document.querySelector(".hero");
+  function sc(){ var y = window.scrollY; nav.classList.toggle("s", y > 10); fl.classList.toggle("on", y > hero.offsetHeight && (window.innerHeight + y) < document.body.scrollHeight - 300); }
+  window.addEventListener("scroll", sc, { passive: true }); sc();
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .1 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+
+  /* ?want= or ?p= pre-selects the enquiry */
+  try { var qp = new URLSearchParams(location.search).get("want"); if (qp && document.querySelector('#fWant option[value="' + qp + '"]')) document.getElementById("fWant").value = qp; } catch (x) {}
+
+  /* enquiry form -> CRM lead (rd_lead_submit, source "home") + email to Marc + receipt */
+  var f = document.getElementById("enqForm"), msg = document.getElementById("enqMsg");
+  var WANT = { "webescapade": "A custom website", "restaurant": "Restaurant Deluxe", "service": "Service Deluxe", "webescapade-ai": "An AI assistant for my website", "webescapade-unsure": "Not sure yet" };
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (document.body.classList.contains("editing")) return;
+    var d = {}; Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name] = el.value.trim(); });
+    msg.className = "msg";
+    if (!d.name || !d.business) { msg.className = "msg err"; msg.textContent = "Please add your name and your business name."; return; }
+    if (!/^\S+@\S+\.\S{2,}$/.test(d.email)) { msg.className = "msg err"; msg.textContent = "Please check your email address."; return; }
+    var btn = f.querySelector("button"); btn.disabled = true; msg.textContent = "Sending…";
+    var base = String(B.supabaseUrl || "").replace(/\/+$/, "");
+    var prod = d.want === "restaurant" || d.want === "service" ? d.want : "webescapade";
+    var text = "Interested in: " + (WANT[d.want] || "-") + (d.message ? "\n" + d.message : "");
+    fetch(base + "/rest/v1/rpc/rd_lead_submit", {
+      method: "POST", headers: { apikey: B.supabaseKey, Authorization: "Bearer " + B.supabaseKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: text, p_trap: d.website, p_product: prod, p_source: "home" })
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || "Something went wrong"); return j; }); })
+      .then(function (j) {
+        if (!j.ok) { msg.className = "msg err"; msg.textContent = j.error || "Something went wrong."; btn.disabled = false; return; }
+        f.reset(); msg.className = "msg ok"; msg.textContent = "Thanks — I've got it. I'll be in touch shortly, usually within one business day. A receipt is on its way to your inbox.";
+        btn.disabled = false;
+      }).catch(function () {
+        msg.className = "msg err"; btn.disabled = false;
+        msg.innerHTML = "Sorry, that didn't send. Please email <a href=\"mailto:" + B.email + "\">" + B.email + "</a> or call " + B.phone + ".";
+      });
+  });
+
+  /* hero: a few things happening while you read */
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var steps = [
+    { c: "New booking", cs: "Facial · Sat 9:30 with Sophie" },
+    { c: "Order sent to the kitchen", cs: "Table 12 · 3 items" },
+    { c: "New enquiry saved", cs: "From your AI assistant · to your CRM" },
+    { c: "“Spring offers” sent", cs: "to your customers with Email Studio" },
+    { c: "Website updated", cs: "New prices, changed by you in a minute" }
+  ], si = 1;
+  function tick() {
+    if (document.body.classList.contains("editing")) return;
+    var s = steps[si]; si = (si + 1) % steps.length;
+    document.getElementById("hc1").textContent = s.c; document.getElementById("hc1s").textContent = s.cs;
+  }
+  if (!reduce) setInterval(tick, 3600);
+
+  /* parallax */
+  var els = [].slice.call(document.querySelectorAll("[data-par]")), ph = document.getElementById("cphone"), ticking = false;
+  function frame() {
+    ticking = false; if (reduce) return; var vh = innerHeight, y = scrollY;
+    els.forEach(function (el) {
+      var f = parseFloat(el.getAttribute("data-par")), r;
+      if (el.closest(".hero")) { if (y > vh * 1.2) return; el.style.transform = "translate3d(0," + (y * f).toFixed(1) + "px,0)"; return; }
+      r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > vh + 200) return;
+      el.style.transform = "translate3d(0," + ((r.top + r.height / 2 - vh / 2) * f).toFixed(1) + "px,0)";
+    });
+  }
+  function req() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+  addEventListener("scroll", req, { passive: true }); addEventListener("resize", req); frame();
+  if (ph && !reduce && matchMedia("(hover:hover) and (pointer:fine)").matches) hero.addEventListener("mousemove", function (e) {
+    var x = e.clientX / innerWidth - .5, yy = e.clientY / innerHeight - .5;
+    ph.style.transform = "perspective(900px) rotateY(" + (x * 10).toFixed(2) + "deg) rotateX(" + (-yy * 8).toFixed(2) + "deg) rotate(3deg)";
+  });
+})();
+</script>
+<script>/*CHAT-JS — Webescapade assistant (edge function we-chat)*/
+(function(){
+  var B=document.body.dataset, box=document.getElementById("chatBox"), fab=document.getElementById("chatFab"), log=document.getElementById("chatLog"),
+      f=document.getElementById("chatF"), inp=document.getElementById("chatIn"), q=document.getElementById("chatQ"), tip=document.getElementById("chatTip"), wrap=document.getElementById("chat");
+  if(!box||!fab) return;
+  var KEY="weChat", st={id:"",msgs:[]}, busy=false;
+  try{ st=JSON.parse(sessionStorage.getItem(KEY))||st; }catch(e){}
+  if(!st.id) st.id="w-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function md(t){
+    var h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+      .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:|#)[^\s)]+)\)/g,function(_,a,u){ var ext=/^https?:/.test(u); return '<a href="'+u+'"'+(ext?' target="_blank" rel="noopener"':' data-in')+'>'+a+'</a>'; })
+      .replace(/(^|[\s(])(https:\/\/(?:webescapade\.com|youtu\.be)\/[^\s<)]*)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+    var out=[], list=false;
+    h.split(/\n/).forEach(function(l){
+      var m=l.match(/^\s*(?:[-•*]|\d+\.)\s+(.*)/);
+      if(m){ if(!list){ out.push("<ul>"); list=true; } out.push("<li>"+m[1]+"</li>"); }
+      else { if(list){ out.push("</ul>"); list=false; } if(l.trim()) out.push("<p>"+l+"</p>"); }
+    });
+    if(list) out.push("</ul>");
+    return out.join("");
+  }
+  function hi(){ var t=document.getElementById("chatHi"); return t ? t.content.textContent.trim() : "Hi! Ask me anything."; }
+  function bubble(role,text){ var d=document.createElement("div"); d.className="cm "+(role==="user"?"u":"a"); d.innerHTML=role==="user"?esc(text).replace(/\n/g,"<br>"):md(text); log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
+  function render(){ log.innerHTML=""; bubble("assistant",hi()); st.msgs.forEach(function(m){ bubble(m.role,m.content); }); q.hidden=st.msgs.length>2; }
+  function open(){ if(document.body.classList.contains("editing")) return; tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(e){} render(); box.hidden=false; wrap.classList.add("open"); if(matchMedia("(pointer:fine)").matches) inp.focus(); }
+  function close(){ box.hidden=true; wrap.classList.remove("open"); }
+  fab.addEventListener("click",open);
+  ["heroAsk","aiAsk"].forEach(function(id){ var ha=document.getElementById(id); if(ha) ha.addEventListener("click",function(e){ e.preventDefault(); open(); }); });
+  document.getElementById("chatX").addEventListener("click",close);
+  tip.addEventListener("click",function(e){ if(e.target.tagName==="BUTTON"){ tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(x){} return; } open(); });
+  log.addEventListener("click",function(e){ var a=e.target.closest("a[data-in]"); if(a&&innerWidth<600) close(); });
+  document.getElementById("chatHuman").addEventListener("click",function(){ if(innerWidth<600) close(); });
+  q.addEventListener("click",function(e){ var b=e.target.closest("button"); if(b) send(b.textContent.trim()); });
+  f.addEventListener("submit",function(e){ e.preventDefault(); send(inp.value); });
+  function send(text){
+    text=String(text||"").trim(); if(!text||busy) return;
+    inp.value=""; st.msgs.push({role:"user",content:text.slice(0,600)}); save(); bubble("user",text); q.hidden=true;
+    busy=true; document.getElementById("chatSend").disabled=true;
+    var t=document.createElement("div"); t.className="cm a typing"; t.innerHTML="<i></i><i></i><i></i>"; log.appendChild(t); log.scrollTop=log.scrollHeight;
+    var base=String(B.supabaseUrl||"").replace(/\/+$/,"");
+    fetch(base+"/functions/v1/we-chat",{method:"POST",headers:{"Content-Type":"application/json",apikey:B.supabaseKey||"",Authorization:"Bearer "+(B.supabaseKey||"")},
+      body:JSON.stringify({session:st.id,messages:st.msgs.slice(-16)})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!j||!j.ok||!j.reply) throw new Error(); return j.reply; })
+      .catch(function(){ return "Sorry — I can't answer right now. You can email [marc@webescapade.com](mailto:marc@webescapade.com), call [0413 872 994](tel:0413872994), or [book a free Zoom chat](https://webescapade.com/demo.html)."; })
+      .then(function(reply){ t.remove(); st.msgs.push({role:"assistant",content:reply}); st.msgs=st.msgs.slice(-24); save(); bubble("assistant",reply); busy=false; document.getElementById("chatSend").disabled=false; });
+  }
+  var seen=false; try{ seen=!!sessionStorage.getItem(KEY+"Tip"); }catch(e){}
+  if(!seen) setTimeout(function(){ if(box.hidden) tip.hidden=false; },9000);
+})();
+</script>
+<!--ENGINE-START-->
+<script>
+/* ===== editing engine (same as Restaurant and Service Deluxe) — only in the editable master; removed when publishing ===== */
+window.RD_HERO0 = { hc1: (document.getElementById('hc1')||{}).textContent, hc1s: (document.getElementById('hc1s')||{}).textContent };
+(function () {
+  var B = document.body.dataset;
+  var bar = document.createElement("div"); bar.id = "eng";
+  bar.innerHTML = '<button data-a="edit">✏️ Edit</button><button data-a="links">🔗 Links</button><button data-a="deploy">🚀 Deploy</button><button data-a="save">💾 Save copy</button>';
+  document.body.appendChild(bar);
+  var panel = null, editing = false;
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function closePanel(){ if (panel) { panel.remove(); panel = null; } bar.querySelectorAll("[data-a]").forEach(function (b) { if (b.getAttribute("data-a") !== "edit") b.classList.remove("on"); }); }
+  function openPanel(name, html){ closePanel(); panel = document.createElement("div"); panel.id = "engp"; panel.innerHTML = html; document.body.appendChild(panel); bar.querySelector('[data-a="' + name + '"]').classList.add("on"); var x = panel.querySelector("[data-close]"); if (x) x.onclick = closePanel; }
+
+  function setEditing(on){
+    editing = on; document.body.classList.toggle("editing", on);
+    var b = bar.querySelector('[data-a="edit"]'); b.classList.toggle("on", on); b.textContent = on ? "✓ Done" : "✏️ Edit";
+    document.querySelectorAll("[data-edit]").forEach(function (el) { if (on) el.setAttribute("contenteditable", "true"); else el.removeAttribute("contenteditable"); });
+    document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+  }
+  document.addEventListener("click", function (e) {
+    if (!editing) return;
+    var a = e.target.closest("a"); if (a && !a.closest("#eng") && !a.closest("#engp")) e.preventDefault();
+    var img = e.target.closest("img[data-img]"); if (img) replaceImage(img);
+  }, true);
+  document.addEventListener("paste", function (e) {
+    if (!editing || !e.target.closest || !e.target.closest("[data-edit]")) return;
+    e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text/plain"));
+  });
+  document.addEventListener("keydown", function (e) { if (editing && e.key === "Enter" && e.target.closest && e.target.closest("[data-edit]") && !e.shiftKey) { e.preventDefault(); e.target.blur(); } });
+
+  /* photos: shrink in the browser (max 1600px, JPEG) before placing */
+  function replaceImage(img){
+    var i = document.createElement("input"); i.type = "file"; i.accept = "image/*";
+    i.onchange = function () {
+      var file = i.files[0]; if (!file) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        var im = new Image();
+        im.onload = function () {
+          var max = img.closest(".wcard,.pcard") ? 1200 : 1600, s = Math.min(1, max / Math.max(im.width, im.height));
+          var c = document.createElement("canvas"); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+          img.src = c.toDataURL("image/jpeg", 0.74); img.setAttribute("width", c.width); img.setAttribute("height", c.height);
+          var alt = prompt("Short description of the new photo (for Google and screen readers):", img.alt || ""); if (alt != null) img.alt = alt;
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    };
+    i.click();
+  }
+
+  function linksPanel(){
+    openPanel("links", '<h4>Links &amp; contact</h4><div class="note">Phone and email used in the “Talk to Marc” section and by the enquiry form. To change the words on any button, tap ✏️ Edit and type on it.</div>' +
+      '<label>Phone<input id="l4" value="' + esc(B.phone) + '"></label><label>Email<input id="l5" value="' + esc(B.email) + '"></label>' +
+      '<div class="note" style="margin-top:6px">To change where a button goes: type part of its words, then the new web address.</div>' +
+      '<label>Button words (e.g. “Book a free Zoom chat”)<input id="lw"></label><label>New web address<input id="lu" placeholder="https://…"></label>' +
+      '<div class="r"><button class="b p" id="lsave">Apply</button><button class="b" data-close>Close</button></div><div class="msg" id="lmsg"></div>');
+    panel.querySelector("#lsave").onclick = function () {
+      var m = panel.querySelector("#lmsg"), out = [];
+      B.phone = panel.querySelector("#l4").value.trim(); B.email = panel.querySelector("#l5").value.trim();
+      document.querySelectorAll('a[href^="tel:"]').forEach(function (x) { x.href = "tel:" + B.phone.replace(/[^0-9+]/g, ""); var s = x.querySelector("span"); if (s && /^[0-9 +]+$/.test(s.textContent.trim())) s.textContent = B.phone; });
+      document.querySelectorAll('a[href^="mailto:"]').forEach(function (x) { x.href = "mailto:" + B.email; var s = x.querySelector("span"); if (s && s.textContent.indexOf("@") > 0) s.textContent = B.email; });
+      out.push("Phone and email applied.");
+      var w = panel.querySelector("#lw").value.trim().toLowerCase(), u = panel.querySelector("#lu").value.trim();
+      if (w && u) { var c = 0; document.querySelectorAll("a").forEach(function (x) { if (!x.closest("#eng,#engp,#chat") && x.textContent.toLowerCase().indexOf(w) >= 0) { x.setAttribute("href", u); c++; } }); out.push(c + " button(s) now go to " + u + "."); }
+      m.textContent = out.join(" ") + " Use Deploy to publish.";
+    };
+  }
+
+  /* ---- snapshot and publish ---- */
+  function snapshot(forPublish){
+    var was = editing; if (was) setEditing(false);
+    var root = document.documentElement.cloneNode(true);
+    if (was) setEditing(true);
+    ["#eng", "#engp"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
+    root.querySelectorAll("[contenteditable]").forEach(function (n) { n.removeAttribute("contenteditable"); });
+    var body = root.querySelector("body"); body.classList.remove("editing"); if (!body.className) body.removeAttribute("class");
+    root.querySelectorAll(".rv.in").forEach(function (n) { n.classList.remove("in"); });
+    root.querySelector("#nav").classList.remove("s"); root.querySelector("#float").classList.remove("on");
+    var m = root.querySelector("#enqMsg"); if (m) { m.textContent = ""; m.className = "msg"; }
+    var vl = root.querySelector("#vlist"); if (vl) vl.innerHTML = ""; var vm = root.querySelector("#vmain"); if (vm) { vm.removeAttribute("style"); vm.querySelectorAll("iframe").forEach(function (f) { f.remove(); }); var vb = vm.querySelector("#vplay"); if (vb) vb.removeAttribute("style"); }
+    root.querySelectorAll("[data-par]").forEach(function (n) { n.style.transform = ""; if (!n.getAttribute("style")) n.removeAttribute("style"); });
+    var cl = root.querySelector("#chatLog"); if (cl) cl.innerHTML = ""; ["#chatBox", "#chatTip"].forEach(function (k) { var n = root.querySelector(k); if (n) n.setAttribute("hidden", ""); });
+    var cw = root.querySelector("#chat"); if (cw) cw.className = "chat"; var cqq = root.querySelector("#chatQ"); if (cqq) cqq.removeAttribute("hidden");
+    var mp = root.querySelector("#cphone"); if (mp) mp.removeAttribute("style");
+    root.querySelectorAll(".mi.pop").forEach(function (n) { n.classList.remove("pop"); });
+    var R0 = window.RD_HERO0 || {}; ["hc1", "hc1s"].forEach(function (k) { var n = root.querySelector("#" + k); if (n && R0[k] != null) n.textContent = R0[k]; });
+    root.querySelectorAll(".hbg img").forEach(function (i, ix) { i.classList.toggle("on", ix === 0); if (ix) i.setAttribute("loading", "lazy"); else i.removeAttribute("loading"); if (!i.className) i.removeAttribute("class"); });
+    var html = "<!doctype html>\n" + root.outerHTML;
+    if (forPublish) {
+      var M = "ENGINE", a1 = "<!--" + M + "-START-->", a2 = "<!--" + M + "-END-->", c1 = "/*" + M + "-CSS-START*/", c2 = "/*" + M + "-CSS-END*/";
+      var cut = function (h, o, c) { var i, j; while ((i = h.indexOf(o)) >= 0 && (j = h.indexOf(c, i)) >= 0) h = h.slice(0, i) + h.slice(j + c.length); return h; };
+      html = cut(cut(html, a1, a2), c1, c2).replace(new RegExp("\\sdata-gh-[a-z]+=\"[^\"]*\"", "g"), "");
+    }
+    return html;
+  }
+  function download(name, text){ var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/html" })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800); }
+  function b64(s){ var bytes = new TextEncoder().encode(s), bin = ""; for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+  function gh(method, path, body){
+    var tok = ""; try { tok = localStorage.getItem("svcsite_gh_token") || ""; } catch (e) {}
+    if (!tok) return Promise.reject(new Error("Add your GitHub token first."));
+    return fetch("https://api.github.com/repos/" + B.ghOwner + "/" + B.ghRepo + "/" + path, { method: method, headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || ("GitHub " + r.status)); return j; }, function () { if (!r.ok) throw new Error("GitHub " + r.status); return {}; }); });
+  }
+  function getSha(path){
+    var dir = path.indexOf("/") >= 0 ? path.slice(0, path.lastIndexOf("/")) : "", name = path.slice(path.lastIndexOf("/") + 1);
+    return gh("GET", "contents/" + dir + "?ref=" + encodeURIComponent(B.ghBranch || "main")).then(function (list) { var f = (list || []).filter(function (x) { return x.name === name; })[0]; return f ? f.sha : null; }, function (e) { if (/Not Found/i.test(e.message)) return null; throw e; });
+  }
+  function commit(path, html, msg){ return getSha(path).then(function (sha) { var b = { message: msg, content: b64(html), branch: B.ghBranch || "main" }; if (sha) b.sha = sha; return gh("PUT", "contents/" + path, b); }); }
+  function deployPanel(){
+    var tok = ""; try { tok = localStorage.getItem("svcsite_gh_token") || ""; } catch (e) {}
+    openPanel("deploy", '<h4>Deploy to GitHub</h4><div class="note">Publish writes the clean live page (no editor). Save master keeps this editable version so you can come back to it.</div>' +
+      '<label>Owner<input id="go" value="' + esc(B.ghOwner) + '"></label><label>Repository<input id="gr" value="' + esc(B.ghRepo) + '"></label>' +
+      '<label>Branch<input id="gb" value="' + esc(B.ghBranch || "main") + '"></label><label>Live page path<input id="gl" value="' + esc(B.ghLive) + '"></label>' +
+      '<label>Editable master path<input id="gm" value="' + esc(B.ghMaster) + '"></label>' +
+      '<label>Fine-grained token (kept on this device only)<input id="gt" type="password" value="' + esc(tok) + '" placeholder="github_pat_…"></label>' +
+      '<div class="r"><button class="b p" id="gpub">Publish live page</button><button class="b" id="gmas">Save editable master</button><button class="b" data-close>Close</button></div><div class="msg" id="gmsg"></div>');
+    var keep = function () {
+      B.ghOwner = panel.querySelector("#go").value.trim(); B.ghRepo = panel.querySelector("#gr").value.trim(); B.ghBranch = panel.querySelector("#gb").value.trim() || "main";
+      B.ghLive = panel.querySelector("#gl").value.trim().replace(/^\/+/, ""); B.ghMaster = panel.querySelector("#gm").value.trim().replace(/^\/+/, "");
+      try { localStorage.setItem("svcsite_gh_token", panel.querySelector("#gt").value.trim()); } catch (e) {}
+      if (!B.ghOwner || !B.ghRepo) throw new Error("Fill in owner and repository.");
+    };
+    var run = function (fn) {
+      var m = panel.querySelector("#gmsg"); try { keep(); } catch (e) { m.textContent = "✗ " + e.message; return; }
+      panel.querySelectorAll(".b").forEach(function (b) { b.disabled = true; }); m.textContent = "Working…";
+      fn().then(function (t) { m.textContent = "✓ " + t; }, function (e) { m.textContent = "✗ " + e.message; }).then(function () { if (panel) panel.querySelectorAll(".b").forEach(function (b) { b.disabled = false; }); });
+    };
+    panel.querySelector("#gpub").onclick = function () {
+      var lp = (panel.querySelector("#gl").value || "").trim().replace(/^\/+/, "");
+      if (lp.indexOf("/") < 0 && lp !== "index.html" && !confirm("Live page path is \"" + lp + "\" with no folder.\n\nIn a repo that hosts another website (like webescapade.com) this REPLACES its home page.\n\nPublish anyway?")) return;
+      run(function () { var h = snapshot(true); return commit(B.ghLive, h, "Publish Webescapade homepage").then(function () { return "Published " + B.ghLive + " (" + Math.round(h.length / 1024) + " KB). Live within a minute."; }); });
+    };
+    panel.querySelector("#gmas").onclick = function () { run(function () { var h = snapshot(false); return commit(B.ghMaster, h, "Save Webescapade homepage master").then(function () { return "Saved " + B.ghMaster + " (" + Math.round(h.length / 1024) + " KB)."; }); }); };
+  }
+  window.ENGINE_SNAPSHOT = snapshot;
+  bar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-a]"); if (!b) return; var a = b.getAttribute("data-a");
+    if (a === "edit") { closePanel(); return setEditing(!editing); }
+    if (a === "save") { closePanel(); return download("homepage-editable.html", snapshot(false)); }
+    if (panel && b.classList.contains("on")) return closePanel();
+    ({ links: linksPanel, deploy: deployPanel })[a]();
+  });
+})();
+</script>
+<!--ENGINE-END-->
+<script>/*VIDEOS-JS*/
+(function(){
+var V=[
+ {id:'FE4Zdnh7T-U',t:'Restaurant Deluxe · the full tour',d:'Website, bookings, ordering at the table and the digital queue, at a real restaurant.',img:'/Restaurant/tour-video-thumb.jpg'},
+ {id:'dgAGQn4IeB4',t:'Service Deluxe · the full tour',d:'Website, online bookings, Ivy the AI assistant and Email Studio, for appointment businesses.',img:'/service/img/full-tour-video-thumb.jpg'},
+ {id:'RvDm7b_jDX0',t:'The AI assistant',d:'Answers clients day and night, shows real free times and takes messages.',img:'/service/img/ai-assistant-video-thumb.jpg'},
+ {id:'qxH-vK9O28s',t:'Email Studio for restaurants',d:'Send your new menu, an event or an offer to your guests in minutes.',img:'/Restaurant/email-studio-video-thumb.jpg'},
+ {id:'CQgsbNhttqw',t:'One menu. Everywhere.',d:'The website and its live menu, connected to ordering at the table.',img:'/Restaurant/restaurant-deluxe-promo-email.jpg'},
+ {id:'6OuMtkKCxrw',t:'The website editor',d:'Change words, photos, layouts and colours yourself.',img:'/service/img/editor-video-thumb.jpg'}];
+var m=document.getElementById('vmain'),l=document.getElementById('vlist');if(!m||!l)return;l.innerHTML='';var cur=V[0];
+function sel(v){cur=v;var f=m.querySelector('iframe');if(f)f.remove();var b=document.getElementById('vplay');if(b)b.style.display='';m.style.backgroundImage='url('+v.img+')';document.getElementById('vnow').textContent=v.t;
+ [].forEach.call(l.children,function(c,i){c.classList.toggle('on',V[i]===v);});}
+function play(){var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+cur.id+'?rel=0&modestbranding=1&autoplay=1&playsinline=1';f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=cur.t;document.getElementById('vplay').style.display='none';m.appendChild(f);}
+V.forEach(function(v){var b=document.createElement('button');b.type='button';b.className='vc';b.innerHTML='<div class="im" style="background-image:url('+v.img+')"></div><div><b>'+v.t+'</b><span>'+v.d+'</span></div>';
+ b.onclick=function(){sel(v);play();if(innerWidth<980)m.scrollIntoView({behavior:'smooth',block:'center'});};l.appendChild(b);});
+document.getElementById('vplay').onclick=play;sel(V[0]);
+})();
+</script>
+</body></html>

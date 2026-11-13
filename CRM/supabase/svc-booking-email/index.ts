@@ -126,8 +126,8 @@ async function handle(ref: string, kind: "confirmed" | "cancelled" | "reminder")
 async function lead(id: string) {
   const p = await rpc("svc_lead_payload", { p_id: id });
   if (!p?.ok) return { lead: id, skipped: "not found" };
-  const R = p.product === "restaurant";
-  const LABEL = R ? "Restaurant Deluxe" : "Service Deluxe";
+  const R = p.product === "restaurant", W = p.product === "webescapade";
+  const LABEL = R ? "Restaurant Deluxe" : W ? "Webescapade" : "Service Deluxe";
   const msg = String(p.message ?? p.notes ?? "").trim();
   const rowsOf = (list: any[][], label: string) => list.filter((r) => r[1])
     .map((r) => `<tr><td style="padding:6px 14px 6px 0;color:#6B746F;width:${label}">${r[0]}</td><td style="padding:6px 0;font-weight:600">${esc(r[1])}</td></tr>`).join("");
@@ -137,10 +137,10 @@ async function lead(id: string) {
   const crm = R ? "https://webescapade.com/CRM/venue-crm.html" : "https://webescapade.com/CRM/";
 
   const toMarc = await send(LEAD_TO, `New ${LABEL} enquiry: ${p.business || p.name}`,
-    `<div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#1E2622;max-width:620px"><h2 style="margin:0 0 4px">New enquiry from the ${LABEL} page</h2>` +
+    `<div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#1E2622;max-width:620px"><h2 style="margin:0 0 4px">New enquiry from the ${W ? "webescapade.com homepage (custom website)" : LABEL + " page"}</h2>` +
     `<p style="margin:0 0 14px;color:#6B746F">${esc(when)}</p><table>${rows}</table>` +
     `<h3 style="margin:18px 0 8px;font-size:15px">Their message</h3>${msg ? quote(msg) : `<p style="color:#6B746F"><i>No message added.</i></p>`}` +
-    `<p style="margin:18px 0 0">${p.existing ? "This email address was already in your CRM, so the enquiry was added to that contact's notes and set for a call today." : `It is in your CRM as a new ${LABEL} prospect, due for a call today.`} ` +
+    `<p style="margin:18px 0 0">${p.existing ? "This email address was already in your CRM, so the enquiry was added to that contact's notes and set for a call today." : `It is in your CRM as a new ${W ? "Service Deluxe CRM (custom website)" : LABEL} prospect, due for a call today.`} ` +
     `<a href="${crm}">Open the CRM</a> · just reply to this email to answer them.</p></div>`,
     "Webescapade website", p.email);
 
@@ -149,11 +149,15 @@ async function lead(id: string) {
     const first = String(p.name || "").trim().split(/\s+/)[0] || "there";
     const mine = rowsOf([["Name", p.name], [R ? "Restaurant" : "Business", p.business], ["Type", p.type], ["Area", p.suburb], ["Phone", p.phone], ["Email", p.email]], "100px");
     const btn = (href: string, label: string, dark: boolean) => `<a href="${href}" style="display:inline-block;margin:0 8px 8px 0;background:${dark ? "#1E2622" : "#ffffff"};color:${dark ? "#ffffff" : "#1E2622"};border:1px solid #1E2622;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:600;font-size:14px">${label}</a>`;
-    const about = R ? `Restaurant Deluxe for ${esc(p.business || "your restaurant")}` : `online bookings for ${esc(p.business || "your business")}`;
-    const wait = R
+    const about = R ? `Restaurant Deluxe for ${esc(p.business || "your restaurant")}` : W ? `a website for ${esc(p.business || "your business")}` : `online bookings for ${esc(p.business || "your business")}`;
+    const wait = W
+      ? `While you wait, pick a time for a free Zoom chat — I'll show you the websites, bookings and AI assistants we build, and we'll talk about what your business needs.`
+      : R
       ? `While you wait, watch the 2-minute tour, or pick a time for a free Zoom demo and I'll show you everything working.`
       : `While you wait, you can try it for yourself — setting up takes a few minutes and it's free for 14 days.`;
-    const buttons = R
+    const buttons = W
+      ? btn("https://webescapade.com/demo.html", "Book a Zoom chat", true) + btn("https://webescapade.com/#work", "See our work", false)
+      : R
       ? btn("https://webescapade.com/Restaurant/demo.html", "Book a Zoom demo", true) + btn("https://youtu.be/FE4Zdnh7T-U", "Watch the 2-minute tour", false)
       : btn("https://webescapade.com/service/service-booking.html?venue=serenity-spa", "Try a booking", true) + btn("https://webescapade.com/service/tour/", "Watch the videos", false);
     receipt = await send(p.email, `We've received your enquiry — ${LABEL}`,
@@ -169,7 +173,7 @@ async function lead(id: string) {
       `<p style="font-size:15px;line-height:1.55;margin:18px 0 0">Marc<br><span style="color:#6B746F">Webescapade · 0413 872 994 · marc@webescapade.com</span></p></td></tr></table></div>`,
       "Marc at Webescapade", LEAD_TO);
   }
-  return { lead: id, product: R ? "restaurant" : "service", marc: toMarc, receipt };
+  return { lead: id, product: R ? "restaurant" : W ? "webescapade" : "service", marc: toMarc, receipt };
 }
 
 Deno.serve(async (req) => {
