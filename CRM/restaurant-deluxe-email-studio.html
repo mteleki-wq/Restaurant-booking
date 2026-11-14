@@ -301,7 +301,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v62</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v63</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -935,7 +935,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v62 \u00b7 Restaurant promos point to the new Restaurant Deluxe page';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v63 \u00b7 Service free-trial invite with the 2-minute how-to video';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -3060,8 +3060,8 @@
   var SVC_EVIDEO = "https://youtu.be/yIXYHlhIdnM";   /* Service Deluxe: Email Studio is here (1 min) */
   var SVC_ETHUMB = "https://webescapade.com/service/img/email-studio-video-thumb.jpg";
   var SVC_ATHUMB = "https://webescapade.com/service/img/ai-assistant-video-thumb.jpg";
-  var SVC_GVIDEO = "https://youtu.be/TIrD-DhMVDw";   /* Premium getting-started (setup) video */
-  var SVC_GTHUMB = "https://webescapade.com/service/img/setup-video-thumb.jpg";
+  var SVC_GVIDEO = "https://youtu.be/YFho2xtlayc";   /* How to start your free trial, step by step (2:24) */
+  var SVC_GTHUMB = "https://webescapade.com/service/img/free-trial-video-thumb.jpg";
   var SVC_SALON = "https://webescapade.com/service/demo-premium/salon/";   /* Premium salon demo (Atelier Hair) */
   var SVC_SBOOK = "https://webescapade.com/service/service-booking.html?venue=atelier-hair&accent=A9503A&word=stylist";
   var SVC_SVIDEO = "https://youtu.be/B-1hhWIhQh4";   /* Premium for salons tour */
@@ -3192,17 +3192,21 @@
         intro:'I’m Marc, a web designer here in Sydney. I’ve built an online booking system for appointment businesses: clients choose the service, the practitioner and a free time, and your calendar fills itself.\n\nIt comes with a website you can edit yourself, and it costs one flat monthly price.',
         cards:cardsCore, plans:[svcBox(M,true)].filter(Boolean),
         subject:'Let your clients book themselves', preheader:'Online bookings and a website you edit yourself. '+T+' days free.' }),
-      P({ name:T+'-day free trial invite', desc:'Invite to start the trial',
-        heroImage:SVC_IMG+'hero-setup.jpg', heroAlt:'The setup screen: choose your type of business', heroLink:SVC_START,
+      P({ name:T+'-day free trial invite + how-to video', desc:'Invite to start the trial, with the 2-minute step-by-step video',
+        eyebrow:'Free for '+T+' days', badge:T+'-DAY FREE TRIAL',
+        heroImage:'', videoUrl:SVC_GVIDEO, videoThumb:SVC_GTHUMB, videoTitle:'Watch how to start: step by step, in 2 minutes', videoPos:'hero',
         bandImage:SVC_IMG+'band-email.jpg', bandAlt:'Automatic booking confirmation email', bandCaption:'Confirmation, cancellation and day-before reminder emails go out for you.',
         cta1:'Start your free trial', cta1url:SVC_START, cta2:'Plans and questions', cta2url:SVC_PAGE+'#pricing',
-        headline:'Try online bookings free for '+T+' days.',
-        intro:'Set up your services, your team and your hours in a few minutes from a ready-made template for your type of business. Your booking page works straight away.\n\nIf it isn’t right for you after '+T+' days, simply stop.',
-        cards:[{n:'01', t:'Pick your business type', d:'Spa, clinic, dental, physio, hair and beauty, or something else.'},
-               {n:'02', t:'Check your services', d:'Change names, lengths and prices whenever you like.'},
-               {n:'03', t:'Share your booking link', d:'On your website, Instagram and Google profile.'}],
+        headline:'Try it free for '+T+' days. We’ll show you how.',
+        intro:'Service Deluxe is free to try for '+T+' days, and you don’t need a credit card. This 2-minute video takes you through every step: creating your login, setting up your business from a ready-made template, and sharing your booking page.\n\nPlay it, then follow along. You can be taking bookings the same day. If it isn’t right for you after '+T+' days, simply stop.',
+        featEyebrow:'How it works', featHeading:'From sign-up to your\nfirst booking.',
+        cards:[{n:'01', t:'Create your login', d:'Your name, email and a password. Then confirm your email.'},
+               {n:'02', t:'Set up your business', d:'Pick spa, clinic, dental, physio, or hair and beauty. Services and hours are ready-made.'},
+               {n:'03', t:'Share your booking link', d:'On your website, Instagram and Google profile. Clients book straight away.'}],
         priceOn:false, plans:[],
-        subject:'Online bookings, free for '+T+' days', preheader:'Set up in minutes from a template made for your business.' }),
+        finalHeading:'Ready when you are.', finalSub:'Free for '+T+' days, no credit card. Questions? Reply to this email or call Marc on 0413 872 994.',
+        finalCta:'Start your free trial', finalUrl:SVC_START,
+        subject:'Try it free: here’s how, in 2 minutes', preheader:'A short video that takes you from sign-up to your first booking.' }),
       P({ name:'Website + bookings ('+svcPrice(M)+')', desc:'Lead with the main plan',
         heroImage:SVC_IMG+'hero-website-phone.jpg', heroAlt:'An example spa website with its booking page on a phone', heroLink:SVC_SITE,
         bandImage:SVC_IMG+'band-rooms.jpg', bandAlt:'The calendar viewed by treatment room', bandLink:SVC_PAGE, bandCaption:'Rooms and people are booked together, so nothing is booked twice.',
@@ -3215,7 +3219,7 @@
         heroImage:SVC_IMG+'premium-hero-spa.jpg', heroAlt:'The Premium spa website with a warm, candle-lit animated hero, on a computer and a phone', heroLink:SVC_PREMIUM,
         bandImage:SVC_IMG+'premium-layouts.jpg', bandAlt:'Four hero layouts: full screen, full width, photo right and photo left', bandLink:SVC_PREMIUM, bandCaption:'Full screen, full width, or the photo on either side. One tap in the editor.',
         videoUrl:SVC_PVIDEO, videoThumb:SVC_PTHUMB, videoTitle:'Watch the 1-minute Premium tour',
-        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to start your free trial (2 min)', video2Pos:'end',
         video2Note:'Like what you see? Here’s how to get started.\nThe booking system is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your words and photos for you ($250 + GST). Either way, it’s yours to edit.',
         cta1:'See the Premium demo', cta1url:SVC_PREMIUM, cta2:'Start your free trial', cta2url:SVC_START,
         headline:'A website that moves — and takes bookings.',
@@ -3231,7 +3235,7 @@
         heroImage:SVC_IMG+'salon-hero.jpg', heroAlt:'A hair salon website with a full-screen animated hero, on a computer and a phone', heroLink:SVC_SALON,
         bandImage:SVC_IMG+'salon-layouts.jpg', bandAlt:'The salon website in four layouts: full screen, full width, photo right and photo left', bandLink:SVC_SALON, bandCaption:'Full screen, full width, or the photo on either side. One tap in the editor.',
         videoUrl:SVC_SVIDEO, videoThumb:SVC_STHUMB, videoTitle:'Watch the 1-minute salon tour',
-        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to start your free trial (2 min)', video2Pos:'end',
         video2Note:'Love the look? Here’s how to get started.\nOnline stylist booking is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your salon’s words and photos for you ($250 + GST). Either way, it’s yours to edit.',
         cta1:'See the salon demo', cta1url:SVC_SALON, cta2:'Try booking a stylist', cta2url:SVC_SBOOK,
         headline:'A website as stylish as your salon.',
@@ -3246,7 +3250,7 @@
       (function(){ var PR=svcPlan('Premium'); return P({ name:'Follow-up: see it working', desc:'For people who opened or clicked the intro: editor tour + setup video',
         eyebrow:'See it working', badge:T+'-DAY FREE TRIAL',
         heroImage:'', videoUrl:SVC_EVIDEO, videoThumb:SVC_ETHUMB, videoTitle:'Watch the 2-minute editor tour', videoPos:'hero',
-        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to start your free trial (2 min)', video2Pos:'end',
         video2Note:'Ready? You can be set up in minutes.\nOnline booking is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your words and photos for you ($250 + GST).',
         cta1:'Start your free trial', cta1url:SVC_START, cta2:'See the Premium demo', cta2url:SVC_PREMIUM,
         headline:'See exactly how it works.',
@@ -3261,7 +3265,7 @@
       (function(){ var PR=svcPlan('Premium'); return P({ name:'Follow-up for hair salons', desc:'Salon follow-up for people who opened or clicked: editor tour + setup video',
         eyebrow:'See it working', badge:T+'-DAY FREE TRIAL',
         heroImage:'', videoUrl:SVC_EVIDEO, videoThumb:SVC_ETHUMB, videoTitle:'Watch the 2-minute editor tour', videoPos:'hero',
-        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to get started', video2Pos:'end',
+        video2Url:SVC_GVIDEO, video2Thumb:SVC_GTHUMB, video2Title:'Watch how to start your free trial (2 min)', video2Pos:'end',
         video2Note:'Ready? You can be set up in minutes.\nOnline stylist booking is free to try for '+T+' days. For the website, choose: we connect it to your domain and you fill it in yourself ($40 + GST), or we load your salon’s words and photos for you ($250 + GST).',
         cta1:'Start your free trial', cta1url:SVC_START, cta2:'See the salon demo', cta2url:SVC_SALON,
         headline:'See exactly how your salon website works.',
