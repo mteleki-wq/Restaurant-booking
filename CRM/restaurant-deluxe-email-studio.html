@@ -301,7 +301,7 @@
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v63</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v64</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -564,6 +564,8 @@
               <div class="field"><label for="fSite">Website</label><input type="url" id="fSite" data-k="siteUrl"></div>
               <div class="field"><label for="fAddr">Business address</label><input type="text" id="fAddr" data-k="address"></div>
             </div>
+            <div class="field"><label for="fYt">YouTube channel (Subscribe button in the footer)</label>
+              <input type="url" id="fYt" data-k="ytUrl" placeholder="Leave empty to hide the YouTube button"></div>
             <label class="chk"><input type="checkbox" data-k="resendUnsub" id="fResendUnsub"> Use Resend's unsubscribe token</label>
             <div class="field"><label for="fUnsub">Unsubscribe link (when not using Resend)</label>
               <input type="url" id="fUnsub" data-k="unsubUrl"></div>
@@ -935,7 +937,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v63 \u00b7 Service free-trial invite with the 2-minute how-to video';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v64 \u00b7 YouTube channel link in every email footer';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -976,6 +978,7 @@
   var QUEUE_PAGE   = "https://webescapade.com/Queue-board/";   /* Scan & Queue landing page */
   var WAITLIST_TRY = "https://webescapade.com/Resto-order-test/waitlist.html?v=sunset-grill&w=769d94ba39f4";   /* live demo queue at Sunset Grill */
   var TRIAL_DAYS   = 14;   /* standard free trial */
+  var YT_CHANNEL = "https://www.youtube.com/@marcteleki2801";   /* Webescapade YouTube channel: shown in every email footer (Subscribe) */
   var RD_TOUR = "https://youtu.be/FE4Zdnh7T-U";   /* Restaurant Deluxe 2-minute full tour */
   var RD_TOUR_THUMB = "https://webescapade.com/Restaurant/tour-video-email.jpg";
   var RD_TOUR2 = {video2Url:RD_TOUR, video2Thumb:RD_TOUR_THUMB, video2Title:"Watch the 2-minute full tour", video2Pos:"end",
@@ -1016,7 +1019,7 @@
       heroImage:"", heroLink:"", heroAlt:"", bandImage:"", bandAlt:"", bandLink:"", bandCaption:"",
       videoUrl:"", videoTitle:"", videoThumb:"", videoPos:"hero",
       video2Url:"", video2Title:"", video2Thumb:"", video2Note:"", video2Pos:"end",
-      resendUnsub:true, unsubUrl:"",
+      resendUnsub:true, unsubUrl:"", ytUrl:YT_CHANNEL,
       subject:"", preheader:"", to:"", theme:"alt"
     }, o);
   }
@@ -1477,6 +1480,12 @@
       '&#9654;&nbsp;&nbsp;'+escKeepTags(title)+'</a></td></tr></table></td></tr></table>';
   }
 
+  /* ================= YOUTUBE CHANNEL (footer) ================= */
+  function ytSub(c){
+    var u=url(c.ytUrl); if(!u) return '';
+    if(/youtube\.com\/(@|channel\/|c\/|user\/)/.test(u) && !/sub_confirmation=/.test(u)) u+=(u.indexOf('?')<0?'?':'&')+'sub_confirmation=1';
+    return u;
+  }
   /* ================= EMAIL BUILDER ================= */
   function buildEmail(c){
     var mode=c.theme||'alt';
@@ -1731,6 +1740,14 @@
       '<td width="37" height="37" align="center" style="width:37px;height:37px;border-radius:10px;'+
       'background:'+A1+';background-image:'+GR+';font:800 13px '+F+';color:#fff;">WE</td>'+
       '<td style="padding-left:10px;font:700 16px '+F+';color:'+Fo.ink+';">Webescapade</td></tr></table>');
+    var yt=ytSub(c);
+    if(yt){
+      o.push('<div style="padding-top:16px;font:400 12px/19px '+F+';color:'+Fo.faint+';">Live demos, new features and practical ideas, on our YouTube channel</div>'+
+        '<table role="presentation" align="center" cellpadding="0" cellspacing="0" style="margin-top:10px;"><tr>'+
+        '<td align="center" style="border-radius:999px;background:#FF0000;">'+
+        '<a href="'+esc(yt)+'" style="display:inline-block;padding:9px 18px;font:700 12px '+F+';color:#ffffff;text-decoration:none;">'+
+        '&#9654;&nbsp;&nbsp;Subscribe on YouTube</a></td></tr></table>');
+    }
     var bits=[];
     if(c.phone)  bits.push('<a href="tel:'+esc(c.phone.replace(/\s/g,''))+'" style="color:'+Fo.faint+';">'+esc(c.phone)+'</a>');
     if(c.email)  bits.push('<a href="mailto:'+esc(c.email)+'" style="color:'+Fo.faint+';">'+esc(c.email)+'</a>');
@@ -1780,6 +1797,7 @@
     if(c.finalOn && c.finalHeading) L.push('', c.finalHeading.replace(/\n/g,' '));
     if(c.finalOn && c.finalCta && url(c.finalUrl)) L.push(c.finalCta+': '+url(c.finalUrl));
     L.push('', '\u2014');
+    if(ytSub(c)) L.push('Subscribe on YouTube for live demos and new features: '+ytSub(c), '');
     var f=[c.phone,c.email,c.siteUrl].filter(Boolean);
     if(f.length) L.push(f.join('  \u2022  '));
     if(c.address) L.push(c.address);
