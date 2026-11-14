@@ -366,6 +366,18 @@ section.s{padding:110px 0}
 .duo .ph2{width:46%;max-width:250px;border-radius:30px;background:#0d0c0b;padding:8px;box-shadow:0 40px 70px -30px rgba(0,0,0,.6)}
 .duo .ph2 img{border-radius:23px}
 .duo .ph2:nth-child(2){margin-top:60px}
+/*YT-SUB*/
+.ytsub{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.ytsub .ytlogo{flex:none;width:44px;height:32px}
+.ytsub .yttx{flex:1 1 220px;min-width:0}
+.ytsub .yttx b{display:block;font-size:16px;line-height:1.3}
+.ytsub .yttx span{display:block;font-size:14px;line-height:1.45;color:var(--muted);margin-top:2px}
+.ytsub .ytbt{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ytsub .ytgo{background:#FF0000;color:#fff;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.ytsub .ytgo:hover{background:#D90000}
+.ytsub .ytall{color:var(--ink);font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap}
+.ytsub .ytall:hover{text-decoration:underline}
+footer .ytf{white-space:nowrap}footer .ytf svg{width:17px;height:12px;vertical-align:-1px;margin-right:5px}
 /* videos */
 .vids{display:grid;gap:22px;margin-top:34px}
 @media(min-width:980px){.vids{grid-template-columns:1.6fr 1fr;align-items:start}}
@@ -568,6 +580,7 @@ body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cu
 <div class="vmain" id="vmain"><button aria-label="Play video" class="vp" id="vplay" type="button"><span id="vnow">The full tour (2 min)</span><span>▶ Play</span></button></div>
 <div><div class="vlist" id="vlist"></div></div>
 </div>
+<div class="ytsub rv"><svg class="ytlogo" viewBox="0 0 28 20" aria-hidden="true"><path fill="#FF0000" d="M27.4 3.1A3.5 3.5 0 0 0 25 .6C22.8 0 14 0 14 0S5.2 0 3 .6A3.5 3.5 0 0 0 .6 3.1C0 5.3 0 10 0 10s0 4.7.6 6.9A3.5 3.5 0 0 0 3 19.4c2.2.6 11 .6 11 .6s8.8 0 11-.6a3.5 3.5 0 0 0 2.4-2.5c.6-2.2.6-6.9.6-6.9s0-4.7-.6-6.9z"/><path fill="#fff" d="M11.2 14.3 18.5 10l-7.3-4.3z"/></svg><div class="yttx"><b data-edit="yt1">Webescapade on YouTube</b><span data-edit="yt2">Live demos, new features and practical ideas for your venue.</span></div><div class="ytbt"><a class="ytgo" href="https://www.youtube.com/@marcteleki2801?sub_confirmation=1" target="_blank" rel="noopener">Subscribe</a><a class="ytall" href="https://www.youtube.com/@marcteleki2801/videos" target="_blank" rel="noopener">All videos ↗</a></div></div>
 </div></section>
 <section class="s" data-sec="olive" id="website"><div class="w">
 <div class="split">
@@ -731,7 +744,7 @@ body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cu
 </form>
 </div>
 </div></section>
-<footer data-sec="terra"><div class="w"><span data-edit="e218">© Webescapade · Sydney, Australia</span><span data-edit="e219">Restaurant Deluxe · <a href="/service/">Service Deluxe</a> · <a href="/Queue-board/">Scan &amp; Queue</a> · <a href="/Restaurant/old.html">Previous page</a></span></div></footer>
+<footer data-sec="terra"><div class="w"><span data-edit="e218">© Webescapade · Sydney, Australia</span><span data-edit="e219">Restaurant Deluxe · <a href="/service/">Service Deluxe</a> · <a href="/Queue-board/">Scan &amp; Queue</a> · <a href="/Restaurant/old.html">Previous page</a> · <a class="ytf" href="https://www.youtube.com/@marcteleki2801?sub_confirmation=1" target="_blank" rel="noopener"><svg viewBox="0 0 28 20" aria-hidden="true"><path fill="#FF0000" d="M27.4 3.1A3.5 3.5 0 0 0 25 .6C22.8 0 14 0 14 0S5.2 0 3 .6A3.5 3.5 0 0 0 .6 3.1C0 5.3 0 10 0 10s0 4.7.6 6.9A3.5 3.5 0 0 0 3 19.4c2.2.6 11 .6 11 .6s8.8 0 11-.6a3.5 3.5 0 0 0 2.4-2.5c.6-2.2.6-6.9.6-6.9s0-4.7-.6-6.9z"/><path fill="#fff" d="M11.2 14.3 18.5 10l-7.3-4.3z"/></svg>YouTube</a></span></div></footer>
 <div class="chat" id="chat">
 <button aria-label="Open the chat assistant" class="chat-fab" id="chatFab" type="button"><span class="ci"><svg viewbox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span><span class="tx">Questions? Ask me</span></button>
 <div class="chat-tip" hidden="" id="chatTip"><button aria-label="Close" type="button">×</button><span>Got a question about prices, table ordering or Email Studio? I can answer in seconds.</span></div>
@@ -1032,6 +1045,7 @@ window.RD_HERO0 = { hpBar: (document.getElementById('hpBar')||{}).textContent, h
 (function(){
 var V=[
  {id:'FE4Zdnh7T-U',t:'The full tour (2 min)',d:'Website, bookings, ordering at the table and the digital queue, at a real restaurant.',img:'/Restaurant/tour-video-thumb.jpg'},
+ {id:'tKq0stG5Ym0',t:'NEW: Restaurant Deluxe in 35 seconds',d:'A guest scans the QR code: ordering, the kitchen, bookings, the queue and Email Studio.',img:'/Restaurant/img/trailer-video-thumb.jpg'},
  {id:'qxH-vK9O28s',t:'NEW: Email Studio',d:'Send your new menu, an event or an offer to your guests in a few minutes.',img:'/Restaurant/email-studio-video-thumb.jpg'},
  {id:'CQgsbNhttqw',t:'One menu. Everywhere.',d:'The new website and its live menu, connected to ordering at the table.',img:'/Restaurant/restaurant-deluxe-promo-email.jpg'},
  {id:'0Drr6G2AsE8',t:'The live menu',d:'Change a dish once — the website and every table update straight away.',img:'/Restaurant/live-menu-video-email.jpg'},
