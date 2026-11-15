@@ -1487,6 +1487,7 @@
   /* ================= YOUTUBE CHANNEL (footer) ================= */
   function ytSub(c){
     var u=url(c.ytUrl); if(!u) return '';
+    u=u.replace('@marcteleki2801','@webescapadesydney');   /* old handle, changed Nov 2026 */
     if(/youtube\.com\/(@|channel\/|c\/|user\/)/.test(u) && !/sub_confirmation=/.test(u)) u+=(u.indexOf('?')<0?'?':'&')+'sub_confirmation=1';
     return u;
   }
