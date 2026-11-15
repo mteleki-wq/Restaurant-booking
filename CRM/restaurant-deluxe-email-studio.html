@@ -38,6 +38,8 @@
   .brand p{margin:0;font-family:var(--fmono);font-size:10.5px;letter-spacing:.16em;
            text-transform:uppercase;color:var(--faint)}
   .top .spacer{flex:1 1 auto}
+  a.pill.navlink{text-decoration:none;color:inherit;cursor:pointer}
+  a.pill.navlink:hover{border-color:rgba(255,255,255,.35)}
   .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;
     border:1px solid var(--line);font-family:var(--fmono);font-size:11px;letter-spacing:.1em;
     text-transform:uppercase;color:var(--muted);background:var(--glass)}
@@ -300,8 +302,10 @@
       <button type="button" data-prod="service">Service Deluxe</button>
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
+    <a class="pill navlink" id="crmLink" href="venue-crm.html?prod=restaurant#campaigns" target="rd-venue-crm" title="Open the CRM: campaign results, pipeline and venue health">📊 CRM &amp; results</a>
+    <a class="pill navlink" href="../Control-room/" title="Back to the Control Room">Control Room</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v64</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v65</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -937,7 +941,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v64 \u00b7 YouTube channel link in every email footer';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v65 \u00b7 Links to the CRM and Control Room in the header';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -3342,6 +3346,7 @@
     $('#prodName').textContent=PROD_NAME[PRODUCT]; $('#prodEyebrow').textContent=PROD_NAME[PRODUCT];
     document.title=PROD_NAME[PRODUCT]+' — Email Studio';
     var sl=document.getElementById('salesLink'); if(sl) sl.href=SALES_PAGE[PRODUCT];
+    var cl=document.getElementById('crmLink'); if(cl) cl.href='venue-crm.html?prod='+PRODUCT+'#campaigns';
     var pn=document.getElementById('pkProdNote'); if(pn) pn.textContent=PROD_NAME[PRODUCT]+' list.';
     try{ audRecall(); }catch(e){}
   }
@@ -3434,6 +3439,7 @@
      =================================================================== */
   var K_AI='rdes.ai', K_HANDOFF='rd.handoff';
   setTimeout(function(){
+    try{ var qp=new URLSearchParams(location.search).get('prod'); if(qp==='service'||qp==='restaurant') store.set(K_PROD,qp); }catch(e){}
     try{ if(store.get(K_PROD)==='service') switchProduct('service',true); else { paintProduct(); pfShow(); } }catch(e){}
     if(SET.secret) pfLoad(true);
   },0);
