@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voice assistant demo | Service Deluxe</title>
+<meta name="description" content="Talk to an AI receptionist: ask about services and prices, hear real free times and book an appointment by voice. A Service Deluxe showcase.">
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E1512; --bg2:#131D18; --panel:#18241E; --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.06);
+  --ink:#F3F1EA; --muted:#A9B4AD; --faint:#74817A;
+  --accent:#7FD1A8; --accent-ink:#0C1F16; --warm:#F2C078; --danger:#F08A7B;
+  --fh:"Instrument Serif",Georgia,serif; --fb:"Manrope",system-ui,-apple-system,Segoe UI,sans-serif;
+}
+body[data-b="northside-medical"]{--accent:#8CC4F5;--accent-ink:#0B1B2B}
+body[data-b="brightside-dental"]{--accent:#9BE0E0;--accent-ink:#0A2222}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:radial-gradient(1200px 700px at 50% -10%,#1B2A22 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font:400 16px/1.55 var(--fb);min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.w{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{display:flex;align-items:center;gap:12px;padding:16px 0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;letter-spacing:-.01em}
+.brand i{width:30px;height:30px;border-radius:9px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:400 19px var(--fh);font-style:normal}
+.tag{margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warm);border:1px solid rgba(242,192,120,.35);border-radius:999px;padding:5px 10px;white-space:nowrap}
+.hero{text-align:center;padding:14px 0 6px}
+.hero h1{font:400 clamp(34px,6.2vw,60px)/1.02 var(--fh);margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+.hero h1 em{color:var(--accent)}
+.hero p{margin:0 auto;max-width:60ch;color:var(--muted);text-wrap:pretty}
+.pick{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:20px 0 0}
+.pick button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;color:var(--muted)}
+.pick button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.stage{display:grid;gap:18px;margin:22px 0 28px}
+@media(min-width:900px){.stage{grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:stretch}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:24px}
+/* ---- the talker ---- */
+.talk{padding:26px 20px 22px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.who{font-size:13px;color:var(--muted)} .who b{color:var(--ink)}
+.orb{--lvl:0;position:relative;width:176px;height:176px;margin:22px 0 16px;border-radius:50%;border:0;cursor:pointer;background:radial-gradient(circle at 35% 30%,#fff3,transparent 45%),var(--accent);color:var(--accent-ink);display:grid;place-items:center;box-shadow:0 20px 60px rgba(0,0,0,.45);transition:transform .2s}
+.orb:hover{transform:scale(1.02)}
+.orb:focus-visible{outline:3px solid #fff;outline-offset:5px}
+.orb:before,.orb:after{content:"";position:absolute;inset:-12px;border-radius:50%;border:2px solid var(--accent);opacity:0;pointer-events:none}
+.orb svg{width:60px;height:60px}
+.orb .lbl{position:absolute;bottom:26px;left:0;right:0;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+body[data-s="listening"] .orb:before{animation:ring 1.6s ease-out infinite}
+body[data-s="listening"] .orb:after{animation:ring 1.6s .8s ease-out infinite}
+body[data-s="thinking"] .orb{animation:breathe 1.1s ease-in-out infinite}
+body[data-s="speaking"] .orb{animation:talk .55s ease-in-out infinite alternate}
+@keyframes ring{0%{transform:scale(.92);opacity:.7}100%{transform:scale(1.28);opacity:0}}
+@keyframes breathe{50%{transform:scale(.94);filter:saturate(.7)}}
+@keyframes talk{from{transform:scale(1)}to{transform:scale(1.06)}}
+.status{min-height:26px;font-weight:700}
+.heard{min-height:48px;color:var(--muted);font-size:15px;max-width:34ch;margin:6px auto 0;font-style:italic}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer}
+.btn:hover{border-color:rgba(255,255,255,.3)}
+.btn[hidden]{display:none}
+.try{margin-top:18px;width:100%;border-top:1px solid var(--line2);padding-top:14px;text-align:left}
+.try h3{margin:0 0 8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.try button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:7px 0;color:var(--ink);cursor:pointer;font-size:15px}
+.try button:before{content:"“"} .try button:after{content:"”"}
+.try button:hover{color:var(--accent)}
+/* ---- the conversation ---- */
+.convo{display:flex;flex-direction:column;min-height:420px;max-height:640px;overflow:hidden}
+.convo h2{margin:0;padding:16px 20px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--line2)}
+.log{flex:1;overflow:auto;padding:16px 16px 6px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:86%;padding:10px 14px;border-radius:18px;font-size:15.5px;overflow-wrap:anywhere}
+.m.u{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:6px}
+.m.a{align-self:flex-start;background:rgba(255,255,255,.07);border-bottom-left-radius:6px}
+.m.sys{align-self:center;background:none;color:var(--faint);font-size:13px;text-align:center;max-width:100%}
+.done{align-self:stretch;border:1px solid var(--accent);border-radius:18px;padding:14px 16px;background:rgba(127,209,168,.08)}
+.done b{display:block;font:400 24px/1.15 var(--fh);margin:2px 0 6px}
+.done small{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.done span{display:block;color:var(--muted);font-size:14.5px}
+.done a{display:inline-block;margin-top:8px;font-size:14px;font-weight:700;color:var(--accent)}
+form.type{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line2)}
+form.type input{flex:1;min-width:0;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:11px 16px;color:var(--ink);font:inherit}
+form.type input::placeholder{color:var(--faint)}
+form.type input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+form.type button{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:0 18px;font-weight:800;cursor:pointer}
+.notes{display:grid;gap:12px;margin:0 0 40px}
+@media(min-width:760px){.notes{grid-template-columns:repeat(3,1fr)}}
+.note{border:1px solid var(--line2);border-radius:18px;padding:16px 18px}
+.note b{display:block;margin-bottom:4px}
+.note span{color:var(--muted);font-size:14.5px}
+footer{border-top:1px solid var(--line2);padding:18px 0 30px;color:var(--faint);font-size:13.5px;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
+footer a{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-b="serenity-spa" data-s="idle">
+<div class="w">
+  <header class="top">
+    <a class="brand" href="/service/"><i>S</i><span>Service Deluxe</span></a>
+    <span class="tag">Voice demo</span>
+  </header>
+
+  <section class="hero">
+    <h1>Talk to the front desk. <em>It books for you.</em></h1>
+    <p>An AI receptionist you speak to. Ask about prices and opening hours, hear the real free times, and make a booking out loud. Pick a business and tap the microphone.</p>
+    <div class="pick" id="pick" role="group" aria-label="Choose a demo business">
+      <button type="button" data-b="serenity-spa" aria-pressed="true">Day spa</button>
+      <button type="button" data-b="northside-medical" aria-pressed="false">Medical practice</button>
+      <button type="button" data-b="brightside-dental" aria-pressed="false">Dental practice</button>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="card talk">
+      <div class="who" id="who">&nbsp;</div>
+      <button class="orb" id="orb" type="button" aria-label="Start talking">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>
+        <span class="lbl" id="orbLbl">Tap to talk</span>
+      </button>
+      <div class="status" id="status" aria-live="polite">Tap the microphone and say hello</div>
+      <div class="heard" id="heard"></div>
+      <div class="ctl">
+        <button class="btn" id="stop" type="button" hidden>■ End the conversation</button>
+        <button class="btn" id="mute" type="button" aria-pressed="false">🔊 Voice on</button>
+      </div>
+      <div class="try"><h3>Try saying</h3><div id="tries"></div></div>
+    </div>
+
+    <div class="card convo">
+      <h2>The conversation</h2>
+      <div class="log" id="log" aria-live="polite"></div>
+      <form class="type" id="type" autocomplete="off">
+        <input id="txt" type="text" placeholder="Or type here instead of talking" aria-label="Type a message">
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="notes">
+    <div class="note"><b>It really books</b><span>The assistant reads the live calendar and puts the appointment straight in. These are demo businesses, so try it freely.</span></div>
+    <div class="note"><b>A receptionist, not a clinician</b><span>It answers about services, prices, hours and times. It won’t give medical or dental advice; it offers an appointment instead.</span></div>
+    <div class="note"><b>Works in your browser</b><span>Best in Chrome, Edge or Safari, with the microphone allowed. In other browsers you can type and still hear the answers.</span></div>
+  </section>
+
+  <footer><span>A Service Deluxe showcase by Webescapade. Demo businesses and demo bookings only.</span><span><a href="/service/">About Service Deluxe</a> · <a id="calLink" href="/service/service-staff.html?venue=serenity-spa">Staff calendar</a></span></footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var CFG={ url:"https://tehxobdokbvqtwtgqzrh.supabase.co",
+    key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" };
+  var BIZ={
+    "serenity-spa":{name:"Serenity Day Spa",bot:"Ivy",tries:["When’s your next 60-minute massage?","How much is a facial?","Are you open on Sunday?","Book me a relaxation massage tomorrow morning"]},
+    "northside-medical":{name:"Northside Medical",bot:"Max",tries:["I need to see a doctor this week","How long is a standard consult?","What time do you open on Saturday?","Book me the first appointment tomorrow"]},
+    "brightside-dental":{name:"Brightside Dental",bot:"Pip",tries:["How much is a check-up and clean?","Do you have anything on Thursday afternoon?","Which dentists work there?","Book me a check-up next week"]}
+  };
+  var $=function(id){ return document.getElementById(id); };
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, synth=window.speechSynthesis;
+  var st={ b:"serenity-spa", msgs:[], on:false, mute:false, busy:false, rec:null, sid:"", voice:null, speaking:false };
+  function newSid(){ var a=new Uint8Array(12); (window.crypto||{getRandomValues:function(x){for(var i=0;i<x.length;i++)x[i]=Math.random()*256;}}).getRandomValues(a); return "v-"+Array.prototype.map.call(a,function(n){return ("0"+n.toString(16)).slice(-2);}).join(""); }
+  function state(s,label){ document.body.dataset.s=s; if(label!=null) $("status").textContent=label; $("orbLbl").textContent= s==="listening"?"Listening":s==="thinking"?"One moment":s==="speaking"?"Tap to interrupt":"Tap to talk"; $("orb").setAttribute("aria-label", s==="idle"?"Start talking":"Microphone: "+s); }
+  function add(cls,text){ var d=document.createElement("div"); d.className="m "+cls; d.textContent=text; $("log").appendChild(d); $("log").scrollTop=$("log").scrollHeight; return d; }
+  function money(c){ return c==null?"":"$"+(c/100).toFixed(c%100?2:0); }
+
+  /* ---------- voice out ---------- */
+  function pickVoice(){
+    if(!synth) return; var vs=synth.getVoices()||[]; if(!vs.length) return;
+    var pref=[/en[-_]AU/i,/en[-_]GB/i,/en[-_]NZ/i,/^en/i], nice=/(Karen|Catherine|Natural|Google|Samantha|Serena|Libby|Sonia)/i, best=null;
+    for(var i=0;i<pref.length&&!best;i++){ var m=vs.filter(function(v){ return pref[i].test(v.lang); }); if(m.length) best=m.filter(function(v){return nice.test(v.name);})[0]||m[0]; }
+    st.voice=best||vs[0];
+  }
+  if(synth){ pickVoice(); if(synth.addEventListener) synth.addEventListener("voiceschanged",pickVoice); }
+  function speak(text,done){
+    if(!synth||st.mute||!text){ done&&done(); return; }
+    try{ synth.cancel(); }catch(e){}
+    var bits=text.match(/[^.!?]+[.!?]*\s*/g)||[text], left=bits.length, finished=false;   // short pieces: long ones get cut off in Chrome
+    function end(){ if(finished) return; finished=true; st.speaking=false; clearTimeout(guard); done&&done(); }
+    var guard=setTimeout(end, 4000+text.length*90);
+    st.speaking=true; state("speaking",BIZ[st.b].bot+" is speaking");
+    bits.forEach(function(b){ var u=new SpeechSynthesisUtterance(b.trim()); if(st.voice){ u.voice=st.voice; u.lang=st.voice.lang; } else u.lang="en-AU"; u.rate=1.03; u.pitch=1;
+      u.onend=u.onerror=function(){ if(--left<=0) end(); }; synth.speak(u); });
+  }
+  function hush(){ try{ synth&&synth.cancel(); }catch(e){} st.speaking=false; }
+
+  /* ---------- voice in ---------- */
+  function listen(){
+    if(!st.on||st.busy) return;
+    if(!SR){ state("idle","Type your question below (this browser can’t listen)"); return; }
+    try{ st.rec&&st.rec.abort(); }catch(e){}
+    var r=new SR(), finalText="", got=false; st.rec=r;
+    r.lang="en-AU"; r.interimResults=true; r.continuous=false; r.maxAlternatives=1;
+    r.onstart=function(){ state("listening","Listening…"); $("heard").textContent=""; };
+    r.onresult=function(ev){ var interim=""; for(var i=ev.resultIndex;i<ev.results.length;i++){ var t=ev.results[i][0].transcript; if(ev.results[i].isFinal) finalText+=t; else interim+=t; } $("heard").textContent=(finalText+" "+interim).trim(); };
+    r.onerror=function(ev){ got=true;
+      if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){ stop(); state("idle","Microphone is blocked. Allow it in your browser, or type below."); }
+      else if(ev.error==="no-speech"){ if(st.on){ state("idle","I didn’t hear anything. Tap to talk."); st.on=false; $("stop").hidden=true; } }
+      else if(ev.error!=="aborted"){ state("idle","Couldn’t hear that. Tap to try again."); st.on=false; $("stop").hidden=true; } };
+    r.onend=function(){ if(st.rec===r) st.rec=null; var t=finalText.trim(); if(t){ ask(t); } else if(!got&&st.on&&!st.busy&&!st.speaking){ st.on=false; $("stop").hidden=true; state("idle","Tap the microphone to keep talking"); } };
+    try{ r.start(); }catch(e){ state("idle","Tap the microphone to talk"); }
+  }
+
+  /* ---------- brain ---------- */
+  function ask(text){
+    if(st.busy||!text) return; st.busy=true; hush(); try{ st.rec&&st.rec.abort(); }catch(e){}
+    add("u",text); $("heard").textContent=""; st.msgs.push({role:"user",content:text}); state("thinking","One moment…");
+    fetch(CFG.url+"/functions/v1/svc-voice",{method:"POST",headers:{apikey:CFG.key,Authorization:"Bearer "+CFG.key,"Content-Type":"application/json"},
+      body:JSON.stringify({venue:st.b,session:st.sid,messages:st.msgs.slice(-18)})})
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if(!d||!d.ok||!d.reply) throw new Error((d&&d.error)||"failed"); return d; })
+    .catch(function(){ return {reply:"Sorry, I’m having trouble right now. Please try again in a moment.",fail:true}; })
+    .then(function(d){
+      st.busy=false; if(!d.fail) st.msgs.push({role:"assistant",content:d.reply}); else st.msgs.pop();
+      add("a",d.reply); if(d.booked) booked(d.booked);
+      speak(d.reply,function(){ if(st.on) listen(); else state("idle","Tap the microphone to keep talking"); });
+      if(!synth||st.mute) state(st.on?"listening":"idle");
+    });
+  }
+  function booked(b){
+    var d=document.createElement("div"); d.className="done";
+    var s=document.createElement("small"); s.textContent="Booked · "+b.ref; var t=document.createElement("b"); t.textContent=b.service;
+    var w=document.createElement("span"); w.textContent=b.date+" at "+b.time+(b.provider?" with "+b.provider:"")+" · "+b.duration_min+" min"+(b.price_cents?" · "+money(b.price_cents):"");
+    var n=document.createElement("span"); n.textContent="Under the name "+b.name+". It’s in the "+b.venue+" calendar now.";
+    var a=document.createElement("a"); a.href="/service/service-staff.html?venue="+encodeURIComponent(st.b); a.target="_blank"; a.rel="noopener"; a.textContent="See it in the staff calendar ↗";
+    d.appendChild(s); d.appendChild(t); d.appendChild(w); d.appendChild(n); d.appendChild(a); $("log").appendChild(d); $("log").scrollTop=$("log").scrollHeight;
+  }
+
+  /* ---------- controls ---------- */
+  function start(){
+    st.on=true; $("stop").hidden=false;
+    if(!st.msgs.length&&!$("log").children.length){ var B=BIZ[st.b], hi="Hi, this is "+B.bot+" at "+B.name+". How can I help you today?"; add("a",hi); speak(hi,listen); if(!synth||st.mute) listen(); }
+    else listen();
+  }
+  function stop(){ st.on=false; hush(); try{ st.rec&&st.rec.abort(); }catch(e){} $("stop").hidden=true; state("idle","Tap the microphone to talk"); }
+  function choose(b){
+    stop(); st.b=b; st.msgs=[]; st.sid=newSid(); document.body.dataset.b=b; $("log").innerHTML=""; $("heard").textContent="";
+    var B=BIZ[b]; $("who").innerHTML="You’re talking to <b></b>"; $("who").querySelector("b").textContent=B.bot+" at "+B.name;
+    Array.prototype.forEach.call($("pick").children,function(x){ x.setAttribute("aria-pressed",x.dataset.b===b?"true":"false"); });
+    $("tries").innerHTML=""; B.tries.forEach(function(t){ var x=document.createElement("button"); x.type="button"; x.textContent=t; x.onclick=function(){ st.on=!!SR; $("stop").hidden=!SR; ask(t); }; $("tries").appendChild(x); });
+    $("calLink").href="/service/service-staff.html?venue="+encodeURIComponent(b);
+    state("idle","Tap the microphone and say hello");
+  }
+  $("orb").onclick=function(){
+    var s=document.body.dataset.s;
+    if(s==="speaking"){ hush(); st.on=true; $("stop").hidden=false; listen(); }
+    else if(s==="listening"){ try{ st.rec&&st.rec.stop(); }catch(e){} }
+    else if(s==="thinking"){ /* wait */ }
+    else start();
+  };
+  $("stop").onclick=stop;
+  $("mute").onclick=function(){ st.mute=!st.mute; this.setAttribute("aria-pressed",st.mute?"true":"false"); this.textContent=st.mute?"🔇 Voice off":"🔊 Voice on"; if(st.mute) hush(); };
+  $("pick").onclick=function(e){ var b=e.target.closest("button[data-b]"); if(b&&b.dataset.b!==st.b) choose(b.dataset.b); };
+  $("type").onsubmit=function(e){ e.preventDefault(); var t=$("txt").value.trim(); if(!t) return; $("txt").value=""; ask(t); };
+  window.addEventListener("pagehide",function(){ hush(); });
+  var q=new URLSearchParams(location.search).get("b"); choose(BIZ[q]?q:"serenity-spa");
+  if(!SR) add("sys","This browser can’t listen through the microphone. Type your questions and you’ll still hear the answers.");
+})();
+</script>
+</body>
+</html>
