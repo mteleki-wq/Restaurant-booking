@@ -60,6 +60,11 @@ body[data-s="speaking"] .orb{animation:talk .55s ease-in-out infinite alternate}
 .btn{border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:9px 15px;font-size:14px;font-weight:700;cursor:pointer}
 .btn:hover{border-color:rgba(255,255,255,.3)}
 .btn[hidden]{display:none}
+.vrow{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:var(--muted)}
+.vrow select{background:rgba(255,255,255,.05);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;max-width:230px}
+.vrow select option{color:#111}
+.vtip{margin:8px 0 0;font-size:12.5px;color:var(--faint)}
+.vtip[hidden],.vrow[hidden]{display:none}
 .try{margin-top:18px;width:100%;border-top:1px solid var(--line2);padding-top:14px;text-align:left}
 .try h3{margin:0 0 8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 .try button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:7px 0;color:var(--ink);cursor:pointer;font-size:15px}
@@ -123,6 +128,8 @@ footer a{color:var(--muted)}
         <button class="btn" id="stop" type="button" hidden>■ End the conversation</button>
         <button class="btn" id="mute" type="button" aria-pressed="false">🔊 Voice on</button>
       </div>
+      <div class="vrow" id="voiceRow" hidden><label for="voice">Voice</label><select id="voice"></select></div>
+      <p class="vtip" id="voiceTip" hidden>For the most natural voice, open this page in Microsoft Edge.</p>
       <div class="try"><h3>Try saying</h3><div id="tries"></div></div>
     </div>
 
@@ -164,11 +171,23 @@ footer a{color:var(--muted)}
   function money(c){ return c==null?"":"$"+(c/100).toFixed(c%100?2:0); }
 
   /* ---------- voice out ---------- */
+  var JUNK=/^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Fred|Junior|Kathy|Ralph|Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley)\b/i;
+  function score(v){   // the most natural-sounding English voice this device has
+    var n=v.name||"", l=(v.lang||"").replace("_","-"), p=0;
+    if(/natural|neural/i.test(n)) p+=100; else if(/premium/i.test(n)) p+=80; else if(/enhanced/i.test(n)) p+=70; else if(/siri/i.test(n)) p+=60; else if(/^google/i.test(n)) p+=50; else if(/karen|samantha|daniel|serena|moira|catherine|libby|sonia|natasha/i.test(n)) p+=20;
+    if(/^en-AU/i.test(l)) p+=30; else if(/^en-GB/i.test(l)) p+=20; else if(/^en-NZ/i.test(l)) p+=15; else if(/^en-US/i.test(l)) p+=10;
+    if(v.localService===false) p+=15;
+    if(/\b(male|william|james|ryan|guy|daniel)\b/i.test(n)&&!/female/i.test(n)) p-=5;
+    return p;
+  }
   function pickVoice(){
-    if(!synth) return; var vs=synth.getVoices()||[]; if(!vs.length) return;
-    var pref=[/en[-_]AU/i,/en[-_]GB/i,/en[-_]NZ/i,/^en/i], nice=/(Karen|Catherine|Natural|Google|Samantha|Serena|Libby|Sonia)/i, best=null;
-    for(var i=0;i<pref.length&&!best;i++){ var m=vs.filter(function(v){ return pref[i].test(v.lang); }); if(m.length) best=m.filter(function(v){return nice.test(v.name);})[0]||m[0]; }
-    st.voice=best||vs[0];
+    if(!synth) return; var vs=(synth.getVoices()||[]).filter(function(v){ return /^en/i.test(v.lang||"")&&!JUNK.test(v.name||""); });
+    if(!vs.length) return; vs.sort(function(a,b){ return score(b)-score(a); });
+    var saved=""; try{ saved=localStorage.getItem("voiceDemo.voice")||""; }catch(e){}
+    st.voice=vs.filter(function(v){ return v.name===saved; })[0]||vs[0];
+    var sel=$("voice"); sel.innerHTML=""; vs.slice(0,14).forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=v.name.replace(/^Microsoft |\s*Online \(Natural\)|\s*-\s*English.*$/g,"")+" ("+(v.lang||"").replace("_","-").slice(3,5)+")"+(score(v)>=100?" · natural":score(v)>=60?" · good":""); if(v===st.voice) o.selected=true; sel.appendChild(o); });
+    $("voiceRow").hidden=false; $("voiceTip").hidden=score(vs[0])>=100;
+    sel.onchange=function(){ st.voice=vs.filter(function(v){ return v.name===sel.value; })[0]||st.voice; try{ localStorage.setItem("voiceDemo.voice",st.voice.name); }catch(e){} var was=st.on; st.on=false; speak("Hi, this is how I sound. How can I help you today?",function(){ st.on=was; state("idle","Tap the microphone to talk"); }); };
   }
   if(synth){ pickVoice(); if(synth.addEventListener) synth.addEventListener("voiceschanged",pickVoice); }
   function speak(text,done){
@@ -178,7 +197,7 @@ footer a{color:var(--muted)}
     function end(){ if(finished) return; finished=true; st.speaking=false; clearTimeout(guard); done&&done(); }
     var guard=setTimeout(end, 4000+text.length*90);
     st.speaking=true; state("speaking",BIZ[st.b].bot+" is speaking");
-    bits.forEach(function(b){ var u=new SpeechSynthesisUtterance(b.trim()); if(st.voice){ u.voice=st.voice; u.lang=st.voice.lang; } else u.lang="en-AU"; u.rate=1.03; u.pitch=1;
+    bits.forEach(function(b){ var u=new SpeechSynthesisUtterance(b.trim()); if(st.voice){ u.voice=st.voice; u.lang=st.voice.lang; } else u.lang="en-AU"; u.rate=(st.voice&&/natural|neural|google/i.test(st.voice.name))?1:1.04; u.pitch=1;
       u.onend=u.onerror=function(){ if(--left<=0) end(); }; synth.speak(u); });
   }
   function hush(){ try{ synth&&synth.cancel(); }catch(e){} st.speaking=false; }
