@@ -1,1005 +1,386 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Function centre demo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Function Centre Website, Availability &amp; Online Quotes | Function Deluxe</title>
+<meta name="description" content="A function centre website you edit yourself, live availability for every room, instant estimates priced by day and public holiday, online date holds and an AI events assistant. 14 days free.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://webescapade.com/Function-centre/">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-48.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Webescapade"><meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://webescapade.com/Function-centre/">
+<meta property="og:title" content="Function Deluxe — your function centre, booked online">
+<meta property="og:description" content="Website, live availability, instant estimates, online holds and an AI events assistant for function centres. 14 days free.">
+<meta property="og:image" content="https://webescapade.com/Function-centre/img/video-thumb.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="geo.region" content="AU-NSW"><meta name="geo.placename" content="Sydney">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"SoftwareApplication","name":"Function Deluxe","applicationCategory":"BusinessApplication","operatingSystem":"Web",
+  "description":"Website, live room availability, instant estimates, online date holds and an AI events assistant for function centres.",
+  "url":"https://webescapade.com/Function-centre/","provider":{"@id":"https://webescapade.com/#org"},
+  "offers":[{"@type":"Offer","name":"Function Deluxe","price":"129","priceCurrency":"AUD"},{"@type":"Offer","name":"Function Deluxe + Ava","price":"169","priceCurrency":"AUD"}]},
+ {"@type":"VideoObject","name":"Function Deluxe — a 2-minute tour","description":"How Function Deluxe works for a function centre: website, availability, estimates with the look preview, online holds and Ava the AI events assistant.",
+  "thumbnailUrl":"https://webescapade.com/Function-centre/img/video-thumb.jpg","uploadDate":"2026-11-20","embedUrl":"https://www.youtube.com/embed/22rezCEm5vU","contentUrl":"https://youtu.be/22rezCEm5vU"}
+]}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* VOICE: formal, warm, celebratory — a venue's events brochure that also takes bookings
-   IDEA: the venue's printed function pack — rooms, menus, a price sheet, the events diary
-   PICTURE: draped ballroom, crystal room and terrace scenes in a slow crossfading hero, plus a filterable gallery
-   COLOUR and TYPE: claret #4a1528 bands, blush #f4e4dc support, teal #127a7a for live/free states; Cormorant Garamond titles + Manrope text
-   LAYOUT: full-bleed hero, rooms, function types, diary calendar, estimator with large live result, FAQ, footer */
-:root{color-scheme:light dark;
---bg:light-dark(#fbf8f5,#1a0c12);--ink:light-dark(#2a1219,#f6ebe6);--soft:light-dark(#6d5560,#c9b2ba);
---card:light-dark(#ffffff,#26131b);--line:light-dark(#ead9d2,#3d2330);
---btn:light-dark(#4a1528,#c46b85);--btnInk:#fff;--band:#4a1528;--bandInk:#f8ebe6;--bandSoft:#e4c9cf;--glyph:#f2c6b8;--foot:#24080f;--footInk:#e8d3d8;--fh:"Cormorant Garamond",Georgia,serif;--fb:Manrope,system-ui,sans-serif;--h1s:1;--h1a:1;--blush:light-dark(#f4e4dc,#331a24);--teal:light-dark(#127a7a,#4cc2bd);
---held:light-dark(#b8741a,#e9a94f);--booked:light-dark(#a3394f,#e07a8f);--free:var(--teal)}
-:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
-*{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--fb);overflow-x:clip}
-h1,h2,h3{font-family:var(--fh);font-weight:600;line-height:1.05;text-wrap:balance;margin:0 0 .4em}
-h2{font-size:clamp(32px,4.4vw,48px)}h3{font-size:26px}
-p{margin:0 0 1em}a{color:inherit}
-.band{padding:clamp(40px,6vw,88px) max(5vw,16px)}
-.wrap{max-width:1240px;margin:0 auto}
-.lead{color:var(--soft);max-width:62ch;font-size:17px}
-button,input,select,textarea{font:inherit;font-size:16px;color:inherit}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;border:1px solid transparent;background:var(--btn);color:var(--btnInk);font-weight:600;cursor:pointer;text-decoration:none}
-.btn:hover{filter:brightness(1.12)}.btn.ghost{background:transparent;border-color:currentColor;color:inherit}
-.btn.light{background:#fff;color:#2a1219}.btn:disabled{opacity:.45;cursor:not-allowed}
-:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+:root{
+  --bg:#F8F3EE; --panel:#FFFFFF; --soft:#F1E8E0; --ink:#21151A; --muted:#6E6066; --faint:#9A8C92; --line:#E7DCD3;
+  --bur:#5C1E2E; --bur2:#7A2E3E; --blush:#F3E2E3; --champ:#E9D3B4; --gold:#B8935A; --ok:#2F7A55;
+  --fs:'Cormorant Garamond',Georgia,serif; --fd:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fd);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block} a{color:inherit}
+.w{max-width:1160px;margin:0 auto;padding:0 22px}
+h1,h2,h3{font-family:var(--fs);font-weight:500;line-height:1.05;letter-spacing:-.005em;margin:0}
+h1{font-size:clamp(46px,7vw,86px)} h2{font-size:clamp(36px,4.6vw,56px)} h3{font-size:27px;line-height:1.15}
+h1 em,h2 em{font-style:italic;color:var(--bur2)}
+.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--bur2);margin-bottom:14px}
+.lead{font-size:clamp(17px,1.6vw,19.5px);color:var(--muted);max-width:640px}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:15px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;font-family:var(--fd);transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px)} .btn.dark{background:var(--bur);color:#fff} .btn.dark:hover{background:var(--bur2)}
+.btn.line{border-color:currentColor;background:transparent} .btn.light{background:#fff;color:var(--bur)}
+.ar{transition:transform .15s} .btn:hover .ar{transform:translateX(3px)}
 /* nav */
-nav.top{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;gap:20px;padding:14px max(5vw,16px);color:#fff;transition:background .3s}
-nav.top.solid{background:color-mix(in srgb,var(--foot) 94%,transparent);backdrop-filter:blur(8px)}
-.brand{font-family:var(--fh);font-size:26px;font-weight:700;letter-spacing:.01em;margin-right:auto}
-nav.top .links{display:flex;gap:22px;flex-wrap:wrap}nav.top .links a{text-decoration:none;font-weight:500;opacity:.9}
-@media(max-width:820px){nav.top .links{display:none}}
-@media(max-width:520px){.brand{font-size:21px}nav.top .btn{min-height:40px;padding:0 14px;font-size:14px;white-space:nowrap}}
+nav.top{position:fixed;inset:0 0 auto;z-index:50;transition:background .25s,box-shadow .25s}
+nav.top .w{display:flex;align-items:center;gap:20px;height:70px}
+nav.top.s{background:rgba(248,243,238,.94);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff} nav.top.s .brand{color:var(--ink)}
+.mark{width:36px;height:36px;border-radius:10px;background:var(--champ);color:var(--bur);display:grid;place-items:center;font-weight:800;font-size:13px;letter-spacing:.04em}
+.brand b{display:block;font-size:15px;line-height:1.1} .brand small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;font-weight:700}
+.links{margin-left:auto;display:flex;gap:22px;font-size:14px;font-weight:600}
+.links a{text-decoration:none;color:#fff;opacity:.88} nav.top.s .links a{color:var(--ink)}
+nav .btn{padding:10px 18px;font-size:14px} nav.top:not(.s) .btn.dark{background:#fff;color:var(--bur)}
+@media (max-width:860px){.links{display:none} nav .btn{margin-left:auto}}
 /* hero */
-.hero{position:relative;color:#fff;background:var(--foot)}
-.stick{position:relative;min-height:var(--hh,min(92vh,820px));display:grid;align-items:end;overflow:hidden}
-.hero.scroll{height:calc(var(--scr,4)*100vh)}.hero.scroll .stick{position:sticky;top:0;height:100vh;min-height:0}
-.slides{position:absolute;inset:0;filter:brightness(var(--pa,1))}
-.slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity 1.6s ease}
-.slides img.on{opacity:1;animation:kb var(--dur,7s) ease-out forwards}
-.slides[data-vibe=slide] img{transform:scale(1.12)}.slides[data-vibe=slide] img.on{animation:pan var(--dur,7s) linear forwards}
-.slides[data-vibe=dissolve] img{transition:opacity 3.2s ease;transform:scale(1.03)}.slides[data-vibe=dissolve] img.on{animation:none}
-.slides[data-vibe=pulse] img.on{animation:breathe var(--dur,7s) ease-in-out infinite}
-.slides[data-vibe=goldsweep]::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(105deg,transparent 35%,rgba(255,218,150,.32) 50%,transparent 65%);background-size:260% 100%;animation:sweep var(--dur,7s) ease-in-out infinite;mix-blend-mode:screen}
-.slides[data-vibe=letterbox]::before,.slides[data-vibe=letterbox]::after{content:"";position:absolute;left:0;right:0;height:11%;background:#000;z-index:2}
-.slides[data-vibe=letterbox]::before{top:0}.slides[data-vibe=letterbox]::after{bottom:0}
-@keyframes kb{to{transform:scale(1.13)}}@keyframes pan{from{transform:scale(1.12) translateX(-3.5%)}to{transform:scale(1.12) translateX(3.5%)}}
-@keyframes breathe{0%,100%{transform:scale(1.02)}50%{transform:scale(1.09)}}@keyframes sweep{from{background-position:130% 0}to{background-position:-30% 0}}
-@media(prefers-reduced-motion:reduce){.slides img.on,.slides::after{animation:none!important}}
-.ovl{position:absolute;inset:0;z-index:1;pointer-events:none}
-.hero[data-ovl=veil] .ovl{background:linear-gradient(180deg,rgba(20,6,12,.4),rgba(20,6,12,.35) 40%,rgba(20,6,12,.75))}
-.hero[data-ovl=left] .ovl{background:linear-gradient(90deg,rgba(20,6,12,.78),rgba(20,6,12,.12) 70%),linear-gradient(180deg,rgba(20,6,12,.35),transparent 25%)}
-.hero[data-ovl=bottom] .ovl{background:linear-gradient(180deg,rgba(20,6,12,.35),transparent 25%,transparent 45%,rgba(20,6,12,.88))}
-.hero[data-ovl=none] .ovl{background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 20%)}
-.hero .in{position:relative;z-index:3;padding:96px max(5vw,16px) clamp(40px,7vw,90px);max-width:1240px;margin:0 auto;width:100%}
-.copy{max-width:760px}
-.hero[data-plate=frost] .copy{background:rgba(20,8,14,.32);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:clamp(20px,3vw,36px);border-radius:22px;border:1px solid rgba(255,255,255,.18)}
-.hero[data-align=center] .copy{margin:0 auto;text-align:center}.hero[data-align=center] .cta{justify-content:center}.hero[data-align=center] .hero h1,.hero[data-align=center] .copy p{margin-inline:auto}
-.hero[data-align=right] .copy{margin-left:auto;text-align:right}.hero[data-align=right] .cta{justify-content:flex-end}.hero[data-align=right] .copy p{margin-left:auto}
-.hero[data-align=center] h1,.hero[data-align=right] h1{margin-inline:auto}.hero[data-align=right] h1{margin-right:0}
-.hero h1{font-size:calc(clamp(46px,7.5vw,96px)*var(--h1s,1));max-width:14ch;opacity:var(--h1a,1)}
-.hero p{font-size:clamp(17px,1.6vw,20px);max-width:52ch;opacity:.92}
-.hero[data-copy=hide] h1,.hero[data-copy=hide] .copy>p{display:none}
-.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-#themeWipe{position:fixed;inset:0;z-index:85;pointer-events:none;clip-path:circle(0 at var(--x,50%) var(--y,50%));transition:clip-path .75s cubic-bezier(.6,0,.2,1),opacity .4s}
-#themeWipe.go{clip-path:circle(150% at var(--x,50%) var(--y,50%))}
-.orbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:14px;margin-top:12px}
-.orb{border:0;background:none;cursor:pointer;display:grid;justify-items:center;gap:6px;font:inherit;font-size:13px;color:var(--ink);padding:4px}
-.orb i{width:62px;height:62px;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,.18),inset 0 0 0 3px rgba(255,255,255,.35);transition:transform .25s}
-.orb:hover i{transform:scale(1.08)}.orb.on i{outline:3px solid var(--btn);outline-offset:3px}
-.tabs{display:flex;gap:6px;margin-top:6px}.tabs button{min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;color:var(--ink)}.tabs button.on{background:var(--btn);color:var(--btnInk);border-color:var(--btn)}
-.optrow{display:flex;gap:6px;flex-wrap:wrap}.optrow button{min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;color:var(--ink)}.optrow button.on{background:var(--btn);color:var(--btnInk);border-color:var(--btn)}
-.dlab{display:block;font-weight:700;font-size:14px;margin:16px 0 6px}.drawer input[type=range]{width:100%;accent-color:var(--btn)}
-.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}.thumbs div{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--blush)}.thumbs img{width:100%;height:100%;object-fit:cover}.thumbs button{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;border:0;background:#fff;color:#2a1219;cursor:pointer}
-.ok{color:var(--free);font-size:14px;margin-top:8px}.bad{color:var(--booked);font-size:14px;margin-top:8px}
-.stats{display:flex;gap:clamp(18px,4vw,48px);flex-wrap:wrap;margin-top:34px;padding-top:22px;border-top:1px solid rgba(255,255,255,.25)}
-.stats b{display:block;font-family:var(--fh);font-size:36px;line-height:1}
-.stats span{font-size:14px;opacity:.8}
-/* rooms */
-.rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:22px;margin-top:30px}
-.room{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
-.room .ph{aspect-ratio:4/3;position:relative;overflow:hidden;background:var(--blush)}
-.room .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}.room:hover .ph img{transform:scale(1.05)}
-.room .bd{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
-.caps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 6px}
-.caps div{background:var(--blush);border-radius:10px;padding:8px 4px;text-align:center}
-.caps b{display:block;font-size:18px}.caps small{font-size:12px;color:var(--soft)}
-.room .from{margin-top:auto;font-size:14px;color:var(--soft)}.room .from b{color:var(--ink);font-size:16px}
-/* functions */
-.fbg{background:var(--band);color:var(--bandInk)}.fbg .lead{color:var(--bandSoft)}
-.ftypes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:1px;background:rgba(255,255,255,.14);border-radius:18px;overflow:hidden;margin-top:30px}
-.ft{background:var(--band);padding:26px 24px}
-.ft svg{width:40px;height:40px;stroke:var(--glyph);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:12px}
-.ft h3{font-size:24px;color:var(--bandInk)}.ft p{font-size:15px;color:var(--bandSoft);margin:0}
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;color:#fff;overflow:hidden;padding:110px 0 70px}
+.hero .bg{position:absolute;inset:0;background:url(demo/images/grand-ballroom.jpg) center/cover;transform:scale(1.06);animation:kb 18s ease-out forwards}
+@keyframes kb{to{transform:scale(1)}}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(40,12,20,.88) 0%,rgba(40,12,20,.62) 45%,rgba(40,12,20,.2) 100%)}
+.hero .w{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;width:100%}
+.hero h1 em{color:var(--champ)} .hero .lead{color:rgba(255,255,255,.85)}
+.badge{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--champ);margin-bottom:20px}
+.badge i{font-style:normal;background:var(--champ);color:var(--bur);border-radius:999px;padding:5px 12px;letter-spacing:.1em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero .btn.line{color:#fff}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;font-size:13px;font-weight:600}
+.pills span{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 13px;background:rgba(255,255,255,.06)}
+.estcard{background:rgba(255,255,255,.97);color:var(--ink);border-radius:22px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.35);max-width:430px;justify-self:end;width:100%}
+.estcard .t{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.estcard .row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.estcard .row span{color:var(--muted)}
+.estcard .tot{background:var(--bur);color:#fff;border-radius:16px;padding:16px 18px;margin-top:14px}
+.estcard .tot small{opacity:.75;font-size:12px} .estcard .tot b{display:block;font-family:var(--fs);font-size:36px;font-weight:600;line-height:1.1;margin:2px 0}
+.estcard .tag{display:inline-block;background:rgba(255,255,255,.14);border-radius:999px;padding:3px 10px;font-size:11.5px;margin-top:6px}
+.estcard .acts{display:flex;gap:8px;margin-top:12px} .estcard .acts span{flex:1;text-align:center;border-radius:999px;padding:10px;font-weight:700;font-size:13px;background:var(--blush);color:var(--bur)}
+.estcard .acts span.on{background:var(--bur);color:#fff}
+.days{display:flex;gap:6px;margin:12px 0 4px}
+.days span{flex:1;text-align:center;border:1px solid var(--line);border-radius:10px;padding:6px 0;font-size:11px;color:var(--muted);line-height:1.25}
+.days span b{display:block;font-size:16px;color:var(--ink)} .days span.on{border-color:var(--bur);background:var(--blush)} .days span.x{opacity:.45;text-decoration:line-through}
+.days span.ph{border-color:var(--gold)} .days span.ph b{color:#8a6a2f}
+@media (max-width:920px){.hero .w{grid-template-columns:1fr}.estcard{justify-self:start}}
+/* sections */
+section.s{padding:100px 0} section.dark{background:var(--bur);color:#fff} section.dark .lead{color:rgba(255,255,255,.78)} section.dark h2 em{color:var(--champ)} section.dark .eyebrow{color:var(--champ)}
+section.soft{background:var(--soft)}
+.head{max-width:720px;margin-bottom:46px} .head.c{text-align:center;margin-left:auto;margin-right:auto} .head.c .lead{margin:16px auto 0} .head .lead{margin-top:16px}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease} .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.hero .bg{animation:none;transform:none}}
+/* video */
+.video{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/9;background:#000;box-shadow:0 30px 70px rgba(60,20,30,.25);max-width:980px;margin:0 auto;cursor:pointer;border:0;padding:0;width:100%;display:block}
+.video img{width:100%;height:100%;object-fit:cover}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vnote{text-align:center;color:var(--muted);font-size:14px;margin-top:16px}
+/* features */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:26px}
+.card .n{font-family:var(--fs);font-size:20px;color:var(--gold);font-weight:600}
+.card h3{margin:8px 0 8px;font-size:25px} .card p{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:900px){.grid3{grid-template-columns:1fr 1fr}} @media (max-width:600px){.grid3{grid-template-columns:1fr}}
+/* split rows */
+.split{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:center}
+.split.rev .txt{order:2}
+.shot{border-radius:18px;overflow:hidden;box-shadow:0 26px 60px rgba(60,20,30,.18);border:1px solid var(--line)}
+.ticks{list-style:none;padding:0;margin:22px 0 0}
+.ticks li{position:relative;padding:0 0 12px 30px;font-size:15.5px}
+.ticks li:before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:var(--blush);color:var(--bur);font-size:12px;font-weight:800;display:grid;place-items:center}
+section.dark .ticks li:before{background:rgba(255,255,255,.14);color:var(--champ)}
+.mini{display:inline-block;margin-top:18px;font-weight:700;color:var(--bur2);text-decoration:none;border-bottom:1.5px solid currentColor}
+section.dark .mini{color:var(--champ)}
+@media (max-width:900px){.split{grid-template-columns:1fr;gap:30px}.split.rev .txt{order:0}}
 /* steps */
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:18px;margin-top:26px;counter-reset:s}
-.step{border-top:2px solid var(--btn);padding-top:16px}
-:root[data-theme=dark] .step{border-color:#c46b85}
-.step h3{font-size:24px}.step p{color:var(--soft);font-size:15px;margin:0}
-/* calendar */
-.diary{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;margin-top:28px;align-items:start}
-@media(max-width:900px){.diary{grid-template-columns:1fr}}
-.calhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.calhead h3{margin:0 auto 0 0;font-size:30px}
-.iconbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:20px}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
-.seg button{border:0;background:none;padding:0 16px;min-height:44px;cursor:pointer;font-weight:600;color:var(--soft)}
-.seg button.on{background:var(--btn);color:var(--btnInk)}
-.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.cal .dow{text-align:center;font-size:13px;color:var(--soft);font-weight:600;padding:4px 0}
-.day{min-height:78px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:7px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:3px;position:relative}
-.day .n{font-weight:700;font-size:15px}.day .s{font-size:12px;line-height:1.2;margin-top:auto}
-.day .ph{font-size:11px;color:var(--held);line-height:1.15}
-.day.l3 .s{color:var(--free)}.day.l2 .s{color:var(--free)}.day.l1 .s{color:var(--held)}.day.l0 .s{color:var(--booked)}
-.day.l0{background:var(--blush)}
-.day.past,.day.blank{opacity:.35;cursor:default}.day.blank{border:0;background:none}
-.day.sel{outline:3px solid var(--btn);outline-offset:-1px}
-:root[data-theme=dark] .day.sel{outline-color:#e07a8f}
-.dots{display:flex;gap:3px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--free)}
-.dots i.held{background:var(--held)}.dots i.booked{background:var(--booked)}
-@media(max-width:600px){.day{min-height:58px;padding:5px}.day .s,.day .ph{display:none}}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--soft);margin-top:12px}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
-.slot{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.slot:last-child{border:0}.slot .nm{flex:1 1 160px}.slot small{color:var(--soft);display:block}
-.chip{font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
-.chip.free{background:color-mix(in srgb,var(--free) 15%,transparent);color:var(--free)}
-.chip.held{background:color-mix(in srgb,var(--held) 18%,transparent);color:var(--held)}
-.chip.booked{background:color-mix(in srgb,var(--booked) 15%,transparent);color:var(--booked)}
-.slot .btn{min-height:40px;padding:0 16px;font-size:14px}
-/* estimator */
-.est{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;margin-top:28px;align-items:start}
-@media(max-width:900px){.est{grid-template-columns:1fr}}
-.form{display:grid;gap:16px}
-.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-@media(max-width:520px){.row2{grid-template-columns:1fr}}
-label.f{display:grid;gap:6px;font-weight:600;font-size:15px}
-.f input,.f select,.f textarea,.inp{min-height:46px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);width:100%}
-.hint{font-size:13px;color:var(--soft);font-weight:400}
-.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:8px}
-.checks label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);cursor:pointer;font-size:15px}
-.checks input{width:20px;height:20px;accent-color:var(--btn)}
-.checks span.p{margin-left:auto;color:var(--soft);font-size:13px;white-space:nowrap}
-.estside{display:grid;gap:16px;align-content:start}
-.lookcard{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}
-.lookcard svg{display:block;width:100%;height:auto;aspect-ratio:8/5}
-.lookcard .cap{padding:12px 16px;font-size:14px;color:var(--soft)}.lookcard .cap b{color:var(--ink);display:block;font-size:15px}
-#eLook{display:grid;gap:12px}.lkl{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
-.sw{display:flex;flex-wrap:wrap;gap:6px}.sw button{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px 0 6px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:14px;color:var(--ink)}
-.sw button i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}.sw button.on{border-color:var(--btn);box-shadow:0 0 0 2px var(--btn)}
-.result{background:var(--band);color:var(--bandInk);border-radius:22px;padding:28px}
-.result .lbl{font-size:14px;opacity:.8}
-.result .big{font-family:var(--fh);font-size:clamp(40px,5.5vw,62px);line-height:1;margin:6px 0 4px;white-space:nowrap}
-.result .tag{display:inline-block;background:rgba(255,255,255,.14);border-radius:999px;padding:5px 12px;font-size:13px;margin:8px 0 14px}
-.result table{width:100%;border-collapse:collapse;font-size:15px}
-.result td{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.14)}.result td:last-child{text-align:right;white-space:nowrap}
-.result .note{font-size:13px;opacity:.8;margin-top:12px}
-.result .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.warn{background:rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:12px}
-/* faq/footer */
-details{border-bottom:1px solid var(--line);padding:16px 0}summary{cursor:pointer;font-weight:600;font-size:17px}
-details p{color:var(--soft);margin:10px 0 0}
-footer{background:var(--foot);color:var(--footInk);padding:48px max(5vw,16px)}
-footer .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px}
-footer a{color:var(--glyph)}.small{font-size:13px;opacity:.75}
-.scroll{overflow-x:auto}.cmp{min-width:560px}
-/* facts, compare, gallery, why, access */
-.facts{background:var(--band);color:var(--bandInk);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:1px}
-.facts div{padding:22px max(2vw,14px);text-align:center;background:var(--band)}
-.facts b{display:block;font-family:var(--fh);font-size:34px;line-height:1.05;color:var(--bandInk)}.facts span{font-size:14px;color:var(--bandSoft)}
-.cmp{width:100%;border-collapse:collapse;margin-top:26px;background:var(--card);border-radius:16px;overflow:hidden}
-.cmp th,.cmp td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.cmp thead th{background:var(--blush);font-family:var(--fh);font-size:24px}
-.cmp tbody th{font-weight:600;color:var(--soft);width:24%}
-.yes{color:var(--teal);font-weight:700}
-.gfil{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 18px}
-.gfil button{min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600}
-.gfil button.on{background:var(--btn);color:var(--btnInk);border-color:var(--btn)}
-.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));grid-auto-rows:200px;grid-auto-flow:dense;gap:12px}
-.gi{margin:0;height:100%;position:relative;border-radius:14px;overflow:hidden;cursor:zoom-in;background:var(--blush);display:block;width:100%;border:0;padding:0}
-.gi img{width:100%;height:100%;object-fit:cover;display:block}.gi.tall{grid-row:span 2}
-.gi span{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 10px;background:linear-gradient(transparent,rgba(20,4,10,.75));color:#fff;font-size:14px;text-align:left}
-.gi .del{position:absolute;top:8px;right:8px;display:none;width:36px;height:36px;border-radius:50%;border:0;background:#fff;color:var(--btn);font-size:20px;cursor:pointer}
-.editing .gi .del{display:block}.addph{display:none}.editing .addph{display:inline-flex}
-.lb{position:fixed;inset:0;z-index:80;background:rgba(10,2,6,.92);display:none;align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:12px}
-.lb.on{display:flex}.lb img{max-width:100%;max-height:80vh;border-radius:10px}.lb p{color:#fff;margin:0}
-.lb .nav{display:flex;gap:10px}.lb .iconbtn{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3)}
-.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:22px;margin-top:26px}
-.why div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
-.why h3{font-size:26px}.why p{color:var(--soft);margin:0}
-.access{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}
-@media(max-width:820px){.access{grid-template-columns:1fr}}
-.access ul{padding-left:20px;margin:0}.access li{margin-bottom:8px}
-.reviews{display:none}.editing .reviews{display:block}
-/* modal */
-.modal{position:fixed;inset:0;z-index:50;background:rgba(20,4,10,.6);display:none;align-items:center;justify-content:center;padding:16px}
-.modal.on{display:flex}
-.sheet{background:var(--bg);border-radius:22px;width:min(640px,100%);max-height:92vh;overflow:auto;padding:26px}
-.sheet .x{float:right}
-.progress{display:flex;gap:6px;margin:6px 0 18px}.progress i{flex:1;height:4px;border-radius:4px;background:var(--line)}.progress i.on{background:var(--btn)}
-.pick{display:flex;flex-wrap:wrap;gap:8px}
-.pick button{min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600}
-.pick button.on{background:var(--btn);color:var(--btnInk);border-color:var(--btn)}
-.pick button:disabled{opacity:.35;text-decoration:line-through}
-.sum{background:var(--blush);border-radius:14px;padding:14px 16px;font-size:15px}
-.sum div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}.sum b{text-align:right}
-.ref{font-family:var(--fh);font-size:34px;color:var(--btn)}
-:root[data-theme=dark] .ref{color:#f2c6b8}
-.demo{font-size:13px;color:var(--soft);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:12px 0}
-/* assistant pill */
-
-
-
-/* editor + venue drawer */
-.etool{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:60;display:none;gap:8px;flex-wrap:wrap;justify-content:center;background:#1c0610;color:#fff;padding:10px;border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.35);width:max-content;max-width:calc(100vw - 24px)}
-.editing .etool{display:flex}.etool .btn{min-height:40px;font-size:14px;padding:0 14px}
-.editing [data-e]{outline:1px dashed rgba(18,122,122,.7);outline-offset:3px;cursor:text}
-.editing [data-img]{cursor:pointer;outline:3px dashed var(--teal);outline-offset:-3px}
-.editing 
-.drawer{position:fixed;top:0;right:0;bottom:0;z-index:70;width:min(560px,100%);background:var(--bg);box-shadow:-10px 0 40px rgba(0,0,0,.25);transform:translateX(105%);transition:transform .3s;overflow:auto;padding:24px}
-.drawer.on{transform:none}
-.grid4{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(0,1fr));gap:6px;align-items:center;font-size:14px}
-.grid4 input{min-height:40px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);width:100%;font-size:15px}
-.grid4 .h{font-weight:700;color:var(--soft);font-size:12px}
-.drawer h3{margin-top:22px}
-.hold{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;background:var(--card);font-size:14px}
-.hold .t{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:15px}
-.hold .a{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.hold .a .btn{min-height:38px;font-size:13px;padding:0 12px}
-.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:90;background:#1c0610;color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;display:none}
-/* assistant (same widget as Service Deluxe, themed by the page) */
-.ast-fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--btn);color:var(--btnInk);border-radius:999px;padding:8px 18px 8px 8px;font:600 15px var(--fb);box-shadow:0 16px 34px -12px rgba(0,0,0,.45);transition:transform .2s}
-.ast-fab:hover{transform:translateY(-2px)}
-.ast-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;position:relative;font:600 20px var(--fh)}
-.ast-fab .ci:after{content:"";position:absolute;right:0;top:0;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid var(--btn)}
-.ast.open .ast-fab{display:none}.editing .ast{display:none}
-.ast-tip{position:fixed;right:20px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:60;max-width:270px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font:400 14px/1.45 var(--fb);box-shadow:0 20px 40px -18px rgba(0,0,0,.35);cursor:pointer;animation:astIn .35s ease}
-.ast-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--soft);cursor:pointer;padding:4px;line-height:1}
-.ast-box{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:200;width:min(390px,calc(100vw - 36px));height:min(620px,calc(100svh - 100px));display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:astIn .3s ease;font-family:var(--fb)}
-.ast [hidden]{display:none!important}
-@keyframes astIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.ast-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--band);color:var(--bandInk)}
-.ast-hd .av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font:600 21px var(--fh);flex:none}
-.ast-hd b{display:block;font-size:15px}.ast-hd small{display:block;font-size:12px;opacity:.8}
-.ast-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.16);color:inherit;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
-.ast-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
-.ast-m{max-width:88%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
-.ast-m.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
-.ast-m.u{align-self:flex-end;background:var(--btn);color:var(--btnInk);border-bottom-right-radius:5px}
-.ast-m p{margin:0 0 6px}.ast-m p:last-child{margin:0}.ast-m ul{margin:4px 0 6px;padding-left:18px}.ast-m li{margin:2px 0}
-.ast-m a{color:var(--btn);font-weight:700}
-.ast-m a.bk{display:inline-flex;align-items:center;gap:6px;margin:4px 4px 2px 0;background:var(--btn);color:var(--btnInk);text-decoration:none;border-radius:999px;padding:7px 14px;font-size:13.5px;cursor:pointer}
-.ast-m.typing{display:flex;gap:4px;padding:14px}.ast-m.typing i{width:7px;height:7px;border-radius:50%;background:var(--soft);opacity:.4;animation:astDot 1s infinite}
-.ast-m.typing i:nth-child(2){animation-delay:.15s}.ast-m.typing i:nth-child(3){animation-delay:.3s}
-@keyframes astDot{50%{opacity:1;transform:translateY(-3px)}}
-.ast-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
-.ast-q button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 13px var(--fb);cursor:pointer}
-.ast-q button:hover{border-color:var(--btn);color:var(--btn)}
-.ast-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--card)}
-.ast-f input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font:400 16px var(--fb);background:var(--bg);color:var(--ink)}
-.ast-f input:focus{outline:none;border-color:var(--btn)}
-.ast-f button{border:0;border-radius:999px;background:var(--ink);color:var(--bg);font:700 14px var(--fb);padding:0 16px;cursor:pointer}
-.ast-f button:disabled{opacity:.5}
-.ast-ft{font-size:11.5px;color:var(--soft);text-align:center;padding:0 12px 10px;background:var(--card)}
-@media(max-width:600px){.ast-fab{padding:8px}.ast-fab .tx{display:none}.ast-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.ast-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:st}
+.step{background:var(--panel);border-radius:20px;padding:28px;border:1px solid var(--line);position:relative}
+.step:before{counter-increment:st;content:counter(st);font-family:var(--fs);font-size:58px;line-height:1;color:var(--champ);position:absolute;right:22px;top:16px}
+.step h3{font-size:28px;margin-bottom:8px} .step p{margin:0;color:var(--muted);font-size:15px}
+.step small{display:block;margin-top:12px;font-weight:700;color:var(--bur2);font-size:13px}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+/* coming */
+.soon{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:10px}
+.soon div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:18px;font-size:14px}
+.soon b{display:block;font-size:15.5px;margin-bottom:4px;color:#fff} .soon span{color:rgba(255,255,255,.7)}
+@media (max-width:900px){.soon{grid-template-columns:1fr 1fr}}
+/* pricing */
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:860px;margin:0 auto}
+.plan{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:32px;position:relative}
+.plan.hi{background:var(--bur);color:#fff;border-color:var(--bur)} .plan.hi .muted{color:rgba(255,255,255,.75)}
+.plan .tag{position:absolute;top:-12px;left:32px;background:var(--champ);color:var(--bur);border-radius:999px;padding:4px 12px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.plan h3{font-size:32px} .muted{color:var(--muted)}
+.pr{font-family:var(--fs);font-size:62px;font-weight:600;line-height:1;margin:18px 0 4px} .pr small{font-family:var(--fd);font-size:14px;font-weight:600;opacity:.7}
+.plan ul{list-style:none;padding:0;margin:20px 0 26px} .plan li{padding:7px 0 7px 26px;position:relative;font-size:15px;border-top:1px solid var(--line)}
+.plan.hi li{border-color:rgba(255,255,255,.14)} .plan li:before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:800}
+.plan .btn{width:100%;justify-content:center}
+.setup{max-width:860px;margin:26px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:30px}
+.setup h3{font-size:28px;margin-bottom:6px}
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.tier{border:1px solid var(--line);border-radius:16px;padding:16px;font-size:14px;background:var(--bg)}
+.tier b{display:block;font-size:15px} .tier .p{font-family:var(--fs);font-size:32px;font-weight:600;color:var(--bur);line-height:1.1;margin:6px 0}
+.tier span{color:var(--muted)}
+.founding{display:flex;gap:14px;align-items:flex-start;margin-top:18px;background:var(--blush);border-radius:16px;padding:16px 18px;font-size:15px}
+.founding i{font-style:normal;font-size:22px}
+@media (max-width:760px){.plans{grid-template-columns:1fr}.tiers{grid-template-columns:1fr 1fr}}
+/* faq */
+.faq{max-width:820px} details{border-bottom:1px solid var(--line);padding:18px 0}
+summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none} summary:after{content:"+";font-size:24px;line-height:1;color:var(--bur2);transition:transform .2s} details[open] summary:after{transform:rotate(45deg)}
+details p{color:var(--muted);margin:10px 0 0}
+/* enquire */
+.enq{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+.contact{display:grid;gap:10px;margin-top:24px}
+.contact a{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 16px;text-decoration:none;font-weight:600}
+.contact a i{font-style:normal;width:34px;height:34px;border-radius:10px;background:var(--blush);display:grid;place-items:center}
+.contact a.demo{background:var(--bur);color:#fff;border-color:var(--bur)} .contact a.demo i{background:rgba(255,255,255,.16)}
+form.f{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:12px}
+input,select,textarea{display:block;width:100%;margin-top:6px;font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 13px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--bur2);outline-offset:1px}
+.hp{position:absolute;left:-9999px}
+.msg{margin-top:12px;font-size:14.5px;min-height:20px} .msg.ok{color:var(--ok);font-weight:700} .msg.err{color:#A3372E}
+@media (max-width:860px){.enq{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+footer{background:#1C1015;color:rgba(255,255,255,.7);padding:34px 0;font-size:14px}
+footer .w{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+footer a{color:#fff;text-decoration:none}
+.float{position:fixed;right:18px;bottom:18px;z-index:40;box-shadow:0 14px 34px rgba(60,20,30,.35);opacity:0;transform:translateY(20px);pointer-events:none;transition:.25s}
+.float.on{opacity:1;transform:none;pointer-events:auto}
 </style>
 </head>
 <body>
-<nav class="top" id="nav">
-  <div class="brand" data-e="brand">Aurelle Function Centre</div>
-  <div class="links"><a href="#rooms">Rooms</a><a href="#functions">Functions</a><a href="#gallery">Gallery</a><a href="#diary">Availability</a><a href="#estimate">Estimate</a><a href="#visit">Visit</a></div>
-  <a class="btn light" href="#diary">Check a date</a>
-</nav>
 
-<header class="hero" id="hero" data-ovl="left" data-align="left" data-plate="none" data-copy="fade">
-  <div class="stick">
-  <div class="slides" id="slides"></div><div class="ovl"></div>
-  <div class="in"><div class="copy" id="heroCopy">
-    <h1 data-e="heroTitle">Beautiful celebrations, from 50 to 500 guests</h1>
-    <p data-e="heroText">Two ballrooms and a terrace lounge for weddings, engagements, formals and corporate nights. Check your date, see what it could cost, and book a free consultation, all in a few minutes.</p>
-    <div class="cta"><a class="btn light" href="#diary">Check a date</a><a class="btn ghost" href="#estimate">Estimate my function</a><button class="btn ghost" data-consult>Book a free consultation</button></div>
-  </div></div>
+<nav class="top" id="nav"><div class="w">
+  <a class="brand" href="#top"><span class="mark">FD</span><span><b>Function Deluxe</b><small>by Webescapade</small></span></a>
+  <div class="links"><a href="#video">Video</a><a href="#features">Features</a><a href="#ava">Ava</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="demo/" target="_blank" rel="noopener">Demo venue ↗</a></div>
+  <a class="btn dark" href="demo.html">Book a free demo</a>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="bg" aria-hidden="true"></div>
+  <div class="w">
+    <div class="rv">
+      <div class="badge"><i>New</i> For function centres &amp; event venues</div>
+      <h1>Your function centre, <em>booked online.</em></h1>
+      <p class="lead" style="margin-top:22px">A beautiful website you edit yourself, live availability for every room, instant estimates priced for the day they choose, and online holds that turn enquiries into confirmed dates — day or night.</p>
+      <div class="cta">
+        <a class="btn light" href="#video">▶ Watch the 2-minute tour</a>
+        <a class="btn line" href="demo/" target="_blank" rel="noopener">Open the demo venue <span class="ar">→</span></a>
+      </div>
+      <div class="pills"><span>No commission</span><span>14 days free</span><span>Weddings · corporate · formals · christenings</span></div>
+    </div>
+    <div class="estcard rv" aria-hidden="true">
+      <div class="t">Saturday evening · March 2027</div>
+      <div class="days"><span>FRI<b>5</b></span><span class="on">SAT<b>6</b></span><span class="x">SAT<b>13</b></span><span>SAT<b>20</b></span><span class="ph">SAT<b>27</b>Easter</span></div>
+      <div class="row"><span>Wedding · 150 guests</span><b>Crystal Room</b></div>
+      <div class="row"><span>Gold banquet + standard drinks</span><b>5 hours</b></div>
+      <div class="row"><span>Look</span><b>Burgundy &amp; blush · ivory linen</b></div>
+      <div class="tot"><small>Estimated total, incl. GST</small><b>$28,900 – $33,450</b><span class="tag">Saturday: peak room hire and minimum spend</span></div>
+      <div class="acts"><span>Book a consultation</span><span class="on">Hold this date</span></div>
+    </div>
   </div>
 </header>
-<div class="facts">
-  <div><b>3</b><span>function rooms</span></div><div><b>50–500</b><span>guests</span></div><div><b data-e="fPark">400</b><span data-e="fParkSub">free parking spaces</span></div><div><b data-e="fAccess">Lift</b><span data-e="fAccessSub">step-free access</span></div><div><b data-e="fKitchen">In-house</b><span data-e="fKitchenSub">chefs, décor and cakes</span></div>
-</div>
 
-<section class="band" id="rooms"><div class="wrap">
-  <h2 data-e="roomsTitle">Our rooms</h2>
-  <p class="lead" data-e="roomsLead">Each room has its own entrance, bar, dance floor and bridal or VIP suite, so your guests never share the night with another party.</p>
-  <div class="rooms" id="roomList"></div>
-  <p class="small" style="margin-top:14px;opacity:1;color:var(--soft)">Sample venue, rooms, photos and prices for demonstration.</p>
+<section class="s" id="video"><div class="w">
+  <div class="head c rv"><div class="eyebrow">Watch it work</div><h2>Two minutes. <em>The whole picture.</em></h2>
+    <p class="lead">See a couple check a date, price their wedding, choose their flowers and hold the date — then see what your team sees.</p></div>
+  <button class="video rv" id="vid" type="button" aria-label="Play the Function Deluxe tour video"><img src="img/video-thumb.jpg" alt="Function Deluxe — a 2-minute tour"></button>
+  <p class="vnote">Prefer YouTube? <a href="https://youtu.be/22rezCEm5vU" target="_blank" rel="noopener">Watch it there ↗</a> · <a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">Subscribe to Webescapade</a></p>
 </div></section>
 
-<section class="band" id="compare" style="background:var(--blush);padding-top:clamp(32px,4vw,56px)"><div class="wrap">
-  <h2 data-e="cmpTitle">Compare the rooms</h2>
-  <div class="scroll"><table class="cmp" id="cmp"></table></div>
-</div></section>
-
-<section class="band fbg" id="functions"><div class="wrap">
-  <h2 data-e="fnTitle" style="color:var(--bandInk)">What we host</h2>
-  <p class="lead" data-e="fnLead">One coordinator looks after your function from the first meeting to the last dance.</p>
-  <div class="ftypes" id="fnList"></div>
-</div></section>
-
-<section class="band" id="gallery"><div class="wrap">
-  <h2 data-e="galTitle">Gallery</h2>
-  <p class="lead" data-e="galLead">Set-ups from our rooms. Tap a photo to see it larger.</p>
-  <div class="gfil" id="gfil"></div>
-  <div class="gal" id="gal"></div>
-  <button class="btn addph" id="addPh">Add a photo</button>
-</div></section>
-
-<section class="band" style="background:var(--blush)"><div class="wrap">
-  <h2 data-e="whyTitle">Why couples and companies choose us</h2>
-  <div class="why">
-    <div><h3 data-e="why1t">Free consultation</h3><p data-e="why1">Walk the rooms with our events coordinator, in person, by Zoom or over the phone. Book a time online in seconds.</p></div>
-    <div><h3 data-e="why2t">Everything in-house</h3><p data-e="why2">Our own chefs, decorators and cake chef. One team, one invoice, no juggling suppliers.</p></div>
-    <div><h3 data-e="why3t">Clear pricing</h3><p data-e="why3">See an estimate for your exact date and guest numbers before you call. No surprises at the meeting.</p></div>
+<section class="s soft" id="features"><div class="w">
+  <div class="head rv"><div class="eyebrow">What's included</div><h2>Everything a couple asks, <em>answered on your website.</em></h2>
+    <p class="lead">Is my date free? What will it cost? Can we see the room? Function Deluxe answers all three, so your coordinator spends time with people who are ready to book.</p></div>
+  <div class="grid3">
+    <div class="card rv"><div class="n">01</div><h3>A website you change yourself</h3><p>Your rooms with capacities, function types, a photo gallery filtered by event, an animated photo hero, 12 colour themes light or dark, and your own photo library. Tap text to change it.</p></div>
+    <div class="card rv"><div class="n">02</div><h3>Live availability, every room</h3><p>A calendar of day and evening sessions for each room. Public holidays are marked, and dates on hold or booked show straight away.</p></div>
+    <div class="card rv"><div class="n">03</div><h3>Instant estimates</h3><p>Function type, guests, room, layout, food and drinks packages and extras. Saturdays, Sundays and public holidays are priced in automatically with your own rules.</p></div>
+    <div class="card rv"><div class="n">04</div><h3>See the look</h3><p>Guests choose flowers, tablecloth colour, chairs or covers with a sash, and room extras like drapes or a balloon arch — and watch their tables change as the total updates.</p></div>
+    <div class="card rv"><div class="n">05</div><h3>Hold, meet, secure</h3><p>A free hold on the date while you confirm it, a consultation booked online (site visit, Zoom or phone), and a deposit to secure the date.</p></div>
+    <div class="card rv"><div class="n">06</div><h3>Your venue view</h3><p>Every hold, meeting and deposit in one list, with the guest's choices and estimate. Confirm, release or follow up in a tap.</p></div>
   </div>
 </div></section>
 
-<section class="band"><div class="wrap">
-  <h2 data-e="howTitle">How booking works</h2>
+<section class="s"><div class="w split">
+  <div class="txt rv"><div class="eyebrow">Instant estimates</div><h2>The price for <em>their</em> day.</h2>
+    <p class="lead">A Friday lunch and a Saturday night aren't the same price, and an Easter Saturday isn't either. Your rules for room hire, minimum spend and surcharges are applied automatically, so the estimate matches the date they pick.</p>
+    <ul class="ticks"><li>Day and evening sessions, weekdays, weekends and public holidays</li><li>Food and drinks packages per guest, extras by the item</li><li>A range, not a promise — your coordinator confirms the final quote</li></ul>
+    <a class="mini" href="demo/#estimate" target="_blank" rel="noopener">Try the estimator on the demo venue ↗</a></div>
+  <div class="shot rv"><img src="img/estimate-look.jpg" alt="Function estimate with live table styling preview"></div>
+</div></section>
+
+<section class="s soft"><div class="w split rev">
+  <div class="txt rv"><div class="eyebrow">Availability</div><h2>Is our date free? <em>They'll know in seconds.</em></h2>
+    <p class="lead">Every room, every session, a month at a glance. Tap a date to see which rooms are free, on hold or booked, then estimate and hold it in the same step.</p>
+    <ul class="ticks"><li>Day and evening sessions for each room</li><li>Holds show as "on hold" until you confirm or release them</li><li>A waitlist option when a room is already held</li></ul></div>
+  <div class="shot rv"><img src="img/availability.jpg" alt="Room availability calendar for a function centre"></div>
+</div></section>
+
+<section class="s"><div class="w">
+  <div class="head c rv"><div class="eyebrow">How a booking happens</div><h2>Hold. Meet. <em>Secure.</em></h2>
+    <p class="lead">Three steps, all online, all visible in your venue view.</p></div>
   <div class="steps">
-    <div class="step"><h3>Check the date</h3><p data-e="how1">See which rooms are free for a day or evening function, months ahead.</p></div>
-    <div class="step"><h3>Get an estimate</h3><p data-e="how2">Answer a few questions. Prices adjust for Saturdays, Sundays and public holidays.</p></div>
-    <div class="step"><h3>Hold and meet</h3><p data-e="how3">We hold the date for you and book your free consultation.</p></div>
-    <div class="step"><h3>Secure with a deposit</h3><p data-e="how4">Pay the deposit online, at any point, to lock the date in.</p></div>
+    <div class="step rv"><h3>Hold the date</h3><p>The guest holds a date for free while you check it (7 days by default). Their estimate and chosen look come with it.</p><small>No more "is it still free?" emails</small></div>
+    <div class="step rv"><h3>Meet your coordinator</h3><p>They book a site visit, a Zoom or a phone call at a time that suits you, straight from the hold.</p><small>Your diary, your times</small></div>
+    <div class="step rv"><h3>Secure it</h3><p>A deposit locks in the date. Online deposit payment through Stripe is connected as part of setup.</p><small>The date is theirs — and yours</small></div>
   </div>
 </div></section>
 
-<section class="band" id="diary" style="background:var(--blush)"><div class="wrap">
-  <h2 data-e="diaryTitle">Check availability</h2>
-  <p class="lead">Pick a month and session. Tap a date to see each room.</p>
-  <div class="diary">
-    <div>
-      <div class="calhead">
-        <h3 id="monthLbl"></h3>
-        <button class="iconbtn" id="prevM" aria-label="Previous month">‹</button>
-        <button class="iconbtn" id="nextM" aria-label="Next month">›</button>
-        <div class="seg" id="sessSeg"></div>
-      </div>
-      <div class="cal" id="cal"></div>
-      <div class="legend"><span><i style="background:var(--free)"></i>Free</span><span><i style="background:var(--held)"></i>On hold</span><span><i style="background:var(--booked)"></i>Booked</span><span>Dots: one per room</span></div>
+<section class="s dark" id="ava"><div class="w split">
+  <div class="txt rv"><div class="eyebrow">Add-on · AI events assistant</div><h2>Meet Ava. <em>Open day and night.</em></h2>
+    <p class="lead">"Is a Saturday in March free for 150, and roughly what would it cost?" Ava answers from your own website and notes, checks every room, works out an estimate with your pricing rules, and links straight to hold the date.</p>
+    <ul class="ticks"><li>Answers about rooms, packages, prices, parking and policies</li><li>Checks dates across all rooms, including public holidays</li><li>Takes messages for your events team, emailed to you</li><li>You choose her name, greeting and what she knows</li></ul>
+    <a class="mini" href="demo/" target="_blank" rel="noopener">Chat with Ava on the demo venue ↗</a></div>
+  <div class="rv"><img src="img/ava-phones.jpg" alt="Ava the AI events assistant and the estimate on a phone" style="border-radius:20px"></div>
+</div></section>
+
+<section class="s"><div class="w split rev">
+  <div class="txt rv"><div class="eyebrow">Your website</div><h2>Your venue, <em>your look.</em></h2>
+    <p class="lead">Change words, photos, colours and fonts yourself — no developer, no waiting. Upload your own photos once and use them across your rooms, gallery and hero.</p>
+    <ul class="ticks"><li>12 colour themes, light or dark, plus your own colours</li><li>Font pairings and an animated hero with six moods</li><li>Room comparison table and a gallery by function type</li></ul></div>
+  <div class="shot rv"><img src="img/editor-themes.jpg" alt="Website editor with colour themes"></div>
+</div></section>
+
+<section class="s dark" style="padding:80px 0"><div class="w">
+  <div class="head rv" style="margin-bottom:26px"><div class="eyebrow">Coming next</div><h2>And we're <em>just getting started.</em></h2></div>
+  <div class="soon rv">
+    <div><b>Function CRM</b><span>every enquiry and follow-up in one place</span></div>
+    <div><b>Email Studio</b><span>news and offers for your own guests</span></div>
+    <div><b>Run sheets</b><span>function sheets for your team</span></div>
+    <div><b>Payment plans</b><span>balance reminders, sent for you</span></div>
+    <div><b>AI voice</b><span>an assistant that answers the phone</span></div>
+  </div>
+</div></section>
+
+<section class="s soft" id="pricing"><div class="w">
+  <div class="head c rv"><div class="eyebrow">Pricing</div><h2>One flat price. <em>No commission.</em></h2>
+    <p class="lead">No percentage on any booking, ever. Try it free for 14 days — set it up yourself, or let us do it for you.</p></div>
+  <div class="plans">
+    <div class="plan rv"><h3>Function Deluxe</h3><p class="muted" style="margin:4px 0 0">Website, availability and online bookings</p>
+      <div class="pr">$129 <small>/ month + GST</small></div>
+      <ul><li>Editable website with rooms and gallery</li><li>Live availability for every room</li><li>Instant estimates with the look preview</li><li>Online holds and consultation booking</li><li>Your venue view of holds, meetings and deposits</li></ul>
+      <a class="btn line" href="#enquire">Start my free trial</a></div>
+    <div class="plan hi rv"><span class="tag">Most complete</span><h3>Function Deluxe + Ava</h3><p class="muted" style="margin:4px 0 0">Everything, plus your AI events assistant</p>
+      <div class="pr">$169 <small>/ month + GST</small></div>
+      <ul><li>Everything in Function Deluxe</li><li>Ava answers from your website, day and night</li><li>Checks dates and works out estimates</li><li>Takes messages for your events team</li><li>Up to 1,000 questions a month</li></ul>
+      <a class="btn light" href="#enquire">Start my free trial <span class="ar">→</span></a></div>
+  </div>
+  <div class="setup rv">
+    <h3>Setup — do it yourself, or we'll do it</h3>
+    <p class="muted" style="margin:0">Setting it up yourself is free with your trial. If you'd rather we did it, it's a one-off fee you can pay over your first 3 months.</p>
+    <div class="tiers">
+      <div class="tier"><b>Do it yourself</b><div class="p">Free</div><span>Add your rooms, prices and photos with our guide</span></div>
+      <div class="tier"><b>Essentials</b><div class="p">$400</div><span>Rooms, packages, prices, photos and calendar loaded for you</span></div>
+      <div class="tier"><b>Plus</b><div class="p">$500</div><span>Essentials, and Ava set up with your venue notes and styling options</span></div>
+      <div class="tier"><b>Premium</b><div class="p">$600</div><span>Plus, your own domain and a one-hour training session</span></div>
     </div>
-    <div class="panel" id="dayPanel"></div>
+    <p class="muted" style="font-size:13px;margin:10px 0 0">Setup prices + GST, payable over 3 months.</p>
+    <div class="founding"><i>✦</i><div><b>Founding offer:</b> the first 3 function centres get done-for-you setup at half price — $200, $250 or $300 + GST. Call Marc on <a href="tel:0413872994">0413 872 994</a>.</div></div>
   </div>
 </div></section>
 
-<section class="band" id="estimate"><div class="wrap">
-  <h2 data-e="estTitle">Estimate your function</h2>
-  <p class="lead" data-e="estLead">A guide price in under a minute. Your coordinator confirms the final quote at your consultation.</p>
-  <div class="est">
-    <form class="form" id="estForm" onsubmit="return false">
-      <div class="row2">
-        <label class="f">Type of function<select id="eType"></select></label>
-        <label class="f">Guests<input id="eGuests" type="number" min="1" max="550" value="180" inputmode="numeric"></label>
-      </div>
-      <div class="row2">
-        <label class="f">Date<input id="eDate" type="date"></label>
-        <label class="f">Session<select id="eSess"></select></label>
-      </div>
-      <div class="row2">
-        <label class="f">Room layout<select id="eStyle"><option value="banquet">Seated with dance floor</option><option value="cocktail">Cocktail (standing)</option><option value="theatre">Theatre</option><option value="boardroom">Boardroom</option></select></label>
-        <label class="f">Room<select id="eRoom"></select></label>
-      </div>
-      <div class="row2">
-        <label class="f">Food package<select id="eFood"></select></label>
-        <label class="f">Drinks package<select id="eBev"></select></label>
-      </div>
-      <div class="f" style="display:grid;gap:8px"><b style="font-size:15px">Styling</b><div id="eLook"></div></div>
-      <div class="f" style="display:grid;gap:8px"><b style="font-size:15px">Extras</b><div class="checks" id="eExtras"></div></div>
-    </form>
-    <div class="estside"><div class="lookcard"><div id="lookPrev"></div><div class="cap"><b id="lookCap"></b>See how your tables could look. Your stylist brings real samples to your consultation.</div></div>
-    <aside class="result" id="result" aria-live="polite"></aside></div>
-  </div>
+<section class="s" id="faq"><div class="w faq">
+  <div class="eyebrow">Questions</div><h2 style="margin-bottom:18px">Straight <em>answers.</em></h2>
+  <details><summary>Is the estimate a firm quote?</summary><p>No — it's a guide based on your own prices and rules for that day, room and package. Your coordinator confirms the final quote, usually at the consultation. The page says so clearly.</p></details>
+  <details><summary>How are weekends and public holidays priced?</summary><p>You set the rules: room hire and minimum spend for each room and session, and surcharges for Saturdays, Sundays and public holidays. NSW public holidays are marked on the calendar and priced in automatically.</p></details>
+  <details><summary>What happens when someone holds a date?</summary><p>The date shows as "on hold" for that room and session, and you get the details with their estimate and chosen look. Holds last 7 days by default. You confirm, release or follow up from your venue view.</p></details>
+  <details><summary>Can guests pay the deposit online?</summary><p>Yes, through Stripe. We connect it to your Stripe account as part of setup, so the money goes straight to you. If you'd rather take deposits your usual way, guests can hold and book a meeting without paying online.</p></details>
+  <details><summary>What does Ava know, and can she get it wrong?</summary><p>Ava answers from your website content and the notes you give her, and uses your pricing rules for estimates. She's an AI assistant, so the chat says answers can be wrong and your coordinator confirms prices and dates. When she can't help, she takes a message for your team.</p></details>
+  <details><summary>Do you charge commission?</summary><p>Never. One flat monthly price, no percentage on any booking or deposit.</p></details>
+  <details><summary>Is Aurelle a real venue?</summary><p>No — Aurelle Function Centre is our demo venue, so you can try everything as a guest would. Nothing is charged and no real dates are held.</p></details>
+  <details><summary>What happens after the 14 days?</summary><p>If you'd like to keep going, choose a plan. If not, simply stop — there's nothing to cancel.</p></details>
 </div></section>
 
-<section class="band reviews" style="background:var(--blush)"><div class="wrap">
-  <h2>Reviews</h2>
-  <p class="lead">Edit mode only: paste your Google review widget or add real reviews here. This section stays hidden until it has content you add.</p>
+<section class="s soft" id="enquire"><div class="w enq">
+  <div class="rv"><div class="eyebrow">Talk to Marc</div><h2>Let's see it <em>with your rooms.</em></h2>
+    <p class="lead" style="margin-top:18px">I'm Marc, a web designer here in Sydney with 50 years' experience in hospitality. Tell me about your venue and I'll show you how it would work for you — or set it up with you.</p>
+    <div class="contact">
+      <a class="demo" href="demo.html"><i>📅</i><span>Book a free Zoom demo — pick a time that suits you</span></a>
+      <a href="tel:0413872994"><i>☎</i><span>0413 872 994</span></a>
+      <a href="mailto:marc@webescapade.com?subject=Function%20Deluxe"><i>✉</i><span>marc@webescapade.com</span></a>
+    </div></div>
+  <form class="f rv" id="enqForm" novalidate>
+    <div class="two"><label>Your name<input name="name" autocomplete="name" required></label>
+      <label>Venue name<input name="business" autocomplete="organization" required></label></div>
+    <div class="two"><label>Email<input name="email" type="email" autocomplete="email" inputmode="email" required></label>
+      <label>Mobile<input name="phone" type="tel" autocomplete="tel" inputmode="tel"></label></div>
+    <div class="two"><label>Type of venue<select name="type"><option value="">Choose…</option><option>Function centre</option><option>Reception venue</option><option>Restaurant with function rooms</option><option>Hotel or club</option><option>Other</option></select></label>
+      <label>Suburb<input name="suburb" autocomplete="address-level2"></label></div>
+    <label>How many rooms? Anything else?<textarea name="message" rows="3" style="resize:vertical"></textarea></label>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <button class="btn dark" type="submit" style="width:100%;justify-content:center">Send my enquiry <span class="ar">→</span></button>
+    <div class="msg" id="enqMsg" role="status"></div>
+  </form>
 </div></section>
 
-<section class="band" id="visit" style="background:var(--blush)"><div class="wrap access">
-  <div><h2 data-e="visitTitle">Getting here</h2>
-  <ul data-e="visitList"><li>Free council car park behind the venue, about 400 spaces</li><li>30 free undercover spaces in our own car park</li><li>Lift and step-free entry to every room</li><li>Train station and taxi rank a short walk away</li></ul></div>
-  <div class="panel"><h3 data-e="consTitle">Come and see the rooms</h3><p data-e="consText" style="color:var(--soft)">Book a free consultation with our events coordinator. Bring your ideas, we'll bring the menus.</p><button class="btn" data-consult>Book a free consultation</button></div>
-</div></section>
+<footer><div class="w"><span>© Webescapade · Sydney, Australia</span><span>Function Deluxe — websites and online bookings for function centres</span><span><a href="/">Webescapade</a> · <a href="/Restaurant/">Restaurant Deluxe</a> · <a href="/service/">Service Deluxe</a> · <a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a></span></div></footer>
 
-<section class="band" id="faq"><div class="wrap" style="max-width:820px">
-  <h2 data-e="faqTitle">Questions</h2>
-  <details><summary>How long is a date held?</summary><p data-e="faq1">A hold lasts 7 days. It becomes a confirmed booking once your deposit is paid. If someone else asks for the same date, we contact you first.</p></details>
-  <details><summary>How accurate is the estimate?</summary><p data-e="faq2">It uses our current room hire, package prices and minimum spends for the day you choose. Final pricing is confirmed in writing after your consultation.</p></details>
-  <details><summary>Why do some days cost more?</summary><p data-e="faq3">Saturdays carry the highest room hire and minimum spend. Sundays add a 10% surcharge on food and drinks, and public holidays add 15% to cover staff penalty rates.</p></details>
-  <details><summary>Can we bring our own decorator or cake?</summary><p data-e="faq5">Yes. Our in-house team is optional, and we will work with your suppliers on bump-in times.</p></details>
-  <details><summary>What is the deposit?</summary><p data-e="faq4">25% of the estimated total, with a minimum of $1,000. It comes off your final invoice.</p></details>
-</div></section>
+<a class="btn dark float" id="float" href="demo.html">Book a free demo <span class="ar">→</span></a>
 
-<footer><div class="wrap">
-  <div><div class="brand" data-e="brand2" style="color:var(--footInk)">Aurelle Function Centre</div><p class="small" data-e="addr">Western Sydney, NSW</p></div>
-  <div><b>Events team</b><p class="small" data-e="contact">events@aurelle.example<br>(02) 9000 0000</p></div>
-  <div><b>Staff</b><p class="small"><a href="#venue">Venue view (demo)</a><br><a href="#edit">Edit this site</a></p></div>
-</div></footer>
-<div class="lb" id="lb"><img id="lbImg" alt=""><p id="lbCap"></p><div class="nav"><button class="iconbtn" id="lbPrev" aria-label="Previous photo">‹</button><button class="iconbtn" id="lbClose" aria-label="Close">×</button><button class="iconbtn" id="lbNext" aria-label="Next photo">›</button></div></div>
-
-
-
-
-<div class="modal" id="modal"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
-<div class="drawer" id="drawer"></div>
-<div class="etool" id="etool">
-  <span style="align-self:center;font-size:14px;padding:0 6px">Editing: tap text to change it, tap a photo to replace it</span>
-  <button class="btn light" id="tTheme">Theme</button>
-  <button class="btn light" id="tHero">Animated hero</button>
-  <button class="btn light" id="tAst">AI assistant</button>
-  <button class="btn light" id="tPrice">Rooms &amp; pricing</button>
-  <button class="btn light" id="tAcct">Sign in</button>
-  <button class="btn light" id="tSave">Save</button>
-  <button class="btn light" id="tDl">Download page</button>
-  <button class="btn ghost" id="tExit">Finish</button>
-</div>
-<input type="file" id="fileIn" accept="image/*" hidden>
-<div class="toast" id="toast"></div>
-<div id="themeWipe"></div>
-
-<script id="fd-config" type="application/json">null</script>
 <script>
-{
-/* ---------- defaults (venue edits override, stored in this browser; baked into the page on download) ---------- */
-const DEFAULT={
- sessions:[{id:'day',label:'Day',time:'11am – 4pm'},{id:'eve',label:'Evening',time:'6pm – midnight'}],
- dayFactor:{hire:0.6,min:0.5},
- rooms:[
-  {id:'grand',name:'Grand Ballroom',seat:'160–380 seated',desc:'White draped ceiling, gold crystal chandeliers and a sunken dance floor. Our largest room, with its own bridal suite.',cap:{banquet:380,cocktail:550,theatre:500,boardroom:0},feat:{dance:'Large, sunken',suite:'Bridal suite',stage:'Yes, with LED backdrop',best:'Weddings, galas, formals'},hire:{wd:1500,fri:2500,sat:3500,sun:2800},min:{wd:12000,fri:20000,sat:30000,sun:24000}},
-  {id:'crystal',name:'Crystal Room',seat:'50–160 seated',desc:'Soft drapes, crystal chandeliers and a private entrance. Made for engagements, christenings and smaller weddings.',cap:{banquet:160,cocktail:220,theatre:180,boardroom:40},feat:{dance:'Yes',suite:'VIP lounge',stage:'Portable stage',best:'Engagements, christenings, birthdays'},hire:{wd:900,fri:1500,sat:2200,sun:1800},min:{wd:5000,fri:9000,sat:13000,sun:10000}},
-  {id:'terrace',name:'Terrace Lounge',seat:'20–60 seated',desc:'An open-air lounge under festoon lights, with a retractable roof for wet nights. Cocktail parties and intimate dinners.',cap:{banquet:60,cocktail:120,theatre:0,boardroom:24},feat:{dance:'Small floor',suite:'No',stage:'No',best:'Cocktail parties, rehearsal dinners, wakes'},hire:{wd:500,fri:800,sat:1200,sun:950},min:{wd:2000,fri:3500,sat:5000,sun:4000}}],
- food:[{id:'silver',name:'Silver banquet (shared entrée, 2 mains)',pp:95},{id:'gold',name:'Gold banquet (3 courses, alternate drop)',pp:115},{id:'platinum',name:'Platinum (canapés, 3 courses, dessert station)',pp:139},{id:'canape',name:'Cocktail canapés and grazing table',pp:65},{id:'lunch',name:'Family lunch (christenings, birthdays)',pp:69},{id:'conf',name:'Conference day (teas and lunch)',pp:59}],
- bev:[{id:'none',name:'Bar tab on consumption',pp:0},{id:'soft',name:'Soft drinks, tea and coffee',pp:15},{id:'standard',name:'Standard drinks, 5 hours',pp:35},{id:'premium',name:'Premium drinks, 5 hours',pp:50}],
- extras:[{id:'drape',name:'Ceiling drapes and fairy lights',price:1200,per:'event'},{id:'bridal',name:'Bridal or head table styling',price:650,per:'event'},{id:'centre',name:'Floral centrepieces',price:15,per:'guest'},{id:'covers',name:'Chair covers and sashes',price:6,per:'guest'},{id:'cake',name:'Cake by our cake chef',price:8,per:'guest'},{id:'dj',name:'DJ and lighting, 5 hours',price:1100,per:'event'},{id:'booth',name:'Photo booth, 3 hours',price:750,per:'event'},{id:'clouds',name:'Dancing on clouds (first dance)',price:450,per:'event'},{id:'candles',name:'Candles and lanterns',price:4,per:'guest'},{id:'balloon',name:'Balloon arch',price:450,per:'event'},{id:'security',name:'Security guard',price:380,per:'event'}],
- types:[
-  {id:'wedding',name:'Weddings',text:'Reception, bridal suite, styling and cake from one team, with a menu tasting.',food:'gold',bev:'standard',style:'banquet',ex:['drape','bridal','centre','cake'],icon:'<circle cx="15" cy="24" r="9"/><circle cx="25" cy="24" r="9"/><path d="M13 12l2-5 2 5"/>'},
-  {id:'engagement',name:'Engagements',text:'Cocktail or seated parties for 50 to 200 guests.',food:'canape',bev:'standard',style:'cocktail',ex:['centre'],icon:'<path d="M14 8h12l-6 10zM20 18v12M14 32h12"/>'},
-  {id:'corporate',name:'Corporate events',text:'Conferences, awards nights and end-of-year parties with AV ready.',food:'silver',bev:'standard',style:'banquet',ex:[],icon:'<rect x="6" y="14" width="28" height="18" rx="2"/><path d="M15 14v-4h10v4M6 22h28"/>'},
-  {id:'christening',name:'Christenings',text:'Daytime family lunches with a kids’ menu and room for prams.',food:'lunch',bev:'soft',style:'banquet',ex:['cake'],icon:'<path d="M20 32s-11-6.5-11-14a6 6 0 0 1 11-3 6 6 0 0 1 11 3c0 7.5-11 14-11 14z"/>'},
-  {id:'formal',name:'Formals and debutante balls',text:'School formals and deb balls with a grand entrance, DJ and photo booth.',food:'silver',bev:'soft',style:'banquet',ex:['dj','booth'],icon:'<path d="M20 6l4 9 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1z"/>'},
-  {id:'birthday',name:'Birthdays',text:'18ths to 80ths. Balloons, cake table, DJ and dance floor.',food:'canape',bev:'standard',style:'cocktail',ex:['cake','dj'],icon:'<rect x="9" y="20" width="22" height="12" rx="2"/><path d="M9 26h22M20 20v-5M20 11c-1.5-2 0-3.5 0-3.5s1.5 1.5 0 3.5"/>'},
-  {id:'sports',name:'Sports presentation nights',text:'Club dinners and trophy nights with stage, screen and microphone.',food:'silver',bev:'standard',style:'banquet',ex:[],icon:'<path d="M13 8h14v6a7 7 0 0 1-14 0zM13 10H8a5 5 0 0 0 5 6M27 10h5a5 5 0 0 1-5 6M20 21v6M14 32h12"/>'},
-  {id:'cultural',name:'Cultural celebrations',text:'Large family gatherings with menus tailored to your traditions.',food:'platinum',bev:'standard',style:'banquet',ex:['drape'],icon:'<circle cx="20" cy="20" r="12"/><path d="M8 20h24M20 8c4 4 4 20 0 24M20 8c-4 4-4 20 0 24"/>'}],
- gallery:[
-  {scene:'grand',cat:'Weddings',cap:'Grand Ballroom, set for a wedding reception',shape:'wide'},
-  {scene:'gala',cat:'Corporate',cap:'Awards gala in the Grand Ballroom',shape:'tall'},
-  {scene:'wedding',cat:'Weddings',cap:'Bridal table with seasonal florals',shape:'wide'},
-  {scene:'engagement',cat:'Engagements',cap:'Engagement party with balloon arch and grazing table',shape:'wide'},
-  {scene:'formal',cat:'Formals',cap:'Dance floor lit for a Year 12 formal',shape:'tall'},
-  {scene:'crystal',cat:'Rooms',cap:'Crystal Room, round tables for 120',shape:'wide'},
-  {scene:'birthday',cat:'Birthdays',cap:'Milestone birthday, cocktail style',shape:'wide'},
-  {scene:'terrace',cat:'Rooms',cap:'Terrace Lounge at dusk',shape:'wide'},
-  {scene:'christening',cat:'Christenings',cap:'Christening lunch in natural light',shape:'wide'},
-  {scene:'corporate',cat:'Corporate',cap:'Conference, theatre layout with AV',shape:'wide'}],
- imgs:{'room:grand':'images/grand-ballroom.jpg','room:crystal':'images/crystal-room.jpg','room:terrace':'images/terrace-lounge.jpg',
-  'gal:0':'images/grand-ballroom.jpg','gal:1':'images/awards-gala.jpg','gal:2':'images/head-table.jpg','gal:3':'images/engagement.jpg','gal:4':'images/formal-dance-floor.jpg','gal:5':'images/crystal-room.jpg','gal:6':'images/birthday-cocktail.jpg','gal:7':'images/terrace-lounge.jpg','gal:8':'images/christening.jpg','gal:9':'images/conference.jpg',
-  hero1:'images/grand-ballroom.jpg',hero2:'images/head-table.jpg',hero3:'images/terrace-lounge.jpg',hero4:'images/crystal-room.jpg',hero5:'images/birthday-cocktail.jpg'},
+(function(){
+  var SB="https://tehxobdokbvqtwtgqzrh.supabase.co", KEY="sb_publishable_CrlY9xXYdhI7qCQwuMnDWg_hFQ3mXCJ";
+  var nav=document.getElementById("nav"), fl=document.getElementById("float"), hero=document.getElementById("top");
+  function sc(){ var y=window.scrollY; nav.classList.toggle("s",y>10); fl.classList.toggle("on",y>hero.offsetHeight&&(window.innerHeight+y)<document.body.scrollHeight-400); }
+  window.addEventListener("scroll",sc,{passive:true}); sc();
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.08});
+    document.querySelectorAll(".rv").forEach(function(el){io.observe(el);});
+  } else document.querySelectorAll(".rv").forEach(function(el){el.classList.add("in");});
 
- surcharge:{sun:0.10,ph:0.15},
- deposit:{pct:0.25,min:1000},
- holdDays:7,
- supabase:{url:'https://tehxobdokbvqtwtgqzrh.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE',venue:'aurelle',bucket:'venue-media'},
- spread:[0.95,1.10],
- holidays:'2026-12-25 Christmas Day\n2026-12-26 Boxing Day\n2026-12-28 Boxing Day (additional)\n2027-01-01 New Year’s Day\n2027-01-26 Australia Day\n2027-03-26 Good Friday\n2027-03-27 Easter Saturday\n2027-03-28 Easter Sunday\n2027-03-29 Easter Monday\n2027-04-25 Anzac Day\n2027-06-14 King’s Birthday\n2027-10-04 Labour Day\n2027-12-25 Christmas Day\n2027-12-27 Christmas (additional)\n2027-12-28 Boxing Day (additional)',
- meetTimes:['10:00','11:30','14:00','15:30']
-};
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const store={get(k,d){try{const v=localStorage.getItem('fd3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('fd3_'+k,JSON.stringify(v));return true}catch(e){return false}}};
-let baked=null;try{baked=JSON.parse($('#fd-config').textContent)}catch(e){}
-let C=JSON.parse(JSON.stringify(store.get('config',null)||baked||DEFAULT));for(const k in DEFAULT)if(C[k]==null)C[k]=JSON.parse(JSON.stringify(DEFAULT[k]));
-const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2600)};
-const pad=n=>String(n).padStart(2,'0'),iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
-const money=n=>'$'+Math.round(n).toLocaleString('en-AU');
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const today=new Date();today.setHours(0,0,0,0);const TODAY=iso(today);
-const nice=s=>parse(s).toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-const holidays=()=>{const m={};(C.holidays||'').split('\n').forEach(l=>{const x=l.trim().match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/);if(x)m[x[1]]=x[2]||'Public holiday'});return m};
-const dayType=s=>{if(holidays()[s])return'ph';const d=parse(s).getDay();return d===0?'sun':d===5?'fri':d===6?'sat':'wd'};
-const DTL={wd:'Weekday (Mon–Thu)',fri:'Friday',sat:'Saturday',sun:'Sunday',ph:'Public holiday'};
-const room=id=>C.rooms.find(r=>r.id===id);
-const sessLabel=id=>(C.sessions.find(s=>s.id===id)||{}).label||id;
+  /* video: thumbnail first, YouTube only when tapped */
+  var v=document.getElementById("vid");
+  v.addEventListener("click",function(){
+    if(v.querySelector("iframe")) return;
+    v.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/22rezCEm5vU?autoplay=1&rel=0&modestbranding=1" title="Function Deluxe — a 2-minute tour" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+  });
+  if(/[?&]v=1/.test(location.search)) setTimeout(function(){ document.getElementById("video").scrollIntoView(); },300);
 
-/* ---------- illustrated room scenes (replace with real photos in edit mode) ---------- */
-function scene(o){
- let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.w1}"/><stop offset="1" stop-color="${o.w2}"/></linearGradient><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.f1}"/><stop offset="1" stop-color="${o.f2}"/></linearGradient><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.s1||'#333'}"/><stop offset=".62" stop-color="${o.s2||'#555'}"/><stop offset=".62" stop-color="${o.s3||'#333'}"/><stop offset="1" stop-color="${o.s4||'#222'}"/></linearGradient><radialGradient id="g"><stop offset="0" stop-color="${o.glow||'#ffe9b8'}" stop-opacity=".95"/><stop offset="1" stop-color="${o.glow||'#ffe9b8'}" stop-opacity="0"/></radialGradient><radialGradient id="d"><stop offset="0" stop-color="${o.dance||'#fff'}" stop-opacity=".9"/><stop offset=".7" stop-color="${o.dance||'#fff'}" stop-opacity=".35"/><stop offset="1" stop-color="${o.dance||'#fff'}" stop-opacity="0"/></radialGradient></defs>`;
- if(o.kind==='terrace'){s+=`<rect width="800" height="520" fill="url(#sk)"/>`;for(let i=0;i<14;i++)s+=`<rect x="${i*58}" y="${250-((i*37)%60)}" width="${30+(i*13)%26}" height="${70+((i*37)%60)}" fill="${o.city}" opacity=".85"/>`;s+=`<rect y="300" width="800" height="16" fill="#3a2a22"/>`}
- else{s+=`<rect width="800" height="320" fill="url(#w)"/>`;
-  if(o.wins)for(const x of o.wins){s+=`<path d="M${x} 300V110a${o.ww/2} ${o.ww/2} 0 0 1 ${o.ww} 0V300z" fill="url(#sk)" stroke="${o.frame}" stroke-width="8"/>`;for(let i=0;i<4;i++)s+=`<rect x="${x+8+i*o.ww/4}" y="${215-(i*17)%34}" width="${o.ww/6}" height="${40+(i*17)%34}" fill="${o.city}" opacity=".8"/>`}
-  if(o.stage)s+=`<rect x="260" y="80" width="280" height="160" rx="6" fill="${o.stage}"/><rect x="270" y="90" width="260" height="140" rx="4" fill="#fff" opacity=".12"/><rect x="220" y="290" width="360" height="30" fill="#1a1016"/><rect x="370" y="250" width="16" height="40" fill="#2b2b2b"/>`;
-  if(o.drape){for(let i=0;i<6;i++){const x=i*800/6,w=800/6;s+=`<path d="M${x} 0Q${x+w/2} ${o.dh||70} ${x+w} 0Z" fill="#fffaf2" opacity=".92"/><path d="M${x} 0Q${x+w/2} ${(o.dh||70)*.7} ${x+w} 0" fill="none" stroke="#eadfcf" stroke-width="2"/>`;for(let k=1;k<8;k++){const t=k/8,y=2*(1-t)*t*(o.dh||70);s+=`<circle cx="${x+w*t}" cy="${y}" r="7" fill="url(#g)"/><circle cx="${x+w*t}" cy="${y}" r="2" fill="#fff6d8"/>`}}
-   s+=`<path d="M0 0h46v320c-20-80-30-200-46-320z" fill="#fffaf2" opacity=".85"/><path d="M800 0h-46v320c20-80 30-200 46-320z" fill="#fffaf2" opacity=".85"/>`}}
- s+=`<polygon points="0,320 800,320 800,520 0,520" fill="url(#f)"/>`;
- if(o.dance)s+=`<ellipse cx="400" cy="410" rx="230" ry="70" fill="url(#d)"/>`;
- for(const c of (o.lights||[])){if(o.kind==='terrace')continue;s+=`<line x1="${c}" y1="0" x2="${c}" y2="${o.drape?70:60}" stroke="#c9a46a" stroke-width="2"/><circle cx="${c}" cy="${o.drape?92:78}" r="70" fill="url(#g)"/><path d="M${c-28} ${o.drape?82:68}h56l-10 24h-36z" fill="${o.chand||'#f6d79a'}"/>`;for(let i=-3;i<=3;i++)s+=`<line x1="${c+i*8}" y1="${o.drape?106:92}" x2="${c+i*8}" y2="${(o.drape?116:102)+(3-Math.abs(i))*4}" stroke="#fff4d6" stroke-width="2"/>`}
- if(o.kind==='terrace'){for(const d of[90,150]){s+=`<path d="M0 20Q400 ${d} 800 20" stroke="#2c2018" stroke-width="2" fill="none"/>`;for(let i=1;i<20;i++){const t=i/20,y=20*(1-t)*(1-t)+2*(1-t)*t*d+20*t*t;s+=`<circle cx="${800*t}" cy="${y+4}" r="12" fill="url(#g)"/><circle cx="${800*t}" cy="${y+4}" r="3.5" fill="#ffe7a8"/>`}}}
- for(const[x,col]of(o.balloons||[])){for(let i=0;i<7;i++){const bx=x+((i*23)%46)-23,by=200+((i*37)%70);s+=`<line x1="${bx}" y1="${by+20}" x2="${x}" y2="330" stroke="#fff" stroke-opacity=".5"/><ellipse cx="${bx}" cy="${by}" rx="18" ry="22" fill="${col[i%col.length]}"/><ellipse cx="${bx-6}" cy="${by-8}" rx="5" ry="7" fill="#fff" opacity=".35"/>`}}
- if(o.theatre){for(let r=0;r<5;r++){const y=340+r*38,sc=.6+r*.13,n=10-r;for(let i=0;i<n;i++){const x=(i+.5)*800/n;s+=`<rect x="${x-12*sc}" y="${y-20*sc}" width="${24*sc}" height="${30*sc}" rx="${5*sc}" fill="${o.chair}"/>`}}}
- const rows=o.theatre?[]:(o.rows||[[5,350,.55],[4,405,.8],[3,475,1.08]]);
- for(const[n,y,sc,skip]of rows){for(let i=0;i<n;i++){if(skip&&skip.includes(i))continue;const x=(i+.5)*800/n;const rx=58*sc,ry=17*sc;
-  s+=`<ellipse cx="${x}" cy="${y+22*sc}" rx="${rx*1.05}" ry="${ry}" fill="#000" opacity=".18"/>`;
-  for(let k=-2;k<=2;k++)s+=`<rect x="${x+k*rx*.42-7*sc}" y="${y-26*sc}" width="${14*sc}" height="${26*sc}" rx="${5*sc}" fill="${o.chair}"/>`;
-  s+=`<path d="M${x-rx} ${y}L${x-rx*.94} ${y+22*sc}Q${x} ${y+30*sc} ${x+rx*.94} ${y+22*sc}L${x+rx} ${y}z" fill="${o.cloth2}"/><ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${o.cloth}"/>`;
-  if(o.tall){s+=`<rect x="${x-1.5*sc}" y="${y-70*sc}" width="${3*sc}" height="${70*sc}" fill="#e8dcc0"/><circle cx="${x}" cy="${y-76*sc}" r="${16*sc}" fill="${o.accent}"/><circle cx="${x-10*sc}" cy="${y-70*sc}" r="${9*sc}" fill="#fff"/>`}
-  else s+=`<circle cx="${x}" cy="${y-10*sc}" r="${9*sc}" fill="${o.accent}"/><rect x="${x-1.5*sc}" y="${y-10*sc}" width="${3*sc}" height="${10*sc}" fill="#ece0c8"/>`}}
- return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s+'</svg>')}
-const SCENES={
- grand:scene({w1:'#f3ebe1',w2:'#d9c6b2',f1:'#7a5a44',f2:'#2e1c14',drape:1,dh:80,lights:[200,400,600],chand:'#e8c46a',dance:'#fff3d6',cloth:'#ffffff',cloth2:'#efe6da',chair:'#f3e7d3',accent:'#e9b7c1',tall:1,rows:[[6,345,.5],[5,395,.72,[2]],[4,470,1.05,[1,2]]]}),
- wedding:scene({w1:'#2e1620',w2:'#4a2232',f1:'#5a3a2e',f2:'#1e100c',drape:1,dh:60,glow:'#ffd9a8',lights:[400],chand:'#e8c46a',cloth:'#fffaf4',cloth2:'#f0e4d6',chair:'#e8d5b9',accent:'#f2b8c6',tall:1,rows:[[3,360,.8],[2,450,1.35]]}),
- crystal:scene({w1:'#eef0f3',w2:'#c9ced8',f1:'#6f6a68',f2:'#2a2626',drape:1,dh:55,lights:[260,540],chand:'#dfe8f2',glow:'#eef4ff',cloth:'#ffffff',cloth2:'#e9ebef',chair:'#c9ced8',accent:'#b6c7e0',rows:[[4,355,.6],[3,420,.9],[2,488,1.15]]}),
- terrace:scene({kind:'terrace',f1:'#7a5a44',f2:'#3b2a20',s1:'#2a2350',s2:'#e08a6a',s3:'#24486b',s4:'#132a40',city:'#1f2238',cloth:'#f4ece0',cloth2:'#dccfbe',chair:'#2d2d2d',accent:'#e9b44c',rows:[[4,370,.6],[3,440,.95]]}),
- birthday:scene({w1:'#2a1638',w2:'#4b2050',f1:'#3a2438',f2:'#140a14',lights:[400],glow:'#ffd0f0',dance:'#ff7ac8',balloons:[[120,['#f6c343','#ffffff','#e75a9b']],[680,['#f6c343','#ffffff','#e75a9b']]],cloth:'#1a1a1a',cloth2:'#111',chair:'#d4af37',accent:'#f6c343',rows:[[4,380,.6,[1,2]],[3,470,1,[1]]]}),
- corporate:scene({w1:'#1d2430',w2:'#2c3646',f1:'#3a3f4a',f2:'#14171d',stage:'#2f6fb0',lights:[160,640],glow:'#dbe8ff',theatre:1,chair:'#c9ced8',cloth:'#fff',cloth2:'#eee',accent:'#fff'}),
- formal:scene({w1:'#120a24',w2:'#2a1046',f1:'#24163a',f2:'#0a0612',lights:[200,600],glow:'#b9a0ff',dance:'#7b5cff',cloth:'#ffffff',cloth2:'#e6e0f0',chair:'#c0c0d0',accent:'#a98bff',rows:[[6,350,.5,[2,3]],[4,460,1,[1,2]]]}),
- christening:scene({w1:'#f6efe6',w2:'#e6d8c6',f1:'#b89878',f2:'#6e5038',wins:[90,330,570],ww:140,s1:'#bfe0f2',s2:'#eef7fb',s3:'#a8cfe0',s4:'#86b4c8',city:'#a8c0cc',frame:'#ffffff',lights:[],cloth:'#ffffff',cloth2:'#f1ece4',chair:'#ffffff',accent:'#a9d3e8',balloons:[[400,['#ffffff','#bfe0f2']]],rows:[[4,380,.65],[3,460,1]]}),
- gala:scene({w1:'#251030',w2:'#4a1528',f1:'#3a2030',f2:'#120810',drape:1,dh:50,lights:[120,300,500,680],chand:'#d4af37',cloth:'#1c1c1c',cloth2:'#111',chair:'#c9a46a',accent:'#f2c6b8',tall:1}),
- engagement:scene({w1:'#f5e6e6',w2:'#e0c4c8',f1:'#8a6a60',f2:'#3e2a26',drape:1,dh:65,lights:[400],glow:'#ffe0e6',chand:'#e8c46a',cloth:'#ffffff',cloth2:'#f3e3e5',chair:'#d9b8bd',accent:'#f29bb0',balloons:[[90,['#ffffff','#f6c9d3']],[710,['#ffffff','#f6c9d3']]],rows:[[4,380,.65],[3,465,1]]})};
-const imgs=store.get('imgs',{});
-const imgSrc=(k,fb)=>imgs[k]||(C.imgs&&C.imgs[k])||SCENES[fb||k.replace('room:','')]||SCENES.grand;
-
-/* ---------- landing renders ---------- */
-function renderHero(){applyHero()}
-function fromPrice(r){return r.hire.wd*C.dayFactor.hire+r.min.wd*C.dayFactor.min}
-function renderRooms(){$('#roomList').innerHTML=C.rooms.map(r=>`<article class="room"><div class="ph"><img data-img="room:${r.id}" src="${imgSrc('room:'+r.id,r.id)}" alt="${esc(r.name)}"></div><div class="bd"><h3>${esc(r.name)}</h3><p style="margin:0;font-weight:600">${esc(r.seat||'')}</p><p style="margin:0;color:var(--soft);font-size:15px">${esc(r.desc)}</p>
- <div class="caps">${[['banquet','Seated'],['cocktail','Cocktail'],['theatre','Theatre'],['boardroom','Board']].map(([k,l])=>`<div><b>${r.cap[k]||'–'}</b><small>${l}</small></div>`).join('')}</div>
- <div class="from">Weekday day functions from <b>${money(fromPrice(r))}</b> incl. minimum spend</div>
- <button class="btn ghost" data-pick-room="${r.id}">Estimate in this room</button></div></article>`).join('');renderCompare()}
-function renderCompare(){const R=C.rooms,f=r=>r.feat||{};
- const rows=[['Seated with dance floor',r=>esc(r.seat||r.cap.banquet)],['Theatre style',r=>r.cap.theatre?'Up to '+r.cap.theatre:'–'],['Cocktail',r=>r.cap.cocktail?'Up to '+r.cap.cocktail:'–'],['Dance floor',r=>esc(f(r).dance||'–')],['Bridal or VIP suite',r=>esc(f(r).suite||'–')],['Stage',r=>esc(f(r).stage||'–')],['Best for',r=>esc(f(r).best||'')],['Saturday night room hire',r=>money(r.hire.sat)],['Saturday minimum spend',r=>money(r.min.sat)]];
- $('#cmp').innerHTML=`<thead><tr><th></th>${R.map(r=>`<th>${esc(r.name)}</th>`).join('')}</tr></thead><tbody>${rows.map(([l,fn])=>`<tr><th>${l}</th>${R.map(r=>`<td>${fn(r)}</td>`).join('')}</tr>`).join('')}</tbody>`}
-function renderTypes(){$('#fnList').innerHTML=C.types.map(t=>`<div class="ft"><svg viewBox="0 0 40 40" aria-hidden="true">${t.icon}</svg><h3>${esc(t.name)}</h3><p>${esc(t.text)}</p></div>`).join('')}
-let gCat='All',lbI=0;const gList=()=>C.gallery.map((g,i)=>({...g,i})).filter(g=>gCat==='All'||g.cat===gCat);
-function renderGallery(){const cats=['All',...new Set(C.gallery.map(g=>g.cat))];if(!cats.includes(gCat))gCat='All';
- $('#gfil').innerHTML=cats.map(c=>`<button class="${c===gCat?'on':''}" data-gc="${esc(c)}">${esc(c)}</button>`).join('');
- $('#gal').innerHTML=gList().map(g=>`<div class="gi ${g.shape||'wide'}" data-gi="${g.i}" role="button" tabindex="0" aria-label="Open photo: ${esc(g.cap)}"><img data-img="gal:${g.i}" src="${imgSrc('gal:'+g.i,g.scene)}" alt="${esc(g.cap)}"><span ${document.body.classList.contains('editing')?'contenteditable="true"':''}>${esc(g.cap)}</span><button class="del" data-gdel="${g.i}" aria-label="Remove photo">×</button></div>`).join('')}
-function openLb(i){const L=gList();lbI=Math.max(0,L.findIndex(g=>g.i===i));showLb()}
-function showLb(){const L=gList(),g=L[(lbI+L.length)%L.length];if(!g)return;$('#lbImg').src=imgSrc('gal:'+g.i,g.scene);$('#lbImg').alt=g.cap;$('#lbCap').textContent=g.cap;$('#lb').classList.add('on')}
-
-/* ---------- design: theme portals, fonts, animated hero (same tools as Restaurant Deluxe) ---------- */
-const THEMES={
- claret:{label:'Claret',light:1,bg:'#fbf8f5',panel:'#ffffff',panel2:'#f4e4dc',ink:'#2a1219',muted:'#6d5560',line:'#ead9d2',band:'#4a1528',bandInk:'#f8ebe6',bandSoft:'#e4c9cf',btn:'#4a1528',btnInk:'#ffffff',free:'#127a7a',glyph:'#f2c6b8',foot:'#24080f',footInk:'#e8d3d8'},
- ivory:{label:'Ivory & Gold',light:1,bg:'#fffdf8',panel:'#ffffff',panel2:'#f5efe3',ink:'#1f1a14',muted:'#6b6252',line:'#ebe3d3',band:'#1f1a14',bandInk:'#fffdf8',bandSoft:'#cbbf9f',btn:'#9a7a2f',btnInk:'#ffffff',free:'#0f766e',glyph:'#d9b866',foot:'#14110d',footInk:'#e8e0cf'},
- linen:{label:'Linen',light:1,bg:'#faf7f0',panel:'#ffffff',panel2:'#f4eee2',ink:'#2a2118',muted:'#6f6455',line:'#e6dfd2',band:'#2a2118',bandInk:'#faf7f0',bandSoft:'#cbbfa9',btn:'#b45309',btnInk:'#ffffff',free:'#0f766e',glyph:'#e7b77a',foot:'#1d1610',footInk:'#e9e0cf'},
- petal:{label:'Petal',light:1,bg:'#fdf2f5',panel:'#ffffff',panel2:'#fae5eb',ink:'#3b1f28',muted:'#7d5a66',line:'#f0d8df',band:'#3b1f28',bandInk:'#fdf2f5',bandSoft:'#e9bccb',btn:'#be185d',btnInk:'#ffffff',free:'#0f766e',glyph:'#ff9cc6',foot:'#2a141c',footInk:'#f3d6e0'},
- sage:{label:'Sage',light:1,bg:'#f1f4ed',panel:'#ffffff',panel2:'#e5ebdd',ink:'#1f2a1c',muted:'#5b6b55',line:'#d9e0d0',band:'#1f3a2a',bandInk:'#eef5ea',bandSoft:'#b9cdb3',btn:'#15803d',btnInk:'#ffffff',free:'#0f766e',glyph:'#a7d7a0',foot:'#141d12',footInk:'#d8e3d2'},
- sky:{label:'Sky',light:1,bg:'#eef4fb',panel:'#ffffff',panel2:'#e0eaf7',ink:'#10233b',muted:'#4e6480',line:'#d3dfee',band:'#10233b',bandInk:'#eef4fb',bandSoft:'#a9bdd6',btn:'#4338ca',btnInk:'#ffffff',free:'#0f766e',glyph:'#a5b4fc',foot:'#0a1726',footInk:'#d4e0ef'},
- latte:{label:'Latte',light:1,bg:'#f3ece1',panel:'#fffdf9',panel2:'#e9dfd0',ink:'#2b2118',muted:'#6d6151',line:'#ddd2c1',band:'#3a2a1c',bandInk:'#f3ece1',bandSoft:'#cdb99d',btn:'#a16207',btnInk:'#ffffff',free:'#0f766e',glyph:'#e2b86b',foot:'#21170f',footInk:'#e6dccb'},
- deluxe:{label:'Deluxe Gold',bg:'#0b0806',panel:'#151009',panel2:'#1c150c',ink:'#f6efe2',muted:'#b3a488',line:'#2c2418',band:'#1c150c',bandInk:'#f6efe2',bandSoft:'#b3a488',btn:'#f0cf85',btnInk:'#1a1206',free:'#7fd3a8',glyph:'#f0cf85',foot:'#050302',footInk:'#d9ccb4'},
- blush:{label:'Blush',bg:'#160a10',panel:'#221019',panel2:'#2b1420',ink:'#ffeef5',muted:'#c99ab0',line:'#3a1d2b',band:'#2b1420',bandInk:'#ffeef5',bandSoft:'#c99ab0',btn:'#ff8fc3',btnInk:'#2a0d1a',free:'#5fd4b0',glyph:'#ff8fc3',foot:'#0c0508',footInk:'#e9cbd8'},
- emerald:{label:'Emerald',bg:'#05100c',panel:'#0b1a14',panel2:'#0f2219',ink:'#e9fff4',muted:'#8fbfa8',line:'#183327',band:'#0f2219',bandInk:'#e9fff4',bandSoft:'#8fbfa8',btn:'#4ade9b',btnInk:'#05261a',free:'#a7f3cf',glyph:'#4ade9b',foot:'#020806',footInk:'#cfe8db'},
- slate:{label:'Steel Slate',bg:'#0a0d12',panel:'#12171f',panel2:'#171d27',ink:'#eef2f8',muted:'#9aa7b8',line:'#232b37',band:'#171d27',bandInk:'#eef2f8',bandSoft:'#9aa7b8',btn:'#93c5fd',btnInk:'#0a1626',free:'#5fd4b0',glyph:'#93c5fd',foot:'#05070a',footInk:'#d5dce6'},
- midnight:{label:'Midnight Claret',bg:'#1a0c12',panel:'#26131b',panel2:'#331a24',ink:'#f6ebe6',muted:'#c9b2ba',line:'#3d2330',band:'#331a24',bandInk:'#f6ebe6',bandSoft:'#c9b2ba',btn:'#e07a8f',btnInk:'#2a0a14',free:'#4cc2bd',glyph:'#f2c6b8',foot:'#0d0509',footInk:'#e8d3d8'}};
-const PAIRS={classic:{label:'Venue Classic (default)',head:'"Cormorant Garamond",Georgia,serif',body:'Manrope,system-ui,sans-serif',load:''},
- modern:{label:'Modern Bold',head:'Unbounded,sans-serif',body:'Sora,sans-serif',load:'family=Unbounded:wght@500;700&family=Sora:wght@400;600;700'},
- editorial:{label:'Editorial Serif',head:'"Playfair Display",serif',body:'Inter,sans-serif',load:'family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700'},
- poster:{label:'Poster Condensed',head:'"Archivo Black",sans-serif',body:'Inter,sans-serif',load:'family=Archivo+Black&family=Inter:wght@400;500;600;700'},
- fine:{label:'Fine Dining Classic',head:'"Cormorant Garamond",serif',body:'Lato,sans-serif',load:'family=Lato:wght@400;700;900'},
- technical:{label:'Technical Clean',head:'"Space Grotesk",sans-serif',body:'"Space Grotesk",sans-serif',load:'family=Space+Grotesk:wght@400;500;600;700'},
- warm:{label:'Warm & Characterful',head:'Fraunces,serif',body:'Nunito,sans-serif',load:'family=Fraunces:wght@600;700;900&family=Nunito:wght@400;600;700;800'}};
-const DESIGN_DEFAULT={theme:'auto',custom:null,font:'classic',h1s:1,h1a:1,hero:{list:[{key:'hero1',scene:'grand'},{key:'hero2',scene:'wedding'},{key:'hero3',scene:'terrace'},{key:'hero4',scene:'crystal'},{key:'hero5',scene:'birthday'}],mode:'loop',vibe:'drift',dur:7,scr:4,copy:'fade',pa:1,ovl:'left',align:'left',height:'tall',plate:'none'}};
-if(!C.design)C.design=JSON.parse(JSON.stringify(DESIGN_DEFAULT));for(const k in DESIGN_DEFAULT.hero)if(C.design.hero[k]==null)C.design.hero[k]=DESIGN_DEFAULT.hero[k];
-const D=()=>C.design,HV=()=>C.design.hero;
-const hex2rgb=x=>{x=x.replace('#','');if(x.length===3)x=x.split('').map(c=>c+c).join('');const n=parseInt(x,16);return[n>>16&255,n>>8&255,n&255]};
-const rgb2hex=a=>'#'+a.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
-const mix=(a,b,t)=>{const A=hex2rgb(a),B=hex2rgb(b);return rgb2hex(A.map((v,i)=>v+(B[i]-v)*t))};
-const lum=x=>{const c=hex2rgb(x).map(v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4});return .2126*c[0]+.7152*c[1]+.0722*c[2]};
-const contrast=(a,b)=>{const L=[lum(a),lum(b)].sort((x,y)=>y-x);return(L[0]+.05)/(L[1]+.05)};
-function themeVars(){const d=D();if(d.custom){const{bg,ink}=d.custom,light=lum(bg)>.4,base=THEMES[d.theme]||THEMES.claret;
-  return{light,bg,ink,panel:light?mix(bg,'#ffffff',.6):mix(bg,ink,.06),panel2:mix(bg,ink,.08),muted:mix(ink,bg,.38),line:mix(bg,ink,.14),band:light?ink:mix(bg,ink,.1),bandInk:light?bg:ink,bandSoft:light?mix(bg,ink,.3):mix(ink,bg,.35),btn:base.btn,btnInk:base.btnInk,free:base.free,glyph:base.glyph,foot:light?mix(ink,'#000000',.3):mix(bg,'#000000',.4),footInk:light?mix(bg,ink,.15):ink}}
- return THEMES[d.theme]||null}
-function applyTheme(){const r=document.documentElement.style,t=themeVars();
- const keys={bg:'--bg',panel:'--card',panel2:'--blush',ink:'--ink',muted:'--soft',line:'--line',band:'--band',bandInk:'--bandInk',bandSoft:'--bandSoft',btn:'--btn',btnInk:'--btnInk',free:'--teal',glyph:'--glyph',foot:'--foot',footInk:'--footInk'};
- if(!t){for(const v of Object.values(keys))r.removeProperty(v);r.removeProperty('color-scheme');['--held','--booked'].forEach(v=>r.removeProperty(v));return}
- for(const[k,v]of Object.entries(keys))r.setProperty(v,t[k]);r.setProperty('color-scheme',t.light?'light':'dark');
- r.setProperty('--held',t.light?'#b8741a':'#e9a94f');r.setProperty('--booked',t.light?'#a3394f':'#e07a8f')}
-function applyFont(){const d=D(),f=PAIRS[d.font]||PAIRS.classic,r=document.documentElement.style;
- if(f.load&&!document.querySelector(`link[data-font="${d.font}"]`)){const l=document.createElement('link');l.rel='stylesheet';l.dataset.font=d.font;l.href='https://fonts.googleapis.com/css2?'+f.load+'&display=swap';document.head.appendChild(l)}
- r.setProperty('--fh',f.head);r.setProperty('--fb',f.body);r.setProperty('--h1s',d.h1s);r.setProperty('--h1a',d.h1a)}
-let heroTimer=null,heroI=0;
-function applyHero(){const H=HV(),hero=$('#hero'),sl=$('#slides');
- Object.assign(hero.dataset,{ovl:H.ovl,align:H.align,plate:H.plate,copy:H.copy});hero.classList.toggle('scroll',H.mode==='scroll');
- hero.style.setProperty('--scr',H.scr);hero.style.setProperty('--hh',{full:'100vh',tall:'min(92vh,820px)',compact:'64vh'}[H.height]||'min(92vh,820px)');
- sl.dataset.vibe=H.vibe;sl.style.setProperty('--dur',H.dur+'s');sl.style.setProperty('--pa',H.pa);
- sl.innerHTML=H.list.map((x,i)=>`<img data-img="${x.key}" alt="" src="${imgSrc(x.key,x.scene||'grand')}" class="${i?'':'on'}">`).join('');heroI=0;
- clearInterval(heroTimer);if(H.mode==='loop'&&H.list.length>1)heroTimer=setInterval(()=>{if(document.body.classList.contains('editing')&&$('#drawer').classList.contains('on')&&!$('#drawer').dataset.hero)return;stepHero(heroI+1)},H.dur*1000);heroScroll()}
-function stepHero(n){const a=$$('#slides img');if(!a.length)return;n=(n+a.length)%a.length;if(n===heroI&&a[n].classList.contains('on'))return;a[heroI%a.length]?.classList.remove('on');heroI=n;const im=a[n];im.classList.remove('on');void im.offsetWidth;im.classList.add('on')}
-function heroScroll(){const H=HV(),hero=$('#hero'),copy=$('#heroCopy');if(!hero)return;const rect=hero.getBoundingClientRect(),span=Math.max(1,hero.offsetHeight-innerHeight),p=Math.min(1,Math.max(0,-rect.top/span));
- if(H.mode==='scroll'){const n=Math.min(H.list.length-1,Math.floor(p*H.list.length));if(n!==heroI)stepHero(n)}
- const fadeP=H.mode==='scroll'?p*2.2:Math.max(0,-rect.top)/(hero.offsetHeight*.6);copy.style.opacity=H.copy==='fade'?Math.max(0,1-fadeP):1}
-addEventListener('scroll',heroScroll,{passive:true});
-function applyDesign(){applyTheme();applyFont();applyHero()}
-function saveDesign(){store.set('config',C)}
-function portal(x,y,fn){const w=$('#themeWipe');const before=getComputedStyle(document.body).backgroundColor;fn();const t=themeVars();w.style.background=t?t.bg:getComputedStyle(document.body).backgroundColor;
- if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;w.style.transition='none';w.style.opacity=1;w.classList.remove('go');w.style.setProperty('--x',x+'px');w.style.setProperty('--y',y+'px');void w.offsetWidth;w.style.transition='';w.classList.add('go');setTimeout(()=>{w.style.opacity=0;setTimeout(()=>w.classList.remove('go'),450)},780)}
-let thTab='all';
-function themePanel(){const d=D(),dr=$('#drawer'),tv=themeVars()||{bg:'#fbf8f5',ink:'#2a1219'};const c=contrast(d.custom?d.custom.bg:tv.bg,d.custom?d.custom.ink:tv.ink);
- const orb=(id,t)=>`<button class="orb ${d.theme===id&&!d.custom?'on':''}" data-theme="${id}"><i style="background:${t?`conic-gradient(from 200deg,${t.bg} 0 35%,${t.band} 35% 65%,${t.btn} 65% 100%)`:'conic-gradient(#fbf8f5 0 50%,#1a0c12 50% 100%)'}"></i>${t?esc(t.label):'Auto (device)'}</button>`;
- dr.dataset.hero='';dr.innerHTML=`<button class="iconbtn" style="float:right" data-dclose aria-label="Close">×</button><h3 style="font-size:32px;margin-top:0">Theme portals</h3><p class="hint">Tap an orb and the new colours sweep across the page. Your choice is saved with the site.</p>
- <div class="tabs">${[['all','All'],['light','Light'],['dark','Dark']].map(([k,l])=>`<button class="${thTab===k?'on':''}" data-thtab="${k}">${l}</button>`).join('')}</div>
- <div class="orbs">${thTab==='all'?orb('auto',null):''}${Object.entries(THEMES).filter(([,t])=>thTab==='all'||(thTab==='light')===!!t.light).map(([id,t])=>orb(id,t)).join('')}</div>
- <span class="dlab">Make it yours</span><div class="row2"><label class="f">Background<input type="color" id="cuBg" value="${d.custom?d.custom.bg:tv.bg}" style="min-height:46px;padding:4px"></label><label class="f">Text<input type="color" id="cuInk" value="${d.custom?d.custom.ink:tv.ink}" style="min-height:46px;padding:4px"></label></div>
- <div class="${c>=4.5?'ok':'bad'}">Contrast ${c.toFixed(1)}:1 ${c>=7?'— beautifully readable':c>=4.5?'— readable':'— too low, pick a darker text or lighter background'}</div>${d.custom?'<button class="btn ghost" style="margin-top:10px" data-cureset>Back to theme colours</button>':''}
- <span class="dlab">Font pairing</span><select class="inp" id="dsFont">${Object.entries(PAIRS).map(([k,f])=>`<option value="${k}" ${d.font===k?'selected':''}>${f.label}</option>`).join('')}</select>
- <span class="dlab">Headline size — <span id="h1sOut">${Math.round(d.h1s*100)}%</span></span><input type="range" id="dsH1s" min="0.6" max="1.5" step="0.05" value="${d.h1s}">
- <span class="dlab">Headline transparency — <span id="h1aOut">${Math.round(d.h1a*100)}%</span></span><input type="range" id="dsH1a" min="0.3" max="1" step="0.05" value="${d.h1a}">
- <p style="margin-top:18px"><button class="btn ghost" data-dsreset>Reset theme, fonts and headline</button></p>`;dr.classList.add('on')}
-function heroPanel(){const H=HV(),dr=$('#drawer');const opt=(k,arr)=>`<div class="optrow">${arr.map(([v,l])=>`<button class="${H[k]===v?'on':''}" data-hk="${k}" data-hv="${v}">${l}</button>`).join('')}</div>`;
- dr.dataset.hero='1';dr.innerHTML=`<button class="iconbtn" style="float:right" data-dclose aria-label="Close">×</button><h3 style="font-size:32px;margin-top:0">Animated hero</h3><p class="hint">Your photos animate at the top of the page. Changes show straight away.</p>
- <span class="dlab">Photos — 3 to 8 works best (${H.list.length})</span><div class="thumbs">${H.list.map((x,i)=>`<div><img src="${imgSrc(x.key,x.scene||'grand')}" alt=""><button data-hdel="${i}" aria-label="Remove">×</button></div>`).join('')}</div>
- <div class="optrow" style="margin-top:8px"><button data-hadd>＋ Add photo</button><button data-hgal>Use gallery photos</button></div>
- <span class="dlab">How it plays</span>${opt('mode',[['loop','Plays and loops by itself'],['scroll','Follows the visitor’s scroll']])}
- ${H.mode==='scroll'?`<span class="dlab">Scroll length — <span id="scrOut">${H.scr}</span>× screen</span><input type="range" id="hScr" min="2" max="7" step="0.5" value="${H.scr}">`:`<span class="dlab">Time on each photo — <span id="durOut">${H.dur}</span>s</span><input type="range" id="hDur" min="4" max="14" step="1" value="${H.dur}">`}
- <span class="dlab">Movement</span><select class="inp" id="hVibe">${[['drift','Cinematic Drift — slow zooms, soft crossfades'],['slide','Slow Slide — editorial parallax pans'],['dissolve','Dissolve — long dreamy fades'],['goldsweep','Gold Shimmer — light sweeps each shot'],['letterbox','Letterbox — cinema bars, filmic'],['pulse','Soft Pulse — gentle breathing zoom']].map(([v,l])=>`<option value="${v}" ${H.vibe===v?'selected':''}>${l}</option>`).join('')}</select>
- <span class="dlab">Headline</span>${opt('copy',[['fade','Fades as you scroll'],['show','Stays over photos'],['hide','Hidden, photos only']])}
- <span class="dlab">Photo strength — <span id="paOut">${Math.round(H.pa*100)}%</span></span><input type="range" id="hPa" min="0.3" max="1.3" step="0.05" value="${H.pa}">
- <span class="dlab">Darken for text</span>${opt('ovl',[['veil','Soft veil'],['left','Left gradient'],['bottom','Bottom gradient'],['none','None']])}
- <h3 style="margin-top:24px">Arrange hero</h3>
- <span class="dlab">Text position</span>${opt('align',[['left','Left'],['center','Centre'],['right','Right']])}
- <span class="dlab">Height</span>${opt('height',[['full','Full screen'],['tall','Tall'],['compact','Compact']])}
- <span class="dlab">Text backdrop</span>${opt('plate',[['none','Transparent'],['frost','Frosted']])}
- <p style="margin-top:18px"><button class="btn ghost" data-hreset>Reset hero</button></p>`;dr.classList.add('on')}
-$('#drawer').addEventListener('click',e=>{const t=e.target,d=D(),H=HV();
- const th=t.closest('[data-theme]');if(th){const r=th.getBoundingClientRect();portal(r.left+r.width/2,r.top+r.height/2,()=>{d.theme=th.dataset.theme;d.custom=null;applyTheme()});saveDesign();themePanel();return}
- const tb=t.closest('[data-thtab]');if(tb){thTab=tb.dataset.thtab;themePanel();return}
- if(t.closest('[data-cureset]')){d.custom=null;applyTheme();saveDesign();themePanel();return}
- if(t.closest('[data-dsreset]')){Object.assign(d,{theme:'auto',custom:null,font:'classic',h1s:1,h1a:1});applyTheme();applyFont();saveDesign();themePanel();return}
- const hk=t.closest('[data-hk]');if(hk){H[hk.dataset.hk]=hk.dataset.hv;applyHero();saveDesign();heroPanel();return}
- const hd=t.closest('[data-hdel]');if(hd){if(H.list.length<=1)return toast('Keep at least one photo');H.list.splice(+hd.dataset.hdel,1);applyHero();saveDesign();heroPanel();return}
- if(t.closest('[data-hadd]')){if(H.list.length>=8)return toast('8 photos is the maximum');const key='hero'+Date.now().toString(36);H.list.push({key,scene:['grand','wedding','crystal','gala','engagement'][H.list.length%5]});applyHero();saveDesign();openPicker(key);return}
- if(t.closest('[data-hgal]')){H.list=C.gallery.slice(0,6).map((g,i)=>({key:'gal:'+i,scene:g.scene}));applyHero();saveDesign();heroPanel();toast('Hero now uses your first 6 gallery photos');return}
- if(t.closest('[data-hreset]')){C.design.hero=JSON.parse(JSON.stringify(DESIGN_DEFAULT.hero));applyHero();saveDesign();heroPanel();return}});
-$('#drawer').addEventListener('input',e=>{const t=e.target,d=D(),H=HV();
- if(t.id==='cuBg'||t.id==='cuInk'){d.custom={bg:$('#cuBg').value,ink:$('#cuInk').value};applyTheme();saveDesign();const c=contrast(d.custom.bg,d.custom.ink),n=t.closest('.drawer').querySelector('.ok,.bad');if(n){n.className=c>=4.5?'ok':'bad';n.textContent=`Contrast ${c.toFixed(1)}:1 ${c>=7?'— beautifully readable':c>=4.5?'— readable':'— too low, pick a darker text or lighter background'}`}}
- if(t.id==='dsFont'){d.font=t.value;applyFont();saveDesign()}
- if(t.id==='dsH1s'){d.h1s=+t.value;$('#h1sOut').textContent=Math.round(d.h1s*100)+'%';applyFont();saveDesign()}
- if(t.id==='dsH1a'){d.h1a=+t.value;$('#h1aOut').textContent=Math.round(d.h1a*100)+'%';applyFont();saveDesign()}
- if(t.id==='hDur'){H.dur=+t.value;$('#durOut').textContent=H.dur;applyHero();saveDesign()}
- if(t.id==='hScr'){H.scr=+t.value;$('#scrOut').textContent=H.scr;applyHero();saveDesign()}
- if(t.id==='hVibe'){H.vibe=t.value;applyHero();saveDesign()}
- if(t.id==='hPa'){H.pa=+t.value;$('#paOut').textContent=Math.round(H.pa*100)+'%';$('#slides').style.setProperty('--pa',H.pa);saveDesign()}});
-
-/* ---------- availability ---------- */
-function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)%100}
-const holds=()=>store.get('holds',[]);
-function status(rid,date,sess){
- const h=holds().find(x=>x.roomId===rid&&x.date===date&&x.session===sess&&x.status!=='released');
- if(h)return h.status==='secured'?'booked':'held';
- if(date<TODAY)return'booked';
- const dt=dayType(date),n=hash(rid+date+sess),near=(parse(date)-today)/864e5;
- const busy={sat:{eve:[52,66],day:[22,32]},fri:{eve:[34,46],day:[16,24]},sun:{eve:[14,22],day:[30,42]},wd:{eve:[9,15],day:[18,26]},ph:{eve:[40,52],day:[30,40]}}[dt][sess];
- const fade=near>150?.5:near>75?.8:1;
- return n<busy[0]*fade?'booked':n<busy[1]*fade?'held':'free'}
-let viewM=new Date(today.getFullYear(),today.getMonth(),1),calSess='eve',selDate=null;
-function renderSeg(){$('#sessSeg').innerHTML=[...C.sessions,{id:'any',label:'Any'}].map(s=>`<button data-sess="${s.id}" class="${calSess===s.id?'on':''}">${s.label}</button>`).join('')}
-function renderCal(){
- $('#monthLbl').textContent=viewM.toLocaleDateString('en-AU',{month:'long',year:'numeric'});
- $('#prevM').disabled=viewM<=new Date(today.getFullYear(),today.getMonth(),1);
- const first=(viewM.getDay()+6)%7,days=new Date(viewM.getFullYear(),viewM.getMonth()+1,0).getDate(),ph=holidays();
- let h=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="dow">${d}</div>`).join('')+'<div class="day blank"></div>'.repeat(first);
- for(let d=1;d<=days;d++){const ds=iso(new Date(viewM.getFullYear(),viewM.getMonth(),d)),past=ds<TODAY;
-  const st=C.rooms.map(r=>{if(calSess==='any'){const a=C.sessions.map(s=>status(r.id,ds,s.id));return a.includes('free')?'free':a.includes('held')?'held':'booked'}return status(r.id,ds,calSess)});
-  const free=st.filter(x=>x==='free').length,lvl=free>=3?3:free;
-  h+=`<button class="day l${lvl} ${past?'past':''} ${selDate===ds?'sel':''}" ${past?'disabled':''} data-date="${ds}" aria-label="${nice(ds)}: ${free} of ${C.rooms.length} rooms free"><span class="n">${d}</span>${ph[ds]?`<span class="ph">${esc(ph[ds])}</span>`:''}<span class="dots">${st.map(x=>`<i class="${x}"></i>`).join('')}</span><span class="s">${past?'':free?free+' free':'Full'}</span></button>`}
- $('#cal').innerHTML=h}
-function renderDay(){const p=$('#dayPanel');
- if(!selDate){p.innerHTML=`<h3>Pick a date</h3><p style="color:var(--soft)">Tap any date to see which rooms are free for day and evening functions.</p><p class="small" style="opacity:1;color:var(--soft)">Saturday evenings book out first, often 12 months ahead.</p>`;return}
- const ph=holidays()[selDate],dt=dayType(selDate);
- p.innerHTML=`<h3 style="font-size:28px">${nice(selDate)}</h3><p style="color:var(--soft);margin:0 0 6px">${ph?esc(ph)+' · public holiday rates':DTL[dt]+' rates'}</p>`+
- C.sessions.map(s=>`<p style="margin:14px 0 0;font-weight:700">${s.label} <span class="hint">${s.time}</span></p>`+C.rooms.map(r=>{const st=status(r.id,selDate,s.id);
-  return`<div class="slot"><div class="nm">${esc(r.name)}<small>Up to ${Math.max(...Object.values(r.cap))} guests</small></div><span class="chip ${st}">${st==='free'?'Free':st==='held'?'On hold':'Booked'}</span>${st==='free'?`<button class="btn" data-est="${r.id}|${s.id}">Estimate &amp; hold</button>`:st==='held'?`<button class="btn ghost" data-wait="${r.id}|${s.id}">Join waitlist</button>`:''}</div>`}).join('')).join('')}
-
-/* ---------- live "your look" preview: an illustrated table setting that follows the guest's choices ---------- */
-const LOOK={
- flower:[{id:'white',name:'White roses',pp:0,c:['#fffaf2','#f1e8da','#ffffff','#f7efe1']},{id:'blush',name:'Blush pink roses',pp:0,c:['#f6c9d3','#f0a9bb','#fbe3e8','#e891a8']},{id:'burgundy',name:'Burgundy and blush',pp:3,c:['#7a1730','#f0b8c6','#fdf3f0','#a32647']},{id:'garden',name:'Mixed garden',pp:5,c:['#f7d27a','#f0a9bb','#ffffff','#c86b98','#e6865a']},{id:'hydrangea',name:'Blue hydrangea',pp:2,c:['#a9c4e8','#cddcf2','#ffffff','#8fb1de']}],
- cloth:[{id:'ivory',name:'Ivory',pp:0,c:['#f6efe2','#e3d6c1']},{id:'white',name:'White',pp:0,c:['#ffffff','#e6e7ec']},{id:'black',name:'Black',pp:3,c:['#26232a','#111014']},{id:'blush',name:'Blush',pp:3,c:['#f3d3d6','#ddb0b6']},{id:'champagne',name:'Champagne',pp:3,c:['#ead8b0','#cdb584']},{id:'sage',name:'Sage',pp:3,c:['#cfdac6','#adbea1']}],
- chair:[{id:'gold',name:'Gold Chiavari',c:'#c9a24a'},{id:'silver',name:'Silver Chiavari',c:'#c4c8cf'},{id:'white',name:'White Chiavari',c:'#f4f4f2'},{id:'covered',name:'Covers with sash',c:'#f7f4ee'}],
- sash:[{id:'ivory',name:'Ivory',c:'#e9dcc3'},{id:'blush',name:'Blush',c:'#efb3c2'},{id:'burgundy',name:'Burgundy',c:'#7a1730'},{id:'gold',name:'Gold',c:'#c9a24a'},{id:'navy',name:'Navy',c:'#22345a'},{id:'sage',name:'Sage',c:'#9fb48f'}]};
-const lk=(k,id)=>LOOK[k].find(x=>x.id===id)||LOOK[k][0];
-function renderLookPick(){const sw=(k,o)=>{const col=Array.isArray(o.c)?o.c:[o.c];return`<button type="button" class="${E[k]===o.id?'on':''}" data-look="${k}|${o.id}" aria-pressed="${E[k]===o.id}"><i style="background:${col.length>1?`conic-gradient(${col.map((c,i)=>`${c} ${i*100/col.length}% ${(i+1)*100/col.length}%`).join(',')})`:col[0]}"></i>${esc(o.name)}</button>`};
- $('#eLook').innerHTML=`<div><span class="lkl">Flowers</span><div class="sw">${LOOK.flower.map(o=>sw('flower',o)).join('')}</div></div>
- <div><span class="lkl">Tablecloth</span><div class="sw">${LOOK.cloth.map(o=>sw('cloth',o)).join('')}</div></div>
- <div><span class="lkl">Chairs</span><div class="sw">${LOOK.chair.map(o=>sw('chair',o)).join('')}</div></div>
- ${E.chair==='covered'?`<div><span class="lkl">Sash colour</span><div class="sw">${LOOK.sash.map(o=>sw('sash',o)).join('')}</div></div>`:''}`}
-function lookText(e=E){return`${lk('flower',e.flower).name} · ${lk('cloth',e.cloth).name} linen · ${e.chair==='covered'?'Chair covers with '+lk('sash',e.sash).name.toLowerCase()+' sash':lk('chair',e.chair).name}`}
-function chairSvg(x,y,s,e,back){const ch=lk('chair',e.chair);
- if(e.chair==='covered'){const sa=lk('sash',e.sash).c;return`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-17 -62Q0 -70 17 -62L19 0Q0 6 -19 0Z" fill="#f7f4ee"/><path d="M-17 -62Q0 -70 17 -62L18 -50Q0 -56 -18 -50Z" fill="#ffffff" opacity=".7"/><path d="M-21 -2Q0 6 21 -2L23 30Q0 36 -23 30Z" fill="#efeae1"/><rect x="-19" y="-30" width="38" height="9" fill="${sa}"/>${back?'':`<path d="M0 -26l-12 -8v16zM0 -26l12 -8v16z" fill="${sa}"/><path d="M-3 -24l-6 22M3 -24l6 22" stroke="${sa}" stroke-width="4"/>`}</g>`}
- const c=ch.c;let sp='';for(let i=-2;i<=2;i++)sp+=`<line x1="${i*6}" y1="-58" x2="${i*6.4}" y2="-6" stroke="${c}" stroke-width="2.2"/>`;
- return`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-16" y="-64" width="32" height="5" rx="2" fill="${c}"/><rect x="-16" y="-36" width="32" height="3" fill="${c}"/>${sp}<line x1="-16" y1="-64" x2="-17" y2="34" stroke="${c}" stroke-width="3"/><line x1="16" y1="-64" x2="17" y2="34" stroke="${c}" stroke-width="3"/><path d="M-19 -6Q0 -1 19 -6L20 2Q0 8 -20 2Z" fill="#f3ead9"/></g>`}
-function flowersSvg(x,y,s,e,full){const f=lk('flower',e.flower).c;let o=`<g transform="translate(${x} ${y}) scale(${s})">`;
- if(full){o+=`<path d="M-14 0L-10 -26H10L14 0Z" fill="${e.flower==='burgundy'||e.cloth==='black'?'#c9a24a':'rgba(220,235,240,.85)'}"/>`;
-  for(let i=0;i<9;i++){const a=i/9*Math.PI*2;o+=`<ellipse cx="${Math.cos(a)*34}" cy="${-40+Math.sin(a)*12}" rx="12" ry="6" fill="#6d8f5f" transform="rotate(${a*57} ${Math.cos(a)*34} ${-40+Math.sin(a)*12})"/>`}
-  const pts=[[0,-58,15],[-22,-46,13],[22,-46,13],[-12,-34,12],[12,-34,12],[-30,-34,10],[30,-34,10],[0,-40,13],[-8,-64,9],[10,-62,9]];
-  pts.forEach(([px,py,r],i)=>{const col=f[i%f.length];o+=`<circle cx="${px}" cy="${py}" r="${r}" fill="${col}"/><circle cx="${px-r*.25}" cy="${py-r*.25}" r="${r*.45}" fill="#fff" opacity=".28"/><circle cx="${px}" cy="${py}" r="${r*.3}" fill="#000" opacity=".08"/>`})}
- else o+=`<rect x="-5" y="-22" width="10" height="22" rx="3" fill="rgba(220,235,240,.85)"/><circle cx="0" cy="-28" r="9" fill="${f[0]}"/><circle cx="-7" cy="-24" r="6" fill="${f[1]}"/><ellipse cx="7" cy="-22" rx="7" ry="3" fill="#6d8f5f"/>`;
- return o+'</g>'}
-function tableSvg(cx,cy,s,e,main){const cl=lk('cloth',e.cloth).c,ex=e.extras,rx=210*s,ry=52*s,drop=main?105:95*s;let o='';
- const back=main?[-0.62,-0.31,0,0.31,0.62]:[-0.5,0,0.5];back.forEach(t=>o+=chairSvg(cx+t*rx*1.05,cy-ry*.55,s*(main?1.05:1),e,1));
- o+=`<ellipse cx="${cx}" cy="${cy+drop*.9}" rx="${rx*1.08}" ry="${ry*.6}" fill="#000" opacity=".22"/>`;
- o+=`<path d="M${cx-rx} ${cy}C${cx-rx} ${cy+drop*.6} ${cx-rx*1.06} ${cy+drop} ${cx-rx*1.04} ${cy+drop}Q${cx} ${cy+drop+ry*.9} ${cx+rx*1.04} ${cy+drop}C${cx+rx*1.06} ${cy+drop} ${cx+rx} ${cy+drop*.6} ${cx+rx} ${cy}Z" fill="${cl[1]}"/>`;
- for(let i=1;i<10;i++){const xx=cx-rx+i*rx/5;o+=`<path d="M${xx} ${cy+ry*.6}Q${xx+4} ${cy+drop*.6} ${xx-2} ${cy+drop+ry*.4}" stroke="${cl[0]}" stroke-opacity=".5" stroke-width="${3*s+1}" fill="none"/>`}
- o+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${cl[0]}"/><ellipse cx="${cx-rx*.18}" cy="${cy-ry*.25}" rx="${rx*.55}" ry="${ry*.4}" fill="#fff" opacity="${e.cloth==='black'?.06:.25}"/>`;
- const n=main?9:6;for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+.35,px=cx+Math.cos(a)*rx*.78,py=cy+Math.sin(a)*ry*.72;o+=`<ellipse cx="${px}" cy="${py}" rx="${18*s}" ry="${6*s}" fill="#ffffff" stroke="${e.cloth==='black'?'#c9a24a':'#e8e2d6'}" stroke-width="${1.5*s}"/><path d="M${px+16*s} ${py-3*s}l${2*s} ${-16*s}l${4*s} 0l${2*s} ${16*s}z" fill="rgba(255,255,255,.55)" stroke="#d6dde3" stroke-width=".8"/>`}
- if(ex.includes('candles'))for(let i=0;i<(main?6:4);i++){const a=i/(main?6:4)*Math.PI*2,px=cx+Math.cos(a)*rx*.4,py=cy+Math.sin(a)*ry*.38;o+=`<circle cx="${px}" cy="${py-6*s}" r="${16*s}" fill="url(#lkGlow)"/><rect x="${px-4*s}" y="${py-10*s}" width="${8*s}" height="${9*s}" rx="2" fill="#fff7e0" opacity=".9"/><ellipse cx="${px}" cy="${py-12*s}" rx="${1.6*s}" ry="${3*s}" fill="#ffb347"/>`}
- o+=flowersSvg(cx,cy+2*s,s*(main?1.9:1.2),e,ex.includes('centre'));
- if(main)[-0.9,0.9].forEach(t=>o+=chairSvg(cx+t*rx*1.02,cy+ry*1.15,1.15,e,0));
- return o}
-function lookSvg(e=E){const ex=e.extras,fl=lk('flower',e.flower).c;let s=`<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of your table styling: ${esc(lookText(e))}"><defs><linearGradient id="lkWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe5d6"/><stop offset="1" stop-color="#dccbb5"/></linearGradient><linearGradient id="lkFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e5b52"/><stop offset="1" stop-color="#3b2f2a"/></linearGradient><linearGradient id="lkPar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b37a45"/><stop offset=".5" stop-color="#d9a66d"/><stop offset="1" stop-color="#8f5d32"/></linearGradient><radialGradient id="lkGlow"><stop offset="0" stop-color="#ffd98a" stop-opacity=".9"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient><radialGradient id="lkUp"><stop offset="0" stop-color="#b06cff" stop-opacity=".75"/><stop offset="1" stop-color="#b06cff" stop-opacity="0"/></radialGradient><pattern id="lkCarpet" width="26" height="14" patternUnits="userSpaceOnUse"><rect width="26" height="14" fill="#5b4a43"/><path d="M0 7q6.5-7 13 0t13 0" stroke="#6d5a51" fill="none" stroke-width="2"/></pattern></defs>`;
- s+=`<rect width="800" height="270" fill="url(#lkWall)"/>`;for(let i=0;i<5;i++)s+=`<rect x="${30+i*156}" y="70" width="120" height="170" fill="none" stroke="#cdbba3" stroke-width="2"/>`;
- if(ex.includes('dj'))[90,710,300,500].forEach(x=>s+=`<ellipse cx="${x}" cy="200" rx="90" ry="120" fill="url(#lkUp)"/>`);
- if(ex.includes('drape')){for(let i=0;i<5;i++){const x=i*160;s+=`<path d="M${x} 0Q${x+80} 74 ${x+160} 0Z" fill="#fffaf2"/><path d="M${x} 0Q${x+80} 56 ${x+160} 0" fill="none" stroke="#e8dcc9" stroke-width="2"/>`;for(let k=1;k<10;k++){const t=k/10,y=2*(1-t)*t*74;s+=`<circle cx="${x+160*t}" cy="${y}" r="8" fill="url(#lkGlow)"/><circle cx="${x+160*t}" cy="${y}" r="2.2" fill="#fff4c8"/>`}}
-  s+=`<path d="M0 0h60v270C40 180 20 80 0 0z" fill="#fffaf2" opacity=".9"/><path d="M800 0h-60v270C760 180 780 80 800 0z" fill="#fffaf2" opacity=".9"/>`}
- else s+=`<rect width="800" height="16" fill="#e9dfd0"/>`+[120,280,520,680].map(x=>`<circle cx="${x}" cy="26" r="5" fill="#fff6d8"/><circle cx="${x}" cy="30" r="22" fill="url(#lkGlow)" opacity=".6"/>`).join('');
- s+=`<g transform="translate(400 ${ex.includes('drape')?62:40})"><line x1="0" y1="-62" x2="0" y2="0" stroke="#c9a24a" stroke-width="2"/><circle cx="0" cy="20" r="70" fill="url(#lkGlow)" opacity=".7"/><path d="M-40 6h80l-14 26h-52z" fill="#e8c46a"/>${Array.from({length:9},(_,i)=>`<line x1="${-32+i*8}" y1="32" x2="${-32+i*8}" y2="${44+(4-Math.abs(i-4))*4}" stroke="#fff4d6" stroke-width="2"/>`).join('')}</g>`;
- s+=`<rect y="270" width="800" height="230" fill="url(#lkCarpet)"/><rect y="270" width="800" height="230" fill="url(#lkFloor)" opacity=".55"/>`;
- if(e.style!=='theatre'&&e.style!=='boardroom')s+=`<path d="M250 276H550L590 330H210Z" fill="url(#lkPar)"/><path d="M250 276H550L590 330H210Z" fill="none" stroke="#e9c07f" stroke-width="2"/>${[0,1,2,3,4,5].map(i=>`<line x1="${255+i*58}" y1="276" x2="${215+i*74}" y2="330" stroke="#8f5d32" stroke-opacity=".35"/>`).join('')}<ellipse cx="400" cy="300" rx="120" ry="14" fill="#fff" opacity=".18"/>`;
- if(ex.includes('clouds'))s+=[[300,318,90],[420,312,110],[520,322,80],[370,328,70]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="${r}" ry="16" fill="#ffffff" opacity=".55"/>`).join('');
- if(ex.includes('balloon')){const bc=[fl[0],'#ffffff',fl[1]||fl[0],'#e6c477'];for(let i=0;i<26;i++){const t=i/25,a=Math.PI*(1-t),x=120+Math.cos(a)*78+(i%3-1)*6,y=268-Math.sin(a)*128+(i%2)*8;s+=`<circle cx="${x}" cy="${y}" r="${13+(i*7)%6}" fill="${bc[i%4]}"/><circle cx="${x-4}" cy="${y-5}" r="4" fill="#fff" opacity=".35"/>`}}
- if(ex.includes('cake'))s+=`<g transform="translate(675 300)"><ellipse cx="0" cy="40" rx="62" ry="10" fill="#000" opacity=".2"/><path d="M-55 0V38Q0 50 55 38V0Z" fill="#f4efe7"/><ellipse cx="0" cy="0" rx="55" ry="12" fill="#ffffff"/><rect x="-26" y="-58" width="52" height="56" rx="4" fill="#fffaf3"/><rect x="-18" y="-96" width="36" height="40" rx="4" fill="#fffaf3"/><rect x="-10" y="-120" width="20" height="26" rx="3" fill="#fffaf3"/><circle cx="-14" cy="-60" r="6" fill="${fl[0]}"/><circle cx="12" cy="-98" r="5" fill="${fl[1]||fl[0]}"/><circle cx="0" cy="-122" r="5" fill="${fl[0]}"/><rect x="-26" y="-30" width="52" height="4" fill="${fl[0]}" opacity=".7"/></g>`;
- s+=tableSvg(165,328,.42,e,0)+tableSvg(ex.includes('cake')?470:635,328,.42,e,0);
- s+=tableSvg(400,385,.88,e,1);
- return s+'</svg>'}
-function renderLook(){const p=$('#lookPrev');if(!p)return;p.innerHTML=lookSvg();$('#lookCap').textContent=lookText()}
-
-/* ---------- estimator ---------- */
-const E={type:'wedding',guests:180,date:'',sess:'eve',style:'banquet',room:'grand',food:'gold',bev:'standard',extras:['drape','centre','cake','candles'],flower:'burgundy',cloth:'ivory',chair:'gold',sash:'blush'};
-function nextSat(){const d=new Date(today);d.setDate(d.getDate()+60);for(let k=0;k<60;k++){if(d.getDay()===6&&status(E.room,iso(d),'eve')==='free')return iso(d);d.setDate(d.getDate()+1)}return iso(d)}
-E.date=nextSat();
-function fillSelects(){
- $('#eType').innerHTML=C.types.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
- $('#eSess').innerHTML=C.sessions.map(s=>`<option value="${s.id}">${s.label} (${s.time})</option>`).join('');
- $('#eFood').innerHTML=C.food.map(f=>`<option value="${f.id}">${esc(f.name)} · ${money(f.pp)} pp</option>`).join('');
- $('#eBev').innerHTML=C.bev.map(f=>`<option value="${f.id}">${esc(f.name)}${f.pp?' · '+money(f.pp)+' pp':''}</option>`).join('');
- $('#eExtras').innerHTML=C.extras.map(x=>`<label><input type="checkbox" value="${x.id}"> ${esc(x.name)}<span class="p">${money(x.price)}${x.per==='guest'?' pp':''}</span></label>`).join('');
- $('#eDate').min=TODAY}
-function syncForm(){$('#eType').value=E.type;$('#eGuests').value=E.guests;$('#eDate').value=E.date;$('#eSess').value=E.sess;$('#eStyle').value=E.style;$('#eFood').value=E.food;$('#eBev').value=E.bev;
- $$('#eExtras input').forEach(i=>i.checked=E.extras.includes(i.value));renderRoomSel();renderLookPick();renderLook()}
-function renderRoomSel(){$('#eRoom').innerHTML=C.rooms.map(r=>{const fits=(r.cap[E.style]||0)>=E.guests,st=E.date?status(r.id,E.date,E.sess):'free';
- return`<option value="${r.id}" ${!fits||st!=='free'?'disabled':''}>${esc(r.name)}${!fits?' (too small for this layout)':st==='held'?' (on hold)':st==='booked'?' (booked)':''}</option>`}).join('');
- const ok=[...$('#eRoom').options].filter(o=>!o.disabled);
- if(!ok.some(o=>o.value===E.room)){const best=C.rooms.filter(r=>ok.some(o=>o.value===r.id)).sort((a,b)=>(a.cap[E.style]||0)-(b.cap[E.style]||0))[0];if(best)E.room=best.id}
- $('#eRoom').value=E.room}
-function estimate(e=E){
- const r=room(e.room),dt=dayType(e.date||TODAY),key=dt==='ph'?'sat':dt,day=e.sess==='day';
- const food=C.food.find(f=>f.id===e.food)||{pp:0},bev=C.bev.find(f=>f.id===e.bev)||{pp:0},g=Math.max(1,+e.guests||1);
- const hire=r.hire[key]*(day?C.dayFactor.hire:1),fnb=g*(food.pp+bev.pp);
- const rate=dt==='ph'?C.surcharge.ph:dt==='sun'?C.surcharge.sun:0,sur=fnb*rate;
- const ex=e.extras.map(id=>C.extras.find(x=>x.id===id)).filter(Boolean).map(x=>({name:x.name,amt:x.per==='guest'?x.price*g:x.price}));
- const fpp=e.extras.includes('centre')?lk('flower',e.flower).pp:0,cpp=lk('cloth',e.cloth).pp;if(fpp)ex.push({name:lk('flower',e.flower).name+' upgrade',amt:fpp*g});if(cpp)ex.push({name:lk('cloth',e.cloth).name+' linen',amt:cpp*g});
- const min=r.min[key]*(day?C.dayFactor.min:1),top=Math.max(0,min-(fnb+sur));
- const total=hire+fnb+sur+ex.reduce((a,x)=>a+x.amt,0)+top;
- const r50=n=>Math.round(n/50)*50;
- return{r,dt,day,hire,fnb,food,bev,g,rate,sur,ex,min,top,total,lo:r50(total*C.spread[0]),hi:r50(total*C.spread[1]),dep:Math.max(C.deposit.min,Math.round(total*C.deposit.pct/10)*10),pp:total/g}}
-function renderResult(){
- const st=status(E.room,E.date,E.sess),fits=(room(E.room).cap[E.style]||0)>=E.guests,x=estimate(),ph=holidays()[E.date];
- const tag=ph?`${ph}: public holiday rates, +${Math.round(C.surcharge.ph*100)}% on food and drinks`:x.dt==='sun'?`Sunday: +${Math.round(C.surcharge.sun*100)}% on food and drinks`:x.dt==='sat'?'Saturday: peak room hire and minimum spend':x.dt==='fri'?'Friday rates':'Weekday rates: our best value';
- $('#result').innerHTML=`<div class="lbl">Estimated total, incl. GST</div><div class="big">${money(x.lo)} – ${money(x.hi)}</div><div class="lbl">about ${money(x.pp)} per guest · ${x.g} guests · ${esc(x.r.name)}, ${sessLabel(E.sess).toLowerCase()}</div>
- <span class="tag">${esc(tag)}</span>
- <table><tr><td>Room hire</td><td>${money(x.hire)}</td></tr><tr><td>${esc(x.food.name)}</td><td>${money(x.g*x.food.pp)}</td></tr>${x.bev.pp?`<tr><td>${esc(x.bev.name)}</td><td>${money(x.g*x.bev.pp)}</td></tr>`:`<tr><td>${esc(x.bev.name)}</td><td>as consumed</td></tr>`}
- ${x.sur?`<tr><td>${x.dt==='ph'?'Public holiday':'Sunday'} surcharge</td><td>${money(x.sur)}</td></tr>`:''}${x.ex.map(e=>`<tr><td>${esc(e.name)}</td><td>${money(e.amt)}</td></tr>`).join('')}
- ${x.top?`<tr><td>Minimum spend top-up</td><td>${money(x.top)}</td></tr>`:''}</table>
- <p class="note">Minimum spend on food and drinks for this room and day: ${money(x.min)}.${x.top?' Your package sits below it, so the difference is added; more guests or an upgraded package would use it instead.':''} Deposit to secure the date: <b>${money(x.dep)}</b>.</p>
- ${!fits?`<div class="warn">${esc(x.r.name)} is too small for ${x.g} guests in this layout. Pick another room or layout.</div>`:st!=='free'?`<div class="warn">${esc(x.r.name)} is ${st==='held'?'on hold':'booked'} for this ${sessLabel(E.sess).toLowerCase()}. Try another room or date.</div>`:''}
- <div class="acts"><button class="btn light" id="holdBtn" ${st!=='free'||!fits?'disabled':''}>Hold this date</button><button class="btn ghost" id="meetBtn">Just book a meeting</button></div>`}
-function refreshEst(){renderRoomSel();renderResult();renderLook()}
-
-/* ---------- hold / meeting / deposit flow ---------- */
-let F=null;
-function openFlow(mode){const x=estimate();F={mode,step:1,name:'',email:'',phone:'',notes:'',meetMode:'Site visit',meetDate:'',meetTime:'',est:x,snap:{...E,extras:[...E.extras]}};drawFlow();$('#modal').classList.add('on')}
-function meetDays(){const a=[],d=new Date(today);while(a.length<10){d.setDate(d.getDate()+1);if(d.getDay()%6&&!holidays()[iso(d)])a.push(iso(d))}return a}
-function takenMeet(d,t){return holds().some(h=>h.meeting&&h.meeting.date===d&&h.meeting.time===t&&h.status!=='released')||hash(d+t)<22}
-function drawFlow(){const s=F.snap,x=F.est,steps=F.mode==='hold'?4:3,sh=$('#sheet');
- const head=`<button class="iconbtn x" data-close aria-label="Close">×</button><h3 style="font-size:30px">${F.mode==='hold'?'Hold your date':'Book a meeting'}</h3><div class="progress">${Array.from({length:steps},(_,i)=>`<i class="${i<F.step?'on':''}"></i>`).join('')}</div>`;
- const summary=`<div class="sum"><div><span>Date</span><b>${nice(s.date)}, ${sessLabel(s.sess).toLowerCase()}</b></div><div><span>Room</span><b>${esc(room(s.room).name)}</b></div><div><span>Function</span><b>${esc(C.types.find(t=>t.id===s.type).name)}, ${s.guests} guests</b></div><div><span>Look</span><b>${esc(lookText(s))}</b></div><div><span>Estimate</span><b>${money(x.lo)} – ${money(x.hi)}</b></div></div>`;
- if(F.step===1)sh.innerHTML=head+(F.mode==='hold'?summary:'')+`<div class="form" style="margin-top:16px"><label class="f">Your name<input id="fName" value="${esc(F.name)}" autocomplete="name"></label><div class="row2"><label class="f">Email<input id="fEmail" type="email" value="${esc(F.email)}" autocomplete="email"></label><label class="f">Phone<input id="fPhone" type="tel" value="${esc(F.phone)}" autocomplete="tel"></label></div><label class="f">Anything we should know? <span class="hint">Optional</span><textarea id="fNotes" rows="3">${esc(F.notes)}</textarea></label><p id="fErr" style="color:var(--booked);margin:0"></p><button class="btn" data-next>Next: choose a meeting time</button></div>`;
- else if(F.step===2){const days=meetDays();if(!F.meetDate)F.meetDate=days[0];
-  sh.innerHTML=head+`<p class="lead" style="font-size:16px">Meet our events coordinator to walk through the room, menu and run sheet.</p><p style="font-weight:600;margin:14px 0 8px">How would you like to meet?</p><div class="pick" id="pMode">${['Site visit','Zoom','Phone call'].map(m=>`<button class="${F.meetMode===m?'on':''}" data-mm="${m}">${m}</button>`).join('')}</div>
-  <p style="font-weight:600;margin:16px 0 8px">Day</p><div class="pick">${days.map(d=>`<button class="${F.meetDate===d?'on':''}" data-md="${d}">${parse(d).toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})}</button>`).join('')}</div>
-  <p style="font-weight:600;margin:16px 0 8px">Time</p><div class="pick">${C.meetTimes.map(t=>`<button class="${F.meetTime===t?'on':''}" data-mt="${t}" ${takenMeet(F.meetDate,t)?'disabled':''}>${t}</button>`).join('')}</div>
-  <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap"><button class="btn ghost" data-back>Back</button><button class="btn" data-next ${F.meetTime?'':'disabled'}>${F.mode==='hold'?'Next: secure the date':'Book meeting'}</button></div>`}
- else if(F.step===3&&F.mode==='hold'){const exp=new Date(today);exp.setDate(exp.getDate()+C.holdDays);F.expires=iso(exp);
-  sh.innerHTML=head+summary+`<h3 style="margin-top:18px">Secure the date now, or after your meeting</h3><p style="color:var(--soft)">Your hold is free and lasts ${C.holdDays} days, until ${nice(F.expires)}. Paying the ${money(x.dep)} deposit confirms the booking straight away. It comes off your final invoice.</p>
-  <div class="demo">Demo: in the live version, "Pay deposit" opens secure Stripe Checkout. No card details are taken here.</div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" data-back>Back</button><button class="btn ghost" data-finish="held">Hold only, pay after meeting</button><button class="btn" data-finish="secured">Pay ${money(x.dep)} deposit</button></div>`}
- else{const h=F.saved;sh.innerHTML=`<button class="iconbtn x" data-close aria-label="Close">×</button><p style="margin:0;color:var(--soft)">${h.status==='secured'?'Booking confirmed':h.status==='held'?'Date on hold':'Meeting booked'}</p><div class="ref">${h.ref}</div>
-  ${h.roomId?`<div class="sum"><div><span>Date</span><b>${nice(h.date)}, ${sessLabel(h.session).toLowerCase()}</b></div><div><span>Room</span><b>${esc(room(h.roomId).name)}</b></div><div><span>Status</span><b>${h.status==='secured'?'Secured, deposit '+money(h.deposit)+' paid':'On hold until '+nice(h.expires)}</b></div><div><span>Meeting</span><b>${h.meeting.mode}, ${parse(h.meeting.date).toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})} at ${h.meeting.time}</b></div></div>`:`<div class="sum"><div><span>Meeting</span><b>${h.meeting.mode}, ${nice(h.meeting.date)} at ${h.meeting.time}</b></div><div><span>About</span><b>${esc(h.typeName)}, ${h.guests} guests</b></div></div>`}
-  <p style="margin-top:14px;color:var(--soft)">A confirmation goes to ${esc(h.email)} with your estimate attached. Your coordinator will call before the meeting.</p><div class="demo">Demo: emails are sent in the live version. This booking is saved in this browser only.</div><button class="btn" data-close>Done</button>`}}
-function validate1(){F.name=$('#fName').value.trim();F.email=$('#fEmail').value.trim();F.phone=$('#fPhone').value.trim();F.notes=$('#fNotes').value.trim();
- if(!F.name||!/^\S+@\S+\.\S+$/.test(F.email)||F.phone.replace(/\D/g,'').length<8){$('#fErr').textContent='Please add your name, a valid email and a phone number.';return false}return true}
-function finish(stat){const s=F.snap,d=new Date(),ref='FN-'+s.date.replace(/-/g,'').slice(2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
- const h={ref,created:iso(d),name:F.name,email:F.email,phone:F.phone,notes:F.notes,type:s.type,typeName:C.types.find(t=>t.id===s.type).name,guests:s.guests,style:s.style,food:s.food,bev:s.bev,extras:s.extras,look:lookText(s),estimate:{lo:F.est.lo,hi:F.est.hi,total:Math.round(F.est.total)},deposit:F.est.dep,meeting:{mode:F.meetMode,date:F.meetDate,time:F.meetTime},status:stat};
- if(F.mode==='hold'){Object.assign(h,{roomId:s.room,date:s.date,session:s.sess,expires:F.expires})}
- const all=holds();all.unshift(h);store.set('holds',all);F.saved=h;F.step=99;drawFlow();renderCal();renderDay();refreshEst()}
-
-/* ---------- venue view (demo) ---------- */
-function renderVenue(){const all=holds(),dr=$('#drawer');
- dr.innerHTML=`<button class="iconbtn" style="float:right" data-dclose aria-label="Close">×</button><h3 style="font-size:32px;margin-top:0">Venue view</h3><p class="small" style="opacity:1;color:var(--soft)">Demo: holds and meetings made in this browser. The live version lists every enquiry, with email alerts and Stripe deposits.</p>
- ${all.length?all.map((h,i)=>`<div class="hold"><div class="t"><span>${h.ref}</span><span class="chip ${h.status==='secured'?'free':h.status==='held'?'held':h.status==='released'?'booked':'free'}">${h.status==='secured'?'Secured':h.status==='held'?'On hold':h.status==='released'?'Released':'Meeting only'}</span></div>
- <div>${esc(h.name)} · ${esc(h.email)} · ${esc(h.phone)}</div><div>${esc(h.typeName)}, ${h.guests} guests${h.roomId?` · ${esc(room(h.roomId)?.name||h.roomId)} · ${nice(h.date)}, ${sessLabel(h.session).toLowerCase()}`:''}</div>
- ${h.look?`<div>Look: ${esc(h.look)}</div>`:''}<div>Estimate ${money(h.estimate.lo)} – ${money(h.estimate.hi)} · deposit ${money(h.deposit)}</div><div>Meeting: ${h.meeting.mode}, ${h.meeting.date} ${h.meeting.time}${h.expires&&h.status==='held'?` · hold expires ${h.expires}`:''}</div>${h.notes?`<div style="color:var(--soft)">“${esc(h.notes)}”</div>`:''}
- ${h.roomId&&h.status==='held'?`<div class="a"><button class="btn" data-vs="${i}|secured">Deposit received</button><button class="btn ghost" data-vs="${i}|released">Release date</button></div>`:''}</div>`).join(''):'<p>No holds yet. Try "Hold this date" in the estimator.</p>'}
- ${all.length?'<button class="btn ghost" data-vclear>Clear demo data</button>':''}`;dr.classList.add('on')}
-
-/* ---------- photo library: Supabase Storage (same bucket and rules as Restaurant Deluxe and Service Deluxe) ---------- */
-const SB=()=>C.supabase||{};
-const sbOn=()=>!!(SB().url&&SB().key&&SB().venue);
-let session=store.get('sb_session',null);
-async function sbAuth(body,grant){const r=await fetch(SB().url.replace(/\/+$/,'')+'/auth/v1/token?grant_type='+grant,{method:'POST',headers:{apikey:SB().key,'content-type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error_description||j.msg||j.message||'Sign-in failed');return{access_token:j.access_token,refresh_token:j.refresh_token,expires_at:Date.now()+(j.expires_in||3600)*1000,email:j.user&&j.user.email}}
-async function token(){if(!session)return null;if(Date.now()>session.expires_at-60000){try{session={...session,...await sbAuth({refresh_token:session.refresh_token},'refresh_token')};store.set('sb_session',session)}catch(e){session=null;store.set('sb_session',null);return null}}return session.access_token}
-function signIn(){return new Promise(res=>{const sh=$('#sheet');sh.innerHTML=`<button class="iconbtn x" data-si-cancel aria-label="Close">×</button><h3 style="font-size:30px">Sign in to upload photos</h3><p style="color:var(--soft)">Use the same login as your Restaurant Deluxe or Service Deluxe venue. Photos go into your venue's online photo library.</p><div class="form"><label class="f">Email<input id="siE" type="email" autocomplete="username"></label><label class="f">Password<input id="siP" type="password" autocomplete="current-password"></label><p id="siErr" style="color:var(--booked);margin:0"></p><button class="btn" id="siGo">Sign in</button></div>`;$('#modal').classList.add('on');
- const done=v=>{$('#modal').classList.remove('on');sh.removeEventListener('click',fn);res(v)};
- const fn=async e=>{if(e.target.closest('[data-si-cancel]'))return done(false);if(e.target.id!=='siGo')return;e.target.disabled=true;$('#siErr').textContent='';
-  try{session=await sbAuth({email:$('#siE').value.trim(),password:$('#siP').value},'password');store.set('sb_session',session);updAcct();done(true)}catch(err){$('#siErr').textContent=/fetch/i.test(err.message)?'Could not reach the photo library from here. Uploads work once the site is on your own web address.':err.message;e.target.disabled=false}};sh.addEventListener('click',fn)})}
-async function uploadPhoto(blob,key){let t=await token();if(!t){if(!await signIn())throw new Error('cancelled');t=await token()}
- const s=SB(),base=s.url.replace(/\/+$/,''),path=`${s.venue}/${Date.now()}-${key.replace(/[^a-z0-9]+/gi,'-')}.jpg`;
- const r=await fetch(`${base}/storage/v1/object/${s.bucket||'venue-media'}/${path}`,{method:'POST',headers:{Authorization:'Bearer '+t,apikey:s.key,'content-type':'image/jpeg','x-upsert':'true','cache-control':'31536000'},body:blob});
- if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(r.status===403||/row-level/i.test(j.message||'')?'This login is not set up as staff for "'+s.venue+'".':(j.message||'Upload failed ('+r.status+')'))}
- return`${base}/storage/v1/object/public/${s.bucket||'venue-media'}/${path}`}
-async function listLibrary(){const s=SB(),base=s.url.replace(/\/+$/,'');const r=await fetch(`${base}/storage/v1/object/list/${s.bucket||'venue-media'}`,{method:'POST',headers:{apikey:s.key,Authorization:'Bearer '+((await token())||s.key),'content-type':'application/json'},body:JSON.stringify({prefix:s.venue+'/',limit:200,sortBy:{column:'created_at',order:'desc'}})});
- if(!r.ok)throw new Error('list');return(await r.json()).filter(o=>o.id&&/\.(jpe?g|png|webp|avif)$/i.test(o.name)).map(o=>`${base}/storage/v1/object/public/${s.bucket||'venue-media'}/${s.venue}/${encodeURIComponent(o.name)}`)}
-function setImg(key,src){imgs[key]=src;$$(`[data-img="${key}"]`).forEach(i=>i.src=src);store.set('imgs',imgs);if($('#drawer').classList.contains('on')&&$('#drawer').dataset.hero)heroPanel()}
-async function openPicker(key){imgKey=key;const sh=$('#sheet');
- sh.innerHTML=`<button class="iconbtn x" data-close aria-label="Close">×</button><h3 style="font-size:30px">Choose a photo</h3><p style="color:var(--soft);margin-bottom:12px">${sbOn()?`Upload a new photo or pick one already in your photo library${session?` (signed in as ${esc(session.email||'staff')})`:''}.`:'Photo library not connected: the photo is kept in this page only. Connect it under Rooms &amp; pricing.'}</p><button class="btn" data-up>Upload a new photo</button><div id="lib" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:16px"></div>`;
- $('#modal').classList.add('on');
- if(sbOn()){$('#lib').innerHTML='<p class="hint">Loading your photo library…</p>';try{const L=await listLibrary();$('#lib').innerHTML=L.length?L.map(u=>`<button data-pickimg="${esc(u)}" style="border:0;padding:0;border-radius:10px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:var(--blush)"><img src="${esc(u)}" alt="" style="width:100%;height:100%;object-fit:cover"></button>`).join(''):'<p class="hint">No photos uploaded yet.</p>'}catch(e){$('#lib').innerHTML='<p class="hint">The photo library opens once the site is on your own web address.</p>'}}}
-$('#sheet').addEventListener('click',e=>{if(e.target.closest('[data-up]')){$('#fileIn').click()}const p=e.target.closest('[data-pickimg]');if(p){setImg(imgKey,p.dataset.pickimg);$('#modal').classList.remove('on');toast('Photo placed. Press Save to keep it')}});
-function updAcct(){const b=$('#tAcct');if(b)b.textContent=session?'Sign out':'Sign in'}
-
-/* ---------- AI events assistant (same engine as Service Deluxe: svc_assistant settings + fn-assistant) ---------- */
-const sbBase=()=>String(SB().url||'').replace(/\/+$/,'');
-const sbHdr=t=>({'content-type':'application/json',apikey:SB().key,Authorization:'Bearer '+(t||SB().key)});
-async function sbRpc(fn,args,auth){const t=auth?await token():null;if(auth&&!t)throw new Error('signin');const r=await fetch(`${sbBase()}/rest/v1/rpc/${fn}`,{method:'POST',headers:sbHdr(t),body:JSON.stringify(args)});const j=await r.json().catch(()=>null);if(!r.ok)throw new Error((j&&j.message)||('Error '+r.status));return j}
-const txt=sel=>{const el=document.querySelector(sel);return el?el.innerText.replace(/\s+\n/g,'\n').trim():''};
-function buildFacts(){const ph=holidays();
- const lines=[];
- lines.push('WEBSITE HEADLINE: '+txt('[data-e="heroTitle"]')+'. '+txt('[data-e="heroText"]'));
- lines.push('KEY FACTS: '+$$('.facts div').map(d=>d.innerText.replace(/\s+/g,' ').trim()).join('; '));
- lines.push('ROOMS INTRO: '+txt('[data-e="roomsLead"]'));
- lines.push('FUNCTION TYPES WE HOST: '+C.types.map(t=>`${t.name}: ${t.text}`).join(' | '));
- lines.push('WHY CHOOSE US: '+['why1t','why1','why2t','why2','why3t','why3'].map(k=>txt(`[data-e="${k}"]`)).join(' '));
- lines.push('HOW BOOKING WORKS: '+['how1','how2','how3','how4'].map(k=>txt(`[data-e="${k}"]`)).join(' '));
- lines.push('GETTING HERE AND ACCESS: '+txt('[data-e="visitList"]').replace(/\n/g,'; ')+'. '+txt('[data-e="consText"]'));
- lines.push('FAQ: '+$$('#faq details').map(d=>'Q: '+d.querySelector('summary').textContent.trim()+' A: '+d.querySelector('p').textContent.replace(/\s+/g,' ').trim()).join(' '));
- lines.push('STYLING OPTIONS (shown in the estimator preview): flowers '+LOOK.flower.map(f=>f.name+(f.pp?` (+$${f.pp} pp with centrepieces)`:'')).join(', ')+'; tablecloths '+LOOK.cloth.map(f=>f.name+(f.pp?` (+$${f.pp} pp)`:'')).join(', ')+'; chairs '+LOOK.chair.map(c=>c.name).join(', ')+'; sash colours '+LOOK.sash.map(s=>s.name).join(', ')+'.');
- return{venue:{name:txt('[data-e="brand"]'),address:txt('[data-e="addr"]'),contact:txt('[data-e="contact"]').replace(/\n/g,' · ')},text:lines.join('\n').slice(0,20000),
-  pricing:{sessions:C.sessions,dayFactor:C.dayFactor,rooms:C.rooms.map(r=>({id:r.id,name:r.name,seat:r.seat,desc:r.desc,cap:r.cap,feat:r.feat,hire:r.hire,min:r.min})),food:C.food,bev:C.bev,extras:C.extras.map(x=>({id:x.id,name:x.name,price:x.price,per:x.per})),surcharge:C.surcharge,deposit:C.deposit,holdDays:C.holdDays,spread:C.spread,holidays:ph},updated:new Date().toISOString()}}
-function availSnapshot(){const out=['rooms in order: '+C.rooms.map(r=>r.name).join(', ')+' | codes: f=free h=on hold b=booked | d=day session e=evening session'];const d=new Date(today);
- for(let i=0;i<400;i++){const s=iso(d);out.push(`${s} d:${C.rooms.map(r=>status(r.id,s,'day')[0]).join('')} e:${C.rooms.map(r=>status(r.id,s,'eve')[0]).join('')}`);d.setDate(d.getDate()+1)}return out.join('\n')}
-async function publishFacts(quiet){try{const j=await sbRpc('fn_assistant_publish',{p_venue:SB().venue,p_facts:buildFacts()},true);if(!j||!j.ok)throw new Error(j&&j.error||'failed');if(!quiet)toast('Assistant updated with the website content');return true}catch(e){if(!quiet)toast(e.message==='signin'?'Sign in first':/fetch/i.test(e.message)?'The assistant updates once the site is on your own web address':e.message);return false}}
-let AST={cfg:null,root:null,st:{id:'',msgs:[]},busy:false};
-const astKey=()=>'fnAst:'+(SB().venue||'');
-function astLoad(){try{AST.st=JSON.parse(sessionStorage.getItem(astKey()))||AST.st}catch(e){}if(!AST.st.id)AST.st.id='v-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10)}
-function astSave(){try{sessionStorage.setItem(astKey(),JSON.stringify(AST.st))}catch(e){}}
-function astMd(t){let h=esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
-  .replace(/\[([^\]]+)\]\(((?:estimate|hold|consult|diary):[^\s)]*)\)/g,(_,a,u)=>`<a class="bk" data-act="${u}">${a} →</a>`)
-  .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:)[^\s)]+)\)/g,(_,a,u)=>`<a href="${u}"${/^https?:/.test(u)?' target="_blank" rel="noopener"':''}>${a}</a>`);
- const out=[];let list=false;h.split(/\n/).forEach(l=>{const m=l.match(/^\s*(?:[-•*]|\d+\.)\s+(.*)/);if(m){if(!list){out.push('<ul>');list=true}out.push('<li>'+m[1]+'</li>')}else{if(list){out.push('</ul>');list=false}if(l.trim())out.push('<p>'+l+'</p>')}});if(list)out.push('</ul>');return out.join('')}
-function astAction(u){const[kind,q]=u.split(/:(.*)/s),p=new URLSearchParams(q||'');
- if(kind==='consult'){astClose();openFlow('meet');return}
- if(kind==='diary'){const d=p.get('date')||q;if(/^\d{4}-\d{2}-\d{2}$/.test(d)){selDate=d;viewM=new Date(parse(d).getFullYear(),parse(d).getMonth(),1);renderCal();renderDay()}if(innerWidth<600)astClose();$('#diary').scrollIntoView({behavior:'smooth'});return}
- const set={type:'type',guests:'guests',date:'date',sess:'sess',session:'sess',room:'room',food:'food',bev:'bev',style:'style'};
- for(const[k,v]of p){const f=set[k];if(!f)continue;if(f==='guests')E.guests=Math.max(1,Math.min(550,+v||E.guests));else if(f==='date'){if(/^\d{4}-\d{2}-\d{2}$/.test(v)&&v>=TODAY)E.date=v}else if(f==='type'&&C.types.some(t=>t.id===v)){E.type=v;const ty=C.types.find(t=>t.id===v);E.food=ty.food;E.bev=ty.bev;E.style=ty.style;E.extras=[...(ty.ex||[])]}else E[f]=v}
- E.extras=(p.get('extras')||'').split(',').filter(id=>C.extras.some(x=>x.id===id));if(E.chair==='covered'&&!E.extras.includes('covers'))E.chair='gold';
- syncForm();refreshEst();if(innerWidth<600)astClose();$('#estimate').scrollIntoView({behavior:'smooth'});
- if(kind==='hold'){astClose();setTimeout(()=>{const b=$('#holdBtn');if(b&&!b.disabled)openFlow('hold');else toast('That room is not free then: pick another room or date')},600)}}
-function astClose(){if(!AST.root)return;AST.root.querySelector('.ast-box').hidden=true;AST.root.classList.remove('open')}
-function astBuild(offline){if(AST.root)AST.root.remove();const cfg=AST.cfg||{name:'Ava'},nm=esc(cfg.name||'Assistant'),ini=esc((cfg.name||'A').trim().charAt(0).toUpperCase());
- const chips=['What rooms do you have?','Price for a wedding of 150','Is a Saturday in March free?','Can we bring our own cake?'].concat(cfg.messages?['Leave a message']:[]);
- const r=document.createElement('div');r.className='ast';r.innerHTML=`<button class="ast-fab" type="button" aria-label="Chat with ${nm}"><span class="ci">${ini}</span><span class="tx">Ask about your function</span></button><div class="ast-tip" hidden><button type="button" aria-label="Close">×</button><span></span></div><div class="ast-box" role="dialog" aria-label="Chat" hidden><div class="ast-hd"><span class="av">${ini}</span><div><b>${nm}</b><small>Events assistant · usually replies in seconds</small></div><button class="x" type="button" aria-label="Close chat">×</button></div><div class="ast-log" aria-live="polite"></div><div class="ast-q">${chips.map(c=>`<button type="button">${c}</button>`).join('')}</div><form class="ast-f"><input placeholder="Ask about rooms, prices or dates…" maxlength="500" autocomplete="off" aria-label="Your question"><button type="submit">Send</button></form><div class="ast-ft">AI assistant — your coordinator confirms all prices and dates.</div></div>`;
- document.body.appendChild(r);AST.root=r;const q=s=>r.querySelector(s),box=q('.ast-box'),log=q('.ast-log'),chipsEl=q('.ast-q'),inp=q('.ast-f input'),tip=q('.ast-tip');
- const greet=()=>cfg.greeting||`Hi, I'm ${cfg.name||'the events assistant'}. Ask me about our rooms, packages, prices or a date you have in mind.`;
- const bubble=(role,t)=>{const d=document.createElement('div');d.className='ast-m '+(role==='user'?'u':'a');d.innerHTML=role==='user'?esc(t):astMd(t);log.appendChild(d);log.scrollTop=log.scrollHeight};
- const render=()=>{log.innerHTML='';bubble('assistant',greet());AST.st.msgs.forEach(m=>bubble(m.role,m.content));chipsEl.hidden=AST.st.msgs.length>2;if(offline)bubble('assistant','Demo preview: I answer live once this page is on your own web address. Until then, try the estimator or the calendar.')};
- const open=()=>{tip.hidden=true;try{sessionStorage.setItem(astKey()+':tip','1')}catch(e){}render();box.hidden=false;r.classList.add('open');if(matchMedia('(pointer:fine)').matches)inp.focus()};
- q('.ast-fab').onclick=open;q('.ast-hd .x').onclick=astClose;tip.querySelector('span').textContent=greet();
- tip.onclick=e=>{if(e.target.tagName==='BUTTON'){tip.hidden=true;try{sessionStorage.setItem(astKey()+':tip','1')}catch(x){}return}open()};
- chipsEl.onclick=e=>{const b=e.target.closest('button');if(b)send(b.textContent)};q('.ast-f').onsubmit=e=>{e.preventDefault();send(inp.value)};
- log.onclick=e=>{const a=e.target.closest('a[data-act]');if(a){e.preventDefault();astAction(a.dataset.act)}};
- function send(t){t=String(t||'').trim();if(!t||AST.busy)return;inp.value='';AST.st.msgs.push({role:'user',content:t.slice(0,500)});astSave();bubble('user',t);chipsEl.hidden=true;AST.busy=true;q('.ast-f button').disabled=true;
-  const ty=document.createElement('div');ty.className='ast-m a typing';ty.innerHTML='<i></i><i></i><i></i>';log.appendChild(ty);log.scrollTop=log.scrollHeight;
-  fetch(sbBase()+'/functions/v1/fn-assistant',{method:'POST',headers:sbHdr(),body:JSON.stringify({venue:SB().venue,session:AST.st.id,messages:AST.st.msgs.slice(-14),avail:availSnapshot()})})
-   .then(r=>r.json()).then(j=>{if(!j||!j.ok||!j.reply)throw 0;return j.reply})
-   .catch(()=>`Sorry, I can't answer right now. Please contact our events team: ${txt('[data-e="contact"]').replace(/\n/g,' · ')}.`)
-   .then(rep=>{ty.remove();AST.st.msgs.push({role:'assistant',content:rep});AST.st.msgs=AST.st.msgs.slice(-24);astSave();bubble('assistant',rep);AST.busy=false;q('.ast-f button').disabled=false})}
- let seen=false;try{seen=!!sessionStorage.getItem(astKey()+':tip')}catch(e){}
- if(!seen)setTimeout(()=>{if(box.hidden&&!document.body.classList.contains('editing'))tip.hidden=false},8000)}
-async function astInit(){if(!sbOn())return;astLoad();try{const c=await sbRpc('svc_assistant_public',{p_venue:SB().venue});AST.cfg=c&&c.ok&&c.enabled?c:null;if(AST.cfg)astBuild(false);else if(AST.root){AST.root.remove();AST.root=null}}catch(e){AST.cfg={name:'Ava'};astBuild(true)}}
-async function assistantPanel(){const dr=$('#drawer');dr.dataset.hero='';dr.innerHTML=`<button class="iconbtn" style="float:right" data-dclose aria-label="Close">×</button><h3 style="font-size:32px;margin-top:0">AI assistant</h3><p class="hint">Answers visitors from your website content and your notes, works out estimates, checks dates and takes messages. Same assistant as Service Deluxe.</p><div id="astAdm"><p class="hint">Loading…</p></div>`;dr.classList.add('on');
- let a;try{if(!await token()&&!await signIn()){$('#astAdm').innerHTML='<p class="hint">Sign in to manage the assistant.</p>';return}a=await sbRpc('svc_assistant_admin_get',{p_venue:SB().venue},true);if(!a.ok)throw new Error(a.error)}catch(e){$('#astAdm').innerHTML=`<p class="bad">${esc(/fetch/i.test(e.message)?'The assistant settings open once the site is on your own web address.':e.message)}</p>`;return}
- $('#astAdm').innerHTML=`<label class="checks" style="display:block"><label><input type="checkbox" id="aOn" ${a.enabled?'checked':''}> Show the assistant on my website</label></label>
- <div class="form" style="margin-top:12px"><label class="f">Assistant name<input class="inp" id="aName" maxlength="40" value="${esc(a.name||'Ava')}"></label>
- <label class="f">Greeting <span class="hint">Optional</span><input class="inp" id="aGreet" maxlength="300" value="${esc(a.greeting||'')}"></label>
- <label class="f">Notes for the assistant <span class="hint">Anything not on the website: BYO policies, kids, dietary, finish times, parking tips. These win over the website if different.</span><textarea class="inp" id="aKnow" rows="9" maxlength="12000">${esc(a.knowledge||'')}</textarea></label>
- <label class="checks" style="display:block"><label><input type="checkbox" id="aMsg" ${a.take_messages?'checked':''}> Take messages from visitors</label></label>
- <label class="f">Email messages to<input class="inp" id="aMail" type="email" value="${esc(a.notify_email||a.venue_email||'')}"></label>
- <button class="btn" data-asave>Save and update from website</button></div>
- <p class="hint" style="margin-top:14px">${a.month_questions||0} questions this month.</p>
- <h3>Latest messages</h3>${(a.messages||[]).length?a.messages.map(m=>`<div class="hold"><div class="t"><span>${esc(m.name)}</span><span class="hint">${esc(String(m.at).slice(0,10))}</span></div><div>${esc(m.phone||'')} ${esc(m.email||'')}</div><div style="white-space:pre-wrap">${esc(m.message)}</div></div>`).join(''):'<p class="hint">No messages yet.</p>'}`}
-$('#drawer').addEventListener('click',async e=>{if(!e.target.closest('[data-asave]'))return;const b=e.target.closest('[data-asave]');b.disabled=true;
- try{const j=await sbRpc('svc_assistant_save',{p_venue:SB().venue,p_enabled:$('#aOn').checked,p_name:$('#aName').value,p_greeting:$('#aGreet').value,p_knowledge:$('#aKnow').value,p_take_messages:$('#aMsg').checked,p_notify_email:$('#aMail').value},true);if(!j.ok)throw new Error(j.error);await publishFacts(true);toast('Assistant saved and updated from the website');astInit()}catch(err){toast(err.message==='signin'?'Sign in first':err.message)}b.disabled=false});
-
-/* ---------- editor ---------- */
-const content=store.get('content',{});
-function applyContent(){const src={...(C.content||{}),...content};$$('[data-e]').forEach(el=>{if(src[el.dataset.e]!=null)el.innerHTML=src[el.dataset.e]})}
-function setEditing(on){document.body.classList.toggle('editing',on);$$('[data-e],.gi span').forEach(el=>el.contentEditable=on?'true':'false');if(on)toast('Edit mode on')}
-function saveAll(){if(sbOn()&&session)publishFacts(true);$$('[data-e]').forEach(el=>content[el.dataset.e]=el.innerHTML);const ok=store.set('content',content)&&store.set('imgs',imgs)&&store.set('config',C);toast(ok?'Saved in this browser':'Could not save here: download the page instead')}
-let imgKey=null;
-function shrinkBlob(file){return new Promise(res=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const sc=Math.min(1,2000/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>res({blob:b,data:c.toDataURL('image/jpeg',.72)}),'image/jpeg',.82)};im.src=u})}
-function shrink(file){return new Promise(res=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.72))};im.src=fr.result};fr.readAsDataURL(file)})}
-function pricingPanel(){const dr=$('#drawer'),dk=['wd','fri','sat','sun'],dl=['Mon–Thu','Fri','Sat','Sun'];
- dr.innerHTML=`<button class="iconbtn" style="float:right" data-dclose aria-label="Close">×</button><h3 style="font-size:32px;margin-top:0">Rooms &amp; pricing</h3><p class="small" style="opacity:1;color:var(--soft)">Evening prices. Day sessions use ${Math.round(C.dayFactor.hire*100)}% of room hire and ${Math.round(C.dayFactor.min*100)}% of minimum spend. Public holidays use Saturday rates.</p>
- <h3>Room hire</h3><div class="grid4"><span></span>${dl.map(d=>`<span class="h">${d}</span>`).join('')}${C.rooms.map((r,i)=>`<input data-p="rooms.${i}.name" value="${esc(r.name)}">${dk.map(k=>`<input type="number" data-p="rooms.${i}.hire.${k}" value="${r.hire[k]}">`).join('')}`).join('')}</div>
- <h3>Minimum spend on food and drinks</h3><div class="grid4"><span></span>${dl.map(d=>`<span class="h">${d}</span>`).join('')}${C.rooms.map((r,i)=>`<span>${esc(r.name)}</span>${dk.map(k=>`<input type="number" data-p="rooms.${i}.min.${k}" value="${r.min[k]}">`).join('')}`).join('')}</div>
- <h3>Capacity</h3><div class="grid4"><span></span>${['Seated','Cocktail','Theatre','Board'].map(d=>`<span class="h">${d}</span>`).join('')}${C.rooms.map((r,i)=>`<span>${esc(r.name)}</span>${['banquet','cocktail','theatre','boardroom'].map(k=>`<input type="number" data-p="rooms.${i}.cap.${k}" value="${r.cap[k]}">`).join('')}`).join('')}</div>
- <h3>Packages, per guest</h3><div class="form">${C.food.map((f,i)=>`<div class="row2"><input class="inp" data-p="food.${i}.name" value="${esc(f.name)}"><input class="inp" type="number" data-p="food.${i}.pp" value="${f.pp}"></div>`).join('')}${C.bev.map((f,i)=>`<div class="row2"><input class="inp" data-p="bev.${i}.name" value="${esc(f.name)}"><input class="inp" type="number" data-p="bev.${i}.pp" value="${f.pp}"></div>`).join('')}</div>
- <h3>Extras</h3><div class="form">${C.extras.map((f,i)=>`<div class="row2"><input class="inp" data-p="extras.${i}.name" value="${esc(f.name)}"><input class="inp" type="number" data-p="extras.${i}.price" value="${f.price}"></div>`).join('')}</div>
- <h3>Photo library</h3><p class="hint">Photos upload to your venue folder in Supabase Storage, the same library as Restaurant Deluxe and Service Deluxe.</p><div class="form"><label class="f">Venue code<input class="inp" data-p="supabase.venue" value="${esc(SB().venue||'')}"></label><label class="f">Supabase URL<input class="inp" data-p="supabase.url" value="${esc(SB().url||'')}"></label><label class="f">Anon key<input class="inp" data-p="supabase.key" value="${esc(SB().key||'')}"></label></div>
- <h3>Surcharges, deposit and hold</h3><div class="form"><div class="row2"><label class="f">Sunday surcharge %<input class="inp" type="number" data-pct="surcharge.sun" value="${Math.round(C.surcharge.sun*100)}"></label><label class="f">Public holiday surcharge %<input class="inp" type="number" data-pct="surcharge.ph" value="${Math.round(C.surcharge.ph*100)}"></label></div>
- <div class="row2"><label class="f">Deposit %<input class="inp" type="number" data-pct="deposit.pct" value="${Math.round(C.deposit.pct*100)}"></label><label class="f">Minimum deposit $<input class="inp" type="number" data-p="deposit.min" value="${C.deposit.min}"></label></div>
- <label class="f">Days a hold lasts<input class="inp" type="number" data-p="holdDays" value="${C.holdDays}"></label>
- <label class="f">Public holidays <span class="hint">One per line: 2027-01-26 Australia Day. Check against the official NSW list each year.</span><textarea class="inp" rows="8" data-p="holidays">${esc(C.holidays)}</textarea></label>
- <button class="btn" data-papply>Apply and save</button><button class="btn ghost" data-preset>Reset to sample prices</button></div>`;dr.classList.add('on')}
-function applyPricing(){$$('#drawer [data-p]').forEach(i=>{const p=i.dataset.p.split('.');let o=C;while(p.length>1)o=o[p.shift()];o[p[0]]=i.type==='number'?(+i.value||0):i.value});
- $$('#drawer [data-pct]').forEach(i=>{const p=i.dataset.pct.split('.');C[p[0]][p[1]]=(+i.value||0)/100});store.set('config',C);renderAllData();toast('Pricing updated')}
-function downloadPage(){saveAll();const clone=document.documentElement.cloneNode(true);
- clone.querySelector('body').classList.remove('editing');clone.querySelectorAll('[contenteditable]').forEach(e=>e.removeAttribute('contenteditable'));
- const cfg={...C,content:{...(C.content||{}),...content},imgs:{...(C.imgs||{}),...imgs}};
- clone.querySelector('#fd-config').textContent=JSON.stringify(cfg).replace(/</g,'\\u003c');
- ['#slides','#roomList','#fnList','#cal','#dayPanel','#result','#drawer','#sheet','#gal','#gfil','#cmp'].forEach(s=>{const e=clone.querySelector(s);if(e)e.innerHTML=''});
- clone.querySelector('#modal').classList.remove('on');
- const html='<!DOCTYPE html>\n'+clone.outerHTML,a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='index.html';document.body.appendChild(a);a.click();a.remove();toast('Downloaded index.html: upload it to publish')}
-
-/* ---------- wiring ---------- */
-function renderAllData(){applyTheme();applyFont();renderHero();renderRooms();renderTypes();renderGallery();fillSelects();syncForm();renderSeg();renderCal();renderDay();renderResult()}
-applyContent();renderAllData();astInit();
-const route=()=>{const h=location.hash.slice(1),q=new URLSearchParams(location.search);
- if(h==='edit'||q.get('edit')==='1')setEditing(true);if(h==='venue')renderVenue()};
-addEventListener('hashchange',route);route();
-addEventListener('scroll',()=>$('#nav').classList.toggle('solid',scrollY>60),{passive:true});
-$('#prevM').onclick=()=>{viewM.setMonth(viewM.getMonth()-1);renderCal()};
-$('#nextM').onclick=()=>{viewM.setMonth(viewM.getMonth()+1);renderCal()};
-$('#sessSeg').onclick=e=>{const b=e.target.closest('[data-sess]');if(b){calSess=b.dataset.sess;renderSeg();renderCal()}};
-$('#cal').onclick=e=>{const b=e.target.closest('[data-date]');if(b&&!b.disabled){selDate=b.dataset.date;renderCal();renderDay();if(innerWidth<900)$('#dayPanel').scrollIntoView({behavior:'smooth',block:'start'})}};
-$('#dayPanel').onclick=e=>{const b=e.target.closest('[data-est]');if(b){const[r,s]=b.dataset.est.split('|');Object.assign(E,{room:r,sess:s,date:selDate});if((room(r).cap[E.style]||0)<E.guests)E.guests=Math.min(E.guests,room(r).cap[E.style]||room(r).cap.cocktail);syncForm();renderResult();$('#estimate').scrollIntoView({behavior:'smooth'})}
- const w=e.target.closest('[data-wait]');if(w)toast('Waitlist: we would email you if this date frees up')};
-$('#roomList').onclick=e=>{const b=e.target.closest('[data-pick-room]');if(b&&!document.body.classList.contains('editing')){E.room=b.dataset.pickRoom;const r=room(E.room);if((r.cap[E.style]||0)<E.guests)E.guests=r.cap[E.style]||r.cap.cocktail;syncForm();renderResult();$('#estimate').scrollIntoView({behavior:'smooth'})}};
-$('#estForm').addEventListener('input',e=>{const t=e.target;
- if(t.id==='eType'){E.type=t.value;const ty=C.types.find(x=>x.id===t.value);if(ty){E.food=ty.food;E.bev=ty.bev;E.style=ty.style;E.extras=[...(ty.ex||[])];if(E.chair==='covered')E.extras.push('covers');E.room='';if(ty.id==='christening')E.sess='day'}syncForm()}
- if(t.id==='eGuests'){E.guests=Math.max(1,Math.min(550,+t.value||1));E.room=''}if(t.id==='eDate'&&t.value)E.date=t.value<TODAY?TODAY:t.value;
- if(t.id==='eSess')E.sess=t.value;if(t.id==='eStyle'){E.style=t.value;E.room=''}if(t.id==='eRoom')E.room=t.value;if(t.id==='eFood')E.food=t.value;if(t.id==='eBev')E.bev=t.value;
- if(t.closest('#eExtras')){E.extras=$$('#eExtras input:checked').map(i=>i.value);if(t.value==='covers'){if(t.checked)E.chair='covered';else if(E.chair==='covered')E.chair='gold';renderLookPick()}}refreshEst()});
-$('#eLook').onclick=e=>{const b=e.target.closest('[data-look]');if(!b)return;const[k,v]=b.dataset.look.split('|');E[k]=v;if(k==='chair'){const has=E.extras.includes('covers');if(v==='covered'&&!has)E.extras.push('covers');if(v!=='covered'&&has)E.extras=E.extras.filter(x=>x!=='covers');$$('#eExtras input').forEach(i=>i.checked=E.extras.includes(i.value))}renderLookPick();refreshEst()};
-$('#result').onclick=e=>{if(e.target.id==='holdBtn')openFlow('hold');if(e.target.id==='meetBtn')openFlow('meet')};
-$('#sheet').onclick=e=>{const t=e.target;
- if(t.closest('[data-close]')){$('#modal').classList.remove('on');return}
- if(t.closest('[data-back]')){F.step--;drawFlow();return}
- if(t.closest('[data-next]')){if(F.step===1&&!validate1())return;if(F.step===2&&F.mode==='meet'){finish('meeting');return}F.step++;drawFlow();return}
- const mm=t.closest('[data-mm]');if(mm){F.meetMode=mm.dataset.mm;drawFlow()}
- const md=t.closest('[data-md]');if(md){F.meetDate=md.dataset.md;F.meetTime='';drawFlow()}
- const mt=t.closest('[data-mt]');if(mt){F.meetTime=mt.dataset.mt;drawFlow()}
- const fi=t.closest('[data-finish]');if(fi)finish(fi.dataset.finish)};
-$('#modal').onclick=e=>{if(e.target.id==='modal')$('#modal').classList.remove('on')};
-addEventListener('keydown',e=>{if(e.key==='Escape'){$('#modal').classList.remove('on');$('#drawer').classList.remove('on')}});
-$('#drawer').onclick=e=>{const t=e.target;
- if(t.closest('[data-dclose]')){$('#drawer').classList.remove('on');if(location.hash==='#venue')history.replaceState(null,'',location.pathname+location.search)}
- const vs=t.closest('[data-vs]');if(vs){const[i,s]=vs.dataset.vs.split('|'),all=holds();all[i].status=s;store.set('holds',all);renderVenue();renderCal();renderDay();refreshEst()}
- if(t.closest('[data-vclear]')){store.set('holds',[]);renderVenue();renderCal();renderDay();refreshEst()}
- if(t.closest('[data-papply]'))applyPricing();
- if(t.closest('[data-preset]')){const keepD=C.design;C=JSON.parse(JSON.stringify(DEFAULT));C.design=keepD;store.set('config',null);renderAllData();pricingPanel();toast('Sample prices restored')}};
-
-document.addEventListener('click',e=>{if(!document.body.classList.contains('editing'))return;const im=e.target.closest('[data-img]');if(im){e.preventDefault();e.stopPropagation();openPicker(im.dataset.img)}},true);
-$$('[data-consult]').forEach(b=>b.onclick=()=>openFlow('meet'));
-$('#gfil').onclick=e=>{const b=e.target.closest('[data-gc]');if(b){gCat=b.dataset.gc;renderGallery()}};
-const flatGal=()=>{if(C.imgs)for(const k of Object.keys(C.imgs))if(k.startsWith('gal:')){if(!imgs[k])imgs[k]=C.imgs[k];delete C.imgs[k]}};
-$('#gal').onclick=e=>{const d=e.target.closest('[data-gdel]');if(d){flatGal();const i=+d.dataset.gdel,n=C.gallery.length;C.gallery.splice(i,1);for(let j=i;j<n;j++){const nx=imgs['gal:'+(j+1)];if(nx)imgs['gal:'+j]=nx;else delete imgs['gal:'+j]}renderGallery();toast('Photo removed. Press Save to keep the change');return}
- if(document.body.classList.contains('editing'))return;const g=e.target.closest('[data-gi]');if(g)openLb(+g.dataset.gi)};
-$('#gal').onkeydown=e=>{if(document.body.classList.contains('editing'))return;const g=e.target.closest('[data-gi]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openLb(+g.dataset.gi)}};
-$('#gal').addEventListener('focusout',e=>{const s=e.target.closest('.gi span');if(s){const i=+s.closest('[data-gi]').dataset.gi;C.gallery[i].cap=s.textContent.trim()}});
-$('#addPh').onclick=()=>{flatGal();C.gallery.unshift({scene:'grand',cat:gCat==='All'?'Weddings':gCat,cap:'New photo: tap to add a caption',shape:'wide'});const n=C.gallery.length;for(let j=n-1;j>0;j--){if(imgs['gal:'+(j-1)])imgs['gal:'+j]=imgs['gal:'+(j-1)];else delete imgs['gal:'+j]}delete imgs['gal:0'];renderGallery();openPicker('gal:0')};
-$('#lbPrev').onclick=()=>{lbI--;showLb()};$('#lbNext').onclick=()=>{lbI++;showLb()};$('#lbClose').onclick=()=>$('#lb').classList.remove('on');
-$('#lb').onclick=e=>{if(e.target.id==='lb')$('#lb').classList.remove('on')};
-addEventListener('keydown',e=>{if(!$('#lb').classList.contains('on'))return;if(e.key==='ArrowLeft'){lbI--;showLb()}if(e.key==='ArrowRight'){lbI++;showLb()}if(e.key==='Escape')$('#lb').classList.remove('on')});
-$('#fileIn').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f||!imgKey)return;const key=imgKey;$('#modal').classList.remove('on');const {blob,data}=await shrinkBlob(f);
- if(sbOn()){toast('Uploading photo…');try{const url=await uploadPhoto(blob,key);setImg(key,url);toast('Uploaded to your photo library. Press Save to keep it');return}catch(err){if(err.message==='cancelled')return;const net=/fetch|network|load failed/i.test(err.message);toast(net?'Photo library unreachable from this preview: photo kept in this page only':err.message);if(!net)return}}
- setImg(key,data)};
-$('#tAcct').onclick=async()=>{if(session){session=null;store.set('sb_session',null);updAcct();toast('Signed out')}else if(await signIn())toast('Signed in')};updAcct();
-$('#tPrice').onclick=()=>{$('#drawer').dataset.hero='';pricingPanel()};$('#tTheme').onclick=themePanel;$('#tAst').onclick=assistantPanel;$('#tHero').onclick=heroPanel;$('#tSave').onclick=saveAll;$('#tDl').onclick=downloadPage;
-$('#tExit').onclick=()=>{saveAll();setEditing(false);if(location.hash==='#edit')history.replaceState(null,'',location.pathname+location.search)};
-}
+  /* enquiry -> CRM as a Function Deluxe lead (fn_lead_submit) */
+  var f=document.getElementById("enqForm"), msg=document.getElementById("enqMsg");
+  var q=new URLSearchParams(location.search);
+  if(q.get("r")) f.business.value=q.get("r"); if(q.get("e")) f.email.value=q.get("e"); if(q.get("n")) f.name.value=q.get("n");
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    var d={}; Array.prototype.forEach.call(f.elements,function(el){ if(el.name) d[el.name]=el.value.trim(); });
+    msg.className="msg";
+    if(!d.name||!d.business){ msg.className="msg err"; msg.textContent="Please add your name and your venue name."; return; }
+    if(!/^\S+@\S+\.\S{2,}$/.test(d.email)){ msg.className="msg err"; msg.textContent="Please check your email address."; return; }
+    var btn=f.querySelector("button"); btn.disabled=true; msg.textContent="Sending…";
+    fetch(SB+"/rest/v1/rpc/fn_lead_submit",{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":"application/json"},
+      body:JSON.stringify({p_name:d.name,p_business:d.business,p_email:d.email,p_phone:d.phone,p_type:d.type,p_suburb:d.suburb,p_message:d.message,p_trap:d.website})})
+    .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error((j&&j.message)||"Something went wrong"); return j; }); })
+    .then(function(j){
+      btn.disabled=false;
+      if(!j.ok){ msg.className="msg err"; msg.textContent=j.error||"Something went wrong."; return; }
+      f.reset(); msg.className="msg ok"; msg.textContent="Thanks — I've got it. I'll be in touch shortly, usually within one business day.";
+    }).catch(function(){
+      btn.disabled=false; msg.className="msg err";
+      msg.innerHTML='Sorry, that didn\'t send. Please email <a href="mailto:marc@webescapade.com">marc@webescapade.com</a> or call 0413 872 994.';
+    });
+  });
+})();
 </script>
 </body>
 </html>

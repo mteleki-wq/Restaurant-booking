@@ -300,6 +300,7 @@
     <div class="prodsw" id="prodSw" role="tablist" aria-label="Product">
       <button type="button" data-prod="restaurant" class="on">Restaurant Deluxe</button>
       <button type="button" data-prod="service">Service Deluxe</button>
+      <button type="button" data-prod="function">Function Deluxe</button>
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <a class="pill navlink" id="crmLink" href="venue-crm.html?prod=restaurant#campaigns" target="rd-venue-crm" title="Open the CRM: campaign results, pipeline and venue health">📊 CRM &amp; results</a>
@@ -339,7 +340,7 @@
           <label>Email theme</label>
           <select id="fTheme" data-k="theme" hidden aria-hidden="true">
             <option value="alt">Dark &amp; light</option><option value="dark">All dark</option><option value="light">Light</option>
-            <option value="cream">Cream &amp; olive</option><option value="terra">Cream &amp; terracotta</option><option value="sage">Soft sage</option>
+            <option value="cream">Cream &amp; olive</option><option value="terra">Cream &amp; terracotta</option><option value="sage">Soft sage</option><option value="blush">Champagne &amp; burgundy</option>
           </select>
           <div class="thms" id="thms" role="group" aria-label="Email theme">
             <button type="button" class="thm" data-thm="alt"><i style="background:linear-gradient(90deg,#0c0f24 50%,#ffffff 50%)"></i><b style="background:#7b3cff"></b><span>Dark &amp; light</span></button>
@@ -348,8 +349,9 @@
             <button type="button" class="thm" data-thm="cream"><i style="background:#fbf8f1"></i><b style="background:#5f7038"></b><span>Cream &amp; olive</span></button>
             <button type="button" class="thm" data-thm="terra"><i style="background:#fffaf4"></i><b style="background:#b3532e"></b><span>Cream &amp; terracotta</span></button>
             <button type="button" class="thm" data-thm="sage"><i style="background:#fbfcfa"></i><b style="background:#3f6b55"></b><span>Soft sage</span></button>
+            <button type="button" class="thm" data-thm="blush"><i style="background:#fffaf7"></i><b style="background:#7a2e3e"></b><span>Champagne &amp; burgundy</span></button>
           </div>
-          <p style="margin:6px 0 0;font-size:12px;opacity:.7">Changes this email’s colours. Light themes suit restaurants and spas.</p>
+          <p style="margin:6px 0 0;font-size:12px;opacity:.7">Changes this email’s colours. Light themes suit restaurants, spas and function centres.</p>
         </div>
         <div class="field">
           <label for="fName">Campaign name</label>
@@ -1508,7 +1510,10 @@
         a1:'#b3532e',a2:'#d07a45',a3:'#d9ab5c',g1:'rgba(201,154,75,.16)',g2:'rgba(179,83,46,.12)',deep:'#3a2219'},
       sage:{bg:'#e6ece6',shell:'#fbfcfa',band:'#fbfcfa',band2:'#f1f5f0',head:'#f1f5f0',foot:'#e8eee7',
         ink:'#1d2a23',mut:'#526158',faint:'#748278',line:'#dde6de',line2:'#dde6de',eye:'#3f6b55',cardbg:'#f1f5f0',
-        a1:'#3f6b55',a2:'#6e9a83',a3:'#c7ae7c',g1:'rgba(180,154,106,.14)',g2:'rgba(63,107,85,.13)',deep:'#1d3127'}
+        a1:'#3f6b55',a2:'#6e9a83',a3:'#c7ae7c',g1:'rgba(180,154,106,.14)',g2:'rgba(63,107,85,.13)',deep:'#1d3127'},
+      blush:{bg:'#f1e8e2',shell:'#fffaf7',band:'#fffaf7',band2:'#f8efea',head:'#f8efea',foot:'#efe4de',
+        ink:'#2a1a20',mut:'#6a5960',faint:'#8b7a80',line:'#ecdcd6',line2:'#ecdcd6',eye:'#7a2e3e',cardbg:'#f8efea',
+        a1:'#7a2e3e',a2:'#a8576a',a3:'#c9a46a',g1:'rgba(201,164,106,.16)',g2:'rgba(122,46,62,.12)',deep:'#3a1520'}
     };
     var TH=THEMES[mode]||null;
     function bandDark(i){ return TH ? false : mode==='dark' ? true : mode==='light' ? false : (i%2===0); }
@@ -2127,6 +2132,7 @@
   function histProd(h){
     if(h.product) return h.product;
     try{ if(svcPresets().some(function(c){ return c.name===h.campaign; })) return 'service'; }catch(e){}
+    try{ if(fnPresets().some(function(c){ return c.name===h.campaign; })) return 'function'; }catch(e){}
     return 'restaurant';
   }
   function myHist(){ var p=(typeof PRODUCT!=='undefined'&&PRODUCT)||'restaurant'; return HIST.filter(function(h){ return histProd(h)===p; }); }
@@ -3065,7 +3071,7 @@
      =================================================================== */
   var K_PROD='rdes.product';
   var PRODUCT='restaurant';
-  var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe'};
+  var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe', 'function':'Function Deluxe'};
   var SVC_SITE  = "https://webescapade.com/service/demo/";   /* demo spa website */
   var SVC_PAGE  = "https://webescapade.com/service/";        /* Service Deluxe sales page */
   var SVC_IMG   = "https://webescapade.com/service/img/email/";   /* email pictures, 1100px wide */
@@ -3089,7 +3095,7 @@
   var SVC_SBOOK = "https://webescapade.com/service/service-booking.html?venue=atelier-hair&accent=A9503A&word=stylist";
   var SVC_SVIDEO = "https://youtu.be/B-1hhWIhQh4";   /* Premium for salons tour */
   var SVC_STHUMB = "https://webescapade.com/service/img/salon-video-thumb.jpg";
-  var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE};
+  var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE, 'function':"https://webescapade.com/Function-centre/"};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
   var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
   var SVC_OFFER = {trial_days:14, gst:true, plans:[
@@ -3340,7 +3346,103 @@
         subject:'Will it work for my business?', preheader:'Practitioners, rooms, price and set-up in four answers.' })
     ];
   }
-  function curPresets(){ return PRODUCT==='service' ? svcPresets() : PRESETS; }
+
+  /* ================= FUNCTION DELUXE (function centres) ================= */
+  var FN_PAGE  = "https://webescapade.com/Function-centre/";        /* Function Deluxe sales page */
+  var FN_SITE  = "https://webescapade.com/Function-centre/demo/";   /* Aurelle demo venue */
+  var FN_EST   = FN_SITE+"#estimate";
+  var FN_DEMO  = "https://webescapade.com/Function-centre/demo.html";   /* book a Zoom demo with Marc (same calendar) */
+  var FN_IMG   = FN_PAGE+"img/";                                     /* email pictures, 1200px wide */
+  var FN_VIDEO = "https://youtu.be/22rezCEm5vU";                     /* Function Deluxe 2-minute tour (voiceover) */
+  var FN_THUMB = FN_IMG+"video-thumb.jpg";
+  var FN_OFFER = {trial_days:14, gst:true, plans:[
+      {name:"Function Deluxe", price:129, desc:"Editable website, live availability, instant estimates with the look preview, online holds and consultation booking, venue view", main:true},
+      {name:"Function Deluxe + Ava", price:169, desc:"Everything in Function Deluxe plus Ava, the AI events assistant (+$40)"}],
+    setup:{price:400, desc:"Optional done-for-you setup: Essentials $400 (rooms, packages, prices, photos, calendar), Plus $500 (adds Ava set up with the venue notes and styling options), Premium $600 (adds own domain and a one-hour training session). Payable over the first 3 months. Do it yourself is free with the trial."},
+    notes:"Founding offer: the first 3 function centres get the setup at half price ($200 / $250 / $300 + GST). Do not invent a deadline or say how many places are left."};
+  function fnPlan(i){ return (FN_OFFER.plans||[])[i]; }
+  function fnMain(){ var ps=FN_OFFER.plans||[]; return ps.filter(function(p){ return p.main; })[0] || ps[0] || {name:'Function Deluxe',price:129,desc:''}; }
+  function fnAva(){ var ps=FN_OFFER.plans||[]; return ps.filter(function(p){ return /ava/i.test(p.name||''); })[0] || ps.filter(function(p){ return !p.main; })[0]; }
+  function fnPer(){ return FN_OFFER.gst ? '/ month + GST' : '/ month'; }
+  function fnBox(p,hi,desc){ return p ? {tier:String(p.name||'').toUpperCase(), price:svcPrice(p), per:fnPer(), desc:desc||p.desc||'', hi:!!hi} : null; }
+  function fnSetupLine(){ var g=FN_OFFER.gst?' + GST':''; return 'Set it up yourself free, or we do it for you from $'+((FN_OFFER.setup&&FN_OFFER.setup.price)||400)+g+', payable over 3 months.'; }
+  function fnPresets(){
+    var T=FN_OFFER.trial_days||14, M=fnMain(), A=fnAva();
+    var FOUND='Founding offer: the first 3 function centres get done-for-you setup at half price.';
+    var TERMS='Free '+T+'-day trial. One flat monthly price, no commission on any booking.';
+    var base={
+      badge:T+'-DAY FREE TRIAL', eyebrow:'Function Deluxe', theme:'blush',
+      cta1:'Open the demo venue', cta1url:FN_SITE,
+      cta2:'Book a Zoom demo', cta2url:FN_DEMO,
+      featEyebrow:'One connected system',
+      featHeading:'Built for your events team.\nEasy for couples and planners.',
+      priceEyebrow:'Simple monthly price', priceHeading:'One flat price. No commission.',
+      finalHeading:'See it with your own rooms.', finalSub:'Book a free 30-minute Zoom demo at a time that suits you, or simply reply to this email. '+TERMS,
+      finalCta:'Book a Zoom demo', finalUrl:FN_DEMO,
+      siteUrl:FN_PAGE,
+      videoUrl:FN_VIDEO, videoThumb:FN_THUMB, videoTitle:'Watch the 2-minute tour', videoPos:'hero',
+      priceFoot:fnSetupLine()+' '+FOUND+' All details: webescapade.com/Function-centre'
+    };
+    function P(o){ return preset(Object.assign({}, base, o)); }
+    return [
+      P({ name:'Introducing Function Deluxe (video)', desc:'Launch email to function centres: the 2-minute video, what it does, hold-meet-secure, prices and the founding offer',
+        badge:'NEW FOR FUNCTION CENTRES', eyebrow:'Introducing Function Deluxe',
+        headline:'Is our date free? What will it cost? Your website answers.',
+        intro:'Most enquiries start with the same three questions: is our date free, roughly what will it cost, and can we see the room? Usually that means emails back and forth for days.\n\nFunction Deluxe answers them on your own website, day or night. Couples and event planners check live availability for every room, get an estimate priced for the day they choose (weekends and public holidays included), see how their tables could look, and hold the date while you confirm it.\n\nI’m Marc, a Sydney web designer with 50 years’ experience in hospitality. The tour takes 2 minutes.',
+        featEyebrow:'What’s included', featHeading:'Everything a couple asks,\nanswered on your website.',
+        cards:[
+          {n:'01', t:'A website you change yourself', d:'Your rooms, function types and gallery. Tap text to change it, pick a colour theme.'},
+          {n:'02', t:'Availability and estimates', d:'Every room, day and evening, priced for the day they choose, public holidays included.'},
+          {n:'03', t:'See the look', d:'Flowers, linen, chairs and sashes. Their tables change as the total updates.'},
+          {n:'04', t:'Ava, AI assistant (add-on)', d:'Answers from your website, checks dates and takes messages, day or night.'}
+        ],
+        spotOn:true, spotEyebrow:'How a booking happens', spotHeading:'Hold. Meet. Secure.',
+        spotSub:'The guest holds a date for free while you check it, with their estimate and chosen look attached. Then they book a site visit, Zoom or phone call with your coordinator. A deposit locks it in. You see every hold, meeting and deposit in one list.',
+        boxes:[{l:'HOLD', v:'Free, 7 days'},{l:'MEET', v:'Booked online'},{l:'SECURE', v:'Deposit paid'}],
+        bandImage:FN_IMG+'estimate-look.jpg', bandAlt:'Function Deluxe estimate with a live preview of the table styling', bandLink:FN_EST,
+        bandCaption:'Try it on our demo venue: choose a room, a Saturday and your flowers, and watch the price and the look change.',
+        plans:[fnBox(M,true), fnBox(A,false)].filter(Boolean),
+        subject:'Is our date free? Your website can answer', resendSubject:'Your function centre, booked online',
+        preheader:'Live availability, instant estimates and online holds. Watch the 2-minute tour.' }),
+      P({ name:'Meet Ava, the AI events assistant', desc:'Second email: Ava answers enquiries from your website, checks dates and works out estimates; leads with the $169 plan',
+        badge:'AI EVENTS ASSISTANT', eyebrow:'Function Deluxe + Ava',
+        headline:'The enquiry that arrives at 11pm. Answered.',
+        intro:'Couples plan their wedding in the evening, after work. Event planners compare venues on Sunday. When they can’t get an answer, they move on to the next venue.\n\nAva is the AI events assistant for your website. Ask her “Is a Saturday in March free for 150, and roughly what would it cost?” and she checks every room, works out an estimate with your own prices and public holiday rules, and links straight to hold the date. When she can’t help, she takes a message for your team.',
+        cta1:'Chat with Ava on the demo', cta1url:FN_SITE,
+        featEyebrow:'What Ava does', featHeading:'Your events coordinator’s\nnight shift.',
+        cards:[
+          {n:'01', t:'Answers from your website', d:'Rooms, packages, prices, parking, cakes, kids’ menus: whatever is on your site and in your notes.'},
+          {n:'02', t:'Checks every room', d:'Any date, day or evening, public holidays included.'},
+          {n:'03', t:'Works out estimates', d:'With your own pricing rules, and a link to hold the date.'},
+          {n:'04', t:'Takes messages', d:'When a question needs a person, she takes the details and emails your team.'}
+        ],
+        spotOn:true, spotEyebrow:'You stay in charge', spotHeading:'Your venue, your rules, your voice.',
+        spotSub:'You choose her name and greeting, and add notes she should know (finish times, BYO cake, outside florists). The chat says she’s an AI assistant and that your coordinator confirms prices and dates.',
+        boxes:[{l:'NAME', v:'You choose'},{l:'NOTES', v:'Your venue, your words'},{l:'QUESTIONS', v:'Up to 1,000 a month'}],
+        bandImage:FN_IMG+'ava-phones.jpg', bandAlt:'Ava the AI events assistant answering a date and price question on a phone', bandLink:FN_SITE,
+        bandCaption:'Ask Ava on our demo venue: “Wedding for 150 on a Saturday in March. What’s free and roughly what would it cost?”',
+        plans:[fnBox(A,true), fnBox(M,false,'Without Ava: website, availability, estimates and online holds.')].filter(Boolean),
+        subject:'The enquiry that arrives at 11pm', resendSubject:'Meet Ava, your AI events assistant',
+        preheader:'Ava answers from your website, checks dates and works out estimates, day or night.' }),
+      P({ name:'Follow-up: short answers', desc:'Short follow-up for venues that opened but did not click: four quick answers and a phone call',
+        followup:'openedNotClicked', followDays:3, badge:'QUICK ANSWERS', eyebrow:'Straight answers',
+        headline:'Will it work for our venue? Four short answers.',
+        intro:'Here are short answers to the first questions most function centres ask.',
+        videoPos:'end', videoTitle:'Or watch the 2-minute tour',
+        featEyebrow:'Four quick answers', featHeading:'Your rooms, your prices,\nyour team, the cost.',
+        cards:[{n:'01', t:'Several rooms', d:'Each room has its own sessions, capacities and prices.'},
+               {n:'02', t:'Your pricing rules', d:'Weekend and public holiday rates are applied for you. Estimates are a guide; you confirm the quote.'},
+               {n:'03', t:'What it costs', d:svcPrice(M)+' a month'+(FN_OFFER.gst?' + GST':'')+', or '+svcPrice(A)+' with Ava. No commission.'},
+               {n:'04', t:'Getting started', d:'Set it up yourself free, or we do it for you. First 3 venues: half-price setup.'}],
+        spotOn:false, priceOn:false, finalHeading:'Easier to talk it through?', finalSub:'Call Marc on 0413 872 994, book a Zoom demo, or simply reply to this email.',
+        finalCta:'Book a Zoom demo', finalUrl:FN_DEMO,
+        subject:'Will it work for our venue?', preheader:'Rooms, prices, team and cost in four short answers.' })
+    ];
+  }
+  function presetsFor(p){ return p==='service' ? svcPresets() : p==='function' ? fnPresets() : PRESETS; }
+  function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : null; }
+  function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; }
+  function curPresets(){ return presetsFor(PRODUCT); }
 
   function paintProduct(){
     document.querySelectorAll('#prodSw [data-prod]').forEach(function(b){ var on=b.getAttribute('data-prod')===PRODUCT; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
@@ -3352,9 +3454,9 @@
     try{ audRecall(); }catch(e){}
   }
   function switchProduct(p,quiet){
-    p=(p==='service')?'service':'restaurant';
+    p=(p==='service'||p==='function')?p:'restaurant';
     CUR_BY[PRODUCT]=cur; try{ audRemember(); }catch(e){}
-    if(!CAMPS_BY[p]) CAMPS_BY[p]=svcPresets().map(function(c){ return JSON.parse(JSON.stringify(c)); });
+    if(!CAMPS_BY[p]) CAMPS_BY[p]=presetsFor(p).map(function(c){ return JSON.parse(JSON.stringify(c)); });
     PRODUCT=p; camps=CAMPS_BY[p]; cur=Math.min(CUR_BY[p]||0, camps.length-1);
     try{ store.set(K_PROD,p); }catch(e){}
     paintProduct();
@@ -3383,7 +3485,7 @@
     $('#pfWhich').textContent=PROD_NAME[PRODUCT];
     $('#pfName').value=info.name||PROD_NAME[PRODUCT];
     $('#pfFacts').value=info.facts||'';
-    var o=PRODUCT==='service' ? (info.offer||SVC_OFFER) : null;
+    var o=offerFor(PRODUCT);
     $('#pfOffer').hidden=!o;
     $('#pfFactsHelp').textContent=o ? 'Prices live in the boxes above; keep them out of the facts.' : 'Restaurant Deluxe prices and setup terms are written inside these facts.';
     if(o){
@@ -3397,13 +3499,15 @@
   function pfLoad(quiet){
     return aiCall('products_get',{}).then(function(d){
       (d.products||[]).forEach(function(p){ PRODUCTS_INFO[p.key]=p; });
-      if(PRODUCTS_INFO.service && PRODUCTS_INFO.service.offer){
-        SVC_OFFER=PRODUCTS_INFO.service.offer;
-        if(CAMPS_BY.service && !CAMPS_BY.service.__touched){ CAMPS_BY.service=svcPresets().map(function(c){ return JSON.parse(JSON.stringify(c)); }); if(PRODUCT==='service'){ camps=CAMPS_BY.service; cur=Math.min(cur,camps.length-1); renderRail(); fillForm(); renderPreview(); } }
-      }
-      PROD_NAME.service=(PRODUCTS_INFO.service&&PRODUCTS_INFO.service.name)||PROD_NAME.service;
-      PROD_NAME.restaurant=(PRODUCTS_INFO.restaurant&&PRODUCTS_INFO.restaurant.name)||PROD_NAME.restaurant;
-      document.querySelector('#prodSw [data-prod="service"]').textContent=PROD_NAME.service;
+      ['service','function'].forEach(function(k){
+        if(!(PRODUCTS_INFO[k] && PRODUCTS_INFO[k].offer)) return;
+        setOffer(k,PRODUCTS_INFO[k].offer);
+        if(CAMPS_BY[k] && !CAMPS_BY[k].__touched){ CAMPS_BY[k]=presetsFor(k).map(function(c){ return JSON.parse(JSON.stringify(c)); }); if(PRODUCT===k){ camps=CAMPS_BY[k]; cur=Math.min(cur,camps.length-1); renderRail(); fillForm(); renderPreview(); } }
+      });
+      ['restaurant','service','function'].forEach(function(k){
+        PROD_NAME[k]=(PRODUCTS_INFO[k]&&PRODUCTS_INFO[k].name)||PROD_NAME[k];
+        var b=document.querySelector('#prodSw [data-prod="'+k+'"]'); if(b) b.textContent=PROD_NAME[k];
+      });
       paintProduct(); $('#pfOut').innerHTML=''; pfShow();
       if(!quiet) toast('Product facts loaded');
     }).catch(function(e){ if(!quiet) $('#pfOut').innerHTML='<div class="note warn">'+esc((e&&e.message)||e)+'</div>'; });
@@ -3414,7 +3518,7 @@
   act('pf-rmplan',function(){});
   act('pf-save',function(btn){
     var body={key:PRODUCT, name:$('#pfName').value.trim(), facts:$('#pfFacts').value};
-    if(PRODUCT==='service'){
+    if(PRODUCT==='service'||PRODUCT==='function'){
       body.offer={trial_days:$('#pfTrial').value, gst:$('#pfGst').checked,
         plans:Array.prototype.map.call(document.querySelectorAll('#pfPlans .offer-row'),function(r){
           return {name:r.querySelector('[data-pf="name"]').value.trim(), price:r.querySelector('[data-pf="price"]').value, desc:r.querySelector('[data-pf="desc"]').value.trim(), main:r.querySelector('[data-pf="main"]').checked};
@@ -3425,8 +3529,8 @@
     aiLock(btn,true); $('#pfOut').innerHTML='<div class="ai-busy"><i></i>Saving…</div>';
     aiCall('product_save',body).then(function(d){
       PRODUCTS_INFO[PRODUCT]=d.product;
-      if(PRODUCT==='service' && d.product.offer) SVC_OFFER=d.product.offer;
-      PROD_NAME[PRODUCT]=d.product.name; if(PRODUCT==='service') document.querySelector('#prodSw [data-prod="service"]').textContent=d.product.name;
+      if(d.product.offer) setOffer(PRODUCT,d.product.offer);
+      PROD_NAME[PRODUCT]=d.product.name; var pb=document.querySelector('#prodSw [data-prod="'+PRODUCT+'"]'); if(pb) pb.textContent=d.product.name;
       paintProduct(); pfShow();
       $('#pfOut').innerHTML='<div class="ai-issue ai-ok"><b>Saved.</b> The AI now uses these facts and prices. Campaigns already open keep their own price boxes — new ones from templates use the new prices after a reload.</div>';
     }).catch(function(e){ $('#pfOut').innerHTML='<div class="note warn">'+esc((e&&e.message)||e)+'</div>'; }).then(function(){ aiLock(btn,false); });
@@ -3440,8 +3544,8 @@
      =================================================================== */
   var K_AI='rdes.ai', K_HANDOFF='rd.handoff';
   setTimeout(function(){
-    try{ var qp=new URLSearchParams(location.search).get('prod'); if(qp==='service'||qp==='restaurant') store.set(K_PROD,qp); }catch(e){}
-    try{ if(store.get(K_PROD)==='service') switchProduct('service',true); else { paintProduct(); pfShow(); } }catch(e){}
+    try{ var qp=new URLSearchParams(location.search).get('prod'); if(qp==='service'||qp==='restaurant'||qp==='function') store.set(K_PROD,qp); }catch(e){}
+    try{ var sp=store.get(K_PROD); if(sp==='service'||sp==='function') switchProduct(sp,true); else { paintProduct(); pfShow(); } }catch(e){}
     if(SET.secret) pfLoad(true);
   },0);
   var AI={ url:'', undo:[] };
@@ -3476,7 +3580,7 @@
     $('#aiUndoBtn').disabled=false;
   }
   function refreshAll(){ renderRail(); fillForm(); renderPreview(); }
-  document.addEventListener('input',function(e){ if(PRODUCT==='service' && CAMPS_BY.service && e.target && e.target.closest && e.target.closest('.editor')) CAMPS_BY.service.__touched=true; });
+  document.addEventListener('input',function(e){ if(PRODUCT!=='restaurant' && CAMPS_BY[PRODUCT] && e.target && e.target.closest && e.target.closest('.editor')) CAMPS_BY[PRODUCT].__touched=true; });
   function applyCopy(fields){
     pushUndo();
     var c=camps[cur];
