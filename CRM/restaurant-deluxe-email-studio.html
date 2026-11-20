@@ -3372,8 +3372,8 @@
     var TERMS='Free '+T+'-day trial. One flat monthly price, no commission on any booking.';
     var base={
       badge:T+'-DAY FREE TRIAL', eyebrow:'Function Deluxe', theme:'blush',
-      cta1:'Open the demo venue', cta1url:FN_SITE,
-      cta2:'Book a Zoom demo', cta2url:FN_DEMO,
+      cta1:'See Function Deluxe', cta1url:FN_PAGE,
+      cta2:'Open the demo venue', cta2url:FN_SITE,
       featEyebrow:'One connected system',
       featHeading:'Built for your events team.\nEasy for couples and planners.',
       priceEyebrow:'Simple monthly price', priceHeading:'One flat price. No commission.',
@@ -3381,7 +3381,7 @@
       finalCta:'Book a Zoom demo', finalUrl:FN_DEMO,
       siteUrl:FN_PAGE,
       videoUrl:FN_VIDEO, videoThumb:FN_THUMB, videoTitle:'Watch the 2-minute tour', videoPos:'hero',
-      priceFoot:fnSetupLine()+' '+FOUND+' All details: webescapade.com/Function-centre'
+      priceFoot:fnSetupLine()+' '+FOUND
     };
     function P(o){ return preset(Object.assign({}, base, o)); }
     return [
@@ -3408,7 +3408,7 @@
         badge:'AI EVENTS ASSISTANT', eyebrow:'Function Deluxe + Ava',
         headline:'The enquiry that arrives at 11pm. Answered.',
         intro:'Couples plan their wedding in the evening, after work. Event planners compare venues on Sunday. When they can’t get an answer, they move on to the next venue.\n\nAva is the AI events assistant for your website. Ask her “Is a Saturday in March free for 150, and roughly what would it cost?” and she checks every room, works out an estimate with your own prices and public holiday rules, and links straight to hold the date. When she can’t help, she takes a message for your team.',
-        cta1:'Chat with Ava on the demo', cta1url:FN_SITE,
+        cta1:'Chat with Ava on the demo', cta1url:FN_SITE, cta2:'Prices and plans', cta2url:FN_PAGE+'#pricing',
         featEyebrow:'What Ava does', featHeading:'Your events coordinator’s\nnight shift.',
         cards:[
           {n:'01', t:'Answers from your website', d:'Rooms, packages, prices, parking, cakes, kids’ menus: whatever is on your site and in your notes.'},
