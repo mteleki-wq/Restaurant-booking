@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Function Deluxe demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: formal, warm, celebratory — a venue's events brochure that also takes bookings
+   IDEA: the venue's printed function pack — rooms, menus, a price sheet, the events diary
+   PICTURE: illustrated room scenes (lamplit ballroom, harbour room, rooftop, library) in a slow crossfading hero
+   COLOUR and TYPE: claret #4a1528 bands, blush #f4e4dc support, teal #127a7a for live/free states; Cormorant Garamond titles + Manrope text
+   LAYOUT: full-bleed hero, rooms, function types, diary calendar, estimator with large live result, FAQ, footer */
+:root{color-scheme:light dark;
+--bg:light-dark(#fbf8f5,#1a0c12);--ink:light-dark(#2a1219,#f6ebe6);--soft:light-dark(#6d5560,#c9b2ba);
+--card:light-dark(#ffffff,#26131b);--line:light-dark(#ead9d2,#3d2330);
+--claret:#4a1528;--claret2:#6b2038;--blush:light-dark(#f4e4dc,#331a24);--teal:light-dark(#127a7a,#4cc2bd);
+--held:light-dark(#b8741a,#e9a94f);--booked:light-dark(#a3394f,#e07a8f);--free:var(--teal)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;line-height:1.05;text-wrap:balance;margin:0 0 .4em}
+h2{font-size:clamp(32px,4.4vw,48px)}h3{font-size:26px}
+p{margin:0 0 1em}a{color:inherit}
+.band{padding:clamp(40px,6vw,88px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.lead{color:var(--soft);max-width:62ch;font-size:17px}
+button,input,select,textarea{font:inherit;font-size:16px;color:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;border:1px solid transparent;background:var(--claret);color:#fff;font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--claret2)}.btn.ghost{background:transparent;border-color:currentColor;color:inherit}
+.btn.light{background:#fff;color:var(--claret)}.btn:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+/* nav */
+nav.top{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;gap:20px;padding:14px max(5vw,16px);color:#fff;transition:background .3s}
+nav.top.solid{background:rgba(42,10,22,.94);backdrop-filter:blur(8px)}
+.brand{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:700;letter-spacing:.01em;margin-right:auto}
+nav.top .links{display:flex;gap:22px;flex-wrap:wrap}nav.top .links a{text-decoration:none;font-weight:500;opacity:.9}
+@media(max-width:820px){nav.top .links{display:none}}
+/* hero */
+.hero{position:relative;min-height:min(92vh,820px);display:grid;align-items:end;color:#fff;overflow:hidden;background:#2a0a16}
+.slides{position:absolute;inset:0}
+.slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity 1.6s ease}
+.slides img.on{opacity:1;animation:kb 9s ease-out forwards}
+@keyframes kb{to{transform:scale(1.13)}}
+@media(prefers-reduced-motion:reduce){.slides img.on{animation:none}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,6,14,.35) 0%,rgba(30,6,14,.1) 35%,rgba(30,6,14,.85) 100%)}
+.hero .in{position:relative;z-index:2;padding:0 max(5vw,16px) clamp(40px,7vw,90px);max-width:1240px;margin:0 auto;width:100%}
+.hero h1{font-size:clamp(46px,7.5vw,96px);max-width:14ch}
+.hero p{font-size:clamp(17px,1.6vw,20px);max-width:52ch;opacity:.92}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.stats{display:flex;gap:clamp(18px,4vw,48px);flex-wrap:wrap;margin-top:34px;padding-top:22px;border-top:1px solid rgba(255,255,255,.25)}
+.stats b{display:block;font-family:"Cormorant Garamond",serif;font-size:36px;line-height:1}
+.stats span{font-size:14px;opacity:.8}
+/* rooms */
+.rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:22px;margin-top:30px}
+.room{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.room .ph{aspect-ratio:4/3;position:relative;overflow:hidden;background:var(--blush)}
+.room .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}.room:hover .ph img{transform:scale(1.05)}
+.room .bd{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.caps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 6px}
+.caps div{background:var(--blush);border-radius:10px;padding:8px 4px;text-align:center}
+.caps b{display:block;font-size:18px}.caps small{font-size:12px;color:var(--soft)}
+.room .from{margin-top:auto;font-size:14px;color:var(--soft)}.room .from b{color:var(--ink);font-size:16px}
+/* functions */
+.fbg{background:var(--claret);color:#f8ebe6}.fbg .lead{color:#e4c9cf}
+.ftypes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:1px;background:rgba(255,255,255,.14);border-radius:18px;overflow:hidden;margin-top:30px}
+.ft{background:var(--claret);padding:26px 24px}
+.ft svg{width:40px;height:40px;stroke:#f2c6b8;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:12px}
+.ft h3{font-size:24px;color:#fff}.ft p{font-size:15px;color:#e4c9cf;margin:0}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:18px;margin-top:26px;counter-reset:s}
+.step{border-top:2px solid var(--claret);padding-top:16px}
+:root[data-theme=dark] .step{border-color:#c46b85}
+.step h3{font-size:24px}.step p{color:var(--soft);font-size:15px;margin:0}
+/* calendar */
+.diary{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;margin-top:28px;align-items:start}
+@media(max-width:900px){.diary{grid-template-columns:1fr}}
+.calhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.calhead h3{margin:0 auto 0 0;font-size:30px}
+.iconbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:20px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:0 16px;min-height:44px;cursor:pointer;font-weight:600;color:var(--soft)}
+.seg button.on{background:var(--claret);color:#fff}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal .dow{text-align:center;font-size:13px;color:var(--soft);font-weight:600;padding:4px 0}
+.day{min-height:78px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:7px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:3px;position:relative}
+.day .n{font-weight:700;font-size:15px}.day .s{font-size:12px;line-height:1.2;margin-top:auto}
+.day .ph{font-size:11px;color:var(--held);line-height:1.15}
+.day.l3 .s{color:var(--free)}.day.l2 .s{color:var(--free)}.day.l1 .s{color:var(--held)}.day.l0 .s{color:var(--booked)}
+.day.l0{background:var(--blush)}
+.day.past,.day.blank{opacity:.35;cursor:default}.day.blank{border:0;background:none}
+.day.sel{outline:3px solid var(--claret);outline-offset:-1px}
+:root[data-theme=dark] .day.sel{outline-color:#e07a8f}
+.dots{display:flex;gap:3px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--free)}
+.dots i.held{background:var(--held)}.dots i.booked{background:var(--booked)}
+@media(max-width:600px){.day{min-height:58px;padding:5px}.day .s,.day .ph{display:none}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--soft);margin-top:12px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.slot{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.slot:last-child{border:0}.slot .nm{flex:1 1 160px}.slot small{color:var(--soft);display:block}
+.chip{font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.chip.free{background:color-mix(in srgb,var(--free) 15%,transparent);color:var(--free)}
+.chip.held{background:color-mix(in srgb,var(--held) 18%,transparent);color:var(--held)}
+.chip.booked{background:color-mix(in srgb,var(--booked) 15%,transparent);color:var(--booked)}
+.slot .btn{min-height:40px;padding:0 16px;font-size:14px}
+/* estimator */
+.est{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;margin-top:28px;align-items:start}
+@media(max-width:900px){.est{grid-template-columns:1fr}}
+.form{display:grid;gap:16px}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(max-width:520px){.row2{grid-template-columns:1fr}}
+label.f{display:grid;gap:6px;font-weight:600;font-size:15px}
+.f input,.f select,.f textarea,.inp{min-height:46px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);width:100%}
+.hint{font-size:13px;color:var(--soft);font-weight:400}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:8px}
+.checks label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);cursor:pointer;font-size:15px}
+.checks input{width:20px;height:20px;accent-color:var(--claret)}
+.checks span.p{margin-left:auto;color:var(--soft);font-size:13px;white-space:nowrap}
+.result{position:sticky;top:84px;background:var(--claret);color:#fbeee9;border-radius:22px;padding:28px}
+.result .lbl{font-size:14px;opacity:.8}
+.result .big{font-family:"Cormorant Garamond",serif;font-size:clamp(40px,5.5vw,62px);line-height:1;margin:6px 0 4px;white-space:nowrap}
+.result .tag{display:inline-block;background:rgba(255,255,255,.14);border-radius:999px;padding:5px 12px;font-size:13px;margin:8px 0 14px}
+.result table{width:100%;border-collapse:collapse;font-size:15px}
+.result td{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.14)}.result td:last-child{text-align:right;white-space:nowrap}
+.result .note{font-size:13px;opacity:.8;margin-top:12px}
+.result .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.warn{background:rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:12px}
+/* faq/footer */
+details{border-bottom:1px solid var(--line);padding:16px 0}summary{cursor:pointer;font-weight:600;font-size:17px}
+details p{color:var(--soft);margin:10px 0 0}
+footer{background:#24080f;color:#e8d3d8;padding:48px max(5vw,16px)}
+footer .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px}
+footer a{color:#f2c6b8}.small{font-size:13px;opacity:.75}
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(20,4,10,.6);display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex}
+.sheet{background:var(--bg);border-radius:22px;width:min(640px,100%);max-height:92vh;overflow:auto;padding:26px}
+.sheet .x{float:right}
+.progress{display:flex;gap:6px;margin:6px 0 18px}.progress i{flex:1;height:4px;border-radius:4px;background:var(--line)}.progress i.on{background:var(--claret)}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600}
+.pick button.on{background:var(--claret);color:#fff;border-color:var(--claret)}
+.pick button:disabled{opacity:.35;text-decoration:line-through}
+.sum{background:var(--blush);border-radius:14px;padding:14px 16px;font-size:15px}
+.sum div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}.sum b{text-align:right}
+.ref{font-family:"Cormorant Garamond",serif;font-size:34px;color:var(--claret)}
+:root[data-theme=dark] .ref{color:#f2c6b8}
+.demo{font-size:13px;color:var(--soft);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:12px 0}
+/* assistant pill */
+.ask{position:fixed;right:18px;bottom:18px;z-index:30}
+.askbox{position:fixed;right:18px;bottom:80px;z-index:30;width:min(340px,calc(100vw - 36px));display:none}
+.askbox.on{display:block}
+/* editor + venue drawer */
+.etool{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:60;display:none;gap:8px;flex-wrap:wrap;justify-content:center;background:#1c0610;color:#fff;padding:10px;border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.35);width:max-content;max-width:calc(100vw - 24px)}
+.editing .etool{display:flex}.etool .btn{min-height:40px;font-size:14px;padding:0 14px}
+.editing [data-e]{outline:1px dashed rgba(18,122,122,.7);outline-offset:3px;cursor:text}
+.editing [data-img]{cursor:pointer;outline:3px dashed var(--teal);outline-offset:-3px}
+.editing .ask{display:none}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:70;width:min(560px,100%);background:var(--bg);box-shadow:-10px 0 40px rgba(0,0,0,.25);transform:translateX(105%);transition:transform .3s;overflow:auto;padding:24px}
+.drawer.on{transform:none}
+.grid4{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(0,1fr));gap:6px;align-items:center;font-size:14px}
+.grid4 input{min-height:40px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);width:100%;font-size:15px}
+.grid4 .h{font-weight:700;color:var(--soft);font-size:12px}
+.drawer h3{margin-top:22px}
+.hold{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;background:var(--card);font-size:14px}
+.hold .t{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:15px}
+.hold .a{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.hold .a .btn{min-height:38px;font-size:13px;padding:0 12px}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:90;background:#1c0610;color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;display:none}
+</style>
+</head>
+<body>
+<nav class="top" id="nav">
+  <div class="brand" data-e="brand">The Lanterne Rooms</div>
+  <div class="links"><a href="#rooms">Rooms</a><a href="#functions">Functions</a><a href="#diary">Availability</a><a href="#estimate">Estimate</a><a href="#faq">FAQ</a></div>
+  <a class="btn light" href="#diary">Check a date</a>
+</nav>
+
+<header class="hero">
+  <div class="slides" id="slides"></div>
+  <div class="in">
+    <h1 data-e="heroTitle">Your celebration, on the harbour</h1>
+    <p data-e="heroText">Four function rooms for weddings, milestone birthdays, corporate dinners and conferences. Check your date, get an estimate in a minute, and hold it while we meet.</p>
+    <div class="cta"><a class="btn light" href="#diary">See available dates</a><a class="btn ghost" href="#estimate">Estimate my function</a></div>
+    <div class="stats"><div><b>4</b><span>function rooms</span></div><div><b>10–350</b><span>guests</span></div><div><b data-e="statHarbour">Harbour</b><span data-e="statHarbourSub">views from three rooms</span></div></div>
+  </div>
+</header>
+
+<section class="band" id="rooms"><div class="wrap">
+  <h2 data-e="roomsTitle">Four rooms, one address</h2>
+  <p class="lead" data-e="roomsLead">From a 20-seat boardroom to a 350-guest cocktail party. Each room comes with its own bar, dedicated events team and in-house kitchen.</p>
+  <div class="rooms" id="roomList"></div>
+  <p class="small" style="margin-top:14px">Sample venue, rooms and prices for demonstration.</p>
+</div></section>
+
+<section class="band fbg" id="functions"><div class="wrap">
+  <h2 data-e="fnTitle" style="color:#fff">Functions we host</h2>
+  <p class="lead" data-e="fnLead">Every function gets a coordinator from the first meeting to the last dance.</p>
+  <div class="ftypes" id="fnList"></div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2 data-e="howTitle">How booking works</h2>
+  <div class="steps">
+    <div class="step"><h3>Check the date</h3><p data-e="how1">See which rooms are free for a day or evening function, months ahead.</p></div>
+    <div class="step"><h3>Get an estimate</h3><p data-e="how2">Answer a few questions. Prices adjust for Saturdays, Sundays and public holidays.</p></div>
+    <div class="step"><h3>Hold and meet</h3><p data-e="how3">We hold the date for you and book a site visit, Zoom or call with our events coordinator.</p></div>
+    <div class="step"><h3>Secure with a deposit</h3><p data-e="how4">Pay the deposit online, at any point, to lock the date in.</p></div>
+  </div>
+</div></section>
+
+<section class="band" id="diary" style="background:var(--blush)"><div class="wrap">
+  <h2 data-e="diaryTitle">Check availability</h2>
+  <p class="lead">Pick a month and session. Tap a date to see each room.</p>
+  <div class="diary">
+    <div>
+      <div class="calhead">
+        <h3 id="monthLbl"></h3>
+        <button class="iconbtn" id="prevM" aria-label="Previous month">‹</button>
+        <button class="iconbtn" id="nextM" aria-label="Next month">›</button>
+        <div class="seg" id="sessSeg"></div>
+      </div>
+      <div class="cal" id="cal"></div>
+      <div class="legend"><span><i style="background:var(--free)"></i>Free</span><span><i style="background:var(--held)"></i>On hold</span><span><i style="background:var(--booked)"></i>Booked</span><span>Dots: one per room</span></div>
+    </div>
+    <div class="panel" id="dayPanel"></div>
+  </div>
+</div></section>
+
+<section class="band" id="estimate"><div class="wrap">
+  <h2 data-e="estTitle">Estimate your function</h2>
+  <p class="lead" data-e="estLead">A guide price in under a minute. Your coordinator confirms the final quote at your meeting.</p>
+  <div class="est">
+    <form class="form" id="estForm" onsubmit="return false">
+      <div class="row2">
+        <label class="f">Type of function<select id="eType"></select></label>
+        <label class="f">Guests<input id="eGuests" type="number" min="1" max="400" value="80" inputmode="numeric"></label>
+      </div>
+      <div class="row2">
+        <label class="f">Date<input id="eDate" type="date"></label>
+        <label class="f">Session<select id="eSess"></select></label>
+      </div>
+      <div class="row2">
+        <label class="f">Room layout<select id="eStyle"><option value="banquet">Seated banquet</option><option value="cocktail">Cocktail (standing)</option><option value="theatre">Theatre</option><option value="boardroom">Boardroom</option></select></label>
+        <label class="f">Room<select id="eRoom"></select></label>
+      </div>
+      <div class="row2">
+        <label class="f">Food package<select id="eFood"></select></label>
+        <label class="f">Drinks package<select id="eBev"></select></label>
+      </div>
+      <div class="f" style="display:grid;gap:8px"><b style="font-size:15px">Extras</b><div class="checks" id="eExtras"></div></div>
+    </form>
+    <aside class="result" id="result" aria-live="polite"></aside>
+  </div>
+</div></section>
+
+<section class="band" id="faq"><div class="wrap" style="max-width:820px">
+  <h2 data-e="faqTitle">Questions</h2>
+  <details><summary>How long is a date held?</summary><p data-e="faq1">A hold lasts 7 days. It becomes a confirmed booking once your deposit is paid. If another couple or company asks for the same date, we contact you first.</p></details>
+  <details><summary>How accurate is the estimate?</summary><p data-e="faq2">It uses our current room hire, package prices and minimum spends for the day you choose. Final pricing is confirmed in writing after your meeting.</p></details>
+  <details><summary>Why do some days cost more?</summary><p data-e="faq3">Saturdays carry the highest room hire and minimum spend. Sundays add a 10% surcharge on food and drinks, and public holidays add 15% to cover staff penalty rates.</p></details>
+  <details><summary>What is the deposit?</summary><p data-e="faq4">25% of the estimated total, with a minimum of $1,000. It comes off your final invoice.</p></details>
+</div></section>
+
+<footer><div class="wrap">
+  <div><div class="brand" data-e="brand2" style="color:#fff">The Lanterne Rooms</div><p class="small" data-e="addr">Harbourside, Sydney NSW</p></div>
+  <div><b>Events team</b><p class="small" data-e="contact">events@lanternerooms.example<br>(02) 9000 0000</p></div>
+  <div><b>Staff</b><p class="small"><a href="#venue">Venue view (demo)</a><br><a href="#edit">Edit this site</a></p></div>
+</div></footer>
+
+<button class="btn ask" id="askBtn">Ask about your function</button>
+<div class="askbox panel" id="askBox"><b>Events assistant</b><p class="small" style="opacity:1;color:var(--soft);margin-top:8px">This is where the AI events assistant add-on appears. It answers questions, checks dates, gives an estimate and books your meeting with the coordinator.</p><button class="btn" style="width:100%" onclick="location.hash='estimate';document.getElementById('askBox').classList.remove('on')">Use the estimator for now</button></div>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="drawer" id="drawer"></div>
+<div class="etool" id="etool">
+  <span style="align-self:center;font-size:14px;padding:0 6px">Editing: tap text to change it, tap a photo to replace it</span>
+  <button class="btn light" id="tPrice">Rooms &amp; pricing</button>
+  <button class="btn light" id="tSave">Save</button>
+  <button class="btn light" id="tDl">Download page</button>
+  <button class="btn ghost" id="tExit">Finish</button>
+</div>
+<input type="file" id="fileIn" accept="image/*" hidden>
+<div class="toast" id="toast"></div>
+
+<script id="fd-config" type="application/json">null</script>
+<script>
+{
+/* ---------- defaults (venue edits override, stored in this browser; baked into the page on download) ---------- */
+const DEFAULT={
+ sessions:[{id:'day',label:'Day',time:'9am – 4pm'},{id:'eve',label:'Evening',time:'6pm – midnight'}],
+ dayFactor:{hire:0.6,min:0.5},
+ rooms:[
+  {id:'grand',name:'Grand Ballroom',desc:'Chandeliers, sprung dance floor and floor-to-ceiling harbour windows.',cap:{banquet:220,cocktail:350,theatre:300,boardroom:0},hire:{wd:1800,fri:2800,sat:3800,sun:3000},min:{wd:9000,fri:16000,sat:24000,sun:18000}},
+  {id:'harbour',name:'Harbour Room',desc:'Our most-booked room for weddings of 80–120, with its own balcony.',cap:{banquet:120,cocktail:180,theatre:150,boardroom:40},hire:{wd:1100,fri:1700,sat:2400,sun:1900},min:{wd:5000,fri:9000,sat:13000,sun:10000}},
+  {id:'terrace',name:'Rooftop Terrace',desc:'Open-air under festoon lights, with a retractable awning for wet weather.',cap:{banquet:70,cocktail:140,theatre:0,boardroom:0},hire:{wd:900,fri:1400,sat:2000,sun:1600},min:{wd:3000,fri:6000,sat:9000,sun:7000}},
+  {id:'library',name:'The Library',desc:'Timber shelves and a fireplace. Private dinners, board meetings, small wakes.',cap:{banquet:30,cocktail:50,theatre:40,boardroom:20},hire:{wd:450,fri:650,sat:900,sun:750},min:{wd:1200,fri:2000,sat:3000,sun:2500}}],
+ food:[{id:'canape',name:'Canapé party (8 pieces)',pp:58},{id:'classic',name:'Classic two-course',pp:89},{id:'signature',name:'Signature three-course',pp:119},{id:'premium',name:'Premium banquet',pp:159},{id:'conf',name:'Conference day (arrival, teas, lunch)',pp:72}],
+ bev:[{id:'none',name:'Bar tab on consumption',pp:0},{id:'soft',name:'Non-alcoholic package',pp:18},{id:'classic',name:'Classic drinks, 4 hours',pp:49},{id:'premium',name:'Premium drinks, 5 hours',pp:69}],
+ extras:[{id:'av',name:'AV, screen and microphone',price:450,per:'event'},{id:'style',name:'Styling and centrepieces',price:15,per:'guest'},{id:'dj',name:'DJ, 5 hours',price:1100,per:'event'},{id:'dance',name:'Dance floor',price:650,per:'event'},{id:'cake',name:'Cake cutting and plating',price:4,per:'guest'},{id:'covers',name:'Chair covers and sashes',price:7,per:'guest'},{id:'security',name:'Security guard',price:380,per:'event'}],
+ types:[
+  {id:'wedding',name:'Weddings',text:'Ceremony and reception in one place, with a bridal suite and a menu tasting.',food:'signature',bev:'classic',style:'banquet',icon:'<circle cx="15" cy="24" r="9"/><circle cx="25" cy="24" r="9"/><path d="M13 12l2-5 2 5"/>'},
+  {id:'corporate',name:'Corporate dinners',text:'Awards nights, client dinners and end-of-year parties with AV ready to go.',food:'classic',bev:'classic',style:'banquet',icon:'<rect x="6" y="14" width="28" height="18" rx="2"/><path d="M15 14v-4h10v4M6 22h28"/>'},
+  {id:'conference',name:'Conferences',text:'Theatre or boardroom layouts, day packages and breakout rooms.',food:'conf',bev:'soft',style:'theatre',icon:'<rect x="8" y="8" width="24" height="16" rx="2"/><path d="M20 24v8M14 32h12"/>'},
+  {id:'birthday',name:'Milestone birthdays',text:'18ths to 80ths. Cocktail or seated, with a cake table and dance floor.',food:'canape',bev:'classic',style:'cocktail',icon:'<rect x="9" y="20" width="22" height="12" rx="2"/><path d="M9 26h22M20 20v-5M20 11c-1.5-2 0-3.5 0-3.5s1.5 1.5 0 3.5"/>'},
+  {id:'engagement',name:'Engagements',text:'Relaxed cocktail parties for 40 to 150 guests.',food:'canape',bev:'classic',style:'cocktail',icon:'<path d="M14 8h12l-6 10zM20 18v12M14 32h12"/>'},
+  {id:'christening',name:'Christenings',text:'Daytime lunches with a children’s menu and room for prams.',food:'classic',bev:'soft',style:'banquet',icon:'<path d="M20 32s-11-6.5-11-14a6 6 0 0 1 11-3 6 6 0 0 1 11 3c0 7.5-11 14-11 14z"/>'},
+  {id:'gala',name:'Galas and fundraisers',text:'Ballroom dinners with staging, auctions and a run sheet we manage.',food:'premium',bev:'premium',style:'banquet',icon:'<path d="M20 6l4 9 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1z"/>'},
+  {id:'memorial',name:'Wakes and memorials',text:'Quiet, dignified rooms at short notice, with simple catering.',food:'canape',bev:'soft',style:'cocktail',icon:'<path d="M20 34V14M20 14c-4-2-6-6-4-9 3 1 4 4 4 9 0-5 1-8 4-9 2 3 0 7-4 9z"/>'}],
+ surcharge:{sun:0.10,ph:0.15},
+ deposit:{pct:0.25,min:1000},
+ holdDays:7,
+ spread:[0.95,1.10],
+ holidays:'2026-12-25 Christmas Day\n2026-12-26 Boxing Day\n2026-12-28 Boxing Day (additional)\n2027-01-01 New Year’s Day\n2027-01-26 Australia Day\n2027-03-26 Good Friday\n2027-03-27 Easter Saturday\n2027-03-28 Easter Sunday\n2027-03-29 Easter Monday\n2027-04-25 Anzac Day\n2027-06-14 King’s Birthday\n2027-10-04 Labour Day\n2027-12-25 Christmas Day\n2027-12-27 Christmas (additional)\n2027-12-28 Boxing Day (additional)',
+ meetTimes:['10:00','11:30','14:00','15:30']
+};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('fd_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('fd_'+k,JSON.stringify(v));return true}catch(e){return false}}};
+let baked=null;try{baked=JSON.parse($('#fd-config').textContent)}catch(e){}
+let C=JSON.parse(JSON.stringify(store.get('config',null)||baked||DEFAULT));
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2600)};
+const pad=n=>String(n).padStart(2,'0'),iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const money=n=>'$'+Math.round(n).toLocaleString('en-AU');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=new Date();today.setHours(0,0,0,0);const TODAY=iso(today);
+const nice=s=>parse(s).toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const holidays=()=>{const m={};(C.holidays||'').split('\n').forEach(l=>{const x=l.trim().match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/);if(x)m[x[1]]=x[2]||'Public holiday'});return m};
+const dayType=s=>{if(holidays()[s])return'ph';const d=parse(s).getDay();return d===0?'sun':d===5?'fri':d===6?'sat':'wd'};
+const DTL={wd:'Weekday (Mon–Thu)',fri:'Friday',sat:'Saturday',sun:'Sunday',ph:'Public holiday'};
+const room=id=>C.rooms.find(r=>r.id===id);
+const sessLabel=id=>(C.sessions.find(s=>s.id===id)||{}).label||id;
+
+/* ---------- illustrated room scenes (replace with real photos in edit mode) ---------- */
+function scene(o){
+ let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.w1}"/><stop offset="1" stop-color="${o.w2}"/></linearGradient><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.f1}"/><stop offset="1" stop-color="${o.f2}"/></linearGradient><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.s1}"/><stop offset=".62" stop-color="${o.s2}"/><stop offset=".62" stop-color="${o.s3}"/><stop offset="1" stop-color="${o.s4}"/></linearGradient><radialGradient id="g"><stop offset="0" stop-color="#ffe9b8" stop-opacity=".95"/><stop offset="1" stop-color="#ffe9b8" stop-opacity="0"/></radialGradient></defs>`;
+ if(o.kind==='terrace'){s+=`<rect width="800" height="520" fill="url(#sk)"/>`;for(let i=0;i<14;i++)s+=`<rect x="${i*58}" y="${250-((i*37)%60)}" width="${30+(i*13)%26}" height="${70+((i*37)%60)}" fill="${o.city}" opacity=".85"/>`;
+  s+=`<rect y="300" width="800" height="16" fill="#3a2a22"/>`;}
+ else{s+=`<rect width="800" height="320" fill="url(#w)"/>`;
+  if(o.kind==='library'){for(let b=0;b<4;b++){const x=40+b*190;s+=`<rect x="${x}" y="40" width="160" height="250" fill="#3b2116"/>`;for(let r=0;r<5;r++)for(let k=0;k<11;k++)s+=`<rect x="${x+8+k*13.5}" y="${50+r*48}" width="${10+(k*7+r)%4}" height="${36-(k+r)%3*4}" fill="${['#7a2e2e','#2f4a3e','#a07a3c','#3b3f63','#8c5a3a'][(k+r*2)%5]}"/>`}s+=`<rect x="330" y="200" width="140" height="110" fill="#2a1710"/><ellipse cx="400" cy="290" rx="40" ry="16" fill="#ff9d4a" opacity=".85"/>`}
+  else{for(const x of o.wins){s+=`<path d="M${x} 300V110a${o.ww/2} ${o.ww/2} 0 0 1 ${o.ww} 0V300z" fill="url(#sk)" stroke="${o.frame}" stroke-width="8"/>`;for(let i=0;i<4;i++)s+=`<rect x="${x+8+i*o.ww/4}" y="${215-(i*17)%34}" width="${o.ww/6}" height="${40+(i*17)%34}" fill="${o.city}" opacity=".8"/>`;s+=`<line x1="${x+o.ww/2}" y1="${80}" x2="${x+o.ww/2}" y2="300" stroke="${o.frame}" stroke-width="4"/>`}}}
+ s+=`<polygon points="0,320 800,320 800,520 0,520" fill="url(#f)"/>`;
+ for(const c of o.lights){if(o.kind==='terrace')continue;s+=`<line x1="${c}" y1="0" x2="${c}" y2="60" stroke="#c9a46a" stroke-width="2"/><circle cx="${c}" cy="78" r="70" fill="url(#g)"/><ellipse cx="${c}" cy="72" rx="26" ry="14" fill="#f6d79a"/>`;for(let i=-2;i<=2;i++)s+=`<circle cx="${c+i*10}" cy="${88+Math.abs(i)*-2}" r="3" fill="#fff4d6"/>`}
+ if(o.kind==='terrace'){for(const[a,b,d]of[[0,800,90],[0,800,150]]){s+=`<path d="M${a} 20 Q400 ${d} ${b} 20" stroke="#2c2018" stroke-width="2" fill="none"/>`;for(let i=1;i<20;i++){const t=i/20,x=a+(b-a)*t,y=20*(1-t)*(1-t)+2*(1-t)*t*d+20*t*t;s+=`<circle cx="${x}" cy="${y+4}" r="12" fill="url(#g)"/><circle cx="${x}" cy="${y+4}" r="3.5" fill="#ffe7a8"/>`}}}
+ const rows=o.rows||[[5,350,.55],[4,405,.8],[3,475,1.08]];
+ for(const[n,y,sc]of rows){for(let i=0;i<n;i++){const x=(i+.5)*800/n+(n%2?0:20);const rx=58*sc,ry=17*sc;
+  s+=`<ellipse cx="${x}" cy="${y+22*sc}" rx="${rx*1.05}" ry="${ry}" fill="#000" opacity=".18"/>`;
+  for(let k=-2;k<=2;k++)s+=`<rect x="${x+k*rx*.42-7*sc}" y="${y-26*sc}" width="${14*sc}" height="${26*sc}" rx="${5*sc}" fill="${o.chair}"/>`;
+  s+=`<path d="M${x-rx} ${y}L${x-rx*.94} ${y+22*sc}Q${x} ${y+30*sc} ${x+rx*.94} ${y+22*sc}L${x+rx} ${y}z" fill="${o.cloth2}"/><ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${o.cloth}"/>`;
+  s+=`<circle cx="${x}" cy="${y-10*sc}" r="${9*sc}" fill="${o.accent}"/><rect x="${x-1.5*sc}" y="${y-10*sc}" width="${3*sc}" height="${10*sc}" fill="#ece0c8"/>`}}
+ return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s+'</svg>')}
+const SCENES={
+ grand:scene({w1:'#3a1220',w2:'#5c1e30',f1:'#6a3b2a',f2:'#2e160f',s1:'#1b2a4a',s2:'#c27a6a',s3:'#1d3b5c',s4:'#0e1d30',city:'#1a1a2e',frame:'#c9a46a',wins:[90,330,570],ww:140,lights:[200,400,600],cloth:'#f7efe6',cloth2:'#e6d6c4',chair:'#c9a46a',accent:'#d8798c'}),
+ harbour:scene({w1:'#e9ddd2',w2:'#cdb9a8',f1:'#8a6a52',f2:'#4a3426',s1:'#7fb2d6',s2:'#f3d6b6',s3:'#2f6f8f',s4:'#1b4a63',city:'#5a6f86',frame:'#ffffff',wins:[60,250,440,630],ww:120,lights:[260,540],cloth:'#ffffff',cloth2:'#ece5dc',chair:'#d9c3a5',accent:'#7aa37a',rows:[[4,355,.6],[3,420,.9],[2,488,1.15]]}),
+ terrace:scene({kind:'terrace',f1:'#7a5a44',f2:'#3b2a20',s1:'#2a2350',s2:'#e08a6a',s3:'#24486b',s4:'#132a40',city:'#1f2238',lights:[],cloth:'#f4ece0',cloth2:'#dccfbe',chair:'#2d2d2d',accent:'#e9b44c',rows:[[4,370,.6],[3,440,.95]]}),
+ library:scene({kind:'library',w1:'#4a2a1c',w2:'#2e1a12',f1:'#6b3f2a',f2:'#2a170f',lights:[400],cloth:'#f2e8d8',cloth2:'#d9cbb5',chair:'#5a2d22',accent:'#b3474f',rows:[[1,430,1.5]]}),
+ gala:scene({w1:'#251030',w2:'#4a1528',f1:'#3a2030',f2:'#120810',s1:'#0d1530',s2:'#3a2a5a',s3:'#0d1a33',s4:'#060c1a',city:'#c9a46a',frame:'#c9a46a',wins:[160,520],ww:120,lights:[120,300,500,680],cloth:'#1c1c1c',cloth2:'#111',chair:'#c9a46a',accent:'#f2c6b8'})};
+const imgs=store.get('imgs',{});const imgSrc=k=>imgs[k]||(C.imgs&&C.imgs[k])||SCENES[k.replace('room:','')]||SCENES.grand;
+
+/* ---------- landing renders ---------- */
+function renderHero(){const keys=['hero1','hero2','hero3','hero4'],def=['grand','harbour','terrace','gala'];
+ $('#slides').innerHTML=keys.map((k,i)=>`<img data-img="${k}" alt="" src="${imgs[k]||(C.imgs&&C.imgs[k])||SCENES[def[i]]}" class="${i?'':'on'}">`).join('')}
+let slideI=0;setInterval(()=>{if(document.body.classList.contains('editing'))return;const a=$$('#slides img');if(!a.length)return;a[slideI].classList.remove('on');slideI=(slideI+1)%a.length;a[slideI].classList.add('on')},6000);
+function fromPrice(r){return Math.min(r.hire.wd*C.dayFactor.hire+r.min.wd*C.dayFactor.min,r.hire.wd+r.min.wd)}
+function renderRooms(){$('#roomList').innerHTML=C.rooms.map(r=>`<article class="room"><div class="ph"><img data-img="room:${r.id}" src="${imgSrc('room:'+r.id)}" alt="${esc(r.name)}"></div><div class="bd"><h3>${esc(r.name)}</h3><p style="margin:0;color:var(--soft);font-size:15px">${esc(r.desc)}</p>
+ <div class="caps">${[['banquet','Seated'],['cocktail','Cocktail'],['theatre','Theatre'],['boardroom','Board']].map(([k,l])=>`<div><b>${r.cap[k]||'–'}</b><small>${l}</small></div>`).join('')}</div>
+ <div class="from">Weekday day functions from <b>${money(fromPrice(r))}</b> incl. minimum spend</div>
+ <button class="btn ghost" data-pick-room="${r.id}">Estimate in this room</button></div></article>`).join('')}
+function renderTypes(){$('#fnList').innerHTML=C.types.map(t=>`<div class="ft"><svg viewBox="0 0 40 40" aria-hidden="true">${t.icon}</svg><h3>${esc(t.name)}</h3><p>${esc(t.text)}</p></div>`).join('')}
+
+/* ---------- availability ---------- */
+function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)%100}
+const holds=()=>store.get('holds',[]);
+function status(rid,date,sess){
+ const h=holds().find(x=>x.roomId===rid&&x.date===date&&x.session===sess&&x.status!=='released');
+ if(h)return h.status==='secured'?'booked':'held';
+ if(date<TODAY)return'booked';
+ const dt=dayType(date),n=hash(rid+date+sess),near=(parse(date)-today)/864e5;
+ const busy={sat:{eve:[52,66],day:[22,32]},fri:{eve:[34,46],day:[16,24]},sun:{eve:[14,22],day:[30,42]},wd:{eve:[9,15],day:[18,26]},ph:{eve:[40,52],day:[30,40]}}[dt][sess];
+ const fade=near>150?.5:near>75?.8:1;
+ return n<busy[0]*fade?'booked':n<busy[1]*fade?'held':'free'}
+let viewM=new Date(today.getFullYear(),today.getMonth(),1),calSess='eve',selDate=null;
+function renderSeg(){$('#sessSeg').innerHTML=[...C.sessions,{id:'any',label:'Any'}].map(s=>`<button data-sess="${s.id}" class="${calSess===s.id?'on':''}">${s.label}</button>`).join('')}
+function renderCal(){
+ $('#monthLbl').textContent=viewM.toLocaleDateString('en-AU',{month:'long',year:'numeric'});
+ $('#prevM').disabled=viewM<=new Date(today.getFullYear(),today.getMonth(),1);
+ const first=(viewM.getDay()+6)%7,days=new Date(viewM.getFullYear(),viewM.getMonth()+1,0).getDate(),ph=holidays();
+ let h=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="dow">${d}</div>`).join('')+'<div class="day blank"></div>'.repeat(first);
+ for(let d=1;d<=days;d++){const ds=iso(new Date(viewM.getFullYear(),viewM.getMonth(),d)),past=ds<TODAY;
+  const st=C.rooms.map(r=>{if(calSess==='any'){const a=C.sessions.map(s=>status(r.id,ds,s.id));return a.includes('free')?'free':a.includes('held')?'held':'booked'}return status(r.id,ds,calSess)});
+  const free=st.filter(x=>x==='free').length,lvl=free>=3?3:free;
+  h+=`<button class="day l${lvl} ${past?'past':''} ${selDate===ds?'sel':''}" ${past?'disabled':''} data-date="${ds}" aria-label="${nice(ds)}: ${free} of ${C.rooms.length} rooms free"><span class="n">${d}</span>${ph[ds]?`<span class="ph">${esc(ph[ds])}</span>`:''}<span class="dots">${st.map(x=>`<i class="${x}"></i>`).join('')}</span><span class="s">${past?'':free?free+' free':'Full'}</span></button>`}
+ $('#cal').innerHTML=h}
+function renderDay(){const p=$('#dayPanel');
+ if(!selDate){p.innerHTML=`<h3>Pick a date</h3><p style="color:var(--soft)">Tap any date to see which rooms are free for day and evening functions.</p><p class="small" style="opacity:1;color:var(--soft)">Saturday evenings book out first, often 12 months ahead.</p>`;return}
+ const ph=holidays()[selDate],dt=dayType(selDate);
+ p.innerHTML=`<h3 style="font-size:28px">${nice(selDate)}</h3><p style="color:var(--soft);margin:0 0 6px">${ph?esc(ph)+' · public holiday rates':DTL[dt]+' rates'}</p>`+
+ C.sessions.map(s=>`<p style="margin:14px 0 0;font-weight:700">${s.label} <span class="hint">${s.time}</span></p>`+C.rooms.map(r=>{const st=status(r.id,selDate,s.id);
+  return`<div class="slot"><div class="nm">${esc(r.name)}<small>Up to ${Math.max(...Object.values(r.cap))} guests</small></div><span class="chip ${st}">${st==='free'?'Free':st==='held'?'On hold':'Booked'}</span>${st==='free'?`<button class="btn" data-est="${r.id}|${s.id}">Estimate &amp; hold</button>`:st==='held'?`<button class="btn ghost" data-wait="${r.id}|${s.id}">Join waitlist</button>`:''}</div>`}).join('')).join('')}
+
+/* ---------- estimator ---------- */
+const E={type:'wedding',guests:80,date:'',sess:'eve',style:'banquet',room:'harbour',food:'signature',bev:'classic',extras:['style']};
+function nextSat(){const d=new Date(today);d.setDate(d.getDate()+60);while(d.getDay()!==6)d.setDate(d.getDate()+1);return iso(d)}
+E.date=nextSat();
+function fillSelects(){
+ $('#eType').innerHTML=C.types.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+ $('#eSess').innerHTML=C.sessions.map(s=>`<option value="${s.id}">${s.label} (${s.time})</option>`).join('');
+ $('#eFood').innerHTML=C.food.map(f=>`<option value="${f.id}">${esc(f.name)} · ${money(f.pp)} pp</option>`).join('');
+ $('#eBev').innerHTML=C.bev.map(f=>`<option value="${f.id}">${esc(f.name)}${f.pp?' · '+money(f.pp)+' pp':''}</option>`).join('');
+ $('#eExtras').innerHTML=C.extras.map(x=>`<label><input type="checkbox" value="${x.id}"> ${esc(x.name)}<span class="p">${money(x.price)}${x.per==='guest'?' pp':''}</span></label>`).join('');
+ $('#eDate').min=TODAY}
+function syncForm(){$('#eType').value=E.type;$('#eGuests').value=E.guests;$('#eDate').value=E.date;$('#eSess').value=E.sess;$('#eStyle').value=E.style;$('#eFood').value=E.food;$('#eBev').value=E.bev;
+ $$('#eExtras input').forEach(i=>i.checked=E.extras.includes(i.value));renderRoomSel()}
+function renderRoomSel(){$('#eRoom').innerHTML=C.rooms.map(r=>{const fits=(r.cap[E.style]||0)>=E.guests,st=E.date?status(r.id,E.date,E.sess):'free';
+ return`<option value="${r.id}" ${!fits||st!=='free'?'disabled':''}>${esc(r.name)}${!fits?' (too small for this layout)':st==='held'?' (on hold)':st==='booked'?' (booked)':''}</option>`}).join('');
+ const ok=[...$('#eRoom').options].filter(o=>!o.disabled);
+ if(!ok.some(o=>o.value===E.room)){const best=C.rooms.filter(r=>ok.some(o=>o.value===r.id)).sort((a,b)=>(a.cap[E.style]||0)-(b.cap[E.style]||0))[0];if(best)E.room=best.id}
+ $('#eRoom').value=E.room}
+function estimate(e=E){
+ const r=room(e.room),dt=dayType(e.date||TODAY),key=dt==='ph'?'sat':dt,day=e.sess==='day';
+ const food=C.food.find(f=>f.id===e.food)||{pp:0},bev=C.bev.find(f=>f.id===e.bev)||{pp:0},g=Math.max(1,+e.guests||1);
+ const hire=r.hire[key]*(day?C.dayFactor.hire:1),fnb=g*(food.pp+bev.pp);
+ const rate=dt==='ph'?C.surcharge.ph:dt==='sun'?C.surcharge.sun:0,sur=fnb*rate;
+ const ex=e.extras.map(id=>C.extras.find(x=>x.id===id)).filter(Boolean).map(x=>({name:x.name,amt:x.per==='guest'?x.price*g:x.price}));
+ const min=r.min[key]*(day?C.dayFactor.min:1),top=Math.max(0,min-(fnb+sur));
+ const total=hire+fnb+sur+ex.reduce((a,x)=>a+x.amt,0)+top;
+ const r50=n=>Math.round(n/50)*50;
+ return{r,dt,day,hire,fnb,food,bev,g,rate,sur,ex,min,top,total,lo:r50(total*C.spread[0]),hi:r50(total*C.spread[1]),dep:Math.max(C.deposit.min,Math.round(total*C.deposit.pct/10)*10),pp:total/g}}
+function renderResult(){
+ const st=status(E.room,E.date,E.sess),fits=(room(E.room).cap[E.style]||0)>=E.guests,x=estimate(),ph=holidays()[E.date];
+ const tag=ph?`${ph}: public holiday rates, +${Math.round(C.surcharge.ph*100)}% on food and drinks`:x.dt==='sun'?`Sunday: +${Math.round(C.surcharge.sun*100)}% on food and drinks`:x.dt==='sat'?'Saturday: peak room hire and minimum spend':x.dt==='fri'?'Friday rates':'Weekday rates: our best value';
+ $('#result').innerHTML=`<div class="lbl">Estimated total, incl. GST</div><div class="big">${money(x.lo)} – ${money(x.hi)}</div><div class="lbl">about ${money(x.pp)} per guest · ${x.g} guests · ${esc(x.r.name)}, ${sessLabel(E.sess).toLowerCase()}</div>
+ <span class="tag">${esc(tag)}</span>
+ <table><tr><td>Room hire</td><td>${money(x.hire)}</td></tr><tr><td>${esc(x.food.name)}</td><td>${money(x.g*x.food.pp)}</td></tr>${x.bev.pp?`<tr><td>${esc(x.bev.name)}</td><td>${money(x.g*x.bev.pp)}</td></tr>`:`<tr><td>${esc(x.bev.name)}</td><td>as consumed</td></tr>`}
+ ${x.sur?`<tr><td>${x.dt==='ph'?'Public holiday':'Sunday'} surcharge</td><td>${money(x.sur)}</td></tr>`:''}${x.ex.map(e=>`<tr><td>${esc(e.name)}</td><td>${money(e.amt)}</td></tr>`).join('')}
+ ${x.top?`<tr><td>Minimum spend top-up</td><td>${money(x.top)}</td></tr>`:''}</table>
+ <p class="note">Minimum spend on food and drinks for this room and day: ${money(x.min)}.${x.top?' Your package sits below it, so the difference is added; more guests or an upgraded package would use it instead.':''} Deposit to secure the date: <b>${money(x.dep)}</b>.</p>
+ ${!fits?`<div class="warn">${esc(x.r.name)} is too small for ${x.g} guests in this layout. Pick another room or layout.</div>`:st!=='free'?`<div class="warn">${esc(x.r.name)} is ${st==='held'?'on hold':'booked'} for this ${sessLabel(E.sess).toLowerCase()}. Try another room or date.</div>`:''}
+ <div class="acts"><button class="btn light" id="holdBtn" ${st!=='free'||!fits?'disabled':''}>Hold this date</button><button class="btn ghost" id="meetBtn">Just book a meeting</button></div>`}
+function refreshEst(){renderRoomSel();renderResult()}
+
+/* ---------- hold / meeting / deposit flow ---------- */
+let F=null;
+function openFlow(mode){const x=estimate();F={mode,step:1,name:'',email:'',phone:'',notes:'',meetMode:'Site visit',meetDate:'',meetTime:'',est:x,snap:{...E,extras:[...E.extras]}};drawFlow();$('#modal').classList.add('on')}
+function meetDays(){const a=[],d=new Date(today);while(a.length<10){d.setDate(d.getDate()+1);if(d.getDay()%6&&!holidays()[iso(d)])a.push(iso(d))}return a}
+function takenMeet(d,t){return holds().some(h=>h.meeting&&h.meeting.date===d&&h.meeting.time===t&&h.status!=='released')||hash(d+t)<22}
+function drawFlow(){const s=F.snap,x=F.est,steps=F.mode==='hold'?4:3,sh=$('#sheet');
+ const head=`<button class="iconbtn x" data-close aria-label="Close">×</button><h3 style="font-size:30px">${F.mode==='hold'?'Hold your date':'Book a meeting'}</h3><div class="progress">${Array.from({length:steps},(_,i)=>`<i class="${i<F.step?'on':''}"></i>`).join('')}</div>`;
+ const summary=`<div class="sum"><div><span>Date</span><b>${nice(s.date)}, ${sessLabel(s.sess).toLowerCase()}</b></div><div><span>Room</span><b>${esc(room(s.room).name)}</b></div><div><span>Function</span><b>${esc(C.types.find(t=>t.id===s.type).name)}, ${s.guests} guests</b></div><div><span>Estimate</span><b>${money(x.lo)} – ${money(x.hi)}</b></div></div>`;
+ if(F.step===1)sh.innerHTML=head+(F.mode==='hold'?summary:'')+`<div class="form" style="margin-top:16px"><label class="f">Your name<input id="fName" value="${esc(F.name)}" autocomplete="name"></label><div class="row2"><label class="f">Email<input id="fEmail" type="email" value="${esc(F.email)}" autocomplete="email"></label><label class="f">Phone<input id="fPhone" type="tel" value="${esc(F.phone)}" autocomplete="tel"></label></div><label class="f">Anything we should know? <span class="hint">Optional</span><textarea id="fNotes" rows="3">${esc(F.notes)}</textarea></label><p id="fErr" style="color:var(--booked);margin:0"></p><button class="btn" data-next>Next: choose a meeting time</button></div>`;
+ else if(F.step===2){const days=meetDays();if(!F.meetDate)F.meetDate=days[0];
+  sh.innerHTML=head+`<p class="lead" style="font-size:16px">Meet our events coordinator to walk through the room, menu and run sheet.</p><p style="font-weight:600;margin:14px 0 8px">How would you like to meet?</p><div class="pick" id="pMode">${['Site visit','Zoom','Phone call'].map(m=>`<button class="${F.meetMode===m?'on':''}" data-mm="${m}">${m}</button>`).join('')}</div>
+  <p style="font-weight:600;margin:16px 0 8px">Day</p><div class="pick">${days.map(d=>`<button class="${F.meetDate===d?'on':''}" data-md="${d}">${parse(d).toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})}</button>`).join('')}</div>
+  <p style="font-weight:600;margin:16px 0 8px">Time</p><div class="pick">${C.meetTimes.map(t=>`<button class="${F.meetTime===t?'on':''}" data-mt="${t}" ${takenMeet(F.meetDate,t)?'disabled':''}>${t}</button>`).join('')}</div>
+  <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap"><button class="btn ghost" data-back>Back</button><button class="btn" data-next ${F.meetTime?'':'disabled'}>${F.mode==='hold'?'Next: secure the date':'Book meeting'}</button></div>`}
+ else if(F.step===3&&F.mode==='hold'){const exp=new Date(today);exp.setDate(exp.getDate()+C.holdDays);F.expires=iso(exp);
+  sh.innerHTML=head+summary+`<h3 style="margin-top:18px">Secure the date now, or after your meeting</h3><p style="color:var(--soft)">Your hold is free and lasts ${C.holdDays} days, until ${nice(F.expires)}. Paying the ${money(x.dep)} deposit confirms the booking straight away. It comes off your final invoice.</p>
+  <div class="demo">Demo: in the live version, "Pay deposit" opens secure Stripe Checkout. No card details are taken here.</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" data-back>Back</button><button class="btn ghost" data-finish="held">Hold only, pay after meeting</button><button class="btn" data-finish="secured">Pay ${money(x.dep)} deposit</button></div>`}
+ else{const h=F.saved;sh.innerHTML=`<button class="iconbtn x" data-close aria-label="Close">×</button><p style="margin:0;color:var(--soft)">${h.status==='secured'?'Booking confirmed':h.status==='held'?'Date on hold':'Meeting booked'}</p><div class="ref">${h.ref}</div>
+  ${h.roomId?`<div class="sum"><div><span>Date</span><b>${nice(h.date)}, ${sessLabel(h.session).toLowerCase()}</b></div><div><span>Room</span><b>${esc(room(h.roomId).name)}</b></div><div><span>Status</span><b>${h.status==='secured'?'Secured, deposit '+money(h.deposit)+' paid':'On hold until '+nice(h.expires)}</b></div><div><span>Meeting</span><b>${h.meeting.mode}, ${parse(h.meeting.date).toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})} at ${h.meeting.time}</b></div></div>`:`<div class="sum"><div><span>Meeting</span><b>${h.meeting.mode}, ${nice(h.meeting.date)} at ${h.meeting.time}</b></div><div><span>About</span><b>${esc(h.typeName)}, ${h.guests} guests</b></div></div>`}
+  <p style="margin-top:14px;color:var(--soft)">A confirmation goes to ${esc(h.email)} with your estimate attached. Your coordinator will call before the meeting.</p><div class="demo">Demo: emails are sent in the live version. This booking is saved in this browser only.</div><button class="btn" data-close>Done</button>`}}
+function validate1(){F.name=$('#fName').value.trim();F.email=$('#fEmail').value.trim();F.phone=$('#fPhone').value.trim();F.notes=$('#fNotes').value.trim();
+ if(!F.name||!/^\S+@\S+\.\S+$/.test(F.email)||F.phone.replace(/\D/g,'').length<8){$('#fErr').textContent='Please add your name, a valid email and a phone number.';return false}return true}
+function finish(stat){const s=F.snap,d=new Date(),ref='FN-'+s.date.replace(/-/g,'').slice(2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
+ const h={ref,created:iso(d),name:F.name,email:F.email,phone:F.phone,notes:F.notes,type:s.type,typeName:C.types.find(t=>t.id===s.type).name,guests:s.guests,style:s.style,food:s.food,bev:s.bev,extras:s.extras,estimate:{lo:F.est.lo,hi:F.est.hi,total:Math.round(F.est.total)},deposit:F.est.dep,meeting:{mode:F.meetMode,date:F.meetDate,time:F.meetTime},status:stat};
+ if(F.mode==='hold'){Object.assign(h,{roomId:s.room,date:s.date,session:s.sess,expires:F.expires})}
+ const all=holds();all.unshift(h);store.set('holds',all);F.saved=h;F.step=99;drawFlow();renderCal();renderDay();refreshEst()}
+
+/* ---------- venue view (demo) ---------- */
+function renderVenue(){const all=holds(),dr=$('#drawer');
+ dr.innerHTML=`<button class="iconbtn" style="float:right" data-dclose aria-label="Close">×</button><h3 style="font-size:32px;margin-top:0">Venue view</h3><p class="small" style="opacity:1;color:var(--soft)">Demo: holds and meetings made in this browser. The live version lists every enquiry, with email alerts and Stripe deposits.</p>
+ ${all.length?all.map((h,i)=>`<div class="hold"><div class="t"><span>${h.ref}</span><span class="chip ${h.status==='secured'?'free':h.status==='held'?'held':h.status==='released'?'booked':'free'}">${h.status==='secured'?'Secured':h.status==='held'?'On hold':h.status==='released'?'Released':'Meeting only'}</span></div>
+ <div>${esc(h.name)} · ${esc(h.email)} · ${esc(h.phone)}</div><div>${esc(h.typeName)}, ${h.guests} guests${h.roomId?` · ${esc(room(h.roomId)?.name||h.roomId)} · ${nice(h.date)}, ${sessLabel(h.session).toLowerCase()}`:''}</div>
+ <div>Estimate ${money(h.estimate.lo)} – ${money(h.estimate.hi)} · deposit ${money(h.deposit)}</div><div>Meeting: ${h.meeting.mode}, ${h.meeting.date} ${h.meeting.time}${h.expires&&h.status==='held'?` · hold expires ${h.expires}`:''}</div>${h.notes?`<div style="color:var(--soft)">“${esc(h.notes)}”</div>`:''}
+ ${h.roomId&&h.status==='held'?`<div class="a"><button class="btn" data-vs="${i}|secured">Deposit received</button><button class="btn ghost" data-vs="${i}|released">Release date</button></div>`:''}</div>`).join(''):'<p>No holds yet. Try "Hold this date" in the estimator.</p>'}
+ ${all.length?'<button class="btn ghost" data-vclear>Clear demo data</button>':''}`;dr.classList.add('on')}
+
+/* ---------- editor ---------- */
+const content=store.get('content',{});
+function applyContent(){const src={...(C.content||{}),...content};$$('[data-e]').forEach(el=>{if(src[el.dataset.e]!=null)el.innerHTML=src[el.dataset.e]})}
+function setEditing(on){document.body.classList.toggle('editing',on);$$('[data-e]').forEach(el=>el.contentEditable=on?'true':'false');if(on)toast('Edit mode on')}
+function saveAll(){$$('[data-e]').forEach(el=>content[el.dataset.e]=el.innerHTML);const ok=store.set('content',content)&&store.set('imgs',imgs)&&store.set('config',C);toast(ok?'Saved in this browser':'Could not save here: download the page instead')}
+let imgKey=null;
+function shrink(file){return new Promise(res=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.72))};im.src=fr.result};fr.readAsDataURL(file)})}
+function pricingPanel(){const dr=$('#drawer'),dk=['wd','fri','sat','sun'],dl=['Mon–Thu','Fri','Sat','Sun'];
+ dr.innerHTML=`<button class="iconbtn" style="float:right" data-dclose aria-label="Close">×</button><h3 style="font-size:32px;margin-top:0">Rooms &amp; pricing</h3><p class="small" style="opacity:1;color:var(--soft)">Evening prices. Day sessions use ${Math.round(C.dayFactor.hire*100)}% of room hire and ${Math.round(C.dayFactor.min*100)}% of minimum spend. Public holidays use Saturday rates.</p>
+ <h3>Room hire</h3><div class="grid4"><span></span>${dl.map(d=>`<span class="h">${d}</span>`).join('')}${C.rooms.map((r,i)=>`<input data-p="rooms.${i}.name" value="${esc(r.name)}">${dk.map(k=>`<input type="number" data-p="rooms.${i}.hire.${k}" value="${r.hire[k]}">`).join('')}`).join('')}</div>
+ <h3>Minimum spend on food and drinks</h3><div class="grid4"><span></span>${dl.map(d=>`<span class="h">${d}</span>`).join('')}${C.rooms.map((r,i)=>`<span>${esc(r.name)}</span>${dk.map(k=>`<input type="number" data-p="rooms.${i}.min.${k}" value="${r.min[k]}">`).join('')}`).join('')}</div>
+ <h3>Capacity</h3><div class="grid4"><span></span>${['Seated','Cocktail','Theatre','Board'].map(d=>`<span class="h">${d}</span>`).join('')}${C.rooms.map((r,i)=>`<span>${esc(r.name)}</span>${['banquet','cocktail','theatre','boardroom'].map(k=>`<input type="number" data-p="rooms.${i}.cap.${k}" value="${r.cap[k]}">`).join('')}`).join('')}</div>
+ <h3>Packages, per guest</h3><div class="form">${C.food.map((f,i)=>`<div class="row2"><input class="inp" data-p="food.${i}.name" value="${esc(f.name)}"><input class="inp" type="number" data-p="food.${i}.pp" value="${f.pp}"></div>`).join('')}${C.bev.map((f,i)=>`<div class="row2"><input class="inp" data-p="bev.${i}.name" value="${esc(f.name)}"><input class="inp" type="number" data-p="bev.${i}.pp" value="${f.pp}"></div>`).join('')}</div>
+ <h3>Extras</h3><div class="form">${C.extras.map((f,i)=>`<div class="row2"><input class="inp" data-p="extras.${i}.name" value="${esc(f.name)}"><input class="inp" type="number" data-p="extras.${i}.price" value="${f.price}"></div>`).join('')}</div>
+ <h3>Surcharges, deposit and hold</h3><div class="form"><div class="row2"><label class="f">Sunday surcharge %<input class="inp" type="number" data-pct="surcharge.sun" value="${Math.round(C.surcharge.sun*100)}"></label><label class="f">Public holiday surcharge %<input class="inp" type="number" data-pct="surcharge.ph" value="${Math.round(C.surcharge.ph*100)}"></label></div>
+ <div class="row2"><label class="f">Deposit %<input class="inp" type="number" data-pct="deposit.pct" value="${Math.round(C.deposit.pct*100)}"></label><label class="f">Minimum deposit $<input class="inp" type="number" data-p="deposit.min" value="${C.deposit.min}"></label></div>
+ <label class="f">Days a hold lasts<input class="inp" type="number" data-p="holdDays" value="${C.holdDays}"></label>
+ <label class="f">Public holidays <span class="hint">One per line: 2027-01-26 Australia Day. Check against the official NSW list each year.</span><textarea class="inp" rows="8" data-p="holidays">${esc(C.holidays)}</textarea></label>
+ <button class="btn" data-papply>Apply and save</button><button class="btn ghost" data-preset>Reset to sample prices</button></div>`;dr.classList.add('on')}
+function applyPricing(){$$('#drawer [data-p]').forEach(i=>{const p=i.dataset.p.split('.');let o=C;while(p.length>1)o=o[p.shift()];o[p[0]]=i.type==='number'?(+i.value||0):i.value});
+ $$('#drawer [data-pct]').forEach(i=>{const p=i.dataset.pct.split('.');C[p[0]][p[1]]=(+i.value||0)/100});store.set('config',C);renderAllData();toast('Pricing updated')}
+function downloadPage(){saveAll();const clone=document.documentElement.cloneNode(true);
+ clone.querySelector('body').classList.remove('editing');clone.querySelectorAll('[contenteditable]').forEach(e=>e.removeAttribute('contenteditable'));
+ const cfg={...C,content:{...(C.content||{}),...content},imgs:{...(C.imgs||{}),...imgs}};
+ clone.querySelector('#fd-config').textContent=JSON.stringify(cfg).replace(/</g,'\\u003c');
+ ['#slides','#roomList','#fnList','#cal','#dayPanel','#result','#drawer','#sheet'].forEach(s=>{const e=clone.querySelector(s);if(e)e.innerHTML=''});
+ clone.querySelector('#modal').classList.remove('on');
+ const html='<!DOCTYPE html>\n'+clone.outerHTML,a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='index.html';document.body.appendChild(a);a.click();a.remove();toast('Downloaded index.html: upload it to publish')}
+
+/* ---------- wiring ---------- */
+function renderAllData(){renderHero();renderRooms();renderTypes();fillSelects();syncForm();renderSeg();renderCal();renderDay();renderResult()}
+applyContent();renderAllData();
+const route=()=>{const h=location.hash.slice(1),q=new URLSearchParams(location.search);
+ if(h==='edit'||q.get('edit')==='1')setEditing(true);if(h==='venue')renderVenue()};
+addEventListener('hashchange',route);route();
+addEventListener('scroll',()=>$('#nav').classList.toggle('solid',scrollY>60),{passive:true});
+$('#prevM').onclick=()=>{viewM.setMonth(viewM.getMonth()-1);renderCal()};
+$('#nextM').onclick=()=>{viewM.setMonth(viewM.getMonth()+1);renderCal()};
+$('#sessSeg').onclick=e=>{const b=e.target.closest('[data-sess]');if(b){calSess=b.dataset.sess;renderSeg();renderCal()}};
+$('#cal').onclick=e=>{const b=e.target.closest('[data-date]');if(b&&!b.disabled){selDate=b.dataset.date;renderCal();renderDay();if(innerWidth<900)$('#dayPanel').scrollIntoView({behavior:'smooth',block:'start'})}};
+$('#dayPanel').onclick=e=>{const b=e.target.closest('[data-est]');if(b){const[r,s]=b.dataset.est.split('|');Object.assign(E,{room:r,sess:s,date:selDate});if((room(r).cap[E.style]||0)<E.guests)E.guests=Math.min(E.guests,room(r).cap[E.style]||room(r).cap.cocktail);syncForm();renderResult();$('#estimate').scrollIntoView({behavior:'smooth'})}
+ const w=e.target.closest('[data-wait]');if(w)toast('Waitlist: we would email you if this date frees up')};
+$('#roomList').onclick=e=>{const b=e.target.closest('[data-pick-room]');if(b&&!document.body.classList.contains('editing')){E.room=b.dataset.pickRoom;const r=room(E.room);if((r.cap[E.style]||0)<E.guests)E.guests=r.cap[E.style]||r.cap.cocktail;syncForm();renderResult();$('#estimate').scrollIntoView({behavior:'smooth'})}};
+$('#estForm').addEventListener('input',e=>{const t=e.target;
+ if(t.id==='eType'){E.type=t.value;const ty=C.types.find(x=>x.id===t.value);if(ty){E.food=ty.food;E.bev=ty.bev;E.style=ty.style;if(ty.id==='conference')E.sess='day'}syncForm()}
+ if(t.id==='eGuests')E.guests=Math.max(1,Math.min(400,+t.value||1));if(t.id==='eDate'&&t.value)E.date=t.value<TODAY?TODAY:t.value;
+ if(t.id==='eSess')E.sess=t.value;if(t.id==='eStyle')E.style=t.value;if(t.id==='eRoom')E.room=t.value;if(t.id==='eFood')E.food=t.value;if(t.id==='eBev')E.bev=t.value;
+ if(t.closest('#eExtras'))E.extras=$$('#eExtras input:checked').map(i=>i.value);refreshEst()});
+$('#result').onclick=e=>{if(e.target.id==='holdBtn')openFlow('hold');if(e.target.id==='meetBtn')openFlow('meet')};
+$('#sheet').onclick=e=>{const t=e.target;
+ if(t.closest('[data-close]')){$('#modal').classList.remove('on');return}
+ if(t.closest('[data-back]')){F.step--;drawFlow();return}
+ if(t.closest('[data-next]')){if(F.step===1&&!validate1())return;if(F.step===2&&F.mode==='meet'){finish('meeting');return}F.step++;drawFlow();return}
+ const mm=t.closest('[data-mm]');if(mm){F.meetMode=mm.dataset.mm;drawFlow()}
+ const md=t.closest('[data-md]');if(md){F.meetDate=md.dataset.md;F.meetTime='';drawFlow()}
+ const mt=t.closest('[data-mt]');if(mt){F.meetTime=mt.dataset.mt;drawFlow()}
+ const fi=t.closest('[data-finish]');if(fi)finish(fi.dataset.finish)};
+$('#modal').onclick=e=>{if(e.target.id==='modal')$('#modal').classList.remove('on')};
+addEventListener('keydown',e=>{if(e.key==='Escape'){$('#modal').classList.remove('on');$('#drawer').classList.remove('on')}});
+$('#drawer').onclick=e=>{const t=e.target;
+ if(t.closest('[data-dclose]')){$('#drawer').classList.remove('on');if(location.hash==='#venue')history.replaceState(null,'',location.pathname+location.search)}
+ const vs=t.closest('[data-vs]');if(vs){const[i,s]=vs.dataset.vs.split('|'),all=holds();all[i].status=s;store.set('holds',all);renderVenue();renderCal();renderDay();refreshEst()}
+ if(t.closest('[data-vclear]')){store.set('holds',[]);renderVenue();renderCal();renderDay();refreshEst()}
+ if(t.closest('[data-papply]'))applyPricing();
+ if(t.closest('[data-preset]')){C=JSON.parse(JSON.stringify(DEFAULT));store.set('config',null);renderAllData();pricingPanel();toast('Sample prices restored')}};
+$('#askBtn').onclick=()=>$('#askBox').classList.toggle('on');
+document.addEventListener('click',e=>{if(!document.body.classList.contains('editing'))return;const im=e.target.closest('[data-img]');if(im){e.preventDefault();imgKey=im.dataset.img;$('#fileIn').click()}},true);
+$('#fileIn').onchange=async e=>{const f=e.target.files[0];if(!f||!imgKey)return;const d=await shrink(f);imgs[imgKey]=d;$$(`[data-img="${imgKey}"]`).forEach(i=>i.src=d);e.target.value='';toast('Photo replaced. Press Save to keep it')};
+$('#tPrice').onclick=pricingPanel;$('#tSave').onclick=saveAll;$('#tDl').onclick=downloadPage;
+$('#tExit').onclick=()=>{saveAll();setEditing(false);if(location.hash==='#edit')history.replaceState(null,'',location.pathname+location.search)};
+}
+</script>
+</body>
+</html>
