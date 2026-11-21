@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sparks &amp; Pipes Co. · Plumbers &amp; electricians, Inner West Sydney</title>
+<meta name="description" content="Licensed plumbers and electricians across Sydney's Inner West. Book online with arrival windows you can count on, free written quotes, and on-call emergency help 7 days.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F2ED;--paper:#FFFFFF;--ink:#14202C;--muted:#5E6975;--line:#E1DDD4;--accent:#E8591A;--accent2:#14202C;--soft:#FCE9DC;--hero:#14202C;--heroInk:#FFFFFF;--hf:"Archivo",system-ui,sans-serif;--hw:800;--r:18px;--rb:999px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%;display:block}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--hf);font-weight:var(--hw);letter-spacing:-.02em;margin:0;line-height:1.02}
+body.f-serif h1,body.f-serif h2,body.f-serif h3{letter-spacing:-.01em}
+h1{font-size:clamp(44px,7.2vw,92px)}
+h2{font-size:clamp(34px,4.6vw,58px)}
+h3{font-size:22px;line-height:1.15}
+body.f-serif h3{font-size:28px}
+em{font-style:normal;color:var(--accent)}
+body.f-serif em{font-style:italic}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:var(--rb);padding:15px 26px;font:700 15px Manrope,sans-serif;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s,box-shadow .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn.acc{background:var(--accent);color:#fff;box-shadow:0 10px 24px -10px var(--accent)}
+.btn.dark{background:var(--ink);color:#fff}
+.btn.line{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.light{background:#fff;color:var(--ink)}
+.btn.sm{padding:10px 16px;font-size:14px}
+.btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
+/* nav */
+nav.n{position:fixed;inset:0 0 auto;z-index:30;transition:background .3s,box-shadow .3s;color:var(--heroInk)}
+nav.n.solid{background:color-mix(in srgb,var(--bg) 94%,transparent);color:var(--ink);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+body.h-centre nav.n,body.h-split nav.n{color:var(--heroInk)}
+nav.n .w{display:flex;align-items:center;gap:26px;height:74px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:var(--hw) 22px/1 var(--hf);letter-spacing:-.01em}
+.logo .mk{width:34px;height:34px;border-radius:calc(var(--r) * .55);background:var(--accent);display:grid;place-items:center;color:#fff;flex:none}
+.logo .mk svg{width:20px;height:20px}
+.logo img{height:40px;width:auto}
+nav .links{display:flex;gap:24px;margin-left:auto;font-size:15px;font-weight:600}
+nav .links a{text-decoration:none;opacity:.78}nav .links a:hover{opacity:1}
+nav .navtel{font-weight:800;text-decoration:none;white-space:nowrap}
+nav .btn{padding:11px 20px}
+@media(max-width:920px){nav .links{display:none}nav .navtel{margin-left:auto;font-size:14px}}
+@media(max-width:520px){nav .navtel{display:none}nav .btn{margin-left:auto}}
+/* hero */
+.hero{position:relative;background:var(--hero);color:var(--heroInk);padding:130px 0 90px;overflow:hidden}
+.hero .w{display:grid;gap:44px;align-items:center;position:relative;z-index:2}
+@media(min-width:960px){.hero .w{grid-template-columns:1.08fr .92fr}}
+.hero .sub{font-size:19px;max-width:54ch;opacity:.82;margin:22px 0 30px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .btn.line{color:var(--heroInk)}
+.hero .tag{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.04em;padding:7px 14px 7px 8px;border-radius:var(--rb);background:rgba(255,255,255,.1);margin-bottom:22px}
+.hero .tag i{width:22px;height:22px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-style:normal;font-size:12px;color:#fff}
+.trust{display:flex;gap:10px 22px;flex-wrap:wrap;margin-top:30px;font-size:14px;font-weight:600;opacity:.85}
+.trust span:before{content:"✓";color:var(--accent);margin-right:7px;font-weight:900}
+.art{position:relative;aspect-ratio:4/4.4;border-radius:calc(var(--r) * 1.4);overflow:hidden}
+.ph{position:absolute;inset:0;background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 90%,#000),color-mix(in srgb,var(--accent2) 70%,#000));background-size:cover;background-position:center}
+.ph .gen{position:absolute;inset:0;display:grid;place-items:center}
+.ph .gen svg{width:58%;height:58%;opacity:.9}
+.ph.has-photo .gen{display:none}
+.chip{position:absolute;left:18px;bottom:18px;right:18px;max-width:340px;background:#fff;color:var(--ink);border-radius:var(--r);padding:14px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 20px 40px -14px rgba(0,0,0,.4)}
+.chip .ic{width:42px;height:42px;border-radius:calc(var(--r) * .6);background:var(--soft);color:var(--accent);display:grid;place-items:center;font-weight:900;flex:none}
+.chip b{display:block;font-size:15px}.chip span{font-size:13px;color:var(--muted)}
+/* hero layouts */
+body.h-photo .hero{padding:170px 0 120px}
+body.h-photo .hero .w{grid-template-columns:1fr}
+body.h-photo .hero .art{position:absolute;inset:0;aspect-ratio:auto;border-radius:0;z-index:0}
+body.h-photo .hero .art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,15,22,.88),rgba(10,15,22,.45))}
+body.h-photo .hero .chip{display:none}
+body.h-photo .hero .w{position:static}body.h-photo .hero .w>div:first-child{position:relative;z-index:2;max-width:760px}
+body.h-centre .hero .w{grid-template-columns:1fr;text-align:center;justify-items:center}
+body.h-centre .hero .sub{margin-left:auto;margin-right:auto}
+body.h-centre .hero .ctas,body.h-centre .trust{justify-content:center}
+body.h-centre .hero .art{width:100%;max-width:880px;aspect-ratio:16/7}
+body.h-light .hero{background:var(--bg);color:var(--ink)}
+body.h-light nav.n{color:var(--ink)}
+body.h-light .hero .tag{background:var(--soft)}
+body.h-light .hero .btn.line{color:var(--ink)}
+/* emergency band */
+.band{background:var(--accent);color:#fff}
+.band .w{display:flex;gap:16px 26px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:18px;padding-bottom:18px}
+.band b{font:var(--hw) 22px/1.15 var(--hf)}
+.band span{opacity:.9;font-size:15px}
+.band .btn{background:#fff;color:var(--accent)}
+/* sections */
+.s{padding:100px 0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:38px}
+.head p{color:var(--muted);max-width:52ch;margin:14px 0 0}
+.cats{display:flex;gap:6px;flex-wrap:wrap}
+.cats button{border:1.5px solid var(--line);background:var(--paper);border-radius:var(--rb);padding:9px 16px;font:700 14px Manrope,sans-serif;cursor:pointer;color:var(--ink)}
+.cats button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.jobs{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.jc{background:var(--paper);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:8px;border:1.5px solid transparent;transition:border-color .2s,transform .2s}
+.jc:hover{border-color:var(--line);transform:translateY(-2px)}
+.jc .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.jc .ic{width:42px;height:42px;border-radius:calc(var(--r) * .6);background:var(--soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.jc .ic svg{width:22px;height:22px}
+.jc .pr{text-align:right;font-weight:800;font-size:15px}
+.jc .pr small{display:block;font-weight:600;color:var(--muted);font-size:12px}
+.jc p{margin:0;color:var(--muted);font-size:15px;flex:1}
+.jc .ft{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
+.jc .ft span{font-size:13px;color:var(--muted);font-weight:600}
+.badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:var(--rb);background:var(--soft);color:var(--accent);margin-left:6px;vertical-align:middle}
+/* steps */
+.steps{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));counter-reset:st}
+.st{background:var(--paper);border-radius:var(--r);padding:28px}
+.st .n{font:var(--hw) 44px/1 var(--hf);color:var(--accent)}
+.st h3{margin:14px 0 8px}
+.st p{margin:0;color:var(--muted)}
+/* quote split */
+.dark{background:var(--accent2);color:#fff}
+.dark .eyebrow{color:rgba(255,255,255,.6)}
+.dark p{color:rgba(255,255,255,.78)}
+.split{display:grid;gap:44px;align-items:center}
+@media(min-width:900px){.split{grid-template-columns:1fr 1fr}}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
+.ticks li{display:flex;gap:12px}
+.ticks li:before{content:"";flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12l4 4 8-8'/%3E%3C/svg%3E") center/14px no-repeat;margin-top:2px}
+.qcard{background:#fff;color:var(--ink);border-radius:calc(var(--r) * 1.2);padding:26px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.qcard .r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.qcard .r.t{border:0;border-top:2px solid var(--ink);font-weight:800;font-size:20px;margin-top:4px;padding-top:12px}
+.qcard .acc{margin-top:16px;width:100%;justify-content:center}
+/* team */
+.team{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.pc{background:var(--paper);border-radius:var(--r);padding:24px}
+.pc .av{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;font:var(--hw) 26px var(--hf);margin-bottom:14px}
+.pc h3{font-size:20px}
+.pc p{margin:4px 0 0;color:var(--muted);font-size:14px}
+/* area */
+.area{display:grid;gap:40px;align-items:start}
+@media(min-width:900px){.area{grid-template-columns:.9fr 1.1fr}}
+.subs{display:flex;flex-wrap:wrap;gap:8px}
+.subs span{background:var(--paper);border-radius:var(--rb);padding:8px 14px;font-weight:600;font-size:14px}
+.map{position:relative;aspect-ratio:1;max-width:460px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 22%,transparent) 0 30%,color-mix(in srgb,var(--accent) 10%,transparent) 30% 62%,transparent 62%);display:grid;place-items:center}
+.map:before{content:"";position:absolute;inset:0;border-radius:50%;border:2px dashed color-mix(in srgb,var(--accent) 50%,transparent)}
+.map b{font:var(--hw) 54px/1 var(--hf);color:var(--accent);display:block;text-align:center}
+.map span{display:block;text-align:center;color:var(--muted);font-weight:700}
+.map .pin{width:18px;height:18px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 8px color-mix(in srgb,var(--accent) 25%,transparent);margin:10px auto 0}
+/* about */
+.about .art{aspect-ratio:5/4}
+/* biz band */
+.biz{background:var(--paper);border-radius:calc(var(--r) * 1.4);padding:40px;display:grid;gap:26px;align-items:center}
+@media(min-width:900px){.biz{grid-template-columns:1.3fr .7fr}}
+.biz p{color:var(--muted);margin:12px 0 0}
+/* contact */
+.contact{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.cc{background:var(--paper);border-radius:var(--r);padding:24px}
+.cc b{display:block;font:var(--hw) 22px/1.2 var(--hf);margin:6px 0}
+.cc p{margin:0;color:var(--muted);font-size:15px}
+footer{padding:36px 0 110px;color:var(--muted);font-size:14px}
+footer .w{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
+.pill-book{position:fixed;right:18px;bottom:18px;z-index:25;opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
+.pill-book.show{opacity:1;transform:none;pointer-events:auto}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+/*ENGINE-CSS-START*/
+#eng{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:4px;background:#111;color:#fff;border-radius:999px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 13px Manrope,sans-serif;max-width:calc(100% - 16px);overflow-x:auto}
+#eng button{border:0;background:none;color:#ddd;padding:8px 13px;border-radius:999px;cursor:pointer;font:inherit;white-space:nowrap}
+#eng button.on,#eng button:hover{background:#fff;color:#111}
+body.editing nav.n{top:62px}
+body.editing [data-edit]{outline:1.5px dashed rgba(232,89,26,.6);outline-offset:4px;border-radius:4px;cursor:text}
+body.editing [data-edit]:focus{outline:2px solid var(--accent);background:rgba(255,255,255,.15)}
+body.editing [data-img]{outline:2px dashed rgba(255,255,255,.8);outline-offset:-10px;cursor:pointer}
+body.editing [data-img]:after{content:"Tap to change photo";position:absolute;top:16px;left:16px;font:700 12px Manrope,sans-serif;background:#111;color:#fff;padding:5px 11px;border-radius:999px;z-index:3}
+body.editing [data-live]{position:relative}
+body.editing [data-live]:before{content:attr(data-live-note);position:absolute;top:-30px;left:0;font:600 12px Manrope,sans-serif;background:#111;color:#fff;padding:4px 10px;border-radius:999px;z-index:2}
+#engp{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:101;width:min(480px,calc(100% - 20px));max-height:calc(100vh - 80px);overflow:auto;background:#fff;color:#111;border-radius:18px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);font:14px/1.45 Manrope,sans-serif}
+#engp h4{margin:0 0 10px;font-size:16px}
+#engp h5{margin:14px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#777}
+#engp label{display:grid;gap:4px;font-weight:600;font-size:12px;color:#555;margin-bottom:10px}
+#engp input,#engp select{border:1px solid #ddd;border-radius:9px;padding:8px 10px;font:15px Manrope,sans-serif;color:#111;width:100%}
+#engp input[type=color]{height:40px;padding:3px}
+#engp .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+#engp .b{border:0;border-radius:9px;padding:9px 14px;font:600 14px Manrope,sans-serif;cursor:pointer;background:#eee;color:#111}
+#engp .b.p{background:#111;color:#fff}
+#engp .b.on{background:#111;color:#fff}
+#engp .msg{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+#engp .looks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#engp .looks button{display:flex;align-items:center;gap:8px;border:1.5px solid #e3e3e3;background:#fff;border-radius:12px;padding:9px 10px;cursor:pointer;font:600 13px Manrope,sans-serif;text-align:left}
+#engp .looks button.on{border-color:#111;box-shadow:0 0 0 2px #111 inset}
+#engp .looks i{width:28px;height:28px;border-radius:8px;flex:none}
+#engp .seg{display:flex;gap:6px;flex-wrap:wrap}
+#engp .note{background:#F4F4F2;border-radius:10px;padding:10px 12px;color:#444;font-size:13px;margin-bottom:10px}
+/*ENGINE-CSS-END*/
+</style>
+</head>
+<body class="h-split f-bold s-round"
+  data-booking-url="/trades/demo/"
+  data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co"
+  data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE"
+  data-business="sparks-and-pipes"
+  data-look="combo" data-accent="#E8591A" data-accent2="#14202C" data-hero-bg="#14202C" data-bg="#F4F2ED" data-font="bold" data-hero="split" data-shape="round"
+  data-art="combo"
+  data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-live="trades/site/index.html" data-gh-master="trades/site/source/site-editable.html">
+
+<nav class="n" id="nav"><div class="w">
+  <a class="logo" href="#top" data-logo><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><span data-edit="brand">Sparks &amp; Pipes</span></a>
+  <div class="links"><a href="#services" data-edit="nav1">Services</a><a href="#quotes" data-edit="nav2">Free quotes</a><a href="#area" data-edit="nav3">Areas we cover</a><a href="#contact" data-edit="nav4">Contact</a></div>
+  <a class="navtel" href="tel:0290001234" data-tel><span data-edit="navPhone">02 9000 1234</span></a>
+  <a class="btn acc" href="#" data-book>Book online <span class="ar">→</span></a>
+</div></nav>
+
+<header class="hero" id="top"><div class="w">
+  <div class="reveal">
+    <div class="tag"><i>✓</i><span data-edit="tag">Licensed plumbers &amp; electricians · Inner West Sydney</span></div>
+    <h1 data-edit="h1">Fixed right.<br><em>On time.</em></h1>
+    <p class="sub" data-edit="sub">Book a licensed plumber or electrician online in under a minute. Pick an arrival window that suits you — we plan our day around the drive, so we turn up when we say.</p>
+    <div class="ctas"><a class="btn acc" href="#" data-book>Book a job <span class="ar">→</span></a><a class="btn line" href="#" data-book data-cat="quote"><span data-edit="cta2">Get a free quote</span></a></div>
+    <div class="trust"><span data-edit="t1">Licensed &amp; insured</span><span data-edit="t2">Upfront pricing</span><span data-edit="t3">12-month workmanship guarantee</span></div>
+  </div>
+  <div class="art reveal"><div class="ph" data-img="hero"><div class="gen" data-gen></div></div>
+    <div class="chip"><span class="ic">⏱</span><span><b data-edit="chipT">Arrive 9–11am</b><span data-edit="chipS">You'll get a text when we're on the way</span></span></div></div>
+</div></header>
+
+<div class="band" id="emergency"><div class="w">
+  <div><b data-edit="emH">Burst pipe? No power? We're on call.</b><br><span data-edit="emP">Emergency plumbers and electricians 6am–10pm, 7 days. Book online or call 02 9000 1234.</span></div>
+  <a class="btn" href="#" data-book data-emergency>🚨 <span data-edit="emB">Emergency booking</span></a>
+</div></div>
+
+<section class="s" id="services"><div class="w">
+  <div class="head reveal"><div><div class="eyebrow" data-edit="sEy">Services &amp; prices</div><h2 data-edit="sH">Clear prices. <em>No surprises.</em></h2><p data-edit="sP">Fixed and "from" prices up front. Bigger jobs get a free written quote before we start.</p></div><div class="cats" id="cats"></div></div>
+  <div class="jobs" id="jobs" data-live data-live-note="Live from your booking system — edit jobs and prices in Setup">
+    <div class="jc"><div class="top"><div class="ic">P</div><div class="pr">$180–$380<small>typical range</small></div></div><h3>Blocked drain or toilet</h3><p>Clear blockages in sinks, showers, toilets and drains.</p><div class="ft"><span>1–1.5 h</span><a class="btn dark sm" href="#" data-book>Book</a></div></div>
+    <div class="jc"><div class="top"><div class="ic">E</div><div class="pr">from $135<small>plus parts if needed</small></div></div><h3>Power point install or replace</h3><p>New or replacement GPOs, USB outlets.</p><div class="ft"><span>30–60 min</span><a class="btn dark sm" href="#" data-book>Book</a></div></div>
+    <div class="jc"><div class="top"><div class="ic">P</div><div class="pr">Free quote<small>we'll price it first</small></div></div><h3>Hot water system replacement</h3><p>Supply and install a new gas, electric or heat-pump system.</p><div class="ft"><span>3–4 h</span><a class="btn dark sm" href="#" data-book>Get a quote</a></div></div>
+  </div>
+</div></section>
+
+<section class="s" id="how" style="padding-top:0"><div class="w">
+  <div class="head reveal"><div><div class="eyebrow" data-edit="hEy">How it works</div><h2 data-edit="hH">Booked in three taps.</h2></div></div>
+  <div class="steps">
+    <div class="st reveal"><div class="n">01</div><h3 data-edit="h1t">Pick the job</h3><p data-edit="h1p">See the price and how long it usually takes, before you book.</p></div>
+    <div class="st reveal"><div class="n">02</div><h3 data-edit="h2t">Choose an arrival window</h3><p data-edit="h2p">Only times we can genuinely make — travel between jobs is already built in.</p></div>
+    <div class="st reveal"><div class="n">03</div><h3 data-edit="h3t">We text when we're on the way</h3><p data-edit="h3p">Confirmation straight away, a reminder the day before and a heads-up on the day.</p></div>
+  </div>
+</div></section>
+
+<section class="s dark" id="quotes"><div class="w"><div class="split">
+  <div class="reveal"><div class="eyebrow" data-edit="qEy">Bigger jobs</div><h2 data-edit="qH">Free written quotes. <em>Book when you're ready.</em></h2>
+    <p data-edit="qP" style="margin-top:18px">Hot water systems, switchboard upgrades, renovations and EV chargers. Send a few photos and we'll usually quote without a site visit.</p>
+    <ul class="ticks"><li data-edit="q1">Send details and photos online, any time</li><li data-edit="q2">Itemised quote with GST — no vague "it depends"</li><li data-edit="q3">Accept online and choose your start time straight away</li></ul>
+    <div style="margin-top:30px"><a class="btn acc" href="#" data-book data-cat="quote"><span data-edit="qB">Request a free quote</span> <span class="ar">→</span></a></div></div>
+  <div class="reveal"><div class="qcard"><div class="eyebrow" style="color:var(--muted)">Example quote</div><h3 style="margin:6px 0 12px" data-edit="qcH">Switchboard upgrade</h3>
+    <div class="r"><span data-edit="qc1">New switchboard &amp; enclosure</span><b data-edit="qc1v">$980</b></div><div class="r"><span data-edit="qc2">Safety switches × 6</span><b data-edit="qc2v">$510</b></div><div class="r"><span data-edit="qc3">Labour (5 h)</span><b data-edit="qc3v">$650</b></div><div class="r"><span>GST</span><b data-edit="qc4v">$214</b></div><div class="r t"><span>Total</span><span data-edit="qc5v">$2,354</span></div>
+    <a class="btn acc acc" href="#" data-book data-cat="quote" style="display:flex">Accept &amp; choose a time</a></div></div>
+</div></div></section>
+
+<section class="s" id="team"><div class="w">
+  <div class="head reveal"><div><div class="eyebrow" data-edit="mEy">The team</div><h2 data-edit="mH">Local, licensed, <em>tidy.</em></h2><p data-edit="mP">Every job is done by one of our own licensed tradespeople — never a stranger off an app.</p></div></div>
+  <div class="team" id="teamlist" data-live data-live-note="Live from your booking system — edit the team in Setup">
+    <div class="pc"><div class="av" style="background:#2C5F8A">D</div><h3>Dave Kowalski</h3><p>Licensed plumber</p></div>
+    <div class="pc"><div class="av" style="background:#E8591A">P</div><h3>Priya Nair</h3><p>Licensed electrician</p></div>
+  </div>
+</div></section>
+
+<section class="s" id="area" style="padding-top:0"><div class="w"><div class="area">
+  <div class="reveal"><div class="map"><div><b data-edit="radius">15 km</b><span data-edit="radiusS">from our Marrickville base</span><div class="pin"></div></div></div></div>
+  <div class="reveal"><div class="eyebrow" data-edit="arEy">Areas we cover</div><h2 data-edit="arH">Close by, so we're <em>never late.</em></h2>
+    <p style="color:var(--muted)" data-edit="arP">We keep our jobs local so we spend the day working, not driving. If you're further out, send a request and we'll let you know.</p>
+    <div class="subs" data-edit="subs" style="margin-top:20px"><span>Marrickville</span><span>Newtown</span><span>Enmore</span><span>Stanmore</span><span>Petersham</span><span>Dulwich Hill</span><span>Leichhardt</span><span>Annandale</span><span>Glebe</span><span>Balmain</span><span>Rozelle</span><span>Summer Hill</span><span>Ashfield</span><span>Erskineville</span><span>St Peters</span><span>Tempe</span></div></div>
+</div></div></section>
+
+<section class="s about" id="about" style="padding-top:0"><div class="w"><div class="split">
+  <div class="art reveal"><div class="ph" data-img="about"><div class="gen" data-gen></div></div></div>
+  <div class="reveal"><div class="eyebrow" data-edit="aEy">About us</div><h2 data-edit="aH">A family business that <em>picks up the phone.</em></h2>
+    <p style="color:var(--muted)" data-edit="aP">We started with one van and a simple idea: turn up when we say, explain the job in plain English, and leave the place cleaner than we found it. Today our team covers the Inner West for homes, strata and local businesses.</p>
+    <ul class="ticks"><li data-edit="a1">Fully licensed and insured — licence numbers on every invoice</li><li data-edit="a2">Shoe covers, drop sheets and a proper clean-up</li><li data-edit="a3">12-month guarantee on all our workmanship</li></ul></div>
+</div></div></section>
+
+<section class="s" style="padding-top:0"><div class="w"><div class="biz reveal">
+  <div><div class="eyebrow" data-edit="bEy">For businesses &amp; strata</div><h2 data-edit="bH" style="font-size:clamp(30px,3.6vw,44px)">Regular maintenance, <em>booked once.</em></h2>
+    <p data-edit="bP">Drain jetting for cafes and restaurants, test &amp; tag for workplaces, smoke alarm checks for strata. Set it to repeat weekly, fortnightly or every 4 weeks and we'll keep the same day and tradie wherever we can.</p></div>
+  <div><a class="btn dark" href="#" data-book data-cat="repeat"><span data-edit="bB">Book a regular service</span> <span class="ar">→</span></a></div>
+</div></div></section>
+
+<section class="s" id="contact" style="padding-top:0"><div class="w">
+  <div class="head reveal"><div><div class="eyebrow" data-edit="cEy">Contact</div><h2 data-edit="cH">Talk to a real person.</h2></div></div>
+  <div class="contact">
+    <div class="cc reveal"><span class="eyebrow" data-edit="c1e">Call</span><b data-edit="c1">02 9000 1234</b><p data-edit="c1p">Mon–Sat 7am–5pm. Emergencies 6am–10pm, 7 days.</p></div>
+    <div class="cc reveal"><span class="eyebrow" data-edit="c2e">Email</span><b data-edit="c2">jobs@sparksandpipes.com.au</b><p data-edit="c2p">We reply the same business day.</p></div>
+    <div class="cc reveal"><span class="eyebrow" data-edit="c3e">Licences</span><b data-edit="c3">Lic. 000000C</b><p data-edit="c3p">ABN 00 000 000 000 · Fully insured</p></div>
+  </div>
+</div></section>
+
+<footer><div class="w"><span data-edit="foot">© Sparks &amp; Pipes Co.</span><span data-edit="foot2">Website &amp; online booking by Webescapade</span></div></footer>
+<a class="btn acc pill-book" id="pill" href="#" data-book>Book online →</a>
+
+<script>
+/* ---------- site runtime (stays on the published page) ---------- */
+(function () {
+  var B = document.body.dataset;
+  var ART = {
+    electric: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+    plumbing: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7S5.5 10 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10 12 2.7 12 2.7z"/><path d="M9 15a3 3 0 0 0 3 3"/></svg>',
+    combo: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg>',
+    garden: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/></svg>',
+    clean: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8L4 10.7l6.1 1.9L12 18.5l1.9-5.9L20 10.7l-6.1-1.9z"/><path d="M5 3v4M3 5h4M19 17v4M17 19h4"/></svg>',
+    handy: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5a2.1 2.1 0 0 1-3-3L12 9"/><path d="M17.6 15 22 10.6M20.9 11.7l-1.3-1.3a2.4 2.4 0 0 1-.7-1.7V7.4L16.3 4.8a5.6 5.6 0 0 0-4-1.7H9.5l.9.8a6.2 6.2 0 0 1 2 4.5v1.6l2 2h1.2a2.4 2.4 0 0 1 1.7.7l1.3 1.3"/></svg>'
+  };
+  function hexOk(c){ return /^#[0-9a-f]{6}$/i.test(c || ""); }
+  function mix(hex, w, amt){ var n = parseInt(hex.slice(1), 16), r = n >> 16, g = n >> 8 & 255, b = n & 255, m = w ? 255 : 0; r = Math.round(r + (m - r) * amt); g = Math.round(g + (m - g) * amt); b = Math.round(b + (m - b) * amt); return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1); }
+  function applyTheme(){
+    var s = document.documentElement.style;
+    if (hexOk(B.accent)) { s.setProperty("--accent", B.accent); s.setProperty("--soft", mix(B.accent, true, .86)); }
+    if (hexOk(B.accent2)) s.setProperty("--accent2", B.accent2);
+    if (hexOk(B.heroBg)) s.setProperty("--hero", B.heroBg);
+    if (hexOk(B.bg)) s.setProperty("--bg", B.bg);
+    var f = B.font || "bold";
+    s.setProperty("--hf", f === "serif" ? '"Instrument Serif",Georgia,serif' : f === "clean" ? "Manrope,system-ui,sans-serif" : '"Archivo",system-ui,sans-serif');
+    s.setProperty("--hw", f === "serif" ? "400" : f === "clean" ? "800" : "800");
+    s.setProperty("--r", B.shape === "square" ? "4px" : B.shape === "soft" ? "10px" : "18px");
+    s.setProperty("--rb", B.shape === "square" ? "4px" : B.shape === "soft" ? "10px" : "999px");
+    var cl = document.body.classList;
+    ["h-split","h-photo","h-centre","h-light","f-bold","f-serif","f-clean"].forEach(function (c) { cl.remove(c); });
+    cl.add("h-" + (B.hero || "split")); cl.add("f-" + f);
+    if (B.heroLight === "1") cl.add("h-light");
+    document.querySelectorAll("[data-gen]").forEach(function (g) { g.innerHTML = ART[B.art] || ART.combo; });
+  }
+  applyTheme();
+  window.SITE = { applyTheme: applyTheme, ART: ART };
+
+  function bookingUrl(a){
+    var u; try { u = new URL(B.bookingUrl || "/trades/demo/", location.href); } catch (e) { return "#"; }
+    u.searchParams.set("view", "customer");
+    if (B.business) u.searchParams.set("business", B.business);
+    if (hexOk(B.accent)) u.searchParams.set("accent", B.accent.replace("#", ""));
+    u.searchParams.set("back", location.href.split("#")[0].split("?")[0]);
+    if (a) {
+      if (a.hasAttribute("data-emergency")) u.searchParams.set("emergency", "1");
+      if (a.getAttribute("data-job")) u.searchParams.set("job", a.getAttribute("data-job"));
+      var c = a.getAttribute("data-cat"); if (c && c !== "quote" && c !== "repeat") u.searchParams.set("cat", c);
+    }
+    return u.toString() + "#book";
+  }
+  window.SITE.bookingUrl = bookingUrl;
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("[data-book]");
+    if (!a || document.body.classList.contains("editing")) return;
+    e.preventDefault(); location.href = bookingUrl(a);
+  });
+
+  var nav = document.getElementById("nav"), pill = document.getElementById("pill"), hero = document.querySelector(".hero");
+  function onScroll(){ var y = window.scrollY; nav.classList.toggle("solid", y > 30); pill.classList.toggle("show", y > hero.offsetHeight - 100); }
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }); }, { threshold: .1 });
+    document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
+
+  /* live jobs, prices and team from the booking system (demo: shared browser storage on the same site) */
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function money(n){ return "$" + Number(n).toLocaleString("en-AU", { maximumFractionDigits: 2 }); }
+  function dur(m){ if (m < 60) return m + " min"; var h = Math.floor(m / 60), r = m % 60; return h + (r ? "." + (r === 30 ? "5" : r) : "") + " h"; }
+  function price(j){ return j.price === "fixed" ? [money(j.a), "fixed price"] : j.price === "from" ? ["from " + money(j.a), "plus parts if needed"] : j.price === "range" ? [money(j.a) + "–" + money(j.b), "typical range"] : j.price === "hourly" ? [money(j.a) + "/hr", "plus parts"] : ["Free quote", "we'll price it first"]; }
+  var DATA = null, cur = "all";
+  try { DATA = JSON.parse(localStorage.getItem("tradeDeluxeDemo_v1") || "null"); } catch (e) {}
+  var CATN = { plumbing: "Plumbing", electrical: "Electrical", gas: "Gas", data: "Data & AV", lawn: "Lawn care", garden: "Garden", repairs: "Repairs", install: "Assembly & install", home: "Home cleaning", special: "Specialist" };
+  function drawJobs(){
+    var list = DATA.jobTypes.filter(function (j) { return j.active !== false; }), cs = [];
+    list.forEach(function (j) { if (cs.indexOf(j.cat) < 0) cs.push(j.cat); });
+    var cb = document.getElementById("cats");
+    cb.innerHTML = cs.length > 1 ? ['<button data-c="all" class="' + (cur === "all" ? "on" : "") + '">All</button>'].concat(cs.map(function (c) { return '<button data-c="' + c + '" class="' + (cur === c ? "on" : "") + '">' + esc(CATN[c] || c) + "</button>"; })).join("") : "";
+    cb.querySelectorAll("[data-c]").forEach(function (b) { b.onclick = function () { cur = b.getAttribute("data-c"); drawJobs(); }; });
+    document.getElementById("jobs").innerHTML = list.filter(function (j) { return cur === "all" || j.cat === cur; }).map(function (j) {
+      var p = price(j), q = j.price === "quote";
+      return '<div class="jc"><div class="top"><div class="ic">' + (ART[j.cat === "electrical" ? "electric" : j.cat === "plumbing" || j.cat === "gas" ? "plumbing" : B.art] || "").replace('stroke="#fff"', 'stroke="currentColor"') + '</div><div class="pr">' + p[0] + "<small>" + p[1] + "</small></div></div><h3>" + esc(j.name) + (j.emergency ? '<span class="badge">24/7</span>' : "") + "</h3><p>" + esc(j.desc) + '</p><div class="ft"><span>' + (j.mins === j.minsMax ? dur(j.mins) : dur(j.mins) + "–" + dur(j.minsMax)) + '</span><a class="btn dark sm" href="#" data-book data-job="' + esc(j.id) + '">' + (q ? "Get a quote" : "Book") + "</a></div></div>";
+    }).join("");
+  }
+  function drawTeam(){
+    var t = DATA.team.filter(function (x) { return x.active !== false; });
+    document.getElementById("teamlist").innerHTML = t.map(function (p) { return '<div class="pc"><div class="av" style="background:' + esc(p.color || "#333") + '">' + esc(p.name.charAt(0)) + "</div><h3>" + esc(p.name) + "</h3><p>" + esc(p.role || "") + (p.onCall ? " · on call for emergencies" : "") + "</p></div>"; }).join("");
+  }
+  /* a real business (booking page has ?b=<business>): jobs, prices and team come live from Supabase */
+  var slug = ""; try { slug = new URL(B.bookingUrl || "", location.href).searchParams.get("b") || ""; } catch (e) {}
+  if (slug && B.supabaseUrl) {
+    fetch(B.supabaseUrl.replace(/\/+$/, "") + "/rest/v1/rpc/trd_public", { method: "POST", headers: { apikey: B.supabaseKey, Authorization: "Bearer " + B.supabaseKey, "Content-Type": "application/json" }, body: JSON.stringify({ p_venue: slug }) })
+      .then(function (r) { return r.json(); }).then(function (d) { if (d && d.ok && d.config) { DATA = d.config; drawJobs(); drawTeam(); } }).catch(function () {});
+  } else if (DATA && DATA.jobTypes) { drawJobs(); drawTeam(); }
+})();
+</script>
+
+<!--ENGINE-START-->
+<script>
+/* ===== editing engine — present only in the editable master; stripped when publishing ===== */
+(function () {
+  var B = document.body.dataset;
+  var bar = document.createElement("div"); bar.id = "eng";
+  bar.innerHTML = '<button data-a="edit">✏️ Edit</button><button data-a="theme">🎨 Look &amp; feel</button><button data-a="book">📅 Bookings</button><button data-a="deploy">🚀 Deploy</button><button data-a="save">💾 Save copy</button>';
+  document.body.appendChild(bar);
+  var panel = null;
+  function closePanel(){ if (panel) { panel.remove(); panel = null; } bar.querySelectorAll("[data-a]").forEach(function (b) { if (b.getAttribute("data-a") !== "edit") b.classList.remove("on"); }); }
+  function openPanel(name, html){
+    closePanel(); panel = document.createElement("div"); panel.id = "engp"; panel.innerHTML = html; document.body.appendChild(panel);
+    bar.querySelector('[data-a="' + name + '"]').classList.add("on");
+    panel.querySelectorAll("[data-close]").forEach(function (x) { x.onclick = closePanel; });
+  }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  /* ---- text + photo editing ---- */
+  var editing = false;
+  function setEditing(on){
+    editing = on; document.body.classList.toggle("editing", on);
+    var eb = bar.querySelector('[data-a="edit"]'); eb.classList.toggle("on", on); eb.textContent = on ? "✓ Done" : "✏️ Edit";
+    document.querySelectorAll("[data-edit]").forEach(function (el) { if (on) el.setAttribute("contenteditable", "true"); else el.removeAttribute("contenteditable"); });
+  }
+  document.addEventListener("click", function (e) {
+    if (!editing) return;
+    var a = e.target.closest("a"); if (a && !a.closest("#eng") && !a.closest("#engp")) e.preventDefault();
+    var img = e.target.closest("[data-img]");
+    if (img && !e.target.closest("[data-edit]")) pickImage(img);
+  }, true);
+  document.addEventListener("paste", function (e) {
+    if (!editing || !e.target.closest || !e.target.closest("[data-edit]")) return;
+    e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text/plain"));
+  });
+  function shrink(file, max, type, q){
+    return new Promise(function (res, rej) {
+      var fr = new FileReader();
+      fr.onload = function () {
+        var im = new Image();
+        im.onload = function () {
+          var s = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement("canvas");
+          c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL(type, q));
+        };
+        im.onerror = rej; im.src = fr.result;
+      };
+      fr.onerror = rej; fr.readAsDataURL(file);
+    });
+  }
+  function choose(cb){ var i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = function () { if (i.files[0]) cb(i.files[0]); }; i.click(); }
+  function pickImage(el){ choose(function (f) { shrink(f, 1600, "image/jpeg", 0.72).then(function (d) { el.classList.add("has-photo"); el.style.backgroundImage = "url(" + d + ")"; }); }); }
+  function pickLogo(){ choose(function (f) { shrink(f, 700, "image/png").then(function (d) { document.querySelector("[data-logo]").innerHTML = '<img src="' + d + '" alt="logo">'; }); }); }
+
+  /* ---- look & feel ---- */
+  var LOOKS = {
+    combo:    { n: "Plumbing & electrical", accent: "#E8591A", accent2: "#14202C", heroBg: "#14202C", bg: "#F4F2ED", art: "combo" },
+    electric: { n: "Electrician",           accent: "#F2B705", accent2: "#111827", heroBg: "#0E1525", bg: "#F5F4EF", art: "electric" },
+    plumbing: { n: "Plumber",               accent: "#1F7AE0", accent2: "#0B2545", heroBg: "#0B2545", bg: "#F2F5F8", art: "plumbing" },
+    garden:   { n: "Lawn & garden",         accent: "#3E8E41", accent2: "#1E3B24", heroBg: "#1E3B24", bg: "#F3F4EC", art: "garden" },
+    clean:    { n: "Cleaning",              accent: "#14A3A3", accent2: "#0F3D46", heroBg: "#0F3D46", bg: "#F1F6F6", art: "clean" },
+    handy:    { n: "Handyman",              accent: "#D9822B", accent2: "#2B2B2B", heroBg: "#262626", bg: "#F4F1EC", art: "handy" }
+  };
+  function seg(id, cur, opts){ return '<div class="seg" id="' + id + '">' + opts.map(function (o) { return '<button class="b' + (o[0] === cur ? " on" : "") + '" data-v="' + o[0] + '">' + o[1] + "</button>"; }).join("") + "</div>"; }
+  function themePanel(){
+    openPanel("theme", "<h4>Look &amp; feel</h4><div class=\"note\">Pick a look for your trade, then fine-tune. Changes show straight away — Deploy to publish.</div><h5>Trade look</h5><div class=\"looks\">" +
+      Object.keys(LOOKS).map(function (k) { var L = LOOKS[k]; return '<button data-look="' + k + '" class="' + (B.look === k ? "on" : "") + '"><i style="background:linear-gradient(135deg,' + L.accent + " 50%," + L.heroBg + ' 50%)"></i>' + L.n + "</button>"; }).join("") + "</div>" +
+      "<h5>Colours</h5><div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px\"><label>Accent<input type=\"color\" id=\"tA\" value=\"" + (B.accent || "#E8591A") + "\"></label><label>Dark sections<input type=\"color\" id=\"tA2\" value=\"" + (B.accent2 || "#14202C") + "\"></label><label>Hero<input type=\"color\" id=\"tH\" value=\"" + (B.heroBg || "#14202C") + "\"></label></div>" +
+      "<h5>Hero layout</h5>" + seg("tHero", B.hero || "split", [["split", "Photo beside"], ["photo", "Full photo"], ["centre", "Centred"]]) +
+      '<label style="margin-top:8px;display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="tLight" style="width:auto"' + (B.heroLight === "1" ? " checked" : "") + "> Light hero instead of dark</label>" +
+      "<h5>Headings</h5>" + seg("tFont", B.font || "bold", [["bold", "Bold &amp; strong"], ["serif", "Elegant serif"], ["clean", "Clean modern"]]) +
+      "<h5>Corners</h5>" + seg("tShape", B.shape || "round", [["round", "Rounded"], ["soft", "Soft"], ["square", "Square"]]) +
+      "<h5>Picture style (until you add photos)</h5>" + seg("tArt", B.art || "combo", [["combo", "🔧"], ["electric", "⚡"], ["plumbing", "💧"], ["garden", "🌿"], ["clean", "✨"], ["handy", "🔨"]]) +
+      '<h5>Google</h5><label>Page title<input id="ett" value="' + esc(document.title) + '"></label>' +
+      '<label>Page description<input id="eds" value="' + esc((document.querySelector("meta[name=description]") || {}).content || "") + '"></label>' +
+      '<div class="r"><button class="b" id="elogo">Upload logo</button><button class="b p" data-close>Done</button></div>');
+    var redraw = function () { window.SITE.applyTheme(); themePanel(); };
+    panel.querySelectorAll("[data-look]").forEach(function (b) { b.onclick = function () { var L = LOOKS[b.getAttribute("data-look")]; B.look = b.getAttribute("data-look"); B.accent = L.accent; B.accent2 = L.accent2; B.heroBg = L.heroBg; B.bg = L.bg; B.art = L.art; redraw(); }; });
+    panel.querySelector("#tA").oninput = function () { B.accent = this.value; window.SITE.applyTheme(); };
+    panel.querySelector("#tA2").oninput = function () { B.accent2 = this.value; window.SITE.applyTheme(); };
+    panel.querySelector("#tH").oninput = function () { B.heroBg = this.value; window.SITE.applyTheme(); };
+    panel.querySelector("#tLight").onchange = function () { B.heroLight = this.checked ? "1" : "0"; window.SITE.applyTheme(); };
+    [["tHero", "hero"], ["tFont", "font"], ["tShape", "shape"], ["tArt", "art"]].forEach(function (x) {
+      panel.querySelectorAll("#" + x[0] + " [data-v]").forEach(function (b) { b.onclick = function () { B[x[1]] = b.getAttribute("data-v"); redraw(); }; });
+    });
+    panel.querySelector("#ett").oninput = function () { document.title = this.value; };
+    panel.querySelector("#eds").oninput = function () { var m = document.querySelector("meta[name=description]"); if (m) m.setAttribute("content", this.value); };
+    panel.querySelector("#elogo").onclick = pickLogo;
+  }
+
+  /* ---- bookings ---- */
+  function bookPanel(){
+    openPanel("book", "<h4>Bookings</h4><div class=\"note\">Jobs, prices and your team on this page come live from your booking system. Change them in Setup on the staff page.</div>" +
+      '<label>Business code<input id="bv" value="' + esc(B.business) + '"></label><label>Booking page address<input id="bu" value="' + esc(B.bookingUrl) + '"></label>' +
+      '<label>Phone number for call buttons<input id="bp" value="' + esc((document.querySelector("[data-tel]") || {}).getAttribute ? document.querySelector("[data-tel]").getAttribute("href").replace("tel:", "") : "") + '"></label>' +
+      '<div class="r"><button class="b p" id="bsave">Save</button><button class="b" id="bstaff">Open staff page</button><button class="b" data-close>Close</button></div><div class="msg" id="bmsg"></div>');
+    panel.querySelector("#bsave").onclick = function () {
+      B.business = panel.querySelector("#bv").value.trim().toLowerCase(); B.bookingUrl = panel.querySelector("#bu").value.trim();
+      var t = panel.querySelector("#bp").value.replace(/[^\d+]/g, ""); if (t) document.querySelectorAll("[data-tel]").forEach(function (a) { a.setAttribute("href", "tel:" + t); });
+      panel.querySelector("#bmsg").textContent = "Saved. Deploy to publish.";
+    };
+    panel.querySelector("#bstaff").onclick = function () { var u = new URL(B.bookingUrl || "/trades/demo/", location.href); u.hash = "staff"; window.open(u.toString(), "_blank"); };
+  }
+
+  /* ---- snapshot / publish (same engine as Service Deluxe) ---- */
+  var LIVE_STATIC = {};
+  document.querySelectorAll("[data-live]").forEach(function (n) { if (n.id) LIVE_STATIC[n.id] = n.innerHTML; });
+  function snapshot(forPublish){
+    var wasEditing = editing; if (wasEditing) setEditing(false);
+    var root = document.documentElement.cloneNode(true);
+    if (wasEditing) setEditing(true);
+    ["#eng", "#engp"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
+    root.querySelectorAll("[contenteditable]").forEach(function (n) { n.removeAttribute("contenteditable"); });
+    var body = root.querySelector("body"); body.classList.remove("editing");
+    root.querySelectorAll(".reveal.in").forEach(function (n) { n.classList.remove("in"); });
+    var nav = root.querySelector("#nav"); if (nav) nav.classList.remove("solid");
+    var pill = root.querySelector("#pill"); if (pill) pill.classList.remove("show");
+    root.querySelectorAll("[data-live]").forEach(function (n) { if (n.id && LIVE_STATIC[n.id] != null) n.innerHTML = LIVE_STATIC[n.id]; });
+    var cats = root.querySelector("#cats"); if (cats) cats.innerHTML = "";
+    root.querySelectorAll("[data-gen]").forEach(function (g) { g.innerHTML = ""; });
+    root.removeAttribute("style");
+    var html = "<!doctype html>\n" + root.outerHTML;
+    if (forPublish) {
+      var M = "ENGINE", a1 = "<!--" + M + "-START-->", a2 = "<!--" + M + "-END-->", c1 = "/*" + M + "-CSS-START*/", c2 = "/*" + M + "-CSS-END*/";
+      var cut = function (h, open, close) { var i, j; while ((i = h.indexOf(open)) >= 0 && (j = h.indexOf(close, i)) >= 0) h = h.slice(0, i) + h.slice(j + close.length); return h; };
+      html = cut(cut(html, a1, a2), c1, c2);
+      html = html.replace(new RegExp("\\sdata-gh-[a-z]+=\"[^\"]*\"", "g"), "");
+    }
+    return html;
+  }
+  function download(name, text){
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/html" })); a.download = name;
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+  }
+  function b64(s){
+    var bytes = new TextEncoder().encode(s), bin = "", chunk = 0x8000;
+    for (var i = 0; i < bytes.length; i += chunk) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    return btoa(bin);
+  }
+  function gh(method, path, body){
+    var tok = ""; try { tok = localStorage.getItem("tradesite_gh_token") || ""; } catch (e) {}
+    if (!tok) return Promise.reject(new Error("Add your GitHub token first."));
+    return fetch("https://api.github.com/repos/" + B.ghOwner + "/" + B.ghRepo + "/" + path, {
+      method: method, headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : undefined
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || ("GitHub " + r.status)); return j; }, function () { if (!r.ok) throw new Error("GitHub " + r.status); return {}; }); });
+  }
+  function getSha(path){
+    var dir = path.indexOf("/") >= 0 ? path.slice(0, path.lastIndexOf("/")) : "", name = path.slice(path.lastIndexOf("/") + 1);
+    return gh("GET", "contents/" + dir + "?ref=" + encodeURIComponent(B.ghBranch || "main")).then(function (list) {
+      var f = (list || []).filter(function (x) { return x.name === name; })[0]; return f ? f.sha : null;
+    }, function (e) { if (/Not Found/i.test(e.message)) return null; throw e; });
+  }
+  function commit(path, html, msg){
+    return getSha(path).then(function (sha) {
+      var body = { message: msg, content: b64(html), branch: B.ghBranch || "main" }; if (sha) body.sha = sha;
+      return gh("PUT", "contents/" + path, body);
+    });
+  }
+  function deployPanel(){
+    var tok = ""; try { tok = localStorage.getItem("tradesite_gh_token") || ""; } catch (e) {}
+    openPanel("deploy", "<h4>Deploy to GitHub</h4><div class=\"note\">Publish writes a clean live page (no editor). Save master keeps this editable version in the repo so you can come back to it.</div>" +
+      '<label>Owner<input id="go" value="' + esc(B.ghOwner) + '"></label><label>Repository<input id="gr" value="' + esc(B.ghRepo) + '"></label>' +
+      '<label>Branch<input id="gb" value="' + esc(B.ghBranch || "main") + '"></label><label>Live page path<input id="gl" value="' + esc(B.ghLive || "index.html") + '"></label>' +
+      '<label>Editable master path<input id="gm" value="' + esc(B.ghMaster || "source/site-editable.html") + '"></label>' +
+      '<label>Fine-grained token (kept on this device only)<input id="gt" type="password" value="' + esc(tok) + '" placeholder="github_pat_…"></label>' +
+      '<div class="r"><button class="b p" id="gpub">Publish live site</button><button class="b" id="gmas">Save editable master</button><button class="b" data-close>Close</button></div><div class="msg" id="gmsg"></div>');
+    var keep = function () {
+      B.ghOwner = panel.querySelector("#go").value.trim(); B.ghRepo = panel.querySelector("#gr").value.trim(); B.ghBranch = panel.querySelector("#gb").value.trim() || "main";
+      B.ghLive = panel.querySelector("#gl").value.trim() || "index.html"; B.ghMaster = panel.querySelector("#gm").value.trim();
+      try { localStorage.setItem("tradesite_gh_token", panel.querySelector("#gt").value.trim()); } catch (e) {}
+      if (!B.ghOwner || !B.ghRepo) throw new Error("Fill in owner and repository.");
+    };
+    var run = function (fn) {
+      var m = panel.querySelector("#gmsg");
+      try { keep(); } catch (e) { m.textContent = "✗ " + e.message; return; }
+      panel.querySelectorAll(".b").forEach(function (b) { b.disabled = true; }); m.textContent = "Working…";
+      fn().then(function (t) { m.textContent = "✓ " + t; }, function (e) { m.textContent = "✗ " + e.message; })
+        .then(function () { if (panel) panel.querySelectorAll(".b").forEach(function (b) { b.disabled = false; }); });
+    };
+    panel.querySelector("#gpub").onclick = function () {
+      var lp = (panel.querySelector("#gl").value || "").trim().replace(/^\/+/, "");
+      if (lp.indexOf("/") < 0 && !confirm("Live page path is \"" + lp + "\" with no folder.\n\nIn a repo that hosts another website (like webescapade.com) this REPLACES its home page.\n\nPublish anyway?")) return;
+      run(function () { var html = snapshot(true); return commit(B.ghLive, html, "Publish trade site").then(function () { return "Published " + B.ghLive + " (" + Math.round(html.length / 1024) + " KB). GitHub Pages updates within a minute."; }); });
+    };
+    panel.querySelector("#gmas").onclick = function () {
+      run(function () { var html = snapshot(false); return commit(B.ghMaster, html, "Save editable trade site").then(function () { return "Saved " + B.ghMaster + " (" + Math.round(html.length / 1024) + " KB)."; }); });
+    };
+  }
+
+  bar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-a]"); if (!b) return;
+    var a = b.getAttribute("data-a");
+    if (a === "edit") { closePanel(); return setEditing(!editing); }
+    if (a === "save") { closePanel(); return download("site-editable.html", snapshot(false)); }
+    if (panel && b.classList.contains("on")) return closePanel();
+    ({ theme: themePanel, book: bookPanel, deploy: deployPanel })[a]();
+  });
+})();
+</script>
+<!--ENGINE-END-->
+</body>
+</html>

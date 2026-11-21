@@ -340,6 +340,7 @@
       <button type="button" data-prod="restaurant" class="on" title="Restaurant Deluxe">Restaurant</button>
       <button type="button" data-prod="service" title="Service Deluxe">Service</button>
       <button type="button" data-prod="function" title="Function Deluxe">Function</button>
+      <button type="button" data-prod="trade" title="Trade Deluxe">Trade</button>
     </div>
     <div class="grow"></div>
     <span class="status" id="conn"><span class="d"></span><span id="connLbl">Not connected</span></span>
@@ -636,9 +637,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   var DATA = null, RAW = null, EM = {}, SYNC = {at:null, busy:false, msg:""};
   /* ---- product: Restaurant Deluxe or Service Deluxe. Each sees only its own
      prospects, emails, calls and live businesses. ---- */
-  try{ var QP=new URLSearchParams(location.search).get("prod"); if(QP==="service"||QP==="restaurant"||QP==="function") store.set("rdcrm.product",QP); }catch(e){}
-  var PRODUCT = (function(p){ return p==="service"||p==="function" ? p : "restaurant"; })(store.get("rdcrm.product"));
-  var PNAME = {restaurant:"Restaurant Deluxe", service:"Service Deluxe", "function":"Function Deluxe"};
+  try{ var QP=new URLSearchParams(location.search).get("prod"); if(QP==="service"||QP==="restaurant"||QP==="function"||QP==="trade") store.set("rdcrm.product",QP); }catch(e){}
+  var PRODUCT = (function(p){ return p==="service"||p==="function"||p==="trade" ? p : "restaurant"; })(store.get("rdcrm.product"));
+  var PNAME = {restaurant:"Restaurant Deluxe", service:"Service Deluxe", "function":"Function Deluxe", trade:"Trade Deluxe"};
   var FN_BASES = ["Introducing Function Deluxe (video)","Meet Ava, the AI events assistant","Follow-up: short answers"];
   var SVC_BASES = ["Intro to Service Deluxe","14-day free trial invite","Website + bookings ($59)","Already have a website? Bookings only ($39)","Booking demo follow-up"];
   function lc(e){ return String(e||"").trim().toLowerCase(); }
@@ -647,7 +648,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if(!RAW) return null;
     var svc=PRODUCT==="service", mine={}, other={}, ids={};
     var ps=(RAW.prospects||[]).filter(function(p){ var e=lc(p.email), m=prodOf(p)===PRODUCT; if(e){ if(m) mine[e]=1; else other[e]=1; } if(m) ids[p.id]=1; return m; });
-    var vs=svc ? (RAW.svc_venues||[]) : PRODUCT==="function" ? [] : (RAW.venues||[]);
+    var vs=svc ? (RAW.svc_venues||[]) : (PRODUCT==="function"||PRODUCT==="trade") ? [] : (RAW.venues||[]);
     vs.forEach(function(v){ var e=lc(v.contact_email); if(e) mine[e]=1; });
     return Object.assign({}, RAW, {
       prospects: ps, venues: vs,
@@ -670,20 +671,27 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     xHealthSub: "Function centres using Function Deluxe will appear here once the first one is live.",
     xPipeSub: "Every function centre or event venue you've imported as a Function Deluxe lead. Move them along as you talk to them, set a follow-up date, and email a filtered group straight from the Email Studio.",
     tHealth: "Venue health"
+  }, XTT = {   /* Trade Deluxe wording */
+    xHomeSub: "Who to call, which follow-up emails are due and how this week is going for Trade Deluxe — plumbers, electricians and other mobile trades.",
+    xHealthEye: "Live businesses",
+    xHealthH: "How every trade business is running",
+    xHealthSub: "Plumbers, electricians and other trades using Trade Deluxe will appear here once the first one is live.",
+    xPipeSub: "Every tradie business that enquired or that you've imported as a Trade Deluxe lead. Move them along as you talk to them and set a follow-up date.",
+    tHealth: "Business health"
   }, XT0 = {};
   function paintProduct(){
-    var svc=PRODUCT==="service", fn=PRODUCT==="function", MAP=fn?XTF:XT;
+    var svc=PRODUCT==="service", tr=PRODUCT==="trade", fn=PRODUCT==="function"||tr, MAP=tr?XTT:PRODUCT==="function"?XTF:XT;
     document.querySelectorAll("#prodSw [data-prod]").forEach(function(b){ var on=b.getAttribute("data-prod")===PRODUCT; b.classList.toggle("on",on); b.setAttribute("aria-selected",on?"true":"false"); });
     document.title=PNAME[PRODUCT]+" — Venue CRM";
-    $("#pMark").textContent=svc?"SD":fn?"FD":"RD";
+    $("#pMark").textContent=svc?"SD":tr?"TD":fn?"FD":"RD";
     $("#pSub").textContent=PNAME[PRODUCT]+(svc?" · marketing · businesses · pipeline · AI":" · marketing · venues · pipeline · AI");
     Object.keys(XT).forEach(function(id){ var el=document.getElementById(id); if(!el) return; if(!(id in XT0)) XT0[id]=el.innerHTML; el.innerHTML= (svc||fn) ? esc(MAP[id]) : XT0[id]; });
     var fc=$("#foundCard"); if(fc) fc.hidden=svc||fn;
-    $("#aiFocus").placeholder= fn ? "e.g. Introduce Function Deluxe to wedding venues in western Sydney, or follow up venues that watched the video" : svc ? "e.g. Get the spas on trial taking online bookings, or reach physios in the eastern suburbs" : "e.g. I want to convert the trials before Christmas, or push table ordering to cafés";
+    $("#aiFocus").placeholder= tr ? "e.g. Follow up the plumbers and electricians who enquired this week" : fn ? "e.g. Introduce Function Deluxe to wedding venues in western Sydney, or follow up venues that watched the video" : svc ? "e.g. Get the spas on trial taking online bookings, or reach physios in the eastern suburbs" : "e.g. I want to convert the trials before Christmas, or push table ordering to cafés";
   }
-  function studioLinkSync(){ var a=document.getElementById("studioLink"); if(a) a.href="restaurant-deluxe-email-studio.html?prod="+PRODUCT; }
+  function studioLinkSync(){ var a=document.getElementById("studioLink"); if(a){ a.href="restaurant-deluxe-email-studio.html?prod="+PRODUCT; a.hidden=PRODUCT==="trade"; } }   /* Email Studio has no Trade Deluxe campaigns yet */
   function switchProduct(p){
-    p=(p==="service"||p==="function")?p:"restaurant"; if(p===PRODUCT) return;
+    p=(p==="service"||p==="function"||p==="trade")?p:"restaurant"; if(p===PRODUCT) return;
     PRODUCT=p; try{ store.set("rdcrm.product",p); }catch(e){}
     paintProduct(); studioLinkSync(); closeAll(); IDEAS=[]; $("#ideas").innerHTML="";
     PF.status=""; PF.due=false; PF.eng=""; PF.limit=60;
@@ -827,6 +835,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
   function renderHealth(){
     if(PRODUCT==="service") return renderHealthSvc();
+    if(PRODUCT==="trade"){ var kpt=document.getElementById("kpis"); if(kpt) kpt.innerHTML=""; $("#venueCards").innerHTML='<p class="empty">No Trade Deluxe businesses are live yet. Enquiries and leads are in your pipeline.</p>'; return; }
     if(PRODUCT==="function"){ var kp=document.getElementById("kpis"); if(kp) kp.innerHTML=""; $("#venueCards").innerHTML='<p class="empty">No Function Deluxe venues are live yet. Leads and trials are in your pipeline; live venues will show here.</p>'; return; }
     var vs=(DATA&&DATA.venues)||[];
     var live=vs.filter(function(v){ return v.stage!=="churned"; });
@@ -1270,7 +1279,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     $("#homeWeb").innerHTML=web.length?'<div class="tl" style="display:grid;gap:8px;margin-top:8px">'+web.slice(0,8).map(function(p){
       return '<div class="trow" data-id="'+esc(p.id)+'"><div><b>'+esc(p.restaurant||"")+'</b><span class="why">'+esc([p.name,ago(p.created_at),p.crm_status].filter(Boolean).join(" · "))+'</span></div>'+
         '<div class="acts">'+(p.phone?'<a class="tel" href="tel:'+esc(String(p.phone).replace(/[^0-9+]/g,""))+'">☎ '+esc(p.phone)+'</a>':'')+'<button class="btn sm primary" type="button" data-logcall="'+esc(p.id)+'">📞 Log call</button></div></div>';
-    }).join("")+'</div>':'<p class="help" style="margin:6px 0 0">None yet. Enquiries from webescapade.com/'+(PRODUCT==="service"?"service":PRODUCT==="function"?"Function-centre":"Restaurant")+' appear here and in your pipeline straight away, as hot leads to call.</p>';
+    }).join("")+'</div>':'<p class="help" style="margin:6px 0 0">None yet. Enquiries from webescapade.com/'+(PRODUCT==="service"?"service":PRODUCT==="function"?"Function-centre":PRODUCT==="trade"?"trades":"Restaurant")+' appear here and in your pipeline straight away, as hot leads to call.</p>';
 
     /* upcoming demos (booked online or logged after a call) */
     var demos=ps.filter(function(p){ return p.crm_status==="Demo booked" && p.follow_up_at && Date.parse(p.follow_up_at)>now-3*36e5; })
@@ -1807,7 +1816,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if(!to.length){ toast("Nobody in this group has an email address"); return; }
     var label=(PF.due?"Follow-up due":PF.status||"All prospects")+(PF.prio?" · priority "+PF.prio:"")+(PF.q?' · "'+PF.q+'"':"");
     if(to.length>100 && !confirm("Send "+to.length+" addresses to the Email Studio? You'll still review everything before anything is sent.")) return;
-    handoff({kind:"group",title:"Prospects — "+label,to:to,toLabel:label,audience:(PRODUCT==="service"?"Service Deluxe prospects (":PRODUCT==="function"?"Function centre prospects (":"Restaurant prospects (")+label+")"});
+    handoff({kind:"group",title:"Prospects — "+label,to:to,toLabel:label,audience:(PRODUCT==="service"?"Service Deluxe prospects (":PRODUCT==="function"?"Function centre prospects (":PRODUCT==="trade"?"Trade Deluxe prospects (":"Restaurant prospects (")+label+")"});
   });
   $("#btnIdeas").addEventListener("click",suggest);
   $("#ideas").addEventListener("click",function(e){ var b=e.target.closest("[data-idea]"); if(b) useIdea(+b.dataset.idea); });
