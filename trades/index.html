@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trade Deluxe · Online booking for plumbers, electricians and mobile trades · Webescapade</title>
+<meta name="description" content="Online bookings that plan the drive between jobs. Arrival windows, free quotes with photos, emergency call-outs, repeat jobs and a website you edit yourself — for plumbers, electricians and other mobile trades.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F2EC; --paper2:#ECE7DE; --card:#FFFFFF; --ink:#14202C; --ink2:#26333F; --muted:#5F6A75; --line:#E0DAD0;
+  --acc:#E8591A; --acc2:#F07A3E; --mint:#FCE8DB; --deep:#14202C; --btn:#14202C; --btnink:#fff;
+  --r:22px; --shadow:0 30px 60px -30px rgba(20,32,44,.4), 0 10px 24px -12px rgba(20,32,44,.2);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.015em;margin:0}
+h1{font-size:clamp(46px,7.2vw,94px);line-height:.96}
+h2{font-size:clamp(36px,5vw,62px);line-height:1}
+h3{font-size:28px;line-height:1.1}
+h1 em,h2 em,h3 em{font-style:italic;color:var(--acc)}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--acc)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:16px 26px;font:700 15px Manrope,sans-serif;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn.dark{background:var(--btn);color:var(--btnink);box-shadow:0 10px 24px -10px rgba(20,32,44,.6)}
+.btn.acc{background:var(--acc);color:#fff;box-shadow:0 10px 24px -10px var(--acc)}
+.btn.line{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.light{background:#fff;color:var(--ink)}
+.btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
+/* nav */
+nav.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.top.s{border-bottom-color:var(--line)}
+nav.top .w{display:flex;align-items:center;gap:26px;height:72px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .m{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center}
+.brand .m svg{width:20px;height:20px}
+.brand b{font:400 25px "Instrument Serif",serif;letter-spacing:-.01em}
+.brand small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+nav.top .links{display:flex;gap:22px;margin-left:auto;font-size:15px;font-weight:600}
+nav.top .links a{text-decoration:none;color:var(--muted)}nav.top .links a:hover{color:var(--ink)}
+nav.top .btn{padding:11px 20px;font-size:14px}
+@media(max-width:960px){nav.top .links{display:none}nav.top .btn{margin-left:auto}}
+@media(max-width:480px){nav.top .w{gap:12px}.brand b{font-size:21px}nav.top .btn{padding:10px 14px;font-size:13px}nav.top .btn .ar{display:none}}
+/* hero */
+.hero{padding:64px 0 60px;position:relative;overflow-x:clip}
+.hero .w{display:grid;gap:56px;align-items:center}
+@media(min-width:1020px){.hero .w{grid-template-columns:1fr 1.08fr}}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:13.5px;font-weight:700;color:var(--ink2);margin-bottom:24px}
+.pill i{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-style:normal;font-size:12px}
+.hero .lead{margin:24px 0 32px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.trust{display:flex;gap:10px 18px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted);font-weight:700}
+.trust span:before{content:"✓";color:var(--acc);margin-right:6px}
+.stage{position:relative;padding-bottom:40px}
+.browser{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.browser .bar{height:30px;background:var(--paper2);display:flex;align-items:center;gap:6px;padding:0 12px}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.browser .bar span{margin-left:10px;font-size:11px;color:var(--muted);background:var(--card);border-radius:6px;padding:2px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phone{position:absolute;width:32%;min-width:150px;right:-2%;bottom:-6%;border-radius:34px;background:#111;padding:8px;box-shadow:var(--shadow)}
+.phone img{border-radius:26px}
+.hero .browser{transform:rotate(-1.2deg)}
+.hero .phone{transform:rotate(3deg)}
+.fc{position:absolute;left:-3%;bottom:4%;background:#fff;border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center;font-size:14px;max-width:270px}
+.fc .ic{width:36px;height:36px;border-radius:10px;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-weight:900;flex:none}
+.fc b{display:block}
+.fc span{color:var(--muted);font-size:12.5px}
+@media(max-width:600px){.phone{width:40%;right:0;bottom:-10%}.fc{display:none}}
+/* trades strip */
+.made{padding:40px 0 20px}
+.made p{text-align:center;color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 16px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.chips span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px}
+.chips span.soon{color:var(--muted);border-style:dashed}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:40px}
+@media(min-width:860px){.facts{grid-template-columns:repeat(4,1fr)}}
+.facts div{background:var(--card);border-radius:18px;padding:20px 22px;border:1px solid var(--line)}
+.facts b{display:block;font:400 34px/1.05 "Instrument Serif",serif}
+.facts span{font-size:14px;color:var(--muted)}
+section.s{padding:110px 0}
+.head{max-width:780px;margin-bottom:50px}
+.head p{color:var(--muted);font-size:18px;margin:18px 0 0}
+/* travel explainer */
+.route{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:grid;gap:26px}
+@media(min-width:900px){.route{grid-template-columns:1.25fr .75fr;align-items:center}}
+.tl{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px}
+.tl>div{flex:none;display:flex;flex-direction:column;justify-content:center;border-radius:12px;padding:10px 12px;font-size:13px;min-height:86px}
+.tl .jb{background:var(--deep);color:#fff;width:150px}
+.tl .jb b{font-size:14px}
+.tl .jb span{opacity:.7}
+.tl .dv{width:86px;background:repeating-linear-gradient(90deg,var(--mint) 0 8px,transparent 8px 12px);color:var(--acc);font-weight:800;text-align:center;border-radius:0}
+.tl .fr{width:120px;background:#E3F2E8;color:#1F6A3E;font-weight:800;text-align:center;border:2px dashed #7CC398}
+.why3{display:grid;gap:16px;margin-top:30px}
+@media(min-width:860px){.why3{grid-template-columns:repeat(3,1fr)}}
+.w3{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.w3 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:14px;margin-bottom:10px}
+.w3 b{display:block;font-size:17px;margin-bottom:4px}
+.w3 span{color:var(--muted);font-size:15px}
+/* steps */
+.steps{display:grid;gap:22px}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font:800 12px Manrope;letter-spacing:.16em;color:var(--acc)}
+.step h3{margin:8px 0 6px;font-size:28px}
+.step p{margin:0 0 20px;color:var(--muted);font-size:15.5px}
+.step .shot{margin-top:auto;border-radius:26px 26px 0 0;background:#111;padding:8px 8px 0;max-width:270px;align-self:center;width:100%}
+.step .shot img{border-radius:20px 20px 0 0;height:360px;width:100%;object-fit:cover;object-position:top}
+/* splits */
+.split{display:grid;gap:44px;align-items:center}
+@media(min-width:980px){.split{grid-template-columns:.9fr 1.1fr}.split.flip{grid-template-columns:1.1fr .9fr}.split.flip .txt{order:2}}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:16px}
+.ticks li{display:flex;gap:14px}
+.ticks li:before{content:"";flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12l4 4 8-8'/%3E%3C/svg%3E") center/14px no-repeat;margin-top:1px}
+.ticks b{display:block}
+.ticks span span{color:var(--muted);font-size:15.5px}
+.dark{background:var(--deep);color:#EEF0EC}
+.dark .ticks span span,.dark .lead{color:rgba(238,240,236,.72)}
+.dark .eyebrow{color:var(--acc2)}
+.dark h2 em{color:var(--acc2)}
+.phones{display:flex;gap:16px;justify-content:center}
+.phones .ph{flex:1;max-width:250px;border-radius:30px;background:#000;padding:7px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.phones .ph img{border-radius:24px}
+.phones .ph:nth-child(2){transform:translateY(40px)}
+/* looks */
+.looks{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.looks button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font:700 14px Manrope,sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.looks button i{width:14px;height:14px;border-radius:50%}
+.looks button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lookimg{position:relative}
+.lookimg img{transition:opacity .4s}
+/* pricing */
+.plans{display:grid;gap:18px}
+@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;position:relative}
+.plan.hi{background:var(--deep);color:#fff;border-color:var(--deep)}
+.plan.hi .muted,.plan.hi li{color:rgba(255,255,255,.78)}
+.plan .tag{position:absolute;top:-12px;left:28px;background:var(--acc);color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 12px}
+.plan .pr{margin:18px 0 8px}
+.plan .pr span{font:400 54px/1 "Instrument Serif",serif}
+.plan .pr small{color:var(--muted)}
+.plan.hi .pr small{color:rgba(255,255,255,.7)}
+.plan ul{list-style:none;padding:0;margin:14px 0 24px;display:grid;gap:10px;flex:1}
+.plan li{padding-left:24px;position:relative;font-size:15.5px;color:var(--ink2)}
+.plan li:before{content:"✓";position:absolute;left:0;color:var(--acc);font-weight:900}
+.muted{color:var(--muted)}
+.notes{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;margin-top:22px;color:var(--muted);font-size:14px}
+/* faq */
+.faq{max-width:860px}
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:14px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--acc);font-size:22px;line-height:1}
+details[open] summary:after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+/* enquire */
+.enq{display:grid;gap:40px}
+@media(min-width:960px){.enq{grid-template-columns:.9fr 1.1fr;align-items:start}}
+.contact{display:grid;gap:10px;margin-top:26px}
+.contact a{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;font-weight:700}
+.contact i{width:36px;height:36px;border-radius:10px;background:var(--mint);display:grid;place-items:center;font-style:normal}
+.form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;display:grid;gap:14px}
+.form label{display:grid;gap:6px;font-size:14px;font-weight:700}
+.form input,.form select,.form textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:16px Manrope,sans-serif;background:#fff;color:var(--ink)}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--acc)}
+.two{display:grid;gap:14px}
+@media(min-width:620px){.two{grid-template-columns:1fr 1fr}}
+.hp{position:absolute;left:-9999px}
+.msg{font-size:15px;font-weight:600;min-height:1.4em}
+.msg.ok{color:#1F6A3E}.msg.err{color:#9A3B2E}
+footer{padding:40px 0 110px;color:var(--muted);font-size:14px}
+footer .w{display:flex;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
+.float{position:fixed;right:18px;bottom:18px;z-index:25;opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
+.float.on{opacity:1;transform:none;pointer-events:auto}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+/* light editor (?edit=1) */
+#eng{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:4px;background:#111;color:#fff;border-radius:999px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 13px Manrope,sans-serif;max-width:calc(100% - 16px);overflow-x:auto}
+#eng button{border:0;background:none;color:#ddd;padding:8px 13px;border-radius:999px;cursor:pointer;font:inherit;white-space:nowrap}
+#eng button.on,#eng button:hover{background:#fff;color:#111}
+body.editing [data-edit]{outline:1.5px dashed rgba(232,89,26,.6);outline-offset:4px;border-radius:4px;cursor:text}
+body.editing [data-img]{outline:3px dashed var(--acc);outline-offset:-3px;cursor:pointer}
+#engp{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:101;width:min(460px,calc(100% - 20px));max-height:calc(100vh - 80px);overflow:auto;background:#fff;color:#111;border-radius:18px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);font:14px/1.45 Manrope,sans-serif}
+#engp h4{margin:0 0 10px;font-size:16px}
+#engp label{display:grid;gap:4px;font-weight:600;font-size:12px;color:#555;margin-bottom:10px}
+#engp input{border:1px solid #ddd;border-radius:9px;padding:8px 10px;font:15px Manrope,sans-serif;color:#111;width:100%}
+#engp .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+#engp .b{border:0;border-radius:9px;padding:9px 14px;font:600 14px Manrope,sans-serif;cursor:pointer;background:#eee;color:#111}
+#engp .b.p{background:#111;color:#fff}
+#engp .note{background:#F4F4F2;border-radius:10px;padding:10px 12px;color:#444;font-size:13px;margin-bottom:10px}
+#engp .msg{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+</style>
+</head>
+<body
+  data-demo-url="/trades/demo/"
+  data-site-url="/trades/site/"
+  data-phone="0413 872 994" data-email="marc@webescapade.com"
+  data-lead-url="https://tehxobdokbvqtwtgqzrh.supabase.co/rest/v1/rpc/trd_lead_submit"
+  data-lead-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE"
+  data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-path="trades/index.html">
+
+<nav class="top" id="nav"><div class="w">
+  <a class="brand" href="#top"><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><span><b data-edit="brand">Trade Deluxe</b><small>by Webescapade</small></span></a>
+  <div class="links"><a href="#travel" data-edit="n1">Travel time</a><a href="#how" data-edit="n2">How it works</a><a href="#quotes" data-edit="n3">Quotes</a><a href="#website" data-edit="n4">Your website</a><a href="#pricing" data-edit="n5">Pricing</a><a href="#faq" data-edit="n6">FAQ</a></div>
+  <a class="btn dark" href="#enquire"><span data-edit="navcta">Get early access</span> <span class="ar">→</span></a>
+</div></nav>
+
+<header class="hero" id="top"><div class="w">
+  <div class="rv">
+    <div class="pill"><i>✦</i><span data-edit="pill">New — for plumbers, electricians and mobile trades</span></div>
+    <h1 data-edit="h1">Online bookings that <em>plan the drive.</em></h1>
+    <p class="lead" data-edit="lead">Customers book a job and an arrival window on their phone. Trade Deluxe only offers times your team can really make — with the travel between jobs already worked out.</p>
+    <div class="ctas">
+      <a class="btn acc" href="/trades/demo/" data-link="demo" target="_blank" rel="noopener"><span data-edit="cta1">Try the live demo</span> <span class="ar">→</span></a>
+      <a class="btn line" href="/trades/site/" data-link="site" target="_blank" rel="noopener"><span data-edit="cta2">See a demo trade website</span></a>
+    </div>
+    <div class="trust"><span data-edit="t1">No commission</span><span data-edit="t2">One tradie or a whole team</span><span data-edit="t3">Works on any phone</span></div>
+  </div>
+  <div class="stage rv">
+    <div class="browser"><div class="bar"><i></i><i></i><i></i><span>Run sheet · travel built in</span></div><img data-img="hero" src="/trades/img/run-sheet.jpg" alt="Run sheet showing three tradies' days with driving time between each job" width="1800" height="1125"></div>
+    <div class="phone"><img data-img="heroPhone" src="/trades/img/phone-time.jpg" alt="Customer choosing a two-hour arrival window on a phone" width="780" height="1688"></div>
+    <div class="fc"><span class="ic">🚗</span><span><b data-edit="fcB">~15 min drive added</b><span data-edit="fcS">between Newtown and Petersham</span></span></div>
+  </div>
+</div></header>
+
+<section class="made"><div class="w">
+  <p data-edit="madeP">One system, set up for your trade</p>
+  <div class="chips"><span data-edit="c1">Plumbers</span><span data-edit="c2">Electricians</span><span data-edit="c3">Lawn mowing &amp; gardening</span><span data-edit="c4">Handyman</span><span data-edit="c5">Cleaning</span><span class="soon" data-edit="c6">Pest control, locksmiths, air-con — ask us</span></div>
+  <div class="facts rv">
+    <div><b data-edit="f1b">Travel</b><span data-edit="f1">worked out between every job, so you're not late for the next one</span></div>
+    <div><b data-edit="f2b">24/7</b><span data-edit="f2">customers book online, and urgent jobs come in as emergencies</span></div>
+    <div><b data-edit="f3b">0%</b><span data-edit="f3">commission — no lead fees, no per-job charges</span></div>
+    <div><b data-edit="f4b">Quotes</b><span data-edit="f4">with photos, accepted and booked online</span></div>
+  </div>
+</div></section>
+
+<section class="s" id="travel"><div class="w">
+  <div class="head rv"><div class="eyebrow" data-edit="trEy">Why trades need something different</div><h2 data-edit="trH">An hour's job is never <em>just an hour.</em></h2>
+    <p data-edit="trP">Salon-style booking systems think in back-to-back slots. Tradies drive. Trade Deluxe looks at where the job before and the job after are, and only offers a time if there's room to get there, park and unload.</p></div>
+  <div class="route rv">
+    <div class="tl" aria-label="Example day: job, drive, free time, job"><div class="jb"><b>8:00 Blocked drain</b><span>Newtown · 1.5 h</span></div><div class="dv">🚗<br>15 min</div><div class="jb"><b>9:45 Leaking tap</b><span>Petersham · 1 h</span></div><div class="dv">🚗<br>20 min</div><div class="fr">Free<br>1 h 20 m<br><small>bookable</small></div><div class="dv">🚗<br>15 min</div><div class="jb"><b>1:00 Hot water</b><span>Dulwich Hill · 2 h</span></div></div>
+    <div><h3 data-edit="trH3">Your day, planned like a run.</h3><p class="muted" data-edit="trP3" style="margin:8px 0 0">Each tradie's run sheet shows the jobs in order, the drive between them, and where there's still room for one more. One tap opens the whole route in Google Maps.</p></div>
+  </div>
+  <div class="why3">
+    <div class="w3 rv"><span class="n">1</span><b data-edit="w1">The job's time bracket</b><span data-edit="w1s">"1 to 1.5 hours" — we keep the longer time free so an overrun doesn't wreck the afternoon.</span></div>
+    <div class="w3 rv"><span class="n">2</span><b data-edit="w2">The drive either side</b><span data-edit="w2s">From the last job (or your base) to this one, and on to the next. Free estimate, or real Google drive times with traffic.</span></div>
+    <div class="w3 rv"><span class="n">3</span><b data-edit="w3">Who can do it</b><span data-edit="w3s">Plumbing goes to plumbers, electrical to sparkies. "First available" picks the tradie who adds the least driving.</span></div>
+  </div>
+</div></section>
+
+<section class="s" id="how" style="padding-top:0"><div class="w">
+  <div class="head rv"><div class="eyebrow" data-edit="hEy">How customers book</div><h2 data-edit="hH">Job, address, time. <em>Booked.</em></h2>
+    <p data-edit="hP">Prices and time brackets up front. Suburbs outside your area become a request instead of a promise you can't keep.</p></div>
+  <div class="steps">
+    <div class="step rv"><span class="n">01</span><h3 data-edit="s1h">Pick the job</h3><p data-edit="s1p">Fixed, "from", range or hourly prices — or a free quote for bigger work.</p><div class="shot"><img data-img="st1" src="/trades/img/phone-jobs.jpg" alt="List of plumbing jobs with prices and time brackets" loading="lazy" width="780" height="1688"></div></div>
+    <div class="step rv"><span class="n">02</span><h3 data-edit="s2h">Choose an arrival window</h3><p data-edit="s2p">"Nearby" shows when a tradie is already working close by — less driving for you.</p><div class="shot"><img data-img="st2" src="/trades/img/phone-time.jpg" alt="Arrival windows with Nearby tags" loading="lazy" width="780" height="1688"></div></div>
+    <div class="step rv"><span class="n">03</span><h3 data-edit="s3h">Pay the call-out, done</h3><p data-edit="s3p">Optional call-out fee or deposit by card, taken off the final bill. Or pay on the day.</p><div class="shot"><img data-img="st3" src="/trades/img/phone-done.jpg" alt="Booking confirmed with arrival window and payment receipt" loading="lazy" width="780" height="1688"></div></div>
+  </div>
+</div></section>
+
+<section class="s dark" id="emergency"><div class="w"><div class="split flip">
+  <div class="rv"><div class="phones"><div class="ph"><img data-img="em1" src="/trades/img/phone-emergency.jpg" alt="Emergency booking mode on a phone" loading="lazy" width="780" height="1688"></div><div class="ph"><img data-img="em2" src="/trades/img/phone-pay.jpg" alt="Paying the call-out fee by card" loading="lazy" width="780" height="1688"></div></div></div>
+  <div class="txt rv"><div class="eyebrow" data-edit="eEy">Emergencies &amp; repeat work</div><h2 data-edit="eH">Burst pipe at 7pm? <em>Booked and paid.</em></h2>
+    <ul class="ticks">
+      <li><span><b data-edit="ea">Emergency call-outs, your rules</b><span data-edit="eas">Choose who's on call, the after-hours window and the emergency fee. Only urgent jobs are offered, today and tomorrow.</span></span></li>
+      <li><span><b data-edit="eb">Paid when they book (coming soon)</b><span data-edit="ebs">Call-out fees and quote deposits paid by card straight into your own Stripe account. Fewer tyre-kickers, fewer no-shows.</span></span></li>
+      <li><span><b data-edit="ec">Repeat jobs, booked once</b><span data-edit="ecs">Lawn mowing, drain maintenance, test &amp; tag: weekly, fortnightly or every 4 weeks, keeping the same day and tradie wherever possible.</span></span></li>
+    </ul></div>
+</div></div></section>
+
+<section class="s" id="quotes"><div class="w"><div class="split">
+  <div class="txt rv"><div class="eyebrow" data-edit="qEy">Quotes</div><h2 data-edit="qH">From photo to quote <em>to booked job.</em></h2>
+    <ul class="ticks">
+      <li><span><b data-edit="qa">Requests arrive with photos</b><span data-edit="qas">Hot water systems, switchboards, renovations. Customers describe the job and add up to four photos.</span></span></li>
+      <li><span><b data-edit="qb">Itemised quotes with GST</b><span data-edit="qbs">Labour, materials and call-out lines, your rates pre-filled. Set how long the job needs on site.</span></span></li>
+      <li><span><b data-edit="qc">Accept, pay the deposit, pick a time</b><span data-edit="qcs">The customer does it all from the quote link — and the time they pick already allows for travel.</span></span></li>
+    </ul></div>
+  <div class="rv"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>Quotes inbox</span></div><img data-img="quotes" src="/trades/img/quotes.jpg" alt="Quotes inbox with an itemised switchboard upgrade quote" loading="lazy" width="1800" height="1125"></div></div>
+</div></div></section>
+
+<section class="s" id="website" style="padding-top:0"><div class="w"><div class="split flip">
+  <div class="txt rv"><div class="eyebrow" data-edit="wEy">Your website</div><h2 data-edit="wH">A trade website <em>you can change yourself.</em></h2>
+    <p class="lead" data-edit="wP" style="margin-top:18px">Your jobs, prices and team show on your website straight from the booking system. Change a price once and it's right everywhere.</p>
+    <ul class="ticks">
+      <li><span><b data-edit="wa">Pick a look for your trade</b><span data-edit="was">Electrician, plumber, lawn &amp; garden, cleaning, handyman — then change colours, headings, corners and the hero layout.</span></span></li>
+      <li><span><b data-edit="wb">Tap to edit words and photos</b><span data-edit="wbs">No designer needed. Add your logo, your van, your team.</span></span></li>
+      <li><span><b data-edit="wc">"Book" and "Emergency" buttons built in</b><span data-edit="wcs">Every job on your site links straight to booking it.</span></span></li>
+    </ul>
+    <div class="ctas" style="margin-top:28px"><a class="btn line" href="/trades/site/" data-link="site" target="_blank" rel="noopener"><span data-edit="wcta">See the demo website</span> <span class="ar">→</span></a></div></div>
+  <div class="rv">
+    <div class="looks" id="looks"><button class="on" data-src="/trades/img/site-combo.jpg"><i style="background:#E8591A"></i>Plumbing &amp; electrical</button><button data-src="/trades/img/site-electric.jpg"><i style="background:#F2B705"></i>Electrician</button><button data-src="/trades/img/site-plumbing.jpg"><i style="background:#1F7AE0"></i>Plumber</button><button data-src="/trades/img/site-garden.jpg"><i style="background:#3E8E41"></i>Lawn &amp; garden</button><button data-src="/trades/img/site-editor.jpg"><i style="background:#111"></i>The editor</button></div>
+    <div class="browser lookimg"><div class="bar"><i></i><i></i><i></i><span>yourbusiness.com.au</span></div><img id="lookImg" data-img="site" src="/trades/img/site-combo.jpg" alt="Example trade website in the plumbing and electrical look" loading="lazy" width="1800" height="1125"></div>
+  </div>
+</div></div></section>
+
+<section class="s" style="padding-top:0"><div class="w"><div class="split">
+  <div class="txt rv"><div class="eyebrow" data-edit="uEy">Setup</div><h2 data-edit="uH">Your area, your team, <em>your rules.</em></h2>
+    <ul class="ticks">
+      <li><span><b data-edit="ua">Start from your trade</b><span data-edit="uas">Ready-made jobs, time brackets and prices for your trade — edit anything.</span></span></li>
+      <li><span><b data-edit="ub">Set your area and travel</b><span data-edit="ubs">Base suburb, service radius, average speed and a parking allowance.</span></span></li>
+      <li><span><b data-edit="uc">Add your team</b><span data-edit="ucs">What each person can do, their days and hours, and who's on call.</span></span></li>
+      <li><span><b data-edit="ud">Arrival windows or exact times</b><span data-edit="uds">1 to 4-hour windows, minimum notice, and whether customers can choose their tradie.</span></span></li>
+    </ul></div>
+  <div class="rv"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>Setup · travel &amp; area</span></div><img data-img="setup" src="/trades/img/setup-travel.jpg" alt="Setup screen with base suburb, service radius and travel settings" loading="lazy" width="1800" height="1125"></div></div>
+</div></div></section>
+
+<section class="s" id="pricing" style="padding-top:0"><div class="w">
+  <div class="head rv" style="text-align:center;margin-left:auto;margin-right:auto"><div class="eyebrow" data-edit="pEy">Pricing</div><h2 data-edit="pH">One flat price. <em>No lead fees.</em></h2>
+    <p data-edit="pP">Every plan includes online bookings, travel-aware scheduling, the run sheet, quotes and support.</p></div>
+  <div class="plans">
+    <div class="plan rv"><h3 data-edit="pl1n">Bookings</h3><p class="muted" data-edit="pl1d" style="margin:6px 0 0">Keep your own website</p>
+      <div class="pr"><span data-edit="pl1p">$39</span> <small data-edit="pl1u">/ month + GST</small></div>
+      <ul><li data-edit="pl1a">Booking page with arrival windows</li><li data-edit="pl1b">Run sheet with travel between jobs</li><li data-edit="pl1c">Quotes, emergencies and repeat jobs</li><li data-edit="pl1e">Up to 3 tradies</li></ul>
+      <a class="btn line" href="#enquire"><span data-edit="pl1cta">Get early access</span></a></div>
+    <div class="plan hi rv"><span class="tag" data-edit="pl2t">Most popular</span><h3 data-edit="pl2n">Basic</h3><p class="muted" data-edit="pl2d" style="margin:6px 0 0">Website + online bookings</p>
+      <div class="pr"><span data-edit="pl2p">$59</span> <small data-edit="pl2u">/ month + GST</small></div>
+      <ul><li data-edit="pl2a">Everything in Bookings</li><li data-edit="pl2b">A trade website you edit yourself</li><li data-edit="pl2c">Jobs, prices and team shown live</li><li data-edit="pl2e">Up to 3 tradies</li></ul>
+      <a class="btn light" href="#enquire"><span data-edit="pl2cta">Get early access</span> <span class="ar">→</span></a></div>
+    <div class="plan rv"><h3 data-edit="pl3n">Team</h3><p class="muted" data-edit="pl3d" style="margin:6px 0 0">For bigger crews</p>
+      <div class="pr"><span data-edit="pl3p">$89</span> <small data-edit="pl3u">/ month + GST</small></div>
+      <ul><li data-edit="pl3a">Everything in Basic</li><li data-edit="pl3b">4 to 10 tradies</li><li data-edit="pl3c">Real Google drive times (your own key)</li><li data-edit="pl3e">Priority support</li></ul>
+      <a class="btn line" href="#enquire"><span data-edit="pl3cta">Get early access</span></a></div>
+  </div>
+  <div class="notes"><span data-edit="pn1">Card payments at booking (coming soon) go through your own Stripe account — Stripe's fees apply</span><span data-edit="pn2">Website setup (optional, one-off): $40 + GST to connect it, or $250 + GST for us to fill it in</span><span data-edit="pn3">More than 10 tradies: price on request</span></div>
+</div></section>
+
+<section class="s" id="faq" style="padding-top:0"><div class="w faq">
+  <div class="eyebrow" data-edit="fqEy">Questions</div><h2 data-edit="fqH" style="margin-bottom:18px">Straight <em>answers.</em></h2>
+  <details><summary data-edit="fq1">How does it know how long the drive is?</summary><p data-edit="fa1">By default it estimates the drive from the distance between suburbs, your average speed and a parking allowance you set — free, and close enough for local work. If you'd like real drive times with typical traffic, add your own Google Maps key; each pair of suburbs is looked up once and saved, so the cost stays very small.</p></details>
+  <details><summary data-edit="fq2">I'm a one-person business. Is it for me?</summary><p data-edit="fa2">Yes. With one tradie it simply plans your own day — you'll stop double-booking yourself across town. Add people later if you grow.</p></details>
+  <details><summary data-edit="fq3">What if a job runs over?</summary><p data-edit="fa3">Each job has a time bracket (say 1 to 1.5 hours) and the longer time is kept free. On the run sheet you can move a job to another tradie in one tap — it checks they can make it, travel included.</p></details>
+  <details><summary data-edit="fq4">Can customers pay when they book?</summary><p data-edit="fa4">Card payments at booking are coming soon. When they're switched on, it's your choice. You can take a call-out fee at booking (taken off the bill), an emergency fee, and a deposit when a quote is accepted. Payments go through Stripe into your own account. Or switch it off and take payment on the day.</p></details>
+  <details><summary data-edit="fq5">Do my customers need an app or an account?</summary><p data-edit="fa5">No. The booking page opens in any phone browser. They enter their address, name, mobile and email.</p></details>
+  <details><summary data-edit="fq6">Does it do invoicing or job notes?</summary><p data-edit="fa6">Not yet — it's bookings, scheduling, quotes and your website. Keep using your accounting software for invoices; Trade Deluxe sits alongside it.</p></details>
+  <details><summary data-edit="fq7">When can I start?</summary><p data-edit="fa7">We're taking early-access businesses now. Send the form below and Marc will set you up and walk you through it.</p></details>
+</div></section>
+
+<section class="s" id="enquire" style="padding-top:0"><div class="w"><div class="enq">
+  <div class="rv"><div class="eyebrow" data-edit="xEy">Talk to Marc</div><h2 data-edit="xH">Want it for <em>your trade?</em></h2>
+    <p class="lead" data-edit="xP" style="margin-top:18px">I'm Marc, a web designer here in Sydney. Tell me about your business — how many in the team and the area you cover — and I'll show you how it would work for you.</p>
+    <div class="contact">
+      <a href="tel:0413872994" data-link="tel"><i>☎</i><span data-link-text="phone">0413 872 994</span></a>
+      <a href="mailto:marc@webescapade.com" data-link="mail"><i>✉</i><span data-link-text="email">marc@webescapade.com</span></a>
+      <a href="/service/demo.html" style="background:var(--deep);color:#fff;border-color:var(--deep)"><i style="background:rgba(255,255,255,.15)">📅</i><span data-edit="xDemo">Book a free Zoom demo</span></a>
+    </div></div>
+  <form class="form rv" id="enqForm" novalidate>
+    <div class="two"><label>Your name<input name="name" autocomplete="name" required></label><label>Business name<input name="business" autocomplete="organization" required></label></div>
+    <div class="two"><label>Email<input name="email" type="email" autocomplete="email" inputmode="email" required></label><label>Mobile<input name="phone" type="tel" autocomplete="tel" inputmode="tel"></label></div>
+    <div class="two"><label>Your trade<select name="type"><option value="">Choose…</option><option>Plumber</option><option>Electrician</option><option>Plumber &amp; electrician</option><option>Lawn mowing / gardening</option><option>Handyman</option><option>Cleaning</option><option>Other trade</option></select></label>
+      <label>Base suburb<input name="suburb" autocomplete="address-level2"></label></div>
+    <label>How many tradies? Anything else?<textarea name="message" rows="3" style="resize:vertical"></textarea></label>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <button class="btn dark" type="submit" style="width:100%"><span data-edit="fbtn">Send my enquiry</span> <span class="ar">→</span></button>
+    <div class="msg" id="enqMsg" role="status"></div>
+  </form>
+</div></div></section>
+
+<footer><div class="w"><span data-edit="foot1">© Webescapade · Sydney, Australia</span><span data-edit="foot2">Trade Deluxe — online bookings for mobile trades</span><span><a href="/service/">Service Deluxe</a> · <a href="/Restaurant/">Restaurant Deluxe</a> · <a href="/Function-centre/">Function Deluxe</a></span><span><a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a></span></div></footer>
+<a class="btn acc float" id="float" href="/trades/demo/" data-link="demo" target="_blank" rel="noopener"><span data-edit="floatcta">Try the live demo</span> <span class="ar">→</span></a>
+
+<script>
+/* ---------- page runtime ---------- */
+(function () {
+  var B = document.body.dataset;
+  var LINKS = { demo: function () { return B.demoUrl; }, site: function () { return B.siteUrl; },
+    tel: function () { return "tel:" + String(B.phone || "").replace(/[^0-9+]/g, ""); }, mail: function () { return "mailto:" + (B.email || ""); } };
+  function applyLinks(){
+    document.querySelectorAll("[data-link]").forEach(function (a) { var f = LINKS[a.getAttribute("data-link")]; if (f && f()) a.setAttribute("href", f()); });
+    document.querySelectorAll('[data-link-text="phone"]').forEach(function (el) { el.textContent = B.phone || ""; });
+    document.querySelectorAll('[data-link-text="email"]').forEach(function (el) { el.textContent = B.email || ""; });
+  }
+  applyLinks(); window.PAGE = { applyLinks: applyLinks };
+
+  var nav = document.getElementById("nav"), fl = document.getElementById("float"), hero = document.querySelector(".hero");
+  function sc(){ var y = window.scrollY; nav.classList.toggle("s", y > 10); fl.classList.toggle("on", y > hero.offsetHeight && (window.innerHeight + y) < document.body.scrollHeight - 400); }
+  window.addEventListener("scroll", sc, { passive: true }); sc();
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .1 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+
+  /* website looks switcher */
+  var li = document.getElementById("lookImg");
+  document.querySelectorAll("#looks button").forEach(function (b) { b.onclick = function () {
+    document.querySelectorAll("#looks button").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on");
+    li.style.opacity = 0; setTimeout(function () { li.src = b.getAttribute("data-src"); li.alt = "Example trade website — " + b.textContent; li.onload = function () { li.style.opacity = 1; }; }, 180);
+  }; });
+
+  /* enquiry form: posts to data-lead-url (Supabase RPC, when set up) — otherwise opens an email to Marc */
+  var f = document.getElementById("enqForm"), msg = document.getElementById("enqMsg");
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (document.body.classList.contains("editing")) return;
+    var d = {}; Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name] = el.value.trim(); });
+    msg.className = "msg";
+    if (d.website) return;
+    if (!d.name || !d.business) { msg.className = "msg err"; msg.textContent = "Please add your name and your business name."; return; }
+    if (!/^\S+@\S+\.\S{2,}$/.test(d.email)) { msg.className = "msg err"; msg.textContent = "Please check your email address."; return; }
+    var done = function () { msg.className = "msg ok"; msg.textContent = "Thanks " + d.name.split(" ")[0] + " — Marc will be in touch shortly."; f.reset(); };
+    if (B.leadUrl) {
+      var btn = f.querySelector("button"); btn.disabled = true; msg.textContent = "Sending…";
+      fetch(B.leadUrl, { method: "POST", headers: { apikey: B.leadKey || "", Authorization: "Bearer " + (B.leadKey || ""), "Content-Type": "application/json" },
+        body: JSON.stringify({ p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: d.message, p_trap: d.website }) })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j || !j.ok) throw new Error((j && (j.error || j.message)) || "Something went wrong"); done(); }); })
+        .catch(function (er) { msg.className = "msg err"; msg.textContent = er.message; })
+        .then(function () { btn.disabled = false; });
+      return;
+    }
+    var body = "Name: " + d.name + "\nBusiness: " + d.business + "\nEmail: " + d.email + "\nMobile: " + d.phone + "\nTrade: " + d.type + "\nBase suburb: " + d.suburb + "\n\n" + d.message;
+    location.href = "mailto:" + B.email + "?subject=" + encodeURIComponent("Trade Deluxe enquiry — " + d.business) + "&body=" + encodeURIComponent(body);
+    msg.className = "msg ok"; msg.textContent = "Your email app should open with the details filled in — just press Send.";
+  });
+})();
+
+/* ---------- light editor: open this page with ?edit=1 ---------- */
+(function () {
+  if (new URLSearchParams(location.search).get("edit") !== "1") return;
+  var B = document.body.dataset, editing = false, panel = null;
+  var bar = document.createElement("div"); bar.id = "eng";
+  bar.innerHTML = '<button data-a="edit">✏️ Edit</button><button data-a="links">🔗 Links</button><button data-a="deploy">🚀 Deploy</button><button data-a="save">💾 Save copy</button>';
+  document.body.appendChild(bar);
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function closeP(){ if (panel) { panel.remove(); panel = null; } }
+  function openP(html){ closeP(); panel = document.createElement("div"); panel.id = "engp"; panel.innerHTML = html; document.body.appendChild(panel); panel.querySelectorAll("[data-close]").forEach(function (x) { x.onclick = closeP; }); }
+  function setEditing(on){
+    editing = on; document.body.classList.toggle("editing", on); bar.querySelector('[data-a="edit"]').textContent = on ? "✓ Done" : "✏️ Edit";
+    document.querySelectorAll("[data-edit]").forEach(function (el) { if (on) el.setAttribute("contenteditable", "true"); else el.removeAttribute("contenteditable"); });
+  }
+  document.addEventListener("click", function (e) {
+    if (!editing) return;
+    var a = e.target.closest("a,button"); if (a && !a.closest("#eng") && !a.closest("#engp")) e.preventDefault();
+    var img = e.target.closest("img[data-img]");
+    if (img) { var i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = function () { var fr = new FileReader(); fr.onload = function () { var im = new Image(); im.onload = function () { var s = Math.min(1, 1800 / Math.max(im.width, im.height)), c = document.createElement("canvas"); c.width = im.width * s; c.height = im.height * s; c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); img.src = c.toDataURL("image/jpeg", .75); }; im.src = fr.result; }; fr.readAsDataURL(i.files[0]); }; i.click(); }
+  }, true);
+  document.addEventListener("paste", function (e) { if (!editing || !e.target.closest || !e.target.closest("[data-edit]")) return; e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text/plain")); });
+  function snapshot(){
+    var was = editing; if (was) setEditing(false);
+    var root = document.documentElement.cloneNode(true); if (was) setEditing(true);
+    ["#eng", "#engp"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
+    root.querySelectorAll(".rv.in").forEach(function (n) { n.classList.remove("in"); });
+    var b = root.querySelector("body"); b.classList.remove("editing"); if (!b.className) b.removeAttribute("class");
+    root.querySelector("#nav").classList.remove("s"); root.querySelector("#float").classList.remove("on");
+    return "<!doctype html>\n" + root.outerHTML;
+  }
+  function b64(s){ var bytes = new TextEncoder().encode(s), bin = ""; for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+  function gh(method, path, body){
+    var tok = ""; try { tok = localStorage.getItem("tradelanding_gh_token") || ""; } catch (e) {}
+    if (!tok) return Promise.reject(new Error("Add your GitHub token first."));
+    return fetch("https://api.github.com/repos/" + B.ghOwner + "/" + B.ghRepo + "/" + path, { method: method, headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || ("GitHub " + r.status)); return j; }); });
+  }
+  function commit(path, html){
+    var dir = path.slice(0, path.lastIndexOf("/")), name = path.slice(path.lastIndexOf("/") + 1);
+    return gh("GET", "contents/" + dir + "?ref=" + (B.ghBranch || "main")).then(function (l) { var f = (l || []).filter(function (x) { return x.name === name; })[0]; return f ? f.sha : null; }, function () { return null; })
+      .then(function (sha) { var body = { message: "Publish Trade Deluxe landing", content: b64(html), branch: B.ghBranch || "main" }; if (sha) body.sha = sha; return gh("PUT", "contents/" + path, body); });
+  }
+  bar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-a]"); if (!b) return; var a = b.getAttribute("data-a");
+    if (a === "edit") { closeP(); return setEditing(!editing); }
+    if (a === "save") { var x = document.createElement("a"); x.href = URL.createObjectURL(new Blob([snapshot()], { type: "text/html" })); x.download = "trades-index.html"; document.body.appendChild(x); x.click(); x.remove(); return; }
+    if (a === "links") {
+      openP('<h4>Links &amp; contact</h4><label>Live demo address<input id="l1" value="' + esc(B.demoUrl) + '"></label><label>Demo website address<input id="l2" value="' + esc(B.siteUrl) + '"></label><label>Phone<input id="l3" value="' + esc(B.phone) + '"></label><label>Email<input id="l4" value="' + esc(B.email) + '"></label><label>Lead form endpoint (optional, Supabase RPC URL)<input id="l5" value="' + esc(B.leadUrl) + '"></label><div class="note">Leave the endpoint empty and enquiries open an email to you instead.</div><div class="r"><button class="b p" id="lsave">Apply</button><button class="b" data-close>Close</button></div>');
+      panel.querySelector("#lsave").onclick = function () { B.demoUrl = panel.querySelector("#l1").value.trim(); B.siteUrl = panel.querySelector("#l2").value.trim(); B.phone = panel.querySelector("#l3").value.trim(); B.email = panel.querySelector("#l4").value.trim(); B.leadUrl = panel.querySelector("#l5").value.trim(); window.PAGE.applyLinks(); closeP(); };
+    }
+    if (a === "deploy") {
+      var tok = ""; try { tok = localStorage.getItem("tradelanding_gh_token") || ""; } catch (er) {}
+      openP('<h4>Deploy to GitHub</h4><div class="note">Publishes this page (editor included, but it only shows with ?edit=1).</div><label>Repository<input id="gr" value="' + esc(B.ghOwner + "/" + B.ghRepo) + '"></label><label>Page path<input id="gp" value="' + esc(B.ghPath) + '"></label><label>Fine-grained token (kept on this device only)<input id="gt" type="password" value="' + esc(tok) + '" placeholder="github_pat_…"></label><div class="r"><button class="b p" id="gpub">Publish</button><button class="b" data-close>Close</button></div><div class="msg" id="gmsg"></div>');
+      panel.querySelector("#gpub").onclick = function () {
+        var m = panel.querySelector("#gmsg"), rp = panel.querySelector("#gr").value.trim().split("/");
+        B.ghOwner = rp[0]; B.ghRepo = rp[1]; B.ghPath = panel.querySelector("#gp").value.trim().replace(/^\/+/, "");
+        try { localStorage.setItem("tradelanding_gh_token", panel.querySelector("#gt").value.trim()); } catch (er) {}
+        if (B.ghPath.indexOf("/") < 0) { m.textContent = "✗ Page path needs a folder (e.g. trades/index.html) so the main site isn't replaced."; return; }
+        m.textContent = "Publishing…"; commit(B.ghPath, snapshot()).then(function () { m.textContent = "✓ Published " + B.ghPath + ". Live within a minute."; }, function (er) { m.textContent = "✗ " + er.message; });
+      };
+    }
+  });
+})();
+</script>
+</body>
+</html>
