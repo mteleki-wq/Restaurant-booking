@@ -189,7 +189,7 @@ details p{color:var(--muted);margin:12px 0 0}
 .msg.ok{color:#1F6A3E}.msg.err{color:#9A3B2E}
 footer{padding:40px 0 110px;color:var(--muted);font-size:14px}
 footer .w{display:flex;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
-.float{position:fixed;right:18px;bottom:18px;z-index:25;opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
+.float{position:fixed;left:18px;bottom:18px;z-index:25;opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
 .float.on{opacity:1;transform:none;pointer-events:auto}
 .rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
 .rv.in{opacity:1;transform:none}
@@ -209,6 +209,48 @@ body.editing [data-img]{outline:3px dashed var(--acc);outline-offset:-3px;cursor
 #engp .b.p{background:#111;color:#fff}
 #engp .note{background:#F4F4F2;border-radius:10px;padding:10px 12px;color:#444;font-size:13px;margin-bottom:10px}
 #engp .msg{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+.chat{--acc:#E8591A;--btn:#14202C;--btnink:#fff;--card:#fff;--deep:#14202C;--paper:#F5F2EC;--shadow:0 24px 70px rgba(20,32,44,.28)}
+.chat-q[hidden],.chat-tip[hidden]{display:none}
+.chat-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--acc);color:#fff;border-radius:999px;padding:8px 18px 8px 8px;font:700 15px Manrope,sans-serif;box-shadow:0 16px 34px -12px rgba(0,0,0,.45);transition:transform .2s}
+.chat-fab:hover{transform:translateY(-2px)}
+.chat-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;position:relative}
+.chat-fab .ci svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-fab .ci:after{content:"";position:absolute;right:1px;top:1px;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid var(--acc)}
+.chat.open .chat-fab{display:none}
+.chat-tip{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;max-width:260px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font-size:14px;line-height:1.45;box-shadow:var(--shadow);cursor:pointer;animation:chatIn .35s ease}
+.chat-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;padding:4px}
+.chat-box{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:200;width:min(392px,calc(100vw - 32px));height:min(620px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:chatIn .3s ease}
+.chat-box[hidden]{display:none}
+@keyframes chatIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.chat-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--deep);color:#fff}
+.chat-hd .av{width:38px;height:38px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font:400 21px "Instrument Serif",Georgia,serif;flex:none}
+.chat-hd b{display:block;font-size:15px}
+.chat-hd small{display:block;font-size:12px;color:rgba(255,255,255,.7);margin-top:1px}
+.chat-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.12);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.chat-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.cm{max-width:86%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
+.cm.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.cm.u{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:5px}
+.cm a{color:var(--acc);font-weight:700}.cm.u a{color:#fff}
+.cm p{margin:0 0 6px}.cm p:last-child{margin:0}
+.cm ul{margin:4px 0 6px;padding-left:18px}.cm li{margin:2px 0}
+.cm.typing{display:flex;gap:4px;padding:14px}
+.cm.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.4;animation:cdot 1s infinite}
+.cm.typing i:nth-child(2){animation-delay:.15s}.cm.typing i:nth-child(3){animation-delay:.3s}
+@keyframes cdot{50%{opacity:1;transform:translateY(-3px)}}
+.chat-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
+.chat-q button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 13px Manrope,sans-serif;cursor:pointer}
+.chat-q button:hover{border-color:var(--acc);color:var(--acc)}
+.chat-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--card)}
+.chat-f input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font:400 16px Manrope,sans-serif;background:var(--paper);color:var(--ink)}
+.chat-f input:focus{outline:none;border-color:var(--acc)}
+.chat-f button{border:0;border-radius:999px;background:var(--btn);color:var(--btnink);font:700 14px Manrope,sans-serif;padding:0 16px;cursor:pointer}
+.chat-f button:disabled{opacity:.5}
+.chat-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--card)}
+.chat-ft a{color:var(--muted)}
+@media(max-width:600px){.chat-fab{padding:8px}.chat-fab .tx{display:none}.chat-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.chat-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+body:has(.chat.open) #float{visibility:hidden}
+body:has(.chat.open) .float{visibility:hidden}
 </style>
 </head>
 <body
@@ -368,7 +410,7 @@ body.editing [data-img]{outline:3px dashed var(--acc);outline-offset:-3px;cursor
     <div class="contact">
       <a href="tel:0413872994" data-link="tel"><i>☎</i><span data-link-text="phone">0413 872 994</span></a>
       <a href="mailto:marc@webescapade.com" data-link="mail"><i>✉</i><span data-link-text="email">marc@webescapade.com</span></a>
-      <a href="/service/demo.html" style="background:var(--deep);color:#fff;border-color:var(--deep)"><i style="background:rgba(255,255,255,.15)">📅</i><span data-edit="xDemo">Book a free Zoom demo</span></a>
+      <a href="/trades/demo.html" style="background:var(--deep);color:#fff;border-color:var(--deep)"><i style="background:rgba(255,255,255,.15)">📅</i><span data-edit="xDemo">Book a free Zoom demo</span></a>
     </div></div>
   <form class="form rv" id="enqForm" novalidate>
     <div class="two"><label>Your name<input name="name" autocomplete="name" required></label><label>Business name<input name="business" autocomplete="organization" required></label></div>
@@ -385,6 +427,70 @@ body.editing [data-img]{outline:3px dashed var(--acc);outline-offset:-3px;cursor
 <footer><div class="w"><span data-edit="foot1">© Webescapade · Sydney, Australia</span><span data-edit="foot2">Trade Deluxe — online bookings for mobile trades</span><span><a href="/service/">Service Deluxe</a> · <a href="/Restaurant/">Restaurant Deluxe</a> · <a href="/Function-centre/">Function Deluxe</a></span><span><a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a></span></div></footer>
 <a class="btn acc float" id="float" href="/trades/demo/" data-link="demo" target="_blank" rel="noopener"><span data-edit="floatcta">Try the live demo</span> <span class="ar">→</span></a>
 
+<div class="chat" id="chat">
+<button aria-label="Open the chat assistant" class="chat-fab" id="chatFab" type="button"><span class="ci"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span><span class="tx">Questions? Ask me</span></button>
+<div class="chat-tip" hidden="" id="chatTip"><button aria-label="Close" type="button">×</button><span>Got a question about prices, travel between jobs or how quotes work? I can answer in seconds.</span></div>
+<div aria-label="Chat assistant" class="chat-box" hidden="" id="chatBox" role="dialog">
+<div class="chat-hd"><span class="av">T</span><div><b>Trade Deluxe assistant</b><small>Prices, travel, quotes — ask away</small></div><button aria-label="Close chat" class="x" id="chatX" type="button">×</button></div>
+<div aria-live="polite" class="chat-log" id="chatLog"></div>
+<div class="chat-q" id="chatQ"><button type="button">How much does it cost?</button><button type="button">How does it allow for travel?</button><button type="button">Does it work for just me?</button><button type="button">How do quotes work?</button><button type="button">I’d like Marc to call me</button></div>
+<form class="chat-f" id="chatF"><input aria-label="Your question" autocomplete="off" id="chatIn" maxlength="600" placeholder="Type your question…" style=""><button id="chatSend" type="submit">Send</button></form>
+<div class="chat-ft">AI assistant — answers can be wrong. <a href="#enquire" id="chatHuman">Talk to Marc</a></div>
+<template id="chatHi">Hi! 👋 I’m the Trade Deluxe assistant. Ask me about prices, how bookings allow for the drive between jobs, quotes, emergencies and repeat jobs, or the trade website.</template>
+
+<script>/*CHAT-JS — Trade Deluxe assistant (edge function trd-chat)*/
+(function(){
+  var B={supabaseUrl:"https://tehxobdokbvqtwtgqzrh.supabase.co",supabaseKey:"sb_publishable_CrlY9xXYdhI7qCQwuMnDWg_hFQ3mXCJ"}, box=document.getElementById("chatBox"), fab=document.getElementById("chatFab"), log=document.getElementById("chatLog"),
+      f=document.getElementById("chatF"), inp=document.getElementById("chatIn"), q=document.getElementById("chatQ"), tip=document.getElementById("chatTip"), wrap=document.getElementById("chat");
+  if(!box||!fab) return;
+  var KEY="trdChat", st={id:"",msgs:[]}, busy=false;
+  try{ st=JSON.parse(sessionStorage.getItem(KEY))||st; }catch(e){}
+  if(!st.id) st.id="t-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function md(t){
+    var h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+      .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:|#)[^\s)]+)\)/g,function(_,a,u){ var ext=/^https?:/.test(u); return '<a href="'+u+'"'+(ext?' target="_blank" rel="noopener"':' data-in')+'>'+a+'</a>'; })
+      .replace(/(^|[\s(])(https:\/\/(?:webescapade\.com|youtu\.be)\/[^\s<)]*)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+    var out=[], list=false;
+    h.split(/\n/).forEach(function(l){
+      var m=l.match(/^\s*(?:[-•*]|\d+\.)\s+(.*)/);
+      if(m){ if(!list){ out.push("<ul>"); list=true; } out.push("<li>"+m[1]+"</li>"); }
+      else { if(list){ out.push("</ul>"); list=false; } if(l.trim()) out.push("<p>"+l+"</p>"); }
+    });
+    if(list) out.push("</ul>");
+    return out.join("");
+  }
+  function hi(){ var t=document.getElementById("chatHi"); return t ? t.content.textContent.trim() : "Hi! Ask me anything."; }
+  function bubble(role,text){ var d=document.createElement("div"); d.className="cm "+(role==="user"?"u":"a"); d.innerHTML=role==="user"?esc(text).replace(/\n/g,"<br>"):md(text); log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
+  function render(){ log.innerHTML=""; bubble("assistant",hi()); st.msgs.forEach(function(m){ bubble(m.role,m.content); }); q.hidden=st.msgs.length>2; }
+  function open(){ if(document.body.classList.contains("editing")) return; tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(e){} render(); box.hidden=false; wrap.classList.add("open"); if(matchMedia("(pointer:fine)").matches) inp.focus(); }
+  function close(){ box.hidden=true; wrap.classList.remove("open"); }
+  fab.addEventListener("click",open);
+  var ha=document.getElementById("heroAsk"); if(ha) ha.addEventListener("click",function(e){ e.preventDefault(); open(); });
+  document.getElementById("chatX").addEventListener("click",close);
+  tip.addEventListener("click",function(e){ if(e.target.tagName==="BUTTON"){ tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(x){} return; } open(); });
+  log.addEventListener("click",function(e){ var a=e.target.closest("a[data-in]"); if(a&&innerWidth<600) close(); });
+  document.getElementById("chatHuman").addEventListener("click",function(){ if(innerWidth<600) close(); });
+  q.addEventListener("click",function(e){ var b=e.target.closest("button"); if(b) send(b.textContent.trim()); });
+  f.addEventListener("submit",function(e){ e.preventDefault(); send(inp.value); });
+  function send(text){
+    text=String(text||"").trim(); if(!text||busy) return;
+    inp.value=""; st.msgs.push({role:"user",content:text.slice(0,600)}); save(); bubble("user",text); q.hidden=true;
+    busy=true; document.getElementById("chatSend").disabled=true;
+    var t=document.createElement("div"); t.className="cm a typing"; t.innerHTML="<i></i><i></i><i></i>"; log.appendChild(t); log.scrollTop=log.scrollHeight;
+    var base=String(B.supabaseUrl||"").replace(/\/+$/,"");
+    fetch(base+"/functions/v1/trd-chat",{method:"POST",headers:{"Content-Type":"application/json",apikey:B.supabaseKey||"",Authorization:"Bearer "+(B.supabaseKey||"")},
+      body:JSON.stringify({session:st.id,messages:st.msgs.slice(-16)})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!j||!j.ok||!j.reply) throw new Error(); return j.reply; })
+      .catch(function(){ return "Sorry — I can't answer right now. You can email [marc@webescapade.com](mailto:marc@webescapade.com), call [0413 872 994](tel:0413872994), or [book a free Zoom demo](https://webescapade.com/trades/demo.html)."; })
+      .then(function(reply){ t.remove(); st.msgs.push({role:"assistant",content:reply}); st.msgs=st.msgs.slice(-24); save(); bubble("assistant",reply); busy=false; document.getElementById("chatSend").disabled=false; });
+  }
+  var seen=false; try{ seen=!!sessionStorage.getItem(KEY+"Tip"); }catch(e){}
+  if(!seen) setTimeout(function(){ if(box.hidden) tip.hidden=false; },9000);
+})();
+</script>
 <script>
 /* ---------- page runtime ---------- */
 (function () {
