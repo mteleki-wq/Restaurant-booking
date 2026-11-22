@@ -1,5 +1,6 @@
 // rd-demo-notify — called by the database (via pg_net) for demo bookings made on
-// webescapade.com/Restaurant/demo.html, /service/demo.html or /demo.html (booking.product: restaurant | service | webescapade), and when Marc confirms or declines a visit.
+// webescapade.com/Restaurant/demo.html, /service/demo.html, /Function-centre/demo.html, /trades/demo.html or /demo.html
+// (booking.product: restaurant | service | function | trade | webescapade), and when Marc confirms or declines a visit.
 //
 // body: { id, kind }   kind = booked | requested | confirmed | declined   (default booked)
 //   booked     video/phone booked: confirmation (+ Zoom link for video) + .ics to the restaurant, alert to Marc
@@ -14,8 +15,8 @@ const SR = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const RESEND = Deno.env.get("RESEND_API_KEY") ?? "";
 const REPORT_TO = Deno.env.get("REPORT_TO") || "sales@webescapade.com";
 const PHONE = "0413 872 994";
-const DEMO_PAGES: Record<string, string> = { restaurant: "https://webescapade.com/Restaurant/demo.html", service: "https://webescapade.com/service/demo.html", webescapade: "https://webescapade.com/demo.html" };
-const LABELS: Record<string, string> = { restaurant: "Restaurant Deluxe", service: "Service Deluxe", webescapade: "Webescapade" };
+const DEMO_PAGES: Record<string, string> = { restaurant: "https://webescapade.com/Restaurant/demo.html", service: "https://webescapade.com/service/demo.html", function: "https://webescapade.com/Function-centre/demo.html", trade: "https://webescapade.com/trades/demo.html", webescapade: "https://webescapade.com/demo.html" };
+const LABELS: Record<string, string> = { restaurant: "Restaurant Deluxe", service: "Service Deluxe", function: "Function Deluxe", trade: "Trade Deluxe", webescapade: "Webescapade" };
 let LABEL = "Restaurant Deluxe";   // set per request from the booking's product
 const CRM_PAGE = "https://webescapade.com/CRM/venue-crm.html";
 
@@ -80,7 +81,7 @@ Deno.serve(async (req) => {
     if (!/^[0-9a-f-]{36}$/i.test(id)) return new Response("bad id", { status: 400 });
     const b = (await db(`rd_demo_bookings?id=eq.${id}&select=*`))?.[0];
     if (!b) return new Response("not found", { status: 404 });
-    const prod = b.product === "service" || b.product === "webescapade" ? b.product : "restaurant";
+    const prod = ["service", "webescapade", "function", "trade"].includes(b.product) ? b.product : "restaurant";
     LABEL = LABELS[prod];
     const set = (await db("rd_demo_settings?id=eq.1&select=zoom_url"))?.[0] || {};
     const zoom = String(set.zoom_url || "");
@@ -94,6 +95,10 @@ Deno.serve(async (req) => {
     const details = `<table style="font-size:15px;border-collapse:collapse;margin:14px 0">${row("When", `<b>${W}</b> (Sydney time, about ${L})`)}${row("How", h(MODE[b.mode]))}${b.mode === "visit" && b.address ? row("Where", h(b.address)) : ""}</table>`;
     const show = prod === "webescapade"
       ? "I’ll show you the websites we build — editable by you, with online bookings, an AI assistant that answers your customers, Email Studio and the CRM — and we’ll talk about what your business needs."
+      : prod === "trade"
+      ? "I’ll show you how customers book a job and an arrival window, how the travel between jobs is worked out on each tradie’s run sheet, quotes with photos, emergency call-outs and repeat jobs, and your trade website."
+      : prod === "function"
+      ? "I’ll show you your function centre website and how easy it is to change, live availability for every room, instant estimates with the look preview, online holds and consultation booking, and Ava, the AI events assistant."
       : prod === "service"
       ? "I’ll show you your website and how easy it is to change, online bookings and the staff calendar, Ivy the AI assistant and Email Studio, all working together for your business."
       : "I’ll show you bookings, the digital waitlist and ordering at the table, working together on the tablets you already have.";
@@ -135,7 +140,7 @@ Deno.serve(async (req) => {
       subject = "Let’s do your demo on Zoom";
       html = wrap(`<h1 style="font-size:22px;margin:0 0 8px">Can we do it on a video call?</h1>
         <p style="font-size:15px">Hi ${h(b.name)},</p>
-        <p style="font-size:15px">Thanks for asking me to visit <b>${h(b.restaurant)}</b>. I can’t make it in person at that time, but I’d love to show you everything on a <b>30-minute Zoom call</b> — you’ll see it on screen exactly as your team and ${prod === "service" ? "clients" : "guests"} would.</p>
+        <p style="font-size:15px">Thanks for asking me to visit <b>${h(b.restaurant)}</b>. I can’t make it in person at that time, but I’d love to show you everything on a <b>30-minute Zoom call</b> — you’ll see it on screen exactly as your team and ${prod === "service" ? "clients" : prod === "function" ? "couples and clients" : prod === "trade" ? "customers" : "guests"} would.</p>
         <p style="font-size:15px">Pick any time that suits you:</p>
         ${button(videoLink, "Book a Zoom video demo")}
         <p style="font-size:15px">If you’d still like me to come in after the call, we’ll arrange it then. You can also reply to this email or call me on ${PHONE}.</p>`);
