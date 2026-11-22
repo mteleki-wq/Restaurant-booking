@@ -748,6 +748,27 @@
           </div>
         </details>
 
+        <details class="grp" open id="grpOne">
+          <summary>Send to one person</summary>
+          <div class="grp-body">
+            <p class="help" style="margin:0 0 12px">Met someone? Type their email and send <b>this campaign</b> straight away. Their first name goes into the greeting.</p>
+            <div class="field">
+              <label for="oneEmail">Email</label>
+              <input type="email" id="oneEmail" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="name@business.com.au">
+            </div>
+            <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div><label for="oneFirst">First name <span style="color:var(--faint)">(optional)</span></label>
+                <input type="text" id="oneFirst" autocomplete="off" placeholder="Sam"></div>
+              <div><label for="oneBiz">Business <span style="color:var(--faint)">(optional)</span></label>
+                <input type="text" id="oneBiz" autocomplete="off" placeholder="Sam’s Plumbing"></div>
+            </div>
+            <label class="chk"><input type="checkbox" id="oneSave" checked> <span>Add them to my <b id="oneProd">Restaurant Deluxe</b> prospects</span></label>
+            <div class="btnrow" style="margin-top:10px">
+              <button class="btn primary" id="btnSendOne" type="button">Send to this person</button>
+            </div>
+          </div>
+        </details>
+
         <details class="grp" open id="grpPick">
           <summary>Choose recipients from your prospects</summary>
           <div class="grp-body">
@@ -2224,18 +2245,18 @@
 
   /* Merge tags are broadcast-only. Resolve them for a direct send so no
      recipient ever sees a raw {{{ ... }}} in their inbox. */
-  function resolveTags(html){
+  function resolveTags(html,first){
     var c=camps[cur];
     /* Direct sends always carry a working unsubscribe link. */
     var unsub = url(c.unsubUrl) || 'https://webescapade.com/CRM/unsubscribe.html';
     return String(html)
-      .replace(/\{\{\{\s*contact\.first_name\s*\|\s*([^}]*?)\s*\}\}\}/g,'$1')
+      .replace(/\{\{\{\s*contact\.first_name\s*\|\s*([^}]*?)\s*\}\}\}/g,function(m,fb){ return first ? escHtml(first) : fb; })
       .replace(/\{\{\{\s*contact\.[a-z_]+\s*\}\}\}/gi,'')
       .replace(/\{\{\{RESEND_UNSUBSCRIBE_URL\}\}\}/g, unsub);
   }
 
   function busy(on){
-    ['btnPing','btnSendTest','btnSendList','btnDraft','btnBroadcast'].forEach(function(id){
+    ['btnPing','btnSendTest','btnSendList','btnSendOne','btnDraft','btnBroadcast'].forEach(function(id){
       var b=document.getElementById(id); if(b) b.disabled=!!on;
     });
   }
@@ -2310,18 +2331,19 @@
      Supabase BEFORE anything is sent, with the Resend receipt id, so
      "Check delivery status" can follow each email (delivered, opened,
      clicked, bounced) straight from Resend. */
-  function doSend(recipients,label,record){
+  function escHtml(v){ return String(v).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function doSend(recipients,label,record,first){
     var c=camps[cur];
     logLine('Sending '+label+'\u2026');
     var payload={
       from:fromAddress(), replyTo:(SET.replyTo||'').trim()||undefined,
-      subject:c.subject, html:resolveTags(finalHtml(c)), text:resolveTags(buildText(c)),
+      subject:c.subject, html:resolveTags(finalHtml(c),first), text:resolveTags(buildText(c),first).replace(/&amp;/g,'&').replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>'),
       to:recipients, campaign:slug(c.name)
     };
     if(record){ payload.recordDelivery=true; payload.requestId=newId(); payload.repeatConfirmation='FOLLOWUP'; }
     var jctx=(record && JRN.send && JRN.send.subject===c.subject) ? JRN.send : null;
     if(jctx){ payload.followUpDeliveryIds=jctx.ids; payload.followUpSegment=jctx.seg; }
-    call('send',payload).then(function(d){
+    return call('send',payload).then(function(d){
       addHist({ kind:(recipients.length===1&&!record?'test':'list'), campaign:c.name,
                 count:d.sent, sent:d.sent, failed:d.failed||0 });
       if(d.warning) logLine(d.warning,'warn');
@@ -2337,8 +2359,43 @@
         if(record) crmSync();
         toast('Sent to '+d.sent);
       }
-    }).catch(function(){});
+      return d;
+    }).catch(function(){ return null; });
   }
+
+  /* ---- send to one person (someone Marc has just met) ----
+     Same protections as a list send: opt-outs, bounces and spam complaints
+     are refused, the send is logged per recipient, and the CRM is updated. */
+  $('#btnSendOne').addEventListener('click',function(){
+    if(!guardBasics()) return;
+    var em=($('#oneEmail').value||'').trim().toLowerCase();
+    var first=($('#oneFirst').value||'').trim().replace(/\s+/g,' ').slice(0,40);
+    var biz=($('#oneBiz').value||'').trim().slice(0,120);
+    if(!/^[^@\s,;]+@[^@\s,;]+\.[^@\s,;]{2,}$/.test(em)){ logLine('Type a valid email address first.','bad'); $('#oneEmail').focus(); return; }
+    var btn=$('#btnSendOne'); btn.disabled=true;
+    var done=function(){ btn.disabled=false; };
+    logLine('Checking '+em+'\u2026');
+    var blockedCheck = (PK.list ? Promise.resolve() : pkLoad(true)).then(function(){ return !!PK.blocked[em]; }).catch(function(){ return null; });
+    Promise.all([blockedCheck, call('recipient_check',{to:[em]})]).then(function(r){
+      if(r[0]===null){ logLine('Could not check your unsubscribe list (AI connection, at the bottom). Nothing was sent.','bad'); done(); return; }
+      if(r[0]){ logLine(em+' unsubscribed, bounced or marked an email as spam. Not sent.','bad'); done(); return; }
+      var prev=(r[1]&&r[1].previous)||[], HOLD=['bounced','complained','suppressed','pending','unconfirmed','scheduled','delayed'];
+      var held=prev.filter(function(p){ return HOLD.indexOf(p.status)>=0; })[0];
+      if(held){ logLine(em+' \u2014 '+held.status+'. Not sent; check delivery status first.','bad'); done(); return; }
+      var msg='Send \u201c'+camps[cur].subject+'\u201d to '+em+(first?' ('+first+')':'')+' now?';
+      if(prev.length) msg+='\n\nThey have had an email from you before.';
+      if(!confirm(msg)){ done(); return; }
+      var save = $('#oneSave').checked
+        ? aiCall('prospects_import',{rows:[{email:em, name:first, restaurant:biz}], source:'Met in person \u00b7 Email Studio', updateExisting:true})
+            .then(function(d){ logLine(d.added?'Added to your '+(PROD_NAME[PRODUCT]||'')+' prospects.':'Already in your prospects.','dim'); })
+            .catch(function(e){ logLine('Could not add them to your prospects: '+((e&&e.message)||e),'warn'); })
+        : Promise.resolve();
+      return save.then(function(){ return doSend([em],'to '+em,true,first); }).then(function(d){
+        done();
+        if(d && d.sent){ $('#oneEmail').value=''; $('#oneFirst').value=''; $('#oneBiz').value=''; PK.list=null; }
+      });
+    }).catch(function(){ logLine('Nothing was sent.','dim'); done(); });
+  });
 
   $('#btnSendTest').addEventListener('click',function(){
     if(!guardBasics()) return;
@@ -3571,6 +3628,7 @@
         subject:'Will it work for my business?', preheader:'The drive, a one-person business, the cost and getting started.' })
     ];
   }
+  function oneProdLabel(){ var el=document.getElementById('oneProd'); if(el) el.textContent=PROD_NAME[PRODUCT]||'Restaurant Deluxe'; }
   function presetsFor(p){ return p==='service' ? svcPresets() : p==='function' ? fnPresets() : p==='trade' ? trdPresets() : PRESETS; }
   function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : p==='trade' ? (info.offer||TRD_OFFER) : null; }
   function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; if(p==='trade') TRD_OFFER=o; }
@@ -3578,7 +3636,7 @@
   function isProd(p){ return p==='restaurant' || OTHER_PRODUCTS.indexOf(p)>=0; }
   function curPresets(){ return presetsFor(PRODUCT); }
 
-  function paintProduct(){
+  function paintProduct(){ try{ oneProdLabel(); }catch(e){}
     document.querySelectorAll('#prodSw [data-prod]').forEach(function(b){ var on=b.getAttribute('data-prod')===PRODUCT; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
     $('#prodName').textContent=PROD_NAME[PRODUCT]; $('#prodEyebrow').textContent=PROD_NAME[PRODUCT];
     document.title=PROD_NAME[PRODUCT]+' — Email Studio';
