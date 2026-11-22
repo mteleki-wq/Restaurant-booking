@@ -689,7 +689,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var fc=$("#foundCard"); if(fc) fc.hidden=svc||fn;
     $("#aiFocus").placeholder= tr ? "e.g. Follow up the plumbers and electricians who enquired this week" : fn ? "e.g. Introduce Function Deluxe to wedding venues in western Sydney, or follow up venues that watched the video" : svc ? "e.g. Get the spas on trial taking online bookings, or reach physios in the eastern suburbs" : "e.g. I want to convert the trials before Christmas, or push table ordering to cafés";
   }
-  function studioLinkSync(){ var a=document.getElementById("studioLink"); if(a){ a.href="restaurant-deluxe-email-studio.html?prod="+PRODUCT; a.hidden=PRODUCT==="trade"; } }   /* Email Studio has no Trade Deluxe campaigns yet */
+  function studioLinkSync(){ var a=document.getElementById("studioLink"); if(a){ a.href="restaurant-deluxe-email-studio.html?prod="+PRODUCT; a.hidden=false; } }
   function switchProduct(p){
     p=(p==="service"||p==="function"||p==="trade")?p:"restaurant"; if(p===PRODUCT) return;
     PRODUCT=p; try{ store.set("rdcrm.product",p); }catch(e){}

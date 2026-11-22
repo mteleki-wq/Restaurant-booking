@@ -301,6 +301,7 @@
       <button type="button" data-prod="restaurant" class="on">Restaurant Deluxe</button>
       <button type="button" data-prod="service">Service Deluxe</button>
       <button type="button" data-prod="function">Function Deluxe</button>
+      <button type="button" data-prod="trade">Trade Deluxe</button>
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <a class="pill navlink" id="crmLink" href="venue-crm.html?prod=restaurant#campaigns" target="rd-venue-crm" title="Open the CRM: campaign results, pipeline and venue health">📊 CRM &amp; results</a>
@@ -340,7 +341,7 @@
           <label>Email theme</label>
           <select id="fTheme" data-k="theme" hidden aria-hidden="true">
             <option value="alt">Dark &amp; light</option><option value="dark">All dark</option><option value="light">Light</option>
-            <option value="cream">Cream &amp; olive</option><option value="terra">Cream &amp; terracotta</option><option value="sage">Soft sage</option><option value="blush">Champagne &amp; burgundy</option>
+            <option value="cream">Cream &amp; olive</option><option value="terra">Cream &amp; terracotta</option><option value="sage">Soft sage</option><option value="blush">Champagne &amp; burgundy</option><option value="trade">Paper, navy &amp; orange</option>
           </select>
           <div class="thms" id="thms" role="group" aria-label="Email theme">
             <button type="button" class="thm" data-thm="alt"><i style="background:linear-gradient(90deg,#0c0f24 50%,#ffffff 50%)"></i><b style="background:#7b3cff"></b><span>Dark &amp; light</span></button>
@@ -1511,6 +1512,9 @@
       sage:{bg:'#e6ece6',shell:'#fbfcfa',band:'#fbfcfa',band2:'#f1f5f0',head:'#f1f5f0',foot:'#e8eee7',
         ink:'#1d2a23',mut:'#526158',faint:'#748278',line:'#dde6de',line2:'#dde6de',eye:'#3f6b55',cardbg:'#f1f5f0',
         a1:'#3f6b55',a2:'#6e9a83',a3:'#c7ae7c',g1:'rgba(180,154,106,.14)',g2:'rgba(63,107,85,.13)',deep:'#1d3127'},
+      trade:{bg:'#ece7de',shell:'#fbf9f5',band:'#fbf9f5',band2:'#f5f2ec',head:'#f5f2ec',foot:'#ece7de',
+        ink:'#14202c',mut:'#5f6a75',faint:'#7d8690',line:'#e0dad0',line2:'#e0dad0',eye:'#c94a12',cardbg:'#f5f2ec',
+        a1:'#e8591a',a2:'#c94a12',a3:'#14202c',g1:'rgba(232,89,26,.13)',g2:'rgba(20,32,44,.10)',deep:'#14202c'},
       blush:{bg:'#f1e8e2',shell:'#fffaf7',band:'#fffaf7',band2:'#f8efea',head:'#f8efea',foot:'#efe4de',
         ink:'#2a1a20',mut:'#6a5960',faint:'#8b7a80',line:'#ecdcd6',line2:'#ecdcd6',eye:'#7a2e3e',cardbg:'#f8efea',
         a1:'#7a2e3e',a2:'#a8576a',a3:'#c9a46a',g1:'rgba(201,164,106,.16)',g2:'rgba(122,46,62,.12)',deep:'#3a1520'}
@@ -2133,6 +2137,7 @@
     if(h.product) return h.product;
     try{ if(svcPresets().some(function(c){ return c.name===h.campaign; })) return 'service'; }catch(e){}
     try{ if(fnPresets().some(function(c){ return c.name===h.campaign; })) return 'function'; }catch(e){}
+    try{ if(trdPresets().some(function(c){ return c.name===h.campaign; })) return 'trade'; }catch(e){}
     return 'restaurant';
   }
   function myHist(){ var p=(typeof PRODUCT!=='undefined'&&PRODUCT)||'restaurant'; return HIST.filter(function(h){ return histProd(h)===p; }); }
@@ -3071,7 +3076,7 @@
      =================================================================== */
   var K_PROD='rdes.product';
   var PRODUCT='restaurant';
-  var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe', 'function':'Function Deluxe'};
+  var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe', 'function':'Function Deluxe', trade:'Trade Deluxe'};
   var SVC_SITE  = "https://webescapade.com/service/demo/";   /* demo spa website */
   var SVC_PAGE  = "https://webescapade.com/service/";        /* Service Deluxe sales page */
   var SVC_IMG   = "https://webescapade.com/service/img/email/";   /* email pictures, 1100px wide */
@@ -3095,7 +3100,7 @@
   var SVC_SBOOK = "https://webescapade.com/service/service-booking.html?venue=atelier-hair&accent=A9503A&word=stylist";
   var SVC_SVIDEO = "https://youtu.be/B-1hhWIhQh4";   /* Premium for salons tour */
   var SVC_STHUMB = "https://webescapade.com/service/img/salon-video-thumb.jpg";
-  var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE, 'function':"https://webescapade.com/Function-centre/"};
+  var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE, 'function':"https://webescapade.com/Function-centre/", trade:"https://webescapade.com/trades/"};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
   var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
   var SVC_OFFER = {trial_days:14, gst:true, plans:[
@@ -3439,9 +3444,138 @@
         subject:'Will it work for our venue?', preheader:'Rooms, prices, team and cost in four short answers.' })
     ];
   }
-  function presetsFor(p){ return p==='service' ? svcPresets() : p==='function' ? fnPresets() : PRESETS; }
-  function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : null; }
-  function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; }
+  /* ================= TRADE DELUXE (plumbers, electricians, mobile trades) ================= */
+  var TRD_PAGE  = "https://webescapade.com/trades/";            /* Trade Deluxe sales page */
+  var TRD_APP   = "https://webescapade.com/trades/demo/";       /* demo booking app (Sparks & Pipes Co.) */
+  var TRD_BOOK  = TRD_APP+"#book";
+  var TRD_STAFF = TRD_APP+"#staff";
+  var TRD_SITE  = "https://webescapade.com/trades/site/";       /* demo trade website */
+  var TRD_ENQ   = TRD_PAGE+"#enquire";                           /* early-access form on the sales page */
+  var TRD_DEMO  = "https://webescapade.com/service/demo.html";   /* book a Zoom demo with Marc (same calendar) */
+  var TRD_IMG   = TRD_PAGE+"img/email/";                         /* email pictures, 1200px wide */
+  var TRD_VIDEO = "https://youtu.be/zFpncnKskSI";                /* Trade Deluxe 2-minute tour */
+  var TRD_THUMB = TRD_PAGE+"img/video-thumb.jpg";
+  var TRD_OFFER = {trial_days:'', gst:true, plans:[
+      {name:"Bookings", price:39, desc:"Keep your own website. Booking page with arrival windows, run sheet with travel between jobs, quotes, emergencies and repeat jobs. Up to 3 tradies."},
+      {name:"Basic", price:59, desc:"Everything in Bookings plus a trade website you edit yourself, with jobs, prices and team shown live. Up to 3 tradies.", main:true},
+      {name:"Team", price:89, desc:"Everything in Basic for 4 to 10 tradies, real Google drive times (with their own Google Maps key) and priority support."}],
+    setup:{price:40, desc:"Optional website setup: $40 + GST to connect the website, or $250 + GST for Webescapade to fill it in."},
+    notes:"Early access: businesses are being set up now. Card payments at booking are coming soon (through the business's own Stripe account; Stripe's fees apply). More than 10 tradies: price on request."};
+  function trdPlan(n){ return (TRD_OFFER.plans||[]).filter(function(p){ return (p.name||'').toLowerCase()===n.toLowerCase(); })[0]; }
+  function trdMain(){ var ps=TRD_OFFER.plans||[]; return ps.filter(function(p){ return p.main; })[0] || ps[0] || {name:'Basic',price:59,desc:''}; }
+  function trdPer(){ return TRD_OFFER.gst ? '/ month + GST' : '/ month'; }
+  function trdBox(p,hi,desc){ return p ? {tier:String(p.name||'').toUpperCase(), price:svcPrice(p), per:trdPer(), desc:desc||p.desc||'', hi:!!hi} : null; }
+  function trdPresets(){
+    var T=parseInt(TRD_OFFER.trial_days,10)||0, M=trdMain(), B=trdPlan('Bookings'), TM=trdPlan('Team');
+    var g=TRD_OFFER.gst?' + GST':'';
+    var TERMS=(T?'Free '+T+'-day trial. ':'')+'One flat monthly price. No commission, no lead fees, no per-job charges.';
+    var base={
+      badge:T?T+'-DAY FREE TRIAL':'EARLY ACCESS', eyebrow:'Trade Deluxe', theme:'trade',
+      cta1:'Try the live demo', cta1url:TRD_BOOK,
+      cta2:'See Trade Deluxe', cta2url:TRD_PAGE,
+      featEyebrow:'One connected system',
+      featHeading:'Built for tradies on the road.\nEasy for your customers.',
+      priceEyebrow:'Simple monthly price', priceHeading:'One flat price. No lead fees.',
+      finalHeading:'See it with your own jobs.', finalSub:'Book a free 30-minute Zoom demo at a time that suits you, or simply reply to this email. '+TERMS,
+      finalCta:'Book a Zoom demo', finalUrl:TRD_DEMO,
+      siteUrl:TRD_PAGE,
+      videoUrl:TRD_VIDEO, videoThumb:TRD_THUMB, videoTitle:'Watch the 2-minute tour', videoPos:'hero',
+      priceFoot:'Website setup (optional): $'+((TRD_OFFER.setup&&TRD_OFFER.setup.price)||40)+g+' to connect it, or $250'+g+' for us to fill it in. More than 10 tradies: price on request.'
+    };
+    function P(o){ return preset(Object.assign({}, base, o)); }
+    return [
+      P({ name:'Introducing Trade Deluxe (video)', desc:'Launch email to plumbers, electricians and mobile trades: the 2-minute video, travel-aware bookings, quotes, emergencies and prices',
+        badge:'NEW FOR TRADIES', eyebrow:'Introducing Trade Deluxe',
+        headline:'Online bookings that plan the drive.',
+        intro:'An hour’s job is never just an hour. There’s the drive there, finding a park and unloading the van. Most booking systems think in back-to-back slots, so the day falls apart by lunchtime.\n\nTrade Deluxe lets your customers book a job and an arrival window on their phone, and it only offers the times your team can really make, with the travel between jobs already worked out. One tradie or a whole team, and no commission on any job.',
+        featEyebrow:'What’s included', featHeading:'Your day, planned like a run.\nNot like a salon.',
+        cards:[
+          {n:'01', t:'Travel worked out', d:'The drive from the job before and to the job after is allowed for, so you turn up when you said.'},
+          {n:'02', t:'Customers book 24/7', d:'Job, address, arrival window. Prices and time brackets shown up front.'},
+          {n:'03', t:'Quotes with photos', d:'Customers send photos, you send an itemised quote, they accept and book a time.'},
+          {n:'04', t:'Emergencies and repeat jobs', d:'After-hours call-outs with your own rules, and regular jobs booked once.'}
+        ],
+        spotOn:true, spotEyebrow:'How a booking happens', spotHeading:'Job. Address. Time. Booked.',
+        spotSub:'The customer picks the job, enters the address and chooses an arrival window. Suburbs outside your area become a request instead of a promise you can’t keep. Each tradie sees their run sheet in order, with the drive between every job.',
+        boxes:[{l:'JOB', v:'Price and time up front'},{l:'ADDRESS', v:'Checked against your area'},{l:'TIME', v:'Travel already allowed'}],
+        bandImage:TRD_IMG+'run-sheet.jpg', bandAlt:'Trade Deluxe run sheet: each tradie’s jobs in order with the drive between them', bandLink:TRD_STAFF,
+        bandCaption:'The run sheet on our demo business: every tradie’s day in order, with the drive between jobs and the free time that’s still bookable.',
+        plans:[trdBox(M,true), trdBox(B,false), trdBox(TM,false)].filter(Boolean),
+        subject:'Online bookings that plan the drive', resendSubject:'Bookings that allow for the drive between jobs',
+        preheader:'Customers book online, and every time allows for the travel. Watch the 2-minute tour.' }),
+      P({ name:'Emergencies and repeat jobs', desc:'Second email: after-hours emergency call-outs with your own rules, and repeat jobs (mowing, maintenance, test & tag) booked once',
+        badge:'EMERGENCIES & REPEAT WORK', eyebrow:'Trade Deluxe',
+        headline:'Burst pipe at 7pm? Booked online.',
+        intro:'Urgent jobs don’t wait for office hours, and neither do your customers. With Trade Deluxe they can book an emergency call-out straight from your website, on your terms: you choose who is on call, the after-hours window and the emergency fee.\n\nAnd for the regular work (lawn mowing, drain maintenance, test & tag), customers book once and the job repeats weekly, fortnightly or every 4 weeks, keeping the same day and the same tradie wherever possible.',
+        cta1:'Try an emergency booking', cta1url:TRD_BOOK,
+        featEyebrow:'Your rules', featHeading:'Urgent work in.\nRegular work locked in.',
+        cards:[
+          {n:'01', t:'Who’s on call', d:'Pick which tradies take emergency jobs and the hours they cover.'},
+          {n:'02', t:'Only urgent jobs', d:'Emergency mode shows only urgent jobs, today and tomorrow, with your emergency fee.'},
+          {n:'03', t:'Repeat jobs', d:'Weekly, fortnightly or every 4 weeks, same day and tradie wherever possible.'}
+        ],
+        spotOn:true, spotEyebrow:'Coming soon', spotHeading:'Paid when they book.',
+        spotSub:'Card payments are coming soon: call-out fees and emergency fees paid by card at booking, straight into your own Stripe account (Stripe’s fees apply). Until then, customers pay on the day.',
+        boxes:[{l:'CALL-OUT FEE', v:'Your choice'},{l:'EMERGENCY FEE', v:'Your choice'},{l:'CARD PAYMENTS', v:'Coming soon'}],
+        bandImage:TRD_IMG+'phones-emergency.jpg', bandAlt:'Emergency booking on a phone: urgent jobs only, today and tomorrow, with arrival windows', bandLink:TRD_BOOK,
+        bandCaption:'Try it on our demo business: tap “Emergency booking” and see only the urgent jobs.',
+        plans:[trdBox(M,true), trdBox(B,false)].filter(Boolean),
+        subject:'Burst pipe at 7pm? Booked online', resendSubject:'Emergency call-outs, on your terms',
+        preheader:'After-hours bookings with your own rules, and repeat jobs booked once.' }),
+      P({ name:'Quotes: from photo to booked job', desc:'Quote requests with photos, itemised quotes with GST, and customers who accept and book a time themselves',
+        badge:'QUOTES', eyebrow:'Trade Deluxe',
+        headline:'From photo to quote to booked job.',
+        intro:'Bigger jobs start with “Can you give me a price?” Then come the phone tag, the photos sent by text, and the quote that sits in someone’s inbox.\n\nWith Trade Deluxe, customers describe the job on your website and add up to four photos. You send an itemised quote with your rates already filled in. They accept it from the quote link and pick a time themselves, and that time already allows for the drive.',
+        cta1:'See the quotes inbox', cta1url:TRD_STAFF,
+        featEyebrow:'How quotes work', featHeading:'Less phone tag.\nMore jobs booked.',
+        cards:[
+          {n:'01', t:'Requests arrive with photos', d:'Hot water, switchboards, renovations: up to four photos with every request.'},
+          {n:'02', t:'Itemised quotes with GST', d:'Labour, materials and call-out lines, with your rates pre-filled.'},
+          {n:'03', t:'Accepted and booked online', d:'The customer accepts and picks a time. Travel is already allowed for.'}
+        ],
+        spotOn:false,
+        bandImage:TRD_IMG+'quotes.jpg', bandAlt:'Trade Deluxe quotes inbox with an itemised switchboard upgrade quote', bandLink:TRD_STAFF,
+        bandCaption:'The quotes inbox on our demo business: open a request, price it up and send it.',
+        plans:[trdBox(M,true), trdBox(B,false)].filter(Boolean),
+        subject:'From photo to quote to booked job', resendSubject:'Quotes your customers can accept and book',
+        preheader:'Requests with photos, itemised quotes, and customers who book the time themselves.' }),
+      P({ name:'A trade website you change yourself', desc:'Leads with the Basic plan: a trade website you edit yourself, with jobs, prices and team shown live from the booking system',
+        badge:'YOUR WEBSITE', eyebrow:'Trade Deluxe Basic',
+        headline:'A trade website you can change yourself.',
+        intro:'Your website should get you work, not be another job on the list. Trade Deluxe Basic gives you a trade website that you edit yourself: tap a heading or a photo and change it. No designer needed.\n\nYour jobs, prices and team come straight from the booking system, so when you change a price once it’s right everywhere. Every job links straight to booking it, with “Book” and “Emergency” buttons built in.',
+        cta1:'See the demo website', cta1url:TRD_SITE, cta2:'Try the booking page', cta2url:TRD_BOOK,
+        featEyebrow:'Your website', featHeading:'Pick a look for your trade.\nMake it yours.',
+        cards:[
+          {n:'01', t:'Looks for every trade', d:'Electrician, plumber, lawn and garden, cleaning, handyman.'},
+          {n:'02', t:'Tap to edit', d:'Words, photos, colours, headings, corners and the hero layout. Add your logo and your van.'},
+          {n:'03', t:'Always up to date', d:'Jobs, prices and team shown live from your bookings.'}
+        ],
+        spotOn:false,
+        bandImage:TRD_IMG+'site-combo.jpg', bandAlt:'Trade Deluxe demo website for a plumbing and electrical business', bandLink:TRD_SITE,
+        bandCaption:'Our demo trade website. Switch between the looks and see your jobs and prices update.',
+        plans:[trdBox(M,true,'Website + online bookings: everything in Bookings plus a trade website you edit yourself. Up to 3 tradies.'), trdBox(B,false,'Keep your own website and add the booking page.')].filter(Boolean),
+        subject:'A website you can change yourself', resendSubject:'Your trade website, always up to date',
+        preheader:'Jobs, prices and team shown live from your bookings. Tap to edit.' }),
+      P({ name:'Follow-up: short answers', desc:'Short follow-up for tradies who opened but did not click: four quick answers and a phone call',
+        followup:'openedNotClicked', followDays:3, badge:'QUICK ANSWERS', eyebrow:'Straight answers',
+        headline:'Will it work for my business? Four short answers.',
+        intro:'Here are short answers to the first questions most tradies ask.',
+        videoPos:'end', videoTitle:'Or watch the 2-minute tour',
+        featEyebrow:'Four quick answers', featHeading:'The drive, a one-person business,\nthe cost, getting started.',
+        cards:[{n:'01', t:'How does it know the drive?', d:'It estimates from the suburbs, your average speed and a parking allowance. Real Google drive times are an option.'},
+               {n:'02', t:'Just me, no team?', d:'Yes. It plans your own day so you stop double-booking yourself across town.'},
+               {n:'03', t:'What it costs', d:(B?svcPrice(B)+' a month'+g+' with your own website, or ':'')+svcPrice(M)+' with a website. No commission or lead fees.'},
+               {n:'04', t:'Getting started', d:'Early access is open now. Marc sets you up and walks you through it.'}],
+        spotOn:false, priceOn:false, finalHeading:'Easier to talk it through?', finalSub:'Call Marc on 0413 872 994, book a Zoom demo, or simply reply to this email.',
+        finalCta:'Book a Zoom demo', finalUrl:TRD_DEMO,
+        subject:'Will it work for my business?', preheader:'The drive, a one-person business, the cost and getting started.' })
+    ];
+  }
+  function presetsFor(p){ return p==='service' ? svcPresets() : p==='function' ? fnPresets() : p==='trade' ? trdPresets() : PRESETS; }
+  function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : p==='trade' ? (info.offer||TRD_OFFER) : null; }
+  function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; if(p==='trade') TRD_OFFER=o; }
+  var OTHER_PRODUCTS=['service','function','trade'];   /* products with their own offer boxes */
+  function isProd(p){ return p==='restaurant' || OTHER_PRODUCTS.indexOf(p)>=0; }
   function curPresets(){ return presetsFor(PRODUCT); }
 
   function paintProduct(){
@@ -3454,7 +3588,7 @@
     try{ audRecall(); }catch(e){}
   }
   function switchProduct(p,quiet){
-    p=(p==='service'||p==='function')?p:'restaurant';
+    p=isProd(p)?p:'restaurant';
     CUR_BY[PRODUCT]=cur; try{ audRemember(); }catch(e){}
     if(!CAMPS_BY[p]) CAMPS_BY[p]=presetsFor(p).map(function(c){ return JSON.parse(JSON.stringify(c)); });
     PRODUCT=p; camps=CAMPS_BY[p]; cur=Math.min(CUR_BY[p]||0, camps.length-1);
@@ -3499,12 +3633,12 @@
   function pfLoad(quiet){
     return aiCall('products_get',{}).then(function(d){
       (d.products||[]).forEach(function(p){ PRODUCTS_INFO[p.key]=p; });
-      ['service','function'].forEach(function(k){
+      OTHER_PRODUCTS.forEach(function(k){
         if(!(PRODUCTS_INFO[k] && PRODUCTS_INFO[k].offer)) return;
         setOffer(k,PRODUCTS_INFO[k].offer);
         if(CAMPS_BY[k] && !CAMPS_BY[k].__touched){ CAMPS_BY[k]=presetsFor(k).map(function(c){ return JSON.parse(JSON.stringify(c)); }); if(PRODUCT===k){ camps=CAMPS_BY[k]; cur=Math.min(cur,camps.length-1); renderRail(); fillForm(); renderPreview(); } }
       });
-      ['restaurant','service','function'].forEach(function(k){
+      ['restaurant'].concat(OTHER_PRODUCTS).forEach(function(k){
         PROD_NAME[k]=(PRODUCTS_INFO[k]&&PRODUCTS_INFO[k].name)||PROD_NAME[k];
         var b=document.querySelector('#prodSw [data-prod="'+k+'"]'); if(b) b.textContent=PROD_NAME[k];
       });
@@ -3518,7 +3652,7 @@
   act('pf-rmplan',function(){});
   act('pf-save',function(btn){
     var body={key:PRODUCT, name:$('#pfName').value.trim(), facts:$('#pfFacts').value};
-    if(PRODUCT==='service'||PRODUCT==='function'){
+    if(OTHER_PRODUCTS.indexOf(PRODUCT)>=0){
       body.offer={trial_days:$('#pfTrial').value, gst:$('#pfGst').checked,
         plans:Array.prototype.map.call(document.querySelectorAll('#pfPlans .offer-row'),function(r){
           return {name:r.querySelector('[data-pf="name"]').value.trim(), price:r.querySelector('[data-pf="price"]').value, desc:r.querySelector('[data-pf="desc"]').value.trim(), main:r.querySelector('[data-pf="main"]').checked};
@@ -3544,8 +3678,8 @@
      =================================================================== */
   var K_AI='rdes.ai', K_HANDOFF='rd.handoff';
   setTimeout(function(){
-    try{ var qp=new URLSearchParams(location.search).get('prod'); if(qp==='service'||qp==='restaurant'||qp==='function') store.set(K_PROD,qp); }catch(e){}
-    try{ var sp=store.get(K_PROD); if(sp==='service'||sp==='function') switchProduct(sp,true); else { paintProduct(); pfShow(); } }catch(e){}
+    try{ var qp=new URLSearchParams(location.search).get('prod'); if(isProd(qp)) store.set(K_PROD,qp); }catch(e){}
+    try{ var sp=store.get(K_PROD); if(sp && sp!=='restaurant' && isProd(sp)) switchProduct(sp,true); else { paintProduct(); pfShow(); } }catch(e){}
     if(SET.secret) pfLoad(true);
   },0);
   var AI={ url:'', undo:[] };
