@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trade CRM &amp; Email Studio · Sparks &amp; Pipes Co. (demo)</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F2EC;--card:#fff;--ink:#14202C;--soft:#5F6A75;--faint:#7d8690;--line:#e0dad0;--blush:#FCE8DB;--bur:#14202C;--bur2:#C94A12;--gold:#E8591A;--champ:#F4A57A;
+ --ok:#2F7A55;--okbg:#e5f2ea;--warn:#b8741a;--warnbg:#fbefdc;--bad:#a3394f;--badbg:#f8e3e7;--blue:#2a5d8f;--bluebg:#e4edf7;
+ --fs:'Instrument Serif',Georgia,serif;--fd:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--fd);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--bur2)}
+.demo{background:var(--bur);color:#fff;font-size:13px;text-align:center;padding:8px 14px}
+.demo a{color:var(--champ);font-weight:700}
+header.top{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top .w{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;max-width:1240px;margin:0 auto}
+.logo{width:40px;height:40px;border-radius:11px;background:var(--gold);color:#fff;display:grid;place-items:center}.logo svg{width:22px;height:22px}
+.ttl b{display:block;font-size:16px;line-height:1.2}.ttl small{color:var(--soft);font-size:12.5px}
+nav.tabs{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav.tabs button{white-space:nowrap;flex:none;border:0;background:none;padding:9px 14px;border-radius:999px;font-weight:700;font-size:14px;color:var(--soft);cursor:pointer;position:relative}
+nav.tabs button.on{background:var(--bur);color:#fff}
+nav.tabs .n{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:999px;background:var(--bad);color:#fff;font-size:11px;margin-left:6px;padding:0 6px}
+main{max-width:1240px;margin:0 auto;padding:22px 20px 80px}
+h1,h2,h3{font-family:var(--fs);font-weight:400;margin:0;line-height:1.1}
+h1{font-size:40px}h2{font-size:30px}h3{font-size:22px}
+.sub{color:var(--soft);margin:6px 0 18px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.kpi small{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.kpi b{display:block;font:400 32px var(--fs);margin-top:2px}.kpi span{font-size:12.5px;color:var(--soft)}
+.grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.panel h3{margin-bottom:4px}.panel .sub{margin:2px 0 12px;font-size:13.5px}
+.group{margin-top:14px}.group>h4{margin:0 0 8px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:8px}
+.group>h4 i{font-style:normal;background:var(--blush);color:var(--bur2);border-radius:999px;padding:1px 8px;letter-spacing:0}
+.task{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px;background:#fff}
+.task .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-size:17px;background:var(--blush)}
+.task.urgent .ic{background:var(--badbg)}.task.soon .ic{background:var(--warnbg)}
+.task .tx{flex:1;min-width:0}.task .tx b{display:block;font-size:14.5px}.task .tx span{display:block;color:var(--soft);font-size:13px}
+.task .due{font-size:12px;font-weight:700;white-space:nowrap}.task.urgent .due{color:var(--bad)}.task.soon .due{color:var(--warn)}
+.task .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.btn{border:1.5px solid transparent;border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;background:var(--bur);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--bur2)}.btn.ghost{background:transparent;color:var(--bur);border-color:var(--line)}.btn.ghost:hover{border-color:var(--bur2)}
+.btn.sm{padding:5px 11px;font-size:12px}
+.empty{color:var(--soft);font-size:14px;padding:10px 0}
+.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:800;white-space:nowrap}
+.st-request{background:var(--bluebg);color:var(--blue)}.st-quoted{background:var(--warnbg);color:var(--warn)}.st-booked{background:var(--okbg);color:var(--ok)}.st-done{background:#eee;color:#555}.st-lost{background:var(--badbg);color:var(--bad)}
+.em{background:#fde4d6;color:#b33c0c}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.pipe button{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:10px;text-align:left;cursor:pointer}
+.pipe button.on{border-color:var(--bur);box-shadow:0 0 0 2px var(--bur) inset}
+.pipe b{display:block;font:400 28px var(--fs)}.pipe small{font-size:12px;color:var(--soft);font-weight:700}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar input,.toolbar select{border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:#fff;min-width:200px}
+table.list{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.list th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:10px 12px;background:#f8f5f0;border-bottom:1px solid var(--line)}
+.list td{padding:11px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+.list tr:last-child td{border-bottom:0}.list tbody tr{cursor:pointer}.list tbody tr:hover{background:#faf7f2}
+.list td small{display:block;color:var(--soft);font-size:12.5px}
+.month{font:600 13px var(--fd);letter-spacing:.14em;text-transform:uppercase;color:var(--bur2);background:#f3eee6!important;cursor:default!important}
+.money{font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:5px;max-width:140px}.bar i{display:block;height:100%;background:var(--ok)}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,16,22,.45);z-index:50;display:none}.scrim.on{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100vw);background:var(--bg);z-index:60;transform:translateX(105%);transition:transform .25s;overflow:auto;box-shadow:-20px 0 60px rgba(0,0,0,.2)}
+.drawer.on{transform:none}
+.drawer .hd{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:16px 18px;display:flex;gap:10px;align-items:flex-start;z-index:2}
+.drawer .hd h2{font-size:28px}.drawer .bd{padding:16px 18px 40px}
+.x{margin-left:auto;border:0;background:var(--blush);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.facts div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;font-size:13.5px}
+.facts small{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:800}
+.sec{margin-top:18px}.sec>h4{margin:0 0 8px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.checks label{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;margin-bottom:6px;font-size:14px;cursor:pointer}
+.checks input{width:18px;height:18px;accent-color:var(--ok)}
+.tl{list-style:none;padding:0;margin:0;border-left:2px solid var(--line);margin-left:6px}
+.tl li{position:relative;padding:0 0 10px 16px;font-size:13.5px}.tl li:before{content:"";position:absolute;left:-6px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.tl small{color:var(--faint);display:block;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.inp{border:1px solid var(--line);border-radius:12px;padding:9px 12px;background:#fff;width:100%}
+textarea.inp{resize:vertical;min-height:90px}
+label.f{display:block;font-size:12.5px;font-weight:700;color:var(--soft);margin-bottom:10px}label.f .inp{margin-top:5px}
+/* email studio */
+.es{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+.tpl{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 12px;margin-bottom:8px;cursor:pointer}
+.tpl.on{border-color:var(--bur);box-shadow:0 0 0 2px var(--bur) inset}.tpl b{display:block;font-size:14px}.tpl small{color:var(--soft);font-size:12.5px}
+.tpl .sw{float:right;font-size:11px;font-weight:800;color:var(--ok)}.tpl .sw.off{color:var(--faint)}
+.seg{display:inline-flex;background:var(--blush);border-radius:999px;padding:3px;margin-bottom:12px}
+.seg button{border:0;background:none;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;cursor:pointer;color:var(--soft)}.seg button.on{background:#fff;color:var(--bur);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.editor{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pv{background:#e9e4db;border-radius:16px;padding:14px;min-height:420px}
+.pv iframe{width:100%;height:640px;border:0;border-radius:10px;background:#fff}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin:-4px 0 10px}.tags button{border:1px dashed var(--line);background:#fff;border-radius:8px;padding:2px 8px;font-size:12px;cursor:pointer;color:var(--soft)}
+.aud{display:grid;gap:6px;margin-bottom:10px}.aud label{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 11px;cursor:pointer;font-size:14px}
+.aud label b{margin-left:auto;font-size:13px;color:var(--soft)}
+.sent li{font-size:13.5px;margin-bottom:6px}
+/* modal */
+.modal{position:fixed;inset:0;z-index:80;display:none;place-items:center;background:rgba(10,16,22,.5);padding:16px}.modal.on{display:grid}
+.mbox{background:var(--bg);border-radius:20px;width:min(760px,100%);max-height:92vh;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.mbox .hd{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0}
+.mbox .bd{padding:14px 16px}.mbox iframe{width:100%;height:560px;border:0;border-radius:12px;background:#fff}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:11px 18px;font-size:14px;font-weight:600;z-index:99;display:none;max-width:92vw}
+.note{background:var(--warnbg);border-radius:12px;padding:10px 12px;font-size:13px;color:#6a4510;margin-bottom:12px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2,.es,.editor{grid-template-columns:1fr}.pipe{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}h1{font-size:32px}.list .hide-s{display:none}nav.tabs{margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap}.pv iframe{height:520px}}
+</style>
+</head>
+<body>
+<div class="demo">Demo of the Trade Deluxe CRM and Email Studio with sample jobs. Bookings and quote requests you make on the <a href="./">demo booking page</a> show up here too. No emails are really sent.</div>
+<header class="top"><div class="w">
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></div><div class="ttl"><b id="vName">Sparks &amp; Pipes Co.</b><small>Trade CRM &amp; Email Studio</small></div>
+  <nav class="tabs" id="tabs">
+    <button data-t="today" class="on">Follow-ups<span class="n" id="nToday" hidden></span></button>
+    <button data-t="jobs">Jobs</button>
+    <button data-t="customers">Customers</button>
+    <button data-t="studio">Email Studio</button>
+    <button data-t="settings">Settings</button>
+  </nav>
+</div></header>
+<main id="main"></main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Job details"></aside>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= helpers ================= */
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var pad=function(n){return String(n).padStart(2,'0')};
+var iso=function(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+var parse=function(s){var a=String(s).split('-').map(Number);return new Date(a[0],a[1]-1,a[2])};
+var TODAY=new Date();TODAY.setHours(0,0,0,0);var T=iso(TODAY);
+var add=function(s,n){var d=parse(s);d.setDate(d.getDate()+n);return iso(d)};
+var diff=function(a,b){return Math.round((parse(a)-parse(b))/864e5)};
+var off=function(n){return add(T,n)};
+var money=function(n){return '$'+Math.round(n||0).toLocaleString('en-AU')};
+var nice=function(s,y){return parse(s).toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:y?'numeric':undefined})};
+var long=function(s){return parse(s).toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'})};
+var rel=function(s){var d=diff(s,T);return d===0?'today':d===1?'tomorrow':d===-1?'yesterday':d>0?'in '+d+' days':Math.abs(d)+' days ago'};
+var store={get:function(k,d){try{var v=localStorage.getItem('tdcrm_'+k);return v?JSON.parse(v):d}catch(e){return d}},set:function(k,v){try{localStorage.setItem('tdcrm_'+k,JSON.stringify(v))}catch(e){}}};
+function toast(m){var t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(function(){t.style.display='none'},3200)}
+var first=function(n){return String(n||'').trim().split(/\s+/)[0]||'there'};
+var fmtMin=function(m){var h=Math.floor(m/60),mm=m%60,ap=h>=12?'pm':'am',h12=h%12||12;return h12+(mm?':'+pad(mm):'')+ap};
+
+/* ================= the business (from the demo booking page when it has been opened) ================= */
+var APP=(function(){try{return JSON.parse(localStorage.getItem('tradeDeluxeDemo_v1')||'null')}catch(e){return null}})();
+var B=(APP&&APP.biz)||{};
+var BIZ={name:B.name||'Sparks & Pipes Co.',addr:(B.base||'Marrickville')+', Sydney',email:B.email||'jobs@sparksandpipes.com.au',phone:B.phone||'02 9000 1234',owner:'Dave',quoteDays:B.quoteValidDays||30};
+var TEAM={t1:'Dave Kowalski',t2:'Priya Nair',t3:'Tom Reid'};
+((APP&&APP.team)||[]).forEach(function(t){TEAM[t.id]=t.name});
+var firstOf=function(id){return TEAM[id]?first(TEAM[id]):''};
+
+/* ================= stages ================= */
+var STAGES=[
+ {id:'request',name:'Quote request',desc:'Waiting for your price'},
+ {id:'quoted',name:'Quote sent',desc:'Waiting on the customer'},
+ {id:'booked',name:'Booked',desc:'Job in the diary'},
+ {id:'done',name:'Job done',desc:'Completed'}];
+var STN={};STAGES.forEach(function(s){STN[s.id]=s.name});STN.lost='Lost';
+
+/* ================= follow-up rules (editable in Settings) ================= */
+var RULES_DEFAULT={qChase:3,qExpWarn:3,remind:1,thanks:1,check:14,svcLead:30};
+var R=Object.assign({},RULES_DEFAULT,store.get('rules',{}));
+
+/* ================= sample jobs (dates relative to today) ================= */
+function sample(){
+ var S=[
+ {name:'Rebecca Lawson',email:'rebecca.lawson@example.com',phone:'0412 340 118',sub:'Leichhardt',seg:'Homes',title:'Switchboard upgrade',trade:'Electrical',tech:'t2',stage:'request',created:-1,value:0,desc:'Old ceramic fuses, lights flicker when the kettle is on. Photos of the switchboard attached.'},
+ {name:'Minh Nguyen',email:'minh.nguyen@example.com',phone:'0423 551 902',sub:'Marrickville',seg:'Homes',title:'Bathroom renovation rough-in',trade:'Plumbing',tech:'t1',stage:'quoted',created:-6,quoted:-4,value:3850},
+ {name:'Harbour Property Group',contact:'Amy Clarke',email:'amy@harbourpg.example',phone:'02 9550 4100',sub:'Glebe',seg:'Landlords & agents',title:'Smoke alarms, 6 units',trade:'Electrical',tech:'t2',stage:'quoted',created:-29,quoted:-27,value:1260,sentChase:true},
+ {name:'Daniel Brooks',email:'dan.brooks@example.com',phone:'0401 778 230',sub:'Petersham',seg:'Homes',title:'Gas continuous-flow hot water',trade:'Plumbing',tech:'t3',stage:'quoted',created:-2,quoted:-1,value:3290},
+ {name:'Café Lumen',contact:'Ben Carter',email:'ben@cafelumen.example',phone:'0408 555 662',sub:'Glebe',seg:'Businesses',title:'Drain maintenance (every 4 weeks)',trade:'Plumbing',tech:'t3',stage:'booked',d:1,win:'10am – 12pm',value:240,repeat:28,created:-60},
+ {name:'Sophie Turner',email:'sophie.t@example.com',phone:'0433 210 455',sub:'Newtown',seg:'Homes',title:'Ceiling fans × 3',trade:'Electrical',tech:'t2',stage:'booked',d:1,win:'8am – 10am',value:690,created:-5},
+ {name:'Mark Ellis',email:'mark.ellis@example.com',phone:'0455 120 774',sub:'Enmore',seg:'Homes',title:'Leaking shower mixer',trade:'Plumbing',tech:'t1',stage:'booked',d:4,win:'1pm – 3pm',value:320,created:-2},
+ {name:'Westside Strata',contact:'Kim Patel',email:'kim@westsidestrata.example',phone:'02 9560 7700',sub:'Stanmore',seg:'Strata',title:'Stormwater pit clean',trade:'Plumbing',tech:'t3',stage:'booked',d:6,win:'7am – 9am',value:880,created:-9},
+ {name:'Julia Romano',email:'julia.romano@example.com',phone:'0466 902 331',sub:'Dulwich Hill',seg:'Homes',title:'Blocked drain (emergency call-out)',trade:'Plumbing',tech:'t1',stage:'done',d:-1,win:'7:15pm',value:450,emergency:true,created:-1},
+ {name:'Chris Wong',email:'chris.wong@example.com',phone:'0477 330 128',sub:'Erskineville',seg:'Homes',title:'Safety switch upgrade',trade:'Electrical',tech:'t2',stage:'done',d:-14,win:'10am – 12pm',value:780,created:-20,sentThanks:true},
+ {name:'Lisa Chen',email:'lisa.chen@example.com',phone:'0488 431 900',sub:'Ashfield',seg:'Homes',title:'Hot water system service',trade:'Plumbing',tech:'t3',stage:'done',d:-335,win:'8am – 10am',value:290,service:{what:'hot water system service',every:365},created:-340,sentThanks:true,sentCheck:true},
+ {name:'Redfern Bakehouse',contact:'Tom Hughes',email:'tom@redfernbakehouse.example',phone:'02 9698 2210',sub:'Redfern',seg:'Businesses',title:'Test and tag, 42 items',trade:'Electrical',tech:'t2',stage:'done',d:-340,win:'6am – 8am',value:460,service:{what:'test and tag',every:365},created:-345,sentThanks:true,sentCheck:true},
+ {name:'Ana Silva',email:'ana.silva@example.com',phone:'0499 213 540',sub:'Summer Hill',seg:'Homes',title:'Kitchen power points',trade:'Electrical',tech:'t2',stage:'done',d:-60,win:'1pm – 3pm',value:540,created:-64,sentThanks:true,sentCheck:true},
+ {name:'Peter Shaw',email:'peter.shaw@example.com',phone:'0402 118 776',sub:'Lewisham',seg:'Homes',title:'Bathroom renovation rough-in',trade:'Plumbing',tech:'t1',stage:'lost',created:-35,quoted:-30,value:4100,lostWhy:'Went with another quote'}];
+ return S.map(function(s,i){
+  var j={id:'S'+(i+1),ref:(s.stage==='request'||s.stage==='quoted'||s.stage==='lost'?'Q-':'TD-')+(41207+i*53).toString(36).toUpperCase(),
+   cust:{name:s.name,contact:s.contact||'',email:s.email,phone:s.phone,suburb:s.sub,seg:s.seg},
+   title:s.title,trade:s.trade,tech:s.tech,date:s.d!=null?off(s.d):'',win:s.win||'',value:s.value,stage:s.stage,emergency:!!s.emergency,
+   repeat:s.repeat||0,service:s.service||null,desc:s.desc||'',quoteSent:s.quoted!=null?off(s.quoted):'',quoteExp:s.quoted!=null?off(s.quoted+BIZ.quoteDays):'',
+   emails:[],timeline:[],done:{},created:off(s.created),notes:'',source:'sample'};
+  j.timeline.push({d:j.created,t:(s.stage==='request'||s.quoted!=null?'Quote request from the website':s.emergency?'Emergency booking from the website':'Booked online')+(j.win&&!s.quoted?': '+j.win:'')});
+  if(s.quoted!=null)j.timeline.push({d:j.quoteSent,t:'Quote sent: '+money(s.value)+' incl. GST'});
+  if(s.stage==='done')j.timeline.push({d:j.date,t:'Job done by '+TEAM[s.tech]});
+  if(s.lostWhy)j.timeline.push({d:off(-20),t:'Lost: '+s.lostWhy});
+  if(s.sentChase)j.emails.push({key:'qchase',d:add(j.quoteSent,R.qChase)});
+  if(s.sentThanks)j.emails.push({key:'thanks',d:add(j.date,R.thanks)});
+  if(s.sentCheck)j.emails.push({key:'check',d:add(j.date,R.check)});
+  return j});
+}
+
+/* ================= jobs and quotes made on the demo booking page ================= */
+function fromApp(){
+ if(!APP)return [];
+ var out=[],jt={};(APP.jobTypes||[]).forEach(function(t){jt[t.id]=t});
+ (APP.bookings||[]).forEach(function(b){
+  if(!b.customer||!b.customer.email||b.status==='cancelled')return;
+  var t=jt[b.typeId]||{},past=b.date<T;
+  out.push({id:'A-'+b.id,ref:b.ref||'TD',cust:{name:b.customer.name,contact:'',email:b.customer.email,phone:b.customer.phone||'',suburb:b.suburb||'',seg:'Homes'},
+   title:b.title||t.name||'Job',trade:t.cat==='electrical'?'Electrical':'Plumbing',tech:b.techId,date:b.date,win:b.winFrom!=null&&b.winTo!=null?fmtMin(b.winFrom)+' – '+fmtMin(b.winTo):fmtMin(b.start||480),
+   value:typeof t.price==='number'?t.price:0,stage:past?'done':'booked',emergency:!!b.emergency,repeat:b.repeatEvery||0,service:null,desc:b.notes||'',
+   quoteSent:'',quoteExp:'',emails:[],timeline:[{d:T,t:(b.emergency?'Emergency booking':'Booked')+' on the booking page'}],done:{},created:T,notes:'',source:'website'});
+ });
+ (APP.quotes||[]).forEach(function(q){
+  if(!q.customer||!q.customer.email)return;
+  var st=q.status==='booked'?'booked':q.status==='declined'?'lost':q.status==='sent'?'quoted':'request';
+  if(st==='booked')return; /* the booking itself is listed above */
+  var tot=(q.lines||[]).reduce(function(a,l){return a+(+l.qty||1)*(+l.price||0)},0);
+  var sentD=q.sentAt?iso(new Date(q.sentAt)):'';
+  out.push({id:'AQ-'+q.id,ref:q.ref||'Q',cust:{name:q.customer.name,contact:'',email:q.customer.email,phone:q.customer.phone||'',suburb:q.suburb||'',seg:'Homes'},
+   title:q.title||'Quote',trade:q.cat==='electrical'?'Electrical':'Plumbing',tech:'',date:'',win:'',value:tot?Math.round(tot*1.1):0,stage:st,emergency:false,repeat:0,service:null,desc:q.description||'',
+   quoteSent:sentD,quoteExp:sentD?add(sentD,BIZ.quoteDays):'',emails:[],timeline:[{d:q.created?iso(new Date(q.created)):T,t:'Quote request on the booking page'}],done:{},created:q.created?iso(new Date(q.created)):T,notes:'',source:'website'});
+ });
+ return out;
+}
+
+/* ================= state ================= */
+var DATA=store.get('data',null);
+if(!DATA||DATA.v!==1||DATA.built!==T){
+ var prev=DATA&&DATA.v===1?DATA:null;
+ DATA={v:1,built:T,jobs:sample().concat(prev?prev.jobs.filter(function(j){return j.source==='manual'}):[])};
+}
+var OVR=store.get('ovr',{});
+function allJobs(){
+ var seen={};DATA.jobs.forEach(function(j){seen[j.id]=1});
+ var w=fromApp().filter(function(j){return !seen[j.id]}).map(function(j){return OVR[j.id]?Object.assign(j,OVR[j.id]):j});
+ return DATA.jobs.concat(w);
+}
+function save(j){
+ if(j.source==='website'){OVR[j.id]={stage:j.stage,emails:j.emails,timeline:j.timeline,done:j.done,notes:j.notes,date:j.date,win:j.win,value:j.value,quoteSent:j.quoteSent,quoteExp:j.quoteExp,service:j.service};store.set('ovr',OVR)}
+ store.set('data',DATA);
+}
+var byId=function(id){return allJobs().filter(function(j){return j.id===id})[0]};
+var sent=function(j,k){return j.emails.some(function(e){return e.key===k})};
+var who=function(j){return j.cust.contact||j.cust.name};
+var svcDue=function(j){return j.service&&j.date?add(j.date,j.service.every):''};
+
+/* ================= email templates ================= */
+var TPL_DEFAULT={
+ qchase:{group:'Quotes',name:'Quote follow-up',auto:true,subject:'Any questions about your quote?',
+  body:'Hi {first},\n\nJust checking you received our quote for the {job} at {suburb}: {value} including GST.\n\nIf anything isn’t clear, or you’d like to change something, just reply to this email or call us on {phone}.\n\nWhen you’re ready, you can accept the quote and pick a time online.',btn:'View my quote'},
+ qexpire:{group:'Quotes',name:'Quote about to expire',auto:true,subject:'Your quote is valid until {quote_expires}',
+  body:'Hi {first},\n\nA quick reminder that our quote for the {job} ({value} including GST) is valid until {quote_expires}.\n\nAccept it before then and you can choose a time that suits you straight away. Prices for parts can change after that date.',btn:'Accept and book'},
+ remind:{group:'Upcoming jobs',name:'Job reminder (day before)',auto:true,subject:'See you {job_day} between {window}',
+  body:'Hi {first},\n\nJust confirming {tradie} will be at {suburb} {job_day} between {window} for the {job}.\n\nPlease make sure we can get to the area, and let us know if there’s a pet, a gate code or parking we should know about. Need to change the time? Just reply.',btn:'Manage my booking'},
+ thanks:{group:'After the job',name:'Thank-you and Google review',auto:true,subject:'Thanks from {business}',
+  body:'Hi {first},\n\nThanks for choosing {business}. {tradie} enjoyed looking after the {job} for you.\n\nIf you were happy with the work, a quick Google review would mean a lot to a local business like ours. It only takes a minute.',btn:'Leave a review'},
+ check:{group:'After the job',name:'Is everything still working?',auto:true,subject:'Is everything still working well?',
+  body:'Hi {first},\n\nIt’s been a couple of weeks since we did the {job}. Is everything still working well?\n\nIf anything isn’t right, reply to this email or call {phone} and we’ll sort it out.',btn:'Book a quick check'},
+ service:{group:'Service reminders',name:'Yearly service reminder',auto:true,subject:'Time for your yearly {service}',
+  body:'Hi {first},\n\nIt’s nearly a year since your {service} at {suburb}. A yearly check helps avoid surprises and keeps everything running safely.\n\nBook online and pick a time that suits you. We’ll send a reminder the day before.',btn:'Book my service'}};
+var TPL=Object.assign({},TPL_DEFAULT);(function(){var s=store.get('tpl',{});Object.keys(s).forEach(function(k){if(TPL[k])TPL[k]=Object.assign({},TPL[k],s[k])})})();
+var GROUP_ICON={'Quotes':'📝','Upcoming jobs':'📅','After the job':'⭐','Service reminders':'🔁'};
+
+function vars(j){
+ var jd=j.date?diff(j.date,T):null;
+ return {first:first(who(j)),name:who(j),business:BIZ.name,phone:BIZ.phone,job:String(j.title).replace(/\s*\(.*\)$/,'').toLowerCase(),suburb:j.cust.suburb||'your place',
+  value:money(j.value),quote_expires:j.quoteExp?long(j.quoteExp):'soon',window:j.win||'your arrival window',date:j.date?long(j.date):'your booking date',
+  job_day:j.date?(jd===1?'tomorrow':jd===0?'today':long(j.date)):'soon',tradie:firstOf(j.tech)||'Our tradie',service:j.service?j.service.what:'service'};
+}
+function fill(t,v){return String(t||'').replace(/\{(\w+)\}/g,function(m,k){return v[k]!=null?v[k]:m})}
+
+/* ================= email design (same look as the trade website) ================= */
+function emailHtml(subject,body,btn,opts){
+ opts=opts||{};
+ var paras=String(body||'').split(/\n{2,}/).map(function(p){
+  if(/^\s*-\s/.test(p))return '<ul style="margin:0 0 16px;padding-left:20px">'+p.split(/\n/).map(function(l){return '<li style="margin:0 0 6px">'+esc(l.replace(/^\s*-\s*/,''))+'</li>'}).join('')+'</ul>';
+  return '<p style="margin:0 0 16px">'+esc(p).replace(/\n/g,'<br>')+'</p>'}).join('');
+ return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head><body style="margin:0;background:#ece7de;font-family:Arial,Helvetica,sans-serif;color:#14202C">'+
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ece7de;padding:18px 10px"><tr><td align="center">'+
+  '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden">'+
+  '<tr><td style="background:#14202C;padding:20px 26px;color:#ffffff;font:22px Georgia,serif"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#E8591A;margin-right:10px"></span>'+esc(BIZ.name)+'</td></tr>'+
+  '<tr><td style="padding:26px 26px 8px;font-size:15.5px;line-height:1.6">'+(opts.heading?'<h1 style="font:28px Georgia,serif;margin:0 0 14px;color:#14202C">'+esc(opts.heading)+'</h1>':'')+paras+
+  (btn?'<p style="margin:6px 0 22px"><a href="#" style="display:inline-block;background:#E8591A;color:#ffffff;text-decoration:none;font-weight:bold;padding:13px 22px;border-radius:999px">'+esc(btn)+'</a></p>':'')+
+  '<p style="margin:0 0 20px">Cheers,<br>'+esc(BIZ.owner)+'<br><span style="color:#5F6A75">'+esc(BIZ.name)+' · '+esc(BIZ.phone)+'</span></p></td></tr>'+
+  '<tr><td style="background:#f5f2ec;padding:16px 26px;font-size:12px;color:#5F6A75">'+esc(BIZ.name)+' · '+esc(BIZ.addr)+' · '+esc(BIZ.phone)+'<br>'+(opts.marketing?'You’re receiving this because we’ve done work for you. <a href="#" style="color:#5F6A75">Unsubscribe</a>':'This email is about your job with us.')+'</td></tr>'+
+  '</table></td></tr></table></body></html>';
+}
+function showEmail(subject,html,onSend,sendLabel){
+ var mb=$('#mbox');
+ mb.innerHTML='<div class="hd"><div><b>'+esc(subject)+'</b><div style="font-size:12.5px;color:var(--soft)">Preview of the email</div></div><button class="x" data-mclose aria-label="Close">×</button></div>'+
+  '<div class="bd"><iframe title="Email preview"></iframe><div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn ghost" data-mclose>Close</button>'+(onSend?'<button class="btn" id="mSend">'+esc(sendLabel||'Send (demo)')+'</button>':'')+'</div></div>';
+ $('#modal').classList.add('on');$('iframe',mb).srcdoc=html;
+ if(onSend)$('#mSend').onclick=function(){onSend();$('#modal').classList.remove('on')};
+}
+$('#modal').addEventListener('click',function(e){if(e.target.id==='modal'||e.target.closest('[data-mclose]'))$('#modal').classList.remove('on')});
+
+/* ================= follow-up engine ================= */
+function tasks(){
+ var out=[];
+ function push(j,key,due,title,detail,extra){
+  if(j.done&&j.done[key])return; if(TPL[key]&&sent(j,key))return;
+  var d=diff(due,T); if(d>7)return;
+  out.push(Object.assign({j:j,key:key,due:due,days:d,title:title,detail:detail,group:(TPL[key]||{}).group||(extra&&extra.group)||'Quotes'},extra||{}))}
+ allJobs().forEach(function(j){
+  var dd=j.date?diff(j.date,T):null;
+  if(j.stage==='request')push(j,'quote',j.created,'Price this job and send the quote',who(j)+' · '+j.title+' · '+j.cust.suburb,{call:true,group:'Quotes'});
+  if(j.stage==='quoted'&&j.quoteSent){
+   push(j,'qchase',add(j.quoteSent,R.qChase),'No reply to the quote yet',who(j)+' · '+j.title+(j.value?' · '+money(j.value):''));
+   if(j.quoteExp&&diff(j.quoteExp,T)>=0)push(j,'qexpire',add(j.quoteExp,-R.qExpWarn),'Quote expires '+rel(j.quoteExp),who(j)+' · '+j.title+(j.value?' · '+money(j.value):''));}
+  if(j.stage==='booked'&&dd!=null&&dd>=0){
+   push(j,'remind',add(j.date,-R.remind),'Job '+rel(j.date)+', '+j.win,who(j)+' · '+j.title+' · '+(firstOf(j.tech)||'unassigned'));}
+  if(j.stage==='booked'&&dd!=null&&dd<0)push(j,'markdone',j.date,'Was this job finished? Mark it done',who(j)+' · '+j.title+' · '+nice(j.date),{call:true,group:'After the job'});
+  if(j.stage==='done'&&dd!=null){
+   if(dd>=-30)push(j,'thanks',add(j.date,R.thanks),'Thank-you and review request',who(j)+' · '+j.title+(j.emergency&&!/emergency/i.test(j.title)?' · emergency call-out':''));
+   if(dd>=-60&&j.value>=300)push(j,'check',add(j.date,R.check),'Check everything is still working',who(j)+' · '+j.title+' '+rel(j.date));
+   if(j.service)push(j,'service',add(svcDue(j),-R.svcLead),'Yearly '+j.service.what+' due '+nice(svcDue(j)),who(j)+' · last done '+nice(j.date,true));}
+ });
+ return out.sort(function(a,b){return a.days-b.days});
+}
+
+/* ================= rendering ================= */
+var TAB='today', FILTER='', STAGEF='open';
+function setTab(t){TAB=t;$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)});render();scrollTo(0,0)}
+$('#tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setTab(b.dataset.t)});
+function render(){
+ var tk=tasks(),dueNow=tk.filter(function(t){return t.days<=0}).length;
+ var n=$('#nToday');n.hidden=!dueNow;n.textContent=dueNow;
+ ({today:renderToday,jobs:renderJobs,customers:renderCustomers,studio:renderStudio,settings:renderSettings})[TAB](tk);
+}
+
+function kpis(){
+ var J=allJobs();
+ var week=J.filter(function(j){return j.stage==='booked'&&j.date&&diff(j.date,T)>=0&&diff(j.date,T)<7});
+ var reqs=J.filter(function(j){return j.stage==='request'});
+ var q=J.filter(function(j){return j.stage==='quoted'});
+ var booked=J.filter(function(j){return j.stage==='booked'&&j.date&&diff(j.date,T)>=0&&diff(j.date,T)<=30});
+ var svc=J.filter(function(j){return j.service&&!sent(j,'service')&&diff(svcDue(j),T)<=R.svcLead+30});
+ return '<div class="kpis">'+
+  k('Jobs this week',week.length,'booked across the team')+k('Quotes to price',reqs.length,'new requests from the website')+
+  k('Quotes waiting',money(q.reduce(function(a,j){return a+j.value},0)),q.length+' sent, not yet accepted')+
+  k('Booked work',money(booked.reduce(function(a,j){return a+j.value},0)),'next 30 days')+k('Service reminders',svc.length,'yearly services coming up')+'</div>';
+ function k(a,b,c){return '<div class="kpi"><small>'+a+'</small><b>'+b+'</b><span>'+c+'</span></div>'}
+}
+
+function taskHtml(t){
+ var cls=t.days<=0?'urgent':t.days<=2?'soon':'';
+ var due=t.days<-7?'Overdue '+Math.abs(t.days)+'d':t.days<=0?'Due now':t.days===1?'Tomorrow':'In '+t.days+' days';
+ var tpl=TPL[t.key];
+ var extra=t.key==='quote'?'<button class="btn sm" data-quote="'+t.j.id+'">✎ Send the quote</button>':t.key==='markdone'?'<button class="btn sm" data-jobdone="'+t.j.id+'">✓ Job done</button>':'';
+ return '<div class="task '+cls+'"><div class="ic">'+(GROUP_ICON[t.group]||'📌')+'</div><div class="tx"><b>'+esc(t.title)+'</b><span>'+esc(t.detail)+'</span>'+
+  '<div class="acts">'+extra+(tpl?'<button class="btn sm" data-email="'+t.j.id+'|'+t.key+'">✉ Send now</button>':'')+
+  '<a class="btn sm ghost" href="tel:'+esc(String(t.j.cust.phone).replace(/[^0-9+]/g,''))+'">☎ Call</a>'+
+  '<button class="btn sm ghost" data-open="'+t.j.id+'">Open</button><button class="btn sm ghost" data-done="'+t.j.id+'|'+t.key+'">Dismiss</button></div></div>'+
+  '<div class="due">'+due+'</div></div>';
+}
+function renderToday(tk){
+ var groups=['Quotes','Upcoming jobs','After the job','Service reminders'];
+ var now=tk.filter(function(t){return t.days<=0}),soon=tk.filter(function(t){return t.days>0});
+ var up=allJobs().filter(function(j){return j.stage==='booked'&&j.date&&j.date>=T}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).slice(0,8);
+ $('#main').innerHTML='<h1>Good '+(new Date().getHours()<12?'morning':new Date().getHours()<17?'afternoon':'evening')+', '+esc(BIZ.owner)+'</h1><p class="sub">Your follow-ups, worked out from every quote and job. Each one comes with the email ready to send.</p>'+kpis()+
+ '<div class="grid2"><div class="panel"><h3>To do today</h3><p class="sub">'+(now.length?now.length+' follow-up'+(now.length>1?'s':'')+' due now':'You’re all caught up for today.')+'</p>'+
+ groups.map(function(g){var L=now.filter(function(t){return t.group===g});return L.length?'<div class="group"><h4>'+GROUP_ICON[g]+' '+g+' <i>'+L.length+'</i></h4>'+L.map(taskHtml).join('')+'</div>':''}).join('')+
+ (soon.length?'<div class="group"><h4>📆 Coming up this week <i>'+soon.length+'</i></h4>'+soon.map(taskHtml).join('')+'</div>':'')+'</div>'+
+ '<div class="panel"><h3>Next jobs</h3><p class="sub">Booked work, soonest first.</p>'+
+ (up.length?'<table class="list"><tbody>'+up.map(function(j){return '<tr data-open="'+j.id+'"><td><b>'+nice(j.date)+'</b><small>'+esc(j.win)+'</small></td><td>'+esc(who(j))+'<small>'+esc(j.title)+' · '+esc(j.cust.suburb)+'</small></td><td>'+esc(firstOf(j.tech))+(j.emergency?' <span class="chip em">Emergency</span>':'')+'</td></tr>'}).join('')+'</tbody></table>':'<p class="empty">No upcoming jobs.</p>')+
+ '<p style="margin:14px 0 0;font-size:13px;color:var(--soft)">Bookings and quote requests made on the <a href="./">demo booking page</a> (with an email address) appear here straight away.</p></div></div>';
+}
+
+function renderJobs(){
+ var J=allJobs(),q=FILTER.toLowerCase();
+ var counts={};STAGES.forEach(function(s){counts[s.id]=0});J.forEach(function(j){if(counts[j.stage]!=null)counts[j.stage]++});
+ var L=J.filter(function(j){
+  if(STAGEF==='open'&&['request','quoted','booked'].indexOf(j.stage)<0)return false;
+  if(STAGEF!=='open'&&STAGEF!=='all'&&j.stage!==STAGEF)return false;
+  return !q||(who(j)+' '+j.cust.name+' '+j.title+' '+j.ref+' '+j.cust.suburb+' '+(TEAM[j.tech]||'')).toLowerCase().indexOf(q)>-1})
+  .sort(function(a,b){var x=a.date||a.created,y=b.date||b.created;return STAGEF==='done'?(x<y?1:-1):(x<y?-1:x>y?1:0)});
+ var rows=L.map(function(j){
+  return '<tr data-open="'+j.id+'"><td><b>'+(j.date?nice(j.date):'—')+'</b><small>'+(j.date?esc(j.win):'asked '+rel(j.created))+'</small></td><td>'+esc(who(j))+'<small>'+esc(j.title)+(j.source==='website'?' · 🌐 booking page':'')+'</small></td>'+
+  '<td class="hide-s">'+esc(firstOf(j.tech)||'—')+'<small>'+esc(j.cust.suburb)+' · '+j.trade+'</small></td><td><span class="chip st-'+j.stage+'">'+STN[j.stage]+'</span>'+(j.emergency?' <span class="chip em">Emergency</span>':'')+(j.repeat?' <span class="chip st-done">Every '+j.repeat/7+' wks</span>':'')+'</td>'+
+  '<td class="money hide-s">'+(j.value?money(j.value):'—')+'<small>'+(j.stage==='request'?'to price':j.stage==='quoted'?'quoted':'incl. GST')+'</small></td></tr>'}).join('');
+ $('#main').innerHTML='<h1>Jobs</h1><p class="sub">Every quote request, quote and job in one list. Click one to see the customer, the quote, the history and the emails.</p>'+
+ '<div class="pipe">'+STAGES.map(function(s){return '<button data-stage="'+s.id+'" class="'+(STAGEF===s.id?'on':'')+'"><small>'+s.name+'</small><b>'+counts[s.id]+'</b><small style="font-weight:500">'+s.desc+'</small></button>'}).join('')+'</div>'+
+ '<div class="toolbar"><input id="q" placeholder="Search name, job, suburb or tradie" value="'+esc(FILTER)+'"><select id="sf"><option value="open"'+(STAGEF==='open'?' selected':'')+'>Open (quotes and booked)</option><option value="all"'+(STAGEF==='all'?' selected':'')+'>Everything</option>'+STAGES.map(function(s){return '<option value="'+s.id+'"'+(STAGEF===s.id?' selected':'')+'>'+s.name+'</option>'}).join('')+'<option value="lost"'+(STAGEF==='lost'?' selected':'')+'>Lost</option></select><button class="btn ghost" id="addJob">+ Add a job</button></div>'+
+ (L.length?'<table class="list"><thead><tr><th>Date</th><th>Customer</th><th class="hide-s">Tradie</th><th>Stage</th><th class="hide-s">Value</th></tr></thead><tbody>'+rows+'</tbody></table>':'<p class="empty">Nothing here yet.</p>');
+ $('#q').oninput=function(e){FILTER=e.target.value;var p=e.target.selectionStart;renderJobs();var i=$('#q');i.focus();i.setSelectionRange(p,p)};
+ $('#sf').onchange=function(e){STAGEF=e.target.value;renderJobs()};
+ $('#addJob').onclick=addJob;
+}
+
+function customers(){
+ var M={};allJobs().forEach(function(j){var k=String(j.cust.email).toLowerCase();if(!M[k])M[k]={c:j.cust,jobs:[]};M[k].jobs.push(j)});
+ return Object.keys(M).map(function(k){return M[k]});
+}
+function renderCustomers(){
+ var C=customers().sort(function(a,b){return a.c.name<b.c.name?-1:1});
+ $('#main').innerHTML='<h1>Customers</h1><p class="sub">Homes, landlords, strata and businesses you’ve quoted or worked for. Use them as audiences in the Email Studio.</p>'+
+ '<table class="list"><thead><tr><th>Customer</th><th class="hide-s">Contact</th><th>Group</th><th>Jobs</th><th class="hide-s">Work done</th></tr></thead><tbody>'+
+ C.map(function(x){var last=x.jobs.slice().sort(function(a,b){return (a.date||a.created)<(b.date||b.created)?1:-1})[0];
+  var sv=x.jobs.filter(function(j){return j.service})[0];
+  return '<tr data-open="'+last.id+'"><td><b>'+esc(x.c.name)+'</b><small>'+esc(x.c.contact||x.c.suburb)+'</small></td><td class="hide-s">'+esc(x.c.email)+'<small>'+esc(x.c.phone)+'</small></td><td>'+esc(x.c.seg)+'</td><td>'+x.jobs.length+'<small>'+x.jobs.map(function(j){return STN[j.stage]}).join(', ')+(sv?' · service due '+nice(svcDue(sv)):'')+'</small></td><td class="money hide-s">'+money(x.jobs.reduce(function(a,j){return a+(j.stage==='done'?j.value:0)},0))+'</td></tr>'}).join('')+
+ '</tbody></table>';
+}
+
+/* ---------- job file (drawer) ---------- */
+function openJob(id){
+ var j=byId(id);if(!j)return;
+ var dd=j.date?diff(j.date,T):null;
+ var st=STAGES.map(function(s){return '<option value="'+s.id+'"'+(j.stage===s.id?' selected':'')+'>'+s.name+'</option>'}).join('')+'<option value="lost"'+(j.stage==='lost'?' selected':'')+'>Lost</option>';
+ var tk=tasks().filter(function(t){return t.j.id===j.id});
+ var dr=$('#drawer');
+ dr.innerHTML='<div class="hd"><div><span class="chip st-'+j.stage+'">'+STN[j.stage]+'</span>'+(j.emergency?' <span class="chip em">Emergency</span>':'')+' <small style="color:var(--faint)">'+esc(j.ref)+(j.source==='website'?' · from the booking page':'')+'</small><h2>'+esc(who(j))+'</h2><div style="color:var(--soft);font-size:14px">'+esc(j.title)+(j.cust.contact?' · '+esc(j.cust.name):'')+'</div></div><button class="x" data-dclose aria-label="Close">×</button></div>'+
+ '<div class="bd"><div class="row"><a class="btn sm" href="tel:'+esc(String(j.cust.phone).replace(/[^0-9+]/g,''))+'">☎ '+esc(j.cust.phone)+'</a><a class="btn sm ghost" href="mailto:'+esc(j.cust.email)+'">✉ '+esc(j.cust.email)+'</a></div>'+
+ '<div class="facts"><div><small>Date and window</small>'+(j.date?long(j.date)+'<br><span style="color:var(--soft)">'+esc(j.win)+' · '+rel(j.date)+'</span>':'Not booked yet')+'</div><div><small>Tradie</small>'+esc(TEAM[j.tech]||'Not assigned')+'<br><span style="color:var(--soft)">'+j.trade+'</span></div>'+
+ '<div><small>Suburb</small>'+esc(j.cust.suburb||'—')+'<br><span style="color:var(--soft)">'+esc(j.cust.seg)+'</span></div><div><small>'+(j.stage==='request'?'Quote':'Value')+'</small>'+(j.value?money(j.value)+' incl. GST':'Not priced yet')+(j.quoteExp&&j.stage==='quoted'?'<br><span style="color:'+(diff(j.quoteExp,T)<=R.qExpWarn?'var(--bad)':'var(--soft)')+'">valid until '+nice(j.quoteExp)+'</span>':'')+'</div>'+
+ (j.repeat?'<div><small>Repeat job</small>Every '+(j.repeat/7)+' weeks<br><span style="color:var(--soft)">same day and tradie</span></div>':'')+(j.service?'<div><small>Next service</small>'+nice(svcDue(j),true)+'<br><span style="color:var(--soft)">'+esc(j.service.what)+'</span></div>':'')+
+ (j.desc?'<div style="grid-column:1/-1"><small>What the customer said</small>'+esc(j.desc)+'</div>':'')+'</div>'+
+ '<div class="row"><label class="f" style="margin:0">Stage <select class="inp" id="dStage" style="width:auto;display:inline-block;margin-left:6px">'+st+'</select></label>'+
+ (j.stage==='request'?'<button class="btn sm" data-quote="'+j.id+'">✎ Send the quote</button>':'')+
+ (j.stage==='quoted'?'<button class="btn sm" id="dAccept">Quote accepted: book it</button>':'')+
+ (j.stage==='booked'&&dd!=null&&dd<=0?'<button class="btn sm" data-jobdone="'+j.id+'">✓ Job done</button>':'')+
+ (j.stage==='done'&&!j.service?'<button class="btn sm ghost" id="dSvc">+ Yearly service reminder</button>':'')+'</div>'+
+ (tk.length?'<div class="sec"><h4>Follow-ups for this job</h4>'+tk.map(taskHtml).join('')+'</div>':'')+
+ '<div class="sec"><h4>Send an email</h4><div class="row">'+Object.keys(TPL).map(function(k){return '<button class="btn sm ghost" data-email="'+j.id+'|'+k+'">'+(sent(j,k)?'✓ ':'')+esc(TPL[k].name)+'</button>'}).join('')+'</div></div>'+
+ '<div class="sec"><h4>Notes</h4><textarea class="inp" id="dNotes" placeholder="Parts to order, access, gate code, pets…">'+esc(j.notes)+'</textarea></div>'+
+ '<div class="sec"><h4>History</h4><ul class="tl">'+j.timeline.concat(j.emails.map(function(e){return{d:e.d,t:'Email sent: '+((TPL[e.key]||{}).name||e.key)}})).sort(function(a,b){return a.d<b.d?1:-1}).map(function(x){return '<li>'+esc(x.t)+'<small>'+nice(x.d,true)+'</small></li>'}).join('')+'</ul></div></div>';
+ dr.classList.add('on');$('#scrim').classList.add('on');dr.dataset.id=id;
+ $('#dStage').onchange=function(e){j.stage=e.target.value;j.timeline.push({d:T,t:'Stage changed to '+STN[j.stage]});save(j);openJob(id);render();toast('Moved to '+STN[j.stage])};
+ var ac=$('#dAccept');if(ac)ac.onclick=function(){j.stage='booked';j.date=off(3);j.win='8am – 10am';j.tech=j.tech||(j.trade==='Electrical'?'t2':'t1');j.timeline.push({d:T,t:'Quote accepted, booked for '+nice(j.date)+' '+j.win});save(j);openJob(id);render();toast('Booked. The day-before reminder is now in your follow-ups')};
+ var sv=$('#dSvc');if(sv)sv.onclick=function(){j.service={what:String(j.title).replace(/\s*\(.*\)$/,'').toLowerCase()+' check',every:365};j.timeline.push({d:T,t:'Yearly service reminder added'});save(j);openJob(id);render();toast('Reminder set for '+nice(svcDue(j),true))};
+ $('#dNotes').onchange=function(e){j.notes=e.target.value;save(j);toast('Notes saved')};
+}
+function closeJob(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on')}
+$('#scrim').onclick=closeJob;
+
+/* ---------- send a follow-up email (demo) ---------- */
+function sendFollowup(id,key){
+ var j=byId(id),t=TPL[key];if(!j||!t)return;
+ var v=vars(j),subj=fill(t.subject,v),html=emailHtml(subj,fill(t.body,v),t.btn,{});
+ showEmail('To '+j.cust.email+': '+subj,html,function(){j.emails.push({key:key,d:T});save(j);render();if($('#drawer').classList.contains('on'))openJob(id);toast('Demo: email marked as sent to '+first(who(j))+'. In the live version it goes to their inbox.')});
+}
+/* ---------- price a quote request (demo) ---------- */
+function quoteJob(id){
+ var j=byId(id);if(!j)return;var mb=$('#mbox');
+ mb.innerHTML='<div class="hd"><b>Quote for '+esc(who(j))+'</b><button class="x" data-mclose aria-label="Close">×</button></div><div class="bd">'+
+ '<p style="margin:0 0 12px;color:var(--soft);font-size:14px">'+esc(j.title)+' · '+esc(j.cust.suburb)+(j.desc?'<br>“'+esc(j.desc)+'”':'')+'</p>'+
+ '<div class="row" style="gap:10px"><label class="f" style="flex:1">Labour ($, ex GST)<input class="inp" id="qL" type="number" value="960"></label><label class="f" style="flex:1">Materials ($, ex GST)<input class="inp" id="qM" type="number" value="1180"></label></div>'+
+ '<p id="qT" style="font-weight:700;margin:0 0 12px"></p><p class="note">In the live version you build the quote line by line with your rates filled in, and the customer gets a link to accept it and pick a time.</p>'+
+ '<div class="row" style="justify-content:flex-end"><button class="btn" id="qGo">Send quote (demo)</button></div></div>';
+ $('#modal').classList.add('on');
+ var tot=function(){return Math.round(((+$('#qL').value||0)+(+$('#qM').value||0))*1.1)};
+ var up=function(){$('#qT').textContent='Total '+money(tot())+' incl. GST'};$('#qL').oninput=up;$('#qM').oninput=up;up();
+ $('#qGo').onclick=function(){j.value=tot();j.stage='quoted';j.quoteSent=T;j.quoteExp=off(BIZ.quoteDays);j.timeline.push({d:T,t:'Quote sent: '+money(j.value)+' incl. GST'});save(j);$('#modal').classList.remove('on');render();if($('#drawer').classList.contains('on'))openJob(id);toast('Demo: quote sent. A follow-up is set for '+R.qChase+' days if they don’t reply')};
+}
+
+/* ---------- global clicks ---------- */
+document.addEventListener('click',function(e){
+ var o=e.target.closest('[data-open]');if(o&&!e.target.closest('a')){openJob(o.dataset.open);return}
+ var em=e.target.closest('[data-email]');if(em){var p=em.dataset.email.split('|');sendFollowup(p[0],p[1]);return}
+ var qb=e.target.closest('[data-quote]');if(qb){quoteJob(qb.dataset.quote);return}
+ var jd=e.target.closest('[data-jobdone]');if(jd){var x=byId(jd.dataset.jobdone);x.stage='done';x.timeline.push({d:T,t:'Job done by '+(TEAM[x.tech]||'the team')});save(x);render();if($('#drawer').classList.contains('on'))openJob(x.id);toast('Job done. The thank-you email is ready in your follow-ups');return}
+ var dn=e.target.closest('[data-done]');if(dn){var q=dn.dataset.done.split('|'),f=byId(q[0]);f.done=f.done||{};f.done[q[1]]=T;f.timeline.push({d:T,t:'Follow-up dismissed: '+((TPL[q[1]]||{}).name||q[1])});save(f);render();if($('#drawer').classList.contains('on'))openJob(f.id);toast('Dismissed');return}
+ if(e.target.closest('[data-dclose]'))closeJob();
+ var sb=e.target.closest('[data-stage]');if(sb){STAGEF=STAGEF===sb.dataset.stage?'open':sb.dataset.stage;renderJobs()}
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeJob();$('#modal').classList.remove('on')}});
+
+/* ---------- add a job by hand (a phone booking) ---------- */
+function addJob(){
+ var mb=$('#mbox');
+ mb.innerHTML='<div class="hd"><b>Add a job</b><button class="x" data-mclose aria-label="Close">×</button></div><div class="bd">'+
+ '<label class="f">Customer name<input class="inp" id="aN"></label><div class="row" style="gap:10px"><label class="f" style="flex:1">Email<input class="inp" id="aE" type="email"></label><label class="f" style="flex:1">Phone<input class="inp" id="aP"></label></div>'+
+ '<div class="row" style="gap:10px"><label class="f" style="flex:1">Job<input class="inp" id="aT" value="Leaking tap"></label><label class="f" style="flex:1">Suburb<input class="inp" id="aS" value="Marrickville"></label></div>'+
+ '<div class="row" style="gap:10px"><label class="f" style="flex:1">Date<input class="inp" id="aD" type="date" value="'+off(2)+'"></label><label class="f" style="flex:1">Tradie<select class="inp" id="aR">'+Object.keys(TEAM).map(function(k){return '<option value="'+k+'">'+esc(TEAM[k])+'</option>'}).join('')+'</select></label></div>'+
+ '<div class="row" style="gap:10px"><label class="f" style="flex:1">Value ($ incl. GST)<input class="inp" id="aV" type="number" value="220"></label><label class="f" style="flex:1">Group<select class="inp" id="aG"><option>Homes</option><option>Landlords &amp; agents</option><option>Strata</option><option>Businesses</option></select></label></div>'+
+ '<div class="row" style="justify-content:flex-end"><button class="btn" id="aGo">Add job</button></div></div>';
+ $('#modal').classList.add('on');
+ $('#aGo').onclick=function(){var n=$('#aN').value.trim(),em=$('#aE').value.trim();if(!n||!/\S+@\S+\.\S+/.test(em)){toast('Add a name and a valid email');return}
+  var tech=$('#aR').value;
+  var j={id:'M'+Date.now(),ref:'TD-'+Math.random().toString(36).slice(2,7).toUpperCase(),cust:{name:n,contact:'',email:em,phone:$('#aP').value,suburb:$('#aS').value,seg:$('#aG').value},
+   title:$('#aT').value||'Job',trade:tech==='t2'?'Electrical':'Plumbing',tech:tech,date:$('#aD').value||off(2),win:'8am – 10am',value:+$('#aV').value||0,stage:'booked',emergency:false,repeat:0,service:null,desc:'',
+   quoteSent:'',quoteExp:'',emails:[],timeline:[{d:T,t:'Phone booking added by the office'}],done:{},created:T,notes:'',source:'manual'};
+  DATA.jobs.push(j);save(j);$('#modal').classList.remove('on');render();openJob(j.id);toast('Job added')};
+}
+
+/* ================= Email Studio ================= */
+var ES={mode:'auto',key:'qchase',camp:0};
+var CAMPS=store.get('camps',null)||[
+ {name:'Winter hot water check',subject:'Is your hot water ready for winter?',heading:'Beat the cold-shower surprise',btn:'Book a hot water check',
+  body:'Hi {first},\n\nMost hot water systems give up in the first cold snap. A quick check of the valves, anode and thermostat now can save a cold morning later.\n\nBook a check online and choose a time that suits you. If your system is over 10 years old, we’ll also give you options for a replacement.',aud:['past','Plumbing']},
+ {name:'Smoke alarms for landlords',subject:'Smoke alarm checks for your rentals',heading:'Every rental, checked and recorded',btn:'Book smoke alarm checks',
+  body:'Hi {first},\n\nWe can test and replace smoke alarms across all your rentals, and send you a short report for each property.\n\nOne booking covers several addresses, and we work around your tenants.',aud:['Landlords & agents','Strata']},
+ {name:'Storm season: gutters and drains',subject:'Storms are coming. Are your drains clear?',heading:'Get ahead of storm season',btn:'Book a drain check',
+  body:'Hi {first},\n\nBlocked stormwater pits and downpipes are the most common call-out after a big storm.\n\nWe’ll check your pits, downpipes and outside drains and clear any blockages before the rain does the damage.',aud:['past','Strata','Businesses']},
+ {name:'Thank you, and refer a friend',subject:'A thank-you from {business}',heading:'Thanks for supporting a local business',btn:'Share our website',
+  body:'Hi {first},\n\nThanks for having us this year. Most of our work comes from word of mouth, so if a friend or neighbour needs a plumber or electrician, we’d love you to pass on our details.',aud:['past']}];
+var AUDS=[['open','Open quotes (not yet accepted)'],['booked','Booked, job coming up'],['past','Past customers (job done)'],['Homes','Homes'],['Landlords & agents','Landlords and agents'],['Strata','Strata'],['Businesses','Businesses'],['Plumbing','Plumbing customers'],['Electrical','Electrical customers']];
+function audList(sel){
+ return customers().filter(function(x){return x.jobs.some(function(j){
+  return sel.some(function(a){
+   if(a==='open')return ['request','quoted'].indexOf(j.stage)>-1;
+   if(a==='booked')return j.stage==='booked';
+   if(a==='past')return j.stage==='done';
+   if(a==='Plumbing'||a==='Electrical')return j.trade===a&&j.stage==='done';
+   return x.c.seg===a})})});
+}
+var SENT=store.get('sent',[]);
+function renderStudio(){
+ var auto=ES.mode==='auto';
+ var left=auto?Object.keys(TPL).map(function(k){var t=TPL[k];return '<button class="tpl'+(ES.key===k?' on':'')+'" data-tpl="'+k+'"><span class="sw'+(t.auto?'':' off')+'">'+(t.auto?'AUTO ON':'OFF')+'</span><b>'+esc(t.name)+'</b><small>'+GROUP_ICON[t.group]+' '+esc(t.group)+'</small></button>'}).join('')
+  :CAMPS.map(function(c,i){return '<button class="tpl'+(ES.camp===i?' on':'')+'" data-camp="'+i+'"><b>'+esc(c.name)+'</b><small>'+esc(fill(c.subject,{business:BIZ.name}))+'</small></button>'}).join('')+'<button class="btn ghost" id="newCamp" style="width:100%;justify-content:center">+ New email</button>';
+ var right;
+ if(auto){var t=TPL[ES.key];
+  right='<div class="editor"><div><p class="note">This email is sent '+whenText(ES.key)+'. It fills in each customer’s name, job, time and price for you.</p>'+
+  '<label class="f"><input type="checkbox" id="tAuto"'+(t.auto?' checked':'')+' style="width:auto;margin-right:6px">Send automatically (otherwise it waits in Follow-ups for you to send)</label>'+
+  '<label class="f">Subject<input class="inp" id="tS" value="'+esc(t.subject)+'"></label><label class="f">Message<textarea class="inp" id="tB" rows="12">'+esc(t.body)+'</textarea></label>'+
+  '<div class="tags">'+['first','job','suburb','window','job_day','tradie','value','quote_expires','service','business','phone'].map(function(x){return '<button type="button" data-tag="{'+x+'}">{'+x+'}</button>'}).join('')+'</div>'+
+  '<label class="f">Button<input class="inp" id="tBtn" value="'+esc(t.btn||'')+'"></label><div class="row"><button class="btn" id="tSave">Save email</button><button class="btn ghost" id="tReset">Back to our wording</button></div></div>'+
+  '<div class="pv"><div style="font-size:12.5px;color:var(--soft);margin-bottom:8px">Preview with a sample customer</div><iframe id="pv" title="Email preview"></iframe></div></div>';
+ } else {var c=CAMPS[ES.camp]||CAMPS[0];var A=audList(c.aud||[]);
+  right='<div class="editor"><div><label class="f">Subject<input class="inp" id="cS" value="'+esc(c.subject)+'"></label><label class="f">Heading<input class="inp" id="cH" value="'+esc(c.heading||'')+'"></label>'+
+  '<label class="f">Message<textarea class="inp" id="cB" rows="9">'+esc(c.body)+'</textarea></label><label class="f">Button<input class="inp" id="cBtn" value="'+esc(c.btn||'')+'"></label>'+
+  '<h3 style="margin:8px 0 8px;font-size:22px">Who gets it</h3><div class="aud">'+AUDS.map(function(a){return '<label><input type="checkbox" data-aud="'+a[0]+'"'+((c.aud||[]).indexOf(a[0])>-1?' checked':'')+'> '+a[1]+'<b>'+audList([a[0]]).length+'</b></label>'}).join('')+'</div>'+
+  '<div class="row"><button class="btn" id="cSend">Send to '+A.length+' customer'+(A.length===1?'':'s')+' (demo)</button><button class="btn ghost" id="cTest">Send me a test</button></div>'+
+  (SENT.length?'<h3 style="margin:18px 0 6px;font-size:22px">Sent emails</h3><ul class="sent">'+SENT.slice(0,8).map(function(s){return '<li><b>'+esc(s.subject)+'</b> · '+s.n+' customers · '+nice(s.d,true)+'</li>'}).join('')+'</ul>':'')+'</div>'+
+  '<div class="pv"><div style="font-size:12.5px;color:var(--soft);margin-bottom:8px">Preview</div><iframe id="pv" title="Email preview"></iframe></div></div>';
+ }
+ $('#main').innerHTML='<h1>Email Studio</h1><p class="sub">Follow-up emails go out at the right moment for every quote and job. Newsletters bring past customers back for the next job.</p>'+
+ '<div class="seg"><button data-mode="auto" class="'+(auto?'on':'')+'">Follow-up emails</button><button data-mode="camp" class="'+(!auto?'on':'')+'">Newsletters and offers</button></div>'+
+ '<div class="es"><div>'+left+'</div><div class="panel">'+right+'</div></div>';
+ $$('[data-mode]').forEach(function(b){b.onclick=function(){ES.mode=b.dataset.mode;renderStudio()}});
+ $$('[data-tpl]').forEach(function(b){b.onclick=function(){ES.key=b.dataset.tpl;renderStudio()}});
+ $$('[data-camp]').forEach(function(b){b.onclick=function(){ES.camp=+b.dataset.camp;renderStudio()}});
+ if(auto)wireTpl();else wireCamp();
+}
+function whenText(k){return{qchase:R.qChase+' days after a quote with no reply',qexpire:R.qExpWarn+' days before a quote expires',remind:R.remind+' day before the job',thanks:R.thanks+' day after the job',check:R.check+' days after a job (over $300)',service:R.svcLead+' days before a yearly service is due'}[k]||''}
+function sampleJob(k){var J=allJobs(),want={qchase:'quoted',qexpire:'quoted',remind:'booked',thanks:'done',check:'done',service:'done'}[k];
+ return J.filter(function(j){return j.stage===want&&(k!=='service'||j.service)})[0]||J[0]}
+function wireTpl(){
+ var k=ES.key;
+ function pv(){var j=sampleJob(k),v=vars(j);$('#pv').srcdoc=emailHtml(fill($('#tS').value,v),fill($('#tB').value,v),$('#tBtn').value,{})}
+ ['#tS','#tB','#tBtn'].forEach(function(s){$(s).oninput=pv});pv();
+ $$('[data-tag]').forEach(function(b){b.onclick=function(){var ta=$('#tB'),p=ta.selectionStart||ta.value.length;ta.value=ta.value.slice(0,p)+b.dataset.tag+ta.value.slice(p);ta.focus();pv()}});
+ $('#tSave').onclick=function(){TPL[k]=Object.assign({},TPL[k],{subject:$('#tS').value,body:$('#tB').value,btn:$('#tBtn').value,auto:$('#tAuto').checked});var s=store.get('tpl',{});s[k]={subject:TPL[k].subject,body:TPL[k].body,btn:TPL[k].btn,auto:TPL[k].auto};store.set('tpl',s);renderStudio();toast('Email saved')};
+ $('#tReset').onclick=function(){TPL[k]=Object.assign({},TPL_DEFAULT[k]);var s=store.get('tpl',{});delete s[k];store.set('tpl',s);renderStudio();toast('Back to our wording')};
+ $('#tAuto').onchange=function(){$('#tSave').click()};
+}
+function wireCamp(){
+ var c=CAMPS[ES.camp];
+ function rd(){c.subject=$('#cS').value;c.heading=$('#cH').value;c.body=$('#cB').value;c.btn=$('#cBtn').value;c.aud=$$('[data-aud]').filter(function(x){return x.checked}).map(function(x){return x.dataset.aud});store.set('camps',CAMPS)}
+ function pv(){rd();var v={first:'Sophie',business:BIZ.name};$('#pv').srcdoc=emailHtml(fill(c.subject,v),fill(c.body,v),c.btn,{heading:c.heading,marketing:true})}
+ ['#cS','#cH','#cB','#cBtn'].forEach(function(s){$(s).oninput=pv});
+ $$('[data-aud]').forEach(function(x){x.onchange=function(){rd();renderStudio()}});pv();
+ $('#cTest').onclick=function(){toast('Demo: a test would go to '+BIZ.email)};
+ $('#cSend').onclick=function(){rd();var A=audList(c.aud);if(!A.length){toast('Choose who gets it first');return}
+  var v={first:first(A[0].c.contact||A[0].c.name),business:BIZ.name};
+  showEmail('To '+A.length+' customers: '+fill(c.subject,v),emailHtml(fill(c.subject,v),fill(c.body,v),c.btn,{heading:c.heading,marketing:true}),function(){
+   SENT.unshift({subject:fill(c.subject,v),n:A.length,d:T});store.set('sent',SENT);
+   A.forEach(function(x){var j=x.jobs[0];j.timeline.push({d:T,t:'Newsletter: '+fill(c.subject,v)});save(j)});
+   renderStudio();toast('Demo: sent to '+A.length+' customers. Each name is filled in for them.')},'Send to '+A.length+' customers (demo)')};
+ var nb=$('#newCamp');if(nb)nb.onclick=function(){CAMPS.push({name:'New email',subject:'News from {business}',heading:'',btn:'Book online',body:'Hi {first},\n\n',aud:['past']});ES.camp=CAMPS.length-1;store.set('camps',CAMPS);renderStudio()};
+}
+
+/* ================= Settings ================= */
+function renderSettings(){
+ var rows=[['qChase','Quote follow-up','days after a quote with no reply'],['qExpWarn','Quote expiry reminder','days before a quote expires'],['remind','Job reminder','days before the job'],['thanks','Thank-you and review','days after the job'],['check','“Is everything working?” check','days after the job'],['svcLead','Yearly service reminder','days before a service is due']];
+ $('#main').innerHTML='<h1>Settings</h1><p class="sub">When each follow-up is due. Change a number and the Follow-ups list updates straight away.</p>'+
+ '<div class="panel" style="max-width:720px">'+rows.map(function(r){return '<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:10px 0"><div><b>'+r[1]+'</b><div style="color:var(--soft);font-size:13px">'+r[2]+'</div></div><input class="inp" type="number" min="0" max="400" data-rule="'+r[0]+'" value="'+R[r[0]]+'" style="width:90px"></div>'}).join('')+
+ '<div class="row" style="margin-top:14px"><button class="btn ghost" id="rReset">Back to our timings</button><button class="btn ghost" id="dReset">Reset the demo data</button></div></div>'+
+ '<div class="panel" style="max-width:720px;margin-top:16px"><h3>In the live version</h3><p class="sub" style="margin-bottom:0">Bookings, quote requests and emergency call-outs come straight from your booking page. Emails go from your own address, and replies come back to your inbox. Your team signs in from any phone.</p></div>';
+ $$('[data-rule]').forEach(function(i){i.onchange=function(){R[i.dataset.rule]=Math.max(0,+i.value||0);store.set('rules',R);render();toast('Saved')}});
+ $('#rReset').onclick=function(){R=Object.assign({},RULES_DEFAULT);store.set('rules',{});render();toast('Back to our timings')};
+ $('#dReset').onclick=function(){store.set('data',null);store.set('ovr',{});store.set('sent',[]);store.set('camps',null);location.reload()};
+}
+
+$('#vName').textContent=BIZ.name;
+render();
+if(location.hash){var h=location.hash.slice(1);if(['today','jobs','customers','studio','settings'].indexOf(h)>-1)setTab(h)}
+})();
+</script>
+
+</body>
+</html>
