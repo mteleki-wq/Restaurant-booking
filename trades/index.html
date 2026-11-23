@@ -147,6 +147,7 @@ section.s{padding:110px 0}
 .video .play{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;background:var(--acc);box-shadow:0 14px 34px -8px rgba(0,0,0,.55);display:grid;place-items:center;transition:transform .2s}
 .video .play:after{content:"";margin-left:6px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent #fff}
 .video:hover .play{transform:scale(1.08)}
+.crmd{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:center;max-width:980px;margin:40px auto 0}.crmd img{width:100%;height:auto;display:block;border-radius:18px;box-shadow:0 20px 50px rgba(20,32,44,.18)}.crmd h3{font-size:30px;margin:6px 0 10px}.crmd p{margin:0 0 16px}@media(max-width:760px){.crmd{grid-template-columns:1fr}}
 .vnote{text-align:center;color:var(--muted);font-size:14px;margin-top:16px}
 /* pricing */
 .plans{display:grid;gap:18px}
@@ -301,6 +302,12 @@ body:has(.chat.open) .float{visibility:hidden}
     <p data-edit="vP" style="margin-left:auto;margin-right:auto">See a customer book a plumber on their phone, an emergency call-out, a quote turned into a booked job — and the run sheet your team sees.</p></div>
   <button class="video rv" id="vid" type="button" aria-label="Play the Trade Deluxe tour video"><img data-img="videoThumb" src="/trades/img/video-thumb.jpg" alt="Trade Deluxe — a 2-minute tour" width="1280" height="720" loading="lazy"><span class="play" aria-hidden="true"></span></button>
   <p class="vnote">Prefer YouTube? <a href="https://youtu.be/zFpncnKskSI" target="_blank" rel="noopener">Watch it there ↗</a> · <a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">Subscribe to Webescapade</a></p>
+  <div class="crmd rv">
+    <a href="/trades/demo/crm.html" target="_blank" rel="noopener"><img data-img="crmThumb" src="/trades/img/crm-demo.jpg" alt="The Trade CRM and Email Studio: today’s follow-ups for a plumbing and electrical business" width="1200" height="675" loading="lazy"></a>
+    <div><div class="eyebrow" data-edit="crmEy">New · preview</div><h3 data-edit="crmH">The Trade CRM &amp; Email Studio</h3>
+      <p class="muted" data-edit="crmP">Every follow-up worked out for you each morning: quotes with no reply, tomorrow’s jobs, thank-you and review emails, and yearly service reminders, each with the email ready to send. Try it on our demo business.</p>
+      <a class="btn acc" href="/trades/demo/crm.html" target="_blank" rel="noopener" data-edit="crmB">Try the CRM demo ↗</a></div>
+  </div>
 </div></section>
 
 <section class="s" id="travel"><div class="w">
