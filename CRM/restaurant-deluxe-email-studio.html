@@ -3536,6 +3536,9 @@
   var TRD_IMG   = TRD_PAGE+"img/email/";                         /* email pictures, 1200px wide */
   var TRD_VIDEO = "https://youtu.be/zFpncnKskSI";                /* Trade Deluxe 2-minute tour */
   var TRD_THUMB = TRD_PAGE+"img/video-thumb.jpg";
+  var TRD_CRM   = TRD_APP+"crm.html";                            /* demo Trade CRM & Email Studio */
+  var TRD_CRM_VIDEO = "https://youtu.be/V7sXC_0TCqg";            /* CRM & Email Studio video (1:57) */
+  var TRD_CRM_THUMB = TRD_PAGE+"img/crm-video-thumb.jpg";
   var TRD_OFFER = {trial_days:'', gst:true, plans:[
       {name:"Bookings", price:39, desc:"Keep your own website. Booking page with arrival windows, run sheet with travel between jobs, quotes, emergencies and repeat jobs. Up to 3 tradies."},
       {name:"Basic", price:59, desc:"Everything in Bookings plus a trade website you edit yourself, with jobs, prices and team shown live. Up to 3 tradies.", main:true},
@@ -3584,6 +3587,27 @@
         plans:[trdBox(M,true), trdBox(B,false), trdBox(TM,false)].filter(Boolean),
         subject:'Online bookings that plan the drive', resendSubject:'Bookings that allow for the drive between jobs',
         preheader:'Customers book online, and every time allows for the travel. Watch the 2-minute tour.' }),
+      P({ name:'Trade CRM & Email Studio (video)', desc:'Shows the new Trade CRM and Email Studio (preview) with its 2-minute video: daily follow-ups with the email ready to send, quotes, jobs, reviews and service reminders',
+        badge:'NEW · PREVIEW', eyebrow:'Trade CRM & Email Studio',
+        headline:'Every quote. Every job. Every follow-up.',
+        intro:'A trade business runs on follow-ups: quotes with no reply, tomorrow’s jobs, a thank-you and a review request after the work, and the yearly service nobody remembers. Miss one and the job goes to someone else.\n\nThe new Trade CRM and Email Studio for Trade Deluxe works them out from every quote and job and lists them each morning, with the email already written. Check it, tap send, and get back on the tools. Watch the 2-minute video, then try it on our demo business.',
+        videoUrl:TRD_CRM_VIDEO, videoThumb:TRD_CRM_THUMB, videoTitle:'Watch: Trade CRM & Email Studio (2 min)', videoPos:'hero',
+        cta1:'Try the CRM demo', cta1url:TRD_CRM, cta2:'See Trade Deluxe', cta2url:TRD_PAGE,
+        featEyebrow:'What’s inside', featHeading:'Your office work,\nsorted before smoko.',
+        cards:[
+          {n:'01', t:'Follow-ups each morning', d:'Quotes with no reply, tomorrow’s jobs, thank-yous and service reminders, worked out for you.'},
+          {n:'02', t:'The email is ready', d:'Name, job and price already filled in. Check it and send.'},
+          {n:'03', t:'Every job, start to finish', d:'From quote request to booked to done, with notes and history.'},
+          {n:'04', t:'Reviews, repeats', d:'Review requests after the job. Yearly service reminders.'}
+        ],
+        spotOn:true, spotEyebrow:'Linked to your bookings', spotHeading:'Booked online. In the CRM instantly.',
+        spotSub:'When a customer books a job or asks for a quote on your website, it appears in the CRM straight away, with its own follow-ups and emails.',
+        boxes:[{l:'FOLLOW-UP EMAILS', v:'6 ready to go'},{l:'TIMING', v:'You choose'},{l:'STATUS', v:'Preview'}],
+        bandImage:TRD_IMG+'crm-followups.jpg', bandAlt:'The Trade CRM follow-up list for a demo plumbing and electrical business', bandLink:TRD_CRM,
+        bandCaption:'Try it on our demo business: open a follow-up and see the email it writes for you.',
+        plans:[trdBox(M,true), trdBox(B,false)].filter(Boolean),
+        subject:'Every follow-up, done for you', resendSubject:'New: Trade CRM and Email Studio',
+        preheader:'Quotes, jobs, reviews and service reminders, each with the email ready. Watch the 2-minute video.' }),
       P({ name:'Emergencies and repeat jobs', desc:'Second email: after-hours emergency call-outs with your own rules, and repeat jobs (mowing, maintenance, test & tag) booked once',
         badge:'EMERGENCIES & REPEAT WORK', eyebrow:'Trade Deluxe',
         headline:'Burst pipe at 7pm? Booked online.',
