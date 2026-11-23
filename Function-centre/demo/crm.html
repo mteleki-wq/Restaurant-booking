@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Function CRM &amp; Email Studio · Aurelle Function Centre (demo)</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F8F3EE;--card:#fff;--ink:#2a1219;--soft:#6d5560;--faint:#9a8890;--line:#ead9d2;--blush:#f4e4dc;--bur:#4a1528;--bur2:#7A2E3E;--gold:#B8935A;--champ:#E9D3B4;
+ --ok:#2F7A55;--okbg:#e5f2ea;--warn:#b8741a;--warnbg:#fbefdc;--bad:#a3394f;--badbg:#f8e3e7;--blue:#2a5d8f;--bluebg:#e4edf7;
+ --fs:'Cormorant Garamond',Georgia,serif;--fd:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--fd);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--bur2)}
+.demo{background:var(--bur);color:#fff;font-size:13px;text-align:center;padding:8px 14px}
+.demo a{color:var(--champ);font-weight:700}
+header.top{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top .w{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;max-width:1240px;margin:0 auto}
+.logo{width:40px;height:40px;border-radius:11px;background:var(--bur);color:var(--champ);display:grid;place-items:center;font:600 22px var(--fs)}
+.ttl b{display:block;font-size:16px;line-height:1.2}.ttl small{color:var(--soft);font-size:12.5px}
+nav.tabs{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav.tabs button{white-space:nowrap;flex:none;border:0;background:none;padding:9px 14px;border-radius:999px;font-weight:700;font-size:14px;color:var(--soft);cursor:pointer;position:relative}
+nav.tabs button.on{background:var(--bur);color:#fff}
+nav.tabs .n{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:999px;background:var(--bad);color:#fff;font-size:11px;margin-left:6px;padding:0 6px}
+main{max-width:1240px;margin:0 auto;padding:22px 20px 80px}
+h1,h2,h3{font-family:var(--fs);font-weight:600;margin:0;line-height:1.1}
+h1{font-size:40px}h2{font-size:30px}h3{font-size:22px}
+.sub{color:var(--soft);margin:6px 0 18px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.kpi small{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.kpi b{display:block;font:600 30px var(--fs);margin-top:2px}.kpi span{font-size:12.5px;color:var(--soft)}
+.grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.panel h3{margin-bottom:4px}.panel .sub{margin:2px 0 12px;font-size:13.5px}
+.group{margin-top:14px}.group>h4{margin:0 0 8px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:8px}
+.group>h4 i{font-style:normal;background:var(--blush);color:var(--bur2);border-radius:999px;padding:1px 8px;letter-spacing:0}
+.task{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px;background:#fff}
+.task .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-size:17px;background:var(--blush)}
+.task.urgent .ic{background:var(--badbg)}.task.soon .ic{background:var(--warnbg)}
+.task .tx{flex:1;min-width:0}.task .tx b{display:block;font-size:14.5px}.task .tx span{display:block;color:var(--soft);font-size:13px}
+.task .due{font-size:12px;font-weight:700;white-space:nowrap}.task.urgent .due{color:var(--bad)}.task.soon .due{color:var(--warn)}
+.task .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.btn{border:1.5px solid transparent;border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;background:var(--bur);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--bur2)}.btn.ghost{background:transparent;color:var(--bur);border-color:var(--line)}.btn.ghost:hover{border-color:var(--bur2)}
+.btn.sm{padding:5px 11px;font-size:12px}
+.empty{color:var(--soft);font-size:14px;padding:10px 0}
+.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:800;white-space:nowrap}
+.st-enquiry{background:var(--bluebg);color:var(--blue)}.st-hold{background:var(--warnbg);color:var(--warn)}.st-meeting{background:#efe6f6;color:#6a3d8f}
+.st-confirmed{background:var(--okbg);color:var(--ok)}.st-paid{background:#dff0ee;color:#127a7a}.st-done{background:#eee;color:#555}.st-lost{background:var(--badbg);color:var(--bad)}
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px}
+.pipe button{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:10px;text-align:left;cursor:pointer}
+.pipe button.on{border-color:var(--bur);box-shadow:0 0 0 2px var(--bur) inset}
+.pipe b{display:block;font:600 26px var(--fs)}.pipe small{font-size:12px;color:var(--soft);font-weight:700}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar input,.toolbar select{border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:#fff;min-width:200px}
+table.list{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.list th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:10px 12px;background:#fcf8f5;border-bottom:1px solid var(--line)}
+.list td{padding:11px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+.list tr:last-child td{border-bottom:0}.list tbody tr{cursor:pointer}.list tbody tr:hover{background:#fdf9f6}
+.list td small{display:block;color:var(--soft);font-size:12.5px}
+.month{font:600 13px var(--fd);letter-spacing:.14em;text-transform:uppercase;color:var(--bur2);background:#fbf3ee!important;cursor:default!important}
+.money{font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:5px;max-width:140px}.bar i{display:block;height:100%;background:var(--ok)}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(30,10,16,.45);z-index:50;display:none}.scrim.on{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100vw);background:var(--bg);z-index:60;transform:translateX(105%);transition:transform .25s;overflow:auto;box-shadow:-20px 0 60px rgba(0,0,0,.2)}
+.drawer.on{transform:none}
+.drawer .hd{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:16px 18px;display:flex;gap:10px;align-items:flex-start;z-index:2}
+.drawer .hd h2{font-size:28px}.drawer .bd{padding:16px 18px 40px}
+.x{margin-left:auto;border:0;background:var(--blush);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.facts div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;font-size:13.5px}
+.facts small{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:800}
+.sec{margin-top:18px}.sec>h4{margin:0 0 8px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.checks label{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;margin-bottom:6px;font-size:14px;cursor:pointer}
+.checks input{width:18px;height:18px;accent-color:var(--ok)}
+.tl{list-style:none;padding:0;margin:0;border-left:2px solid var(--line);margin-left:6px}
+.tl li{position:relative;padding:0 0 10px 16px;font-size:13.5px}.tl li:before{content:"";position:absolute;left:-6px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.tl small{color:var(--faint);display:block;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.inp{border:1px solid var(--line);border-radius:12px;padding:9px 12px;background:#fff;width:100%}
+textarea.inp{resize:vertical;min-height:90px}
+label.f{display:block;font-size:12.5px;font-weight:700;color:var(--soft);margin-bottom:10px}label.f .inp{margin-top:5px}
+/* email studio */
+.es{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+.tpl{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 12px;margin-bottom:8px;cursor:pointer}
+.tpl.on{border-color:var(--bur);box-shadow:0 0 0 2px var(--bur) inset}.tpl b{display:block;font-size:14px}.tpl small{color:var(--soft);font-size:12.5px}
+.tpl .sw{float:right;font-size:11px;font-weight:800;color:var(--ok)}.tpl .sw.off{color:var(--faint)}
+.seg{display:inline-flex;background:var(--blush);border-radius:999px;padding:3px;margin-bottom:12px}
+.seg button{border:0;background:none;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;cursor:pointer;color:var(--soft)}.seg button.on{background:#fff;color:var(--bur);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.editor{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pv{background:#efe7e1;border-radius:16px;padding:14px;min-height:420px}
+.pv iframe{width:100%;height:640px;border:0;border-radius:10px;background:#fff}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin:-4px 0 10px}.tags button{border:1px dashed var(--line);background:#fff;border-radius:8px;padding:2px 8px;font-size:12px;cursor:pointer;color:var(--soft)}
+.aud{display:grid;gap:6px;margin-bottom:10px}.aud label{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 11px;cursor:pointer;font-size:14px}
+.aud label b{margin-left:auto;font-size:13px;color:var(--soft)}
+.sent li{font-size:13.5px;margin-bottom:6px}
+/* modal */
+.modal{position:fixed;inset:0;z-index:80;display:none;place-items:center;background:rgba(30,10,16,.5);padding:16px}.modal.on{display:grid}
+.mbox{background:var(--bg);border-radius:20px;width:min(760px,100%);max-height:92vh;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.mbox .hd{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0}
+.mbox .bd{padding:14px 16px}.mbox iframe{width:100%;height:560px;border:0;border-radius:12px;background:#fff}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:11px 18px;font-size:14px;font-weight:600;z-index:99;display:none;max-width:92vw}
+.note{background:var(--warnbg);border-radius:12px;padding:10px 12px;font-size:13px;color:#6a4510;margin-bottom:12px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2,.es,.editor{grid-template-columns:1fr}.pipe{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}h1{font-size:32px}.list .hide-s{display:none}nav.tabs{margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap}.pv iframe{height:520px}}
+</style>
+</head>
+<body>
+<div class="demo">Demo of the Function Deluxe CRM and Email Studio with sample functions. Holds you make on the <a href="./">demo venue website</a> show up here too. No emails are really sent.</div>
+<header class="top"><div class="w">
+  <div class="logo">A</div><div class="ttl"><b id="vName">Aurelle Function Centre</b><small>Function CRM &amp; Email Studio</small></div>
+  <nav class="tabs" id="tabs">
+    <button data-t="today" class="on">Follow-ups<span class="n" id="nToday" hidden></span></button>
+    <button data-t="functions">Functions</button>
+    <button data-t="clients">Clients</button>
+    <button data-t="studio">Email Studio</button>
+    <button data-t="settings">Settings</button>
+  </nav>
+</div></header>
+<main id="main"></main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Function details"></aside>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= helpers ================= */
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var pad=function(n){return String(n).padStart(2,'0')};
+var iso=function(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+var parse=function(s){var a=String(s).split('-').map(Number);return new Date(a[0],a[1]-1,a[2])};
+var TODAY=new Date();TODAY.setHours(0,0,0,0);var T=iso(TODAY);
+var add=function(s,n){var d=parse(s);d.setDate(d.getDate()+n);return iso(d)};
+var diff=function(a,b){return Math.round((parse(a)-parse(b))/864e5)}; /* a - b in days */
+var off=function(n){return add(T,n)};
+var money=function(n){return '$'+Math.round(n||0).toLocaleString('en-AU')};
+var nice=function(s,y){return parse(s).toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:y?'numeric':undefined})};
+var long=function(s){return parse(s).toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'})};
+var rel=function(s){var d=diff(s,T);return d===0?'today':d===1?'tomorrow':d===-1?'yesterday':d>0?'in '+d+' days':Math.abs(d)+' days ago'};
+var store={get:function(k,d){try{var v=localStorage.getItem('fd3_'+k);return v?JSON.parse(v):d}catch(e){return d}},set:function(k,v){try{localStorage.setItem('fd3_'+k,JSON.stringify(v))}catch(e){}}};
+function toast(m){var t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(function(){t.style.display='none'},3200)}
+var first=function(n){return String(n||'').trim().split(/\s+/)[0]||'there'};
+
+/* ================= venue (from the demo website's saved settings) ================= */
+var CFG=store.get('config',null)||{};
+var ROOMS={grand:'Grand Ballroom',crystal:'Crystal Room',terrace:'Terrace Lounge'};
+(CFG.rooms||[]).forEach(function(r){ROOMS[r.id]=r.name});
+var SESS={day:'Day (11am – 4pm)',eve:'Evening (6pm – midnight)'};
+(CFG.sessions||[]).forEach(function(s){SESS[s.id]=s.label+(s.time?' ('+s.time+')':'')});
+var VENUE={name:'Aurelle Function Centre',addr:'Western Sydney, NSW',email:'events@aurelle.example',phone:'(02) 9000 0000',coord:'Sophie',site:'./'};
+var DEP=(CFG.deposit&&CFG.deposit.pct)||0.25, DEPMIN=(CFG.deposit&&CFG.deposit.min)||1000;
+
+/* ================= stages ================= */
+var STAGES=[
+ {id:'enquiry',name:'Enquiry',desc:'Estimate, no date held'},
+ {id:'hold',name:'On hold',desc:'Date held, waiting'},
+ {id:'meeting',name:'Meeting',desc:'Consultation booked'},
+ {id:'confirmed',name:'Confirmed',desc:'Deposit paid'},
+ {id:'paid',name:'Paid in full',desc:'Balance received'},
+ {id:'done',name:'Completed',desc:'Function held'}];
+var STN={};STAGES.forEach(function(s){STN[s.id]=s.name});STN.lost='Lost / released';
+
+/* ================= follow-up rules (editable in Settings) ================= */
+var RULES_DEFAULT={holdWarn:2,meetRemind:1,noReply:3,bal1:60,bal2:30,numbers:10,dietary:21,runsheet:14,thanks:2,anniv:335};
+var R=Object.assign({},RULES_DEFAULT,store.get('crm_rules',{}));
+
+/* ================= sample functions (dates relative to today) ================= */
+function sample(){
+ var S=[
+ {name:'Olivia & James Chen',email:'olivia.chen@example.com',phone:'0412 345 678',type:'Wedding',guests:180,room:'grand',sess:'eve',d:46,stage:'confirmed',est:41800,depPaid:-60,look:'White roses, ivory linen, gold chiavari chairs',seg:'Weddings',checks:{dietary:false,seating:false,runsheet:false,numbers:false},created:-75},
+ {name:'Priya Sharma',email:'priya.s@example.com',phone:'0423 118 902',type:'Engagement party',guests:120,room:'crystal',sess:'eve',d:34,stage:'confirmed',est:14650,depPaid:-40,look:'Blush roses, white linen',seg:'Engagements',checks:{dietary:true,seating:false,runsheet:false,numbers:false},created:-52},
+ {name:'Western Sydney Plumbing Co.',contact:'Mark Davies',email:'mark@wsplumbing.example',phone:'02 9688 1200',type:'Christmas party',guests:90,room:'terrace',sess:'eve',d:12,stage:'paid',est:9850,depPaid:-30,paidAll:-5,look:'',seg:'Corporate',checks:{dietary:true,seating:true,runsheet:false,numbers:false},created:-44},
+ {name:'Sofia & Daniel Rossi',email:'sofia.rossi@example.com',phone:'0401 222 333',type:'Wedding',guests:220,room:'grand',sess:'eve',d:118,stage:'meeting',est:48900,meet:{d:1,time:'11:30',mode:'Site visit'},look:'Burgundy & blush, ivory linen, cross-back chairs',seg:'Weddings',created:-6},
+ {name:'Hannah Nguyen',email:'hannah.n@example.com',phone:'0433 444 555',type:'Christening',guests:70,room:'crystal',sess:'day',d:33,stage:'hold',holdExp:1,est:6900,look:'White hydrangeas, white linen',seg:'Christenings',created:-6},
+ {name:'Parramatta High P&C',contact:'Jenny Walsh',email:'formal@parrahigh.example',phone:'02 9630 4000',type:'Year 12 formal',guests:240,room:'grand',sess:'eve',d:152,stage:'hold',holdExp:5,est:31200,look:'',seg:'Formals',created:-2},
+ {name:'Ahmed Khalil',email:'ahmed.k@example.com',phone:'0455 666 777',type:'50th birthday',guests:110,room:'crystal',sess:'eve',d:75,stage:'enquiry',est:13400,look:'Gold balloons, black linen',seg:'Birthdays',created:-4},
+ {name:'Lauren & Tom Baker',email:'lauren.baker@example.com',phone:'0466 777 888',type:'Wedding',guests:160,room:'grand',sess:'eve',d:212,stage:'enquiry',est:37600,look:'Peonies, sage linen',seg:'Weddings',created:-1},
+ {name:'Blacktown Leagues Juniors',contact:'Craig Morris',email:'craig@btleagues.example',phone:'0477 888 999',type:'Presentation night',guests:150,room:'grand',sess:'eve',d:-3,stage:'done',est:14200,depPaid:-90,paidAll:-20,look:'',seg:'Corporate',created:-120},
+ {name:'Grace & Michael Tan',email:'grace.tan@example.com',phone:'0488 111 222',type:'Wedding',guests:140,room:'crystal',sess:'eve',d:-335,stage:'done',est:29800,depPaid:-500,paidAll:-370,look:'Pink & white roses, white linen',seg:'Weddings',created:-540},
+ {name:'Emily Wong',email:'emily.w@example.com',phone:'0499 333 444',type:'Engagement party',guests:90,room:'terrace',sess:'eve',d:61,stage:'confirmed',est:11200,depPaid:-10,depEmailSent:false,look:'Fairy lights, white linen',seg:'Engagements',created:-20},
+ {name:'Kara Pty Ltd',contact:'Anna Lee',email:'events@kara.example',phone:'02 8800 1111',type:'Awards dinner',guests:200,room:'grand',sess:'eve',d:-40,stage:'lost',est:26000,look:'',seg:'Corporate',created:-80,lostWhy:'Chose a city venue'}];
+ return S.map(function(s,i){
+  var date=off(s.d),dep=Math.max(DEPMIN,Math.round(s.est*DEP/10)*10);
+  var f={id:'S'+(i+1),ref:'FN-'+date.replace(/-/g,'').slice(2)+'-'+(1000+i*37).toString(36).toUpperCase().slice(-4),
+   client:{name:s.name,contact:s.contact||'',email:s.email,phone:s.phone,seg:s.seg},
+   type:s.type,guests:s.guests,room:s.room,session:s.sess,date:date,stage:s.stage,estimate:s.est,deposit:dep,look:s.look,
+   payments:[],checks:s.checks||{dietary:false,seating:false,runsheet:false,numbers:false},emails:[],timeline:[],done:{},created:off(s.created),notes:'',source:'sample'};
+  f.timeline.push({d:f.created,t:'Enquiry from the website: estimate '+money(s.est)});
+  if(s.holdExp!=null){f.holdExpires=off(s.holdExp);f.timeline.push({d:off(s.holdExp-7),t:'Date held for 7 days'})}
+  if(s.meet){f.meeting={date:off(s.meet.d),time:s.meet.time,mode:s.meet.mode};f.timeline.push({d:off(-5),t:'Consultation booked: '+s.meet.mode+', '+nice(f.meeting.date)+' '+s.meet.time})}
+  if(s.depPaid!=null){f.payments.push({d:off(s.depPaid),amt:dep,what:'Deposit'});f.timeline.push({d:off(s.depPaid),t:'Deposit received: '+money(dep)});
+   if(s.depEmailSent!==false)f.emails.push({key:'deposit',d:off(s.depPaid)})}
+  if(s.paidAll!=null){f.payments.push({d:off(s.paidAll),amt:s.est-dep,what:'Balance'});f.timeline.push({d:off(s.paidAll),t:'Balance received: '+money(s.est-dep)})}
+  if(s.stage==='done'&&s.d<-2&&s.d>-30){/* thank-you not yet sent */}
+  else if(s.stage==='done'){f.emails.push({key:'thanks',d:add(date,2)})}
+  if(s.lostWhy){f.timeline.push({d:off(-30),t:'Lost: '+s.lostWhy})}
+  /* pretend earlier reminders were sent so today's list stays realistic */
+  if(f.stage==='confirmed'&&diff(date,T)<R.bal1)f.emails.push({key:'bal1',d:add(date,-R.bal1)});
+  if(f.stage==='confirmed'&&diff(date,T)<R.dietary&&f.checks.dietary)f.emails.push({key:'dietary',d:add(date,-R.dietary)});
+  if(f.stage==='paid'){['bal1','bal2','dietary'].forEach(function(k){f.emails.push({key:k,d:off(-20)})})}
+  return f});
+}
+
+/* ================= holds made on the demo website (fd3_holds) ================= */
+function fromWebsite(){
+ var H=store.get('holds',[])||[];
+ return H.map(function(h){
+  var st=h.status==='secured'?'confirmed':h.status==='released'?'lost':h.status==='held'?'hold':'meeting';
+  var f={id:'W-'+h.ref,ref:h.ref,client:{name:h.name,contact:'',email:h.email,phone:h.phone,seg:segOf(h.typeName)},
+   type:(h.typeName||'Function').replace(/s$/,''),guests:h.guests,room:h.roomId||'',session:h.session||'eve',date:h.date||'',stage:st,
+   estimate:(h.estimate&&h.estimate.total)||0,deposit:h.deposit||0,look:h.look||'',payments:[],checks:{dietary:false,seating:false,runsheet:false,numbers:false},
+   emails:[],timeline:[{d:h.created||T,t:'From the website: '+(h.roomId?'date held':'consultation booked')+', estimate '+money(h.estimate&&h.estimate.lo)+' – '+money(h.estimate&&h.estimate.hi)}],
+   done:{},created:h.created||T,notes:h.notes||'',source:'website',holdExpires:h.expires||''};
+  if(h.meeting&&h.meeting.date)f.meeting={date:h.meeting.date,time:h.meeting.time,mode:h.meeting.mode};
+  if(st==='confirmed'){f.payments.push({d:T,amt:f.deposit,what:'Deposit'});}
+  if(!f.date&&f.meeting)f.date='';
+  return f});
+}
+function segOf(t){t=String(t||'');return /wed/i.test(t)?'Weddings':/engag/i.test(t)?'Engagements':/corp|award|conference|sport/i.test(t)?'Corporate':/christ/i.test(t)?'Christenings':/formal|deb/i.test(t)?'Formals':/birth/i.test(t)?'Birthdays':'Other'}
+
+/* ================= state ================= */
+var DATA=store.get('crm_data',null);
+if(!DATA||DATA.v!==1||DATA.built!==T){
+ /* rebuild sample each day (dates stay relative) but keep changes made today */
+ var prev=DATA&&DATA.v===1?DATA:null;
+ DATA={v:1,built:T,fns:sample().concat(prev?prev.fns.filter(function(f){return f.source==='manual'}):[])};
+}
+var OVR=store.get('crm_ovr',{}); /* changes to website holds, keyed by id */
+function allFns(){
+ var w=fromWebsite().map(function(f){return OVR[f.id]?Object.assign(f,OVR[f.id]):f});
+ return DATA.fns.concat(w);
+}
+function save(f){
+ if(f.source==='website'){OVR[f.id]={stage:f.stage,payments:f.payments,checks:f.checks,emails:f.emails,timeline:f.timeline,done:f.done,notes:f.notes,date:f.date,room:f.room,session:f.session,estimate:f.estimate,holdExpires:f.holdExpires};store.set('crm_ovr',OVR)}
+ store.set('crm_data',DATA);
+}
+var byId=function(id){return allFns().filter(function(f){return f.id===id})[0]};
+var paid=function(f){return f.payments.reduce(function(a,p){return a+p.amt},0)};
+var balance=function(f){return Math.max(0,f.estimate-paid(f))};
+var sent=function(f,k){return f.emails.some(function(e){return e.key===k})};
+var who=function(f){return f.client.contact||f.client.name};
+
+/* ================= email templates ================= */
+var TPL_DEFAULT={
+ holdwarn:{group:'Hold and meeting',name:'Hold about to expire',auto:true,subject:'Your date at {venue} is held until {hold_expires}',
+  body:'Hi {first},\n\nJust a reminder that we’re holding {date} in the {room} for your {type} until {hold_expires}.\n\nIf you’d like to keep it, the next step is a quick consultation with our events team, or you can pay the deposit of {deposit} to secure it.\n\nHappy to answer any questions — just reply to this email.',btn:'Book a consultation'},
+ meeting:{group:'Hold and meeting',name:'Meeting reminder',auto:true,subject:'See you {meeting_day}: your consultation at {venue}',
+  body:'Hi {first},\n\nLooking forward to meeting you on {meeting}.\n\nWe’ll walk through the {room}, your menu and styling, and answer any questions. Bring your ideas, photos and guest numbers if you have them.\n\nNeed to change the time? Just reply to this email.',btn:'Get directions'},
+ noreply:{group:'Hold and meeting',name:'No reply after the estimate',auto:true,subject:'Still thinking about {date}?',
+  body:'Hi {first},\n\nThanks for pricing your {type} with us. Your estimate for {guests} guests was {estimate}.\n\nDates go quickly, especially Saturdays. Would you like us to hold the date while you decide? It’s free for 7 days.\n\nOr reply with any questions and I’ll get straight back to you.',btn:'Hold my date'},
+ deposit:{group:'Deposit and balance',name:'Deposit received — you’re confirmed',auto:true,subject:'Confirmed: {date} at {venue}',
+  body:'Hi {first},\n\nWonderful news — we’ve received your deposit of {deposit} and your {type} is confirmed for {date} in the {room}.\n\nYour balance of {balance} is due {balance_due}. We’ll send a reminder before then.\n\nWe can’t wait to celebrate with you.',btn:'View my booking'},
+ bal1:{group:'Deposit and balance',name:'Balance reminder (first)',auto:true,subject:'Your balance for {date}',
+  body:'Hi {first},\n\nYour {type} is getting closer! Just a friendly reminder that the balance of {balance} is due {balance_due}.\n\nYou can pay by bank transfer or card. Reply if you’d like to set up a payment plan.',btn:'Pay my balance'},
+ bal2:{group:'Deposit and balance',name:'Balance reminder (final)',auto:true,subject:'Final reminder: balance due {balance_due}',
+  body:'Hi {first},\n\nA final reminder that the balance of {balance} for your {type} on {date} is due {balance_due}.\n\nIf you’ve already paid, thank you — please ignore this email.',btn:'Pay my balance'},
+ numbers:{group:'Deposit and balance',name:'Final guest numbers due',auto:true,subject:'Final numbers for {date}, please',
+  body:'Hi {first},\n\nWe’re nearly there! Could you send your final guest numbers by {numbers_due}?\n\nYou currently have {guests} guests booked. If anything has changed, just reply to this email.',btn:'Confirm my numbers'},
+ dietary:{group:'Before the event',name:'Dietary list and seating plan',auto:true,subject:'Dietary needs and seating for {date}',
+  body:'Hi {first},\n\nTo make sure everyone is looked after, please send us:\n\n- any dietary needs or allergies (names and tables)\n- your seating plan, or a rough idea of the tables\n\nWe need these by {dietary_due}. A simple list in your reply is perfect.',btn:'Send my list'},
+ runsheet:{group:'Before the event',name:'Final details and run sheet',auto:true,subject:'Let’s finalise your {type}',
+  body:'Hi {first},\n\nTwo weeks to go! Here’s your run sheet for {date} in the {room}. Please check the timings, speeches, cake cutting and music.\n\nIf you’d like a quick call to go through it, reply with a time that suits.',btn:'Check my run sheet'},
+ thanks:{group:'After the event',name:'Thank-you and review',auto:true,subject:'Thank you from {venue}',
+  body:'Hi {first},\n\nThank you for celebrating your {type} with us. It was a pleasure to look after you and your guests.\n\nIf you have a minute, we’d love a review. It really helps other families and couples find us.',btn:'Leave a review'},
+ anniv:{group:'After the event',name:'Anniversary or next-event offer',auto:true,subject:'Happy anniversary from {venue}',
+  body:'Hi {first},\n\nIt’s almost a year since your {type} with us. Happy anniversary!\n\nCome back and celebrate: enjoy a complimentary bottle of sparkling with dinner, or 10% off room hire for your next function with us.',btn:'Plan a celebration'}};
+var TPL=Object.assign({},TPL_DEFAULT);(function(){var s=store.get('crm_tpl',{});Object.keys(s).forEach(function(k){if(TPL[k])TPL[k]=Object.assign({},TPL[k],s[k])})})();
+var GROUP_ICON={'Hold and meeting':'⏳','Deposit and balance':'💳','Before the event':'📋','After the event':'💐'};
+
+function vars(f){
+ var bd=add(f.date||T,-R.bal2);
+ return {first:first(who(f)),name:who(f),venue:VENUE.name,date:f.date?long(f.date):'your date',room:ROOMS[f.room]||'room',type:String(f.type).toLowerCase(),
+  guests:f.guests,estimate:money(f.estimate),deposit:money(f.deposit),balance:money(balance(f)),balance_due:f.date?long(bd):'before your function',
+  hold_expires:f.holdExpires?long(f.holdExpires):'soon',meeting:f.meeting?long(f.meeting.date)+' at '+f.meeting.time+' ('+String(f.meeting.mode).toLowerCase()+')':'your meeting',
+  meeting_day:f.meeting?(diff(f.meeting.date,T)===1?'tomorrow':nice(f.meeting.date)):'soon',numbers_due:f.date?long(add(f.date,-R.numbers)):'',dietary_due:f.date?long(add(f.date,-R.dietary+7)):''};
+}
+function fill(t,v){return String(t||'').replace(/\{(\w+)\}/g,function(m,k){return v[k]!=null?v[k]:m})}
+
+/* ================= email design (same look as the venue website) ================= */
+function emailHtml(subject,body,btn,opts){
+ opts=opts||{};
+ var img=opts.img?'<tr><td><img src="'+esc(opts.img)+'" alt="" width="600" style="display:block;width:100%;height:auto;border:0"></td></tr>':'';
+ var paras=String(body||'').split(/\n{2,}/).map(function(p){
+  if(/^\s*-\s/.test(p))return '<ul style="margin:0 0 16px;padding-left:20px">'+p.split(/\n/).map(function(l){return '<li style="margin:0 0 6px">'+esc(l.replace(/^\s*-\s*/,''))+'</li>'}).join('')+'</ul>';
+  return '<p style="margin:0 0 16px">'+esc(p).replace(/\n/g,'<br>')+'</p>'}).join('');
+ return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head><body style="margin:0;background:#f1e8e2;font-family:Arial,Helvetica,sans-serif;color:#2a1219">'+
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f1e8e2;padding:18px 10px"><tr><td align="center">'+
+  '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fffaf7;border-radius:14px;overflow:hidden">'+
+  '<tr><td style="background:#4a1528;padding:22px 26px;color:#E9D3B4;font:600 24px Georgia,serif;letter-spacing:.02em">'+esc(VENUE.name)+'</td></tr>'+img+
+  '<tr><td style="padding:26px 26px 8px;font-size:15.5px;line-height:1.6">'+(opts.heading?'<h1 style="font:600 28px Georgia,serif;margin:0 0 14px;color:#2a1219">'+esc(opts.heading)+'</h1>':'')+paras+
+  (btn?'<p style="margin:6px 0 22px"><a href="#" style="display:inline-block;background:#4a1528;color:#ffffff;text-decoration:none;font-weight:bold;padding:13px 22px;border-radius:999px">'+esc(btn)+'</a></p>':'')+
+  '<p style="margin:0 0 20px">Warm regards,<br>'+esc(VENUE.coord)+'<br><span style="color:#6d5560">Events team · '+esc(VENUE.name)+'</span></p></td></tr>'+
+  '<tr><td style="background:#f8efea;padding:16px 26px;font-size:12px;color:#8b7a80">'+esc(VENUE.name)+' · '+esc(VENUE.addr)+' · '+esc(VENUE.phone)+'<br>'+(opts.marketing?'You’re receiving this because you held an event with us. <a href="#" style="color:#8b7a80">Unsubscribe</a>':'This email is about your booking.')+'</td></tr>'+
+  '</table></td></tr></table></body></html>';
+}
+function showEmail(subject,html,onSend,sendLabel){
+ var mb=$('#mbox');
+ mb.innerHTML='<div class="hd"><div><b>'+esc(subject)+'</b><div style="font-size:12.5px;color:var(--soft)">Preview of the email</div></div><button class="x" data-mclose aria-label="Close">×</button></div>'+
+  '<div class="bd"><iframe title="Email preview"></iframe><div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn ghost" data-mclose>Close</button>'+(onSend?'<button class="btn" id="mSend">'+esc(sendLabel||'Send (demo)')+'</button>':'')+'</div></div>';
+ $('#modal').classList.add('on');$('iframe',mb).srcdoc=html;
+ if(onSend)$('#mSend').onclick=function(){onSend();$('#modal').classList.remove('on')};
+}
+$('#modal').addEventListener('click',function(e){if(e.target.id==='modal'||e.target.closest('[data-mclose]'))$('#modal').classList.remove('on')});
+
+/* ================= follow-up engine ================= */
+function tasks(){
+ var out=[];
+ function push(f,key,due,title,detail,extra){
+  if(f.done&&f.done[key])return; if(TPL[key]&&sent(f,key))return;
+  var d=diff(due,T); if(d>7)return;
+  out.push(Object.assign({f:f,key:key,due:due,days:d,title:title,detail:detail,group:(TPL[key]||{}).group||'Hold and meeting'},extra||{}))}
+ allFns().forEach(function(f){
+  var dd=f.date?diff(f.date,T):null;
+  if(f.stage==='hold'&&f.holdExpires){push(f,'holdwarn',add(f.holdExpires,-R.holdWarn),'Hold expires '+rel(f.holdExpires),who(f)+' · '+f.type+' · '+(f.date?nice(f.date):''));}
+  if(f.stage==='hold'&&f.holdExpires&&diff(f.holdExpires,T)<0)push(f,'holdcall',f.holdExpires,'Hold expired: call or release the date',who(f)+' · '+f.type,{call:true});
+  if(f.meeting&&(f.stage==='meeting'||f.stage==='hold')&&diff(f.meeting.date,T)>=0){
+   push(f,'meeting',add(f.meeting.date,-R.meetRemind),'Meeting '+rel(f.meeting.date)+' at '+f.meeting.time,who(f)+' · '+f.meeting.mode);
+   if(diff(f.meeting.date,T)===0)push(f,'meettoday',f.meeting.date,'Meeting today at '+f.meeting.time+': prepare the room tour',who(f)+' · '+f.type+' · '+f.guests+' guests',{call:true});}
+  if(f.stage==='enquiry')push(f,'noreply',add(f.created,R.noReply),'No reply since the estimate',who(f)+' · '+f.type+' · '+money(f.estimate));
+  if(f.stage==='confirmed'&&!sent(f,'deposit'))push(f,'deposit',T,'Deposit received: send the confirmation',who(f)+' · '+money(f.deposit));
+  if((f.stage==='confirmed')&&dd!=null&&balance(f)>0){
+   push(f,'bal1',add(f.date,-R.bal1),'Balance reminder: '+money(balance(f))+' due',who(f)+' · function '+rel(f.date));
+   if(dd<=R.bal2+7)push(f,'bal2',add(f.date,-R.bal2),'Final balance reminder',who(f)+' · '+money(balance(f))+' outstanding');}
+  if((f.stage==='confirmed'||f.stage==='paid')&&dd!=null&&dd>=0){
+   if(!f.checks.dietary||!f.checks.seating)push(f,'dietary',add(f.date,-R.dietary),'Dietary list and seating plan',who(f)+' · '+f.type+' '+rel(f.date));
+   if(!f.checks.runsheet)push(f,'runsheet',add(f.date,-R.runsheet),'Final details and run sheet',who(f)+' · '+f.type+' '+rel(f.date));
+   if(!f.checks.numbers)push(f,'numbers',add(f.date,-R.numbers),'Final guest numbers due',who(f)+' · '+f.guests+' guests booked');}
+  if((f.stage==='done'||((f.stage==='paid'||f.stage==='confirmed')&&dd!=null&&dd<0))){
+   if(dd>=-30)push(f,'thanks',add(f.date,R.thanks),'Thank-you and review request',who(f)+' · '+f.type+' '+rel(f.date));
+   if(/wed/i.test(f.type))push(f,'anniv',add(f.date,R.anniv),'Anniversary offer',who(f)+' · married '+nice(f.date,true));}
+ });
+ return out.sort(function(a,b){return a.days-b.days});
+}
+
+/* ================= rendering ================= */
+var TAB='today', FILTER='', STAGEF='upcoming';
+function setTab(t){TAB=t;$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)});render();scrollTo(0,0)}
+$('#tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setTab(b.dataset.t)});
+function render(){
+ var tk=tasks(),dueNow=tk.filter(function(t){return t.days<=0}).length;
+ var n=$('#nToday');n.hidden=!dueNow;n.textContent=dueNow;
+ ({today:renderToday,functions:renderFunctions,clients:renderClients,studio:renderStudio,settings:renderSettings})[TAB](tk);
+}
+
+function kpis(){
+ var F=allFns(),up=F.filter(function(f){return f.date&&f.date>=T&&['confirmed','paid'].indexOf(f.stage)>-1});
+ var in90=up.filter(function(f){return diff(f.date,T)<=90});
+ var holds=F.filter(function(f){return f.stage==='hold'});
+ var bal=up.reduce(function(a,f){return a+balance(f)},0);
+ var pipe=F.filter(function(f){return ['enquiry','hold','meeting'].indexOf(f.stage)>-1}).reduce(function(a,f){return a+f.estimate},0);
+ return '<div class="kpis">'+
+  k('Confirmed functions',up.length,in90.length+' in the next 90 days')+k('On hold',holds.length,'dates waiting on a decision')+
+  k('Meetings this week',F.filter(function(f){return f.meeting&&diff(f.meeting.date,T)>=0&&diff(f.meeting.date,T)<7}).length,'consultations and site visits')+
+  k('Balances to collect',money(bal),'on confirmed functions')+k('Open enquiries',money(pipe),'estimated value')+'</div>';
+ function k(a,b,c){return '<div class="kpi"><small>'+a+'</small><b>'+b+'</b><span>'+c+'</span></div>'}
+}
+
+function taskHtml(t){
+ var cls=t.days<=0?'urgent':t.days<=2?'soon':'';
+ var due=t.days<-3?'Overdue '+Math.abs(t.days)+'d':t.days<=0?'Due now':t.days===1?'Tomorrow':'In '+t.days+' days';
+ var tpl=TPL[t.key];
+ return '<div class="task '+cls+'"><div class="ic">'+(GROUP_ICON[t.group]||'📌')+'</div><div class="tx"><b>'+esc(t.title)+'</b><span>'+esc(t.detail)+'</span>'+
+  '<div class="acts">'+(tpl?'<button class="btn sm" data-email="'+t.f.id+'|'+t.key+'">✉ '+(tpl.auto?'Send now':'Email')+'</button>':'')+
+  '<a class="btn sm ghost" href="tel:'+esc(String(t.f.client.phone).replace(/[^0-9+]/g,''))+'">☎ Call</a>'+
+  '<button class="btn sm ghost" data-open="'+t.f.id+'">Open</button><button class="btn sm ghost" data-done="'+t.f.id+'|'+t.key+'">✓ Done</button></div></div>'+
+  '<div class="due">'+due+'</div></div>';
+}
+function renderToday(tk){
+ var groups=['Hold and meeting','Deposit and balance','Before the event','After the event'];
+ var now=tk.filter(function(t){return t.days<=0}),soon=tk.filter(function(t){return t.days>0});
+ var up=allFns().filter(function(f){return f.date&&f.date>=T&&['confirmed','paid','hold','meeting'].indexOf(f.stage)>-1}).sort(function(a,b){return a.date<b.date?-1:1}).slice(0,8);
+ $('#main').innerHTML='<h1>Good '+(new Date().getHours()<12?'morning':new Date().getHours()<17?'afternoon':'evening')+', '+esc(VENUE.coord)+'</h1><p class="sub">Your follow-ups, worked out from every function in the diary. Each one comes with the email ready to send.</p>'+kpis()+
+ '<div class="grid2"><div class="panel"><h3>To do today</h3><p class="sub">'+(now.length?now.length+' follow-up'+(now.length>1?'s':'')+' due now':'You’re all caught up for today.')+'</p>'+
+ groups.map(function(g){var L=now.filter(function(t){return t.group===g});return L.length?'<div class="group"><h4>'+GROUP_ICON[g]+' '+g+' <i>'+L.length+'</i></h4>'+L.map(taskHtml).join('')+'</div>':''}).join('')+
+ (soon.length?'<div class="group"><h4>📅 Coming up this week <i>'+soon.length+'</i></h4>'+soon.map(taskHtml).join('')+'</div>':'')+'</div>'+
+ '<div class="panel"><h3>Next functions</h3><p class="sub">Confirmed and held dates, soonest first.</p>'+
+ (up.length?'<table class="list"><tbody>'+up.map(function(f){return '<tr data-open="'+f.id+'"><td><b>'+nice(f.date)+'</b><small>'+esc(ROOMS[f.room]||'')+' · '+(f.session==='day'?'Day':'Evening')+'</small></td><td>'+esc(who(f))+'<small>'+esc(f.type)+' · '+f.guests+' guests</small></td><td><span class="chip st-'+f.stage+'">'+STN[f.stage]+'</span></td></tr>'}).join('')+'</tbody></table>':'<p class="empty">No upcoming functions.</p>')+
+ '<p style="margin:14px 0 0;font-size:13px;color:var(--soft)">Holds and meetings made on the <a href="./">venue website</a> appear here straight away.</p></div></div>';
+}
+
+function renderFunctions(){
+ var F=allFns(),q=FILTER.toLowerCase();
+ var counts={};STAGES.forEach(function(s){counts[s.id]=0});F.forEach(function(f){if(counts[f.stage]!=null)counts[f.stage]++});
+ var L=F.filter(function(f){
+  if(STAGEF==='upcoming'&&!(f.date&&f.date>=T&&f.stage!=='lost'))return false;
+  if(STAGEF!=='upcoming'&&STAGEF!=='all'&&f.stage!==STAGEF)return false;
+  return !q||(who(f)+' '+f.client.name+' '+f.type+' '+f.ref+' '+(ROOMS[f.room]||'')).toLowerCase().indexOf(q)>-1})
+  .sort(function(a,b){return STAGEF==='done'?(a.date<b.date?1:-1):((a.date||'9')<(b.date||'9')?-1:1)});
+ var rows='',lastM='';
+ L.forEach(function(f){var m=f.date?parse(f.date).toLocaleDateString('en-AU',{month:'long',year:'numeric'}):'No date yet';
+  if(m!==lastM){rows+='<tr><td class="month" colspan="6">'+m+'</td></tr>';lastM=m}
+  var p=f.estimate?Math.min(100,Math.round(paid(f)/f.estimate*100)):0;
+  rows+='<tr data-open="'+f.id+'"><td><b>'+(f.date?nice(f.date):'—')+'</b><small>'+(f.date?rel(f.date):'')+'</small></td><td>'+esc(who(f))+'<small>'+esc(f.type)+(f.source==='website'?' · 🌐 website':'')+'</small></td>'+
+  '<td class="hide-s">'+esc(ROOMS[f.room]||'—')+'<small>'+(f.session==='day'?'Day':'Evening')+' · '+f.guests+' guests</small></td><td><span class="chip st-'+f.stage+'">'+STN[f.stage]+'</span></td>'+
+  '<td class="money hide-s">'+money(f.estimate)+'<div class="bar"><i style="width:'+p+'%"></i></div><small>'+money(paid(f))+' paid</small></td><td class="money hide-s">'+(balance(f)&&['confirmed','paid'].indexOf(f.stage)>-1?money(balance(f))+'<small>balance</small>':'')+'</td></tr>'});
+ $('#main').innerHTML='<h1>Functions</h1><p class="sub">Every enquiry, hold and booking in one diary. Click a function to see the client, payments, checklist and emails.</p>'+
+ '<div class="pipe">'+STAGES.map(function(s){return '<button data-stage="'+s.id+'" class="'+(STAGEF===s.id?'on':'')+'"><small>'+s.name+'</small><b>'+counts[s.id]+'</b><small style="font-weight:500">'+s.desc+'</small></button>'}).join('')+'</div>'+
+ '<div class="toolbar"><input id="q" placeholder="Search name, type or reference" value="'+esc(FILTER)+'"><select id="sf"><option value="upcoming"'+(STAGEF==='upcoming'?' selected':'')+'>Upcoming</option><option value="all"'+(STAGEF==='all'?' selected':'')+'>Everything</option>'+STAGES.map(function(s){return '<option value="'+s.id+'"'+(STAGEF===s.id?' selected':'')+'>'+s.name+'</option>'}).join('')+'<option value="lost"'+(STAGEF==='lost'?' selected':'')+'>Lost / released</option></select><button class="btn ghost" id="addFn">+ Add a function</button></div>'+
+ (L.length?'<table class="list"><thead><tr><th>Date</th><th>Client</th><th class="hide-s">Room</th><th>Stage</th><th class="hide-s">Estimate</th><th class="hide-s">Balance</th></tr></thead><tbody>'+rows+'</tbody></table>':'<p class="empty">Nothing here yet.</p>');
+ $('#q').oninput=function(e){FILTER=e.target.value;var p=e.target.selectionStart;renderFunctions();var i=$('#q');i.focus();i.setSelectionRange(p,p)};
+ $('#sf').onchange=function(e){STAGEF=e.target.value;renderFunctions()};
+ $('#addFn').onclick=addFunction;
+}
+
+function clients(){
+ var M={};allFns().forEach(function(f){var k=f.client.email.toLowerCase();if(!M[k])M[k]={c:f.client,fns:[]};M[k].fns.push(f)});
+ return Object.keys(M).map(function(k){return M[k]});
+}
+function renderClients(){
+ var C=clients().sort(function(a,b){return a.c.name<b.c.name?-1:1});
+ $('#main').innerHTML='<h1>Clients</h1><p class="sub">Couples, families and companies who enquired or held a function with you. Use them as audiences in the Email Studio.</p>'+
+ '<table class="list"><thead><tr><th>Client</th><th class="hide-s">Contact</th><th>Group</th><th>Functions</th><th class="hide-s">Total value</th></tr></thead><tbody>'+
+ C.map(function(x){var last=x.fns.slice().sort(function(a,b){return (a.date||'')<(b.date||'')?1:-1})[0];
+  return '<tr data-open="'+last.id+'"><td><b>'+esc(x.c.name)+'</b><small>'+esc(x.c.contact||'')+'</small></td><td class="hide-s">'+esc(x.c.email)+'<small>'+esc(x.c.phone)+'</small></td><td>'+esc(x.c.seg)+'</td><td>'+x.fns.length+'<small>'+x.fns.map(function(f){return STN[f.stage]}).join(', ')+'</small></td><td class="money hide-s">'+money(x.fns.reduce(function(a,f){return a+(f.stage==='lost'?0:f.estimate)},0))+'</td></tr>'}).join('')+
+ '</tbody></table>';
+}
+
+/* ---------- function file (drawer) ---------- */
+function openFn(id){
+ var f=byId(id);if(!f)return;
+ var bal=balance(f),dd=f.date?diff(f.date,T):null;
+ var st=STAGES.map(function(s){return '<option value="'+s.id+'"'+(f.stage===s.id?' selected':'')+'>'+s.name+'</option>'}).join('')+'<option value="lost"'+(f.stage==='lost'?' selected':'')+'>Lost / released</option>';
+ var tk=tasks().filter(function(t){return t.f.id===f.id});
+ var dr=$('#drawer');
+ dr.innerHTML='<div class="hd"><div><span class="chip st-'+f.stage+'">'+STN[f.stage]+'</span> <small style="color:var(--faint)">'+esc(f.ref)+(f.source==='website'?' · from the website':'')+'</small><h2>'+esc(who(f))+'</h2><div style="color:var(--soft);font-size:14px">'+esc(f.type)+' · '+f.guests+' guests'+(f.client.contact?' · '+esc(f.client.name):'')+'</div></div><button class="x" data-dclose aria-label="Close">×</button></div>'+
+ '<div class="bd"><div class="row"><a class="btn sm" href="tel:'+esc(String(f.client.phone).replace(/[^0-9+]/g,''))+'">☎ '+esc(f.client.phone)+'</a><a class="btn sm ghost" href="mailto:'+esc(f.client.email)+'">✉ '+esc(f.client.email)+'</a></div>'+
+ '<div class="facts"><div><small>Date</small>'+(f.date?long(f.date):'Not set')+(dd!=null?'<br><span style="color:var(--soft)">'+rel(f.date)+'</span>':'')+'</div><div><small>Room and session</small>'+esc(ROOMS[f.room]||'—')+'<br><span style="color:var(--soft)">'+esc(SESS[f.session]||'')+'</span></div>'+
+ '<div><small>Estimate</small>'+money(f.estimate)+'<br><span style="color:var(--soft)">deposit '+money(f.deposit)+'</span></div><div><small>Paid / balance</small>'+money(paid(f))+' paid<br><span style="color:'+(bal&&dd!=null&&dd<=R.bal2?'var(--bad)':'var(--soft)')+'">'+money(bal)+' balance'+(f.date?' · due '+nice(add(f.date,-R.bal2)):'')+'</span></div>'+
+ (f.holdExpires&&f.stage==='hold'?'<div><small>Hold expires</small>'+long(f.holdExpires)+'</div>':'')+(f.meeting?'<div><small>Consultation</small>'+nice(f.meeting.date)+' '+esc(f.meeting.time)+'<br><span style="color:var(--soft)">'+esc(f.meeting.mode)+'</span></div>':'')+
+ (f.look?'<div style="grid-column:1/-1"><small>The look they chose</small>'+esc(f.look)+'</div>':'')+'</div>'+
+ '<div class="row"><label class="f" style="margin:0">Stage <select class="inp" id="dStage" style="width:auto;display:inline-block;margin-left:6px">'+st+'</select></label>'+
+ (bal>0&&f.stage!=='lost'?'<button class="btn sm" id="dPay">'+(paid(f)?'Record balance '+money(bal):'Record deposit '+money(f.deposit))+'</button>':'')+'</div>'+
+ (tk.length?'<div class="sec"><h4>Follow-ups for this function</h4>'+tk.map(taskHtml).join('')+'</div>':'')+
+ (['confirmed','paid'].indexOf(f.stage)>-1?'<div class="sec"><h4>Before the event</h4><div class="checks">'+
+  [['dietary','Dietary list received'],['seating','Seating plan received'],['runsheet','Run sheet confirmed'],['numbers','Final numbers confirmed']].map(function(c){return '<label><input type="checkbox" data-chk="'+c[0]+'"'+(f.checks[c[0]]?' checked':'')+'> '+c[1]+'</label>'}).join('')+'</div></div>':'')+
+ '<div class="sec"><h4>Send an email</h4><div class="row">'+Object.keys(TPL).map(function(k){return '<button class="btn sm ghost" data-email="'+f.id+'|'+k+'">'+(sent(f,k)?'✓ ':'')+esc(TPL[k].name)+'</button>'}).join('')+'</div></div>'+
+ '<div class="sec"><h4>Notes</h4><textarea class="inp" id="dNotes" placeholder="Menu choices, special requests, who to call…">'+esc(f.notes)+'</textarea></div>'+
+ '<div class="sec"><h4>History</h4><ul class="tl">'+f.timeline.concat(f.emails.map(function(e){return{d:e.d,t:'Email sent: '+((TPL[e.key]||{}).name||e.key)}})).sort(function(a,b){return a.d<b.d?1:-1}).map(function(x){return '<li>'+esc(x.t)+'<small>'+nice(x.d,true)+'</small></li>'}).join('')+'</ul></div></div>';
+ dr.classList.add('on');$('#scrim').classList.add('on');dr.dataset.id=id;
+ $('#dStage').onchange=function(e){f.stage=e.target.value;f.timeline.push({d:T,t:'Stage changed to '+STN[f.stage]});save(f);openFn(id);render();toast('Moved to '+STN[f.stage])};
+ var pb=$('#dPay');if(pb)pb.onclick=function(){var dep=!paid(f),amt=dep?f.deposit:balance(f);f.payments.push({d:T,amt:amt,what:dep?'Deposit':'Balance'});f.timeline.push({d:T,t:(dep?'Deposit':'Balance')+' received: '+money(amt)});
+  if(dep&&['enquiry','hold','meeting'].indexOf(f.stage)>-1)f.stage='confirmed';else if(!dep)f.stage='paid';save(f);openFn(id);render();toast((dep?'Deposit':'Balance')+' recorded'+(dep?'. The confirmation email is ready in your follow-ups':''))};
+ $$('[data-chk]',dr).forEach(function(c){c.onchange=function(){f.checks[c.dataset.chk]=c.checked;save(f);render()}});
+ $('#dNotes').onchange=function(e){f.notes=e.target.value;save(f);toast('Notes saved')};
+}
+function closeFn(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on')}
+$('#scrim').onclick=closeFn;
+
+/* ---------- send a follow-up email (demo) ---------- */
+function sendFollowup(id,key){
+ var f=byId(id),t=TPL[key];if(!f||!t)return;
+ var v=vars(f),subj=fill(t.subject,v),html=emailHtml(subj,fill(t.body,v),t.btn,{img:key==='thanks'||key==='anniv'?'images/head-table.jpg':key==='deposit'?'images/grand-ballroom.jpg':''});
+ showEmail('To '+f.client.email+': '+subj,html,function(){f.emails.push({key:key,d:T});save(f);render();if($('#drawer').classList.contains('on'))openFn(id);toast('Demo: email marked as sent to '+first(who(f))+'. In the live version it goes to their inbox.')});
+}
+
+/* ---------- global clicks ---------- */
+document.addEventListener('click',function(e){
+ var o=e.target.closest('[data-open]');if(o&&!e.target.closest('a')){openFn(o.dataset.open);return}
+ var em=e.target.closest('[data-email]');if(em){var p=em.dataset.email.split('|');sendFollowup(p[0],p[1]);return}
+ var dn=e.target.closest('[data-done]');if(dn){var q=dn.dataset.done.split('|'),f=byId(q[0]);f.done=f.done||{};f.done[q[1]]=T;f.timeline.push({d:T,t:'Follow-up done: '+((TPL[q[1]]||{}).name||q[1])});save(f);render();if($('#drawer').classList.contains('on'))openFn(f.id);toast('Marked as done');return}
+ if(e.target.closest('[data-dclose]'))closeFn();
+ var sb=e.target.closest('[data-stage]');if(sb){STAGEF=STAGEF===sb.dataset.stage?'upcoming':sb.dataset.stage;renderFunctions()}
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeFn();$('#modal').classList.remove('on')}});
+
+/* ---------- add a function by hand ---------- */
+function addFunction(){
+ var mb=$('#mbox');
+ mb.innerHTML='<div class="hd"><b>Add a function</b><button class="x" data-mclose aria-label="Close">×</button></div><div class="bd">'+
+ '<label class="f">Client name<input class="inp" id="aN"></label><div class="row" style="gap:10px"><label class="f" style="flex:1">Email<input class="inp" id="aE" type="email"></label><label class="f" style="flex:1">Phone<input class="inp" id="aP"></label></div>'+
+ '<div class="row" style="gap:10px"><label class="f" style="flex:1">Function<input class="inp" id="aT" value="Wedding"></label><label class="f" style="flex:1">Guests<input class="inp" id="aG" type="number" value="120"></label></div>'+
+ '<div class="row" style="gap:10px"><label class="f" style="flex:1">Date<input class="inp" id="aD" type="date" value="'+off(90)+'"></label><label class="f" style="flex:1">Room<select class="inp" id="aR">'+Object.keys(ROOMS).map(function(k){return '<option value="'+k+'">'+esc(ROOMS[k])+'</option>'}).join('')+'</select></label></div>'+
+ '<div class="row" style="gap:10px"><label class="f" style="flex:1">Estimate ($)<input class="inp" id="aV" type="number" value="20000"></label><label class="f" style="flex:1">Stage<select class="inp" id="aS">'+STAGES.slice(0,4).map(function(s){return '<option value="'+s.id+'">'+s.name+'</option>'}).join('')+'</select></label></div>'+
+ '<div class="row" style="justify-content:flex-end"><button class="btn" id="aGo">Add function</button></div></div>';
+ $('#modal').classList.add('on');
+ $('#aGo').onclick=function(){var n=$('#aN').value.trim(),em=$('#aE').value.trim();if(!n||!/\S+@\S+\.\S+/.test(em)){toast('Add a name and a valid email');return}
+  var est=+$('#aV').value||0,date=$('#aD').value||off(90),dep=Math.max(DEPMIN,Math.round(est*DEP/10)*10),t=$('#aT').value||'Function';
+  var f={id:'M'+Date.now(),ref:'FN-'+date.replace(/-/g,'').slice(2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase(),client:{name:n,contact:'',email:em,phone:$('#aP').value,seg:segOf(t)},type:t,guests:+$('#aG').value||0,room:$('#aR').value,session:'eve',date:date,stage:$('#aS').value,estimate:est,deposit:dep,look:'',payments:[],checks:{dietary:false,seating:false,runsheet:false,numbers:false},emails:[],timeline:[{d:T,t:'Added by the events team'}],done:{},created:T,notes:'',source:'manual'};
+  if(f.stage==='hold')f.holdExpires=off(7);if(f.stage==='confirmed'){f.payments.push({d:T,amt:dep,what:'Deposit'})}
+  DATA.fns.push(f);save(f);$('#modal').classList.remove('on');render();openFn(f.id);toast('Function added')};
+}
+
+/* ================= Email Studio ================= */
+var ES={mode:'auto',key:'holdwarn',camp:0};
+var IMGS=[['','No picture'],['images/grand-ballroom.jpg','Grand Ballroom'],['images/head-table.jpg','Bridal table'],['images/crystal-room.jpg','Crystal Room'],['images/terrace-lounge.jpg','Terrace Lounge'],['images/awards-gala.jpg','Awards gala'],['images/birthday-cocktail.jpg','Birthday party'],['images/engagement.jpg','Engagement'],['images/christening.jpg','Christening']];
+var CAMPS=store.get('crm_camps',null)||[
+ {name:'Open day and wedding showcase',subject:'You’re invited: our wedding open day',heading:'Wedding open day, Sunday 2pm–5pm',img:'images/grand-ballroom.jpg',btn:'Reserve your spot',
+  body:'Hi {first},\n\nSee the Grand Ballroom and Crystal Room styled for a wedding, taste canapés from our menu and meet our florist and events team.\n\nBring your partner, your ideas and your questions. Couples who book on the day receive complimentary chair covers and sashes.',aud:['enquiry','Weddings']},
+ {name:'Christmas parties',subject:'Christmas party dates are going fast',heading:'Your end-of-year party, sorted',img:'images/awards-gala.jpg',btn:'See Christmas dates',
+  body:'Hi {first},\n\nOur December Fridays and Saturdays are filling up. Packages for 40 to 400 guests include a three-course menu, drinks and a DJ.\n\nBook before the end of the month and we’ll include a welcome drink for every guest.',aud:['Corporate']},
+ {name:'Last-minute dates',subject:'A few dates have just opened up',heading:'Dates just released',img:'images/crystal-room.jpg',btn:'Check availability',
+  body:'Hi {first},\n\nA few Saturday and Sunday dates have just come free in the Crystal Room and Terrace Lounge.\n\nIf you’ve been waiting to plan an engagement, birthday or christening, now is a great time to lock it in.',aud:['enquiry']},
+ {name:'Anniversary dinners',subject:'Celebrate where it all began',heading:'An anniversary dinner, on us',img:'images/head-table.jpg',btn:'Book your dinner',
+  body:'Hi {first},\n\nIt’s been a joy to host so many weddings. To say thank you, every couple married with us is invited back for an anniversary dinner with a complimentary bottle of sparkling.',aud:['past','Weddings']}];
+var AUDS=[['enquiry','Open enquiries and holds'],['upcoming','Booked, function coming up'],['past','Past clients (function held)'],['Weddings','Weddings'],['Engagements','Engagements'],['Corporate','Corporate'],['Birthdays','Birthdays'],['Christenings','Christenings'],['Formals','Formals']];
+function audList(sel){
+ return clients().filter(function(x){return x.fns.some(function(f){
+  return sel.some(function(a){
+   if(a==='enquiry')return ['enquiry','hold','meeting'].indexOf(f.stage)>-1;
+   if(a==='upcoming')return ['confirmed','paid'].indexOf(f.stage)>-1&&f.date>=T;
+   if(a==='past')return f.stage==='done'||(f.date&&f.date<T&&['confirmed','paid'].indexOf(f.stage)>-1);
+   return x.c.seg===a})})});
+}
+var SENT=store.get('crm_sent',[]);
+function renderStudio(){
+ var auto=ES.mode==='auto';
+ var left=auto?Object.keys(TPL).map(function(k){var t=TPL[k];return '<button class="tpl'+(ES.key===k?' on':'')+'" data-tpl="'+k+'"><span class="sw'+(t.auto?'':' off')+'">'+(t.auto?'AUTO ON':'OFF')+'</span><b>'+esc(t.name)+'</b><small>'+GROUP_ICON[t.group]+' '+esc(t.group)+'</small></button>'}).join('')
+  :CAMPS.map(function(c,i){return '<button class="tpl'+(ES.camp===i?' on':'')+'" data-camp="'+i+'"><b>'+esc(c.name)+'</b><small>'+esc(c.subject)+'</small></button>'}).join('')+'<button class="btn ghost" id="newCamp" style="width:100%;justify-content:center">+ New email</button>';
+ var right;
+ if(auto){var t=TPL[ES.key];
+  right='<div class="editor"><div><p class="note">This email is sent '+whenText(ES.key)+'. It fills in each client’s name, date, room and amounts for you.</p>'+
+  '<label class="f"><input type="checkbox" id="tAuto"'+(t.auto?' checked':'')+' style="width:auto;margin-right:6px">Send automatically (otherwise it waits in Follow-ups for you to send)</label>'+
+  '<label class="f">Subject<input class="inp" id="tS" value="'+esc(t.subject)+'"></label><label class="f">Message<textarea class="inp" id="tB" rows="12">'+esc(t.body)+'</textarea></label>'+
+  '<div class="tags">'+['first','date','room','type','guests','deposit','balance','balance_due','hold_expires','meeting','venue'].map(function(x){return '<button type="button" data-tag="{'+x+'}">{'+x+'}</button>'}).join('')+'</div>'+
+  '<label class="f">Button<input class="inp" id="tBtn" value="'+esc(t.btn||'')+'"></label><div class="row"><button class="btn" id="tSave">Save email</button><button class="btn ghost" id="tReset">Back to our wording</button></div></div>'+
+  '<div class="pv"><div style="font-size:12.5px;color:var(--soft);margin-bottom:8px">Preview with a sample client</div><iframe id="pv" title="Email preview"></iframe></div></div>';
+ } else {var c=CAMPS[ES.camp]||CAMPS[0];var A=audList(c.aud||[]);
+  right='<div class="editor"><div><label class="f">Subject<input class="inp" id="cS" value="'+esc(c.subject)+'"></label><label class="f">Heading<input class="inp" id="cH" value="'+esc(c.heading||'')+'"></label>'+
+  '<label class="f">Picture<select class="inp" id="cI">'+IMGS.map(function(x){return '<option value="'+x[0]+'"'+(c.img===x[0]?' selected':'')+'>'+x[1]+'</option>'}).join('')+'</select></label>'+
+  '<label class="f">Message<textarea class="inp" id="cB" rows="9">'+esc(c.body)+'</textarea></label><label class="f">Button<input class="inp" id="cBtn" value="'+esc(c.btn||'')+'"></label>'+
+  '<h3 style="margin:8px 0 8px;font-size:20px">Who gets it</h3><div class="aud">'+AUDS.map(function(a){return '<label><input type="checkbox" data-aud="'+a[0]+'"'+((c.aud||[]).indexOf(a[0])>-1?' checked':'')+'> '+a[1]+'<b>'+audList([a[0]]).length+'</b></label>'}).join('')+'</div>'+
+  '<div class="row"><button class="btn" id="cSend">Send to '+A.length+' client'+(A.length===1?'':'s')+' (demo)</button><button class="btn ghost" id="cTest">Send me a test</button></div>'+
+  (SENT.length?'<h3 style="margin:18px 0 6px;font-size:20px">Sent emails</h3><ul class="sent">'+SENT.slice(0,8).map(function(s){return '<li><b>'+esc(s.subject)+'</b> · '+s.n+' clients · '+nice(s.d,true)+'</li>'}).join('')+'</ul>':'')+'</div>'+
+  '<div class="pv"><div style="font-size:12.5px;color:var(--soft);margin-bottom:8px">Preview</div><iframe id="pv" title="Email preview"></iframe></div></div>';
+ }
+ $('#main').innerHTML='<h1>Email Studio</h1><p class="sub">Follow-up emails go out at the right moment for every function. Newsletters keep past clients and enquiries coming back.</p>'+
+ '<div class="seg"><button data-mode="auto" class="'+(auto?'on':'')+'">Follow-up emails</button><button data-mode="camp" class="'+(!auto?'on':'')+'">Newsletters and offers</button></div>'+
+ '<div class="es"><div>'+left+'</div><div class="panel">'+right+'</div></div>';
+ $$('[data-mode]').forEach(function(b){b.onclick=function(){ES.mode=b.dataset.mode;renderStudio()}});
+ $$('[data-tpl]').forEach(function(b){b.onclick=function(){ES.key=b.dataset.tpl;renderStudio()}});
+ $$('[data-camp]').forEach(function(b){b.onclick=function(){ES.camp=+b.dataset.camp;renderStudio()}});
+ if(auto)wireTpl();else wireCamp();
+}
+function whenText(k){return{holdwarn:R.holdWarn+' days before a hold expires',meeting:R.meetRemind+' day before a consultation',noreply:R.noReply+' days after an estimate with no reply',deposit:'as soon as a deposit is recorded',bal1:R.bal1+' days before the function if a balance is owing',bal2:R.bal2+' days before the function if a balance is owing',numbers:R.numbers+' days before the function',dietary:R.dietary+' days before the function',runsheet:R.runsheet+' days before the function',thanks:R.thanks+' days after the function',anniv:'about a year after a wedding'}[k]||''}
+function sampleFn(k){var F=allFns(),want={holdwarn:'hold',noreply:'enquiry',meeting:'meeting',thanks:'done',anniv:'done'}[k]||'confirmed';
+ return F.filter(function(f){return f.stage===want&&(k!=='anniv'||/wed/i.test(f.type))})[0]||F.filter(function(f){return f.stage==='confirmed'})[0]||F[0]}
+function wireTpl(){
+ var k=ES.key;
+ function pv(){var f=sampleFn(k),v=vars(f);$('#pv').srcdoc=emailHtml(fill($('#tS').value,v),fill($('#tB').value,v),$('#tBtn').value,{})}
+ ['#tS','#tB','#tBtn'].forEach(function(s){$(s).oninput=pv});pv();
+ $$('[data-tag]').forEach(function(b){b.onclick=function(){var ta=$('#tB'),p=ta.selectionStart||ta.value.length;ta.value=ta.value.slice(0,p)+b.dataset.tag+ta.value.slice(p);ta.focus();pv()}});
+ $('#tSave').onclick=function(){TPL[k]=Object.assign({},TPL[k],{subject:$('#tS').value,body:$('#tB').value,btn:$('#tBtn').value,auto:$('#tAuto').checked});var s=store.get('crm_tpl',{});s[k]={subject:TPL[k].subject,body:TPL[k].body,btn:TPL[k].btn,auto:TPL[k].auto};store.set('crm_tpl',s);renderStudio();toast('Email saved')};
+ $('#tReset').onclick=function(){TPL[k]=Object.assign({},TPL_DEFAULT[k]);var s=store.get('crm_tpl',{});delete s[k];store.set('crm_tpl',s);renderStudio();toast('Back to our wording')};
+ $('#tAuto').onchange=function(){$('#tSave').click()};
+}
+function wireCamp(){
+ var c=CAMPS[ES.camp];
+ function rd(){c.subject=$('#cS').value;c.heading=$('#cH').value;c.img=$('#cI').value;c.body=$('#cB').value;c.btn=$('#cBtn').value;c.aud=$$('[data-aud]').filter(function(x){return x.checked}).map(function(x){return x.dataset.aud});store.set('crm_camps',CAMPS)}
+ function pv(){rd();var v={first:'Olivia',venue:VENUE.name};$('#pv').srcdoc=emailHtml(fill(c.subject,v),fill(c.body,v),c.btn,{img:c.img,heading:c.heading,marketing:true})}
+ ['#cS','#cH','#cB','#cBtn'].forEach(function(s){$(s).oninput=pv});$('#cI').onchange=pv;
+ $$('[data-aud]').forEach(function(x){x.onchange=function(){rd();renderStudio()}});pv();
+ $('#cTest').onclick=function(){toast('Demo: a test would go to '+VENUE.email)};
+ $('#cSend').onclick=function(){rd();var A=audList(c.aud);if(!A.length){toast('Choose who gets it first');return}
+  showEmail('To '+A.length+' clients: '+c.subject,emailHtml(fill(c.subject,{first:first(A[0].c.contact||A[0].c.name),venue:VENUE.name}),fill(c.body,{first:first(A[0].c.contact||A[0].c.name),venue:VENUE.name}),c.btn,{img:c.img,heading:c.heading,marketing:true}),function(){
+   SENT.unshift({subject:c.subject,n:A.length,d:T});store.set('crm_sent',SENT);
+   A.forEach(function(x){var f=x.fns[0];f.timeline.push({d:T,t:'Newsletter: '+c.subject});save(f)});
+   renderStudio();toast('Demo: sent to '+A.length+' clients. Each name is filled in for them.')},'Send to '+A.length+' clients (demo)')};
+ var nb=$('#newCamp');if(nb)nb.onclick=function(){CAMPS.push({name:'New email',subject:'News from '+VENUE.name,heading:'',img:'images/grand-ballroom.jpg',btn:'Find out more',body:'Hi {first},\n\n',aud:['past']});ES.camp=CAMPS.length-1;store.set('crm_camps',CAMPS);renderStudio()};
+}
+
+/* ================= Settings ================= */
+function renderSettings(){
+ var rows=[['holdWarn','Hold reminder','days before a hold expires'],['meetRemind','Meeting reminder','days before a consultation'],['noReply','No-reply follow-up','days after an estimate'],['bal1','First balance reminder','days before the function'],['bal2','Final balance reminder (balance due)','days before the function'],['numbers','Final numbers due','days before the function'],['dietary','Dietary list and seating plan','days before the function'],['runsheet','Run sheet check','days before the function'],['thanks','Thank-you and review','days after the function'],['anniv','Anniversary offer','days after a wedding']];
+ $('#main').innerHTML='<h1>Settings</h1><p class="sub">When each follow-up is due. Change a number and the Follow-ups list updates straight away.</p>'+
+ '<div class="panel" style="max-width:720px">'+rows.map(function(r){return '<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:10px 0"><div><b>'+r[1]+'</b><div style="color:var(--soft);font-size:13px">'+r[2]+'</div></div><input class="inp" type="number" min="0" max="400" data-rule="'+r[0]+'" value="'+R[r[0]]+'" style="width:90px"></div>'}).join('')+
+ '<div class="row" style="margin-top:14px"><button class="btn ghost" id="rReset">Back to our timings</button><button class="btn ghost" id="dReset">Reset the demo data</button></div></div>'+
+ '<div class="panel" style="max-width:720px;margin-top:16px"><h3>In the live version</h3><p class="sub" style="margin-bottom:0">Holds, meetings and deposits come straight from your website and online payments. Emails go from your own address, and replies come back to your inbox. Your team signs in from any device.</p></div>';
+ $$('[data-rule]').forEach(function(i){i.onchange=function(){R[i.dataset.rule]=Math.max(0,+i.value||0);store.set('crm_rules',R);render();toast('Saved')}});
+ $('#rReset').onclick=function(){R=Object.assign({},RULES_DEFAULT);store.set('crm_rules',{});render();toast('Back to our timings')};
+ $('#dReset').onclick=function(){store.set('crm_data',null);store.set('crm_ovr',{});store.set('crm_sent',[]);location.reload()};
+}
+
+render();
+if(location.hash){var h=location.hash.slice(1);if(['today','functions','clients','studio','settings'].indexOf(h)>-1)setTab(h)}
+})();
+</script>
+</body>
+</html>
