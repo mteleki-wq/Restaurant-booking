@@ -3417,6 +3417,9 @@
   var FN_IMG   = FN_PAGE+"img/";                                     /* email pictures, 1200px wide */
   var FN_VIDEO = "https://youtu.be/22rezCEm5vU";                     /* Function Deluxe 2-minute tour (voiceover) */
   var FN_THUMB = FN_IMG+"video-thumb.jpg";
+  var FN_CRM   = FN_SITE+"crm.html";                                 /* demo Function CRM & Email Studio */
+  var FN_CRM_VIDEO = "https://youtu.be/gTa9cXqMVrg";                 /* CRM & Email Studio video (1:45) */
+  var FN_CRM_THUMB = FN_IMG+"crm-video-thumb.jpg";
   var FN_OFFER = {trial_days:14, gst:true, plans:[
       {name:"Function Deluxe", price:129, desc:"Editable website, live availability, instant estimates with the look preview, online holds and consultation booking, venue view", main:true},
       {name:"Function Deluxe + Ava", price:169, desc:"Everything in Function Deluxe plus Ava, the AI events assistant (+$40)"}],
@@ -3486,6 +3489,27 @@
         plans:[fnBox(A,true), fnBox(M,false,'Without Ava: website, availability, estimates and online holds.')].filter(Boolean),
         subject:'The enquiry that arrives at 11pm', resendSubject:'Meet Ava, your AI events assistant',
         preheader:'Ava answers from your website, checks dates and works out estimates, day or night.' }),
+      P({ name:'Function CRM & Email Studio (video)', desc:'Shows the new Function CRM and Email Studio (preview) with its 1:45 video: daily follow-ups with the email ready to send, the functions diary, newsletters',
+        badge:'NEW · PREVIEW', eyebrow:'Function CRM & Email Studio',
+        headline:'Every function. Every follow-up. Nothing forgotten.',
+        intro:'A function centre runs on follow-ups: holds about to expire, meetings tomorrow, deposits to confirm, balances due, final numbers, and a thank-you after the big day. Miss one and a date, a payment or a review slips away.\n\nThe new Function CRM and Email Studio for Function Deluxe works them out from every function in your diary and lists them each morning, with the email already written: the client’s name, date, room and amounts filled in. It’s in preview now, and you can try it yourself on our demo venue.',
+        videoUrl:FN_CRM_VIDEO, videoThumb:FN_CRM_THUMB, videoTitle:'Watch: CRM & Email Studio (1:45)', videoPos:'hero',
+        cta1:'Try the CRM demo', cta1url:FN_CRM, cta2:'See Function Deluxe', cta2url:FN_PAGE,
+        featEyebrow:'What’s inside', featHeading:'Your events team’s\ndaily to-do list, done.',
+        cards:[
+          {n:'01', t:'Follow-ups each morning', d:'Holds, meetings, deposits, balances, final numbers and thank-yous, worked out for you.'},
+          {n:'02', t:'The email is ready', d:'Every follow-up comes with the email written and filled in. Check it and send.'},
+          {n:'03', t:'The functions diary', d:'Every function from first enquiry to paid in full, with payments and a checklist.'},
+          {n:'04', t:'Newsletters and offers', d:'Open days, Christmas parties and last-minute dates to the right group of clients.'}
+        ],
+        spotOn:true, spotEyebrow:'Linked to your bookings', spotHeading:'Held online. In the CRM instantly.',
+        spotSub:'When a couple holds a date or books a meeting on your website, it appears in the CRM straight away, with its own follow-ups and emails.',
+        boxes:[{l:'FOLLOW-UP EMAILS', v:'11 ready to go'},{l:'TIMING', v:'You choose'},{l:'STATUS', v:'Preview'}],
+        bandImage:FN_IMG+'crm-followups.jpg', bandAlt:'The Function CRM follow-up list for a demo function centre', bandLink:FN_CRM,
+        bandCaption:'Try it on our demo venue: open a follow-up and see the email it writes for you.',
+        plans:[fnBox(M,true), fnBox(A,false)].filter(Boolean),
+        subject:'Every follow-up, done for you', resendSubject:'New: Function CRM and Email Studio',
+        preheader:'Holds, deposits, balances and thank-yous, each with the email ready. Watch the 1:45 video.' }),
       P({ name:'Follow-up: short answers', desc:'Short follow-up for venues that opened but did not click: four quick answers and a phone call',
         followup:'openedNotClicked', followDays:3, badge:'QUICK ANSWERS', eyebrow:'Straight answers',
         headline:'Will it work for our venue? Four short answers.',

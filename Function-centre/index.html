@@ -142,7 +142,7 @@ section.dark .mini{color:var(--champ)}
 .tier span{color:var(--muted)}
 .founding{display:flex;gap:14px;align-items:flex-start;margin-top:18px;background:var(--blush);border-radius:16px;padding:16px 18px;font-size:15px}
 .founding i{font-style:normal;font-size:22px}
-@media (max-width:760px){.plans{grid-template-columns:1fr}.tiers{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){#video .rv[style*="grid"]{grid-template-columns:1fr!important}.plans{grid-template-columns:1fr}.tiers{grid-template-columns:1fr 1fr}}
 /* faq */
 .faq{max-width:820px} details{border-bottom:1px solid var(--line);padding:18px 0}
 summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px}
@@ -248,6 +248,11 @@ body:has(.chat.open) .float{visibility:hidden}
   <div class="head c rv"><div class="eyebrow">Watch it work</div><h2>Two minutes. <em>The whole picture.</em></h2>
     <p class="lead">See a couple check a date, price their wedding, choose their flowers and hold the date — then see what your team sees.</p></div>
   <button class="video rv" id="vid" type="button" aria-label="Play the Function Deluxe tour video"><img src="img/video-thumb.jpg" alt="Function Deluxe — a 2-minute tour"></button>
+  <div class="rv" style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:center;max-width:980px;margin:40px auto 0">
+    <a href="https://youtu.be/gTa9cXqMVrg" target="_blank" rel="noopener" style="display:block;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(60,20,30,.2)"><img src="img/crm-video-thumb.jpg" alt="Function CRM and Email Studio video" width="1200" height="675" style="width:100%;height:auto"></a>
+    <div><div class="eyebrow">New · preview</div><h3 style="font-size:32px">The Function CRM &amp; Email Studio</h3><p class="muted" style="margin:10px 0 14px">Every follow-up worked out for you each morning, with the email ready to send. Watch the 1:45 video, then try it on the demo venue.</p>
+    <a class="mini" href="demo/crm.html" target="_blank" rel="noopener">Try the CRM demo ↗</a></div>
+  </div>
   <p class="vnote">Prefer YouTube? <a href="https://youtu.be/22rezCEm5vU" target="_blank" rel="noopener">Watch it there ↗</a> · <a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">Subscribe to Webescapade</a></p>
 </div></section>
 
