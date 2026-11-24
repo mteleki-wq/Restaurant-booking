@@ -2110,6 +2110,7 @@ a{color:var(--ui-a2)}
     const m = (e && e.message) || String(e);
     if (/duplicate key|slug_key/i.test(m)) return new Error('That web address is already taken — please try another.');
     if (/slug.*check|check constraint/i.test(m)) return new Error('Web address can only use lowercase letters, numbers and dashes.');
+    if (/free site limit/i.test(m)) return new Error('The free plan includes one website. Upgrade to Platinum to create more.');
     if (/site limit/i.test(m)) return new Error('You have reached the maximum of ' + CFG.maxSites + ' websites.');
     if (/Failed to fetch|NetworkError/i.test(m)) return new Error('No connection — check your internet and try again.');
     if (/JWT|not authenticated|401/i.test(m)) return new Error('Your session expired — please sign in again.');
@@ -2295,7 +2296,13 @@ a{color:var(--ui-a2)}
     try { rows = await Store.list(); } catch (e) { $('#d-grid', v).innerHTML = '<p style="color:var(--ui-bad)">' + esc(e.message) + '</p>'; return; }
     const g = $('#d-grid', v); g.innerHTML = '';
     const nb = frag('<button class="newcard"><i>+</i>New website</button>');
-    nb.onclick = () => newSiteModal(rows.length);
+    nb.onclick = async () => {
+      if (rows.length >= 1) {
+        let plan = 'standard'; try { plan = await Store.plan(); } catch (e) { /* keep standard */ }
+        if (plan !== 'platinum') return upgradeModal();
+      }
+      newSiteModal(rows.length);
+    };
     g.appendChild(nb);
     rows.forEach((r) => {
       const c = frag('<div class="scard"><div class="thumb"><div class="tpv"></div><span class="tletter">' + esc((r.name || '?').trim().charAt(0).toUpperCase()) + '</span><small class="' + (r.published_at ? 'live' : '') + '">' + (r.published_at ? '● LIVE' : 'DRAFT') + '</small></div>' +
@@ -2349,6 +2356,16 @@ a{color:var(--ui-a2)}
         if (over > 10) { pv.style.setProperty('--sc', -over + 'px'); pv.style.setProperty('--dur', Math.min(9, Math.max(3, over / 120)) + 's'); }
       });
     } catch (e) { console.warn('thumbnail', e); }
+  }
+
+  function upgradeModal() {
+    const m = modal('<h2>Want another website?</h2>' +
+      '<p class="muted" style="margin:0 0 14px">The free plan includes <b>one website</b>. Upgrade to <b>Platinum</b> for up to 10 websites — plus online bookings, your own AI assistant and no Webescapade badge.</p>' +
+      '<p style="margin:0 0 18px;font-size:15px"><b>$49 / month + GST</b> — or <b>$29 / month + GST</b> if you already use Restaurant, Service, Trade or Function Deluxe.</p>' +
+      '<div class="acts"><button class="btn ghost" data-x>Not now</button>' +
+      '<a class="btn ghost" style="text-decoration:none" href="https://webescapade.com/site-builder/#plans" target="_blank" rel="noopener">See plans</a>' +
+      '<a class="btn pri" style="text-decoration:none" href="mailto:marc@webescapade.com?subject=Upgrade%20my%20Site%20Builder%20to%20Platinum">Upgrade to Platinum</a></div>');
+    $('[data-x]', m).onclick = () => m.close();
   }
 
   function newSiteModal(count) {
