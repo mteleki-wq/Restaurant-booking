@@ -1504,7 +1504,13 @@
       boxes:[{l:"BOOKINGS", v:"Built in"},{l:"AI ASSISTANT", v:"24/7"},{l:"ONLINE SHOP", v:"Stripe"}],
       bandImage:BLD_IMG+"sb-band.jpg", bandLink:BLD_PAGE, bandAlt:"Bookings, AI assistant and online shop inside a Webescapade website",
       bandCaption:"Already using "+who.sys+"? Your "+who.book+" plug straight into your new website.",
-      priceOn:false,
+      priceOn:true, priceEyebrow:"Simple pricing", priceHeading:"Start free. Grow when you’re ready.",
+      plans:[
+        {tier:"STARTER", price:"Free", per:"", desc:"Build and publish your website: drag-and-drop editor, templates, animated welcome screens and automatic phone layout.", hi:false},
+        {tier:"PLATINUM", price:"$49", per:"/ month + GST", desc:"Bookings in a side panel, an AI assistant that answers customers 24/7, and no Webescapade badge. Already a "+who.sys+" client? Just $29 / month + GST.", hi:true},
+        {tier:"SHOP ADD-ON", price:"$0", per:"/ month", desc:"Only 1.5% per sale, plus Stripe’s normal fees. Products, gift vouchers and downloads, paid straight to your Stripe.", hi:false}
+      ],
+      priceFoot:"Rather we build it for you? Done-for-you setup from $250 + GST.",
       finalHeading:"You asked for it. Now it’s here.",
       finalSub:"Create your account, pick a template and have your first page ready in minutes. Coming next: CRM and Email Studio, connected to your site. Questions? Call Marc on 0413 872 994 or simply reply to this email.",
       finalCta:"Build my website", finalUrl:BLD_PAGE,

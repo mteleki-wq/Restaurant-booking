@@ -388,6 +388,13 @@ section{position:relative}
 .plan li:before{content:"✓";color:#0f9f6e;font-weight:800}.plan.hi li:before{color:var(--g)}
 .plan .btn{justify-content:center}
 @media(max-width:900px){.plans{grid-template-columns:1fr}}
+.plan .price{display:flex;align-items:baseline;gap:8px;margin:2px 0 8px}.plan .price b{font:600 52px/1 var(--serif);letter-spacing:-.02em}.plan .price span{font-size:14px;color:var(--mut)}.plan.hi .price span{color:var(--mut2)}
+.plan .deal{font-size:13.5px;line-height:1.45;color:#d9d5f5;background:rgba(124,92,255,.18);border:1px solid rgba(124,92,255,.45);border-radius:12px;padding:10px 12px;margin-bottom:18px}.plan .deal b{color:#fff}
+.setup{margin-top:24px;display:grid;grid-template-columns:1.1fr 1fr 1fr auto;gap:20px;align-items:center;background:var(--lilac);border-radius:22px;padding:24px 28px}
+.setup small{font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--v)}.setup>div>b{display:block;font:600 24px var(--serif);margin-top:4px}
+.setup .opt b{font:600 30px var(--serif)}.setup .opt span{font-size:13px;color:var(--mut);margin-left:6px}.setup .opt p{margin:4px 0 0;font-size:14px;color:var(--mut);line-height:1.45}
+@media(max-width:900px){.setup{grid-template-columns:1fr}}
+
 
 /* marc */
 .marc{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:center;background:#fff;border:1px solid #e9e5fb;border-radius:30px;padding:48px}
@@ -787,12 +794,18 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
     <div class="head c rv">
       <div class="eyebrow">Choose your level</div>
       <h2>Start free. <em>Grow when you’re ready.</em></h2>
-      <p class="lead">Build and publish your website first. Add Platinum or the Shop whenever your business needs them.</p>
+      <p class="lead">Build and publish your website for free. Add Platinum or the Shop whenever your business needs them. All prices in AUD.</p>
     </div>
     <div class="plans">
-      <div class="plan rv"><small>Site Builder</small><h3>Your website</h3><div class="pp">Everything you need to design and publish.</div><ul><li>Drag-and-drop editor</li><li>4 templates + 20 sections</li><li>Animated welcome screens</li><li>Automatic phone layout</li><li>Contact form, map, video</li><li>Publish &amp; update any time</li></ul><a class="btn line" href="https://webescapade.com/builder/">Start building free</a></div>
-      <div class="plan hi rv d1"><small>Platinum</small><h3>Bookings + AI</h3><div class="pp">Turn visitors into customers, day and night.</div><ul><li>Everything in Site Builder</li><li>Booking panel &amp; floating Book button</li><li>Connects to Restaurant, Service or Trade Deluxe</li><li>Or paste your own booking link</li><li>AI assistant that learns from your site</li></ul><a class="btn pri" href="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website">Upgrade to Platinum</a></div>
-      <div class="plan rv d2"><small>Add-on</small><h3>Shop</h3><div class="pp">Add an online shop to any website.</div><ul><li>Products, gift vouchers &amp; downloads</li><li>Post, local delivery or pick-up</li><li>Paid straight to your Stripe account</li><li>Orders page &amp; voucher codes</li><li>Small fee per sale — no monthly lock-in</li></ul><a class="btn line" href="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20my%20website">Add the Shop</a></div>
+      <div class="plan rv"><small>Starter</small><h3>Your website</h3><div class="price"><b>Free</b></div><div class="pp">Design and publish your website. No card needed.</div><ul><li>Drag-and-drop editor</li><li>4 templates + 20 sections</li><li>Animated welcome screens</li><li>Automatic phone layout</li><li>Contact form, map, video</li><li>Publish &amp; update any time</li><li>Small “Made with Webescapade” badge</li></ul><a class="btn line" href="https://webescapade.com/builder/">Start building free</a></div>
+      <div class="plan hi rv d1"><small>Platinum</small><h3>Bookings + AI</h3><div class="price"><b>$49</b><span>/ month + GST</span></div><div class="deal">Already a Restaurant, Service, Trade or Function Deluxe client? <b>$29 / month + GST</b></div><ul><li>Everything in Starter</li><li>Booking panel &amp; floating Book button</li><li>Connects to Restaurant, Service or Trade Deluxe — or any booking link</li><li>AI assistant that learns from your site, 24/7</li><li>No Webescapade badge</li></ul><a class="btn pri" href="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website">Upgrade to Platinum</a></div>
+      <div class="plan rv d2"><small>Add-on</small><h3>Shop</h3><div class="price"><b>$0</b><span>/ month · 1.5% per sale</span></div><div class="pp">Only pay when you sell. Stripe’s normal fees apply.</div><ul><li>Products, gift vouchers &amp; downloads</li><li>Post, local delivery or pick-up</li><li>Paid straight to your own Stripe account</li><li>Orders page &amp; voucher codes</li><li>Works with Starter or Platinum</li></ul><a class="btn line" href="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20my%20website">Add the Shop</a></div>
+    </div>
+    <div class="setup rv">
+      <div><small>Rather we build it for you?</small><b>Done-for-you setup</b></div>
+      <div class="opt"><b>$250</b><span>+ GST, one-off</span><p>Marc builds your website with your words, photos and colours.</p></div>
+      <div class="opt"><b>$400</b><span>+ GST, one-off</span><p>Website plus bookings, AI assistant and shop products set up for you.</p></div>
+      <a class="btn line" href="https://webescapade.com/Restaurant/demo.html">Book a free Zoom demo</a>
     </div>
   </div>
 </section>
@@ -817,6 +830,7 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
     <div class="head c rv"><div class="eyebrow">Questions</div><h2>Straight <em>answers.</em></h2></div>
     <div class="faq rv">
       <details open><summary>Do I need to know how to code?</summary><p>No. You click, drag and type. If you can use a phone, you can build your website. And if you would rather we set it up for you, just ask.</p></details>
+      <details><summary>How much does it cost?</summary><p>Building and publishing your website is free. Platinum (bookings + AI assistant, no badge) is $49 a month + GST — or $29 a month + GST if you already use Restaurant, Service, Trade or Function Deluxe. The Shop has no monthly fee: 1.5% per sale plus Stripe’s normal fees. Want us to build it? Setup is $250 + GST, or $400 + GST with bookings, the AI assistant and shop set up too.</p></details>
       <details><summary>Will my website look good on phones?</summary><p>Yes. Your phone layout is created automatically from your desktop page, in the right reading order. You can switch to Phone view at any time to fine-tune it, or hide items on phones.</p></details>
       <details><summary>Can I connect the booking system I already use?</summary><p>Yes, with Platinum. Restaurant Deluxe, Service Deluxe and Trade Deluxe connect in a couple of clicks — or paste the link of any other online booking page (it must start with https://).</p></details>
       <details><summary>How does the AI assistant know about my business?</summary><p>It reads the words on your own website — your menu, services, prices and opening hours. When you update your website and publish, the assistant knows the new information too.</p></details>

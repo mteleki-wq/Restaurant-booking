@@ -1617,7 +1617,7 @@ body{min-height:100vh}
     let rt = null;
     window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(relayout, 80); });
     if (location.hash.length > 1) setTimeout(() => { try { const n = document.querySelector(location.hash); if (n) n.scrollIntoView(); } catch (e) { /* bad hash */ } }, 300);
-    if (CFG.badge) {
+    if (CFG.badge && state.plan !== 'platinum') {   // Platinum sites have no badge
       const b = document.createElement('a');
       b.className = 'wb-badge'; b.href = 'https://webescapade.com'; b.target = '_blank'; b.rel = 'noopener';
       b.innerHTML = '<i></i>Made with Webescapade';
