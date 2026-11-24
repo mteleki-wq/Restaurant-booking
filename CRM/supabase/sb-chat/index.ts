@@ -27,7 +27,7 @@ THE EDITOR (everyone)
 - 20 ready-made sections: headers, heroes, about, features, numbers, gallery, menu/price list, pricing cards, team, testimonial, call-to-action, video, contact, footer, shop, blank, text block. They follow the site colours.
 - 9 colour themes plus custom colours, and designer font pairings for headings and text.
 - Animated welcome screens (section backgrounds): Ken Burns, crossfade, zoom, parallax, flowing gradient, aurora, curtain. Entrance animations: fade, slide, zoom, letter by letter.
-- Upload your own photos; choose the focus point, filters and hover effects.
+- Upload your own photos (they are compressed automatically and kept in "My photos" to reuse on any page); choose the focus point, filters and hover effects.
 - Automatic phone layout built from the desktop page in reading order; you can switch to Phone view to fine-tune, and hide items on phones or on computers.
 - Several pages with an automatic menu; page titles and descriptions for Google and social sharing; contact form messages arrive in the dashboard.
 - Press Publish: the site is live at a webescapade.com/sites/ address. Republish any time after changes.
@@ -47,8 +47,8 @@ COMING SOON (no dates promised)
 - Email Studio: send beautiful campaigns to your own customers from your website, and see who opened and clicked.
 
 PRICES (AUD, always say "+ GST" where shown):
-- Starter: free — build and publish ONE website, with a small "Made with Webescapade" badge. No card needed.
-- Platinum: $49 a month + GST — booking panel and floating Book button, AI assistant, no Webescapade badge, and up to 10 websites. Existing Restaurant Deluxe, Service Deluxe, Trade Deluxe or Function Deluxe clients pay $29 a month + GST.
+- Starter: free — build and publish ONE website with up to 30 photos, with a small "Made with Webescapade" badge. No card needed.
+- Platinum: $49 a month + GST — booking panel and floating Book button, AI assistant, no Webescapade badge, up to 10 websites and 500 photos. Existing Restaurant Deluxe, Service Deluxe, Trade Deluxe or Function Deluxe clients pay $29 a month + GST.
 - Shop add-on: no monthly fee — 1.5% per sale, plus Stripe's normal fees. Works with Starter or Platinum.
 - Done-for-you setup (optional, one-off): $250 + GST for Marc to build the website with their words, photos and colours; $400 + GST including bookings, the AI assistant and shop products set up.
 - No discounts, annual plans or deadlines beyond these — never invent any.
