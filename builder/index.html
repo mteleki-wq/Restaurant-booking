@@ -261,6 +261,9 @@ a{color:var(--ui-a2)}
 .plat-on span,.plat-off span{color:#c9c8dc}
 .pane h4 svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
 
+.tpvi .wb-site{overflow:hidden}
+.thumb .tpv,.tpl .pv .tpv{overflow:hidden}
+
 </style>
 </head>
 <body>
@@ -988,8 +991,11 @@ a{color:var(--ui-a2)}
     S.appendChild(renderBg(sec, ctx));
     const inn = document.createElement('div');
     inn.className = 'wb-in' + (flow ? ' wb-flow' : '');
+    // scaled with a transform (identical in Safari, Chrome and Firefox)
     inn.style.width = W + 'px';
-    inn.style.zoom = ctx.k;
+    inn.style.marginLeft = (-W * ctx.k / 2) + 'px';
+    if (ctx.k !== 1) inn.style.transform = 'scale(' + ctx.k + ')';
+    inn.dataset.k = ctx.k;
     if (flow) {
       const mh = mobileMinH(sec);
       if (mh) { inn.style.minHeight = mh + 'px'; inn.style.justifyContent = 'center'; }
@@ -998,6 +1004,8 @@ a{color:var(--ui-a2)}
       renderFlowItems(flowPlan(sec), inn, ctx);
     } else {
       inn.style.height = (mob ? sec.mh : sec.h) + 'px';
+      inn.dataset.h = mob ? sec.mh : sec.h;
+      S.style.height = ((mob ? sec.mh : sec.h) * ctx.k) + 'px';
       let fallbackY = 20;
       (sec.els || []).slice().sort((a, b) => a.z - b.z).forEach((el) => {
         if (mob && el.m && el.m.hide) return;
@@ -1051,7 +1059,31 @@ a{color:var(--ui-a2)}
     });
     mount.innerHTML = '';
     mount.appendChild(root);
+    WB.fitFlow(root);
     return { root, ctx };
+  };
+
+  // automatic (phone) sections have no fixed height: size the section to its scaled content
+  WB.fitFlow = function (root) {
+    const flows = Array.from(root.querySelectorAll('.wb-in.wb-flow'));
+    const fit = (inn) => { const s = inn.parentNode; if (s) s.style.height = Math.ceil(inn.offsetHeight * parseFloat(inn.dataset.k || 1)) + 'px'; };
+    flows.forEach(fit);
+    if (flows.length && 'ResizeObserver' in window) {
+      if (root._ro) root._ro.disconnect();
+      root._ro = new ResizeObserver((ents) => ents.forEach((e) => fit(e.target)));
+      flows.forEach((n) => root._ro.observe(n));
+    }
+  };
+  // change the scale of an already-drawn page (window resized, same device)
+  WB.rescale = function (root, k) {
+    root.querySelectorAll('.wb-in').forEach((inn) => {
+      const W = parseFloat(inn.style.width) || DESK;
+      inn.dataset.k = k;
+      inn.style.marginLeft = (-W * k / 2) + 'px';
+      inn.style.transform = k !== 1 ? 'scale(' + k + ')' : '';
+      if (inn.dataset.h) inn.parentNode.style.height = (parseFloat(inn.dataset.h) * k) + 'px';
+      else inn.parentNode.style.height = Math.ceil(inn.offsetHeight * k) + 'px';
+    });
   };
 
   /* ---------- live runtime: entrance animations, slideshows, parallax ---------- */
@@ -1262,7 +1294,7 @@ a{color:var(--ui-a2)}
 .wb-fixed{position:fixed}
 .wb-fixed.wb-scrolled>.wb-bg{background:var(--wb-scroll-bg,color-mix(in srgb,var(--c-bg) 92%,transparent))!important;box-shadow:0 6px 24px rgba(0,0,0,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .wb-bg{position:absolute;inset:0;overflow:hidden;z-index:0}
-.wb-in{position:relative;margin:0 auto;z-index:1}
+.wb-in{position:absolute;left:50%;top:0;z-index:1;transform-origin:0 0}
 .wb-el{position:absolute}
 .wb-flow{display:flex;flex-direction:column;padding:44px ${PAD}px}
 .wb-flow>.wb-el,.wb-fg>.wb-el{position:relative;left:auto;top:auto}
@@ -2010,11 +2042,20 @@ a{color:var(--ui-a2)}
       const site = WB.normalizeSite(clone(draft));
       const pv = $('.tpv', box);
       const w = box.clientWidth || 300;
-      WB.renderPage(site, site.pages[0], pv, { thumb: true, device: 'desktop', width: w, k: w / WB.DESK, maxSections: 6 });
+      const k = w / WB.DESK;
+      // draw the page at full desktop size, then shrink the whole picture with a transform
+      // (works the same in Safari, Chrome and Firefox; CSS zoom does not)
+      const inner = document.createElement('div');
+      inner.className = 'tpvi';
+      inner.style.cssText = 'width:' + WB.DESK + 'px;transform:scale(' + k + ');transform-origin:0 0';
+      pv.innerHTML = ''; pv.appendChild(inner);
+      WB.renderPage(site, site.pages[0], inner, { thumb: true, device: 'desktop', width: WB.DESK, k: 1, maxSections: 6 });
       box.classList.add('has-pv');
       box.style.background = WB.color(site.theme.colors.bg, '#111');
       requestAnimationFrame(() => {
-        const over = pv.scrollHeight - box.clientHeight;
+        const fullH = inner.offsetHeight * k;
+        pv.style.height = fullH + 'px';
+        const over = fullH - box.clientHeight;
         if (over > 10) { pv.style.setProperty('--sc', -over + 'px'); pv.style.setProperty('--dur', Math.min(9, Math.max(3, over / 120)) + 's'); }
       });
     } catch (e) { console.warn('thumbnail', e); }
@@ -2498,7 +2539,7 @@ a{color:var(--ui-a2)}
     }
     function moveSecResize(e) {
       const d = secDrag, h = Math.max(40, Math.round(d.h0 + (e.clientY - d.y0) / d.k));
-      d.h = h; d.inn.style.height = h + 'px';
+      d.h = h; d.inn.style.height = h + 'px'; d.inn.parentNode.style.height = (h * d.k) + 'px';
       let pos = $('.ed-pos', stage); if (!pos) { pos = frag('<div class="ed-pos"></div>'); stage.appendChild(pos); }
       pos.textContent = 'Height ' + h + 'px';
       const sr = stage.getBoundingClientRect(); pos.style.left = (e.clientX - sr.left + 14) + 'px'; pos.style.top = (e.clientY - sr.top + 10) + 'px';
