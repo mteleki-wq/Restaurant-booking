@@ -54,6 +54,13 @@ a{color:var(--ui-a2)}
 @keyframes fIn{from{opacity:0}}
 .modal{background:var(--ui-p);border:1px solid var(--ui-line);border-radius:18px;width:min(560px,100%);max-height:calc(100vh - 40px);overflow:auto;padding:26px;box-shadow:0 30px 80px #000a}
 .modal.wide{width:min(1040px,100%)}
+.ml-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}.ml-use{font-size:13px}
+.ml-bar{height:6px;border-radius:6px;background:var(--ui-p2);overflow:hidden;margin:10px 0 12px}.ml-bar i{display:block;height:100%;width:0;background:var(--ui-grad);transition:width .4s}.ml-bar i.warn{background:#f59e0b}.ml-bar i.full{background:#ef4444}
+.ml-tip{font-size:13px;margin:0 0 14px}.ml-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;max-height:52vh;overflow:auto;padding:2px}
+.ml-it{position:relative;aspect-ratio:4/3;border:0;border-radius:10px;background:#0006 center/cover no-repeat;cursor:pointer;box-shadow:inset 0 0 0 1px var(--ui-line);transition:transform .15s,box-shadow .15s}
+.ml-it:hover{transform:translateY(-2px)}.ml-it.on{box-shadow:0 0 0 3px #8b5cf6}.ml-it.on:after{content:"✓";position:absolute;left:8px;top:8px;width:24px;height:24px;border-radius:50%;background:#8b5cf6;color:#fff;font:700 14px/24px sans-serif;text-align:center}
+.ml-del{position:absolute;right:6px;top:6px;width:26px;height:26px;border-radius:50%;background:#000b;color:#fff;font:700 17px/25px sans-serif;text-align:center;opacity:0;transition:opacity .15s}.ml-it:hover .ml-del,.ml-it:focus .ml-del{opacity:1}@media(hover:none){.ml-del{opacity:1}}
+.ml-empty{grid-column:1/-1;text-align:center;padding:30px 0}
 .modal h2{margin:0 0 6px;font-size:21px}
 .modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
 /* auth */
@@ -2154,6 +2161,8 @@ a{color:var(--ui-a2)}
       async unpublish(id) { return this.save(id, { published: null, published_at: null }); },
       async remove(id) { localStorage.removeItem(key(id)); localStorage.setItem(K, JSON.stringify(idx().filter((s) => s.id !== id))); },
       async upload(blob) { return blobToDataURL(blob); },
+      async media() { return { limit: 0, files: [] }; },
+      async removeMedia() {},
       async messages(row) { try { return JSON.parse(localStorage.getItem('wb.msg.' + row.slug)) || []; } catch (e) { return []; } },
       async deleteMessage(row, m) { const a = (await this.messages(row)).filter((x) => x.id !== m.id); localStorage.setItem('wb.msg.' + row.slug, JSON.stringify(a)); },
       viewUrl(row) { return CFG.viewerUrl + '?local=' + encodeURIComponent(row.id); }
@@ -2201,12 +2210,18 @@ a{color:var(--ui-a2)}
       if (error) throw friendly(error);
       return sb.storage.from('builder-media').getPublicUrl(path).data.publicUrl;
     },
+    async media() {
+      const { data, error } = await sb.rpc('builder_my_media'); if (error) throw friendly(error);
+      const d = data || {}; return { limit: d.limit || 30, files: (d.files || []).map((f) => Object.assign(f, { url: sb.storage.from('builder-media').getPublicUrl(f.name).data.publicUrl })) };
+    },
+    async removeMedia(name) { const { error } = await sb.storage.from('builder-media').remove([name]); if (error) throw friendly(error); },
     async messages(row) { const { data, error } = await sb.from('builder_messages').select('*').eq('site_id', row.id).order('created_at', { ascending: false }).limit(300); if (error) throw friendly(error); return data || []; },
     async deleteMessage(row, m) { const { error } = await sb.from('builder_messages').delete().eq('id', m.id); if (error) throw friendly(error); },
     viewUrl(row) { return CFG.viewerUrl + '?s=' + encodeURIComponent(row.slug); }
   };
 
   /* ---------------- image compression ---------------- */
+  let PLAN = 'standard';
   function compressImage(file, maxDim) {
     return new Promise((res, rej) => {
       if (!/^image\//.test(file.type)) return rej(new Error('Please choose an image file.'));
@@ -2215,7 +2230,8 @@ a{color:var(--ui-a2)}
       const im = new Image();
       im.onload = () => {
         try {
-          const md = maxDim || 1800;
+          const free = PLAN !== 'platinum';
+          const md = free ? Math.min(maxDim || 1800, 1600) : (maxDim || 1800);
           const sc = Math.min(1, md / Math.max(im.naturalWidth, im.naturalHeight));
           const w = Math.round(im.naturalWidth * sc), h = Math.round(im.naturalHeight * sc);
           const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
@@ -2224,7 +2240,10 @@ a{color:var(--ui-a2)}
           if (!png) { cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h); }
           cx.drawImage(im, 0, 0, w, h);
           URL.revokeObjectURL(url);
-          cv.toBlob((b) => b ? res({ blob: b, ext: png ? 'png' : 'jpg' }) : rej(new Error('Could not process that image.')), png ? 'image/png' : 'image/jpeg', 0.8);
+          const done = (b, ext) => b ? res({ blob: b, ext: ext }) : rej(new Error('Could not process that image.'));
+          if (png) cv.toBlob((b) => done(b, 'png'), 'image/png');
+          else if (free) cv.toBlob((b) => { if (b && b.type === 'image/webp') done(b, 'webp'); else cv.toBlob((j) => done(j, 'jpg'), 'image/jpeg', 0.78); }, 'image/webp', 0.78);
+          else cv.toBlob((b) => done(b, 'jpg'), 'image/jpeg', 0.82);
         } catch (e) { rej(e); }
       };
       im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('That image format could not be opened. Try a JPG or PNG.')); };
@@ -2238,15 +2257,71 @@ a{color:var(--ui-a2)}
       inp.click();
     });
   }
+  function limitBox(limit) {
+    const m = modal('<h2>Your photo space is full</h2><p class="muted">' + (PLAN === 'platinum'
+      ? 'You have used all ' + limit + ' photos included with Platinum. Delete photos you no longer use in My photos to make room.'
+      : 'The free plan includes ' + limit + ' photos. Delete photos you no longer use in My photos, or upgrade to Platinum for up to 500 photos, bookings and your own AI assistant.') +
+      '</p><div class="acts"><button class="btn ghost" data-x>OK</button>' + (PLAN === 'platinum' ? '' : '<a class="btn pri" target="_blank" rel="noopener" href="https://webescapade.com/site-builder/#plans">Upgrade to Platinum</a>') + '</div>');
+    $('[data-x]', m).onclick = () => m.close();
+  }
+  /* My photos: pick an uploaded photo or upload new ones */
+  function chooseImages(multiple, maxDim) {
+    if (Store.mode === 'local') return pickImages(multiple).then((f) => f.length ? uploadFiles(f, maxDim) : []);
+    return new Promise((res) => {
+      let done = false; const fin = (v) => { if (done) return; done = true; res(v); };
+      const m = modal('<div class="ml-head"><h2>My photos</h2><span class="ml-use muted" id="ml-use">Loading…</span></div><div class="ml-bar"><i id="ml-fill"></i></div>' +
+        '<p class="muted ml-tip">' + (multiple ? 'Tap photos to choose them, or upload new ones.' : 'Tap a photo to use it, or upload a new one.') + ' Photos are reused across your pages, so you never need to upload the same one twice.</p>' +
+        '<div class="ml-grid" id="ml-grid"></div><div class="acts"><button class="btn ghost" data-x>Cancel</button><button class="btn" id="ml-up">Upload new</button>' + (multiple ? '<button class="btn pri" id="ml-use-sel" disabled>Use selected</button>' : '') + '</div>', { wide: true, onClose: () => fin([]) });
+      const sel = []; let info = { limit: 30, files: [] };
+      const draw = () => {
+        const n = info.files.length, pct = Math.min(100, Math.round(n / info.limit * 100));
+        $('#ml-use', m).textContent = n + ' of ' + info.limit + ' photos used' + (PLAN === 'platinum' ? '' : ' · free plan');
+        $('#ml-fill', m).style.width = pct + '%'; $('#ml-fill', m).className = pct >= 100 ? 'full' : pct >= 80 ? 'warn' : '';
+        $('#ml-grid', m).innerHTML = n ? info.files.map((f, i) => '<button type="button" class="ml-it' + (sel.indexOf(f.url) >= 0 ? ' on' : '') + '" data-i="' + i + '" style="background-image:url(&quot;' + esc(f.url) + '&quot;)"><span class="ml-del" data-del="' + i + '" title="Delete photo">×</span></button>').join('')
+          : '<p class="muted ml-empty">No photos yet. Press Upload new to add your first one.</p>';
+        const us = $('#ml-use-sel', m); if (us) { us.disabled = !sel.length; us.textContent = sel.length ? 'Use ' + sel.length + ' selected' : 'Use selected'; }
+      };
+      const load = () => Store.media().then((d) => { info = d; draw(); }).catch((e) => { $('#ml-use', m).textContent = ''; toast(e.message, 'bad'); });
+      load();
+      $('#ml-grid', m).onclick = async (e) => {
+        const d = e.target.closest('[data-del]');
+        if (d) {
+          e.stopPropagation(); const f = info.files[+d.dataset.del];
+          if (!await confirmBox('Delete this photo?', 'If it is used on any of your pages, it will disappear there too. This frees up one photo space.', 'Delete', true)) return;
+          try { await Store.removeMedia(f.name); const k = sel.indexOf(f.url); if (k >= 0) sel.splice(k, 1); toast('Photo deleted', 'ok'); await load(); } catch (er) { toast(er.message, 'bad'); }
+          return;
+        }
+        const it = e.target.closest('.ml-it'); if (!it) return;
+        const u = info.files[+it.dataset.i].url;
+        if (!multiple) { m.close(); fin([u]); return; }
+        const k = sel.indexOf(u); if (k >= 0) sel.splice(k, 1); else sel.push(u); draw();
+      };
+      $('[data-x]', m).onclick = () => m.close();
+      $('#ml-up', m).onclick = async () => {
+        if (info.files.length >= info.limit) return limitBox(info.limit);
+        const files = await pickImages(multiple); if (!files.length) return;
+        const urls = await uploadFiles(files.slice(0, Math.max(1, info.limit - info.files.length)), maxDim);
+        if (!urls.length) { load(); return; }
+        if (!multiple) { m.close(); fin(urls); return; }
+        urls.forEach((u) => sel.push(u)); await load();
+      };
+      const us = $('#ml-use-sel', m); if (us) us.onclick = () => { m.close(); fin(sel.slice()); };
+    });
+  }
   async function uploadFiles(files, maxDim) {
     const urls = [];
+    let full = false;
     for (const f of files) {
+      if (full) break;
       const t = frag('<div class="toast">Uploading ' + esc(f.name) + '…</div>'); toasts.appendChild(t);
       try {
         const c = await compressImage(f, maxDim);
         if (c.blob.size > 5e6) throw new Error('Image is too large after compression (over 5 MB).');
         urls.push(await Store.upload(c.blob, c.ext));
-      } catch (e) { toast(e.message || 'Upload failed', 'bad', 5000); }
+      } catch (e) {
+        if (/row-level security|violates|403|unauthori[sz]ed/i.test(e.message || '')) { full = true; let lim = 30; try { lim = (await Store.media()).limit; } catch (x) {} limitBox(lim); }
+        else toast(e.message || 'Upload failed', 'bad', 5000);
+      }
       t.remove();
     }
     return urls;
@@ -3024,8 +3099,7 @@ a{color:var(--ui-a2)}
 
     /* ---------- images ---------- */
     async function replaceImage(id) {
-      const files = await pickImages(false); if (!files.length) return;
-      const urls = await uploadFiles(files, 1800); if (!urls.length) return;
+      const urls = await chooseImages(false, 1800); if (!urls.length) return;
       const f = findEl(id); if (!f) return;
       change(() => { f.el.c = Object.assign({}, f.el.c, { src: urls[0] }); });
       toast('Image added', 'ok');
@@ -3334,8 +3408,7 @@ a{color:var(--ui-a2)}
       kindSel.onchange = syncKind; syncKind();
       $('[data-x]', m).onclick = () => m.close();
       $('#pm-img', m).onclick = async () => {
-        const files = await pickImages(false); if (!files.length) return;
-        const u = await uploadFiles(files, 1400); if (!u[0]) return;
+        const u = await chooseImages(false, 1400); if (!u[0]) return;
         p.image = u[0]; const th = $('#pm-thumb', m); th.style.backgroundImage = 'url("' + u[0] + '")'; th.textContent = '';
       };
       $('#pm-file', m).onclick = () => {
@@ -3514,13 +3587,12 @@ a{color:var(--ui-a2)}
       const sec = curSec();
       if (a === 'img' && f) return replaceImage(f.el.id);
       if (a === 'imgclear' && f) return change(() => { f.el.c = Object.assign({}, f.el.c, { src: '' }); });
-      if (a === 'navlogo' && f) { const files = await pickImages(false); if (!files.length) return; const u = await uploadFiles(files, 700); if (u[0]) change(() => { f.el.c.logoImg = u[0]; }); return; }
+      if (a === 'navlogo' && f) { const u = await chooseImages(false, 700); if (u[0]) change(() => { f.el.c.logoImg = u[0]; }); return; }
       if (a === 'navlogoclear' && f) return change(() => { f.el.c.logoImg = ''; });
       if (a === 'navadd' && f) return change(() => { f.el.c.links = (f.el.c.links || []).concat([{ label: 'New link', href: '#' }]); });
       if (a === 'navdel' && f) return change(() => { f.el.c.links.splice(+b.dataset.i, 1); });
       if (a === 'bgadd' && sec) {
-        const files = await pickImages(true); if (!files.length) return;
-        const urls = await uploadFiles(files, 2000); if (!urls.length) return;
+        const urls = await chooseImages(true, 2000); if (!urls.length) return;
         return change(() => { sec.bg.type = 'image'; sec.bg.images = (sec.bg.images || []).concat(urls); if (!sec.bg.anim || sec.bg.anim === 'none') sec.bg.anim = 'kenburns'; if (sec.bg.overlay == null) sec.bg.overlay = 0.35; });
       }
       if (a === 'bgdel' && sec) return change(() => { sec.bg.images.splice(+b.dataset.i, 1); });
@@ -3820,7 +3892,7 @@ a{color:var(--ui-a2)}
     window.__wbEditor = { S, render, select, addElement, insertSection, undo, redo, findEl, saveNow, toCustom, change };
     S.tab = 'add';
     S.plan = 'standard';
-    Store.plan().then((p) => { S.plan = p; if (S.tab === 'extras') renderLeft(); }).catch(() => {});
+    Store.plan().then((p) => { S.plan = p; PLAN = p; if (S.tab === 'extras') renderLeft(); }).catch(() => {});
     S.shopOn = false; S.products = []; S.shopStatus = null;
     Store.shopOn().then((v) => { S.shopOn = v; if (S.tab === 'shop') renderLeft(); }).catch(() => {});
     loadProducts();
