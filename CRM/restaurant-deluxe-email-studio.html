@@ -1466,6 +1466,55 @@
     })
   ];
 
+  /* ===================================================================
+     SITE BUILDER LAUNCH (v-builder) — "You asked, we listened".
+     One announcement campaign, shown first under every product, so each
+     list (restaurants, service, function, trades) can be told about the new
+     Webescapade Site Builder: free placement editor, Platinum bookings +
+     AI assistant, and the Shop add-on. Pictures live in /builder/email/.
+     =================================================================== */
+  var BLD_PAGE  = "https://webescapade.com/builder/";
+  var BLD_IMG   = "https://webescapade.com/builder/email/";
+  var BLD_VIDEO = "";   /* paste the YouTube link of the Site Builder premium tour here when it is up */
+  function bldPresets(p){
+    var who = {restaurant:{sys:'Restaurant Deluxe', book:'table bookings', demo:DEMO_BOOK},
+               service:{sys:'Service Deluxe', book:'appointment bookings', demo:'https://webescapade.com/service/demo.html'},
+               'function':{sys:'Function Deluxe', book:'event enquiries and bookings', demo:'https://webescapade.com/Function-centre/demo.html'},
+               trade:{sys:'Trade Deluxe', book:'job bookings', demo:'https://webescapade.com/trades/demo.html'}}[p] || {sys:'Restaurant Deluxe', book:'bookings', demo:DEMO_BOOK};
+    return [preset({
+      name:"NEW: Site Builder is here — you asked, we listened",
+      desc:"Launch announcement for the new Webescapade Site Builder: drag-and-drop website, Platinum bookings + AI assistant, Shop add-on",
+      badge:"NEW AT WEBESCAPADE", eyebrow:"You asked. We listened.",
+      headline:"Now you can build your own website.",
+      intro:"So many of you told us the same thing: you want a beautiful website you can change yourself — without waiting, and without code.\n\nWe listened, and now it’s here. The new Webescapade Site Builder lets you place text, photos, buttons and whole sections exactly where you want them. Start from a ready-made template, add an animated welcome screen, and your phone version builds itself.\n\nAnd with Platinum, your website does more than look good: it takes bookings, answers questions with its own AI assistant, and can even sell online.",
+      heroImage:BLD_IMG+"sb-hero.jpg", heroLink:BLD_PAGE, heroAlt:"The Webescapade Site Builder: drag, drop and edit any part of your page",
+      videoUrl:BLD_VIDEO, videoTitle:"Watch the Site Builder tour", videoPos:"hero",
+      cta1:"Start building free", cta1url:BLD_PAGE,
+      cta2:"Book a Zoom demo", cta2url:who.demo,
+      featEyebrow:"Design it your way", featHeading:"Drag it. Drop it.\nPublish it.",
+      featSub:"Everything you need to look professional online — and keep it up to date yourself.",
+      cards:[
+        {n:"01", t:"Put things anywhere", d:"Move text, photos and buttons freely on the page. Colours and fonts change in one click."},
+        {n:"02", t:"Ready-made templates", d:"Restaurant, spa, business and portfolio designs to start from — with animated welcome screens."},
+        {n:"03", t:"Perfect on phones", d:"Your phone version is laid out for you automatically. Publish when you are happy."}
+      ],
+      spotOn:true, spotEyebrow:"Platinum",
+      spotHeading:"A website that works for you, day and night",
+      spotSub:"Guests book in a panel without leaving your site (connect "+who.sys+" or your own booking link). Your AI assistant learns from your own website and answers questions 24/7. And the Shop add-on sells products, gift vouchers and downloads, paid straight to your own Stripe account.",
+      boxes:[{l:"BOOKINGS", v:"Built in"},{l:"AI ASSISTANT", v:"24/7"},{l:"ONLINE SHOP", v:"Stripe"}],
+      bandImage:BLD_IMG+"sb-band.jpg", bandLink:BLD_PAGE, bandAlt:"Bookings, AI assistant and online shop inside a Webescapade website",
+      bandCaption:"Already using "+who.sys+"? Your "+who.book+" plug straight into your new website.",
+      priceOn:false,
+      finalHeading:"You asked for it. Now it’s here.",
+      finalSub:"Create your account, pick a template and have your first page ready in minutes. Coming next: CRM and Email Studio, connected to your site. Questions? Call Marc on 0413 872 994 or simply reply to this email.",
+      finalCta:"Build my website", finalUrl:BLD_PAGE,
+      siteUrl:BLD_PAGE,
+      subject:"You asked, we listened: build your own website", resendSubject:"Have you tried the new Site Builder yet?",
+      preheader:"Drag-and-drop website with bookings, an AI assistant and an online shop — now live."
+    })];
+  }
+  PRESETS = bldPresets('restaurant').concat(PRESETS);
+
   var camps = PRESETS.map(function(c){ return JSON.parse(JSON.stringify(c)); });
   var cur = 0;
 
@@ -3653,7 +3702,7 @@
     ];
   }
   function oneProdLabel(){ var el=document.getElementById('oneProd'); if(el) el.textContent=PROD_NAME[PRODUCT]||'Restaurant Deluxe'; }
-  function presetsFor(p){ return p==='service' ? svcPresets() : p==='function' ? fnPresets() : p==='trade' ? trdPresets() : PRESETS; }
+  function presetsFor(p){ return p==='service' ? bldPresets(p).concat(svcPresets()) : p==='function' ? bldPresets(p).concat(fnPresets()) : p==='trade' ? bldPresets(p).concat(trdPresets()) : PRESETS; }
   function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : p==='trade' ? (info.offer||TRD_OFFER) : null; }
   function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; if(p==='trade') TRD_OFFER=o; }
   var OTHER_PRODUCTS=['service','function','trade'];   /* products with their own offer boxes */
