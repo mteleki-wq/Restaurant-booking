@@ -466,6 +466,34 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
 .mcta.on{transform:none}
 @media(max-width:700px){.mcta{display:flex}.mcta .btn{width:100%;justify-content:center}.s{padding:84px 0}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.chip{opacity:1;transform:none}}
+/*LEARN-CSS*/
+.lsn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.lsn{display:block;text-align:left;font:inherit;color:inherit;background:#fff;border:1px solid #e9e5fb;border-radius:20px;padding:10px 10px 16px;cursor:pointer;transition:transform .3s,box-shadow .3s}
+.lsn:hover{transform:translateY(-5px);box-shadow:0 26px 50px -26px rgba(80,50,200,.45)}
+.lsn-th{position:relative;display:block;border-radius:13px;overflow:hidden;aspect-ratio:16/9;background:#15122b}
+.lsn-th img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.lsn:hover .lsn-th img{transform:scale(1.05)}
+.lsn-pl{position:absolute;left:10px;bottom:10px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 0 0 8px rgba(255,255,255,.2);transition:transform .3s}
+.lsn-pl:after{content:"";position:absolute;left:16px;top:12px;border-left:13px solid var(--v);border-top:9px solid transparent;border-bottom:9px solid transparent}
+.lsn:hover .lsn-pl{transform:scale(1.1)}
+.lsn-th em{position:absolute;right:8px;bottom:8px;font:700 12px var(--sans);font-style:normal;color:#fff;background:rgba(0,0,0,.6);padding:3px 7px;border-radius:6px}
+.lsn small{display:block;margin:14px 6px 2px;font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--v)}
+.lsn b{display:block;margin:0 6px 4px;font:600 18px/1.25 var(--sans)}
+.lsn .lsn-p{display:block;margin:0 6px;font-size:14px;line-height:1.45;color:var(--mut)}
+.lsn-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
+.lsn-modal{position:fixed;inset:0;z-index:250;background:rgba(10,8,25,.82);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px}
+.lsn-modal[hidden]{display:none}
+.lsn-box{width:min(1100px,100%);background:#15122b;border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.lsn-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;color:#fff}
+.lsn-top b{font:600 15px var(--sans)}
+.lsn-x{border:0;background:rgba(255,255,255,.12);color:#fff;width:36px;height:36px;border-radius:50%;font-size:22px;cursor:pointer}
+.lsn-box video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+.lsn-nav{display:flex;justify-content:space-between;gap:10px;padding:12px 16px}
+.lsn-nav .btn{padding:11px 18px;font-size:14px}
+.lsn-nav .btn.line{background:transparent;color:#fff;border-color:rgba(255,255,255,.3)}
+@media(max-width:1000px){.lsn-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.lsn-grid{grid-template-columns:1fr}}
+/*LEARN-CSS-END*/
 </style>
 </head>
 <body data-link-builder="https://webescapade.com/builder/" data-link-demo="https://webescapade.com/Restaurant/demo.html" data-link-platinum="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website" data-link-shop="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20my%20website" data-link-wait="mailto:marc@webescapade.com?subject=Early%20access%3A%20CRM%20%26%20Email%20Studio" data-phone="0413 872 994" data-email="marc@webescapade.com">
@@ -479,7 +507,7 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
       <li><a href="#features">Features</a></li>
       <li><a href="#platinum">Platinum</a></li>
       <li><a href="#shop">Shop</a></li>
-      <li><a href="#next">Coming soon</a></li>
+      <li><a href="#learn">Learn</a></li><li><a href="#next">Coming soon</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
     <a class="btn pri navcta" href="https://webescapade.com/builder/">Start building free <span class="arrow">→</span></a>
@@ -787,6 +815,25 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
     <div class="waitlist rv"><span>Want to be first to try the CRM and Email Studio?</span><a class="btn ghost" href="mailto:marc@webescapade.com?subject=Early%20access%3A%20CRM%20%26%20Email%20Studio">Join the early-access list →</a></div>
   </div>
 </section>
+
+<!-- LEARN-START -->
+<section class="s" id="learn" style="padding-top:0">
+  <div class="wrap">
+    <div class="head c rv"><div class="eyebrow">Learn it in 12 minutes</div><h2>Seven short lessons. <em>Start to shop.</em></h2><p class="lead">Short how-to videos that walk you through every step — from your first page to taking bookings and selling online.</p></div>
+    <div class="lsn-grid"><button class="lsn rv" type="button" data-lsn="0"><span class="lsn-th"><img src="/site-builder/img/lessons/lesson1-getting-started.jpg" alt="Lesson 1: Getting started" loading="lazy"><i class="lsn-pl"></i><em>1:48</em></span><small>Lesson 1</small><b>Getting started</b><span class="lsn-p">Sign up, pick a template, find your way around and publish.</span></button><button class="lsn rv d1" type="button" data-lsn="1"><span class="lsn-th"><img src="/site-builder/img/lessons/lesson2-text-and-photos.jpg" alt="Lesson 2: Text & photos" loading="lazy"><i class="lsn-pl"></i><em>1:38</em></span><small>Lesson 2</small><b>Text & photos</b><span class="lsn-p">Edit words, fonts and colours. Add your own photos.</span></button><button class="lsn rv d2" type="button" data-lsn="2"><span class="lsn-th"><img src="/site-builder/img/lessons/lesson3-sections-and-components.jpg" alt="Lesson 3: Sections & components" loading="lazy"><i class="lsn-pl"></i><em>1:32</em></span><small>Lesson 3</small><b>Sections & components</b><span class="lsn-p">Add sections and items, drag, resize and layer.</span></button><button class="lsn rv d3" type="button" data-lsn="3"><span class="lsn-th"><img src="/site-builder/img/lessons/lesson4-your-look.jpg" alt="Lesson 4: Your look" loading="lazy"><i class="lsn-pl"></i><em>1:45</em></span><small>Lesson 4</small><b>Your look</b><span class="lsn-p">Colour themes, font pairs and animated welcome screens.</span></button><button class="lsn rv" type="button" data-lsn="4"><span class="lsn-th"><img src="/site-builder/img/lessons/lesson5-pages-menu-phones.jpg" alt="Lesson 5: Pages, menu & phones" loading="lazy"><i class="lsn-pl"></i><em>1:25</em></span><small>Lesson 5</small><b>Pages, menu & phones</b><span class="lsn-p">Add pages, link buttons and perfect the phone view.</span></button><button class="lsn rv d1" type="button" data-lsn="5"><span class="lsn-th"><img src="/site-builder/img/lessons/lesson6-platinum-bookings-ai.jpg" alt="Lesson 6: Platinum: bookings & AI" loading="lazy"><i class="lsn-pl"></i><em>1:32</em></span><small>Lesson 6</small><b>Platinum: bookings & AI</b><span class="lsn-p">Connect bookings and switch on your AI assistant.</span></button><button class="lsn rv d2" type="button" data-lsn="6"><span class="lsn-th"><img src="/site-builder/img/lessons/lesson7-online-shop.jpg" alt="Lesson 7: Your online shop" loading="lazy"><i class="lsn-pl"></i><em>1:33</em></span><small>Lesson 7</small><b>Your online shop</b><span class="lsn-p">Products, gift vouchers, delivery and orders.</span></button></div>
+    <div class="lsn-cta rv"><a class="btn pri" href="https://webescapade.com/builder/">Start building free <span class="arrow">→</span></a><button class="btn line" type="button" data-lsn="0">▶ Watch lesson 1</button></div>
+  </div>
+  <div class="lsn-modal" id="lsnModal" hidden><div class="lsn-box"><div class="lsn-top"><b id="lsnTitle">Lesson</b><button type="button" class="lsn-x" id="lsnX" aria-label="Close">×</button></div><video id="lsnVid" controls playsinline preload="none"></video><div class="lsn-nav"><button type="button" class="btn line" id="lsnPrev">← Previous</button><button type="button" class="btn pri" id="lsnNext">Next lesson →</button></div></div></div>
+</section>
+<script>/*LEARN-JS*/(function(){var L=[['lesson1-getting-started', 'Getting started'], ['lesson2-text-and-photos', 'Text & photos'], ['lesson3-sections-and-components', 'Sections & components'], ['lesson4-your-look', 'Your look'], ['lesson5-pages-menu-phones', 'Pages, menu & phones'], ['lesson6-platinum-bookings-ai', 'Platinum: bookings & AI'], ['lesson7-online-shop', 'Your online shop']];var m=document.getElementById('lsnModal'),v=document.getElementById('lsnVid'),ti=document.getElementById('lsnTitle'),cur=0;
+function show(i){cur=(i+L.length)%L.length;v.src='/site-builder/video/lessons/'+L[cur][0]+'.mp4';v.poster='/site-builder/img/lessons/'+L[cur][0]+'.jpg';ti.textContent='Lesson '+(cur+1)+' of 7 · '+L[cur][1];document.getElementById('lsnNext').style.visibility=cur===L.length-1?'hidden':'';document.getElementById('lsnPrev').style.visibility=cur===0?'hidden':'';m.hidden=false;document.body.style.overflow='hidden';var p=v.play();if(p&&p.catch)p.catch(function(){});}
+function hide(){v.pause();v.removeAttribute('src');v.load();m.hidden=true;document.body.style.overflow='';}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-lsn]');if(b&&!document.body.classList.contains('editing')){e.preventDefault();show(+b.getAttribute('data-lsn'));}});
+document.getElementById('lsnX').onclick=hide;m.addEventListener('click',function(e){if(e.target===m)hide();});
+document.getElementById('lsnNext').onclick=function(){show(cur+1);};document.getElementById('lsnPrev').onclick=function(){show(cur-1);};
+v.addEventListener('ended',function(){if(cur<L.length-1)show(cur+1);});
+document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')hide();});})();</script>
+<!-- LEARN-END -->
 
 <!-- PLANS -->
 <section class="s" id="plans">
