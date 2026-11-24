@@ -2293,7 +2293,7 @@ a{color:var(--ui-a2)}
         }
         const it = e.target.closest('.ml-it'); if (!it) return;
         const u = info.files[+it.dataset.i].url;
-        if (!multiple) { m.close(); fin([u]); return; }
+        if (!multiple) { fin([u]); m.close(); return; }
         const k = sel.indexOf(u); if (k >= 0) sel.splice(k, 1); else sel.push(u); draw();
       };
       $('[data-x]', m).onclick = () => m.close();
@@ -2302,10 +2302,10 @@ a{color:var(--ui-a2)}
         const files = await pickImages(multiple); if (!files.length) return;
         const urls = await uploadFiles(files.slice(0, Math.max(1, info.limit - info.files.length)), maxDim);
         if (!urls.length) { load(); return; }
-        if (!multiple) { m.close(); fin(urls); return; }
+        if (!multiple) { fin(urls); m.close(); return; }
         urls.forEach((u) => sel.push(u)); await load();
       };
-      const us = $('#ml-use-sel', m); if (us) us.onclick = () => { m.close(); fin(sel.slice()); };
+      const us = $('#ml-use-sel', m); if (us) us.onclick = () => { fin(sel.slice()); m.close(); };
     });
   }
   async function uploadFiles(files, maxDim) {
