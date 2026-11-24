@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Site Builder by Webescapade — build your own website with bookings, AI and an online shop</title>
+<meta name="description" content="You asked, we listened. Build your own website: drag anything anywhere, animated welcome screens, automatic phone layout — plus bookings, an AI assistant and an online shop. CRM and Email Studio coming next.">
+<meta property="og:title" content="Site Builder by Webescapade — you asked, we listened">
+<meta property="og:description" content="Drag-and-drop website builder with bookings, an AI assistant and an online shop built in.">
+<meta property="og:image" content="https://webescapade.com/site-builder/img/live.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0d0b1a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0d0b1a;--deep:#15122b;--deep2:#1d1938;--line:rgba(255,255,255,.1);
+  --v:#7c5cff;--c:#22d3ee;--p:#ff7ab6;--g:#34d399;
+  --paper:#faf9ff;--lilac:#f1eeff;--text:#17142b;--mut:#5f5b7a;--mut2:#a6a2c4;
+  --grad:linear-gradient(100deg,#7c5cff 0%,#4f8bff 50%,#22d3ee 100%);
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:22px;--max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--text);font:17px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin:0}
+h1 em,h2 em,h3 em{font-style:italic;font-weight:400;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.eyebrow{font:700 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--v);margin-bottom:16px;display:inline-flex;align-items:center;gap:10px}
+.dark .eyebrow{color:var(--c)}
+.eyebrow:before{content:"";width:22px;height:2px;border-radius:2px;background:currentColor}
+.lead{font-size:19px;color:var(--mut);max-width:640px}
+.dark{background:var(--ink);color:#fff}
+.dark .lead{color:var(--mut2)}
+section{position:relative}
+.s{padding:120px 0}
+.head{max-width:760px;margin-bottom:56px}
+.head.c{margin-left:auto;margin-right:auto;text-align:center}
+.head.c .lead{margin:0 auto}
+.head h2{font-size:clamp(36px,5vw,60px);margin-bottom:18px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:16px 26px;font:600 16px/1 var(--sans);text-decoration:none;cursor:pointer;transition:transform .25s,box-shadow .25s,background .25s;white-space:nowrap}
+.btn.pri{background:var(--grad);color:#fff;box-shadow:0 10px 30px -8px rgba(124,92,255,.7)}
+.btn.pri:hover{transform:translateY(-2px);box-shadow:0 16px 38px -8px rgba(124,92,255,.85)}
+.btn.ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(8px)}
+.btn.ghost:hover{background:rgba(255,255,255,.16)}
+.btn.line{background:#fff;color:var(--text);border:1px solid #dcd7f5}
+.btn.line:hover{border-color:var(--v);transform:translateY(-2px)}
+.btn .play{width:22px;height:22px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.btn .play:after{content:"";border-left:7px solid var(--v);border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;margin-left:2px}
+.arrow{transition:transform .25s}.btn:hover .arrow{transform:translateX(4px)}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .3s,box-shadow .3s,backdrop-filter .3s}
+.nav.solid{background:rgba(13,11,26,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:22px;height:74px}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff}
+.logo b{width:38px;height:38px;border-radius:11px;background:var(--grad);display:grid;place-items:center;font:800 14px var(--sans);letter-spacing:-.02em}
+.logo span{font:700 16px/1.1 var(--sans)}.logo small{display:block;font:500 11px var(--sans);color:var(--mut2);letter-spacing:.08em}
+.nav ul{display:flex;gap:4px;list-style:none;margin:0 0 0 auto;padding:0}
+.nav ul a{color:#d9d6f0;text-decoration:none;font:500 14px var(--sans);padding:8px 12px;border-radius:10px;transition:background .2s,color .2s}
+.nav ul a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav .btn{padding:12px 20px;font-size:14px}
+.burger{display:none;margin-left:auto;background:none;border:0;color:#fff;width:44px;height:44px;cursor:pointer}
+@media(max-width:1060px){.nav ul{display:none}.nav ul.open{display:flex;position:absolute;top:74px;left:0;right:0;flex-direction:column;background:rgba(13,11,26,.97);padding:14px 20px 22px;border-bottom:1px solid var(--line)}.nav ul.open a{font-size:17px;padding:12px}.burger{display:block}.nav .btn.navcta{display:none}}
+
+/* hero */
+.hero{min-height:100vh;padding:130px 0 90px;overflow:hidden;background:var(--ink)}
+.aur{position:absolute;inset:-20%;pointer-events:none;filter:blur(70px);opacity:.75}
+.aur i{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:float 18s ease-in-out infinite alternate}
+.aur i:nth-child(1){width:46vw;height:46vw;left:5%;top:0;background:radial-gradient(circle,#6d3cff 0,transparent 65%)}
+.aur i:nth-child(2){width:40vw;height:40vw;right:0;top:20%;background:radial-gradient(circle,#0fb5d6 0,transparent 65%);animation-duration:22s;animation-delay:-6s}
+.aur i:nth-child(3){width:34vw;height:34vw;left:35%;bottom:0;background:radial-gradient(circle,#c3339a 0,transparent 65%);animation-duration:26s;animation-delay:-12s;opacity:.6}
+@keyframes float{0%{transform:translate(0,0) scale(1)}50%{transform:translate(6%,-4%) scale(1.12)}100%{transform:translate(-5%,6%) scale(.95)}}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.gridlines{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:56px;align-items:center}
+.hero .wrap>*{min-width:0}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:7px 16px 7px 8px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font:600 13px var(--sans);color:#e9e6ff;margin-bottom:26px}
+.pill b{background:var(--grad);color:#fff;border-radius:999px;padding:4px 10px;font-size:11px;letter-spacing:.08em}
+.hero h1{font-size:clamp(46px,6.4vw,88px);margin-bottom:24px}
+.hero h1 .l{display:block}
+.hero .lead{font-size:20px;margin-bottom:34px}
+.ctas{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:30px}
+.ticks{display:flex;flex-wrap:wrap;gap:8px 22px;list-style:none;padding:0;margin:0;font:500 14px var(--sans);color:#c9c5e6}
+.ticks li:before{content:"✓";color:var(--g);font-weight:800;margin-right:8px}
+
+/* playground */
+.play-area{position:relative}
+.browser{position:relative;border-radius:18px;background:#1a1730;border:1px solid rgba(255,255,255,.14);box-shadow:0 50px 120px -30px rgba(0,0,0,.8),0 0 0 1px rgba(124,92,255,.15),0 0 80px -20px rgba(124,92,255,.5);overflow:hidden;transform:perspective(1600px) rotateY(-6deg) rotateX(3deg);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.play-area:hover .browser{transform:perspective(1600px) rotateY(0) rotateX(0)}
+.bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#221e3b;border-bottom:1px solid rgba(255,255,255,.08)}
+.bar i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.bar i:nth-child(2){background:#febc2e}.bar i:nth-child(3){background:#28c840}
+.bar .url{margin-left:12px;flex:1;background:#15122b;border-radius:8px;padding:6px 12px;font:500 12px var(--sans);color:#a6a2c4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .live{font:700 10px var(--sans);letter-spacing:.12em;color:#fff;background:var(--grad);border-radius:6px;padding:5px 8px}
+.canvas{container-type:inline-size;position:relative;aspect-ratio:16/10.4;overflow:hidden;background:#1b1714;touch-action:none;user-select:none;-webkit-user-select:none;--acc:#c65a3b}
+.cbg{position:absolute;inset:0;overflow:hidden}
+.cbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s}
+.cbg img.on{opacity:1}
+.fx-ken .cbg img.on{animation:ken 14s linear infinite alternate}
+@keyframes ken{from{transform:scale(1.05) translate(0,0)}to{transform:scale(1.25) translate(-4%,-3%)}}
+.fx-aurora .cbg{background:#120e24}
+.fx-aurora .cbg img{opacity:0!important}
+.fx-aurora .cbg:before,.fx-aurora .cbg:after{content:"";position:absolute;width:80%;height:90%;border-radius:50%;filter:blur(50px);mix-blend-mode:screen;animation:float 9s ease-in-out infinite alternate}
+.fx-aurora .cbg:before{left:-10%;top:-10%;background:radial-gradient(circle,var(--acc),transparent 65%)}
+.fx-aurora .cbg:after{right:-15%;bottom:-20%;background:radial-gradient(circle,#2bb8d8,transparent 65%);animation-delay:-4s}
+.fx-cross .cbg img.on{animation:ken 9s linear both}
+.cshade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.05) 100%);pointer-events:none}
+.cnav{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:4% 5%;font:500 2.1cqw var(--sans);color:#fff;pointer-events:none}
+.cnav b{font:500 3.2cqw var(--serif)}
+.cnav span{display:flex;gap:3cqw;align-items:center}
+.cnav em{font-style:normal;background:var(--acc);border-radius:999px;padding:1.1cqw 2.2cqw;transition:background .4s}
+.el{position:absolute;cursor:grab;touch-action:none;border-radius:6px;outline:1.5px dashed transparent;outline-offset:6px;transition:outline-color .2s}
+.el:hover{outline-color:rgba(255,255,255,.55)}
+.el.sel{outline:2px solid #8f75ff;cursor:grabbing}
+.el.sel:before,.el.sel:after,.el.sel>.h1:before,.el.sel>.h1:after{content:"";position:absolute;width:9px;height:9px;background:#fff;border:2px solid #8f75ff;border-radius:2px}
+.el.sel:before{left:-11px;top:-11px}.el.sel:after{right:-11px;bottom:-11px}
+.el .tag{position:absolute;left:-8px;top:-34px;background:#8f75ff;color:#fff;font:600 10px var(--sans);padding:4px 8px;border-radius:6px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
+.el.sel .tag{opacity:1}
+.e-eye{font:700 1.7cqw var(--sans);letter-spacing:.2em;color:#f0b48a;text-transform:uppercase}
+.e-h{font:500 6.6cqw/1.04 var(--serif);color:#fff;letter-spacing:-.01em;white-space:nowrap}
+.e-p{font:400 2.15cqw/1.6 var(--sans);color:#e8e1dc;width:44cqw}
+.e-b{font:600 2.2cqw var(--sans);color:#fff;background:var(--acc);padding:.9em 1.6em;border-radius:8px;transition:background .4s;white-space:nowrap}
+.e-b2{background:transparent;border:1.5px solid #fff}
+.guide{position:absolute;top:0;bottom:0;left:50%;width:0;border-left:1.5px dashed #ff4fb5;opacity:0;pointer-events:none;transition:opacity .15s}
+.guide.h{left:0;right:0;top:50%;bottom:auto;height:0;width:auto;border-left:0;border-top:1.5px dashed #ff4fb5}
+.guide.on{opacity:1}
+.hint{position:absolute;z-index:4;left:52%;top:47%;display:flex;align-items:center;gap:8px;background:#fff;color:#2b2550;font:700 12px var(--sans);padding:8px 12px 8px 10px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.35);pointer-events:none;animation:bob 2.2s ease-in-out infinite;transition:opacity .4s}
+.hint i{width:20px;height:20px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#fff;font-style:normal;font-size:11px}
+.hint.gone{opacity:0}
+.hint,.tools button{white-space:nowrap}
+@media(max-width:600px){.hint{left:30%;top:66%}.tools{gap:8px 12px}.tools button{padding:5px 8px}}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding:12px 14px;background:#221e3b;border-top:1px solid rgba(255,255,255,.08);font:600 12px var(--sans);color:#a6a2c4}
+.tools .grp{display:flex;align-items:center;gap:6px}
+.tools button{font:600 12px var(--sans);color:#d6d2f2;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 10px;cursor:pointer;transition:all .2s}
+.tools button[aria-pressed=true]{background:#7c5cff;color:#fff;border-color:#7c5cff}
+.sw{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.25)!important;padding:0!important;cursor:pointer}
+.sw[aria-pressed=true]{outline:2px solid #fff;outline-offset:2px}
+.chip{position:absolute;z-index:5;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.96);color:#1d1938;border-radius:14px;padding:10px 14px;box-shadow:0 18px 40px -10px rgba(0,0,0,.5);font:600 12.5px/1.3 var(--sans);opacity:0;transform:translateY(12px) scale(.96);animation:chip 12s ease-in-out infinite}
+.chip small{display:block;font-weight:500;color:#6b6688;font-size:11.5px}
+.chip .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:15px}
+.chip.c1{left:-40px;top:-22px;animation-delay:0s}.chip.c1 .ic{background:#e6f9f0}
+.chip.c2{right:-30px;bottom:22%;top:auto;animation-delay:4s}.chip.c2 .ic{background:#efeaff}
+.chip.c3{left:12%;bottom:-30px;animation-delay:8s}.chip.c3 .ic{background:#fff1e6}
+@keyframes chip{0%,3%{opacity:0;transform:translateY(12px) scale(.96)}7%,30%{opacity:1;transform:none}36%,100%{opacity:0;transform:translateY(-8px) scale(.98)}}
+@media(max-width:980px){.hero .wrap{grid-template-columns:minmax(0,1fr);gap:60px}.browser{transform:none}.chip.c1{left:-6px}.chip.c2{right:-6px}}
+
+/* marquee */
+.marq{background:var(--deep);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:18px 0;color:#cfcaf0}
+.marq .t{display:flex;gap:44px;width:max-content;animation:marq 40s linear infinite;font:600 15px var(--sans)}
+.marq span{display:flex;align-items:center;gap:44px;white-space:nowrap}
+.marq span:after{content:"✦";color:var(--v)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* listened */
+.asks{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.ask{position:relative;background:#fff;border:1px solid #e9e5fb;border-radius:var(--r);padding:28px 26px 26px;overflow:hidden;transition:transform .35s,box-shadow .35s}
+.ask:hover{transform:translateY(-6px);box-shadow:0 30px 60px -30px rgba(80,50,200,.35)}
+.ask .q{font:500 italic 22px/1.3 var(--serif);color:#3b3560;margin-bottom:18px;min-height:58px}
+.ask .q:before{content:"You asked";display:block;font:700 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:#a29cc4;font-style:normal;margin-bottom:10px}
+.ask .a{display:flex;gap:12px;align-items:flex-start;padding-top:16px;border-top:1px dashed #e3def8;font-size:15px;color:var(--mut)}
+.ask .a b{color:var(--text)}
+.ask .ok{flex:none;width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800;transform:scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1) .3s}
+.ask.in .ok{transform:scale(1)}
+@media(max-width:900px){.asks{grid-template-columns:1fr 1fr}}@media(max-width:600px){.asks{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:56px}
+.stat{text-align:center;padding:24px 10px;border-radius:18px;background:var(--lilac)}
+.stat b{display:block;font:600 46px/1 var(--serif);background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font:500 14px var(--sans);color:var(--mut)}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.stat:last-child{grid-column:span 2}}
+
+/* videos */
+.vid{display:grid;grid-template-columns:1.7fr 1fr;gap:22px;align-items:start}
+.player{position:relative;border-radius:var(--r);overflow:hidden;background:#000;aspect-ratio:16/9;box-shadow:0 40px 80px -40px rgba(30,20,80,.6)}
+.player video{width:100%;height:100%;display:block;background:#000}
+.player .cover{position:absolute;inset:0;cursor:pointer;display:grid;place-items:center;background:center/cover no-repeat}
+.player .cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.45),transparent 50%)}
+.big-play{position:relative;z-index:1;width:92px;height:92px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;box-shadow:0 0 0 14px rgba(255,255,255,.18);transition:transform .3s}
+.big-play:after{content:"";border-left:24px solid var(--v);border-top:15px solid transparent;border-bottom:15px solid transparent;margin-left:6px}
+.player .cover:hover .big-play{transform:scale(1.08)}
+.vlist{display:flex;flex-direction:column;gap:12px}
+.vbtn{display:flex;gap:14px;align-items:center;text-align:left;background:#fff;border:1.5px solid #e9e5fb;border-radius:16px;padding:12px;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,box-shadow .2s}
+.vbtn img{width:120px;aspect-ratio:16/9;object-fit:cover;border-radius:10px}
+.vbtn b{display:block;font-size:15px}.vbtn span{font-size:13.5px;color:var(--mut);line-height:1.45;display:block}
+.vbtn[aria-pressed=true]{border-color:var(--v);box-shadow:0 12px 30px -16px rgba(124,92,255,.6)}
+.vnote{font-size:14px;color:var(--mut);padding:6px 4px}
+@media(max-width:900px){.vid{grid-template-columns:1fr}}
+
+/* how (sticky story) */
+.how{background:var(--lilac)}
+.story{display:grid;grid-template-columns:1fr 1.35fr;gap:60px}
+.steps{padding:10vh 0}
+.step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transition:opacity .5s}
+.step.on{opacity:1}
+.step .n{font:600 15px var(--sans);color:var(--v);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.step .n i{width:36px;height:36px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-style:normal}
+.step h3{font-size:clamp(30px,3.4vw,44px);margin-bottom:14px}
+.step p{color:var(--mut);margin:0 0 14px;max-width:440px}
+.step ul{margin:0;padding:0;list-style:none;font-size:15px;color:var(--text)}.step li{padding:4px 0}.step li:before{content:"→";color:var(--v);margin-right:10px}
+.shots{position:sticky;top:110px;height:calc(100vh - 160px);display:flex;align-items:center}
+.shotbox{position:relative;width:100%;aspect-ratio:1920/950;border-radius:18px;overflow:hidden;background:#15122b;box-shadow:0 50px 100px -40px rgba(40,20,120,.55),0 0 0 1px rgba(124,92,255,.15)}
+.shotbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transform:scale(1.04);transition:opacity .7s,transform 1.2s}
+.shotbox img.on{opacity:1;transform:none}
+.mshot{display:none}
+@media(max-width:900px){.story{grid-template-columns:1fr}.shots{display:none}.step{min-height:0;opacity:1;padding:30px 0}.mshot{display:block;border-radius:14px;margin-top:18px;box-shadow:0 20px 40px -20px rgba(40,20,120,.5)}.steps{padding:0}}
+
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+.b{position:relative;border-radius:var(--r);background:var(--deep);border:1px solid var(--line);padding:30px;overflow:hidden;transition:border-color .3s,transform .4s}
+.b:hover{border-color:rgba(124,92,255,.55);transform:translateY(-4px)}
+.b:before{content:"";position:absolute;inset:0;background:radial-gradient(500px circle at var(--mx,50%) var(--my,0%),rgba(124,92,255,.18),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+.b:hover:before{opacity:1}
+.b h3{font-size:26px;margin-bottom:10px;position:relative}
+.b p{color:var(--mut2);font-size:15.5px;margin:0;position:relative}
+.b .bi{border-radius:12px;margin-top:22px;border:1px solid var(--line);position:relative}
+.b .kicker{font:700 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--c);margin-bottom:12px;position:relative}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center}
+.w3{grid-column:span 3}.w2{grid-column:span 2}.w4{grid-column:span 4}.w6{grid-column:span 6}
+@media(max-width:900px){.bento{grid-template-columns:1fr}.w3,.w2,.w4,.w6{grid-column:auto}.split{grid-template-columns:1fr}}
+.letters{font:600 italic 38px/1.1 var(--serif);margin-top:20px;min-height:90px;position:relative}
+.letters span{display:inline-block;opacity:0;transform:translateY(24px) rotate(6deg);transition:opacity .5s,transform .6s cubic-bezier(.2,.9,.3,1.3)}
+.letters.go span{opacity:1;transform:none}
+.palettes{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;position:relative}
+.palettes i{width:46px;height:46px;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);transition:transform .3s}
+.palettes i:hover{transform:translateY(-4px) rotate(-6deg)}
+.fontrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;position:relative}
+.fontrow span{border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:18px;color:#e9e6ff}
+.elist{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;position:relative}
+.elist span{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font:500 13.5px var(--sans);color:#d9d5f5}
+
+/* fx showcase */
+.fxs{display:grid;grid-template-columns:280px 1fr;gap:28px;align-items:center}
+.fxtabs{display:flex;flex-direction:column;gap:8px}
+.fxtabs button{display:flex;justify-content:space-between;align-items:center;text-align:left;font:600 16px var(--sans);color:#d6d2f2;background:transparent;border:1px solid var(--line);border-radius:14px;padding:15px 18px;cursor:pointer;transition:all .25s}
+.fxtabs button small{font:500 12.5px var(--sans);color:var(--mut2);display:block;margin-top:3px}
+.fxtabs button:after{content:"→";opacity:0;transition:opacity .2s,transform .2s}
+.fxtabs button[aria-pressed=true]{background:linear-gradient(100deg,rgba(124,92,255,.28),rgba(34,211,238,.12));border-color:rgba(124,92,255,.7);color:#fff}
+.fxtabs button[aria-pressed=true]:after{opacity:1}
+.stage{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 50px 100px -40px rgba(0,0,0,.9)}
+.stage .ly{position:absolute;inset:-6%;background-size:cover;background-position:center}
+.stage .shade{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(0,0,0,.55),rgba(0,0,0,.15) 70%)}
+.stage .txt{position:absolute;left:7%;bottom:12%;color:#fff;max-width:70%}
+.stage .txt small{font:700 12px var(--sans);letter-spacing:.2em;color:#ffd2a8;text-transform:uppercase}
+.stage .txt h3{font:500 clamp(30px,4.4vw,64px)/1.02 var(--serif);margin-top:10px}
+.stage .name{position:absolute;right:20px;top:18px;font:700 11px var(--sans);letter-spacing:.14em;color:#fff;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);padding:8px 12px;border-radius:999px;text-transform:uppercase}
+.st-ken .ly.a{animation:ken 12s linear infinite alternate}
+.st-zoom .ly.a{animation:zoomin 10s ease-out infinite}
+@keyframes zoomin{from{transform:scale(1)}to{transform:scale(1.3)}}
+.st-cross .ly{animation:cross 12s infinite}.st-cross .ly.b{animation-delay:4s;opacity:0}.st-cross .ly.c{animation-delay:8s;opacity:0}
+@keyframes cross{0%{opacity:0;transform:scale(1.08)}8%,33%{opacity:1}41%,100%{opacity:0;transform:scale(1)}}
+.st-cross .ly.a{opacity:0}
+.st-grad .ly{background:linear-gradient(120deg,#2b1055,#7c5cff,#22d3ee,#ff7ab6,#2b1055)!important;background-size:400% 400%!important;animation:gshift 12s ease infinite}
+@keyframes gshift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.st-aurora .ly{background:#0d0920!important}
+.st-aurora .ly:before,.st-aurora .ly:after{content:"";position:absolute;width:70%;height:90%;border-radius:50%;filter:blur(60px);mix-blend-mode:screen;animation:float 8s ease-in-out infinite alternate}
+.st-aurora .ly:before{left:0;top:0;background:radial-gradient(circle,#7c5cff,transparent 65%)}
+.st-aurora .ly:after{right:0;bottom:0;background:radial-gradient(circle,#22d3ee,transparent 65%);animation-delay:-3s}
+.st-curtain .ly.a{animation:curtain 5s cubic-bezier(.7,0,.2,1) infinite}
+@keyframes curtain{0%{clip-path:inset(0 50% 0 50%)}35%,100%{clip-path:inset(0 0 0 0)}}
+.st-par .ly.a{transition:transform .2s linear}
+@media(max-width:900px){.fxs{grid-template-columns:1fr}.fxtabs{flex-direction:row;overflow-x:auto;padding-bottom:6px}.fxtabs button{flex:none}}
+
+/* templates */
+.tpls{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.tpl{text-decoration:none;color:inherit}
+.tpl .frame{border-radius:16px;overflow:hidden;aspect-ratio:3/3.6;position:relative;box-shadow:0 30px 60px -30px rgba(40,20,120,.45);border:1px solid #e6e1fa;background:#fff}
+.tpl .frame img{width:100%;transition:transform 5s ease}
+.tpl:hover .frame img{transform:translateY(calc(-100% + 100cqw * 1.2))}
+.tpl .frame{container-type:inline-size}
+.tpl b{display:block;margin-top:16px;font:600 18px var(--sans)}
+.tpl span{font-size:14px;color:var(--mut)}
+@media(max-width:900px){.tpls{grid-template-columns:1fr 1fr}}
+
+/* phone */
+.phone-sec{display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center}
+.devices{position:relative;height:560px}
+.devices .desk{position:absolute;left:0;top:30px;width:82%;border-radius:14px;overflow:hidden;box-shadow:0 40px 80px -30px rgba(40,20,120,.5);border:1px solid #e3def8}
+.devices .ph{position:absolute;right:2%;top:0;width:250px;height:520px;border-radius:40px;background:#0e0c1c;padding:12px;box-shadow:0 50px 90px -30px rgba(20,10,60,.7)}
+.devices .ph .scr{width:100%;height:100%;border-radius:30px;overflow:hidden;position:relative}
+.devices .ph .scr img{width:100%;animation:phscroll 14s ease-in-out infinite alternate}
+@keyframes phscroll{0%,15%{transform:translateY(0)}85%,100%{transform:translateY(calc(-100% + 496px))}}
+.devices .ph:before{content:"";position:absolute;top:22px;left:50%;transform:translateX(-50%);width:76px;height:20px;border-radius:12px;background:#0e0c1c;z-index:2}
+.checks{list-style:none;padding:0;margin:26px 0 0}
+.checks li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #ebe7fb;font-size:16px}
+.checks li:before{content:"✓";flex:none;width:24px;height:24px;border-radius:50%;background:#e8fbf3;color:#0f9f6e;font:800 12px/24px var(--sans);text-align:center}
+@media(max-width:900px){.phone-sec{grid-template-columns:1fr}.devices{height:440px}.devices .ph{width:190px;height:400px}@keyframes phscroll{0%,15%{transform:translateY(0)}85%,100%{transform:translateY(calc(-100% + 376px))}}}
+
+/* platinum */
+.plat{background:radial-gradient(ellipse at 20% 0%,#2a1b6b 0%,transparent 55%),radial-gradient(ellipse at 100% 100%,#0b4a5e 0%,transparent 50%),var(--ink);overflow:hidden}
+.badge{display:inline-flex;gap:8px;align-items:center;font:800 12px var(--sans);letter-spacing:.2em;padding:8px 14px;border-radius:999px;background:linear-gradient(100deg,#e9e4ff,#bfefff);color:#2a1f6b;margin-bottom:20px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.pcard{border-radius:26px;background:rgba(255,255,255,.04);border:1px solid var(--line);padding:34px;overflow:hidden;position:relative}
+.pcard h3{font-size:34px;margin:6px 0 12px}
+.pcard p{color:var(--mut2);margin:0 0 18px}
+.pcard .lst{list-style:none;margin:0 0 24px;padding:0;font-size:15px;color:#e3e0fb}
+.pcard .lst li{padding:6px 0;display:flex;gap:10px}.pcard .lst li:before{content:"✦";color:var(--c)}
+.connect{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.connect span{font:600 13px var(--sans);padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.connect span.rd{border-color:#c65a3b}.connect span.sd{border-color:#3d9a82}.connect span.td{border-color:#ff8a3d}.connect span.fd{border-color:#b5507a}
+.pshot{border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.chat{background:#faf6f2;border-radius:18px;overflow:hidden;color:#2b2420;max-width:420px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.chat .ch{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(100deg,#c65a3b,#e0943b);color:#fff}
+.chat .ch i{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font:600 16px var(--serif);font-style:normal}
+.chat .ch b{display:block;font-size:15px}.chat .ch small{font-size:12px;opacity:.85}
+.chat .msgs{padding:16px;display:flex;flex-direction:column;gap:10px;height:330px;overflow:hidden;justify-content:flex-end}
+.m{max-width:82%;padding:10px 14px;border-radius:16px;font-size:14.5px;line-height:1.45;animation:pop .4s cubic-bezier(.3,1.4,.5,1) both}
+.m.u{align-self:flex-end;background:#c65a3b;color:#fff;border-bottom-right-radius:5px}
+.m.a{align-self:flex-start;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06);border-bottom-left-radius:5px}
+.m .bk{display:inline-block;margin-top:8px;background:#c65a3b;color:#fff;border-radius:999px;padding:6px 12px;font-weight:600;font-size:13px}
+.typing{display:flex;gap:4px;padding:14px;align-self:flex-start;background:#fff;border-radius:16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#bfb4ab;animation:dot 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{transform:translateY(-4px);background:#c65a3b}}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.95)}}
+.chat .in{display:flex;gap:8px;padding:12px 14px;border-top:1px solid #eee3da}
+.chat .in span{flex:1;border:1px solid #e3d6cb;border-radius:999px;padding:9px 14px;color:#a79a90;font-size:14px}
+.chat .in b{width:38px;height:38px;border-radius:50%;background:#c65a3b}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:end}
+@media(max-width:900px){.pgrid,.duo{grid-template-columns:1fr}}
+
+/* shop */
+.shop{display:grid;grid-template-columns:1fr 1.15fr;gap:60px;align-items:center}
+.ptypes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0}
+.pt{background:#fff;border:1px solid #e9e5fb;border-radius:16px;padding:18px}
+.pt b{display:block;font-size:16px;margin:8px 0 4px}.pt span{font-size:14px;color:var(--mut)}
+.pt i{font-style:normal;font-size:22px}
+.stack{position:relative}
+.stack .s1{border-radius:18px;overflow:hidden;box-shadow:0 40px 80px -30px rgba(40,20,120,.5);border:1px solid #e6e1fa}
+.stack .s2{position:absolute;width:46%;right:-4%;bottom:-14%;border-radius:18px;overflow:hidden;box-shadow:0 40px 80px -20px rgba(40,20,120,.6);transform:rotate(3deg);transition:transform .5s}
+.stack:hover .s2{transform:rotate(0) translateY(-10px)}
+.fee{display:flex;gap:14px;align-items:center;background:var(--lilac);border-radius:16px;padding:16px 18px;font-size:15px;color:var(--mut)}
+.fee b{color:var(--text)}
+.fee .st{font:800 13px var(--sans);color:#fff;background:#635bff;border-radius:8px;padding:6px 9px;letter-spacing:.02em}
+@media(max-width:900px){.shop{grid-template-columns:1fr}.stack .s2{position:relative;width:70%;right:auto;bottom:auto;margin:-60px 0 0 auto}}
+
+/* next */
+.next{background:linear-gradient(180deg,var(--ink) 0%,#1a1240 100%);overflow:hidden}
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;margin-bottom:60px}
+.road:before{content:"";position:absolute;left:8%;right:8%;top:27px;height:2px;background:linear-gradient(90deg,var(--g),var(--v) 45%,rgba(124,92,255,.25))}
+.rn{position:relative;text-align:center;padding:0 10px}
+.rn .dot{width:56px;height:56px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--deep2);border:2px solid var(--v);position:relative;z-index:1}
+.rn.done .dot{background:var(--g);border-color:var(--g);color:#0d2a1f;font-weight:800}
+.rn.soon .dot{animation:ring 2.4s infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(124,92,255,.6)}70%{box-shadow:0 0 0 18px rgba(124,92,255,0)}100%{box-shadow:0 0 0 0 rgba(124,92,255,0)}}
+.rn small{font:700 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--c)}
+.rn.done small{color:var(--g)}
+.rn h3{font-size:24px;margin:8px 0}
+.rn p{color:var(--mut2);font-size:15px;margin:0}
+.ngrid{display:grid;grid-template-columns:1.1fr 1fr;gap:22px}
+.ncard{border-radius:26px;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:32px;position:relative;overflow:hidden}
+.ncard .soon{display:inline-block;margin-bottom:16px;font:800 11px var(--sans);letter-spacing:.16em;color:#1a1240;background:linear-gradient(100deg,#ffd36e,#ff7ab6);padding:7px 11px;border-radius:999px}
+.ncard h3{font-size:32px;margin-bottom:10px}
+.ncard p{color:var(--mut2);margin:0 0 20px}
+.crm{background:#fff;border-radius:16px;color:var(--text);overflow:hidden;font-size:13.5px}
+.crm .top{display:flex;gap:8px;padding:12px 14px;border-bottom:1px solid #eee;font-weight:600}
+.crm .top span{padding:5px 10px;border-radius:8px;background:#f2efff;color:#5b45d8}.crm .top span+span{background:#f5f5f8;color:#666}
+.crm .row{display:grid;grid-template-columns:34px 1.4fr 1fr .9fr;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid #f3f1f9;opacity:0;transform:translateX(-14px);transition:all .5s}
+.in .crm .row{opacity:1;transform:none}
+.crm .row:nth-child(3){transition-delay:.12s}.crm .row:nth-child(4){transition-delay:.24s}.crm .row:nth-child(5){transition-delay:.36s}
+@media(max-width:600px){.crm .row{grid-template-columns:34px 1fr auto}.crm .row>small{display:none}}
+.crm .av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px}
+.crm .row b{display:block}.crm .row small{color:#8b87a3}
+.crm .tg{justify-self:start;font-size:11.5px;font-weight:700;padding:4px 8px;border-radius:999px}
+.mailph{display:flex;gap:20px;align-items:flex-start}
+.mailph .scr{width:210px;flex:none;height:380px;border-radius:30px;background:#0e0c1c;padding:9px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
+.mailph .scr div{width:100%;height:100%;border-radius:22px;overflow:hidden}
+.mailph .scr img{width:100%;animation:phscroll2 12s ease-in-out infinite alternate}
+@keyframes phscroll2{0%,15%{transform:translateY(0)}85%,100%{transform:translateY(calc(-100% + 362px))}}
+.mailph ul{list-style:none;padding:0;margin:0;font-size:15px;color:#e3e0fb}.mailph li{padding:7px 0;display:flex;gap:10px}.mailph li:before{content:"✦";color:var(--p)}
+.waitlist{margin-top:44px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center;text-align:center;color:var(--mut2)}
+@media(max-width:900px){.road{grid-template-columns:1fr;gap:34px}.road:before{display:none}.ngrid{grid-template-columns:1fr}.mailph{flex-direction:column}}
+
+/* plans */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+.plan{background:#fff;border:1px solid #e6e1fa;border-radius:26px;padding:32px;display:flex;flex-direction:column}
+.plan.hi{background:var(--ink);color:#fff;border-color:transparent;box-shadow:0 40px 80px -30px rgba(80,50,200,.6);position:relative}
+.plan.hi:before{content:"Most popular";position:absolute;top:-13px;left:32px;font:800 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;background:var(--grad);color:#fff;padding:7px 12px;border-radius:999px}
+.plan small{font:700 12px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--v)}
+.plan.hi small{color:var(--c)}
+.plan h3{font-size:34px;margin:10px 0 8px}
+.plan .pp{font-size:15px;color:var(--mut);margin-bottom:22px}.plan.hi .pp{color:var(--mut2)}
+.plan ul{list-style:none;padding:0;margin:0 0 28px;font-size:15px;flex:1}
+.plan li{padding:7px 0;display:flex;gap:10px;border-bottom:1px solid #f0edfb}.plan.hi li{border-color:rgba(255,255,255,.08)}
+.plan li:before{content:"✓";color:#0f9f6e;font-weight:800}.plan.hi li:before{color:var(--g)}
+.plan .btn{justify-content:center}
+@media(max-width:900px){.plans{grid-template-columns:1fr}}
+
+/* marc */
+.marc{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:center;background:#fff;border:1px solid #e9e5fb;border-radius:30px;padding:48px}
+.marc .mono{width:150px;height:150px;border-radius:40px;background:var(--grad);display:grid;place-items:center;color:#fff;font:600 54px var(--serif);box-shadow:0 30px 60px -25px rgba(124,92,255,.8)}
+.marc blockquote{margin:0 0 16px;font:400 italic clamp(22px,2.6vw,30px)/1.35 var(--serif);color:#2a2448}
+.marc cite{font-style:normal;font-weight:600}.marc cite span{display:block;font-weight:500;color:var(--mut);font-size:15px}
+@media(max-width:760px){.marc{grid-template-columns:1fr;padding:30px;text-align:center}.marc .mono{margin:0 auto}}
+
+/* faq */
+.faq{max-width:840px;margin:0 auto}
+.faq details{border-bottom:1px solid #e6e1fa;padding:4px 0}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;padding:20px 0;font:600 19px var(--sans)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";flex:none;width:32px;height:32px;border-radius:50%;background:var(--lilac);color:var(--v);display:grid;place-items:center;font-size:20px;transition:transform .3s}
+.faq details[open] summary:after{transform:rotate(45deg)}
+.faq details p{margin:0 0 22px;color:var(--mut);max-width:720px}
+
+/* final */
+.final{text-align:center;padding:140px 0;overflow:hidden;background:var(--ink)}
+.final h2{font-size:clamp(42px,6vw,80px);margin-bottom:22px}
+.final .lead{margin:0 auto 36px}
+.final .ctas{justify-content:center}
+.contact{margin-top:28px;color:var(--mut2);font-size:15px}.contact a{color:#fff}
+footer{background:#08070f;color:#8a86a8;font-size:14px;padding:40px 0}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 30px;align-items:center;justify-content:space-between}
+footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wrap;gap:20px}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+.mcta{position:fixed;left:16px;right:16px;bottom:14px;z-index:40;display:none;justify-content:center;transform:translateY(120px);transition:transform .4s}
+.mcta.on{transform:none}
+@media(max-width:700px){.mcta{display:flex}.mcta .btn{width:100%;justify-content:center}.s{padding:84px 0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.chip{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><b>WE</b><span>Site Builder<small>BY WEBESCAPADE</small></span></a>
+    <ul id="menu">
+      <li><a href="#try">Try it</a></li>
+      <li><a href="#tour">Videos</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#platinum">Platinum</a></li>
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#next">Coming soon</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a class="btn pri navcta" href="https://webescapade.com/builder/">Start building free <span class="arrow">→</span></a>
+    <button class="burger" id="burger" aria-label="Menu"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero dark" id="top">
+  <div class="aur"><i></i><i></i><i></i></div><div class="gridlines"></div><div class="grain"></div>
+  <div class="wrap">
+    <div>
+      <div class="pill rv"><b>NEW</b> You asked. We listened. Now it’s here.</div>
+      <h1 class="rv d1"><span class="l">Build your own website.</span> <em>Put anything, anywhere.</em></h1>
+      <p class="lead rv d2">A website builder made for real businesses. Drag text, photos and buttons exactly where you want them, add an animated welcome screen — and switch on bookings, an AI assistant and an online shop when you are ready.</p>
+      <div class="ctas rv d3">
+        <a class="btn pri" href="https://webescapade.com/builder/">Start building free <span class="arrow">→</span></a>
+        <a class="btn ghost" href="#tour"><span class="play"></span> Watch the 2-minute tour</a>
+      </div>
+      <ul class="ticks rv d4"><li>No code</li><li>Phone version builds itself</li><li>Bookings, AI &amp; shop built in</li></ul>
+    </div>
+
+    <div class="play-area rv d2" id="try">
+      <div class="chip c1"><span class="ic">✅</span><span>Booking confirmed<small>Sat 7:30 pm · 4 guests</small></span></div>
+      <div class="chip c2"><span class="ic">✨</span><span>AI assistant<small>“Yes — our pasta can be gluten-free.”</small></span></div>
+      <div class="chip c3"><span class="ic">🛍️</span><span>New order · $134.50<small>Gift voucher + house pasta sauce</small></span></div>
+      <div class="browser">
+        <div class="bar"><i></i><i></i><i></i><div class="url">webescapade.com/sites/your-business</div><span class="live">EDITING</span></div>
+        <div class="canvas fx-ken" id="canvas">
+          <div class="cbg" id="cbg"><img src="img/p1.jpg" alt="" class="on"><img src="img/p3.jpg" alt=""><img src="img/p4.jpg" alt=""></div>
+          <div class="cshade"></div>
+          <div class="guide" id="gv"></div><div class="guide h" id="gh"></div>
+          <div class="cnav"><b>Bella Cucina</b><span>Home Menu <em>Book a table</em></span></div>
+          <div class="el" data-x="7" data-y="29"><span class="tag">Text</span><div class="e-eye">Modern bistro · Sydney</div></div>
+          <div class="el" data-x="7" data-y="35" id="dragme"><span class="tag">Heading · drag me</span><div class="e-h">Seasonal food,<br>warm welcome</div></div>
+          <div class="el" data-x="7" data-y="61"><span class="tag">Text</span><div class="e-p">Fresh local produce, natural wines and a table waiting for you.</div></div>
+          <div class="el" data-x="7" data-y="78"><span class="tag">Button → booking</span><div class="e-b">Book a table</div></div>
+          <div class="el" data-x="29" data-y="78"><span class="tag">Button</span><div class="e-b e-b2">View menu</div></div>
+          <div class="hint" id="hint"><i>✋</i>Try it — drag anything</div>
+        </div>
+        <div class="tools">
+          <div class="grp">Welcome screen:
+            <button data-fx="fx-ken" aria-pressed="true">Ken Burns</button><button data-fx="fx-cross" aria-pressed="false">Crossfade</button><button data-fx="fx-aurora" aria-pressed="false">Aurora</button>
+          </div>
+          <div class="grp">Colour:
+            <button class="sw" data-acc="#c65a3b" style="background:#c65a3b" aria-pressed="true" aria-label="Terracotta"></button><button class="sw" data-acc="#d4a017" style="background:#d4a017" aria-pressed="false" aria-label="Gold"></button><button class="sw" data-acc="#5b7f6a" style="background:#5b7f6a" aria-pressed="false" aria-label="Sage"></button><button class="sw" data-acc="#7c5cff" style="background:#7c5cff" aria-pressed="false" aria-label="Violet"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marq" aria-hidden="true"><div class="t">
+  <span>Drag &amp; drop anywhere</span><span>Animated welcome screens</span><span>Automatic phone layout</span><span>9 colour themes</span><span>Ready-made sections</span><span>Online bookings</span><span>AI assistant 24/7</span><span>Online shop with Stripe</span><span>Gift vouchers</span><span>Digital downloads</span><span>Contact forms</span><span>Google Maps &amp; video</span>
+  <span>Drag &amp; drop anywhere</span><span>Animated welcome screens</span><span>Automatic phone layout</span><span>9 colour themes</span><span>Ready-made sections</span><span>Online bookings</span><span>AI assistant 24/7</span><span>Online shop with Stripe</span><span>Gift vouchers</span><span>Digital downloads</span><span>Contact forms</span><span>Google Maps &amp; video</span>
+</div></div>
+
+<!-- LISTENED -->
+<section class="s" id="listened">
+  <div class="wrap">
+    <div class="head c rv">
+      <div class="eyebrow">We listen. We deliver.</div>
+      <h2>You told us what you needed. <em>So we built it.</em></h2>
+      <p class="lead">Every feature in the Site Builder started as something a business owner asked us for. Here is what you asked — and what you get today.</p>
+    </div>
+    <div class="asks">
+      <div class="ask rv"><div class="q">“I want to change my own website — without waiting for anyone.”</div><div class="a"><span class="ok">✓</span><span><b>Edit everything yourself.</b> Click any text to rewrite it, drop in your own photos, press Publish.</span></div></div>
+      <div class="ask rv d1"><div class="q">“Templates all look the same. I want it my way.”</div><div class="a"><span class="ok">✓</span><span><b>Free placement.</b> Put anything anywhere on the page — guides keep it neat.</span></div></div>
+      <div class="ask rv d2"><div class="q">“It has to look good on phones.”</div><div class="a"><span class="ok">✓</span><span><b>Your phone version builds itself</b> — and you can fine-tune it if you like.</span></div></div>
+      <div class="ask rv"><div class="q">“Can people book straight from my website?”</div><div class="a"><span class="ok">✓</span><span><b>Bookings built in.</b> Connect Restaurant, Service or Trade Deluxe — or your own booking link.</span></div></div>
+      <div class="ask rv d1"><div class="q">“I can’t answer the same questions all day.”</div><div class="a"><span class="ok">✓</span><span><b>An AI assistant</b> that learns from your website and answers customers 24/7.</span></div></div>
+      <div class="ask rv d2"><div class="q">“I’d love to sell gift vouchers online.”</div><div class="a"><span class="ok">✓</span><span><b>The Shop add-on</b> sells products, vouchers and downloads — paid straight to your Stripe.</span></div></div>
+    </div>
+    <div class="stats">
+      <div class="stat rv"><b data-count="9">0</b><span>colour themes</span></div>
+      <div class="stat rv d1"><b data-count="7">0</b><span>animated welcome screens</span></div>
+      <div class="stat rv d2"><b data-count="20">0</b><span>ready-made sections</span></div>
+      <div class="stat rv d3"><b data-count="14">0</b><span>building blocks</span></div>
+      <div class="stat rv d4"><b>24/7</b><span>AI assistant</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section class="s" id="tour" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Watch it work</div>
+      <h2>See it in action. <em>Two minutes.</em></h2>
+      <p class="lead">Watch a website go from blank to live — then see bookings, the AI assistant and the shop working together.</p>
+    </div>
+    <div class="vid rv">
+      <div class="player" id="player">
+        <video id="video" playsinline controls preload="none" poster="img/poster-premium.jpg"></video>
+        <div class="cover" id="cover" style="background-image:url(img/poster-premium.jpg)"><span class="big-play" aria-label="Play video"></span></div>
+      </div>
+      <div class="vlist">
+        <button class="vbtn" aria-pressed="true" data-src="video/premium-tour.mp4" data-poster="img/poster-premium.jpg"><img src="img/poster-premium.jpg" alt=""><span><b>NEW: Bookings, AI &amp; shop</b><span>The Premium tour — booking panel, AI assistant, online shop and gift vouchers.</span></span></button>
+        <button class="vbtn" aria-pressed="false" data-src="video/build-tour.mp4" data-poster="img/poster-build.jpg"><img src="img/poster-build.jpg" alt=""><span><b>Build a website, step by step</b><span>Narrated: pick a template, drag, add photos, recolour, check the phone, publish.</span></span></button>
+        <div class="vnote">More videos on our YouTube channel: <a href="https://www.youtube.com/@webescapadesydney" target="_blank" rel="noopener">@webescapadesydney</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="s how" id="how">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">How it works</div>
+      <h2>From blank page to live website. <em>In an afternoon.</em></h2>
+    </div>
+    <div class="story">
+      <div class="steps">
+        <div class="step" data-shot="0"><div class="n"><i>1</i> Pick a starting point</div><h3>Choose a template — or start blank.</h3><p>Restaurant, spa and beauty, business or portfolio. Every word, photo, colour and position can be changed afterwards.</p><ul><li>Name your website and pick its web address</li><li>Your colours and fonts are set up for you</li></ul><img class="mshot" src="img/ed-templates.jpg" alt="Choosing a template" loading="lazy"></div>
+        <div class="step" data-shot="1"><div class="n"><i>2</i> Drag it, drop it</div><h3>Put things exactly where you want them.</h3><p>Grab any heading, photo or button and move it. Pink guide lines help you line things up perfectly.</p><ul><li>Resize, layer and align with one click</li><li>Undo anything</li></ul><img class="mshot" src="img/ed-drag.jpg" alt="Dragging a heading in the editor" loading="lazy"></div>
+        <div class="step" data-shot="2"><div class="n"><i>3</i> Add ready-made sections</div><h3>About, menu, gallery, prices, team, contact…</h3><p>Twenty designed sections, ready to drop in. They match your colours automatically.</p><ul><li>Drop in your own photos</li><li>Add pages to your menu</li></ul><img class="mshot" src="img/ed-photos.jpg" alt="Adding photos to a gallery" loading="lazy"></div>
+        <div class="step" data-shot="3"><div class="n"><i>4</i> Make it yours</div><h3>Change the colours and fonts of the whole site.</h3><p>Nine colour themes and seven font pairings — or pick your own colours. Everything updates at once.</p><img class="mshot" src="img/ed-theme.jpg" alt="Changing the colour theme" loading="lazy"></div>
+        <div class="step" data-shot="4"><div class="n"><i>5</i> Check the phone, then publish</div><h3>Press Publish. You are live.</h3><p>Your phone layout is built automatically. Check it, fine-tune it if you want, and publish — update it any time.</p><img class="mshot" src="img/ed-phone.jpg" alt="The phone version of the site" loading="lazy"></div>
+      </div>
+      <div class="shots"><div class="shotbox" id="shotbox">
+        <img src="img/ed-templates.jpg" alt="Choosing a template" class="on" style="object-fit:contain;background:#0f0d1d">
+        <img src="img/ed-drag.jpg" alt="Dragging a heading in the editor" loading="lazy">
+        <img src="img/ed-photos.jpg" alt="Adding photos to a gallery" loading="lazy">
+        <img src="img/ed-theme.jpg" alt="Changing the colour theme" loading="lazy">
+        <img src="img/ed-phone.jpg" alt="The phone version of the site" loading="lazy">
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES BENTO -->
+<section class="s dark" id="features">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Everything included</div>
+      <h2>All the tools to look professional. <em>None of the code.</em></h2>
+      <p class="lead">The Site Builder is built fresh for local businesses — simple enough for anyone, flexible enough for a designer.</p>
+    </div>
+    <div class="bento">
+      <div class="b w4 rv"><div class="kicker">Free placement</div><h3>Drag anything, anywhere</h3><p>Move, resize, layer and align every element on the page. Smart guides snap things into line.</p><img class="bi" src="img/ed-drag.jpg" alt="The editor with a heading selected" loading="lazy"></div>
+      <div class="b w2 rv d1"><div class="kicker">Entrance animations</div><h3>Make an entrance</h3><p>Fade, slide, zoom or letter by letter — as visitors scroll.</p><div class="letters" id="letters">Welcome in.</div></div>
+      <div class="b w2 rv"><div class="kicker">Themes</div><h3>9 colour themes</h3><p>Change the whole site’s colours in one click.</p><div class="palettes"><i style="background:linear-gradient(135deg,#c65a3b,#f3e9df)"></i><i style="background:linear-gradient(135deg,#5b7f6a,#eef2ec)"></i><i style="background:linear-gradient(135deg,#7c5cff,#15122b)"></i><i style="background:linear-gradient(135deg,#d4a017,#121212)"></i><i style="background:linear-gradient(135deg,#2a6fdb,#f4f7fd)"></i><i style="background:linear-gradient(135deg,#b5507a,#faf0f4)"></i></div></div>
+      <div class="b w2 rv d1"><div class="kicker">Typography</div><h3>Beautiful fonts</h3><p>Designer font pairings for headings and text.</p><div class="fontrow"><span style="font-family:'Playfair Display',Georgia,serif">Playfair</span><span style="font-family:Fraunces,Georgia,serif;font-style:italic">Fraunces</span><span style="font-family:Inter,sans-serif;font-weight:700">Inter</span><span style="font-family:Georgia,serif">Lora</span></div></div>
+      <div class="b w2 rv d2"><div class="kicker">Building blocks</div><h3>14 elements</h3><div class="elist"><span>Headings</span><span>Text</span><span>Buttons</span><span>Images</span><span>Shapes</span><span>Lines</span><span>Video</span><span>Google Map</span><span>Contact form</span><span>Menu bar</span><span>Social icons</span><span>Products</span><span>Shop grid</span><span>Cart</span></div></div>
+      <div class="b w3 rv"><div class="kicker">Sections</div><h3>20 ready-made sections</h3><p>Headers, heroes, about, features, numbers, gallery, menu, prices, team, reviews, video, contact, shop and more.</p><img class="bi" src="img/ed-sections.jpg" alt="Adding a ready-made section" loading="lazy"></div>
+      <div class="b w3 rv d1"><div class="kicker">Your photos</div><h3>Drop in your own photos</h3><p>Upload straight from your phone or computer. Choose the focus point, filters and hover effects.</p><img class="bi" src="img/ed-photos.jpg" alt="A gallery filled with photos" loading="lazy"></div>
+      <div class="b w6 rv split"><div><div class="kicker">And all the details</div><h3>Pages, menus, contact forms, SEO &amp; sharing</h3><p>Add pages and they appear in your menu. Contact form messages arrive in your dashboard. Set your page titles and descriptions so Google and social media show you properly. Undo, preview and publish whenever you like.</p></div><img class="bi" src="img/live.jpg" alt="A published website" loading="lazy" style="margin:0"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FX SHOWCASE -->
+<section class="s dark" id="welcome" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Animated welcome screens</div>
+      <h2>First impressions that <em>move.</em></h2>
+      <p class="lead">The same eye-catching landing animations our restaurant clients love — now one click away. Tap an effect to see it.</p>
+    </div>
+    <div class="fxs rv">
+      <div class="fxtabs" id="fxtabs">
+        <button data-st="st-ken" aria-pressed="true"><span>Ken Burns<small>Slow, cinematic pan and zoom</small></span></button>
+        <button data-st="st-cross" aria-pressed="false"><span>Crossfade<small>Your photos dissolve one into the next</small></span></button>
+        <button data-st="st-zoom" aria-pressed="false"><span>Zoom<small>A gentle push in</small></span></button>
+        <button data-st="st-par" aria-pressed="false"><span>Parallax<small>Moves with the visitor (move your mouse)</small></span></button>
+        <button data-st="st-grad" aria-pressed="false"><span>Gradient<small>Flowing colour, no photo needed</small></span></button>
+        <button data-st="st-aurora" aria-pressed="false"><span>Aurora<small>Soft glowing light</small></span></button>
+        <button data-st="st-curtain" aria-pressed="false"><span>Curtain<small>A dramatic reveal</small></span></button>
+      </div>
+      <div class="stage st-ken" id="stage">
+        <div class="ly a" style="background-image:url(img/p1.jpg)"></div>
+        <div class="ly b" style="background-image:url(img/p3.jpg)"></div>
+        <div class="ly c" style="background-image:url(img/p4.jpg)"></div>
+        <div class="shade"></div>
+        <span class="name" id="stname">Ken Burns</span>
+        <div class="txt"><small>Your business · Your city</small><h3>A welcome worth remembering.</h3></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEMPLATES -->
+<section class="s" id="templates">
+  <div class="wrap">
+    <div class="head c rv">
+      <div class="eyebrow">Start in minutes</div>
+      <h2>Four beautiful starting points. <em>Endless results.</em></h2>
+      <p class="lead">Pick the one closest to your business, then change anything. Hover to scroll through each one.</p>
+    </div>
+    <div class="tpls">
+      <a class="tpl rv" href="https://webescapade.com/builder/"><div class="frame"><img src="img/tpl-restaurant-long.jpg" alt="Restaurant template" loading="lazy"></div><b>Restaurant &amp; café</b><span>Photo hero, menu, gallery, bookings</span></a>
+      <a class="tpl rv d1" href="https://webescapade.com/builder/"><div class="frame"><img src="img/tpl-spa-long.jpg" alt="Spa and beauty template" loading="lazy"></div><b>Spa, beauty &amp; health</b><span>Treatments, prices, team, bookings</span></a>
+      <a class="tpl rv d2" href="https://webescapade.com/builder/"><div class="frame"><img src="img/tpl-business-long.jpg" alt="Business template" loading="lazy"></div><b>Business</b><span>Services, numbers, reviews, contact</span></a>
+      <a class="tpl rv d3" href="https://webescapade.com/builder/"><div class="frame"><img src="img/tpl-portfolio-long.jpg" alt="Portfolio template" loading="lazy"></div><b>Portfolio &amp; personal</b><span>Big intro, work gallery, about</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- PHONE -->
+<section class="s" id="phone" style="padding-top:0">
+  <div class="wrap phone-sec">
+    <div class="devices rv">
+      <img class="desk" src="img/tpl-restaurant.jpg" alt="Desktop website" loading="lazy">
+      <div class="ph"><div class="scr"><img src="img/phone-restaurant.jpg" alt="The same website on a phone" loading="lazy"></div></div>
+    </div>
+    <div class="rv d1">
+      <div class="eyebrow">Perfect on phones</div>
+      <h2 style="font-size:clamp(34px,4.4vw,54px);margin-bottom:18px">Design it once. <em>It works everywhere.</em></h2>
+      <p class="lead">Most of your customers will see your website on a phone. The Site Builder reads your desktop page and lays it out for phones automatically — in the right reading order.</p>
+      <ul class="checks"><li>Automatic phone layout — nothing to do</li><li>Switch to Phone view to fine-tune anything</li><li>Hide items on phones or on computers</li><li>Fast-loading pages, crisp on every screen</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- PLATINUM -->
+<section class="s dark plat" id="platinum">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="badge">★ PLATINUM</span>
+      <h2>A website that works for you, <em>day and night.</em></h2>
+      <p class="lead">Upgrade to Platinum and your website stops being a brochure. It takes bookings and answers your customers’ questions — even while you sleep.</p>
+    </div>
+    <div class="pgrid">
+      <div class="pcard rv">
+        <div class="eyebrow">Bookings</div>
+        <h3>Book without leaving your site.</h3>
+        <p>Any “Book” button opens your booking system in a smooth side panel, plus a floating “Book a table” button follows visitors down the page.</p>
+        <div class="connect"><span class="rd">Restaurant Deluxe</span><span class="sd">Service Deluxe</span><span class="td">Trade Deluxe</span><span>Any other booking link</span></div>
+        <div class="pshot"><img src="img/booking.jpg" alt="The booking panel on a website" loading="lazy"></div>
+      </div>
+      <div class="pcard rv d1">
+        <div class="eyebrow">AI assistant</div>
+        <h3>Your front desk, <em>open 24/7.</em></h3>
+        <p>It reads your own website — menu, opening hours, services, prices — and answers customers instantly. Then it points them to book.</p>
+        <ul class="lst"><li>Learns from your website automatically</li><li>Give it your own name, colours and welcome</li><li>Update your site — it knows straight away</li></ul>
+        <div class="chat" id="chat">
+          <div class="ch"><i>S</i><span><b>Sofia</b><small>AI assistant · replies instantly</small></span></div>
+          <div class="msgs" id="msgs"></div>
+          <div class="in"><span>Type your question…</span><b></b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="s" id="shop">
+  <div class="wrap shop">
+    <div class="rv">
+      <span class="badge" style="background:linear-gradient(100deg,#e7e3ff,#ffe3f0)">🛍️ SHOP ADD-ON</span>
+      <h2 style="font-size:clamp(36px,4.6vw,58px);margin-bottom:18px">Sell online. <em>Get paid directly.</em></h2>
+      <p class="lead">Add the Shop to any website. Customers fill a cart, pay securely, and the money goes straight into your own Stripe account.</p>
+      <div class="ptypes">
+        <div class="pt"><i>📦</i><b>Products</b><span>With options like size or flavour, and stock.</span></div>
+        <div class="pt"><i>🎁</i><b>Gift vouchers</b><span>Unique codes sent instantly after payment.</span></div>
+        <div class="pt"><i>⬇️</i><b>Digital downloads</b><span>Recipe books, guides, PDFs — delivered automatically.</span></div>
+        <div class="pt"><i>🚚</i><b>Post, delivery or pick-up</b><span>You choose which options you offer.</span></div>
+      </div>
+      <div class="fee"><span class="st">stripe</span><span>Apple Pay, Google Pay and cards. Payouts go to <b>your</b> bank through your own Stripe account.</span></div>
+    </div>
+    <div class="stack rv d1">
+      <div class="s1"><img src="img/shop.jpg" alt="An online shop section on a restaurant website" loading="lazy"></div>
+      <div class="s2"><img src="img/order.jpg" alt="Order confirmation with a gift voucher code" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMING NEXT -->
+<section class="s dark next" id="next">
+  <div class="wrap">
+    <div class="head c rv">
+      <div class="eyebrow">Coming soon</div>
+      <h2>We’re not stopping here. <em>Here’s what’s next.</em></h2>
+      <p class="lead">You asked for one place to run your website, your customers and your marketing. That is exactly where we are going.</p>
+    </div>
+    <div class="road">
+      <div class="rn done rv"><div class="dot">✓</div><small>Live now</small><h3>Site Builder</h3><p>Design, publish, Platinum bookings &amp; AI assistant, plus the Shop add-on.</p></div>
+      <div class="rn soon rv d1"><div class="dot">👥</div><small>Coming next</small><h3>CRM</h3><p>Every customer, booking, order and message in one place.</p></div>
+      <div class="rn soon rv d2"><div class="dot">✉️</div><small>Then</small><h3>Email Studio</h3><p>Beautiful campaigns to your own customers, right from your website.</p></div>
+    </div>
+    <div class="ngrid">
+      <div class="ncard rv" id="crmcard">
+        <span class="soon">COMING SOON</span>
+        <h3>CRM — know every customer.</h3>
+        <p>See who booked, who bought a voucher and who sent a message — and when they last visited. Your website fills it in for you.</p>
+        <div class="crm">
+          <div class="top"><span>Customers</span><span>Bookings</span><span>Orders</span></div>
+          <div class="row"><span class="av" style="background:#c65a3b">JM</span><span><b>Jess Martin</b><small>Booked for 4 · Sat</small></span><small>Last visit: 2 weeks</small><span class="tg" style="background:#e8fbf3;color:#0f9f6e">Regular</span></div>
+          <div class="row"><span class="av" style="background:#7c5cff">TK</span><span><b>Tom Kelly</b><small>Bought a gift voucher</small></span><small>Last visit: new</small><span class="tg" style="background:#efeaff;color:#5b45d8">Voucher</span></div>
+          <div class="row"><span class="av" style="background:#22a5c4">AL</span><span><b>Amy Lee</b><small>Asked the AI about events</small></span><small>Last visit: 3 months</small><span class="tg" style="background:#fff1e6;color:#c2611f">Win back</span></div>
+        </div>
+      </div>
+      <div class="ncard rv d1">
+        <span class="soon">COMING SOON</span>
+        <h3>Email Studio — bring them back.</h3>
+        <p>The same Email Studio we use to announce our own news — like this one — for your customers.</p>
+        <div class="mailph">
+          <div class="scr"><div><img src="img/email-preview.jpg" alt="A campaign email designed in Email Studio" loading="lazy"></div></div>
+          <ul><li>Ready-made, beautiful templates</li><li>Send to your customers in a few taps</li><li>See who opened and clicked</li><li>Specials, events, new menus, vouchers</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="waitlist rv"><span>Want to be first to try the CRM and Email Studio?</span><a class="btn ghost" href="mailto:marc@webescapade.com?subject=Early%20access%3A%20CRM%20%26%20Email%20Studio">Join the early-access list →</a></div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="s" id="plans">
+  <div class="wrap">
+    <div class="head c rv">
+      <div class="eyebrow">Choose your level</div>
+      <h2>Start free. <em>Grow when you’re ready.</em></h2>
+      <p class="lead">Build and publish your website first. Add Platinum or the Shop whenever your business needs them.</p>
+    </div>
+    <div class="plans">
+      <div class="plan rv"><small>Site Builder</small><h3>Your website</h3><div class="pp">Everything you need to design and publish.</div><ul><li>Drag-and-drop editor</li><li>4 templates + 20 sections</li><li>Animated welcome screens</li><li>Automatic phone layout</li><li>Contact form, map, video</li><li>Publish &amp; update any time</li></ul><a class="btn line" href="https://webescapade.com/builder/">Start building free</a></div>
+      <div class="plan hi rv d1"><small>Platinum</small><h3>Bookings + AI</h3><div class="pp">Turn visitors into customers, day and night.</div><ul><li>Everything in Site Builder</li><li>Booking panel &amp; floating Book button</li><li>Connects to Restaurant, Service or Trade Deluxe</li><li>Or paste your own booking link</li><li>AI assistant that learns from your site</li></ul><a class="btn pri" href="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website">Upgrade to Platinum</a></div>
+      <div class="plan rv d2"><small>Add-on</small><h3>Shop</h3><div class="pp">Add an online shop to any website.</div><ul><li>Products, gift vouchers &amp; downloads</li><li>Post, local delivery or pick-up</li><li>Paid straight to your Stripe account</li><li>Orders page &amp; voucher codes</li><li>Small fee per sale — no monthly lock-in</li></ul><a class="btn line" href="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20my%20website">Add the Shop</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARC -->
+<section class="s" style="padding-top:0">
+  <div class="wrap">
+    <div class="marc rv">
+      <div class="mono">M</div>
+      <div>
+        <div class="eyebrow">Why we built it</div>
+        <blockquote>“For years, business owners told me the same thing: they wanted a beautiful website they could look after themselves — one that actually brings in bookings and sales. So we listened, and we built it.”</blockquote>
+        <cite>Marc — Webescapade<span>Web designer with 50 years’ experience in hospitality · Sydney</span></cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="s" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="head c rv"><div class="eyebrow">Questions</div><h2>Straight <em>answers.</em></h2></div>
+    <div class="faq rv">
+      <details open><summary>Do I need to know how to code?</summary><p>No. You click, drag and type. If you can use a phone, you can build your website. And if you would rather we set it up for you, just ask.</p></details>
+      <details><summary>Will my website look good on phones?</summary><p>Yes. Your phone layout is created automatically from your desktop page, in the right reading order. You can switch to Phone view at any time to fine-tune it, or hide items on phones.</p></details>
+      <details><summary>Can I connect the booking system I already use?</summary><p>Yes, with Platinum. Restaurant Deluxe, Service Deluxe and Trade Deluxe connect in a couple of clicks — or paste the link of any other online booking page (it must start with https://).</p></details>
+      <details><summary>How does the AI assistant know about my business?</summary><p>It reads the words on your own website — your menu, services, prices and opening hours. When you update your website and publish, the assistant knows the new information too.</p></details>
+      <details><summary>How do I get paid from the Shop?</summary><p>You connect your own Stripe account. Customers pay by card, Apple Pay or Google Pay and the money goes into your Stripe account, then to your bank. Stripe’s normal fees apply, plus a small Webescapade fee of 1.5% per sale.</p></details>
+      <details><summary>Can I use my own photos?</summary><p>Of course. Upload them from your phone or computer, then drag them where you want them. Choose the focus point so faces and dishes stay in the frame.</p></details>
+      <details><summary>What is coming next?</summary><p>A CRM to see all your customers, bookings and orders in one place, then Email Studio so you can send beautiful emails to your own customers. Join the early-access list to be first.</p></details>
+      <details><summary>Can someone help me get started?</summary><p>Yes. Book a free Zoom demo or call Marc on 0413 872 994 — we will walk you through it, or build it for you.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final dark" id="start">
+  <div class="aur"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="wrap" style="position:relative">
+    <div class="pill rv" style="margin-bottom:24px"><b>LIVE</b> You asked. We listened.</div>
+    <h2 class="rv d1">Now it’s your turn. <em>Build something beautiful.</em></h2>
+    <p class="lead rv d2">Create your account, pick a template and have your first page ready in minutes.</p>
+    <div class="ctas rv d3">
+      <a class="btn pri" href="https://webescapade.com/builder/">Start building free <span class="arrow">→</span></a>
+      <a class="btn ghost" href="https://webescapade.com/Restaurant/demo.html">Book a free Zoom demo</a>
+    </div>
+    <div class="contact rv d4">Rather talk? Call Marc on <a href="tel:0413872994">0413 872 994</a> or email <a href="mailto:marc@webescapade.com">marc@webescapade.com</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top"><b>WE</b><span>Webescapade<small>SYDNEY, AUSTRALIA</small></span></a>
+    <nav><a href="https://webescapade.com/">Home</a><a href="https://webescapade.com/Restaurant/">Restaurant Deluxe</a><a href="https://webescapade.com/service/">Service Deluxe</a><a href="https://webescapade.com/trades/">Trade Deluxe</a><a href="https://webescapade.com/Function-centre/">Function Deluxe</a><a href="https://www.youtube.com/@webescapadesydney" target="_blank" rel="noopener">YouTube</a></nav>
+    <span>© <span id="yr">2026</span> Webescapade</span>
+  </div>
+</footer>
+
+<div class="mcta" id="mcta"><a class="btn pri" href="https://webescapade.com/builder/">Start building free →</a></div>
+
+<script>
+(function(){
+  'use strict';
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(s,r){ return (r||document).querySelector(s); }, $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  $('#yr').textContent = new Date().getFullYear();
+
+  /* nav */
+  var nav = $('#nav'), mcta = $('#mcta');
+  function onScroll(){ var y = window.scrollY; nav.classList.toggle('solid', y > 40); mcta.classList.toggle('on', y > 700); }
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  $('#burger').addEventListener('click', function(){ $('#menu').classList.toggle('open'); });
+  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ $('#menu').classList.remove('open'); }); });
+
+  /* reveal */
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.14, rootMargin:'0px 0px -40px 0px'}) : null;
+  $$('.rv, .ask, #crmcard').forEach(function(el){ io ? io.observe(el) : el.classList.add('in'); });
+
+  /* counters */
+  function count(el){ var n = +el.dataset.count, t0 = performance.now(), d = 1400;
+    (function f(t){ var p = Math.min(1,(t-t0)/d); el.textContent = Math.round(n*(1-Math.pow(1-p,3))); if(p<1) requestAnimationFrame(f); })(t0); }
+  var cio = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ count(e.target); cio.unobserve(e.target); } }); }, {threshold:.6}) : null;
+  $$('[data-count]').forEach(function(el){ cio ? cio.observe(el) : (el.textContent = el.dataset.count); });
+
+  /* ---------- playground ---------- */
+  var cv = $('#canvas'), gv = $('#gv'), gh = $('#gh'), hint = $('#hint');
+  var els = $$('.el', cv);
+  function place(el){ el.style.left = el.dataset.x + '%'; el.style.top = el.dataset.y + '%'; }
+  els.forEach(place);
+  var drag = null;
+  els.forEach(function(el){
+    el.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      els.forEach(function(o){ o.classList.toggle('sel', o === el); });
+      var r = cv.getBoundingClientRect();
+      drag = { el:el, r:r, sx:e.clientX, sy:e.clientY, x:+el.dataset.x, y:+el.dataset.y, w:el.offsetWidth/r.width*100, h:el.offsetHeight/r.height*100 };
+      el.setPointerCapture(e.pointerId);
+      hint.classList.add('gone');
+    });
+    el.addEventListener('pointermove', function(e){
+      if(!drag || drag.el !== el) return;
+      var x = drag.x + (e.clientX - drag.sx) / drag.r.width * 100;
+      var y = drag.y + (e.clientY - drag.sy) / drag.r.height * 100;
+      x = Math.max(0, Math.min(100 - drag.w, x)); y = Math.max(8, Math.min(100 - drag.h, y));
+      var cx = x + drag.w/2, cy = y + drag.h/2, snapX = Math.abs(cx - 50) < 2.2, snapY = Math.abs(cy - 50) < 2.6;
+      if(snapX) x = 50 - drag.w/2; if(snapY) y = 50 - drag.h/2;
+      gv.classList.toggle('on', snapX); gh.classList.toggle('on', snapY);
+      el.dataset.x = x.toFixed(2); el.dataset.y = y.toFixed(2); place(el);
+    });
+    function end(){ if(drag && drag.el === el){ drag = null; gv.classList.remove('on'); gh.classList.remove('on'); } }
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  });
+  cv.addEventListener('pointerdown', function(e){ if(e.target === cv || !e.target.closest('.el')) els.forEach(function(o){ o.classList.remove('sel'); }); });
+  /* select the heading after a moment so visitors see the handles */
+  setTimeout(function(){ if(!$('.el.sel', cv)) $('#dragme').classList.add('sel'); }, 1600);
+
+  /* background effect + colour */
+  var imgs = $$('#cbg img'), slide = 0, timer = null;
+  function setFx(fx){
+    cv.classList.remove('fx-ken','fx-cross','fx-aurora'); cv.classList.add(fx);
+    clearInterval(timer);
+    if(fx === 'fx-cross' && !reduce){ timer = setInterval(function(){ imgs[slide].classList.remove('on'); slide = (slide+1) % imgs.length; imgs[slide].classList.add('on'); }, 3200); }
+    else { imgs.forEach(function(i,n){ i.classList.toggle('on', n === 0); }); slide = 0; }
+  }
+  $$('[data-fx]').forEach(function(b){ b.addEventListener('click', function(){ $$('[data-fx]').forEach(function(o){ o.setAttribute('aria-pressed', o === b); }); setFx(b.dataset.fx); }); });
+  $$('[data-acc]').forEach(function(b){ b.addEventListener('click', function(){ $$('[data-acc]').forEach(function(o){ o.setAttribute('aria-pressed', o === b); }); cv.style.setProperty('--acc', b.dataset.acc); }); });
+
+  /* ---------- videos ---------- */
+  var video = $('#video'), cover = $('#cover'), cur = $('.vbtn[aria-pressed=true]');
+  function load(btn, play){
+    cur = btn;
+    $$('.vbtn').forEach(function(o){ o.setAttribute('aria-pressed', o === btn); });
+    video.pause(); video.src = btn.dataset.src; video.poster = btn.dataset.poster;
+    cover.style.backgroundImage = 'url(' + btn.dataset.poster + ')';
+    if(play){ cover.style.display = 'none'; video.play().catch(function(){}); } else cover.style.display = '';
+  }
+  cover.addEventListener('click', function(){ if(!video.getAttribute('src')) video.src = cur.dataset.src; cover.style.display = 'none'; video.play().catch(function(){}); });
+  $$('.vbtn').forEach(function(b){ b.addEventListener('click', function(){ load(b, true); $('#player').scrollIntoView({behavior:'smooth', block:'center'}); }); });
+
+  /* ---------- sticky story ---------- */
+  var shots = $$('#shotbox img'), steps = $$('.step');
+  var sio = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ var n = +e.target.dataset.shot; steps.forEach(function(s){ s.classList.toggle('on', s === e.target); }); shots.forEach(function(im,i){ im.classList.toggle('on', i === n); }); } });
+  }, {rootMargin:'-45% 0px -45% 0px'}) : null;
+  steps.forEach(function(s){ sio ? sio.observe(s) : s.classList.add('on'); });
+  if(steps[0]) steps[0].classList.add('on');
+
+  /* ---------- bento glow + letters ---------- */
+  $$('.b').forEach(function(b){ b.addEventListener('pointermove', function(e){ var r = b.getBoundingClientRect(); b.style.setProperty('--mx', (e.clientX - r.left) + 'px'); b.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); });
+  var L = $('#letters'), txt = L.textContent; L.textContent = '';
+  txt.split('').forEach(function(ch, i){ var s = document.createElement('span'); s.textContent = ch === ' ' ? ' ' : ch; s.style.transitionDelay = (i * 0.06) + 's'; L.appendChild(s); });
+  function replay(){ L.classList.remove('go'); void L.offsetWidth; setTimeout(function(){ L.classList.add('go'); }, 60); }
+  var lio = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) replay(); }); }, {threshold:.8}) : null;
+  lio ? lio.observe(L) : L.classList.add('go');
+  L.parentNode.addEventListener('mouseenter', replay);
+
+  /* ---------- fx stage ---------- */
+  var stage = $('#stage'), stname = $('#stname');
+  $$('#fxtabs button').forEach(function(b){ b.addEventListener('click', function(){
+    $$('#fxtabs button').forEach(function(o){ o.setAttribute('aria-pressed', o === b); });
+    stage.className = 'stage'; void stage.offsetWidth; stage.classList.add(b.dataset.st);
+    stname.textContent = b.querySelector('span').firstChild.textContent;
+    $('.ly.a', stage).style.transform = '';
+  }); });
+  stage.addEventListener('pointermove', function(e){
+    if(!stage.classList.contains('st-par')) return;
+    var r = stage.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5;
+    $('.ly.a', stage).style.transform = 'scale(1.08) translate(' + (-dx * 4) + '%,' + (-dy * 4) + '%)';
+  });
+  addEventListener('scroll', function(){
+    if(!stage.classList.contains('st-par')) return;
+    var r = stage.getBoundingClientRect(), p = (r.top + r.height/2 - innerHeight/2) / innerHeight;
+    $('.ly.a', stage).style.transform = 'scale(1.1) translateY(' + (p * 8) + '%)';
+  }, {passive:true});
+
+  /* ---------- AI chat demo ---------- */
+  var msgs = $('#msgs'), script = [
+    ['u','Do you have gluten-free options?'],
+    ['a','Yes! Our pasta can be made gluten-free on request, and the wild mushroom risotto is naturally gluten-free. Just mention it when you book.'],
+    ['u','Can I book a table for 4 this Saturday?'],
+    ['a','We’d love to have you! Tap below to pick a time — you’ll see live availability.<br><span class="bk">📅 Book a table</span>'],
+    ['u','What time do you open on Sunday?'],
+    ['a','Sunday we’re open from 12 pm to 9 pm. Lunch is served until 3 pm.']
+  ], si = 0, running = false;
+  function step(){
+    if(si >= script.length){ setTimeout(function(){ msgs.innerHTML = ''; si = 0; step(); }, 4000); return; }
+    var m = script[si++];
+    if(m[0] === 'a'){
+      var t = document.createElement('div'); t.className = 'typing'; t.innerHTML = '<i></i><i></i><i></i>'; msgs.appendChild(t);
+      setTimeout(function(){ t.remove(); add(m); setTimeout(step, 2200); }, 1300);
+    } else { add(m); setTimeout(step, 900); }
+  }
+  function add(m){ var d = document.createElement('div'); d.className = 'm ' + m[0]; d.innerHTML = m[1]; msgs.appendChild(d); while(msgs.children.length > 5) msgs.removeChild(msgs.firstChild); }
+  var chio = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting && !running){ running = true; step(); } }); }, {threshold:.4}) : null;
+  if(chio) chio.observe($('#chat')); else { running = true; step(); }
+})();
+</script>
+</body>
+</html>
