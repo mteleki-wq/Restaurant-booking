@@ -597,19 +597,73 @@ h1 em,h2 em{background:var(--grad);-webkit-background-clip:text;background-clip:
 @media(max-width:600px){.hstage{height:560px}}
 
 
+/*SITEBUILDER-ANNOUNCE*/
+.sbx{position:relative;overflow:hidden;background:#100d1c;color:#fff;padding:110px 0 120px}
+.sbx-aur{position:absolute;inset:-25%;filter:blur(80px);opacity:.75;pointer-events:none}
+.sbx-aur i{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:sbxF 18s ease-in-out infinite alternate}
+.sbx-aur i:nth-child(1){width:48vw;height:48vw;left:0;top:5%;background:radial-gradient(circle,#6d3cff,transparent 65%)}
+.sbx-aur i:nth-child(2){width:40vw;height:40vw;right:0;top:25%;background:radial-gradient(circle,#0fb5c9,transparent 65%);animation-duration:23s;animation-delay:-7s}
+.sbx-aur i:nth-child(3){width:30vw;height:30vw;left:40%;bottom:0;background:radial-gradient(circle,#c3339a,transparent 65%);animation-duration:27s;opacity:.55}
+@keyframes sbxF{50%{transform:translate(6%,-4%) scale(1.12)}100%{transform:translate(-5%,6%) scale(.95)}}
+.sbx .sbx-w{display:block;position:relative;z-index:1;height:auto}
+.sbx-top{text-align:center;max-width:900px;margin:0 auto 56px}
+.sbx-pill{display:inline-flex;align-items:center;gap:10px;padding:7px 16px 7px 8px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);font:600 13.5px Manrope,sans-serif;color:#ece9ff;text-decoration:none;margin-bottom:24px}
+.sbx-pill b{background:var(--grad);color:#fff;border-radius:999px;padding:4px 10px;font-size:11px;letter-spacing:.1em}
+.sbx .sbx-h{color:#fff;font-size:clamp(40px,5.6vw,74px);line-height:1.02;margin:0 auto 20px;max-width:900px;text-align:center}
+.sbx .sbx-h em{background:linear-gradient(100deg,#b69bff,#6ea8ff 50%,#4fe3d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sbx-lead{font-size:19px;line-height:1.6;color:#c9c4e4;max-width:720px;margin:0 auto}
+.sbx-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center}
+.sbx-show{position:relative}
+.sbx-frame{border-radius:18px;overflow:hidden;background:#1c1833;border:1px solid rgba(255,255,255,.14);box-shadow:0 50px 110px -30px rgba(0,0,0,.85),0 0 90px -25px rgba(124,92,255,.6);transform:perspective(1600px) rotateY(5deg) rotateX(2deg);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.sbx-show:hover .sbx-frame{transform:none}
+.sbx-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:#24203f;border-bottom:1px solid rgba(255,255,255,.08)}
+.sbx-bar i{width:10px;height:10px;border-radius:50%;background:#ff5f57}.sbx-bar i:nth-child(2){background:#febc2e}.sbx-bar i:nth-child(3){background:#28c840}
+.sbx-bar span{margin-left:10px;flex:1;background:#15122b;border-radius:7px;padding:5px 12px;font:500 12px Manrope,sans-serif;color:#a6a2c4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbx-vid{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#000}
+.sbx-chip{position:absolute;z-index:3;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.97);color:#1d1938;border-radius:14px;padding:10px 14px;box-shadow:0 18px 40px -10px rgba(0,0,0,.55);font:13px/1.3 Manrope,sans-serif;opacity:0;animation:sbxC 12s ease-in-out infinite}
+.sbx-chip>span:first-child{width:30px;height:30px;border-radius:9px;background:#f2efff;display:grid;place-items:center;font-size:15px;flex:none}
+.sbx-chip b{display:block;font-weight:700}.sbx-chip small{display:block;color:#6b6688;font-size:12px}
+.sbx-chip.c1{left:-26px;top:-20px}.sbx-chip.c2{right:-22px;top:40%;animation-delay:4s}.sbx-chip.c3{left:8%;bottom:-24px;animation-delay:8s}
+@keyframes sbxC{0%,3%{opacity:0;transform:translateY(12px)}7%,30%{opacity:1;transform:none}36%,100%{opacity:0;transform:translateY(-8px)}}
+.sbx-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sbx-t{display:block;text-decoration:none;color:#fff;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;transition:transform .3s,border-color .3s,background .3s}
+.sbx-t:hover{transform:translateY(-4px);border-color:rgba(160,130,255,.7);background:rgba(124,92,255,.12)}
+.sbx-t i{font-style:normal;font-size:22px}.sbx-t b{display:block;margin:8px 0 4px;font:700 16px Manrope,sans-serif}.sbx-t span{display:block;font-size:14px;line-height:1.45;color:#bdb8da}
+.sbx-next{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0 14px;font:600 14px Manrope,sans-serif}
+.sbx-k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#4fe3d0}
+.sbx-n{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.25);color:#e9e6ff}
+.sbx-n i{width:8px;height:8px;border-radius:50%;background:#ffb44f;box-shadow:0 0 0 0 rgba(255,180,79,.7);animation:sbxR 2s infinite}
+@keyframes sbxR{70%{box-shadow:0 0 0 9px rgba(255,180,79,0)}100%{box-shadow:0 0 0 0 rgba(255,180,79,0)}}
+.sbx-price{font-size:14.5px;color:#c9c4e4;margin-bottom:22px}.sbx-price b{color:#fff}.sbx-price span{color:#9f99c4}
+.sbx-ctas{display:flex;flex-wrap:wrap;gap:10px}
+.sbx-btn{display:inline-flex;align-items:center;gap:9px;border-radius:999px;padding:15px 22px;font:700 15px Manrope,sans-serif;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s;white-space:nowrap}
+.sbx-btn.pri{background:linear-gradient(100deg,#7c5cff,#4f8bff 50%,#22d3ee);color:#fff;box-shadow:0 12px 30px -8px rgba(124,92,255,.75)}
+.sbx-btn.pri:hover{transform:translateY(-2px)}
+.sbx-btn.ghost{color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.22)}
+.sbx-btn.ghost:hover{background:rgba(255,255,255,.14)}
+.sbx-btn .pl{width:20px;height:20px;border-radius:50%;background:#fff;position:relative}.sbx-btn .pl:after{content:"";position:absolute;left:8px;top:5px;border-left:7px solid #7c5cff;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.top .links a.sbx-nav{color:var(--acc)!important;font-weight:700}
+.sbx-nav sup{font:800 9px Manrope,sans-serif;letter-spacing:.08em;background:var(--grad);color:#fff;border-radius:6px;padding:2px 5px;margin-left:4px;vertical-align:2px}
+.sbx-hero{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px;padding:6px 14px 6px 6px;border-radius:999px;background:#17131f;color:#fff;font:600 13px Manrope,sans-serif;text-decoration:none;box-shadow:0 10px 24px -12px rgba(23,19,31,.7)}
+.sbx-hero b{background:var(--grad);border-radius:999px;padding:3px 9px;font-size:10.5px;letter-spacing:.1em}
+.sbx-hero:hover{transform:translateY(-1px)}
+@media(max-width:980px){.sbx-grid{grid-template-columns:1fr}.sbx-frame{transform:none}.sbx-chip.c1{left:-6px}.sbx-chip.c2{right:-6px}}
+@media(max-width:560px){.sbx{padding:80px 0 90px}.sbx-tiles{grid-template-columns:1fr}.sbx-chip{display:none}}
+@media(prefers-reduced-motion:reduce){.sbx-aur i,.sbx-chip,.sbx-n i{animation:none}.sbx-chip{opacity:1}}
+/*SITEBUILDER-ANNOUNCE-END*/
 </style>
 </head>
 <body data-email="marc@webescapade.com" data-phone="0413 872 994" data-supabase-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-supabase-url="https://tehxobdokbvqtwtgqzrh.supabase.co">
 <nav class="top" id="nav"><div class="w">
 <a class="brand" href="#top"><span class="m">WE</span><span><b data-edit="e203" style="">Webescapade</b><small data-edit="e204" style="">Sydney web studio</small></span></a>
-<div class="links"><a data-edit="e205" href="#products" style="">Our products</a><a data-edit="e206" href="#build" style="">What we build</a><a data-edit="e207" href="#ai" style="">AI assistant</a><a data-edit="e208" href="#custom" style="">Custom websites</a><a data-edit="e209" href="#work" style="">Our work</a><a data-edit="e210" href="#about" style="">About</a><a data-edit="e211" href="#faq" style="">FAQ</a></div>
+<div class="links"><a class="sbx-nav" href="#sitebuilder"><span data-edit="sb26">Site Builder</span><sup>NEW</sup></a><a data-edit="e205" href="#products" style="">Our products</a><a data-edit="e206" href="#build" style="">What we build</a><a data-edit="e207" href="#ai" style="">AI assistant</a><a data-edit="e208" href="#custom" style="">Custom websites</a><a data-edit="e209" href="#work" style="">Our work</a><a data-edit="e210" href="#about" style="">About</a><a data-edit="e211" href="#faq" style="">FAQ</a></div>
 <a class="btn dark" href="/demo.html"><span data-edit="e87" style="">Book a free Zoom chat</span><span class="ar">→</span></a>
 </div></nav>
 <header class="hero" data-sec="lav" id="top">
 <div class="hfade" style="background:none"></div><div class="hglow g1" data-par="-0.18"></div><div class="hglow g2" data-par="0.22"></div>
 <div class="w">
 <div class="rv">
-<div class="pill"><i>✦</i><span data-edit="e83" style="">Websites · bookings · AI assistants · for small and medium businesses</span></div>
+<a class="sbx-hero" href="#sitebuilder"><b>NEW</b><span data-edit="sb0">The Site Builder is here — see what it can do</span> <span>→</span></a><br><div class="pill"><i>✦</i><span data-edit="e83" style="">Websites · bookings · AI assistants · for small and medium businesses</span></div>
 <h1 data-edit="e1">Sydney web design,<br><em>with online bookings built in.</em></h1>
 <p class="lead" data-edit="e41" style="">Webescapade is a Sydney web design studio. We build websites that do real work: you edit them yourself, customers book or order straight from them, an AI assistant answers questions day and night — and Email Studio brings people back. One flat monthly price. No commission, ever.</p>
 <div class="ctas">
@@ -635,6 +689,43 @@ h1 em,h2 em{background:var(--grad);-webkit-background-clip:text;background-clip:
 <div class="fc f2" data-par="0.16"><span class="ic">✦</span><b data-edit="e115" style="">0% commission</b><span data-edit="e117" style="">one flat monthly price</span></div>
 </div></div>
 </div></header>
+<section class="sbx" id="sitebuilder">
+<div class="sbx-aur"><i></i><i></i><i></i></div>
+<div class="w sbx-w">
+  <div class="sbx-top rv">
+    <a class="sbx-pill" href="/site-builder/"><b data-edit="sb1">NEW</b><span data-edit="sb2">You asked. We listened. Now it’s here.</span></a>
+    <h2 class="sbx-h" data-edit="sb3">Introducing the Site Builder. <em>Everything we make, in one place.</em></h2>
+    <p class="sbx-lead" data-edit="sb4">Build your own website by dragging things exactly where you want them — then switch on online bookings, an AI assistant that answers your customers day and night, and an online shop paid straight to your Stripe.</p>
+  </div>
+  <div class="sbx-grid">
+    <div class="sbx-show rv">
+      <div class="sbx-chip c1"><span>✅</span><span><b data-edit="sb5">Booking confirmed</b><small data-edit="sb6">Sat 7:30 pm · 4 guests</small></span></div>
+      <div class="sbx-chip c2"><span>✨</span><span><b data-edit="sb7">AI assistant</b><small data-edit="sb8">“Yes — our pasta can be gluten-free.”</small></span></div>
+      <div class="sbx-chip c3"><span>🛍️</span><span><b data-edit="sb9">New order · $134.50</b><small data-edit="sb10">Gift voucher + pasta sauce</small></span></div>
+      <div class="sbx-frame">
+        <div class="sbx-bar"><i></i><i></i><i></i><span>webescapade.com/sites/your-business</span></div>
+        <video class="sbx-vid" src="/site-builder/video/teaser.mp4" poster="/site-builder/img/teaser.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Short silent preview of the Site Builder: editing, bookings, AI assistant and online shop"></video>
+      </div>
+    </div>
+    <div class="sbx-side">
+      <div class="sbx-tiles">
+        <a class="sbx-t rv" href="/site-builder/#features"><i>✏️</i><b data-edit="sb11">Your website</b><span data-edit="sb12">Drag &amp; drop anywhere, animated welcome screens, perfect on phones.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#platinum"><i>📅</i><b data-edit="sb13">Bookings</b><span data-edit="sb14">Restaurant, Service or Trade Deluxe — right on your page.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#platinum"><i>✨</i><b data-edit="sb15">AI assistant</b><span data-edit="sb16">Learns from your website. Answers customers 24/7.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#shop"><i>🛍️</i><b data-edit="sb17">Online shop</b><span data-edit="sb18">Products, gift vouchers and downloads, paid to your Stripe.</span></a>
+      </div>
+      <div class="sbx-next rv"><span class="sbx-k" data-edit="sb19">Coming next</span><span class="sbx-n"><i></i><span data-edit="sb20">CRM</span></span><span class="sbx-n"><i></i><span data-edit="sb21">Email Studio</span></span></div>
+      <div class="sbx-price rv" data-edit="sb22"><b>Start free</b> · Platinum $49 / month + GST <span>($29 for Deluxe clients)</span> · Shop 1.5% per sale</div>
+      <div class="sbx-ctas rv">
+        <a class="sbx-btn pri" href="/site-builder/"><span data-edit="sb23">Explore the Site Builder</span> <span class="ar">→</span></a>
+        <a class="sbx-btn ghost" href="/builder/"><span data-edit="sb24">Start building free</span></a>
+        <a class="sbx-btn ghost" href="/site-builder/#tour"><span class="pl"></span><span data-edit="sb25">2-minute tour</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<script>/*SITEBUILDER-ANNOUNCE-JS*/(function(){var v=document.querySelector('.sbx-vid');if(!v)return;if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause();return;}if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){});}else v.pause();});},{threshold:.2}).observe(v);}})();</script>
 <section class="s" data-sec="paper" id="products" style="padding-top:90px"><div class="w">
 <div class="head rv"><div class="eyebrow" data-edit="e31" style="">Ready to go</div><h2 data-edit="e2" style="">Four systems, <em>ready to go.</em></h2>
 <p data-edit="e42" style="">Built with real businesses, used every day and improved from their feedback. Pick the one made for your kind of business — or ask us to build something around you.</p></div>
