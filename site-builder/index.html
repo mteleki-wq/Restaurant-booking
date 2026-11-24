@@ -415,6 +415,42 @@ footer{background:#08070f;color:#8a86a8;font-size:14px;padding:40px 0}
 footer .wrap{display:flex;flex-wrap:wrap;gap:16px 30px;align-items:center;justify-content:space-between}
 footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wrap;gap:20px}
 
+
+/* chat assistant */
+.chat-fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--grad);color:#fff;border-radius:999px;padding:8px 20px 8px 8px;font:700 15px var(--sans);box-shadow:0 18px 40px -12px rgba(124,92,255,.75);transition:transform .2s}
+.chat-fab:hover{transform:translateY(-2px)}
+.chat-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;position:relative}
+.chat-fab .ci svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-fab .ci:after{content:"";position:absolute;right:1px;top:1px;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid #6a6cff}
+.chat.open .chat-fab{display:none}
+.chat-tip{position:fixed;right:20px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:60;max-width:270px;background:#fff;color:var(--text);border:1px solid #e6e1fa;border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font-size:14px;line-height:1.45;box-shadow:0 20px 50px -15px rgba(40,20,120,.45);cursor:pointer;animation:chatIn .35s ease}
+.chat-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--mut);cursor:pointer;line-height:1;padding:4px}
+.chat-tip[hidden],.chat-q[hidden],.chat-box[hidden]{display:none}
+.chat-box{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:200;width:min(400px,calc(100vw - 32px));height:min(630px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--text);border:1px solid #e6e1fa;border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -25px rgba(20,10,60,.6);animation:chatIn .3s ease}
+@keyframes chatIn{from{opacity:0;transform:translateY(14px) scale(.98)}}
+.chat-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:linear-gradient(110deg,#15122b,#2a1d63);color:#fff}
+.chat-hd .av{width:38px;height:38px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font:800 13px var(--sans);flex:none}
+.chat-hd b{display:block;font-size:15px}.chat-hd small{display:block;font-size:12px;color:rgba(255,255,255,.72);margin-top:1px}
+.chat-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.12);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.chat-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.cm{max-width:86%;padding:10px 14px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
+.cm p{margin:0 0 6px}.cm p:last-child{margin:0}.cm ul{margin:4px 0;padding-left:18px}.cm li{margin:2px 0}
+.cm.a{align-self:flex-start;background:#fff;border:1px solid #ebe7fb;border-bottom-left-radius:5px}
+.cm.a a{color:#5b45d8;font-weight:600}
+.cm.u{align-self:flex-end;background:var(--v);color:#fff;border-bottom-right-radius:5px}
+.cm.typing{display:flex;gap:4px;padding:14px}
+.cm.typing i{width:7px;height:7px;border-radius:50%;background:#c4bde6;animation:dot 1s infinite}.cm.typing i:nth-child(2){animation-delay:.15s}.cm.typing i:nth-child(3){animation-delay:.3s}
+.chat-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
+.chat-q button{border:1px solid #e1dbfa;background:#fff;color:var(--text);border-radius:999px;padding:7px 12px;font:600 13px var(--sans);cursor:pointer}
+.chat-q button:hover{border-color:var(--v);color:var(--v)}
+.chat-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #ebe7fb;background:#fff}
+.chat-f input{flex:1;min-width:0;border:1.5px solid #e1dbfa;border-radius:999px;padding:11px 15px;font:400 16px var(--sans);background:var(--paper);color:var(--text)}
+.chat-f input:focus{outline:none;border-color:var(--v)}
+.chat-f button{border:0;border-radius:999px;background:var(--grad);color:#fff;font:700 14px var(--sans);padding:0 16px;cursor:pointer}
+.chat-f button:disabled{opacity:.5}
+.chat-ft{font-size:11.5px;color:var(--mut);text-align:center;padding:0 12px 10px;background:#fff}.chat-ft a{color:var(--mut)}
+@media(max-width:700px){.chat-fab{padding:8px;bottom:calc(84px + env(safe-area-inset-bottom))}.chat-fab .tx{display:none}.chat-tip{bottom:calc(150px + env(safe-area-inset-bottom))}.chat-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.chat-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+
 /* reveal */
 .rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
 .rv.in{opacity:1;transform:none}
@@ -803,7 +839,7 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
       <a class="btn pri" href="https://webescapade.com/builder/">Start building free <span class="arrow">→</span></a>
       <a class="btn ghost" href="https://webescapade.com/Restaurant/demo.html">Book a free Zoom demo</a>
     </div>
-    <div class="contact rv d4">Rather talk? Call Marc on <a href="tel:0413872994">0413 872 994</a> or email <a href="mailto:marc@webescapade.com">marc@webescapade.com</a></div>
+    <div class="contact rv d4"><a href="#" data-chat style="color:#fff;font-weight:600">💬 Ask our AI assistant</a> · Rather talk? Call Marc on <a href="tel:0413872994">0413 872 994</a> or email <a href="mailto:marc@webescapade.com">marc@webescapade.com</a></div>
   </div>
 </section>
 
@@ -815,6 +851,18 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
   </div>
 </footer>
 
+
+<div class="chat" id="chatW">
+  <button class="chat-fab" id="chatFab" type="button" aria-label="Open the chat assistant"><span class="ci"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span><span class="tx">Questions? Ask me</span></button>
+  <div class="chat-tip" id="chatTip" hidden><button type="button" aria-label="Close">×</button><span>Wondering if the Site Builder suits your business? Ask me — I answer in seconds.</span></div>
+  <div class="chat-box" id="chatBox" role="dialog" aria-label="Chat assistant" hidden>
+    <div class="chat-hd"><span class="av">WE</span><div><b>Site Builder assistant</b><small>Features, Platinum, Shop — ask away</small></div><button class="x" id="chatX" type="button" aria-label="Close chat">×</button></div>
+    <div class="chat-log" id="chatLog" aria-live="polite"></div>
+    <div class="chat-q" id="chatQ"><button type="button">Is it really free to start?</button><button type="button">Can people book from my website?</button><button type="button">How does the AI assistant work?</button><button type="button">How does the Shop get paid?</button><button type="button">Can Marc build it for me?</button></div>
+    <form class="chat-f" id="chatF"><input id="chatIn" placeholder="Type your question…" maxlength="600" autocomplete="off" aria-label="Your question"><button type="submit" id="chatSend">Send</button></form>
+    <div class="chat-ft">AI assistant — answers can be wrong. <a href="tel:0413872994" id="chatHuman">Call Marc</a></div>
+  </div>
+</div>
 <div class="mcta" id="mcta"><a class="btn pri" href="https://webescapade.com/builder/">Start building free →</a></div>
 
 <script>
@@ -954,6 +1002,58 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
   function add(m){ var d = document.createElement('div'); d.className = 'm ' + m[0]; d.innerHTML = m[1]; msgs.appendChild(d); while(msgs.children.length > 5) msgs.removeChild(msgs.firstChild); }
   var chio = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting && !running){ running = true; step(); } }); }, {threshold:.4}) : null;
   if(chio) chio.observe($('#chat')); else { running = true; step(); }
+})();
+</script>
+
+<script>
+/* Site Builder chat assistant (Supabase edge function sb-chat, same as the Service Deluxe page) */
+(function(){
+  var API="https://tehxobdokbvqtwtgqzrh.supabase.co/functions/v1/sb-chat", KEY="sbChat";
+  var wrap=document.getElementById("chatW"), fab=document.getElementById("chatFab"), tip=document.getElementById("chatTip"), box=document.getElementById("chatBox"),
+      log=document.getElementById("chatLog"), q=document.getElementById("chatQ"), f=document.getElementById("chatF"), inp=document.getElementById("chatIn"), busy=false;
+  var HI="Hi! 👋 I'm the Site Builder assistant. Ask me what you can build, how bookings and the AI assistant work, or how the online shop gets paid.";
+  var st={id:"",msgs:[]};
+  try{ st=JSON.parse(sessionStorage.getItem(KEY))||st; }catch(e){}
+  if(!st.id) st.id="s-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function md(t){
+    var h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+      .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:|#)[^\s)]+)\)/g,function(_,a,u){ var ext=/^https?:/.test(u); return '<a href="'+u+'"'+(ext?' target="_blank" rel="noopener"':' data-in')+'>'+a+'</a>'; })
+      .replace(/(^|[\s(])(https:\/\/webescapade\.com\/[^\s<)]*)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+    var out=[], list=false;
+    h.split(/\n/).forEach(function(l){
+      var m=l.match(/^\s*(?:[-•*]|\d+\.)\s+(.*)/);
+      if(m){ if(!list){ out.push("<ul>"); list=true; } out.push("<li>"+m[1]+"</li>"); }
+      else { if(list){ out.push("</ul>"); list=false; } if(l.trim()) out.push("<p>"+l+"</p>"); }
+    });
+    if(list) out.push("</ul>");
+    return out.join("");
+  }
+  function bubble(role,text){ var d=document.createElement("div"); d.className="cm "+(role==="user"?"u":"a"); d.innerHTML=role==="user"?esc(text).replace(/\n/g,"<br>"):md(text); log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
+  function render(){ log.innerHTML=""; bubble("assistant",HI); st.msgs.forEach(function(m){ bubble(m.role,m.content); }); q.hidden=st.msgs.length>2; }
+  function open(){ tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(e){} render(); box.hidden=false; wrap.classList.add("open"); if(matchMedia("(pointer:fine)").matches) inp.focus(); }
+  function close(){ box.hidden=true; wrap.classList.remove("open"); }
+  fab.addEventListener("click",open);
+  document.getElementById("chatX").addEventListener("click",close);
+  tip.addEventListener("click",function(e){ if(e.target.tagName==="BUTTON"){ tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(x){} return; } open(); });
+  log.addEventListener("click",function(e){ var a=e.target.closest("a[data-in]"); if(a&&innerWidth<700) close(); });
+  q.addEventListener("click",function(e){ var b=e.target.closest("button"); if(b) send(b.textContent.trim()); });
+  f.addEventListener("submit",function(e){ e.preventDefault(); send(inp.value); });
+  document.querySelectorAll("[data-chat]").forEach(function(b){ b.addEventListener("click",function(e){ e.preventDefault(); open(); }); });
+  function send(text){
+    text=String(text||"").trim(); if(!text||busy) return;
+    inp.value=""; st.msgs.push({role:"user",content:text.slice(0,600)}); save(); bubble("user",text); q.hidden=true;
+    busy=true; document.getElementById("chatSend").disabled=true;
+    var t=document.createElement("div"); t.className="cm a typing"; t.innerHTML="<i></i><i></i><i></i>"; log.appendChild(t); log.scrollTop=log.scrollHeight;
+    fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({session:st.id,messages:st.msgs.slice(-16)})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!j||!j.ok||!j.reply) throw new Error(); return j.reply; })
+      .catch(function(){ return "Sorry — I can't answer right now. You can email [marc@webescapade.com](mailto:marc@webescapade.com) or call [0413 872 994](tel:0413872994)."; })
+      .then(function(reply){ t.remove(); st.msgs.push({role:"assistant",content:reply}); st.msgs=st.msgs.slice(-24); save(); bubble("assistant",reply); busy=false; document.getElementById("chatSend").disabled=false; });
+  }
+  var seen=false; try{ seen=!!sessionStorage.getItem(KEY+"Tip"); }catch(e){}
+  if(!seen) setTimeout(function(){ if(box.hidden) tip.hidden=false; },9000);
 })();
 </script>
 </body>
