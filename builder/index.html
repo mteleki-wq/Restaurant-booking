@@ -1215,9 +1215,10 @@ a{color:var(--ui-a2)}
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((ents) => {
         ents.forEach((e) => {
-          if (e.isIntersecting) { e.target.classList.add(e.target.classList.contains('wb-sec') ? 'wb-seen' : 'wb-on'); io.unobserve(e.target); }
+          // 12% visible — or, for something taller than the screen (a long live menu on a phone), 80px of it
+          if (e.isIntersecting && (e.intersectionRatio >= 0.12 || e.intersectionRect.height >= 80)) { e.target.classList.add(e.target.classList.contains('wb-sec') ? 'wb-seen' : 'wb-on'); io.unobserve(e.target); }
         });
-      }, { root: opts.scroller || null, threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      }, { root: opts.scroller || null, threshold: [0, 0.005, 0.01, 0.02, 0.04, 0.08, 0.12], rootMargin: '0px 0px -6% 0px' });
       targets.forEach((n) => io.observe(n));
       offs.push(() => io.disconnect());
     } else targets.forEach((n) => n.classList.add(n.classList.contains('wb-sec') ? 'wb-seen' : 'wb-on'));
