@@ -647,6 +647,17 @@ h1 em,h2 em{background:var(--grad);-webkit-background-clip:text;background-clip:
 .sbx-hero{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px;padding:6px 14px 6px 6px;border-radius:999px;background:#17131f;color:#fff;font:600 13px Manrope,sans-serif;text-decoration:none;box-shadow:0 10px 24px -12px rgba(23,19,31,.7)}
 .sbx-hero b{background:var(--grad);border-radius:999px;padding:3px 9px;font-size:10.5px;letter-spacing:.1em}
 .sbx-hero:hover{transform:translateY(-1px)}
+.sbx-play{position:relative}.sbx-cover{position:absolute;inset:0;border:0;padding:0;cursor:pointer;background:#000 center/cover no-repeat;display:grid;place-items:center}
+.sbx-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,8,25,.55),transparent 55%)}
+.sbx-big{position:relative;z-index:1;width:84px;height:84px;border-radius:50%;background:linear-gradient(120deg,#8b5cf6,#3b82f6 55%,#22d3ee);box-shadow:0 18px 50px rgba(60,40,160,.65);transition:transform .3s}
+.sbx-big:after{content:"";position:absolute;left:34px;top:26px;border-left:22px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent}
+.sbx-cover:hover .sbx-big{transform:scale(1.08)}
+.sbx-len{position:absolute;z-index:1;left:18px;bottom:18px;display:flex;align-items:center;gap:10px;font:700 15px Manrope,sans-serif;color:#fff;background:rgba(14,13,26,.82);padding:8px 16px 8px 8px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.4);transition:transform .25s}.sbx-len:before{content:"";width:34px;height:34px;border-radius:50%;background:linear-gradient(120deg,#8b5cf6,#3b82f6 55%,#22d3ee) }.sbx-len:after{content:"";position:absolute;left:22px;top:50%;margin-top:-7px;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent}.sbx-cover:hover .sbx-len{transform:scale(1.05)}
+.sbx-why{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:56px}
+.sbx-w1{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:20px}
+.sbx-w1 i{font-style:normal;font-size:22px}.sbx-w1 b{display:block;margin:8px 0 4px;font:700 16px Manrope,sans-serif;color:#fff}.sbx-w1 span{display:block;font-size:14px;line-height:1.45;color:#bdb8da}
+@media(max-width:980px){.sbx-why{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.sbx-why{grid-template-columns:1fr}.sbx-len{font-size:13px;left:10px;bottom:10px;padding:5px 12px 5px 5px}.sbx-len:before{width:26px;height:26px}.sbx-len:after{left:16px;margin-top:-6px;border-left-width:9px;border-top-width:6px;border-bottom-width:6px}}
 @media(max-width:980px){.sbx-grid{grid-template-columns:1fr}.sbx-frame{transform:none}.sbx-chip.c1{left:-6px}.sbx-chip.c2{right:-6px}}
 @media(max-width:560px){.sbx{padding:80px 0 90px}.sbx-tiles{grid-template-columns:1fr}.sbx-chip{display:none}}
 @media(prefers-reduced-motion:reduce){.sbx-aur i,.sbx-chip,.sbx-n i{animation:none}.sbx-chip{opacity:1}}
@@ -683,7 +694,7 @@ body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cu
 <div class="hfade" style="background:none"></div><div class="hglow g1" data-par="-0.18"></div><div class="hglow g2" data-par="0.22"></div>
 <div class="w">
 <div class="rv">
-<a class="sbx-hero" href="#sitebuilder"><b>NEW</b><span data-edit="sb0">The Site Builder is here — see what it can do</span> <span>→</span></a><br><div class="pill"><i>✦</i><span data-edit="e83" style="">Websites · bookings · AI assistants · for small and medium businesses</span></div>
+<a class="sbx-hero" href="#sitebuilder"><b>NEW</b><span data-edit="sb0">New: build your website with AI — see what it can do</span> <span>→</span></a><br><div class="pill"><i>✦</i><span data-edit="e83" style="">Websites · bookings · AI assistants · for small and medium businesses</span></div>
 <h1 data-edit="e1">Sydney web design,<br><em>with online bookings built in.</em></h1>
 <p class="lead" data-edit="e41" style="">Webescapade is a Sydney web design studio. We build websites that do real work: you edit them yourself, customers book or order straight from them, an AI assistant answers questions day and night — and Email Studio brings people back. One flat monthly price. No commission, ever.</p>
 <div class="ctas">
@@ -713,25 +724,30 @@ body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cu
 <div class="sbx-aur"><i></i><i></i><i></i></div>
 <div class="w sbx-w">
   <div class="sbx-top rv">
-    <a class="sbx-pill" href="/site-builder/"><b data-edit="sb1">NEW</b><span data-edit="sb2">You asked. We listened. Now it’s here.</span></a>
-    <h2 class="sbx-h" data-edit="sb3">Introducing the Site Builder. <em>Everything we make, in one place.</em></h2>
-    <p class="sbx-lead" data-edit="sb4">Build your own website by dragging things exactly where you want them — then switch on online bookings, an AI assistant that answers your customers day and night, and an online shop paid straight to your Stripe.</p>
+    <a class="sbx-pill" href="/site-builder/"><b data-edit="sb1">NEW</b><span data-edit="sb2">Now with AI — your website in minutes</span></a>
+    <h2 class="sbx-h" data-edit="sb3">The Site Builder. <em>Built by AI. Changed by you, any time.</em></h2>
+    <p class="sbx-lead" data-edit="sb4">Answer a few questions and AI writes your whole website. Import your menu or price list, drag anything anywhere, and publish changes yourself in seconds — then add online bookings, an AI assistant that answers customers 24/7, and an online shop.</p>
   </div>
   <div class="sbx-grid">
     <div class="sbx-show rv">
       <div class="sbx-chip c1"><span>✅</span><span><b data-edit="sb5">Booking confirmed</b><small data-edit="sb6">Sat 7:30 pm · 4 guests</small></span></div>
-      <div class="sbx-chip c2"><span>✨</span><span><b data-edit="sb7">AI assistant</b><small data-edit="sb8">“Yes — our pasta can be gluten-free.”</small></span></div>
-      <div class="sbx-chip c3"><span>🛍️</span><span><b data-edit="sb9">New order · $134.50</b><small data-edit="sb10">Gift voucher + pasta sauce</small></span></div>
+      <div class="sbx-chip c2"><span>✨</span><span><b data-edit="sb7">Website ready</b><small data-edit="sb8">Written by AI in under a minute</small></span></div>
+      <div class="sbx-chip c3"><span>🍽️</span><span><b data-edit="sb9">Table 12 · order sent</b><small data-edit="sb10">Pay at the table or the counter</small></span></div>
       <div class="sbx-frame">
         <div class="sbx-bar"><i></i><i></i><i></i><span>webescapade.com/sites/your-business</span></div>
-        <video class="sbx-vid" src="/site-builder/video/teaser.mp4" poster="/site-builder/img/teaser.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Short silent preview of the Site Builder: editing, bookings, AI assistant and online shop"></video>
+        <div class="sbx-play" id="sbxPlay">
+          <video class="sbx-vid" id="sbxVid" playsinline controls preload="none" poster="/site-builder/img/poster-promo.jpg" data-src="/site-builder/video/promo.mp4" aria-label="Three-minute film: the Webescapade Site Builder, live menu, table ordering, bookings, AI assistant and shop"></video>
+          <button class="sbx-cover" type="button" aria-label="Play the 3-minute film" style="background-image:url(/site-builder/img/poster-promo.jpg)"><span class="sbx-len" data-edit="sb30">Watch the film · 3 min</span></button>
+        </div>
       </div>
     </div>
     <div class="sbx-side">
       <div class="sbx-tiles">
-        <a class="sbx-t rv" href="/site-builder/#features"><i>✏️</i><b data-edit="sb11">Your website</b><span data-edit="sb12">Drag &amp; drop anywhere, animated welcome screens, perfect on phones.</span></a>
-        <a class="sbx-t rv" href="/site-builder/#platinum"><i>📅</i><b data-edit="sb13">Bookings</b><span data-edit="sb14">Restaurant, Service or Trade Deluxe — right on your page.</span></a>
-        <a class="sbx-t rv" href="/site-builder/#platinum"><i>✨</i><b data-edit="sb15">AI assistant</b><span data-edit="sb16">Learns from your website. Answers customers 24/7.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#new"><i>✨</i><b data-edit="sb11">Built with AI</b><span data-edit="sb12">Answer a few questions — get a complete first draft in under a minute.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#new"><i>✏️</i><b data-edit="sb31">Change anything, any time</b><span data-edit="sb32">Edit from your phone and publish in seconds. No designer fees.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#new"><i>📄</i><b data-edit="sb33">Import your menu or resume</b><span data-edit="sb34">Drop in a PDF or Word file — it lands on your page.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#new"><i>🍽️</i><b data-edit="sb35">Live menu &amp; table ordering</b><span data-edit="sb36">With Restaurant Deluxe: sold out updates itself; guests scan, order and pay.</span></a>
+        <a class="sbx-t rv" href="/site-builder/#platinum"><i>📅</i><b data-edit="sb13">Bookings &amp; AI assistant</b><span data-edit="sb14">Book right on your page. Questions answered 24/7.</span></a>
         <a class="sbx-t rv" href="/site-builder/#shop"><i>🛍️</i><b data-edit="sb17">Online shop</b><span data-edit="sb18">Products, gift vouchers and downloads, paid to your Stripe.</span></a>
       </div>
       <div class="sbx-next rv"><span class="sbx-k" data-edit="sb19">Coming next</span><span class="sbx-n"><i></i><span data-edit="sb20">CRM</span></span><span class="sbx-n"><i></i><span data-edit="sb21">Email Studio</span></span></div>
@@ -739,13 +755,18 @@ body.editing img[data-img]{outline:3px dashed var(--clay);outline-offset:-3px;cu
       <div class="sbx-ctas rv">
         <a class="sbx-btn pri" href="/site-builder/"><span data-edit="sb23">Explore the Site Builder</span> <span class="ar">→</span></a>
         <a class="sbx-btn ghost" href="/builder/"><span data-edit="sb24">Start building free</span></a>
-        <a class="sbx-btn ghost" href="/site-builder/#tour"><span class="pl"></span><span data-edit="sb25">2-minute tour</span></a>
       </div>
     </div>
   </div>
+  <div class="sbx-why">
+    <div class="sbx-w1 rv"><i>⏱️</i><b data-edit="sb37">Online today</b><span data-edit="sb38">Not in weeks. AI writes the first draft for you.</span></div>
+    <div class="sbx-w1 rv"><i>💸</i><b data-edit="sb39">No fees for changes</b><span data-edit="sb40">New special, new price, new photo — you do it in a minute.</span></div>
+    <div class="sbx-w1 rv"><i>📈</i><b data-edit="sb41">Bookings &amp; sales 24/7</b><span data-edit="sb42">Your website works while you sleep.</span></div>
+    <div class="sbx-w1 rv"><i>🤝</i><b data-edit="sb43">A real person to help</b><span data-edit="sb44">Prefer we build it? We’ll set it all up for you.</span></div>
+  </div>
 </div>
 </section>
-<script>/*SITEBUILDER-ANNOUNCE-JS*/(function(){var v=document.querySelector('.sbx-vid');if(!v)return;if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause();return;}if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){});}else v.pause();});},{threshold:.2}).observe(v);}})();</script>
+<script>/*SITEBUILDER-ANNOUNCE-JS*/(function(){var v=document.getElementById('sbxVid'),c=document.querySelector('#sbxPlay .sbx-cover');if(!v||!c)return;c.addEventListener('click',function(){if(!v.getAttribute('src'))v.src=v.getAttribute('data-src');c.style.display='none';var p=v.play();if(p&&p.catch)p.catch(function(){});});})();</script>
 <section class="s" data-sec="paper" id="products" style="padding-top:90px"><div class="w">
 <div class="head rv"><div class="eyebrow" data-edit="e31" style="">Ready to go</div><h2 data-edit="e2" style="">Four systems, <em>ready to go.</em></h2>
 <p data-edit="e42" style="">Built with real businesses, used every day and improved from their feedback. Pick the one made for your kind of business — or ask us to build something around you.</p></div>
