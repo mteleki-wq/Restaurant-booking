@@ -299,6 +299,8 @@ a{color:var(--ui-a2)}
 /* touch screens (iPad): show controls that otherwise appear on hover, and give handles a finger-sized target */
 @media (hover:none),(pointer:coarse){.ed-stage .wb-sec.ed-on>.ed-addsec{opacity:1}.ed-h:after{content:"";position:absolute;inset:calc(-12px * var(--ik,1))}.ed-sech{height:18px;bottom:-9px;width:84px}.ed-stage .wb-el:hover{outline:none}}
 
+.bk-st{font-size:12.5px;line-height:1.5;color:var(--ui-m);margin:8px 0 2px}.bk-st.ok{color:var(--ui-ok)}.bk-st.bad{color:#fbbf24}.bk-st a{color:#a78bfa}
+
 </style>
 </head>
 <body>
@@ -949,9 +951,16 @@ a{color:var(--ui-a2)}
         c.style.cssText = '--lm-cols:' + cols + ';--lm-fg:' + color(s.color, 'var(--c-text)') + ';--lm-mut:' + color(s.muted, 'var(--c-muted)') + ';--lm-acc:' + color(s.accent, 'var(--c-accent)') + ';--lm-card:' + color(s.bg, 'var(--c-surface)');
         if (!slug) { c.innerHTML = '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'Live menu — type your Restaurant Deluxe venue code in the panel on the right' : '') + '</div>'; break; }
         c.innerHTML = '<div class="wb-lm-load">Loading the menu…</div>';
-        WB.liveMenu(slug).then((m) => { fillLiveMenu(c, m, cs, ctx); WB.growSection(w); if (ctx.editor) requestAnimationFrame(() => global.dispatchEvent(new CustomEvent('wb-lm-loaded', { detail: el.id }))); }).catch(() => {
-          c.innerHTML = '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'We couldn’t find a Restaurant Deluxe menu for “' + esc(slug) + '”. Check the venue code.' : 'The menu is not available right now.') + '</div>';
+        const lmLoad = (tries) => WB.liveMenu(slug).then((m) => { fillLiveMenu(c, m, cs, ctx); WB.growSection(w); if (ctx.editor) requestAnimationFrame(() => global.dispatchEvent(new CustomEvent('wb-lm-loaded', { detail: el.id }))); }).catch((e) => {
+          const unknown = e && e.kind === 'unknown';
+          if (!unknown && !ctx.editor && tries < 2) { setTimeout(() => lmLoad(tries + 1), 4000 * (tries + 1)); return; } // brief connection blips: try again by itself
+          c.innerHTML = '<div class="wb-ph wb-lm-empty">' + (unknown
+            ? (ctx.editor ? 'We couldn’t find a Restaurant Deluxe menu for “' + esc(slug) + '”. Check the venue code — it’s the one in your Menu Manager link.' : 'The menu is not available right now.')
+            : (ctx.editor ? 'We couldn’t reach Restaurant Deluxe just now. Your setting is saved — press Refresh menu to try again.' : 'We couldn’t load the menu just now. <button type="button" class="wb-lm-retry">Try again</button>')) + '</div>';
+          const rb = c.querySelector('.wb-lm-retry'); if (rb) rb.onclick = () => { c.innerHTML = '<div class="wb-lm-load">Loading the menu…</div>'; lmLoad(2); };
+          WB.growSection(w);
         });
+        lmLoad(0);
         break;
       }
       case 'cart': {
@@ -1256,14 +1265,33 @@ a{color:var(--ui-a2)}
 
   /* ---------- Platinum extras: booking popup + AI chat assistant ---------- */
   WB.RESTAURANT_BOOKING = 'https://webescapade.com/restaurant-booking-supabase-with-crm-final.html';
-  WB.BOOK_SYSTEMS = [['', 'Not connected'], ['restaurant', 'Restaurant Deluxe'], ['service', 'Service Deluxe'], ['trades', 'Trades (electricians, plumbers…)'], ['other', 'Another booking link']];
+  WB.BOOK_SYSTEMS = [['', 'Not connected'], ['restaurant', 'Restaurant Deluxe'], ['service', 'Service Deluxe'], ['trades', 'Trade Deluxe (electricians, plumbers…)'], ['other', 'Another booking link']];
+  WB.SERVICE_BOOKING = 'https://webescapade.com/service/service-booking.html';
+  WB.TRADES_BOOKING = 'https://webescapade.com/trades/app/';
+  const cleanCode = (c) => String(c || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+  // the business code for Restaurant / Service / Trade Deluxe: typed directly, or read from a pasted booking link
+  WB.codeFromLink = function (v) {
+    v = String(v || '').trim();
+    if (!/^https?:\/\//i.test(v)) return cleanCode(v);
+    try { const u = new URL(v); return cleanCode(u.searchParams.get('venue') || u.searchParams.get('b') || ''); } catch (e) { return ''; }
+  };
+  WB.bookingCode = function (bk) {
+    bk = bk || {};
+    if (!/^(restaurant|service|trades)$/.test(bk.system || '')) return '';
+    return cleanCode(bk.venue) || (bk.system !== 'restaurant' ? WB.codeFromLink(bk.url) : '');
+  };
   WB.bookingUrl = function (bk) {
     bk = bk || {};
-    if (bk.system === 'restaurant' && bk.venue) {
+    const code = WB.bookingCode(bk);
+    if (bk.system === 'restaurant' && code) {
       const base = (global.WB_CONFIG && global.WB_CONFIG.restaurantBooking) || WB.RESTAURANT_BOOKING;
-      return base + (base.indexOf('?') >= 0 ? '&' : '?') + 'venue=' + encodeURIComponent(String(bk.venue).toLowerCase().replace(/[^a-z0-9-]/g, ''));
+      return base + (base.indexOf('?') >= 0 ? '&' : '?') + 'venue=' + encodeURIComponent(code);
     }
-    if (bk.system && bk.url && /^https:\/\/[^\s"'<>]+$/i.test(String(bk.url).trim())) return String(bk.url).trim();
+    // older websites saved a pasted Service/Trade link: keep using it exactly as it was
+    if ((bk.system === 'service' || bk.system === 'trades') && !cleanCode(bk.venue) && bk.url && /^https:\/\/[^\s"'<>]+$/i.test(String(bk.url).trim())) return String(bk.url).trim();
+    if (bk.system === 'service' && code) return WB.SERVICE_BOOKING + '?venue=' + encodeURIComponent(code);
+    if (bk.system === 'trades' && code) return WB.TRADES_BOOKING + '?b=' + encodeURIComponent(code) + '#book';
+    if (bk.system === 'other' && bk.url && /^https:\/\/[^\s"'<>]+$/i.test(String(bk.url).trim())) return String(bk.url).trim();
     return '';
   };
   const BAG_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>';
@@ -1275,7 +1303,8 @@ a{color:var(--ui-a2)}
     const cfg = global.WB_CONFIG || {};
     const p = (cfg.supabaseUrl && cfg.supabaseKey)
       ? fetch(cfg.supabaseUrl.replace(/\/$/, '') + '/rest/v1/rpc/rd_menu', { method: 'POST', headers: { apikey: cfg.supabaseKey, Authorization: 'Bearer ' + cfg.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_venue_slug: slug }) })
-        .then((r) => r.json()).then((d) => { if (!d || d.ok === false) throw new Error((d && d.error) || 'menu'); return d; })
+        .then((r) => { if (!r.ok) { const e = new Error('offline'); e.kind = 'offline'; throw e; } return r.json(); }, () => { const e = new Error('offline'); e.kind = 'offline'; throw e; })
+        .then((d) => { if (!d || d.ok === false) { const e = new Error((d && d.error) || 'menu'); e.kind = d && d.error === 'unknown_venue' ? 'unknown' : 'offline'; throw e; } return d; })
       : Promise.resolve(WB.LM_DEMO);
     LM_CACHE[slug] = p; p.catch(() => { delete LM_CACHE[slug]; });
     return p;
@@ -1289,7 +1318,7 @@ a{color:var(--ui-a2)}
     const cats = (m.categories || []).filter((k) => (k.items || []).length);
     let h = '';
     if (cs.note !== false && cs.note !== 'off') h += '<div class="wb-lm-note"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 17h4v4"/></svg><span>' + esc(cs.noteText || 'Dining in? Scan the QR code on your table to order and pay from your phone.') + '</span></div>';
-    if (!cats.length) h += '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'This menu has no dishes yet — add them in the Restaurant Deluxe Menu Manager.' : '') + '</div>';
+    if (!cats.length) h += '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'This menu has no dishes showing yet — add dishes (or make them visible) in the Restaurant Deluxe Menu Manager.' : 'Our menu is being updated — please check back soon.') + '</div>';
     cats.forEach((k) => {
       h += '<section class="wb-lm-cat"><h3 class="wb-lm-ch">' + esc(k.name) + '</h3>' + (k.blurb ? '<p class="wb-lm-blurb">' + esc(k.blurb) + '</p>' : '') + '<div class="wb-lm-grid">';
       (k.items || []).forEach((i) => {
@@ -1332,7 +1361,10 @@ a{color:var(--ui-a2)}
     let panel = null;
     function openBooking() {
       if (!url) {
-        if (o.preview) note(plat ? 'Add your booking link in the Platinum tab to switch this on.' : 'Online booking is a Platinum feature.');
+        if (o.preview) { note(plat ? 'Connect your booking system in the Platinum tab to switch this on.' : 'Online booking is a Platinum feature.'); return; }
+        // live website without a booking connection: take visitors to the contact details rather than doing nothing
+        const t = root.querySelector('#contact') || (root.querySelector('.wb-t-form') || {}).parentNode || null;
+        if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       if (panel) { panel.classList.add('on'); return; }
@@ -1373,7 +1405,7 @@ a{color:var(--ui-a2)}
       btn.type = 'button'; btn.className = 'wb-x-chatbtn'; btn.setAttribute('aria-label', 'Chat with us'); btn.innerHTML = CHAT_ICON;
       const box = document.createElement('div');
       box.className = 'wb-x-chat';
-      box.innerHTML = '<div class="wb-x-ch"><i>' + esc(name.charAt(0).toUpperCase()) + '</i><div><b>' + esc(name) + '</b><span>AI assistant · replies instantly</span></div><button type="button" aria-label="Close">✕</button></div><div class="wb-x-msgs" role="log"></div><div class="wb-x-chips"></div><form class="wb-x-in"><input maxlength="800" placeholder="Type your question…" aria-label="Message"><button type="submit" aria-label="Send">➤</button></form>';
+      box.innerHTML = '<div class="wb-x-ch"><i>' + esc(name.charAt(0).toUpperCase()) + '</i><div><b>' + esc(name) + '</b><span>AI assistant · answers can be wrong</span></div><button type="button" aria-label="Close">✕</button></div><div class="wb-x-msgs" role="log"></div><div class="wb-x-chips"></div><form class="wb-x-in"><input maxlength="800" placeholder="Type your question…" aria-label="Message"><button type="submit" aria-label="Send">➤</button></form>';
       layer.appendChild(box); layer.appendChild(btn);
       const list = box.querySelector('.wb-x-msgs'), chips = box.querySelector('.wb-x-chips'), form = box.querySelector('form'), input = form.querySelector('input');
       const bubble = (role, text, book) => {
@@ -1722,7 +1754,7 @@ a{color:var(--ui-a2)}
 .wb-x-note{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:10px;font-size:13.5px;max-width:90%;text-align:center}
 
 /* shop */
-.wb-lm{display:block;color:var(--lm-fg)}.wb-lm-load{padding:30px;text-align:center;color:var(--lm-mut);font-size:15px}.wb-lm-empty{min-height:160px;padding:20px;text-align:center}
+.wb-lm{display:block;color:var(--lm-fg)}.wb-lm-load{padding:30px;text-align:center;color:var(--lm-mut);font-size:15px}.wb-lm-retry{margin-left:6px;font:inherit;font-weight:600;color:var(--lm-acc);background:none;border:1px solid currentColor;border-radius:999px;padding:3px 12px;cursor:pointer}.wb-lm-empty{min-height:160px;padding:20px;text-align:center}
 .wb-lm-note{display:flex;align-items:center;gap:12px;justify-content:center;margin:0 auto 34px;max-width:640px;padding:12px 18px;border-radius:999px;background:var(--lm-card);color:var(--lm-fg);font-size:15px;font-weight:600}.wb-lm-note svg{color:var(--lm-acc);flex:none}
 .wb-lm-cat{margin:0 0 40px}.wb-lm-ch{margin:0 0 6px;text-align:center;font-family:var(--f-head);font-size:30px;font-weight:600;color:var(--lm-acc)}.wb-lm-ch:after{content:"";display:block;width:70px;height:2px;margin:12px auto 0;background:var(--lm-acc);opacity:.6}
 .wb-lm-blurb{margin:10px auto 0;max-width:640px;text-align:center;color:var(--lm-mut);font-size:15px}
@@ -2796,7 +2828,9 @@ a{color:var(--ui-a2)}
       async removeMedia() {},
       async messages(row) { try { return JSON.parse(localStorage.getItem('wb.msg.' + row.slug)) || []; } catch (e) { return []; } },
       async deleteMessage(row, m) { const a = (await this.messages(row)).filter((x) => x.id !== m.id); localStorage.setItem('wb.msg.' + row.slug, JSON.stringify(a)); },
-      viewUrl(row) { return CFG.viewerUrl + '?local=' + encodeURIComponent(row.id); }
+      viewUrl(row) { return CFG.viewerUrl + '?local=' + encodeURIComponent(row.id); },
+      // demo mode: only the sample businesses exist
+      async checkBooking(system, code) { const demo = { restaurant: { 'cafe-bojo': 'Cafe Bojo', 'sunset-grill': 'Sunset grill' }, service: { 'serenity-spa': 'Serenity Day Spa' }, trades: { 'zz-trd-test': 'ZZ Trade Test' } }; const n = (demo[system] || {})[code]; if (n) return { ok: true, name: n, code }; for (const k in demo) if (demo[k][code]) return { ok: false, error: 'wrong_system', actual: k, name: demo[k][code] }; return { ok: false, error: code ? 'unknown' : 'missing' }; }
     };
   })() : {
     mode: 'supabase',
@@ -2848,7 +2882,8 @@ a{color:var(--ui-a2)}
     async removeMedia(name) { const { error } = await sb.storage.from('builder-media').remove([name]); if (error) throw friendly(error); },
     async messages(row) { const { data, error } = await sb.from('builder_messages').select('*').eq('site_id', row.id).order('created_at', { ascending: false }).limit(300); if (error) throw friendly(error); return data || []; },
     async deleteMessage(row, m) { const { error } = await sb.from('builder_messages').delete().eq('id', m.id); if (error) throw friendly(error); },
-    viewUrl(row) { return CFG.viewerUrl + '?s=' + encodeURIComponent(row.slug); }
+    viewUrl(row) { return CFG.viewerUrl + '?s=' + encodeURIComponent(row.slug); },
+    async checkBooking(system, code) { const { data, error } = await sb.rpc('builder_check_booking', { p_system: system, p_code: code }); if (error) throw friendly(error); return data || { ok: false, error: 'unknown' }; }
   };
 
   /* ---------------- image compression ---------------- */
@@ -4120,11 +4155,10 @@ a{color:var(--ui-a2)}
           : '<div class="plat-off">' + I('star') + '<div><b>Platinum features</b><span>Connect your Restaurant Deluxe, Service Deluxe or Trades bookings and add an AI assistant that knows your whole website. You can set everything up now — it goes live when Platinum is switched on for your account.</span><a class="btn sm pri" href="mailto:marc@webescapade.com?subject=Platinum%20upgrade%20for%20' + encodeURIComponent(S.row.slug) + '">Ask about Platinum</a></div></div>') +
           '<h4>' + I('pages') + ' Online bookings</h4>' +
           '<label class="field"><span>Booking system</span><select class="inp" data-site="booking.system">' + sys + '</select></label>' +
-          (bk.system === 'restaurant' ? '<label class="field"><span>Restaurant Deluxe venue code</span><input class="inp" data-site="booking.venue" value="' + esc(bk.venue || '') + '" placeholder="e.g. cafe-bojo"></label><p class="i-note">The same venue code you use in Restaurant Deluxe — bookings go straight into your existing booking list and CRM.</p>' : '') +
-          (bk.system && bk.system !== 'restaurant' ? '<label class="field"><span>Your booking page link</span><input class="inp" data-site="booking.url" value="' + esc(bk.url || '') + '" placeholder="https://…"></label><p class="i-note">Paste the booking link from your ' + esc((WB.BOOK_SYSTEMS.find((o) => o[0] === bk.system) || [])[1] || '') + ' account. It must start with https://</p>' : '') +
+          bookingFields(bk) +
           (bk.system ? '<label class="field"><span>Button text</span><input class="inp" data-site="booking.label" value="' + esc(bk.label || 'Book now') + '"></label>' +
             '<label class="i-chk">Floating “Book now” button on every page<input type="checkbox" data-site="booking.floating"' + (bk.floating !== false ? ' checked' : '') + '></label>' +
-            '<p class="i-note" style="margin-top:10px">' + (bUrl ? '✓ Connected. Any button can also open it: choose <b>Open the booking panel</b> as its link.' : '⚠ Not connected yet — add your ' + (bk.system === 'restaurant' ? 'venue code' : 'booking link') + '.') + '</p>' : '') +
+            (bUrl ? '<p class="i-note" style="margin-top:10px">Any button can also open bookings: choose <b>Open the booking panel</b> as its link.</p>' : '') : '') +
           '<h4>' + I('bot') + ' AI assistant (chatbot)</h4>' +
           '<label class="i-chk">Show the AI assistant on my website<input type="checkbox" data-site="chat.on"' + (ch.on ? ' checked' : '') + '></label>' +
           (ch.on ? '<label class="field" style="margin-top:12px"><span>Assistant name</span><input class="inp" data-site="chat.name" value="' + esc(ch.name || 'Assistant') + '"></label>' +
@@ -4132,7 +4166,7 @@ a{color:var(--ui-a2)}
             '<label class="field"><span>Extra things it should know</span><textarea class="inp" rows="6" data-site="chat.notes" placeholder="Opening hours, parking, dietary options, cancellation policy, areas you service, prices not on the site…">' + esc(ch.notes || '') + '</textarea></label>' +
             '<label class="field"><span>Suggested questions (one per line)</span><textarea class="inp" rows="3" data-site="chat.chipsText" placeholder="What are your opening hours?\nDo you have parking?">' + esc(ch.chipsText || '') + '</textarea></label>' +
             '<label class="i-chk">Take messages (name, email or phone)<input type="checkbox" data-site="chat.leads"' + (ch.leads !== false ? ' checked' : '') + '></label>' +
-            '<p class="i-note" style="margin-top:10px">The assistant reads <b>everything on your website</b> — every page, menu, price and contact detail — plus the notes above. It never makes up prices or times. Messages it takes appear in <b>My websites → Messages</b>. Press <b>Preview</b> to try it (your latest changes are used).</p>' : '');
+            '<p class="i-note" style="margin-top:10px">The assistant reads <b>everything on your website</b> — every page, menu, price and contact detail — plus the notes above. It’s instructed to answer only from your website and notes and to say when it doesn’t know, but like any AI it can occasionally get something wrong — so keep prices and opening hours up to date on your site. It can point visitors to your booking button, but it can’t check availability or make a booking itself. Messages it takes appear in <b>My websites → Messages</b>. Press <b>Preview</b> to try it (your latest changes are used).</p>' : '');
       }
       if (S.tab === 'shop') {
         const sh = S.site.shop || {}, st = S.shopStatus;
@@ -4141,9 +4175,11 @@ a{color:var(--ui-a2)}
         h = (S.shopOn ? '' : '<div class="plat-off">' + I('bag') + '<div><b>Online shop add-on</b><span>Sell products, gift vouchers and downloads, paid straight into your own Stripe account. You can set everything up now — it opens for customers once the Shop add-on is switched on.</span><a class="btn sm pri" href="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20' + encodeURIComponent(S.row.slug) + '">Ask about the Shop add-on</a></div></div>') +
           '<h4>' + I('star') + ' Payments (Stripe)</h4>' +
           (st == null ? '<p class="i-note">Checking your Stripe connection…</p>'
-            : st.error ? '<p class="i-note">' + esc(st.error) + '</p>'
+            : st.error ? '<p class="bk-st bad">' + esc(st.error) + '</p><div class="i-acts"><button class="btn sm" data-shop="recheck">Check again</button></div>'
             : st.charges_enabled ? '<div class="plat-on">' + I('check') + '<div><b>Stripe connected' + (st.demo ? ' (demo)' : '') + '</b><span>Payments go straight to your Stripe account and then your bank. Refunds and payouts are managed in Stripe.</span>' + (st.demo ? '' : '<a class="btn sm" target="_blank" rel="noopener" href="https://dashboard.stripe.com">' + I('ext') + 'Open my Stripe dashboard</a>') + '</div></div>'
             : '<div class="plat-off">' + I('bag') + '<div><b>' + (st.connected ? 'Finish your Stripe setup' : 'Connect Stripe to take payments') + '</b><span>' + (st.connected ? 'Stripe still needs a few details (like your bank account) before you can take payments.' : 'Sign in to Stripe or create a free account. Customers’ payments go straight to you.') + '</span><button class="btn sm pri" data-shop="connect">' + (st.connected ? 'Continue Stripe setup' : 'Connect Stripe') + '</button></div></div>') +
+          (st && !st.error && !st.charges_enabled && S.shopOn ? '<p class="bk-st">Until Stripe setup is finished, your shop shows on your website but customers can’t pay yet.</p>' : '') +
+          (prods.some((p) => p.kind === 'physical' && p.active !== false) && !((sh.post && sh.post.on) || (sh.local && sh.local.on) || (sh.pickup && sh.pickup.on)) ? '<p class="bk-st bad">⚠ Turn on at least one delivery option below — without one, customers can’t check out physical products.</p>' : '') +
           '<h4>' + I('tag') + ' Products</h4>' +
           (prods.length ? '<div class="slist">' + prods.map((p, i) => '<div class="sitem prod" data-prod="' + esc(p.id) + '">' + (p.image ? '<i style="background-image:url(&quot;' + esc(p.image) + '&quot;)"></i>' : '<i></i>') + '<span>' + esc(p.name) + '<small>' + WB.money(p.price_cents) + ' · ' + kindName[p.kind] + (p.stock != null ? ' · ' + p.stock + ' left' : '') + (p.active === false ? ' · hidden' : '') + '</small></span><button class="ic" data-pm="up" title="Move up">' + I('up') + '</button><button class="ic" data-pm="del" title="Delete">' + I('trash') + '</button></div>').join('') + '</div>' : '<p class="i-note">No products yet.</p>') +
           '<div class="i-acts" style="margin-top:10px"><button class="btn sm pri" data-shop="add">' + I('plus') + 'Add product</button><button class="btn sm" data-add="shopgrid">' + I('grid') + 'Put a product grid on the page</button><button class="btn sm" data-import="shop">' + I('pages') + 'Import from a price list</button></div>' +
@@ -4179,6 +4215,7 @@ a{color:var(--ui-a2)}
       const sa = t.closest('[data-shop]');
       if (sa) {
         if (sa.dataset.shop === 'add') return productModal(null);
+        if (sa.dataset.shop === 'recheck') { S.shopStatus = null; renderLeft(); return loadShopStatus(); }
         if (sa.dataset.shop === 'orders') return ordersModal();
         if (sa.dataset.shop === 'connect') {
           sa.disabled = true;
@@ -4248,6 +4285,7 @@ a{color:var(--ui-a2)}
         if (!(await confirmBox('Unpublish this website?', 'Visitors will no longer be able to see it. Your draft is kept.', 'Unpublish', true))) return;
         try { const r = await Store.unpublish(S.row.id); S.row = Object.assign(S.row, r); toast('Website unpublished'); renderLeft(); } catch (er) { toast(er.message, 'bad', 5000); }
       }
+      if (t.id === 'bk-test') { testBooking(false); return; }
       if (t.id === 'st-dl') {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([JSON.stringify({ format: 'webescapade-site', version: 1, slug: S.row.slug, site: S.site })], { type: 'application/json' }));
@@ -4276,18 +4314,82 @@ a{color:var(--ui-a2)}
       if (t.dataset.site) {
         const path = t.dataset.site; const v = t.type === 'checkbox' ? t.checked : t.value;
         const relist = /^(booking\.system|booking\.venue|booking\.url|chat\.on|shop\.(post|local|pickup)\.on)$/.test(path);
-        return change(() => {
+        change(() => {
           setPath(S.site, path, v === false ? false : v);
           if (path === 'name') { S.site.name = v || 'My website'; }
           if (path === 'chat.chipsText') S.site.chat.chips = String(v || '').split('\n').map((x) => x.trim()).filter(Boolean).slice(0, 3);
-          if (path === 'booking.system' && v === 'restaurant' && !S.site.booking.venue) S.site.booking.venue = S.row.slug;
+          if (path === 'booking.venue') S.site.booking.venue = WB.codeFromLink(v);
+          if (path === 'booking.system' || path === 'booking.venue' || path === 'booking.url') {
+            const b = S.site.booking, vf = b.verified;
+            if (vf && (vf.system !== b.system || vf.code !== WB.bookingCode(b))) delete b.verified;
+          }
         }, { left: relist });
+        if (/^booking\.(system|venue)$/.test(path) && WB.bookingCode(S.site.booking)) setTimeout(() => testBooking(true), 50);
+        return;
       }
       if (t.dataset.tcol) return change(() => { S.site.theme.colors[t.dataset.tcol] = t.value; }, { left: true });
     });
     lpane.addEventListener('input', (e) => { if (e.target.dataset.tcol || e.target.dataset.k) liveInput(e); });
     lpane.addEventListener('change', (e) => { if (e.target.dataset.k) controlChange(e); });
 
+
+    /* ---------- booking connection: settings vs. a tested connection ---------- */
+    const SYS_NAME = { restaurant: 'Restaurant Deluxe', service: 'Service Deluxe', trades: 'Trade Deluxe', other: 'your booking system' };
+    function bookingFields(bk) {
+      if (!bk.system) return '';
+      if (bk.system === 'other') {
+        const u = WB.bookingUrl(bk);
+        return '<label class="field"><span>Your booking page link</span><input class="inp" data-site="booking.url" value="' + esc(bk.url || '') + '" placeholder="https://…"></label>' +
+          (bk.url && !u ? '<p class="bk-st bad">⚠ That link doesn’t look right — it must start with https://</p>'
+            : u ? '<p class="bk-st">Link saved. We can’t test other booking systems automatically — <a href="' + esc(u) + '" target="_blank" rel="noopener">open the link</a> to check it shows your booking page.</p>'
+            : '<p class="bk-st">⚠ Not connected yet — paste the booking link from your booking system.</p>');
+      }
+      const label = { restaurant: 'Restaurant Deluxe venue code', service: 'Service Deluxe business code', trades: 'Trade Deluxe business code' }[bk.system];
+      const ph = { restaurant: 'e.g. cafe-bojo', service: 'e.g. serenity-spa', trades: 'e.g. smith-electrical' }[bk.system];
+      const code = WB.bookingCode(bk), v = bk.verified || {};
+      const ok = code && v.system === bk.system && v.code === code;
+      let st;
+      if (!code) st = '<p class="bk-st">⚠ Not connected yet — type your ' + (bk.system === 'restaurant' ? 'venue' : 'business') + ' code (or paste your ' + SYS_NAME[bk.system] + ' booking link).</p>';
+      else if (ok) st = '<p class="bk-st ok">✓ Connection verified — bookings go to <b>' + esc(v.name || code) + '</b>.</p>';
+      else if (S.bkCheck && S.bkCheck.key === bk.system + '|' + code) st = S.bkCheck.busy ? '<p class="bk-st">Checking…</p>' : '<p class="bk-st bad">' + S.bkCheck.msg + '</p>';
+      else st = '<p class="bk-st">Not tested yet — press <b>Test connection</b>.</p>';
+      return '<label class="field"><span>' + label + '</span><input class="inp" data-site="booking.venue" value="' + esc(code) + '" placeholder="' + ph + '" autocapitalize="off" autocorrect="off" spellcheck="false"></label>' +
+        '<div class="i-acts"><button class="btn sm" id="bk-test">Test connection</button>' + (WB.bookingUrl(bk) ? '<a class="btn sm ghost" target="_blank" rel="noopener" href="' + esc(WB.bookingUrl(bk)) + '">Open booking page ↗</a>' : '') + '</div>' + st;
+    }
+    function bookingMsg(r, code, sys) {
+      const nm = r && r.name ? '“' + esc(r.name) + '”' : '“' + esc(code) + '”';
+      switch (r && r.error) {
+        case 'missing': return 'Type your code first.';
+        case 'invalid': return 'Codes use only lowercase letters, numbers and dashes — like cafe-bojo.';
+        case 'unknown': return 'We couldn’t find a ' + SYS_NAME[sys] + ' business with the code “' + esc(code) + '”. Check the code in your ' + SYS_NAME[sys] + ' settings — it’s the part after <b>?venue=</b> in your booking link.';
+        case 'inactive': return nm + ' is switched off in ' + SYS_NAME[sys] + ', so it can’t take bookings right now.';
+        case 'wrong_system': return nm + ' is a ' + SYS_NAME[r.actual] + ' business. Choose <b>' + SYS_NAME[r.actual] + '</b> as the booking system above.';
+        case 'incomplete': return nm + ' has no services set up yet, so customers can’t book. Add your services in Service Deluxe, then test again.';
+        case 'network': return 'We couldn’t reach the booking service just now. Your settings are saved — try again in a minute.';
+        default: return 'That connection didn’t work. Check the code and try again.';
+      }
+    }
+    async function testBooking(quiet) {
+      const bk = S.site.booking || {}; const code = WB.bookingCode(bk);
+      if (!/^(restaurant|service|trades)$/.test(bk.system || '')) return;
+      const key = bk.system + '|' + code;
+      if (!code) { S.bkCheck = { key, msg: bookingMsg({ error: 'missing' }, code, bk.system) }; renderLeft(); return; }
+      S.bkCheck = { key, busy: true }; if (S.tab === 'extras') renderLeft();
+      let r;
+      try { r = await Store.checkBooking(bk.system, code); } catch (e) { r = { ok: false, error: 'network' }; }
+      const now = S.site.booking || {};
+      if (now.system + '|' + WB.bookingCode(now) !== key) return; // settings changed while checking
+      if (r && r.ok) {
+        S.bkCheck = null;
+        change(() => { S.site.booking.verified = { system: bk.system, code, name: r.name || code, at: new Date().toISOString() }; }, { left: true, render: false });
+        renderLeft();
+        if (!quiet) toast('Connection verified — bookings go to ' + (r.name || code), 'ok');
+      } else {
+        S.bkCheck = { key, msg: bookingMsg(r, code, bk.system) };
+        if ((now.verified || {}).code) change(() => { delete S.site.booking.verified; }, { render: false });
+        if (S.tab === 'extras') renderLeft();
+      }
+    }
 
     /* ---------- shop: products, Stripe status, orders ---------- */
     async function loadProducts() {
@@ -4299,7 +4401,7 @@ a{color:var(--ui-a2)}
     }
     async function loadShopStatus() {
       try { S.shopStatus = await Store.shopApi('status', { site_id: S.row.id }); }
-      catch (e) { S.shopStatus = { error: /add-on/i.test(e.message) ? 'Stripe can be connected once the Shop add-on is active.' : e.message }; }
+      catch (e) { const m = (e && e.message) || ''; S.shopStatus = { error: /add-on/i.test(m) ? 'Stripe can be connected once the Shop add-on is active.' : /fetch|network|connection/i.test(m) ? 'We couldn’t check your Stripe connection just now — please try again in a minute.' : m || 'We couldn’t check your Stripe connection.' }; }
       if (S.tab === 'shop') renderLeft();
     }
     function productModal(p) {
@@ -4497,7 +4599,7 @@ a{color:var(--ui-a2)}
       const a = b.dataset.ia; if (!a) return;
       const f = S.sel && S.sel.el ? findEl(S.sel.el) : null;
       const sec = curSec();
-      if (a === 'lmrefresh' && f) { const v = String((f.el.c || {}).venue || '').toLowerCase().replace(/[^a-z0-9-]/g, ''); if (!v) return toast('Type your venue code first.', 'bad'); WB.liveMenu(v, true).then(() => { renderCanvas(); toast('Menu refreshed', 'ok'); }).catch(() => toast('We couldn’t find a menu for “' + v + '”. Check the venue code.', 'bad', 6000)); return; }
+      if (a === 'lmrefresh' && f) { const v = String((f.el.c || {}).venue || '').toLowerCase().replace(/[^a-z0-9-]/g, ''); if (!v) return toast('Type your venue code first.', 'bad'); WB.liveMenu(v, true).then(() => { renderCanvas(); toast('Menu refreshed', 'ok'); }).catch((er) => { renderCanvas(); toast(er && er.kind === 'unknown' ? 'We couldn’t find a menu for “' + v + '”. Check the venue code.' : 'We couldn’t reach Restaurant Deluxe just now — try again in a minute.', 'bad', 6000); }); return; }
       if (a === 'img' && f) return replaceImage(f.el.id);
       if (a === 'imgclear' && f) return change(() => { f.el.c = Object.assign({}, f.el.c, { src: '' }); });
       if (a === 'navlogo' && f) { const u = await chooseImages(false, 700); if (u[0]) change(() => { f.el.c.logoImg = u[0]; }); return; }
@@ -4776,7 +4878,19 @@ a{color:var(--ui-a2)}
         const r = await Store.publish(S.row.id, S.site);
         S.row = Object.assign(S.row, r);
         const url = Store.viewUrl(S.row);
-        const m = modal('<h2>🎉 Your website is live</h2><p class="muted">Every time you make changes, press Publish again to update the live site.</p><label class="field"><span>Your link</span><input class="inp" readonly value="' + esc(LOCAL ? '(demo mode — opens in this browser only)' : url) + '"></label><div class="acts"><button class="btn ghost" data-x>Close</button>' + (LOCAL ? '' : '<button class="btn" data-copy>Copy link</button>') + '<a class="btn pri" target="_blank" href="' + esc(url) + '">' + I('ext') + 'Open site</a></div>');
+        // booking connection that was never tested (or no longer matches): say so in plain words
+        let warn = '';
+        const bk = S.site.booking || {}, code = WB.bookingCode(bk);
+        if (S.plan === 'platinum' && /^(restaurant|service|trades)$/.test(bk.system || '')) {
+          const vf = bk.verified || {};
+          if (!code) warn = 'Online bookings aren’t connected yet — add your ' + SYS_NAME[bk.system] + ' code in the Platinum tab.';
+          else if (!(vf.system === bk.system && vf.code === code)) {
+            let r; try { r = await Store.checkBooking(bk.system, code); } catch (e) { r = null; }
+            if (r && r.ok) { S.site.booking.verified = { system: bk.system, code, name: r.name || code, at: new Date().toISOString() }; markDirty(); }
+            else warn = r ? bookingMsg(r, code, bk.system) : 'We couldn’t check your booking connection just now.';
+          }
+        }
+        const m = modal('<h2>🎉 Your website is live</h2><p class="muted">Every time you make changes, press Publish again to update the live site.</p>' + (warn ? '<p class="bk-st bad" style="margin:0 0 14px">⚠ Bookings: ' + warn + '</p>' : '') + '<label class="field"><span>Your link</span><input class="inp" readonly value="' + esc(LOCAL ? '(demo mode — opens in this browser only)' : url) + '"></label><div class="acts"><button class="btn ghost" data-x>Close</button>' + (LOCAL ? '' : '<button class="btn" data-copy>Copy link</button>') + '<a class="btn pri" target="_blank" href="' + esc(url) + '">' + I('ext') + 'Open site</a></div>');
         $('[data-x]', m).onclick = () => m.close();
         const cp = $('[data-copy]', m); if (cp) cp.onclick = () => { navigator.clipboard.writeText(url).then(() => toast('Link copied', 'ok')); };
         if (S.tab === 'settings') renderLeft();

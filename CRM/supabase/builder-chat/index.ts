@@ -166,7 +166,7 @@ Deno.serve(async (req) => {
     await db("builder_chat_log", { method: "POST", body: JSON.stringify({ site_id: row.id, ip_hash: ipHash }), headers: { Prefer: "return=minimal" } });
 
     const name = String(chat.name || "Assistant").slice(0, 40);
-    const booking = site.booking && site.booking.system ? true : false;
+    const booking = !!(site.booking && site.booking.system && ((site.booking.system === "other" && /^https:\/\//.test(String(site.booking.url || ""))) || site.booking.venue || site.booking.url));
     const leads = chat.leads !== false;
     const today = new Date().toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Australia/Sydney" });
     const system = [
@@ -174,8 +174,8 @@ Deno.serve(async (req) => {
       `Answer visitors' questions using ONLY the website content and the owner's notes below. Use Australian English, be warm and brief (1–4 short sentences), and never use markdown headings or tables.`,
       `Never invent prices, opening hours, availability, menu items, services or policies. If the answer is not in the information, say you're not sure and suggest ${leads ? "leaving their details so the team can get back to them" : "contacting the business directly"}.`,
       booking
-        ? `Online booking is available. When someone wants to book, check availability or make an appointment, tell them to use the "${site.booking.label || "Book now"}" button, and add the token [[BOOK]] at the very end of your reply. You cannot see live availability yourself.`
-        : `There is no online booking. For bookings, point people to the contact details on the website.`,
+        ? `Online booking is available through the website's booking system. You can't see availability and you can't make, change or cancel bookings. When someone wants to book or asks whether a time is free, say they can check live availability and book with the "${site.booking.label || "Book now"}" button, and add the token [[BOOK]] at the very end of your reply. Never say a time is available or that a booking has been made.`
+        : `There is no online booking on this website. You can't check availability or make bookings. For bookings, point people to the phone, email or contact form on the website, or offer to take a message.`,
       leads
         ? `If a visitor wants a call back, a quote or to leave a message: ask for their name and an email or phone number, plus their message. Once you have a name AND (email or phone), confirm warmly and append exactly one line at the end: <lead>{"name":"...","email":"...","phone":"...","message":"..."}</lead>`
         : `Do not collect personal details.`,

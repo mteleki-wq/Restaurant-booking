@@ -681,9 +681,16 @@ body{min-height:100vh}
         c.style.cssText = '--lm-cols:' + cols + ';--lm-fg:' + color(s.color, 'var(--c-text)') + ';--lm-mut:' + color(s.muted, 'var(--c-muted)') + ';--lm-acc:' + color(s.accent, 'var(--c-accent)') + ';--lm-card:' + color(s.bg, 'var(--c-surface)');
         if (!slug) { c.innerHTML = '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'Live menu — type your Restaurant Deluxe venue code in the panel on the right' : '') + '</div>'; break; }
         c.innerHTML = '<div class="wb-lm-load">Loading the menu…</div>';
-        WB.liveMenu(slug).then((m) => { fillLiveMenu(c, m, cs, ctx); WB.growSection(w); if (ctx.editor) requestAnimationFrame(() => global.dispatchEvent(new CustomEvent('wb-lm-loaded', { detail: el.id }))); }).catch(() => {
-          c.innerHTML = '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'We couldn’t find a Restaurant Deluxe menu for “' + esc(slug) + '”. Check the venue code.' : 'The menu is not available right now.') + '</div>';
+        const lmLoad = (tries) => WB.liveMenu(slug).then((m) => { fillLiveMenu(c, m, cs, ctx); WB.growSection(w); if (ctx.editor) requestAnimationFrame(() => global.dispatchEvent(new CustomEvent('wb-lm-loaded', { detail: el.id }))); }).catch((e) => {
+          const unknown = e && e.kind === 'unknown';
+          if (!unknown && !ctx.editor && tries < 2) { setTimeout(() => lmLoad(tries + 1), 4000 * (tries + 1)); return; } // brief connection blips: try again by itself
+          c.innerHTML = '<div class="wb-ph wb-lm-empty">' + (unknown
+            ? (ctx.editor ? 'We couldn’t find a Restaurant Deluxe menu for “' + esc(slug) + '”. Check the venue code — it’s the one in your Menu Manager link.' : 'The menu is not available right now.')
+            : (ctx.editor ? 'We couldn’t reach Restaurant Deluxe just now. Your setting is saved — press Refresh menu to try again.' : 'We couldn’t load the menu just now. <button type="button" class="wb-lm-retry">Try again</button>')) + '</div>';
+          const rb = c.querySelector('.wb-lm-retry'); if (rb) rb.onclick = () => { c.innerHTML = '<div class="wb-lm-load">Loading the menu…</div>'; lmLoad(2); };
+          WB.growSection(w);
         });
+        lmLoad(0);
         break;
       }
       case 'cart': {
@@ -988,14 +995,33 @@ body{min-height:100vh}
 
   /* ---------- Platinum extras: booking popup + AI chat assistant ---------- */
   WB.RESTAURANT_BOOKING = 'https://webescapade.com/restaurant-booking-supabase-with-crm-final.html';
-  WB.BOOK_SYSTEMS = [['', 'Not connected'], ['restaurant', 'Restaurant Deluxe'], ['service', 'Service Deluxe'], ['trades', 'Trades (electricians, plumbers…)'], ['other', 'Another booking link']];
+  WB.BOOK_SYSTEMS = [['', 'Not connected'], ['restaurant', 'Restaurant Deluxe'], ['service', 'Service Deluxe'], ['trades', 'Trade Deluxe (electricians, plumbers…)'], ['other', 'Another booking link']];
+  WB.SERVICE_BOOKING = 'https://webescapade.com/service/service-booking.html';
+  WB.TRADES_BOOKING = 'https://webescapade.com/trades/app/';
+  const cleanCode = (c) => String(c || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+  // the business code for Restaurant / Service / Trade Deluxe: typed directly, or read from a pasted booking link
+  WB.codeFromLink = function (v) {
+    v = String(v || '').trim();
+    if (!/^https?:\/\//i.test(v)) return cleanCode(v);
+    try { const u = new URL(v); return cleanCode(u.searchParams.get('venue') || u.searchParams.get('b') || ''); } catch (e) { return ''; }
+  };
+  WB.bookingCode = function (bk) {
+    bk = bk || {};
+    if (!/^(restaurant|service|trades)$/.test(bk.system || '')) return '';
+    return cleanCode(bk.venue) || (bk.system !== 'restaurant' ? WB.codeFromLink(bk.url) : '');
+  };
   WB.bookingUrl = function (bk) {
     bk = bk || {};
-    if (bk.system === 'restaurant' && bk.venue) {
+    const code = WB.bookingCode(bk);
+    if (bk.system === 'restaurant' && code) {
       const base = (global.WB_CONFIG && global.WB_CONFIG.restaurantBooking) || WB.RESTAURANT_BOOKING;
-      return base + (base.indexOf('?') >= 0 ? '&' : '?') + 'venue=' + encodeURIComponent(String(bk.venue).toLowerCase().replace(/[^a-z0-9-]/g, ''));
+      return base + (base.indexOf('?') >= 0 ? '&' : '?') + 'venue=' + encodeURIComponent(code);
     }
-    if (bk.system && bk.url && /^https:\/\/[^\s"'<>]+$/i.test(String(bk.url).trim())) return String(bk.url).trim();
+    // older websites saved a pasted Service/Trade link: keep using it exactly as it was
+    if ((bk.system === 'service' || bk.system === 'trades') && !cleanCode(bk.venue) && bk.url && /^https:\/\/[^\s"'<>]+$/i.test(String(bk.url).trim())) return String(bk.url).trim();
+    if (bk.system === 'service' && code) return WB.SERVICE_BOOKING + '?venue=' + encodeURIComponent(code);
+    if (bk.system === 'trades' && code) return WB.TRADES_BOOKING + '?b=' + encodeURIComponent(code) + '#book';
+    if (bk.system === 'other' && bk.url && /^https:\/\/[^\s"'<>]+$/i.test(String(bk.url).trim())) return String(bk.url).trim();
     return '';
   };
   const BAG_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>';
@@ -1007,7 +1033,8 @@ body{min-height:100vh}
     const cfg = global.WB_CONFIG || {};
     const p = (cfg.supabaseUrl && cfg.supabaseKey)
       ? fetch(cfg.supabaseUrl.replace(/\/$/, '') + '/rest/v1/rpc/rd_menu', { method: 'POST', headers: { apikey: cfg.supabaseKey, Authorization: 'Bearer ' + cfg.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_venue_slug: slug }) })
-        .then((r) => r.json()).then((d) => { if (!d || d.ok === false) throw new Error((d && d.error) || 'menu'); return d; })
+        .then((r) => { if (!r.ok) { const e = new Error('offline'); e.kind = 'offline'; throw e; } return r.json(); }, () => { const e = new Error('offline'); e.kind = 'offline'; throw e; })
+        .then((d) => { if (!d || d.ok === false) { const e = new Error((d && d.error) || 'menu'); e.kind = d && d.error === 'unknown_venue' ? 'unknown' : 'offline'; throw e; } return d; })
       : Promise.resolve(WB.LM_DEMO);
     LM_CACHE[slug] = p; p.catch(() => { delete LM_CACHE[slug]; });
     return p;
@@ -1021,7 +1048,7 @@ body{min-height:100vh}
     const cats = (m.categories || []).filter((k) => (k.items || []).length);
     let h = '';
     if (cs.note !== false && cs.note !== 'off') h += '<div class="wb-lm-note"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 17h4v4"/></svg><span>' + esc(cs.noteText || 'Dining in? Scan the QR code on your table to order and pay from your phone.') + '</span></div>';
-    if (!cats.length) h += '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'This menu has no dishes yet — add them in the Restaurant Deluxe Menu Manager.' : '') + '</div>';
+    if (!cats.length) h += '<div class="wb-ph wb-lm-empty">' + (ctx.editor ? 'This menu has no dishes showing yet — add dishes (or make them visible) in the Restaurant Deluxe Menu Manager.' : 'Our menu is being updated — please check back soon.') + '</div>';
     cats.forEach((k) => {
       h += '<section class="wb-lm-cat"><h3 class="wb-lm-ch">' + esc(k.name) + '</h3>' + (k.blurb ? '<p class="wb-lm-blurb">' + esc(k.blurb) + '</p>' : '') + '<div class="wb-lm-grid">';
       (k.items || []).forEach((i) => {
@@ -1064,7 +1091,10 @@ body{min-height:100vh}
     let panel = null;
     function openBooking() {
       if (!url) {
-        if (o.preview) note(plat ? 'Add your booking link in the Platinum tab to switch this on.' : 'Online booking is a Platinum feature.');
+        if (o.preview) { note(plat ? 'Connect your booking system in the Platinum tab to switch this on.' : 'Online booking is a Platinum feature.'); return; }
+        // live website without a booking connection: take visitors to the contact details rather than doing nothing
+        const t = root.querySelector('#contact') || (root.querySelector('.wb-t-form') || {}).parentNode || null;
+        if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       if (panel) { panel.classList.add('on'); return; }
@@ -1105,7 +1135,7 @@ body{min-height:100vh}
       btn.type = 'button'; btn.className = 'wb-x-chatbtn'; btn.setAttribute('aria-label', 'Chat with us'); btn.innerHTML = CHAT_ICON;
       const box = document.createElement('div');
       box.className = 'wb-x-chat';
-      box.innerHTML = '<div class="wb-x-ch"><i>' + esc(name.charAt(0).toUpperCase()) + '</i><div><b>' + esc(name) + '</b><span>AI assistant · replies instantly</span></div><button type="button" aria-label="Close">✕</button></div><div class="wb-x-msgs" role="log"></div><div class="wb-x-chips"></div><form class="wb-x-in"><input maxlength="800" placeholder="Type your question…" aria-label="Message"><button type="submit" aria-label="Send">➤</button></form>';
+      box.innerHTML = '<div class="wb-x-ch"><i>' + esc(name.charAt(0).toUpperCase()) + '</i><div><b>' + esc(name) + '</b><span>AI assistant · answers can be wrong</span></div><button type="button" aria-label="Close">✕</button></div><div class="wb-x-msgs" role="log"></div><div class="wb-x-chips"></div><form class="wb-x-in"><input maxlength="800" placeholder="Type your question…" aria-label="Message"><button type="submit" aria-label="Send">➤</button></form>';
       layer.appendChild(box); layer.appendChild(btn);
       const list = box.querySelector('.wb-x-msgs'), chips = box.querySelector('.wb-x-chips'), form = box.querySelector('form'), input = form.querySelector('input');
       const bubble = (role, text, book) => {
@@ -1454,7 +1484,7 @@ body{min-height:100vh}
 .wb-x-note{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:10px;font-size:13.5px;max-width:90%;text-align:center}
 
 /* shop */
-.wb-lm{display:block;color:var(--lm-fg)}.wb-lm-load{padding:30px;text-align:center;color:var(--lm-mut);font-size:15px}.wb-lm-empty{min-height:160px;padding:20px;text-align:center}
+.wb-lm{display:block;color:var(--lm-fg)}.wb-lm-load{padding:30px;text-align:center;color:var(--lm-mut);font-size:15px}.wb-lm-retry{margin-left:6px;font:inherit;font-weight:600;color:var(--lm-acc);background:none;border:1px solid currentColor;border-radius:999px;padding:3px 12px;cursor:pointer}.wb-lm-empty{min-height:160px;padding:20px;text-align:center}
 .wb-lm-note{display:flex;align-items:center;gap:12px;justify-content:center;margin:0 auto 34px;max-width:640px;padding:12px 18px;border-radius:999px;background:var(--lm-card);color:var(--lm-fg);font-size:15px;font-weight:600}.wb-lm-note svg{color:var(--lm-acc);flex:none}
 .wb-lm-cat{margin:0 0 40px}.wb-lm-ch{margin:0 0 6px;text-align:center;font-family:var(--f-head);font-size:30px;font-weight:600;color:var(--lm-acc)}.wb-lm-ch:after{content:"";display:block;width:70px;height:2px;margin:12px auto 0;background:var(--lm-acc);opacity:.6}
 .wb-lm-blurb{margin:10px auto 0;max-width:640px;text-align:center;color:var(--lm-mut);font-size:15px}
