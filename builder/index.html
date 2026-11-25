@@ -276,6 +276,18 @@ a{color:var(--ui-a2)}
 .sitem.prod span{display:flex;flex-direction:column;line-height:1.25}
 .sitem.prod small{color:var(--ui-m);font-size:11px;margin:0}
 
+/* import menu / price list */
+.imp-cta{display:flex;gap:12px;align-items:flex-start;margin:14px 0 4px;padding:14px;border-radius:14px;background:linear-gradient(135deg,#8b5cf622,#22d3ee14);border:1px solid #8b5cf655}.imp-cta>svg{width:22px;height:22px;flex:none;color:#a78bfa;margin-top:2px}.imp-cta b{display:block;font-size:14px}.imp-cta span{display:block;font-size:12.5px;color:var(--ui-m);margin:3px 0 10px;line-height:1.45}
+.imp-drop{display:flex;flex-direction:column;align-items:center;gap:6px;margin:16px 0 12px;padding:30px 20px;border:2px dashed var(--ui-line);border-radius:16px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s}.imp-drop:hover,.imp-drop.over{border-color:#8b5cf6;background:#8b5cf611}.imp-drop svg{width:30px;height:30px;color:#a78bfa}.imp-drop span{font-size:12.5px;color:var(--ui-m)}
+.imp-paste summary{cursor:pointer;font-weight:600;font-size:13.5px;padding:6px 0}.imp-paste textarea{margin-top:8px;resize:vertical;font:13px/1.5 ui-monospace,Menlo,monospace}
+.imp-list{max-height:44vh;overflow:auto;border:1px solid var(--ui-line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:14px}
+.imp-ch{display:flex;gap:8px;margin-bottom:6px}.imp-ch .inp{font-weight:700;color:#c4b5fd}
+.imp-row{display:grid;grid-template-columns:minmax(0,1.3fr) 90px minmax(0,2fr) 30px;gap:6px;margin-bottom:5px;align-items:center}.imp-row .inp,.imp-ch .inp{padding:8px 10px;font-size:13px}
+.imp-row .ic{width:30px;height:30px;border-radius:8px;background:transparent;color:var(--ui-m);font-size:18px}.imp-row .ic:hover{background:#3a1d24;color:#fecaca}
+.imp-opts{margin-top:14px;display:flex;flex-direction:column;gap:6px}.imp-opts>b,.imp-where>b{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--ui-m)}
+.imp-r{justify-content:flex-start;gap:10px}.imp-r input{order:-1}.imp-r.off{opacity:.5}.imp-where{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+@media(max-width:640px){.imp-row{grid-template-columns:minmax(0,1fr) 80px 30px}.imp-row .inp:nth-child(3){grid-column:1/3}}
+
 </style>
 </head>
 <body>
@@ -1944,6 +1956,37 @@ a{color:var(--ui-a2)}
     ]);
   } };
   WB.LIBRARY = L;
+  /* Menu / price list built from imported data: { title, categories:[{ title, dishes:[{name,price,desc}] }] } */
+  WB.menuFromImport = (o) => {
+    const els = [eyebrow(o.eyebrow || 'Taste', 300, 76, 600, 'center'), title(WB.esc(o.title || 'Our menu'), 200, 110, 800, 60, 46, 'center')];
+    let y = 222;
+    const nameH = (t) => 34 * Math.max(1, Math.ceil(String(t || '').length / 30));
+    const descH = (t) => (t ? 26 * Math.max(1, Math.ceil(String(t).length / 58)) : 0);
+    const itemH = (d) => nameH(d.name) + (d.desc ? 6 + descH(d.desc) : 0) + 34;
+    (o.categories || []).forEach((cat, ci) => {
+      const many = o.categories.length > 1 || cat.title;
+      if (many && cat.title) {
+        els.push(E('heading', 200, y, 800, 44, { font: 'head', size: 30, weight: 600, lh: 1.3, align: 'center', color: '@accent', tag: 'h3' }, WB.esc(cat.title), A('fadeUp', 0)));
+        els.push(E('line', 560, y + 54, 80, 2, { bg: '@accent', opacity: 0.6 }, '', A('fade', 0.1)));
+        y += 84;
+      }
+      const ds = cat.dishes || [];
+      for (let i = 0; i < ds.length; i += 2) {
+        const pair = ds.slice(i, i + 2), d0 = (i / 2) * 0.06;
+        pair.forEach((d, col) => {
+          const x = 80 + col * 560, nh = nameH(d.name);
+          els.push(E('heading', x, y, d.price ? 390 : 480, nh, { font: 'head', size: 23, weight: 600, lh: 1.3, color: '@text', tag: 'h4' }, WB.esc(d.name), A('fadeUp', d0)));
+          if (d.price) els.push(E('text', x + 400, y, 80, 34, { size: 20, weight: 600, lh: 1.5, align: 'right', color: '@accent' }, WB.esc(d.price), A('fadeUp', d0)));
+          let yy = y + nh;
+          if (d.desc) { els.push(para(WB.esc(d.desc), x, yy + 6, 470, descH(d.desc), 'left', '@muted', A('fadeUp', d0 + 0.05), 15)); yy += 6 + descH(d.desc); }
+          els.push(E('line', x, yy + 16, 480, 1, { bg: '@muted', opacity: 0.35 }, '', A('fade', d0)));
+        });
+        y += Math.max.apply(null, pair.map(itemH));
+      }
+      y += ci < o.categories.length - 1 ? 40 : 0;
+    });
+    return WB.normSection(sec('Menu', y + 70, { type: 'color', color: '@surface' }, els, { anchor: 'menu' }));
+  };
   WB.makeSection = (key, o) => WB.normSection(L[key].make(o));
 
   /* ---------------- starter templates ---------------- */
@@ -2019,6 +2062,201 @@ a{color:var(--ui-a2)}
       header: b.header, footer: b.footer, pages: b.pages
     };
     return WB.normalizeSite(site);
+  };
+})();
+
+</script>
+<script>
+/* =====================================================================
+   Menu / price list import — reads a PDF, Word (.docx) or pasted text on the
+   customer's own device (same reader as Restaurant Deluxe; no server, no AI)
+   and returns { categories: [{ title, dishes: [{ name, desc, price }] }] }.
+   ===================================================================== */
+(function () {
+  'use strict';
+  var MI_SECTIONS = /^(entr[\u00e9e]es?|starters?|to (start|share|begin|finish|drink)|small plates?|large plates?|snacks?|nibbles?|raw|oysters?|salads?|soups?|mains?|main courses?|from the (grill|land|sea)|grill|seafood|meat|pizze?a?s?|pastas?|risotto|sides?|vegetables?|desserts?|sweets?|cheeses?|drinks?|beverages?|cocktails?|wines?|beer|kids?|children|set menu|tasting menu|degustation|breakfast|brunch|lunch|dinner|supper|specials?)\b/i;
+  var MI_FOOTER   = /(allerg|dietar|surcharge|include[ds]? gst|prices? (are|include|subject)|public holiday|service charge|gratuit|10%|15%|please (advise|inform|note)|subject to)/i;
+  var MI_PRICE    = /^([\s\S]*?)(\$\s?\d[\d.,]*(?:\s?(?:ea|each|pp|dozen|doz|per person))?|\bMP\b|\bP\.?O\.?A\.?\b|market price)\s*$/i;
+  var MI_PRICEISH = /^(\$|mp$|p\.?o\.?a|\d)/i;
+
+  function itemsToWords(items){
+    var out = [];
+    (items || []).forEach(function(it){
+      var s = it.str; if(s == null || !/\S/.test(s)) return;
+      var tr = it.transform || [1,0,0,1,0,0];
+      var x = tr[4] || 0, y = -(tr[5] || 0), w = it.width || 0;
+      out.push({ x:x, y:y, xM:x + w, t:s.replace(/\s+/g,' ').trim() });
+    });
+    return out;
+  }
+  function groupRows(ws){
+    var rows = [];
+    ws.slice().sort(function(a,b){ return a.y - b.y || a.x - b.x; }).forEach(function(w){
+      var r = null;
+      for(var i=0;i<rows.length;i++){ if(Math.abs(rows[i].y - w.y) <= 4){ r = rows[i]; break; } }
+      if(!r){ r = { y:w.y, ws:[] }; rows.push(r); }
+      r.ws.push(w);
+    });
+    return rows;
+  }
+  function rowText(ws){
+    return ws.slice().sort(function(a,b){ return a.x - b.x; }).map(function(w){ return w.t; }).join(' ').replace(/\s+/g,' ').trim();
+  }
+  /* columns are found from where NAMES/DESCRIPTIONS start (prices are ignored,
+     since they're right-aligned and would masquerade as extra columns) */
+  function detectColumnStarts(words){
+    var edges = [];
+    groupRows(words).forEach(function(r){
+      var ws = r.ws.slice().sort(function(a,b){ return a.x - b.x; });
+      ws.forEach(function(w){
+        if(MI_PRICEISH.test(w.t)) return;
+        var hasLeft = ws.some(function(o){ return o.x < w.x && Math.abs(w.x - o.xM) < 14; });
+        if(!hasLeft) edges.push(w.x);
+      });
+    });
+    edges.sort(function(a,b){ return a-b; });
+    var clusters = [];
+    edges.forEach(function(x){
+      var c = null;
+      for(var i=0;i<clusters.length;i++){ if(Math.abs(clusters[i].x - x) <= 6){ c = clusters[i]; break; } }
+      if(!c){ c = { x:x, xs:[] }; clusters.push(c); }
+      c.xs.push(x); c.x = c.xs.reduce(function(a,b){ return a+b; },0)/c.xs.length;
+    });
+    if(!clusters.length) return [0];
+    clusters.sort(function(a,b){ return b.xs.length - a.xs.length; });
+    var top = clusters[0].xs.length, starts = [];
+    clusters.forEach(function(c){
+      if(c.xs.length >= Math.max(3, 0.25*top) && starts.every(function(s){ return Math.abs(c.x - s) > 120; })) starts.push(c.x);
+    });
+    starts.sort(function(a,b){ return a-b; });
+    return starts.length ? starts : [0];
+  }
+  function wordsToLines(words){
+    if(!words.length) return [];
+    var starts = detectColumnStarts(words);
+    function colOf(x){ var idx = 0; for(var i=0;i<starts.length;i++){ if(x >= starts[i]-8) idx = i; } return idx; }
+    var byCol = {};
+    words.forEach(function(w){ var c = colOf(w.x); (byCol[c] = byCol[c] || []).push(w); });
+    var lines = [];
+    Object.keys(byCol).forEach(function(c){
+      groupRows(byCol[c]).forEach(function(r){ lines.push({ col:+c, y:r.y, text:rowText(r.ws) }); });
+    });
+    return lines;
+  }
+  function textToLines(text){
+    var lines = [];
+    String(text || '').split(/\r?\n/).forEach(function(l, i){
+      l = l.replace(/[ \t]+/g,' ').trim();
+      if(l) lines.push({ col:0, y:i, text:l });
+    });
+    return lines;
+  }
+  function tidyTitle(t){
+    return t.replace(/\s+/g,' ').trim().toLowerCase().replace(/(^|[\s\-\/&(])(\S)/g, function(m,a,c){ return a + c.toUpperCase(); });
+  }
+  function isAllCapsShort(l){
+    var letters = l.replace(/[^A-Za-z]/g,'');
+    return letters.length >= 3 && l.length <= 34 && !/\d/.test(l) && l.indexOf('$') < 0 && l === l.toUpperCase();
+  }
+  function normPrice(p){ return p.replace(/\s+/g,' ').trim().replace(/\$\s+/,'$').replace(/^mp$/i,'MP'); }
+  function mapDish(d){ return { name:d.name, desc:d.desc, price:d.price }; }
+
+  function linesToMenu(lines){
+    lines = (lines || []).slice();
+    lines.forEach(function(ln){
+      var t = ln.text;
+      ln.priceM = t.match(MI_PRICE);
+      ln.footer = MI_FOOTER.test(t) && !ln.priceM;
+      ln.hdr = (MI_SECTIONS.test(t) || isAllCapsShort(t)) && !ln.priceM && t.length <= 40;
+    });
+    lines.sort(function(a,b){ return a.y - b.y || a.col - b.col; });
+    var headers = lines.filter(function(l){ return l.hdr && !l.footer; });
+    var started = null;
+    for(var i=0;i<lines.length;i++){ if(!lines[i].footer && (lines[i].hdr || lines[i].priceM)){ started = lines[i].y; break; } }
+
+    function sectionFor(d){
+      /* nearest heading above the item in the SAME column; else the nearest above in any column */
+      function near(list){ var best = null; list.forEach(function(h){ if(h.y <= d.y + 0.5 && (best === null || h.y > best.y + 0.5)) best = h; }); return best; }
+      return near(headers.filter(function(h){ return h.col === d.col; })) || near(headers);
+    }
+
+    var dishes = [], cols = {};
+    lines.forEach(function(l){ cols[l.col] = true; });
+    Object.keys(cols).map(Number).sort(function(a,b){ return a-b; }).forEach(function(col){
+      var cur = null;
+      lines.filter(function(l){ return l.col === col; }).forEach(function(ln){
+        if(started !== null && ln.y < started - 0.5) return;   /* skip the title block */
+        if(ln.footer) return;
+        if(ln.hdr){ cur = null; return; }
+        if(ln.priceM){
+          var name = ln.priceM[1].replace(/[.\s\-\u2013\u2014]+$/,'').trim();
+          var price = normPrice(ln.priceM[2]);
+          if(!name && cur && !cur.price){ cur.price = price; return; }   /* price on its own line */
+          cur = { col:col, y:ln.y, name:name || 'Dish', price:price, desc:'' };
+          dishes.push(cur);
+        } else {
+          if(cur) cur.desc = cur.desc ? (cur.desc + ' ' + ln.text) : ln.text;   /* description */
+          else { cur = { col:col, y:ln.y, name:ln.text, price:'', desc:'' }; dishes.push(cur); }
+        }
+      });
+    });
+
+    dishes.forEach(function(d){ d.sec = sectionFor(d); });
+    var seen = [], out = [];
+    headers.slice().sort(function(a,b){ var pa = Math.floor(a.y / 100000), pb = Math.floor(b.y / 100000); return pa - pb || a.col - b.col || a.y - b.y; }).forEach(function(h){ if(seen.indexOf(h) < 0) seen.push(h); });
+    var orphans = dishes.filter(function(d){ return !d.sec; });
+    if(orphans.length){ orphans.sort(function(a,b){ return a.col - b.col || a.y - b.y; }); out.push({ title:'Menu', dishes:orphans.map(mapDish) }); }
+    seen.forEach(function(h){
+      var ds = dishes.filter(function(d){ return d.sec === h; });
+      ds.sort(function(a,b){ return a.col - b.col || a.y - b.y; });
+      if(ds.length) out.push({ title: tidyTitle(h.text), dishes: ds.map(mapDish) });
+    });
+    return { categories: out };
+  }
+
+
+  const LIBS = {
+    pdf: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    pdfWorker: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
+    docx: 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js'
+  };
+  const loaded = {};
+  function load(src) {
+    if (!loaded[src]) loaded[src] = new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => { delete loaded[src]; rej(new Error('Could not load the document reader. Check your internet and try again.')); }; document.head.appendChild(s); });
+    return loaded[src];
+  }
+  async function readPdfLines(file) {
+    await load(LIBS.pdf);
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = LIBS.pdfWorker;
+    const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    let out = [];
+    for (let n = 1; n <= pdf.numPages; n++) {
+      const tc = await (await pdf.getPage(n)).getTextContent();
+      out = out.concat(wordsToLines(itemsToWords(tc.items)).map((l) => Object.assign(l, { y: l.y + n * 100000 })));
+    }
+    return out;
+  }
+  async function readDocxText(file) {
+    await load(LIBS.docx);
+    const r = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
+    return r.value;
+  }
+  function count(m) { return m.categories.reduce((a, c) => a + c.dishes.length, 0); }
+  function check(m) {
+    if (!m || !m.categories || !m.categories.length || !count(m)) throw new Error('We couldn’t pick out any items. Make sure each item has a price like $24, or paste the text instead.');
+    return m;
+  }
+  WB.MenuImport = {
+    async fromFile(file) {
+      const name = (file.name || '').toLowerCase();
+      if (name.endsWith('.pdf') || file.type === 'application/pdf') return check(linesToMenu(await readPdfLines(file)));
+      if (name.endsWith('.docx')) return check(linesToMenu(textToLines(await readDocxText(file))));
+      if (name.endsWith('.txt') || /^text\//.test(file.type)) return check(linesToMenu(textToLines(await file.text())));
+      if (name.endsWith('.doc')) throw new Error('Old .doc files can’t be read — please save it as .docx or PDF, or paste the text.');
+      throw new Error('Please choose a PDF, a Word (.docx) or a text file.');
+    },
+    fromText(text) { return check(linesToMenu(textToLines(text))); },
+    count
   };
 })();
 
@@ -3152,6 +3390,104 @@ a{color:var(--ui-a2)}
       }, { left: true });
       setTimeout(() => { const n = mount.querySelector('.wb-sec[data-id="' + S.sel.sec + '"]'); if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
     }
+
+    /* ---------- import a menu / price list (read on the device, like Restaurant Deluxe) ---------- */
+    function openImport(mode) {
+      const m = modal('<div id="imp"></div>', { wide: true, sticky: true });
+      const box = $('#imp', m);
+      let cats = [], title = mode === 'shop' ? 'Shop' : 'Our menu';
+      const isMenuSec = (sc) => sc && (sc.anchor === 'menu' || /menu|price/i.test(sc.name || ''));
+      const pick = () => {
+        box.innerHTML = '<h2>Import a menu or price list</h2><p class="muted">Upload a PDF or Word file, or paste the text. It is read on your own device and laid out for you, and you can check everything before it goes on your page.</p>' +
+          '<label class="imp-drop" id="imp-drop"><input type="file" id="imp-file" accept=".pdf,.docx,.txt,application/pdf" hidden>' + I('pages') + '<b>Drop your file here, or click to choose</b><span>PDF, Word (.docx) or text file</span></label>' +
+          '<details class="imp-paste"><summary>Or paste the text</summary><textarea class="inp" id="imp-txt" rows="8" placeholder="ENTRÉES&#10;Garlic bread $9&#10;Crusty sourdough, herb butter&#10;MAINS&#10;Steak frites $38"></textarea><div class="i-acts" style="margin-top:8px"><button class="btn sm pri" id="imp-go">Read my text</button></div></details>' +
+          '<p class="i-note" style="margin-top:12px">Tips: every item needs a price like <b>$24</b>. Headings in CAPITALS, or words like Entrées, Mains, Desserts, Drinks, become the headings.</p>' +
+          '<div class="acts"><button class="btn ghost" data-x>Cancel</button></div>';
+        $('[data-x]', box).onclick = () => m.close();
+        const drop = $('#imp-drop', box), inp = $('#imp-file', box);
+        drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+        drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+        drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); if (e.dataTransfer.files[0]) read(() => WB.MenuImport.fromFile(e.dataTransfer.files[0])); });
+        inp.onchange = () => { if (inp.files[0]) read(() => WB.MenuImport.fromFile(inp.files[0])); };
+        $('#imp-go', box).onclick = () => { const t = $('#imp-txt', box).value.trim(); if (t.length < 8) return toast('Please paste a little more text.', 'bad'); read(() => WB.MenuImport.fromText(t)); };
+      };
+      const read = async (fn) => {
+        box.innerHTML = '<h2>Reading your document…</h2><p class="muted">This only takes a moment.</p>';
+        try {
+          const r = await fn();
+          cats = r.categories.map((c) => ({ title: c.title === 'Menu' && r.categories.length === 1 ? '' : c.title, dishes: c.dishes.slice(0, 200) }));
+          review();
+        } catch (e) { pick(); toast(e.message || 'Could not read that file.', 'bad', 7000); }
+      };
+      const collect = () => {
+        title = ($('#imp-title', box) || {}).value || title;
+        $$('[data-ci]', box).forEach((n) => { const c = cats[+n.dataset.ci]; if (c) c.title = n.value.trim(); });
+        $$('[data-di]', box).forEach((n) => { const [ci, di, f] = n.dataset.di.split(':'); const d = cats[+ci] && cats[+ci].dishes[+di]; if (d) d[f] = n.value.trim(); });
+        cats.forEach((c) => { c.dishes = c.dishes.filter((d) => d.name); });
+        cats = cats.filter((c) => c.dishes.length);
+      };
+      const review = () => {
+        const n = WB.MenuImport.count({ categories: cats });
+        const existing = sections().filter(({ sec, where }) => where === 'page' && isMenuSec(sec)).map(({ sec }) => sec)[0];
+        const shopOK = S.shopOn;
+        box.innerHTML = '<h2>Check your ' + (mode === 'shop' ? 'products' : 'menu') + '</h2><p class="muted">Found <b>' + n + '</b> item' + (n === 1 ? '' : 's') + (cats.filter((c) => c.title).length ? ' under <b>' + cats.filter((c) => c.title).length + '</b> heading' + (cats.filter((c) => c.title).length === 1 ? '' : 's') : '') + '. Fix anything below, or remove what you don’t want.</p>' +
+          '<label class="field"><span>Section title</span><input class="inp" id="imp-title" value="' + esc(title) + '"></label>' +
+          '<div class="imp-list">' + cats.map((c, ci) => '<div class="imp-cat"><div class="imp-ch"><input class="inp" data-ci="' + ci + '" value="' + esc(c.title) + '" placeholder="Heading (optional)"><button class="btn sm ghost" data-rmcat="' + ci + '">Remove heading &amp; items</button></div>' +
+            c.dishes.map((d, di) => '<div class="imp-row"><input class="inp" data-di="' + ci + ':' + di + ':name" value="' + esc(d.name) + '" placeholder="Name"><input class="inp" data-di="' + ci + ':' + di + ':price" value="' + esc(d.price) + '" placeholder="Price"><input class="inp" data-di="' + ci + ':' + di + ':desc" value="' + esc(d.desc) + '" placeholder="Description"><button class="ic" data-rm="' + ci + ':' + di + '" aria-label="Remove item" title="Remove">×</button></div>').join('') + '</div>').join('') + '</div>' +
+          '<div class="imp-opts"><b>Add it as</b>' +
+          '<label class="i-chk imp-r"><input type="radio" name="imp-as" value="menu"' + (mode !== 'shop' ? ' checked' : '') + '><span><b>A menu / price list</b> section on this page</span></label>' +
+          '<label class="i-chk imp-r' + (shopOK ? '' : ' off') + '"><input type="radio" name="imp-as" value="shop"' + (mode === 'shop' && shopOK ? ' checked' : '') + (shopOK ? '' : ' disabled') + '><span><b>Shop products</b> customers can buy' + (shopOK ? '' : ' · needs the Shop add-on') + '</span></label>' +
+          (existing ? '<div class="imp-where"><b>This page already has a “' + esc(existing.name) + '” section</b><label class="i-chk imp-r"><input type="radio" name="imp-where" value="replace"><span>Replace it</span></label><label class="i-chk imp-r"><input type="radio" name="imp-where" value="add" checked><span>Add a new section</span></label></div>' : '') +
+          '</div><div class="acts"><button class="btn ghost" id="imp-back">Start again</button><button class="btn ghost" data-x>Cancel</button><button class="btn pri" id="imp-ok">Add to my page</button></div>';
+        $('[data-x]', box).onclick = () => m.close();
+        $('#imp-back', box).onclick = pick;
+        const syncWhere = () => { const w = $('.imp-where', box); if (w) w.style.display = ($('[name=imp-as]:checked', box) || {}).value === 'shop' ? 'none' : ''; };
+        $$('[name=imp-as]', box).forEach((r) => { r.onchange = syncWhere; }); syncWhere();
+        box.onclick = (e) => {
+          const rm = e.target.closest('[data-rm]'), rc = e.target.closest('[data-rmcat]');
+          if (rm) { collect(); const [ci, di] = rm.dataset.rm.split(':'); cats[+ci].dishes.splice(+di, 1); cats = cats.filter((c) => c.dishes.length); return cats.length ? review() : pick(); }
+          if (rc) { collect(); cats.splice(+rc.dataset.rmcat, 1); return cats.length ? review() : pick(); }
+        };
+        $('#imp-ok', box).onclick = async () => {
+          const as = ($('[name=imp-as]:checked', box) || {}).value || 'menu';
+          const where = ($('[name=imp-where]:checked', box) || {}).value || 'add';
+          collect(); if (!cats.length) return toast('There is nothing left to add.', 'bad');
+          if (as === 'shop') return importProducts($('#imp-ok', box));
+          const sec = WB.menuFromImport({ title: title || 'Our menu', categories: cats });
+          change(() => {
+            const list = page().sections;
+            const old = existing && where === 'replace' ? list.indexOf(existing) : -1;
+            if (old >= 0) list.splice(old, 1, sec);
+            else { const cs = curSec(); let i = cs ? list.indexOf(cs) : -1; if (i < 0) i = list.length - 1; list.splice(i + 1, 0, sec); }
+            S.sel = { sec: sec.id };
+          }, { left: true });
+          m.close(); toast('Menu added — click any item to change it', 'ok', 4000);
+          setTimeout(() => { const nd = mount.querySelector('.wb-sec[data-id="' + sec.id + '"]'); if (nd) nd.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+        };
+      };
+      const importProducts = async (btn) => {
+        const cents = (p) => { const mt = String(p || '').replace(/,/g, '').match(/\d+(?:\.\d{1,2})?/); return mt ? Math.round(parseFloat(mt[0]) * 100) : 0; };
+        const all = []; cats.forEach((c) => c.dishes.forEach((d) => all.push(d)));
+        const ok = all.filter((d) => cents(d.price) >= 50), skipped = all.length - ok.length;
+        if (!ok.length) return toast('None of these items has a price of at least $0.50, so they can’t be sold online.', 'bad', 6000);
+        btn.disabled = true; btn.textContent = 'Adding products…';
+        let start = (S.products || []).length, added = 0;
+        try {
+          for (const d of ok) {
+            await Store.saveProduct(S.row.id, { name: d.name.slice(0, 120), description: (d.desc || '').slice(0, 2000), price_cents: cents(d.price), kind: 'physical', options: [], stock: null, active: true, sort: start + added });
+            added++;
+          }
+        } catch (er) { toast(er.message, 'bad', 6000); }
+        m.close();
+        if (added) {
+          const hasGrid = sections().some(({ sec }) => sec.els.some((el) => el.t === 'shopgrid'));
+          if (!hasGrid) insertSection('shop', curSec());
+          await loadProducts();
+          toast('Added ' + added + ' product' + (added === 1 ? '' : 's') + (skipped ? ' (' + skipped + ' without a price were skipped)' : '') + '. Add photos in the Shop tab.', 'ok', 7000);
+        }
+      };
+      pick();
+    }
     function libraryHTML() {
       const groups = {};
       Object.keys(WB.LIBRARY).forEach((k) => { const g = WB.LIBRARY[k].group; (groups[g] = groups[g] || []).push(k); });
@@ -3181,6 +3517,7 @@ a{color:var(--ui-a2)}
         const cs = curSec();
         h = '<h4>Sections on “' + esc(page().name) + '”</h4><div class="slist">' + sections().map(({ sec, where }) =>
           '<div class="sitem' + (cs === sec ? ' on' : '') + '" data-sid="' + sec.id + '"><span>' + esc(sec.name) + '</span>' + (where !== 'page' ? '<small>' + where.toUpperCase() + '</small>' : '<button class="ic" data-sl="up">' + I('up') + '</button><button class="ic" data-sl="down">' + I('down') + '</button>') + '</div>').join('') + '</div>' +
+          '<div class="imp-cta">' + I('pages') + '<div><b>Have a menu or price list?</b><span>Import it from a PDF, Word file or pasted text and we lay it out for you.</span><button class="btn sm pri" data-import="menu">Import menu / price list</button></div></div>' +
           '<h4>Add a section</h4>' + libraryHTML();
       }
       if (S.tab === 'theme') {
@@ -3235,7 +3572,7 @@ a{color:var(--ui-a2)}
             : '<div class="plat-off">' + I('bag') + '<div><b>' + (st.connected ? 'Finish your Stripe setup' : 'Connect Stripe to take payments') + '</b><span>' + (st.connected ? 'Stripe still needs a few details (like your bank account) before you can take payments.' : 'Sign in to Stripe or create a free account. Customers’ payments go straight to you.') + '</span><button class="btn sm pri" data-shop="connect">' + (st.connected ? 'Continue Stripe setup' : 'Connect Stripe') + '</button></div></div>') +
           '<h4>' + I('tag') + ' Products</h4>' +
           (prods.length ? '<div class="slist">' + prods.map((p, i) => '<div class="sitem prod" data-prod="' + esc(p.id) + '">' + (p.image ? '<i style="background-image:url(&quot;' + esc(p.image) + '&quot;)"></i>' : '<i></i>') + '<span>' + esc(p.name) + '<small>' + WB.money(p.price_cents) + ' · ' + kindName[p.kind] + (p.stock != null ? ' · ' + p.stock + ' left' : '') + (p.active === false ? ' · hidden' : '') + '</small></span><button class="ic" data-pm="up" title="Move up">' + I('up') + '</button><button class="ic" data-pm="del" title="Delete">' + I('trash') + '</button></div>').join('') + '</div>' : '<p class="i-note">No products yet.</p>') +
-          '<div class="i-acts" style="margin-top:10px"><button class="btn sm pri" data-shop="add">' + I('plus') + 'Add product</button><button class="btn sm" data-add="shopgrid">' + I('grid') + 'Put a product grid on the page</button></div>' +
+          '<div class="i-acts" style="margin-top:10px"><button class="btn sm pri" data-shop="add">' + I('plus') + 'Add product</button><button class="btn sm" data-add="shopgrid">' + I('grid') + 'Put a product grid on the page</button><button class="btn sm" data-import="shop">' + I('pages') + 'Import from a price list</button></div>' +
           '<h4>' + I('pages') + ' Delivery options</h4><div class="i-body" style="padding:0">' +
           '<label class="i-chk">Post to the customer\'s address<input type="checkbox" data-site="shop.post.on"' + (sh.post && sh.post.on ? ' checked' : '') + '></label>' +
           (sh.post && sh.post.on ? '<div class="i-2"><label class="field"><span>Postage $</span><input class="inp" inputmode="decimal" data-site="shop.post.fee" value="' + esc(sh.post.fee || '') + '" placeholder="10"></label><label class="field"><span>Free over $</span><input class="inp" inputmode="decimal" data-site="shop.post.freeOver" value="' + esc(sh.post.freeOver || '') + '" placeholder="100"></label></div>' : '') +
@@ -3289,6 +3626,7 @@ a{color:var(--ui-a2)}
         return;
       }
       const pr = t.closest('[data-prod]'); if (pr) return productModal((S.products || []).find((x) => x.id === pr.dataset.prod));
+      const imp = t.closest('[data-import]'); if (imp) return openImport(imp.dataset.import);
       const lib = t.closest('[data-lib]'); if (lib) return insertSection(lib.dataset.lib, curSec());
       const sl = t.closest('[data-sl]');
       if (sl) { e.stopPropagation(); return sectionAction(sl.dataset.sl, findSec(sl.closest('[data-sid]').dataset.sid)); }
