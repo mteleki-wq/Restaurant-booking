@@ -288,6 +288,13 @@ a{color:var(--ui-a2)}
 .imp-r{justify-content:flex-start;gap:10px}.imp-r input{order:-1}.imp-r.off{opacity:.5}.imp-where{margin-top:8px;display:flex;flex-direction:column;gap:6px}
 @media(max-width:640px){.imp-row{grid-template-columns:minmax(0,1fr) 80px 30px}.imp-row .inp:nth-child(3){grid-column:1/3}}
 
+.plat-tag{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.08em;padding:2px 6px;border-radius:999px;background:#f5c84b;color:#2a2000;margin-left:4px}
+.rs-scroll{max-height:52vh;overflow:auto;padding-right:6px}.rs-h{margin:16px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--ui-m)}.rs-h small{text-transform:none;letter-spacing:0;margin-left:6px;font-weight:500}
+.rs-job{border:1px solid var(--ui-line);border-radius:12px;padding:8px;margin-bottom:8px}.rs-jh{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.2fr) 150px 30px;gap:6px;margin-bottom:6px;align-items:center}.rs-jh .inp,.rs-job textarea{padding:8px 10px;font-size:13px}
+.rs-jh .ic{width:30px;height:30px;border-radius:8px;background:transparent;color:var(--ui-m);font-size:18px}.rs-jh .ic:hover{background:#3a1d24;color:#fecaca}
+.rs-secs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+@media(max-width:640px){.rs-jh{grid-template-columns:minmax(0,1fr) 30px}.rs-jh .inp:nth-child(2),.rs-jh .inp:nth-child(3){grid-column:1/2}.rs-secs{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -2051,6 +2058,106 @@ a{color:var(--ui-a2)}
       ] }
     ]
   }) };
+
+  /* ---------- sections built from an imported resume ---------- */
+  const lines = (t, per) => Math.max(1, Math.ceil(String(t || '').length / per));
+  const bul = (pts) => pts.map((p) => '• ' + WB.esc(p)).join('<br>');
+  const chips = (els, items, x0, y, w, style) => {
+    let x = x0, row = 0;
+    items.forEach((t, i) => {
+      const cw = Math.min(w, Math.round(String(t).length * 8.6 + 44));
+      if (x + cw > x0 + w) { x = x0; row++; }
+      els.push(E('text', x, y + row * 56, cw, 44, Object.assign({ size: 15, weight: 600, lh: 2.9, align: 'center', color: '@text', bg: '@surface', radius: 999 }, style || {}), WB.esc(t), A('fadeUp', Math.min(i * 0.03, 0.6))));
+      x += cw + 12;
+    });
+    return items.length ? (row + 1) * 56 : 0;
+  };
+  WB.resumeSections = (d) => {
+    d = Object.assign({ jobs: [], education: [], skills: [], certs: [] }, d);
+    const out = {}, first = (d.name || '').split(' ')[0];
+    out.intro = sec('Intro', 700, { type: 'color', color: '@bg', anim: 'aurora', speed: 'normal' }, [
+      eyebrow(WB.esc(d.title || 'Welcome'), 250, 210, 700, 'center', '@accent', A('fadeDown', 0.1)),
+      E('heading', 100, 252, 1000, 110, { font: 'head', size: 78, weight: 600, lh: 1.05, align: 'center', color: '@text', tag: 'h1' }, WB.esc(d.name || 'Your Name'), A('fadeUp', 0.3)),
+      para(WB.esc(d.summary || ''), 250, 380, 700, 30 * lines(d.summary, 62), 'center', '@muted', A('fadeUp', 0.5), 19),
+      btn('Get in touch', 405, 500, 190, 'solid', '#contact', {}, A('fadeUp', 0.7)),
+      btn(d.jobs && d.jobs.length ? 'My experience' : 'About me', 607, 500, 190, 'outline', d.jobs && d.jobs.length ? '#experience' : '#about', { bg: '@text' }, A('fadeUp', 0.8))
+    ], { anchor: 'intro' });
+    if (d.about) {
+      const ah = 29 * lines(d.about, 50);
+      const facts = [d.location && '<b>Based in</b> ' + WB.esc(d.location), d.email && '<b>Email</b> ' + WB.esc(d.email), d.phone && '<b>Phone</b> ' + WB.esc(d.phone)].filter(Boolean).join('<br>');
+      const ttl = first ? 'Hello, I’m ' + WB.esc(first) + '.' : 'About me', th = ttl.length > 20 ? 120 : 62, py = 188 + th + 18;
+      const fy = py + ah + 24, h = Math.max(660, fy + (facts ? 90 : 0) + 90);
+      const els = [img(80, 90, 500, Math.min(480, h - 180), {}, A('slideLeft', 0), 'Photo of ' + (d.name || 'me')),
+        eyebrow('About me', 660, 150, 460, 'left', '@accent', A('fadeUp', 0.1)),
+        title(ttl, 660, 188, 460, th, 44, 'left', '@text', A('fadeUp', 0.2)),
+        para(WB.esc(d.about), 660, py, 460, ah, 'left', '@muted', A('fadeUp', 0.3))];
+      if (facts) els.push(para(facts, 660, fy, 460, 90, 'left', '@text', A('fadeUp', 0.4), 16));
+      out.about = sec('About', h, { type: 'color', color: '@bg' }, els, { anchor: 'about' });
+    }
+    if (d.jobs && d.jobs.length) {
+      const els = [eyebrow('Experience', 300, 80, 600, 'center'), title('Where I’ve worked', 200, 114, 800, 64, 44, 'center')];
+      let y = 230; const y0 = y;
+      d.jobs.forEach((j, i) => {
+        const dl = i * 0.06, rh = 34 * lines(j.role || j.org, 48);
+        els.push(E('text', 80, y + 4, 250, 30, { size: 15, weight: 600, lh: 1.6, align: 'right', color: '@accent' }, WB.esc(j.dates || ''), A('fadeUp', dl)));
+        els.push(Object.assign(E('shape', 352, y + 9, 16, 16, { bg: '@accent', radius: 999 }, '', A('zoomIn', dl)), { z: 3 }));
+        els.push(E('heading', 400, y, 720, rh, { font: 'head', size: 25, weight: 600, lh: 1.3, color: '@text', tag: 'h3' }, WB.esc(j.role || j.org), A('fadeUp', dl)));
+        let yy = y + rh;
+        if (j.role && j.org) { els.push(E('text', 400, yy + 2, 720, 28, { size: 17, weight: 600, lh: 1.5, color: '@muted' }, WB.esc(j.org), A('fadeUp', dl + 0.03))); yy += 32; }
+        if (j.points && j.points.length) {
+          const ph = j.points.reduce((a, p) => a + 27 * lines(p, 82), 0);
+          els.push(para(bul(j.points), 400, yy + 10, 720, ph, 'left', '@muted', A('fadeUp', dl + 0.06), 16)); yy += 10 + ph;
+        }
+        y = yy + 52;
+      });
+      els.push(Object.assign(E('line', 359, y0 + 12, 2, y - y0 - 52, { bg: '@muted', opacity: 0.35 }, '', A('fade', 0)), { z: 1 }));
+      out.experience = sec('Experience', y + 40, { type: 'color', color: '@surface' }, els, { anchor: 'experience' });
+    }
+    if ((d.skills && d.skills.length) || (d.certs && d.certs.length)) {
+      const els = [eyebrow('Skills', 300, 80, 600, 'center'), title('What I bring', 200, 114, 800, 64, 44, 'center')];
+      let y = 220;
+      if (d.skills.length) y += chips(els, d.skills, 160, y, 880) + 30;
+      if (d.certs.length) {
+        els.push(E('heading', 160, y, 880, 36, { font: 'head', size: 24, weight: 600, lh: 1.4, align: 'center', color: '@text', tag: 'h3' }, 'Certificates &amp; licences', A('fadeUp', 0)));
+        y += 56; y += chips(els, d.certs, 160, y, 880, { bg: 'transparent', bw: 1, bc: '@accent', color: '@accent' });
+      }
+      out.skills = sec('Skills', y + 70, { type: 'color', color: '@bg' }, els, { anchor: 'skills' });
+    }
+    if (d.education && d.education.length) {
+      const els = [eyebrow('Education', 300, 80, 600, 'center'), title('Study &amp; training', 200, 114, 800, 64, 44, 'center')];
+      let y = 220;
+      d.education.forEach((e, i) => {
+        const dl = i * 0.06, th = 32 * lines(e.title, 56);
+        els.push(E('heading', 160, y, 640, th, { font: 'head', size: 22, weight: 600, lh: 1.35, color: '@text', tag: 'h3' }, WB.esc(e.title), A('fadeUp', dl)));
+        if (e.dates) els.push(E('text', 820, y + 2, 220, 30, { size: 15, weight: 600, lh: 1.6, align: 'right', color: '@accent' }, WB.esc(e.dates), A('fadeUp', dl)));
+        let yy = y + th;
+        if (e.org) { els.push(E('text', 160, yy + 2, 640, 28, { size: 16, lh: 1.6, color: '@muted' }, WB.esc(e.org), A('fadeUp', dl + 0.03))); yy += 30; }
+        els.push(E('line', 160, yy + 18, 880, 1, { bg: '@muted', opacity: 0.3 }, '', A('fade', dl)));
+        y = yy + 40;
+      });
+      out.education = sec('Education', y + 60, { type: 'color', color: '@surface' }, els, { anchor: 'education' });
+    }
+    const c = L.contact.make({ eyebrow: 'Contact', title: 'Let’s work together', formTitle: 'Send me a message', address: d.location || 'Sydney NSW',
+      text: [d.email && '<b>Email</b> ' + WB.esc(d.email), d.phone && '<b>Phone</b> ' + WB.esc(d.phone), d.location && '<b>Based in</b> ' + WB.esc(d.location)].filter(Boolean).join('<br>') || 'Tell me about your project or role — I’ll reply soon.' });
+    const soc = c.els.find((e) => e.t === 'social'); if (soc) soc.c = { linkedin: d.linkedin || '', email: d.email || '', phone: d.phone || '' };
+    if (!d.location) c.els = c.els.filter((e) => e.t !== 'map');
+    out.contact = c;
+    Object.keys(out).forEach((k) => { out[k] = WB.normSection(out[k]); });
+    return out;
+  };
+  WB.RESUME_ORDER = [['intro', 'Intro'], ['about', 'About me'], ['experience', 'Experience'], ['skills', 'Skills & certificates'], ['education', 'Education'], ['contact', 'Contact']];
+  WB.resumeSite = (d, siteName) => {
+    const site = WB.buildTemplate('portfolio', siteName || d.name || 'My website');
+    const S = WB.resumeSections(d);
+    site.pages = [site.pages[0]];
+    site.pages[0].sections = WB.RESUME_ORDER.map((k) => S[k[0]]).filter(Boolean);
+    const nav = site.header && site.header.els.find((e) => e.t === 'nav');
+    if (nav) { nav.c.logo = WB.esc(d.name || siteName || ''); nav.c.cta = { label: 'Get in touch', href: '#contact' }; }
+    if (site.footer) {
+      site.footer.els.forEach((e) => { if (typeof e.c === 'string') e.c = e.c.replace(/Your Brand/g, WB.esc(d.name || siteName || '')); if (e.t === 'social') e.c = { linkedin: d.linkedin || '', email: d.email || '' }; });
+      const f = site.footer.els.find((e) => e.t === 'heading'); if (f) f.c = WB.esc(d.name || siteName || ''); const t = site.footer.els.find((e) => e.t === 'text'); if (t) t.c = [WB.esc(d.title || ''), WB.esc(d.location || '')].filter(Boolean).join('<br>'); }
+    return site;
+  };
   WB.TEMPLATES = T;
   WB.buildTemplate = function (key, name) {
     const t = T[key] || T.blank;
@@ -2246,6 +2353,7 @@ a{color:var(--ui-a2)}
     if (!m || !m.categories || !m.categories.length || !count(m)) throw new Error('We couldn’t pick out any items. Make sure each item has a price like $24, or paste the text instead.');
     return m;
   }
+  WB.DocReader = { pdfLines: readPdfLines, docxText: readDocxText };
   WB.MenuImport = {
     async fromFile(file) {
       const name = (file.name || '').toLowerCase();
@@ -2257,6 +2365,211 @@ a{color:var(--ui-a2)}
     },
     fromText(text) { return check(linesToMenu(textToLines(text))); },
     count
+  };
+})();
+
+/* =====================================================================
+   Resume import — reads a PDF, Word (.docx) or pasted resume on the
+   person's own device (no server, no AI) and returns:
+   { name, title, summary, about, email, phone, location, linkedin, website,
+     jobs:[{role, org, dates, points:[]}], education:[{title, org, dates}],
+     skills:[], certs:[] }
+   Grew out of ChefLink's resume reader, widened for any job.
+   ===================================================================== */
+(function () {
+  'use strict';
+  const MONTH = '(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\\.?';
+  const DATE = '(?:' + MONTH + '\\s+)?(?:(?:0?[1-9]|1[0-2])\\/)?(?:19[6-9]\\d|20\\d{2})';
+  const END = '(?:' + DATE + '|present|current|now|today|ongoing)';
+  const RANGE = new RegExp('(' + DATE + ')\\s*(?:[-–—]|to|until)\\s*(' + END + ')', 'i');
+  const SINGLE = new RegExp('\\b(' + DATE + ')\\b', 'i');
+
+  const HEADS = [
+    ['profile', /^(professional\s+summary|career\s+(summary|profile|objective)|personal\s+(statement|profile)|executive\s+summary|summary(\s+of\s+qualifications)?|profile|about(\s+me)?|objective|introduction)$/i],
+    ['experience', /^(professional\s+experience|work\s+(experience|history)|employment(\s+history)?|career\s+history|(relevant\s+)?experience|positions?\s+held|career)$/i],
+    ['education', /^(education(\s+(and|&)\s+(training|qualifications))?|academic\s+(background|qualifications)|qualifications?|training|studies)$/i],
+    ['certs', /^(certifications?|certificates?|licen[cs]es?(\s+(and|&)\s+certifications?)?|accreditations?|tickets?)$/i],
+    ['skills', /^(key\s+skills|core\s+(skills|competencies|strengths)|(technical\s+|soft\s+)?skills(\s+(and|&)\s+(abilities|expertise))?|expertise|areas\s+of\s+expertise|competencies|strengths|capabilities|tools(\s+(and|&)\s+technologies)?)$/i],
+    ['contact', /^(contact(\s+(details|information|me))?|personal\s+details|details)$/i],
+    ['other', /^(referees?|references?|interests|hobbies(\s+(and|&)\s+interests)?|languages|awards?(\s+(and|&)\s+achievements)?|achievements|volunteer(ing)?(\s+experience)?|projects|publications|memberships)$/i]
+  ];
+  const BULLET = /^\s*([•●▪◦■□➢►▸‣∙·*–—-]|\d+[.)])\s+/;
+  const CAREER = /\b(manager|director|officer|assistant|coordinator|consultant|engineer|developer|designer|analyst|chef|cook|nurse|teacher|trainer|assessor|accountant|administrator|specialist|supervisor|lead|head|executive|associate|technician|electrician|plumber|carpenter|builder|apprentice|sales|marketing|receptionist|clerk|barista|waiter|waitress|attendant|representative|advisor|adviser|architect|photographer|writer|editor|producer|owner|founder|intern|volunteer|worker|operator|driver|therapist|stylist|hairdresser|beautician|pharmacist|doctor|dentist|lawyer|solicitor|paralegal|bookkeeper|scientist|researcher|lecturer|tutor|planner|estimator|surveyor|agent|broker|cleaner|carer|labourer|mechanic|fitter|welder|machinist|baker|butcher|server|host|bartender|sommelier|instructor|coach)s?\b/i;
+  const NOT_NAME = /\b(resume|curriculum|vitae|cv|profile|summary|contact|address|mobile|phone|email|linkedin|references?|objective|page|history|experience|skills|education|qualifications?|work|employment|certificates?|street|road|avenue)\b/i;
+
+  const fixAcro = (s) => s.replace(/\b(i{1,3}|iv|tafe|nsw|rsa|rcg|whs|uts|unsw|ict|it|hr)\b/gi, (m) => m.toUpperCase());
+  const tc = (s) => s.toLowerCase().replace(/(^|[\s'’-])([a-zà-ÿ])/g, (m, a, c) => a + c.toUpperCase());
+  const sentences = (s) => (s.replace(/\s+/g, ' ').match(/[^.!?]+[.!?]+/g) || (s.trim() ? [s.trim()] : [])).map((x) => x.trim());
+  const stripBullet = (l) => l.replace(BULLET, '').trim();
+  const isHead = (l) => {
+    const c = l.trim().replace(/[:\-–—]+\s*$/, '').replace(/\s+/g, ' ');
+    if (!c || c.length > 44) return null;
+    for (const [k, rx] of HEADS) if (rx.test(c)) return k;
+    return null;
+  };
+
+  function split(lines) {
+    const sec = { head: [] }; let cur = 'head';
+    lines.forEach((l) => { const h = isHead(l); if (h) { cur = h; sec[cur] = sec[cur] || []; return; } (sec[cur] = sec[cur] || []).push(l); });
+    return sec;
+  }
+
+  function email(t) { const m = t.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i); return m ? m[0] : ''; }
+  function phone(t) {
+    const cands = t.match(/(?:\+\d{1,3}[\s.-]?)?(?:\(?\d{1,4}\)?[\s.-]?){2,5}\d{2,4}/g) || [];
+    for (const c of cands) {
+      const d = c.replace(/\D/g, '');
+      if (d.length < 8 || d.length > 13) continue;
+      if (/^(19|20)\d{2}(19|20)\d{2}$/.test(d)) continue;
+      let au = d.startsWith('61') ? '0' + d.slice(2) : d;
+      if (/^04\d{8}$/.test(au)) return au.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
+      if (/^0[2378]\d{8}$/.test(au)) return au.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2 $3');
+      return c.trim();
+    }
+    return '';
+  }
+  function links(t) {
+    const li = t.match(/(?:https?:\/\/)?(?:[a-z]{2,3}\.)?linkedin\.com\/in\/[\w%-]+\/?/i);
+    const urls = (t.match(/(?:https?:\/\/|www\.)[^\s)>,|]+/gi) || []).map((u) => u.replace(/[.,;]$/, '')).filter((u) => !/linkedin\.com/i.test(u));
+    const fix = (u) => (u && !/^https?:/i.test(u) ? 'https://' + u : u);
+    return { linkedin: li ? fix(li[0]) : '', website: urls[0] ? fix(urls[0]) : '' };
+  }
+  function location(t) {
+    t = t.split('\n').slice(0, 10).join('\n') + '\n' + t;
+    const m = t.match(/\b([A-Z][a-z]+(?:[ -][A-Z][a-z]+){0,2}),?\s+(NSW|VIC|QLD|SA|WA|TAS|ACT|NT)\b(?:\s+\d{4})?/);
+    if (m) return m[1].trim() + ' ' + m[2];
+    const c = t.match(/\b(Sydney|Melbourne|Brisbane|Perth|Adelaide|Canberra|Hobart|Darwin|Gold Coast|Newcastle|Wollongong|Auckland|Wellington|London)\b/);
+    return c ? c[1] : '';
+  }
+  function name(lines, em) {
+    const lab = lines.join('\n').match(/^name\s*[:\-]\s*([A-Za-zÀ-ÿ'’. -]{4,40})$/im);
+    if (lab) return tc(lab[1].trim());
+    const tokens = em ? em.split('@')[0].toLowerCase().split(/[._-]+/).filter((x) => x.length > 1) : [];
+    let best = null;
+    lines.slice(0, 10).forEach((raw, i) => {
+      const l = raw.replace(/[a-z0-9._%+-]+@\S+/gi, ' ').replace(/(https?:\/\/|www\.)\S+/gi, ' ').replace(/\+?\d[\d\s().-]{6,}\d/g, ' ');
+      l.split(/\s*[|•·,–—\/]\s*/).forEach((chunk) => {
+        const w = chunk.trim().split(/\s+/).filter(Boolean);
+        if (w.length < 2 || w.length > 4 || NOT_NAME.test(chunk) || CAREER.test(chunk)) return;
+        if (isHead(chunk) || !w.every((x) => /^[A-ZÀ-Þ][A-Za-zÀ-ÿ'’.-]*[a-zà-ÿ][A-Za-zÀ-ÿ'’.-]*$/.test(x) || /^[A-ZÀ-Þ'’.-]{2,}$/.test(x))) return;
+        const nm = w.map((x) => (/[a-z]/.test(x) ? x : tc(x))).join(' ');
+        const score = nm.toLowerCase().split(' ').filter((x) => tokens.includes(x)).length * 10 - i;
+        if (!best || score > best.score) best = { nm, score };
+      });
+    });
+    if (best) return best.nm;
+    if (em) { const p = em.split('@')[0].split(/[._-]+/).filter((x) => /^[a-z]{2,}$/i.test(x)); if (p.length >= 2) return tc(p.join(' ')); }
+    return '';
+  }
+  function title(lines, nm) {
+    const at = lines.findIndex((l) => nm && l.toLowerCase().includes(nm.toLowerCase()));
+    const from = at >= 0 ? at : 0;
+    for (const raw of lines.slice(from, from + 5)) {
+      let l = raw; if (nm) l = l.replace(new RegExp(nm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), '');
+      l = l.replace(/[a-z0-9._%+-]+@\S+/gi, '').replace(/\+?\d[\d\s().-]{6,}\d/g, '').replace(/^[\s|,•·–—-]+|[\s|,•·–—-]+$/g, '');
+      if (l.length >= 3 && l.length <= 70 && CAREER.test(l) && !RANGE.test(l) && !/[.!?]$/.test(l)) return l.split(/\s*[|•·]\s*/)[0].trim();
+    }
+    return '';
+  }
+
+  /* split "Role at Org", "Role | Org", "Role, Org", "Role – Org" (or "Org – Role") */
+  function roleOrg(text) {
+    let t = text.replace(/\s+/g, ' ').replace(/^[\s|,•·–—-]+|[\s|,•·–—-]+$/g, '');
+    let m = t.match(/^(.+?)\s+(?:at|@)\s+(.+)$/i);
+    if (!m) m = t.match(/^(.+?)\s*(?:\||–|—|\s-\s|,)\s*(.+)$/);
+    if (!m) return CAREER.test(t) ? { role: t, org: '' } : { role: '', org: t };
+    let a = m[1].trim(), b = m[2].trim();
+    if (!CAREER.test(a) && CAREER.test(b)) [a, b] = [b, a];
+    return { role: a, org: b };
+  }
+
+  /* entries = blocks anchored on a date range (jobs, study) */
+  function entries(lines, wantPoints) {
+    const out = []; let cur = null, pend = [];
+    const flushPend = () => { if (cur && pend.length) { pend.forEach((p) => cur.points.push(p)); } pend = []; };
+    lines.forEach((raw) => {
+      const line = raw.trim(); if (!line) return;
+      const r = line.match(RANGE) || (!BULLET.test(line) && line.length < 90 && line.match(SINGLE) && !/[.!?]$/.test(line) ? line.match(SINGLE) : null);
+      if (r) {
+        const dates = r[0].replace(/\s*(?:[-–—]|to|until)\s*/i, ' – ').replace(/\b(present|current|now|today|ongoing)\b/i, 'Present').replace(/\s+/g, ' ').trim();
+        const rest = line.replace(r[0], '').replace(/[()]/g, ' ');
+        const header = [];
+        if (cur && !cur.points.length && !cur.role && !cur.org) { /* date line followed a lone header already set */ }
+        pend.forEach((p) => header.push(p)); pend = [];
+        if (rest.replace(/[\s|,•·–—-]/g, '').length > 1) header.push(rest);
+        cur = { role: '', org: '', dates, points: [] };
+        const hs = header.map((h) => h.trim()).filter(Boolean).slice(-3);
+        if (hs.length === 1) Object.assign(cur, roleOrg(hs[0]));
+        else if (hs.length >= 2) {
+          const a = roleOrg(hs[0]), b = roleOrg(hs[1]);
+          if (a.role && a.org) Object.assign(cur, a);
+          else { const first = hs[0], second = hs[1]; if (CAREER.test(second) && !CAREER.test(first)) { cur.role = second; cur.org = first; } else { cur.role = first; cur.org = second; } }
+          hs.slice(2).forEach((x) => cur.points.push(x));
+        }
+        out.push(cur); return;
+      }
+      if (BULLET.test(line)) { flushPend(); if (cur) cur.points.push(stripBullet(line)); return; }
+      const shortish = line.length <= 70 && !/[.!?;]$/.test(line);
+      if (shortish && (!cur || cur.points.length || pend.length)) { pend.push(line); return; }
+      if (cur && !cur.role && !cur.org && shortish) { Object.assign(cur, roleOrg(line)); return; }
+      if (cur && !cur.points.length && shortish && !cur.org) { cur.org = line; return; }
+      flushPend(); if (cur) cur.points.push(line);
+    });
+    flushPend();
+    out.forEach((e) => {
+      const pts = []; e.points.forEach((p) => { if (pts.length && /^[a-z]/.test(p) && !/[.!?]$/.test(pts[pts.length - 1])) pts[pts.length - 1] += ' ' + p; else pts.push(p); });
+      e.points = wantPoints ? pts.slice(0, 8) : [];
+      if (!e.role && e.org && !wantPoints) { e.role = e.org; e.org = ''; }
+    });
+    return out.filter((e) => e.role || e.org);
+  }
+
+  function list(lines) {
+    const out = [];
+    lines.forEach((l) => stripBullet(l).split(/\s*[,;|•·]\s*/).forEach((x) => {
+      x = x.replace(/^[\s:–—-]+|[\s.]+$/g, ''); if (x.length >= 2 && x.length <= 48 && !/^(and|etc)$/i.test(x)) out.push(x);
+    }));
+    return [...new Set(out)].slice(0, 30);
+  }
+  const CERT = [/certificate\s+(?:i{1,3}|iv|[1-4])\s+in\s+[a-z ,&()-]+/gi, /(?:advanced\s+)?diploma\s+(?:of|in)\s+[a-z ,&()-]+/gi, /bachelor\s+of\s+[a-z ,&()-]+/gi, /master\s+of\s+[a-z ,&()-]+/gi, /first\s+aid(?:\s+certificate)?/gi, /\b(?:rsa|rcg|white\s+card|working\s+with\s+children\s+check|food\s+safety\s+supervisor)\b/gi];
+
+  function parse(lines) {
+    lines = lines.map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+    if (lines.length < 3) throw new Error('That resume looks almost empty. Try another file, or paste the text.');
+    const text = lines.join('\n'), sec = split(lines);
+    const em = email(text), nm = name(lines, em), lk = links(text);
+    const jobs = entries(sec.experience || [], true);
+    const edu = entries(sec.education || [], false).map((e) => ({ title: e.role || e.org, org: e.role ? e.org : '', dates: e.dates }));
+    if (!edu.length && sec.education) (sec.education || []).filter((l) => !BULLET.test(l) || true).slice(0, 6).forEach((l) => edu.push({ title: stripBullet(l), org: '', dates: '' }));
+    let skills = list(sec.skills || []);
+    let certs = list(sec.certs || []);
+    if (!certs.length) { CERT.forEach((rx) => (text.match(rx) || []).forEach((c) => certs.push(c.trim().replace(/[,.;]+$/, '')))); certs = [...new Set(certs.map((c) => c.split(/\s+[-–—,]\s+/)[0]).map((c) => (c.length <= 5 ? c.toUpperCase() : fixAcro(tc(c)))))].filter((c) => !edu.some((e) => e.title.toLowerCase() === c.toLowerCase())).slice(0, 8); }
+    const prof = (sec.profile || []).filter((l) => !BULLET.test(l)).join(' ').replace(/\s+/g, ' ').trim();
+    let about = sentences(prof).slice(0, 5).join(' ');
+    if (about.length > 700) about = about.slice(0, 697).replace(/\s+\S*$/, '') + '…';
+    const ttl = title(lines, nm) || (jobs[0] && jobs[0].role) || '';
+    let summary = sentences(prof)[0] || '';
+    if (summary.length > 160 || summary.length < 25) summary = [ttl, location(text)].filter(Boolean).join(' · ');
+    const d = { name: nm, title: ttl, summary, about, email: em, phone: phone(text), location: location(text), linkedin: lk.linkedin, website: lk.website, jobs, education: edu.slice(0, 8), skills, certs };
+    if (!d.name && !d.jobs.length && !d.email) throw new Error('We couldn’t find a name, contact details or jobs in that file. Try another file, or paste the text.');
+    return d;
+  }
+
+  async function linesFromFile(file) {
+    const n = (file.name || '').toLowerCase();
+    if (n.endsWith('.pdf') || file.type === 'application/pdf') {
+      const ls = await WB.DocReader.pdfLines(file);
+      ls.sort((a, b) => Math.floor(a.y / 100000) - Math.floor(b.y / 100000) || a.col - b.col || a.y - b.y);
+      return ls.map((l) => l.text);
+    }
+    if (n.endsWith('.docx')) return (await WB.DocReader.docxText(file)).split(/\r?\n/);
+    if (n.endsWith('.txt') || /^text\//.test(file.type)) return (await file.text()).split(/\r?\n/);
+    if (n.endsWith('.doc')) throw new Error('Old .doc files can’t be read — please save it as .docx or PDF, or paste the text.');
+    throw new Error('Please choose a PDF, a Word (.docx) or a text file.');
+  }
+  WB.ResumeImport = {
+    async fromFile(file) { return parse(await linesFromFile(file)); },
+    fromText(text) { return parse(String(text || '').split(/\r?\n/)); }
   };
 })();
 
@@ -2295,7 +2608,7 @@ a{color:var(--ui-a2)}
     map: '<path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>', form: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h5"/>',
     nav: '<path d="M3 6h18M3 12h18M3 18h18"/>', social: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
     bold: '<path d="M6 4h8a4 4 0 0 1 0 8H6zM6 12h9a4 4 0 0 1 0 8H6z"/>', italic: '<path d="M19 4h-9M14 20H5M15 4 9 20"/>', underline: '<path d="M6 3v7a6 6 0 0 0 12 0V3M4 21h16"/>',
-    link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>', check: '<path d="M20 6 9 17l-5-5"/>',
+    link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>', check: '<path d="M20 6 9 17l-5-5"/>', user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
     al: '<path d="M3 6h18M3 12h12M3 18h16"/>', ac: '<path d="M3 6h18M6 12h12M4 18h16"/>', ar: '<path d="M3 6h18M9 12h12M5 18h16"/>', menu: '<path d="M3 6h18M3 12h18M3 18h18"/>', sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
     bag: '<path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/>', grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>', tag: '<path d="M20 12 12 20 3 11V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
     star: '<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>', bot: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9 17h6"/>',
@@ -2671,9 +2984,10 @@ a{color:var(--ui-a2)}
     } catch (e) { console.warn('thumbnail', e); }
   }
 
-  function upgradeModal() {
-    const m = modal('<h2>Want another website?</h2>' +
-      '<p class="muted" style="margin:0 0 14px">The free plan includes <b>one website</b>. Upgrade to <b>Platinum</b> for up to 10 websites — plus online bookings, your own AI assistant and no Webescapade badge.</p>' +
+  function upgradeModal(o) {
+    o = o || {};
+    const m = modal('<h2>' + (o.title || 'Want another website?') + '</h2>' +
+      '<p class="muted" style="margin:0 0 14px">' + (o.text || 'The free plan includes <b>one website</b>. Upgrade to <b>Platinum</b> for up to 10 websites — plus online bookings, your own AI assistant and no Webescapade badge.') + '</p>' +
       '<p style="margin:0 0 18px;font-size:15px"><b>$49 / month + GST</b> — or <b>$29 / month + GST</b> if you already use Restaurant, Service, Trade or Function Deluxe.</p>' +
       '<div class="acts"><button class="btn ghost" data-x>Not now</button>' +
       '<a class="btn ghost" style="text-decoration:none" href="https://webescapade.com/site-builder/#plans" target="_blank" rel="noopener">See plans</a>' +
@@ -2681,6 +2995,72 @@ a{color:var(--ui-a2)}
     $('[data-x]', m).onclick = () => m.close();
   }
 
+
+  /* ---------- resume import: read on the device, check, then build sections ---------- */
+  function resumeModal(onDone, opts) {
+    opts = opts || {};
+    const m = modal('<div id="rsm"></div>', { wide: true, sticky: true });
+    const box = $('#rsm', m);
+    let d = null;
+    const pick = () => {
+      box.innerHTML = '<h2>' + (opts.site ? 'Start from your resume' : 'Import your resume') + '</h2><p class="muted">Upload your resume as a PDF or Word file, or paste the text. It is read on your own device — it is never sent anywhere — and you can check everything before it goes on your website.</p>' +
+        '<label class="imp-drop" id="rs-drop"><input type="file" id="rs-file" accept=".pdf,.docx,.txt,application/pdf" hidden>' + I('pages') + '<b>Drop your resume here, or click to choose</b><span>PDF, Word (.docx) or text file</span></label>' +
+        '<details class="imp-paste"><summary>Or paste the text</summary><textarea class="inp" id="rs-txt" rows="8" placeholder="Your name&#10;Your job title&#10;email · phone · suburb&#10;&#10;SUMMARY&#10;…&#10;EXPERIENCE&#10;Role, Company&#10;2020 – Present&#10;• What you did"></textarea><div class="i-acts" style="margin-top:8px"><button class="btn sm pri" id="rs-go">Read my resume</button></div></details>' +
+        '<p class="i-note" style="margin-top:12px">Works best with clear headings like <b>Summary</b>, <b>Experience</b>, <b>Education</b> and <b>Skills</b>, and dates like <b>2019 – Present</b>.</p>' +
+        '<div class="acts"><button class="btn ghost" data-x>Cancel</button></div>';
+      $('[data-x]', box).onclick = () => m.close();
+      const drop = $('#rs-drop', box), inp = $('#rs-file', box);
+      drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+      drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+      drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); if (e.dataTransfer.files[0]) read(() => WB.ResumeImport.fromFile(e.dataTransfer.files[0])); });
+      inp.onchange = () => { if (inp.files[0]) read(() => WB.ResumeImport.fromFile(inp.files[0])); };
+      $('#rs-go', box).onclick = () => { const t = $('#rs-txt', box).value.trim(); if (t.length < 20) return toast('Please paste a little more of your resume.', 'bad'); read(() => WB.ResumeImport.fromText(t)); };
+    };
+    const read = async (fn) => {
+      box.innerHTML = '<h2>Reading your resume…</h2><p class="muted">This only takes a moment.</p>';
+      try { d = await fn(); review(); } catch (e) { pick(); toast(e.message || 'Could not read that file.', 'bad', 7000); }
+    };
+    const fld = (k, label, ph, area) => '<label class="field"><span>' + label + '</span>' + (area ? '<textarea class="inp" rows="' + area + '" data-rf="' + k + '" placeholder="' + esc(ph || '') + '">' + esc(d[k] || '') + '</textarea>' : '<input class="inp" data-rf="' + k + '" value="' + esc(d[k] || '') + '" placeholder="' + esc(ph || '') + '">') + '</label>';
+    const collect = () => {
+      $$('[data-rf]', box).forEach((n) => { d[n.dataset.rf] = n.value.trim(); });
+      $$('[data-rj]', box).forEach((n) => { const [i, f] = n.dataset.rj.split(':'); const j = d.jobs[+i]; if (j) j[f] = f === 'points' ? n.value.split('\n').map((x) => x.replace(/^[•\-*]\s*/, '').trim()).filter(Boolean) : n.value.trim(); });
+      $$('[data-re]', box).forEach((n) => { const [i, f] = n.dataset.re.split(':'); const e = d.education[+i]; if (e) e[f] = n.value.trim(); });
+      d.skills = String(d.skillsText || '').split(/\s*[,\n]\s*/).filter(Boolean); d.certs = String(d.certsText || '').split(/\s*\n\s*/).filter(Boolean);
+      d.jobs = d.jobs.filter((j) => j.role || j.org); d.education = d.education.filter((e) => e.title);
+    };
+    const review = () => {
+      d.skillsText = (d.skills || []).join(', '); d.certsText = (d.certs || []).join('\n');
+      const page = opts.page ? opts.page() : null;
+      const clash = page ? WB.RESUME_ORDER.filter(([k]) => page.sections.some((sc) => sc.anchor === k || (k === 'intro' && (sc.anchor === 'top' || /hero|intro/i.test(sc.name || ''))))).map((x) => x[1]) : [];
+      box.innerHTML = '<h2>Check your details</h2><p class="muted">Here is what we found. Fix anything below — it is exactly what will go on your website.</p>' +
+        '<div class="rs-scroll"><div class="i-2">' + fld('name', 'Name', 'Your name') + fld('title', 'Job title', 'e.g. Marketing Manager') + '</div>' +
+        fld('summary', 'One-line intro', 'Shown under your name', 0) + fld('about', 'About you', 'A few sentences about you', 4) +
+        '<div class="i-2">' + fld('email', 'Email') + fld('phone', 'Phone') + '</div><div class="i-2">' + fld('location', 'Location', 'e.g. Surry Hills NSW') + fld('linkedin', 'LinkedIn', 'https://linkedin.com/in/…') + '</div>' +
+        '<h4 class="rs-h">Experience <small>' + d.jobs.length + ' job' + (d.jobs.length === 1 ? '' : 's') + '</small></h4>' +
+        (d.jobs.length ? d.jobs.map((j, i) => '<div class="rs-job"><div class="rs-jh"><input class="inp" data-rj="' + i + ':role" value="' + esc(j.role) + '" placeholder="Role"><input class="inp" data-rj="' + i + ':org" value="' + esc(j.org) + '" placeholder="Workplace"><input class="inp" data-rj="' + i + ':dates" value="' + esc(j.dates) + '" placeholder="Dates"><button class="ic" data-rmj="' + i + '" title="Remove job" aria-label="Remove job">×</button></div><textarea class="inp" rows="3" data-rj="' + i + ':points" placeholder="What you did — one point per line">' + esc((j.points || []).join('\n')) + '</textarea></div>').join('') : '<p class="i-note">No jobs found — you can add them on the page afterwards.</p>') +
+        '<h4 class="rs-h">Education</h4>' + (d.education.length ? d.education.map((e, i) => '<div class="rs-jh"><input class="inp" data-re="' + i + ':title" value="' + esc(e.title) + '" placeholder="Course or degree"><input class="inp" data-re="' + i + ':org" value="' + esc(e.org) + '" placeholder="Where"><input class="inp" data-re="' + i + ':dates" value="' + esc(e.dates) + '" placeholder="Dates"><button class="ic" data-rme="' + i + '" title="Remove" aria-label="Remove">×</button></div>').join('') : '<p class="i-note">None found.</p>') +
+        '<div class="i-2" style="margin-top:12px">' + fld('skillsText', 'Skills (separate with commas)', 'e.g. Team leadership, Budgeting', 3) + fld('certsText', 'Certificates & licences (one per line)', '', 3) + '</div></div>' +
+        (opts.site ? '' : '<div class="imp-opts"><b>Add these sections</b><div class="rs-secs">' + WB.RESUME_ORDER.map(([k, l]) => '<label class="i-chk imp-r"><input type="checkbox" data-rs="' + k + '" checked><span>' + l + '</span></label>').join('') + '</div>' +
+          (clash.length ? '<div class="imp-where"><b>This page already has ' + esc(clash.join(', ')) + '</b><label class="i-chk imp-r"><input type="radio" name="rs-where" value="replace"><span>Replace those sections</span></label><label class="i-chk imp-r"><input type="radio" name="rs-where" value="add" checked><span>Add new sections</span></label></div>' : '') + '</div>') +
+        '<div class="acts"><button class="btn ghost" id="rs-back">Start again</button><button class="btn ghost" data-x>Cancel</button><button class="btn pri" id="rs-ok">' + (opts.site ? 'Continue' : 'Add to my page') + '</button></div>';
+      $('[data-x]', box).onclick = () => m.close();
+      $('#rs-back', box).onclick = pick;
+      box.onclick = (e) => {
+        const rj = e.target.closest('[data-rmj]'), re = e.target.closest('[data-rme]');
+        if (rj) { collect(); d.jobs.splice(+rj.dataset.rmj, 1); review(); }
+        if (re) { collect(); d.education.splice(+re.dataset.rme, 1); review(); }
+      };
+      $('#rs-ok', box).onclick = () => {
+        collect();
+        if (!d.name) return toast('Please add your name.', 'bad');
+        const pickSecs = opts.site ? null : $$('[data-rs]', box).filter((n) => n.checked).map((n) => n.dataset.rs);
+        if (pickSecs && !pickSecs.length) return toast('Choose at least one section to add.', 'bad');
+        const where = ($('[name=rs-where]:checked', box) || {}).value || 'add';
+        m.close(); onDone(d, pickSecs, where);
+      };
+    };
+    pick();
+  }
   function newSiteModal(count) {
     if (count >= CFG.maxSites) return toast('You have reached the maximum of ' + CFG.maxSites + ' websites.', 'bad', 5000);
     let chosen = 'business';
@@ -2688,7 +3068,7 @@ a{color:var(--ui-a2)}
       '<div class="tpl-grid">' + Object.keys(WB.TEMPLATES).map((k) => '<button class="tpl' + (k === chosen ? ' on' : '') + '" data-k="' + k + '"><div class="pv"></div><div class="tx"><b>' + esc(WB.TEMPLATES[k].label) + '</b><span>' + esc(WB.TEMPLATES[k].desc) + '</span></div></button>').join('') + '</div>' +
       '<div class="i-2"><label class="field"><span>Website name</span><input class="inp" id="n-name" placeholder="e.g. Serenity Day Spa"></label>' +
       '<label class="field"><span>Web address</span><input class="inp" id="n-slug" placeholder="serenity-day-spa"></label></div>' +
-      '<div class="muted" id="n-url" style="font-size:12.5px;margin-top:-6px"></div><div class="acts"><button class="btn ghost" data-x>Cancel</button><button class="btn pri" id="n-go">Create website</button></div>', { wide: true });
+      '<div class="muted" id="n-url" style="font-size:12.5px;margin-top:-6px"></div><div class="acts"><button class="btn" id="n-cv" style="margin-right:auto">' + I('pages') + 'Start from my resume <em class="plat-tag">PLATINUM</em></button><button class="btn ghost" data-x>Cancel</button><button class="btn pri" id="n-go">Create website</button></div>', { wide: true });
     $$('.tpl', m).forEach((b) => {
       const site = WB.buildTemplate(b.dataset.k, WB.TEMPLATES[b.dataset.k].label);
       const pvb = $('.pv', b); pvb.innerHTML = '<div class="tpv"></div>';
@@ -2701,12 +3081,24 @@ a{color:var(--ui-a2)}
     nm.oninput = () => { if (!slugTouched) sl.value = slugify(nm.value); showUrl(); };
     sl.oninput = () => { slugTouched = true; sl.value = slugify(sl.value); showUrl(); };
     $('[data-x]', m).onclick = () => m.close();
+    $('#n-cv', m).onclick = async () => {
+      let plan = 'standard'; try { plan = await Store.plan(); } catch (e) { /* keep standard */ }
+      if (plan !== 'platinum') return upgradeModal({ title: 'Build your website from your resume', text: 'Resume import is a <b>Platinum</b> feature. Drop in your resume and we build your intro, about, experience, skills, education and contact sections for you — plus online bookings, your own AI assistant, up to 10 websites and no Webescapade badge.' });
+      resumeModal((d) => {
+        if (!nm.value.trim()) { nm.value = d.name; if (!slugTouched) sl.value = slugify(d.name); showUrl(); }
+        m.__resume = d;
+        $$('.tpl', m).forEach((x) => x.classList.toggle('on', x.dataset.k === 'portfolio')); chosen = 'portfolio';
+        $('#n-cv', m).innerHTML = I('check') + 'Resume ready — ' + esc(d.name);
+        $('#n-go', m).textContent = 'Create my website';
+        toast('Check the website name and address, then press Create my website.', 'ok', 5000);
+      }, { site: true });
+    };
     $('#n-go', m).onclick = async () => {
       const name = nm.value.trim() || 'My website', slug = sl.value || slugify(name);
       const err = slugError(slug); if (err) return toast(err, 'bad', 5000);
       const btn = $('#n-go', m); btn.disabled = true;
       try {
-        const draft = WB.buildTemplate(chosen, name);
+        const draft = m.__resume && chosen === 'portfolio' ? WB.resumeSite(m.__resume, name) : WB.buildTemplate(chosen, name);
         draft.settings.title = name;
         const nav = draft.header && draft.header.els.find((e) => e.t === 'nav'); if (nav) nav.c.logo = name;
         if (draft.footer) { const f = draft.footer.els.find((e) => e.t === 'heading'); if (f) f.c = esc(name); }
@@ -3391,6 +3783,28 @@ a{color:var(--ui-a2)}
       setTimeout(() => { const n = mount.querySelector('.wb-sec[data-id="' + S.sel.sec + '"]'); if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
     }
 
+
+    function importResume() {
+      if (S.plan !== 'platinum') return upgradeModal({ title: 'Build your website from your resume', text: 'Resume import is a <b>Platinum</b> feature. Drop in your resume and we build your intro, about, experience, skills, education and contact sections for you — plus online bookings, your own AI assistant, up to 10 websites and no Webescapade badge.' });
+      resumeModal((d, keys, where) => {
+        const made = WB.resumeSections(d), ids = [];
+        change(() => {
+          const list = page().sections;
+          let at = (() => { const cs = curSec(); const i = cs ? list.indexOf(cs) : -1; return i < 0 ? list.length - 1 : i; })();
+          keys.forEach((k) => {
+            const sc = made[k]; if (!sc) return;
+            const old = where === 'replace' ? list.findIndex((x) => x.anchor === k || (k === 'intro' && (x.anchor === 'top' || /hero|intro/i.test(x.name || '')))) : -1;
+            if (old >= 0) { list.splice(old, 1, sc); at = old; }
+            else if (k === 'intro') { list.splice(0, 0, sc); at = 0; }
+            else { list.splice(at + 1, 0, sc); at++; }
+            ids.push(sc.id);
+          });
+          if (ids[0]) S.sel = { sec: ids[0] };
+        }, { left: true });
+        toast(ids.length + ' section' + (ids.length === 1 ? '' : 's') + ' added — add your photo, then press Publish', 'ok', 5000);
+        setTimeout(() => { const n = ids[0] && mount.querySelector('.wb-sec[data-id="' + ids[0] + '"]'); if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+      }, { page });
+    }
     /* ---------- import a menu / price list (read on the device, like Restaurant Deluxe) ---------- */
     function openImport(mode) {
       const m = modal('<div id="imp"></div>', { wide: true, sticky: true });
@@ -3518,6 +3932,7 @@ a{color:var(--ui-a2)}
         h = '<h4>Sections on “' + esc(page().name) + '”</h4><div class="slist">' + sections().map(({ sec, where }) =>
           '<div class="sitem' + (cs === sec ? ' on' : '') + '" data-sid="' + sec.id + '"><span>' + esc(sec.name) + '</span>' + (where !== 'page' ? '<small>' + where.toUpperCase() + '</small>' : '<button class="ic" data-sl="up">' + I('up') + '</button><button class="ic" data-sl="down">' + I('down') + '</button>') + '</div>').join('') + '</div>' +
           '<div class="imp-cta">' + I('pages') + '<div><b>Have a menu or price list?</b><span>Import it from a PDF, Word file or pasted text and we lay it out for you.</span><button class="btn sm pri" data-import="menu">Import menu / price list</button></div></div>' +
+          '<div class="imp-cta">' + I('user') + '<div><b>Building your own website?</b><span>Import your resume and we fill in your intro, experience, skills, education and contact.</span><button class="btn sm pri" data-import="resume">Import resume' + (S.plan === 'platinum' ? '' : ' <em class="plat-tag">PLATINUM</em>') + '</button></div></div>' +
           '<h4>Add a section</h4>' + libraryHTML();
       }
       if (S.tab === 'theme') {
@@ -3626,7 +4041,7 @@ a{color:var(--ui-a2)}
         return;
       }
       const pr = t.closest('[data-prod]'); if (pr) return productModal((S.products || []).find((x) => x.id === pr.dataset.prod));
-      const imp = t.closest('[data-import]'); if (imp) return openImport(imp.dataset.import);
+      const imp = t.closest('[data-import]'); if (imp) return imp.dataset.import === 'resume' ? importResume() : openImport(imp.dataset.import);
       const lib = t.closest('[data-lib]'); if (lib) return insertSection(lib.dataset.lib, curSec());
       const sl = t.closest('[data-sl]');
       if (sl) { e.stopPropagation(); return sectionAction(sl.dataset.sl, findSec(sl.closest('[data-sid]').dataset.sid)); }
