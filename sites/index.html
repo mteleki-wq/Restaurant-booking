@@ -1273,10 +1273,12 @@ body{min-height:100vh}
         const option = opt ? opt.value : '';
         const ex = cart.find((i) => i.id === id && i.option === option);
         const inCart = cart.filter((i) => i.id === id).reduce((s, i) => s + i.qty, 0);
-        if (p.stock != null && inCart >= p.stock) { add.textContent = 'No more in stock'; return; }
+        const label = add.dataset.label || (add.dataset.label = add.textContent);
+        const flash = (txt) => { add.textContent = txt; clearTimeout(add._t); add._t = setTimeout(() => { add.textContent = label; }, 1800); };
+        if (p.stock != null && inCart >= p.stock) { flash(p.stock > 0 ? 'Only ' + p.stock + ' in stock' : 'No more in stock'); return; }
         if (ex) ex.qty++; else cart.push({ id, qty: 1, option });
         save();
-        const t = add.textContent; add.textContent = '✓ Added'; setTimeout(() => { add.textContent = t; }, 1300);
+        flash('✓ Added');
         open();
         return;
       }
