@@ -189,6 +189,36 @@ section{position:relative}
 .vbtn b{display:block;font-size:15px}.vbtn span{font-size:13.5px;color:var(--mut);line-height:1.45;display:block}
 .vbtn[aria-pressed=true]{border-color:var(--v);box-shadow:0 12px 30px -16px rgba(124,92,255,.6)}
 .vnote{font-size:14px;color:var(--mut);padding:6px 4px;text-align:center}
+/* NEW FEATURES */
+.nw{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.nwc{background:#fff;border:1.5px solid #e9e5fb;border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 60px -44px rgba(30,20,80,.45);transition:transform .35s,box-shadow .35s}
+.nwc:hover{transform:translateY(-4px);box-shadow:0 40px 70px -40px rgba(60,40,160,.5)}
+.nwc .im{position:relative;aspect-ratio:16/10;overflow:hidden;background:#141223}
+.nwc .im img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.nwc:hover .im img{transform:scale(1.04)}
+.nwc .tag{position:absolute;right:14px;top:14px;font:700 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#fff;padding:8px 11px;border-radius:999px;background:linear-gradient(120deg,#8b5cf6,#3b82f6 55%,#22d3ee);box-shadow:0 8px 20px -6px rgba(60,40,160,.6)}
+.nwc .tag.rd{background:linear-gradient(120deg,#c65a3b,#e9a14b)}
+.nwc .tag.pl{background:linear-gradient(120deg,#17142b,#4b3f8f)}
+.nwc .bd{padding:26px 28px 28px;display:flex;flex-direction:column;gap:10px;flex:1}
+.nwc h3{font-size:24px;line-height:1.2}
+.nwc p{color:var(--mut);font-size:16px;line-height:1.6;flex:1}
+.nwc .wl{align-self:flex-start;margin-top:6px;display:inline-flex;align-items:center;gap:9px;border:0;background:var(--lilac);color:var(--text);font:600 14px/1 var(--sans);padding:11px 16px;border-radius:999px;cursor:pointer;transition:background .2s}
+.nwc .wl:hover{background:#e4ddff}
+.nwc .wl i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--v);color:#fff;font-size:10px}
+.live{margin-top:26px;border-radius:var(--r);padding:44px 46px;background:var(--ink);color:#fff;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1.25fr;gap:40px;align-items:center}
+.live:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:#7c5cff;filter:blur(120px);opacity:.35;left:-160px;top:-260px}
+.live:after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:#22d3ee;filter:blur(120px);opacity:.22;right:-120px;bottom:-240px}
+.live>*{position:relative;z-index:1}
+.live .eyebrow{color:var(--c)}
+.live h3{font-size:clamp(28px,3.4vw,40px);line-height:1.1;margin-bottom:14px}
+.live h3 em{font-style:normal;background:linear-gradient(120deg,#a78bfa,#60a5fa 55%,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.live p{color:var(--mut2);font-size:17px;line-height:1.6}
+.lpts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lpt{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px 18px 16px}
+.lpt b{display:block;font-size:16px;margin-bottom:6px}
+.lpt span{font-size:14.5px;line-height:1.5;color:var(--mut2)}
+.lpt .ic{font-size:22px;display:block;margin-bottom:8px}
+@media(max-width:900px){.nw{grid-template-columns:1fr}.live{grid-template-columns:1fr;padding:34px 26px}.lpts{grid-template-columns:1fr}}
 @media(max-width:900px){.vid{grid-template-columns:1fr}}
 
 /* how (sticky story) */
@@ -504,6 +534,7 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
     <ul id="menu">
       <li><a href="#try">Try it</a></li>
       <li><a href="#tour">Videos</a></li>
+      <li><a href="#new">New</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#platinum">Platinum</a></li>
       <li><a href="#shop">Shop</a></li>
@@ -562,8 +593,8 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
 </section>
 
 <div class="marq" aria-hidden="true"><div class="t">
-  <span>Drag &amp; drop anywhere</span><span>Animated welcome screens</span><span>Automatic phone layout</span><span>9 colour themes</span><span>Ready-made sections</span><span>Online bookings</span><span>AI assistant 24/7</span><span>Online shop with Stripe</span><span>Gift vouchers</span><span>Digital downloads</span><span>Contact forms</span><span>Google Maps &amp; video</span>
-  <span>Drag &amp; drop anywhere</span><span>Animated welcome screens</span><span>Automatic phone layout</span><span>9 colour themes</span><span>Ready-made sections</span><span>Online bookings</span><span>AI assistant 24/7</span><span>Online shop with Stripe</span><span>Gift vouchers</span><span>Digital downloads</span><span>Contact forms</span><span>Google Maps &amp; video</span>
+  <span>Build it with AI</span><span>Import your menu</span><span>Resume to website</span><span>Live menu</span><span>Drag &amp; drop anywhere</span><span>Animated welcome screens</span><span>Automatic phone layout</span><span>9 colour themes</span><span>Ready-made sections</span><span>Online bookings</span><span>AI assistant 24/7</span><span>Online shop with Stripe</span><span>Gift vouchers</span><span>Digital downloads</span><span>Contact forms</span><span>Google Maps &amp; video</span>
+  <span>Build it with AI</span><span>Import your menu</span><span>Resume to website</span><span>Live menu</span><span>Drag &amp; drop anywhere</span><span>Animated welcome screens</span><span>Automatic phone layout</span><span>9 colour themes</span><span>Ready-made sections</span><span>Online bookings</span><span>AI assistant 24/7</span><span>Online shop with Stripe</span><span>Gift vouchers</span><span>Digital downloads</span><span>Contact forms</span><span>Google Maps &amp; video</span>
 </div></div>
 
 <!-- LISTENED -->
@@ -606,6 +637,36 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
         <div class="cover" id="cover" style="background-image:url(/site-builder/img/poster-promo.jpg)"><span class="big-play" aria-label="Play video"></span></div>
       </div>
       <div class="vnote">More videos on our YouTube channel: <a href="https://www.youtube.com/@webescapadesydney" target="_blank" rel="noopener">@webescapadesydney</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW -->
+<section class="s" id="new" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">New in the Site Builder</div>
+      <h2>Online in minutes. <em>Up to date forever.</em></h2>
+      <p class="lead">Four new ways to get your business online faster — and to keep your website accurate every single day, without waiting for anyone.</p>
+    </div>
+    <div class="nw">
+      <article class="nwc rv"><div class="im"><img src="/site-builder/img/new/ai.jpg" alt="The AI builder showing a first draft of a restaurant website" loading="lazy"><span class="tag">New · AI</span></div><div class="bd"><h3>Build your website with AI</h3><p>Answer a few quick questions about your business. AI writes your headings, your story, your menu and your contact details — a complete first draft in under a minute, ready for your photos.</p><button class="wl" type="button" data-lsn="10"><i>▶</i>Watch how · 1:39</button></div></article>
+      <article class="nwc rv d1"><div class="im"><img src="/site-builder/img/new/import.jpg" alt="Checking an imported menu before adding it to the page" loading="lazy"><span class="tag">New</span></div><div class="bd"><h3>Import your menu or price list</h3><p>Drop in a PDF, a Word file or paste the text. Every dish, service and price lands on your page in seconds — or becomes products in your online shop. No retyping.</p><button class="wl" type="button" data-lsn="7"><i>▶</i>Watch how · 1:18</button></div></article>
+      <article class="nwc rv"><div class="im"><img src="/site-builder/img/new/resume.jpg" alt="A resume turned into a personal website" loading="lazy"><span class="tag pl">Platinum</span></div><div class="bd"><h3>Your website from your resume</h3><p>Upload your resume and get a finished personal website — about you, experience, skills, education and contact. Perfect for chefs, consultants, freelancers and job seekers.</p><button class="wl" type="button" data-lsn="8"><i>▶</i>Watch how · 1:14</button></div></article>
+      <article class="nwc rv d1"><div class="im"><img src="/site-builder/img/new/livemenu.jpg" alt="A live menu on a website with a dish marked sold out" loading="lazy"><span class="tag rd">Restaurant Deluxe</span></div><div class="bd"><h3>A live menu that updates itself</h3><p>Using Restaurant Deluxe? Change a price or mark a dish sold out in your Menu Manager, and your website shows it straight away — the same menu guests order from at the table.</p><button class="wl" type="button" data-lsn="9"><i>▶</i>Watch how · 1:07</button></div></article>
+    </div>
+    <div class="live rv">
+      <div>
+        <div class="eyebrow">Your website, your rules</div>
+        <h3>Change anything. Any time. <em>Live in seconds.</em></h3>
+        <p>Most businesses wait days — and pay — for every small website change. With the Site Builder you make the change yourself, from your computer or your phone, and press Publish. Your customers always see what’s true today.</p>
+      </div>
+      <div class="lpts">
+        <div class="lpt"><span class="ic">✍️</span><b>New special tonight?</b><span>Add it in a minute and publish — before the dinner rush.</span></div>
+        <div class="lpt"><span class="ic">🏷️</span><b>Prices changed?</b><span>Edit once. Import a new menu or price list in seconds.</span></div>
+        <div class="lpt"><span class="ic">🍽️</span><b>Sold out?</b><span>With a live menu, your website shows it automatically.</span></div>
+        <div class="lpt"><span class="ic">💸</span><b>No designer, no waiting</b><span>No fees for changes. Undo anything, publish whenever you like.</span></div>
+      </div>
     </div>
   </div>
 </section>
