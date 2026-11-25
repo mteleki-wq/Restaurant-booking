@@ -746,7 +746,7 @@ h1 em,h2 em{background:var(--grad);-webkit-background-clip:text;background-clip:
   </div>
 </div>
 </section>
-<script>/*SITEBUILDER-ANNOUNCE-JS*/(function(){var v=document.getElementById('sbxVid'),c=document.querySelector('#sbxPlay .sbx-cover');if(!v||!c)return;c.addEventListener('click',function(){if(!v.getAttribute('src'))v.src=v.getAttribute('data-src');c.style.display='none';var p=v.play();if(p&&p.catch)p.catch(function(){});});})();</script>
+<script>/*SITEBUILDER-ANNOUNCE-JS*/(function(){var v=document.getElementById('sbxVid'),c=document.querySelector('#sbxPlay .sbx-cover');if(!v||!c)return;c.addEventListener('click',function(){if(!v.getAttribute('src'))v.src=v.getAttribute('data-src');c.style.display='none';document.querySelectorAll('.sbx-chip').forEach(function(x){x.style.display='none';});var p=v.play();if(p&&p.catch)p.catch(function(){});});})();</script>
 <section class="s" data-sec="paper" id="products" style="padding-top:90px"><div class="w">
 <div class="head rv"><div class="eyebrow" data-edit="e31" style="">Ready to go</div><h2 data-edit="e2" style="">Four systems, <em>ready to go.</em></h2>
 <p data-edit="e42" style="">Built with real businesses, used every day and improved from their feedback. Pick the one made for your kind of business — or ask us to build something around you.</p></div>
