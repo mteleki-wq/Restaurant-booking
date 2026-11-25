@@ -300,6 +300,16 @@ a{color:var(--ui-a2)}
 @media (hover:none),(pointer:coarse){.ed-stage .wb-sec.ed-on>.ed-addsec{opacity:1}.ed-h:after{content:"";position:absolute;inset:calc(-12px * var(--ik,1))}.ed-sech{height:18px;bottom:-9px;width:84px}.ed-stage .wb-el:hover{outline:none}}
 
 .bk-st{font-size:12.5px;line-height:1.5;color:var(--ui-m);margin:8px 0 2px}.bk-st.ok{color:var(--ui-ok)}.bk-st.bad{color:#fbbf24}.bk-st a{color:#a78bfa}
+/* Build it with AI */
+.ai-btn{margin-right:8px}
+.ai-prog{display:flex;gap:6px;margin:0 0 16px}.ai-prog i{flex:1;height:4px;border-radius:4px;background:var(--ui-line)}.ai-prog i.on{background:var(--ui-grad)}
+.ai-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.ai-chip{font:inherit;font-size:13.5px;padding:9px 14px;border-radius:999px;border:1px solid var(--ui-line);background:var(--ui-p2);color:var(--ui-t);cursor:pointer}.ai-chip:hover{border-color:var(--ui-a)}.ai-chip.on{background:#8b5cf622;border-color:var(--ui-a);color:#fff}.ai-chips.big .ai-chip{padding:14px 20px;font-size:15px}
+.ai-wait{text-align:center;padding:40px 10px}.ai-wait .spin{margin:0 auto 18px}
+.ai-style{display:flex;align-items:center;gap:12px;font-size:13.5px;color:var(--ui-m);margin-bottom:10px}.ai-sw{display:flex}.ai-sw i{width:22px;height:22px;border-radius:50%;margin-right:-6px;border:2px solid var(--ui-p)}
+.ai-tag{font-style:italic;color:var(--ui-t);margin:0 0 12px}
+.ai-secs{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:46vh;overflow:auto}.ai-sec span{display:flex;flex-direction:column}.ai-sec small{color:var(--ui-m);font-size:12px;margin-top:2px;line-height:1.35}
+.ai-miss{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:#fbbf2414;border:1px solid #fbbf2440;font-size:13px}.ai-miss ul{margin:6px 0 0;padding-left:18px;color:var(--ui-m)}
+@media(max-width:640px){.ai-secs{grid-template-columns:1fr}}
 
 </style>
 </head>
@@ -2688,6 +2698,152 @@ a{color:var(--ui-a2)}
   };
 })();
 
+/* =====================================================================
+   "Build it with AI": turn the AI's plan (plain data) into normal builder sections.
+   The AI never writes HTML or layout — it only chooses from our section library and
+   fills in words, so the result is an ordinary, fully editable website.
+   ===================================================================== */
+(function () {
+  'use strict';
+  const L = WB.LIBRARY, esc = WB.esc;
+  const PALETTES = Object.keys(WB.PALETTES), FONTS = Object.keys(WB.FONT_PAIRS);
+  const lines = (t, per) => Math.max(1, Math.ceil(String(t || '').length / per));
+  // trim to a length at a word boundary (the AI is asked for short text; this is the safety net)
+  const cut = (t, n) => { t = String(t || '').replace(/\s+/g, ' ').trim(); if (t.length <= n) return t; const s = t.slice(0, n); return s.slice(0, Math.max(s.lastIndexOf(' '), n - 12)).replace(/[,;:\s]+$/, '') + '…'; };
+  const T = (t, n) => esc(cut(t, n));
+  // keep one optional line break the AI may give a hero title ("First line|Second line")
+  const title2 = (t, n) => String(t || '').split(/\s*(?:\||\n|<br>)\s*/).slice(0, 2).map((x) => T(x, n)).filter(Boolean).join('<br>');
+
+  WB.AI_SECTIONS = ['hero', 'about', 'features', 'pricing', 'menu', 'livemenu', 'gallery', 'team', 'testimonial', 'stats', 'shop', 'cta', 'contact'];
+  WB.AI_LABEL = { hero: 'Welcome (hero)', about: 'About', features: 'What you offer', pricing: 'Services & prices', menu: 'Menu / price list', livemenu: 'Live menu (Restaurant Deluxe)', gallery: 'Photo gallery', team: 'Team', testimonial: 'Customer review', stats: 'Numbers', shop: 'Online shop', cta: 'Call to action', contact: 'Contact' };
+
+  function heroSection(p, s, targets) {
+    const kind = ['photo', 'split', 'center'].indexOf(p.hero) >= 0 ? p.hero : 'photo';
+    const key = kind === 'photo' ? 'hero_photo' : kind === 'split' ? 'hero_split' : 'hero_center';
+    const o = { eyebrow: T(s.eyebrow, 46), title: title2(s.title || p.site_name, 28) || 'Welcome', text: T(s.text, 150), b1: T(s.button || 'Get in touch', 22), h1: targets.primary, b2: T(s.button2 || '', 22), h2: targets.secondary };
+    if (kind === 'center') o.anim = 'aurora';
+    const sec = L[key].make(o);
+    if (!o.b2 || !targets.secondary) sec.els = sec.els.filter((e) => !(e.t === 'button' && e.s && e.s.style === 'outline'));
+    return sec;
+  }
+  function aboutSection(s) {
+    const text = T(s.text, 520);
+    const sec = L.about.make({ eyebrow: T(s.eyebrow || 'About us', 40), title: T(s.title, 46), text, b1: T(s.button || 'Get in touch', 22) });
+    // make room for longer stories
+    const ph = 29 * lines(text, 52), p = sec.els.find((e) => e.t === 'text' && e.y === 326), b = sec.els.find((e) => e.t === 'button');
+    if (p) { p.h = Math.max(p.h, ph); if (b) b.y = Math.max(b.y, p.y + p.h + 24); sec.h = Math.max(sec.h, (b ? b.y + 54 : p.y + p.h) + 90); }
+    return sec;
+  }
+  function itemsOf(s, n, map) { return (s.items || []).slice(0, n).map(map); }
+
+  WB.aiSite = function (p, ans, keep) {
+    p = p || {}; ans = ans || {};
+    const name = String(ans.name || p.site_name || 'My website').trim();
+    const pal = PALETTES.indexOf(p.palette) >= 0 ? p.palette : 'ivory';
+    const fonts = FONTS.indexOf(p.fonts) >= 0 ? p.fonts : 'classic';
+    const site = WB.buildTemplate('blank', name);
+    site.theme.palette = pal; site.theme.colors = Object.assign({}, WB.PALETTES[pal]);
+    site.theme.fonts = { head: WB.FONT_PAIRS[fonts].head, body: WB.FONT_PAIRS[fonts].body };
+    const secs = (p.sections || []).filter((s) => s && WB.AI_SECTIONS.indexOf(s.type) >= 0 && (!keep || keep.indexOf(s.type) >= 0));
+    const has = (t) => secs.some((s) => s.type === t);
+    const anchorOf = { about: '#about', features: '#services', pricing: '#treatments', menu: '#menu', livemenu: '#menu', gallery: '#gallery', shop: '#shop', contact: '#contact', team: '#team' };
+    const wantsBooking = !!ans.booking;
+    const primary = wantsBooking ? 'booking:' : '#contact';
+    const secondary = ['menu', 'livemenu', 'pricing', 'features', 'gallery', 'shop', 'about'].map((t) => has(t) && anchorOf[t]).find(Boolean) || '';
+    const out = [];
+    secs.forEach((s) => {
+      let sec = null;
+      switch (s.type) {
+        case 'hero': sec = heroSection(p, s, { primary, secondary }); break;
+        case 'about': sec = aboutSection(s); break;
+        case 'features': {
+          const items = itemsOf(s, 3, (i) => [T(i.title, 30), T(i.text, 115)]);
+          while (items.length < 3) items.push(['Add a highlight', 'Describe something customers love about you.']);
+          sec = L.features.make({ eyebrow: T(s.eyebrow || 'What we do', 40), title: T(s.title, 46), items });
+          break;
+        }
+        case 'pricing': {
+          const items = itemsOf(s, 3, (i) => [T(i.title, 26), T(i.subtitle || '', 20), T(i.price || '[Add price]', 12), T(i.text, 100)]);
+          while (items.length < 3) items.push(['Add a service', '', '[Add price]', 'A short description.']);
+          sec = L.pricing.make({ eyebrow: T(s.eyebrow || 'Services', 40), title: T(s.title, 46), items, b: T(s.button || (wantsBooking ? 'Book' : 'Enquire'), 16), href: primary });
+          break;
+        }
+        case 'menu': {
+          const cats = (s.categories || []).map((c) => ({ title: cut(c.title, 40), dishes: (c.items || []).slice(0, 40).map((d) => ({ name: cut(d.title, 60), price: cut(d.price || '', 12), desc: cut(d.text || '', 160) })).filter((d) => d.name) })).filter((c) => c.dishes.length);
+          if (cats.length) sec = WB.menuFromImport({ eyebrow: cut(s.eyebrow || 'Menu', 40), title: cut(s.title || 'Our menu', 46), categories: cats });
+          else sec = L.menu.make({ eyebrow: T(s.eyebrow || 'Menu', 40), title: T(s.title || 'Our menu', 46), count: 4, items: [['[Add a dish]', '$00', 'A short description'], ['[Add a dish]', '$00', 'A short description'], ['[Add a dish]', '$00', 'A short description'], ['[Add a dish]', '$00', 'A short description']] });
+          break;
+        }
+        case 'livemenu': sec = L.livemenu.make({ eyebrow: T(s.eyebrow || 'Our menu', 40), title: T(s.title || 'Our menu', 46), venue: String(ans.venue || '').toLowerCase().replace(/[^a-z0-9-]/g, '') }); break;
+        case 'gallery': sec = L.gallery.make({ eyebrow: T(s.eyebrow || 'Gallery', 40), title: T(s.title || 'A look inside', 46) }); break;
+        case 'team': {
+          const items = itemsOf(s, 3, (i) => [T(i.title, 30), T(i.subtitle, 34)]).filter((i) => i[0]);
+          if (!items.length) return;
+          sec = L.team.make({ eyebrow: T(s.eyebrow || 'Our team', 40), title: T(s.title || 'Meet the team', 46), items });
+          if (items.length < 3) { const shift = (3 - items.length) * 170; sec.els.forEach((e) => { if (e.y >= 230) e.x += shift; }); }
+          break;
+        }
+        case 'testimonial': {
+          if (!s.text) return;
+          sec = L.testimonial.make({ quote: T(s.text, 220), name: T(s.title || 'A happy customer', 50) });
+          break;
+        }
+        case 'stats': {
+          const items = itemsOf(s, 4, (i) => [T(i.title, 8), T(i.text, 26)]).filter((i) => i[0]);
+          if (items.length < 2) return;
+          sec = L.stats.make({ items });
+          const off = (4 - items.length) * 132; sec.els.forEach((e) => { e.x += off; });
+          break;
+        }
+        case 'shop': sec = L.shop.make({ eyebrow: T(s.eyebrow || 'Shop online', 40), title: T(s.title || 'Shop online', 46) }); break;
+        case 'cta': sec = L.cta.make({ title: T(s.title || 'Ready when you are', 40), text: T(s.text, 90), b1: T(s.button || (wantsBooking ? 'Book now' : 'Contact us'), 20), href: primary }); break;
+        case 'contact': {
+          // contact details come only from what the owner typed, never from the AI
+          const rows = [ans.address && '<b>Address</b><br>' + esc(ans.address), ans.phone && '<b>Phone</b> ' + esc(ans.phone), ans.email && '<b>Email</b> ' + esc(ans.email), ans.hours && '<b>Hours</b><br>' + esc(ans.hours).replace(/\n/g, '<br>')].filter(Boolean);
+          sec = L.contact.make({ eyebrow: T(s.eyebrow || 'Contact', 40), title: T(s.title || 'Get in touch', 40), formTitle: T(s.button || 'Send us a message', 36), address: ans.address || ans.suburb || '', text: rows.join('<br>') || '[Add your phone, email and address]' });
+          const txt = sec.els.find((e) => e.t === 'text' && /<b>|\[Add/.test(String(e.c))); if (txt) txt.h = Math.max(txt.h, 26 * (rows.length * 1.6 + 1));
+          const soc = sec.els.find((e) => e.t === 'social'); if (soc) soc.c = { email: ans.email || '', phone: ans.phone || '' };
+          if (!ans.address && !ans.suburb) sec.els = sec.els.filter((e) => e.t !== 'map');
+          break;
+        }
+      }
+      if (sec) out.push(WB.normSection(sec));
+    });
+    if (!out.length) out.push(WB.makeSection('hero_center', { title: esc(name) }));
+    if (!has('contact')) out.push(WB.normSection(L.contact.make({ address: ans.address || ans.suburb || '', text: [ans.phone && '<b>Phone</b> ' + esc(ans.phone), ans.email && '<b>Email</b> ' + esc(ans.email)].filter(Boolean).join('<br>') || '[Add your phone, email and address]' })));
+    site.pages = [{ id: WB.uid('p'), name: 'Home', slug: '', sections: out }];
+    const overlay = (p.hero || 'photo') === 'photo';
+    site.header = WB.normSection(L[overlay ? 'header_overlay' : 'header_solid'].make({ logo: esc(name), cta: T(p.header_button || (wantsBooking ? 'Book now' : 'Contact us'), 18), href: primary }));
+    site.footer = WB.normSection(L.footer.make({ logo: esc(name), text: [T(p.tagline, 80), esc([ans.address || ans.suburb, ans.phone].filter(Boolean).join(' · '))].filter(Boolean).join('<br>') || esc(name) }));
+    const fs = site.footer.els.find((e) => e.t === 'social'); if (fs) fs.c = { email: ans.email || '' };
+    const cp = site.footer.els.find((e) => e.t === 'text' && /©/.test(String(e.c))); if (cp) cp.c = '© ' + new Date().getFullYear() + ' ' + esc(name);
+    site.settings = { title: cut(p.seo_title || name, 60), description: cut(p.seo_description || p.tagline || '', 160) };
+    if (wantsBooking) site.booking = { system: ans.bookingSystem || '', label: T(p.header_button || 'Book now', 18), floating: true };
+    return WB.normalizeSite(site);
+  };
+})();
+/* demo mode (no server): a fixed plan built from the answers, so the flow can be tried and tested offline */
+WB.AI_DEMO_PLAN = function (a) {
+  const nm = a.name || 'Bella Cucina', food = /restaurant|café|bar/i.test(a.type || '');
+  return {
+    site_name: nm, tagline: food ? 'Handmade pasta and wood-fired pizza in ' + (a.suburb || 'Sydney') : 'Care you can feel in ' + (a.suburb || 'Sydney'),
+    palette: food ? 'terracotta' : 'sage', fonts: food ? 'classic' : 'elegant', hero: food ? 'photo' : 'split', header_button: a.booking ? (food ? 'Book a table' : 'Book now') : 'Contact us',
+    seo_title: nm + ' · ' + (a.suburb || 'Sydney'), seo_description: 'Demo plan for ' + nm + '.',
+    missing: ['Opening hours', 'Prices for every item'],
+    sections: [
+      { type: 'hero', eyebrow: (a.type || 'Local business') + ' · ' + (a.suburb || 'Sydney'), title: food ? 'Pasta made|by hand, daily' : 'Slow down|and restore', text: 'A demo headline written from your answers, short and warm.', button: a.booking ? 'Book a table' : 'Get in touch', button2: food ? 'See the menu' : 'Our services' },
+      food ? { type: 'menu', eyebrow: 'Menu', title: 'From our kitchen', categories: [{ title: 'Pasta', items: [{ title: 'Pappardelle with beef ragù', price: '$28', text: 'Slow-cooked for eight hours' }, { title: 'Cacio e pepe', price: '$24', text: 'Pecorino, black pepper' }] }, { title: 'Pizza', items: [{ title: 'Margherita', price: '$22', text: 'Fior di latte, basil' }] }] }
+        : { type: 'pricing', eyebrow: 'Treatments', title: 'Choose your treatment', items: [{ title: 'Relax', subtitle: '60 min', price: '$95', text: 'Full-body relaxation massage.' }, { title: 'Restore', subtitle: '90 min', price: '[Add price]', text: 'Deep tissue on the areas you need.' }], button: 'Book' },
+      { type: 'about', eyebrow: 'Our story', title: 'Family-run, made with love', text: 'A demo about text. ' + (a.special || 'Tell your story here.') },
+      { type: 'features', eyebrow: 'Why us', title: 'What makes us different', items: [{ title: 'Local produce', text: 'From growers we know by name.' }, { title: 'Made fresh', text: 'Every day, by hand.' }] },
+      { type: 'gallery', eyebrow: 'Gallery', title: 'A look inside' },
+      { type: 'testimonial', text: '', title: '' },
+      { type: 'cta', title: 'Come and see us', text: 'We’d love to welcome you.', button: a.booking ? 'Book now' : 'Contact us' },
+      { type: 'contact', eyebrow: 'Contact', title: 'Visit or say hello', button: 'Send us a message' }
+    ]
+  };
+};
+
 </script>
 <script>
 /* =====================================================================
@@ -2832,6 +2988,8 @@ a{color:var(--ui-a2)}
       async messages(row) { try { return JSON.parse(localStorage.getItem('wb.msg.' + row.slug)) || []; } catch (e) { return []; } },
       async deleteMessage(row, m) { const a = (await this.messages(row)).filter((x) => x.id !== m.id); localStorage.setItem('wb.msg.' + row.slug, JSON.stringify(a)); },
       viewUrl(row) { return CFG.viewerUrl + '?local=' + encodeURIComponent(row.id); },
+      // demo mode: a fixed sample plan so the AI flow can be tried without a server
+      async aiBuild(ans) { await new Promise((r) => setTimeout(r, 900)); return { plan: WB.AI_DEMO_PLAN(ans), left: 4 }; },
       // demo mode: only the sample businesses exist
       async checkBooking(system, code) { const demo = { restaurant: { 'cafe-bojo': 'Cafe Bojo', 'sunset-grill': 'Sunset grill' }, service: { 'serenity-spa': 'Serenity Day Spa' }, trades: { 'zz-trd-test': 'ZZ Trade Test' } }; const n = (demo[system] || {})[code]; if (n) return { ok: true, name: n, code }; for (const k in demo) if (demo[k][code]) return { ok: false, error: 'wrong_system', actual: k, name: demo[k][code] }; return { ok: false, error: code ? 'unknown' : 'missing' }; }
     };
@@ -2886,6 +3044,13 @@ a{color:var(--ui-a2)}
     async messages(row) { const { data, error } = await sb.from('builder_messages').select('*').eq('site_id', row.id).order('created_at', { ascending: false }).limit(300); if (error) throw friendly(error); return data || []; },
     async deleteMessage(row, m) { const { error } = await sb.from('builder_messages').delete().eq('id', m.id); if (error) throw friendly(error); },
     viewUrl(row) { return CFG.viewerUrl + '?s=' + encodeURIComponent(row.slug); },
+    async aiBuild(answers, pasted) {
+      const tok = await this.token();
+      let res;
+      try { res = await fetch(CFG.supabaseUrl.replace(/\/+$/, '') + '/functions/v1/builder-ai', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseKey, Authorization: 'Bearer ' + (tok || CFG.supabaseKey) }, body: JSON.stringify({ answers, pasted }) }); }
+      catch (e) { throw new Error('No connection — check your internet and try again.'); }
+      const j = await res.json().catch(() => ({})); if (!res.ok) throw new Error(j.error || 'The AI couldn’t build your website just now. Please try again.'); return j;
+    },
     async checkBooking(system, code) { const { data, error } = await sb.rpc('builder_check_booking', { p_system: system, p_code: code }); if (error) throw friendly(error); return data || { ok: false, error: 'unknown' }; }
   };
 
@@ -3179,6 +3344,130 @@ a{color:var(--ui-a2)}
     };
     pick();
   }
+
+  /* ---------------- "Build it with AI": a few questions -> a ready-made first draft ---------------- */
+  const AI_TYPES = [['restaurant', 'Restaurant / café'], ['bar', 'Bar / pub / wine bar'], ['venue', 'Function / event venue'], ['spa', 'Spa / massage / beauty'], ['salon', 'Hair / nail salon'], ['health', 'Health clinic / therapist'], ['fitness', 'Gym / yoga / fitness'], ['trades', 'Tradie / home services'], ['professional', 'Professional services'], ['creative', 'Photographer / creative'], ['retail', 'Shop / products'], ['other', 'Something else']];
+  const AI_FEEL = ['Elegant', 'Warm & friendly', 'Modern & bold', 'Calm & natural', 'Fun & colourful', 'Simple & minimal'];
+  const AI_WANT = { menu: 'Menu / price list', pricing: 'Services with prices', gallery: 'Photo gallery', team: 'Our team', testimonial: 'A customer review', shop: 'Sell online (shop)', booking: 'Online bookings' };
+  const AI_DEFAULTS = { restaurant: ['menu', 'gallery', 'booking'], bar: ['menu', 'gallery'], venue: ['gallery', 'pricing', 'booking'], spa: ['pricing', 'team', 'booking'], salon: ['pricing', 'gallery', 'booking'], health: ['pricing', 'team', 'booking'], fitness: ['pricing', 'team'], trades: ['pricing', 'gallery', 'booking'], professional: ['pricing', 'team'], creative: ['gallery'], retail: ['shop', 'gallery'], other: ['gallery'] };
+  const AI_BOOK = { restaurant: 'restaurant', bar: 'restaurant', venue: 'other', spa: 'service', salon: 'service', health: 'service', fitness: 'service', trades: 'trades' };
+  function aiModal(onDone, init) {
+    const ans = { name: (init && init.name) || '', type: '', typeOther: '', suburb: '', address: '', phone: '', email: '', offer: '', hours: '', special: '', feel: '', want: null, venue: '', pasted: '' };
+    const m = modal('<div id="aim"></div>', { wide: true, sticky: true });
+    const box = $('#aim', m);
+    let step = 0, plan = null, busy = false;
+    const STEPS = 6;
+    const head = (t, sub) => '<div class="ai-prog">' + Array.from({ length: STEPS }, (_, i) => '<i class="' + (i <= step ? 'on' : '') + '"></i>').join('') + '</div><h2>' + t + '</h2>' + (sub ? '<p class="muted" style="margin:0 0 16px">' + sub + '</p>' : '');
+    const fld = (k, label, ph, opt) => '<label class="field"><span>' + label + (opt ? ' <small class="muted">(optional)</small>' : '') + '</span>' + (opt === 'area' || (opt && opt.area) ? '<textarea class="inp" rows="' + ((opt && opt.rows) || 4) + '" data-a="' + k + '" placeholder="' + esc(ph || '') + '">' + esc(ans[k] || '') + '</textarea>' : '<input class="inp" data-a="' + k + '" value="' + esc(ans[k] || '') + '" placeholder="' + esc(ph || '') + '">') + '</label>';
+    const area = (k, label, ph, rows, optional) => '<label class="field"><span>' + label + (optional ? ' <small class="muted">(optional)</small>' : '') + '</span><textarea class="inp" rows="' + rows + '" data-a="' + k + '" placeholder="' + esc(ph || '') + '">' + esc(ans[k] || '') + '</textarea></label>';
+    const nav = (next, back) => '<div class="acts">' + (back !== false ? '<button class="btn ghost" id="ai-back">Back</button>' : '<button class="btn ghost" data-x>Cancel</button>') + '<button class="btn pri" id="ai-next">' + (next || 'Next') + '</button></div>';
+    const collect = () => { $$('[data-a]', box).forEach((n) => { ans[n.dataset.a] = n.value.trim(); }); };
+    const typeName = () => ans.type === 'other' ? (ans.typeOther || 'Small business') : ((AI_TYPES.find((t) => t[0] === ans.type) || [])[1] || '');
+    const draw = () => {
+      let h = '';
+      if (step === 0) h = head('Let’s build your website', 'Answer a few quick questions and we’ll write a first draft of your website — ready for your photos and final touches.') +
+        fld('name', 'What’s your business called?', 'e.g. Bella Cucina') +
+        '<div class="field"><span>What kind of business is it?</span><div class="ai-chips">' + AI_TYPES.map(([k, l]) => '<button type="button" class="ai-chip' + (ans.type === k ? ' on' : '') + '" data-type="' + k + '">' + esc(l) + '</button>').join('') + '</div></div>' +
+        (ans.type === 'other' ? fld('typeOther', 'Tell us in a few words', 'e.g. Dog grooming') : '') + nav('Next', false);
+      if (step === 1) h = head('Where are you, and how can customers reach you?', 'These go straight onto your contact section, exactly as you type them.') +
+        '<div class="i-2">' + fld('suburb', 'Suburb or city', 'e.g. Surry Hills, Sydney') + fld('phone', 'Phone', 'e.g. 02 9000 0000', true) + '</div>' +
+        '<div class="i-2">' + fld('email', 'Email', 'e.g. hello@bellacucina.com.au', true) + fld('address', 'Street address', 'e.g. 12 Crown St, Surry Hills NSW', true) + '</div>' +
+        area('hours', 'Opening hours', 'e.g. Tue–Sun 12pm till late', 2, true) + nav();
+      if (step === 2) h = head('What do you offer?', 'The more you tell us, the better your website. Mention your main services, products or dishes — with prices if you’d like them shown.') +
+        area('offer', 'What you offer', ans.type === 'restaurant' || ans.type === 'bar' ? 'e.g. Wood-fired pizza and handmade pasta, natural wines, weekend brunch…' : ans.type === 'trades' ? 'e.g. Emergency plumbing, blocked drains ($180), hot water systems…' : 'e.g. Relaxation massage 60 min $95, facials, gift vouchers…', 5) +
+        area('special', 'What makes you special? Who are your customers?', 'e.g. Family-run since 2009, locally sourced, friendly team, great for families…', 4, true) + nav();
+      if (step === 3) h = head('How should your website feel?', 'Pick the mood — we’ll choose colours and fonts to match. You can change them any time.') +
+        '<div class="ai-chips big">' + AI_FEEL.map((f) => '<button type="button" class="ai-chip' + (ans.feel === f ? ' on' : '') + '" data-feel="' + esc(f) + '">' + esc(f) + '</button>').join('') + '</div>' + nav();
+      if (step === 4) {
+        if (!ans.want) ans.want = (AI_DEFAULTS[ans.type] || []).slice();
+        h = head('What would you like on your website?', 'We always add a welcome section, an about section and a contact section with a form.') +
+          '<div class="ai-chips">' + Object.keys(AI_WANT).map((k) => '<button type="button" class="ai-chip' + (ans.want.indexOf(k) >= 0 ? ' on' : '') + '" data-want="' + k + '">' + (ans.want.indexOf(k) >= 0 ? '✓ ' : '') + esc(AI_WANT[k]) + '</button>').join('') + '</div>' +
+          (ans.type === 'restaurant' || ans.type === 'bar' ? '<div style="margin-top:14px">' + fld('venue', 'Use Restaurant Deluxe? Your venue code shows your live menu', 'e.g. sunset-grill', true) + '</div>' : '') +
+          (ans.want.indexOf('booking') >= 0 ? '<p class="i-note">Online bookings connect to your booking system in the <b>Platinum</b> tab afterwards. Until then, the Book buttons take visitors to your contact section.</p>' : '') + nav();
+      }
+      if (step === 5) h = head('Anything you already have?', 'Paste or upload a menu, price list, “about us” or text from an old website — we’ll use it word for word. You can skip this.') +
+        '<label class="imp-drop" id="ai-drop"><input type="file" id="ai-file" accept=".pdf,.docx,.txt,application/pdf" hidden>' + I('pages') + '<b>Drop a file here, or click to choose</b><span>PDF, Word (.docx) or text file — read on your device</span></label>' +
+        area('pasted', 'Or paste text', 'Paste your menu, price list or any text about your business…', 7, true) +
+        '<p class="i-note">To write your website, your answers and this text are sent to our AI service. Please don’t include passwords or card details. The AI writes a first draft — check every word, price and detail before you publish.</p>' + nav('✨ Build my website');
+      box.innerHTML = h;
+      $$('[data-type]', box).forEach((b) => { b.onclick = () => { collect(); ans.type = b.dataset.type; ans.want = null; draw(); }; });
+      $$('[data-feel]', box).forEach((b) => { b.onclick = () => { ans.feel = b.dataset.feel; draw(); }; });
+      $$('[data-want]', box).forEach((b) => { b.onclick = () => { collect(); const k = b.dataset.want, i = ans.want.indexOf(k); if (i >= 0) ans.want.splice(i, 1); else ans.want.push(k); draw(); }; });
+      const x = $('[data-x]', box); if (x) x.onclick = () => m.close();
+      const bk = $('#ai-back', box); if (bk) bk.onclick = () => { collect(); step--; draw(); };
+      $('#ai-next', box).onclick = () => {
+        collect();
+        if (step === 0 && !ans.name) return toast('Please type your business name.', 'bad');
+        if (step === 0 && !ans.type) return toast('Please choose the kind of business.', 'bad');
+        if (step === 1 && ans.email && !/^\S+@\S+\.\S+$/.test(ans.email)) return toast('That email doesn’t look right.', 'bad');
+        if (step === 2 && ans.offer.length < 10) return toast('Tell us a little about what you offer — a sentence or two is enough.', 'bad');
+        if (step < STEPS - 1) { step++; draw(); return; }
+        build();
+      };
+      const drop = $('#ai-drop', box), inp = $('#ai-file', box);
+      if (drop) {
+        const readFile = async (f) => {
+          const n = (f.name || '').toLowerCase();
+          try {
+            let t = '';
+            if (n.endsWith('.pdf') || f.type === 'application/pdf') t = (await WB.DocReader.pdfLines(f)).map((l) => (typeof l === 'string' ? l : l.text || '')).join('\n');
+            else if (n.endsWith('.docx')) t = await WB.DocReader.docxText(f);
+            else if (n.endsWith('.txt') || /^text\//.test(f.type)) t = await f.text();
+            else return toast('Please choose a PDF, a Word (.docx) or a text file.', 'bad');
+            collect(); ans.pasted = ((ans.pasted ? ans.pasted + '\n\n' : '') + t).slice(0, 14000); draw();
+            toast('Added the text from ' + f.name + '. Check it below.', 'ok');
+          } catch (e) { toast('We couldn’t read that file — try pasting the text instead.', 'bad', 6000); }
+        };
+        drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+        drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+        drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); if (e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]); });
+        inp.onchange = () => { if (inp.files[0]) readFile(inp.files[0]); };
+      }
+      const f0 = $('input.inp, textarea.inp', box); if (f0 && !f0.value) setTimeout(() => f0.focus(), 30);
+    };
+    const facts = () => ({ name: ans.name, type: typeName(), suburb: ans.suburb, address: ans.address, phone: ans.phone, email: ans.email, hours: ans.hours, offer: ans.offer, special: ans.special, feel: ans.feel, want: ans.want.filter((k) => k !== 'booking').map((k) => AI_WANT[k]), booking: ans.want.indexOf('booking') >= 0, venue: ans.venue });
+    const build = async () => {
+      if (busy) return; busy = true;
+      const msgs = ['Reading your answers…', 'Choosing colours and fonts…', 'Writing your headline…', 'Planning your sections…', 'Polishing the words…'];
+      box.innerHTML = '<div class="ai-wait"><div class="spin"></div><h2>Building your website</h2><p class="muted" id="ai-msg">' + msgs[0] + '</p><p class="i-note">This usually takes 20–40 seconds.</p></div>';
+      let k = 0; const tick = setInterval(() => { const n = $('#ai-msg', box); if (n) n.textContent = msgs[++k % msgs.length]; }, 3500);
+      try {
+        const r = await Store.aiBuild(facts(), ans.pasted);
+        plan = r.plan; plan.__left = r.left;
+        review();
+      } catch (e) { draw(); toast(e.message || 'The AI couldn’t build your website just now.', 'bad', 8000); }
+      clearInterval(tick); busy = false;
+    };
+    const review = () => {
+      const keep = {};
+      // drop sections the AI left empty on purpose (no real review, no named team, fewer than two real numbers)
+      const usable = (s) => s.type === 'testimonial' ? !!String(s.text || '').trim() : s.type === 'team' ? (s.items || []).some((i) => i && i.title) : s.type === 'stats' ? (s.items || []).filter((i) => i && i.title).length >= 2 : true;
+      const secs = (plan.sections || []).filter((s) => WB.AI_SECTIONS.indexOf(s.type) >= 0 && usable(s));
+      const preview = (s) => esc(String(s.title || s.text || (s.categories ? s.categories.map((c) => c.title).join(', ') : '') || '').replace(/\|/g, ' ').replace(/<[^>]*>/g, '').slice(0, 90));
+      const pal = WB.PALETTES[plan.palette] || WB.PALETTES.ivory, fp = WB.FONT_PAIRS[plan.fonts] || WB.FONT_PAIRS.classic;
+      const miss = (plan.missing || []).slice(0, 8);
+      box.innerHTML = '<h2>Here’s your first draft</h2><p class="muted" style="margin:0 0 14px">Untick anything you don’t want. You can change every word, colour and photo in the editor.</p>' +
+        '<div class="ai-style"><span class="ai-sw">' + ['bg', 'surface', 'accent', 'accent2', 'text'].map((c) => '<i style="background:' + esc(pal[c]) + '"></i>').join('') + '</span><span><b>' + esc(pal.label || '') + '</b> colours · <b>' + esc(fp.label) + '</b> fonts (' + esc(fp.head) + ')</span></div>' +
+        (plan.tagline ? '<p class="ai-tag">“' + esc(plan.tagline) + '”</p>' : '') +
+        '<div class="ai-secs">' + secs.map((s, i) => '<label class="i-chk imp-r ai-sec"><input type="checkbox" data-sec="' + i + '" checked><span><b>' + esc(WB.AI_LABEL[s.type] || s.type) + '</b><small>' + preview(s) + '</small></span></label>').join('') + '</div>' +
+        (miss.length ? '<div class="ai-miss"><b>Still to add</b><ul>' + miss.map((x) => '<li>' + esc(x) + '</li>').join('') + '<li>Your own photos</li></ul></div>' : '<div class="ai-miss"><b>Still to add</b><ul><li>Your own photos</li></ul></div>') +
+        '<p class="i-note">Written by AI from your answers — please check every detail, especially prices and times, before you publish.' + (plan.__left != null ? ' You can build ' + plan.__left + ' more today.' : '') + '</p>' +
+        '<div class="acts"><button class="btn ghost" id="ai-again" style="margin-right:auto">Change my answers</button><button class="btn ghost" data-x>Cancel</button><button class="btn pri" id="ai-use">Use this website</button></div>';
+      $('[data-x]', box).onclick = () => m.close();
+      $('#ai-again', box).onclick = () => { step = 0; draw(); };
+      $('#ai-use', box).onclick = () => {
+        const on = $$('[data-sec]', box).filter((n) => n.checked).map((n) => +n.dataset.sec);
+        if (!on.length) return toast('Keep at least one section.', 'bad');
+        const p2 = Object.assign({}, plan, { sections: secs.filter((s, i) => on.indexOf(i) >= 0) });
+        const a2 = Object.assign({}, facts(), { bookingSystem: AI_BOOK[ans.type] || '' });
+        let site;
+        try { site = WB.aiSite(p2, a2); } catch (e) { console.error(e); return toast('Something went wrong putting your website together. Please try again.', 'bad'); }
+        m.close(); onDone(site, ans);
+      };
+    };
+    draw();
+  }
+
   function newSiteModal(count) {
     if (count >= CFG.maxSites) return toast('You have reached the maximum of ' + CFG.maxSites + ' websites.', 'bad', 5000);
     let chosen = 'business';
@@ -3186,12 +3475,12 @@ a{color:var(--ui-a2)}
       '<div class="tpl-grid">' + Object.keys(WB.TEMPLATES).map((k) => '<button class="tpl' + (k === chosen ? ' on' : '') + '" data-k="' + k + '"><div class="pv"></div><div class="tx"><b>' + esc(WB.TEMPLATES[k].label) + '</b><span>' + esc(WB.TEMPLATES[k].desc) + '</span></div></button>').join('') + '</div>' +
       '<div class="i-2"><label class="field"><span>Website name</span><input class="inp" id="n-name" placeholder="e.g. Serenity Day Spa"></label>' +
       '<label class="field"><span>Web address</span><input class="inp" id="n-slug" placeholder="serenity-day-spa"></label></div>' +
-      '<div class="muted" id="n-url" style="font-size:12.5px;margin-top:-6px"></div><div class="acts"><button class="btn" id="n-cv" style="margin-right:auto">' + I('pages') + 'Start from my resume <em class="plat-tag">PLATINUM</em></button><button class="btn ghost" data-x>Cancel</button><button class="btn pri" id="n-go">Create website</button></div>', { wide: true });
+      '<div class="muted" id="n-url" style="font-size:12.5px;margin-top:-6px"></div><div class="acts"><button class="btn pri ai-btn" id="n-ai">✨ Build it with AI</button><button class="btn" id="n-cv" style="margin-right:auto">' + I('pages') + 'Start from my resume <em class="plat-tag">PLATINUM</em></button><button class="btn ghost" data-x>Cancel</button><button class="btn pri" id="n-go">Create website</button></div>', { wide: true });
     $$('.tpl', m).forEach((b) => {
       const site = WB.buildTemplate(b.dataset.k, WB.TEMPLATES[b.dataset.k].label);
       const pvb = $('.pv', b); pvb.innerHTML = '<div class="tpv"></div>';
       thumbInto(pvb, site);
-      b.onclick = () => { chosen = b.dataset.k; $$('.tpl', m).forEach((x) => x.classList.toggle('on', x === b)); };
+      b.onclick = () => { chosen = b.dataset.k; $$('.tpl', m).forEach((x) => x.classList.toggle('on', x === b)); if (m.__ai) { m.__ai = null; $('#n-ai', m).textContent = '✨ Build it with AI'; $('#n-go', m).textContent = 'Create website'; } };
     });
     const nm = $('#n-name', m), sl = $('#n-slug', m), url = $('#n-url', m);
     let slugTouched = false;
@@ -3211,12 +3500,22 @@ a{color:var(--ui-a2)}
         toast('Check the website name and address, then press Create my website.', 'ok', 5000);
       }, { site: true });
     };
+    $('#n-ai', m).onclick = () => aiModal((site, ans) => {
+      nm.value = ans.name; if (!slugTouched) sl.value = slugify(ans.name); showUrl();
+      m.__ai = site; m.__resume = null; chosen = 'ai';
+      $$('.tpl', m).forEach((x) => x.classList.remove('on'));
+      $('#n-ai', m).innerHTML = I('check') + 'AI website ready';
+      $('#n-go', m).textContent = 'Create my website';
+      toast('Check the web address, then press Create my website.', 'ok', 5000);
+      setTimeout(() => sl.focus(), 50);
+    }, { name: nm.value.trim() });
     $('#n-go', m).onclick = async () => {
       const name = nm.value.trim() || 'My website', slug = sl.value || slugify(name);
       const err = slugError(slug); if (err) return toast(err, 'bad', 5000);
       const btn = $('#n-go', m); btn.disabled = true;
       try {
-        const draft = m.__resume && chosen === 'portfolio' ? WB.resumeSite(m.__resume, name) : WB.buildTemplate(chosen, name);
+        const draft = chosen === 'ai' && m.__ai ? m.__ai : m.__resume && chosen === 'portfolio' ? WB.resumeSite(m.__resume, name) : WB.buildTemplate(chosen, name);
+        if (chosen === 'ai') draft.name = name;
         draft.settings.title = name;
         const nav = draft.header && draft.header.els.find((e) => e.t === 'nav'); if (nav) nav.c.logo = name;
         if (draft.footer) { const f = draft.footer.els.find((e) => e.t === 'heading'); if (f) f.c = esc(name); }
