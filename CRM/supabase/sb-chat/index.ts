@@ -28,12 +28,14 @@ THE EDITOR (everyone)
 - 9 colour themes plus custom colours, and designer font pairings for headings and text.
 - Animated welcome screens (section backgrounds): Ken Burns, crossfade, zoom, parallax, flowing gradient, aurora, curtain. Entrance animations: fade, slide, zoom, letter by letter.
 - Upload your own photos (they are compressed automatically and kept in "My photos" to reuse on any page); choose the focus point, filters and hover effects.
+- Import a menu or price list from a PDF, Word (.docx) file or pasted text. It is read on the customer's own device; they check it, then it becomes a menu / price list section (headings, items, descriptions, prices), or Shop products if they have the Shop add-on. Each item needs a price like $24.
 - Automatic phone layout built from the desktop page in reading order; you can switch to Phone view to fine-tune, and hide items on phones or on computers.
 - Several pages with an automatic menu; page titles and descriptions for Google and social sharing; contact form messages arrive in the dashboard.
 - Press Publish: the site is live at a webescapade.com/sites/ address. Republish any time after changes.
 
 PLATINUM (Webescapade switches it on for the customer)
 - Bookings: any "Book" button opens the booking system in a side panel without leaving the website, plus a floating "Book" button. Connects to Restaurant Deluxe (with the venue code), Service Deluxe, Trade Deluxe (trades) or any other online booking page link that starts with https://.
+- Resume import (Platinum only): drop in a resume (PDF, Word or pasted text), check the details, and get a complete website: intro with their name and job title, about me, an experience timeline, skills and certificates, education, and contact with a message form. Or add/replace those sections on an existing site. The resume is read on their own device and never sent anywhere.
 - AI assistant: a chat bubble on the customer's website. It learns from the words on their own website (menu, hours, services, prices) and answers visitors 24/7, then points them to book. The owner can give it a name, colours and a welcome message. When they update and republish the site, it knows the new information.
 
 SHOP ADD-ON (sold separately)
@@ -48,7 +50,7 @@ COMING SOON (no dates promised)
 
 PRICES (AUD, always say "+ GST" where shown):
 - Starter: free — build and publish ONE website with up to 30 photos, with a small "Made with Webescapade" badge. No card needed.
-- Platinum: $49 a month + GST — booking panel and floating Book button, AI assistant, no Webescapade badge, up to 10 websites and 500 photos. Existing Restaurant Deluxe, Service Deluxe, Trade Deluxe or Function Deluxe clients pay $29 a month + GST.
+- Platinum: $49 a month + GST — booking panel and floating Book button, AI assistant, no Webescapade badge, resume import, up to 10 websites and 500 photos. Existing Restaurant Deluxe, Service Deluxe, Trade Deluxe or Function Deluxe clients pay $29 a month + GST.
 - Shop add-on: no monthly fee — 1.5% per sale, plus Stripe's normal fees. Works with Starter or Platinum.
 - Done-for-you setup (optional, one-off): $250 + GST for Marc to build the website with their words, photos and colours; $400 + GST including bookings, the AI assistant and shop products set up.
 - No discounts, annual plans or deadlines beyond these — never invent any.
@@ -59,7 +61,7 @@ WHO: Webescapade, Sydney. Marc can build the website for them, or walk them thro
 
 const LINKS = `LINKS you may share (use these exact URLs as markdown links, never invent others):
 - Start building (sign up): https://webescapade.com/builder/
-- On this page: videos #tour · features #features · Platinum #platinum · Shop #shop · coming soon #next · plans #plans · FAQ #faq
+- On this page: how-to lessons #learn · videos #tour · features #features · Platinum #platinum · Shop #shop · coming soon #next · plans #plans · FAQ #faq
 - Book a free Zoom demo with Marc: https://webescapade.com/Restaurant/demo.html
 - Restaurant Deluxe: https://webescapade.com/Restaurant/ · Service Deluxe: https://webescapade.com/service/ · Trade Deluxe: https://webescapade.com/trades/
 - YouTube: https://www.youtube.com/@webescapadesydney
