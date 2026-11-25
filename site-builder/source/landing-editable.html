@@ -175,7 +175,7 @@ section{position:relative}
 @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.stat:last-child{grid-column:span 2}}
 
 /* videos */
-.vid{display:grid;grid-template-columns:1.7fr 1fr;gap:22px;align-items:start}
+.vid{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:16px}.vid .player{width:100%}
 .player{position:relative;border-radius:var(--r);overflow:hidden;background:#000;aspect-ratio:16/9;box-shadow:0 40px 80px -40px rgba(30,20,80,.6)}
 .player video{width:100%;height:100%;display:block;background:#000}
 .player .cover{position:absolute;inset:0;cursor:pointer;display:grid;place-items:center;background:center/cover no-repeat}
@@ -188,7 +188,7 @@ section{position:relative}
 .vbtn img{width:120px;aspect-ratio:16/9;object-fit:cover;border-radius:10px}
 .vbtn b{display:block;font-size:15px}.vbtn span{font-size:13.5px;color:var(--mut);line-height:1.45;display:block}
 .vbtn[aria-pressed=true]{border-color:var(--v);box-shadow:0 12px 30px -16px rgba(124,92,255,.6)}
-.vnote{font-size:14px;color:var(--mut);padding:6px 4px}
+.vnote{font-size:14px;color:var(--mut);padding:6px 4px;text-align:center}
 @media(max-width:900px){.vid{grid-template-columns:1fr}}
 
 /* how (sticky story) */
@@ -602,14 +602,10 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
     </div>
     <div class="vid rv">
       <div class="player" id="player">
-        <video id="video" playsinline controls preload="none" poster="/site-builder/img/poster-promo.jpg"></video>
+        <video id="video" playsinline controls preload="none" data-src="/site-builder/video/promo.mp4" poster="/site-builder/img/poster-promo.jpg"></video>
         <div class="cover" id="cover" style="background-image:url(/site-builder/img/poster-promo.jpg)"><span class="big-play" aria-label="Play video"></span></div>
       </div>
-      <div class="vlist">
-        <button class="vbtn" aria-pressed="true" data-src="/site-builder/video/promo.mp4" data-poster="/site-builder/img/poster-promo.jpg"><img src="/site-builder/img/poster-promo.jpg" alt=""><span><b>NEW: The whole system in 3 minutes</b><span>AI builder, editor, live menu, order &amp; pay at the table, bookings, AI assistant and shop.</span></span></button>
-        <button class="vbtn" aria-pressed="false" data-src="/site-builder/video/build-tour.mp4" data-poster="/site-builder/img/poster-build.jpg"><img src="/site-builder/img/poster-build.jpg" alt=""><span><b>Build a website, step by step</b><span>Narrated: pick a template, drag, add photos, recolour, check the phone, publish.</span></span></button>
-        <div class="vnote">More videos on our YouTube channel: <a href="https://www.youtube.com/@webescapadesydney" target="_blank" rel="noopener">@webescapadesydney</a></div>
-      </div>
+      <div class="vnote">More videos on our YouTube channel: <a href="https://www.youtube.com/@webescapadesydney" target="_blank" rel="noopener">@webescapadesydney</a></div>
     </div>
   </div>
 </section>
@@ -1006,7 +1002,7 @@ document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')h
     cover.style.backgroundImage = 'url(' + btn.dataset.poster + ')';
     if(play){ cover.style.display = 'none'; video.play().catch(function(){}); } else cover.style.display = '';
   }
-  cover.addEventListener('click', function(){ if(!video.getAttribute('src')) video.src = cur.dataset.src; cover.style.display = 'none'; video.play().catch(function(){}); });
+  cover.addEventListener('click', function(){ if(!video.getAttribute('src')) video.src = cur ? cur.dataset.src : video.dataset.src; cover.style.display = 'none'; video.play().catch(function(){}); });
   $$('.vbtn').forEach(function(b){ b.addEventListener('click', function(){ load(b, true); $('#player').scrollIntoView({behavior:'smooth', block:'center'}); }); });
 
   /* ---------- sticky story ---------- */
