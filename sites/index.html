@@ -20,6 +20,7 @@ window.WB_CONFIG = {
 </script>
 <style>
 html,body{margin:0;padding:0}
+@supports not (overflow-x:clip){html,body{overflow-x:hidden}}
 body{min-height:100vh}
 .nf{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font:16px/1.6 system-ui,sans-serif;color:#333;text-align:center;padding:30px}
 .nf h1{font-size:28px;margin:0 0 8px}

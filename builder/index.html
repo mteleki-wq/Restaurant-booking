@@ -119,7 +119,8 @@ a{color:var(--ui-a2)}
 .ed-name{display:flex;flex-direction:column;line-height:1.15;min-width:0;max-width:220px}
 .ed-name b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ed-status{font-size:11.5px;color:var(--ui-m)}
-.ed-status.bad{color:var(--ui-bad)}
+.ed-status.bad{color:var(--ui-bad);cursor:pointer;text-decoration:underline dotted}
+.ed-status.ok{color:var(--ui-ok,#34d399)}
 .seg{display:inline-flex;background:#0f0f19;border:1px solid var(--ui-line);border-radius:10px;padding:3px;gap:2px}
 .seg button{border:0;background:transparent;border-radius:7px;padding:5px 9px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ui-m)}
 .seg button.on{background:var(--ui-p2);color:#fff}
@@ -251,12 +252,12 @@ a{color:var(--ui-a2)}
 .prev-bar .sp{flex:1}
 .prev-scroll{flex:1;overflow:auto;position:relative}
 .prev-frame{margin:0 auto;background:#fff;transform:translateZ(0);min-height:100%;position:relative}
-.prev-frame.phone{margin:24px auto;border-radius:30px;overflow:auto;height:calc(100% - 48px);min-height:0;box-shadow:0 0 0 10px #1c1c28,0 0 0 11px #34344a}
+.prev-frame.phone{margin:24px auto;border-radius:30px;overflow-x:hidden;overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior:contain;height:calc(100% - 48px);min-height:0;box-shadow:0 0 0 10px #1c1c28,0 0 0 11px #34344a}
 .spin{width:28px;height:28px;border-radius:50%;border:3px solid #ffffff22;border-top-color:var(--ui-a);animation:spin .8s linear infinite;margin:40px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
+.only-sm{display:none!important}
 @media (max-width:1100px){.ed{grid-template-columns:250px 1fr 270px}.ed-name{max-width:120px}.hide-md{display:none!important}}
 @media (max-width:820px){.ed{grid-template-columns:0 1fr 0}.ed-left,.ed-right{position:fixed;top:58px;bottom:0;width:300px;z-index:30;transition:transform .25s;box-shadow:0 0 40px #000c}.ed-left{left:0;transform:translateX(-100%)}.ed-right{right:0;transform:translateX(100%)}.ed.show-left .ed-left,.ed.show-right .ed-right{transform:none}.only-sm{display:inline-flex!important}}
-.only-sm{display:none!important}
 
 .tabs button[data-tab=extras] svg{color:#fbbf24}
 .plat-on,.plat-off{display:flex;gap:12px;padding:14px;border-radius:14px;margin-bottom:6px;font-size:12.5px;line-height:1.5}
@@ -294,6 +295,9 @@ a{color:var(--ui-a2)}
 .rs-jh .ic{width:30px;height:30px;border-radius:8px;background:transparent;color:var(--ui-m);font-size:18px}.rs-jh .ic:hover{background:#3a1d24;color:#fecaca}
 .rs-secs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 @media(max-width:640px){.rs-jh{grid-template-columns:minmax(0,1fr) 30px}.rs-jh .inp:nth-child(2),.rs-jh .inp:nth-child(3){grid-column:1/2}.rs-secs{grid-template-columns:1fr 1fr}}
+
+/* touch screens (iPad): show controls that otherwise appear on hover, and give handles a finger-sized target */
+@media (hover:none),(pointer:coarse){.ed-stage .wb-sec.ed-on>.ed-addsec{opacity:1}.ed-h:after{content:"";position:absolute;inset:calc(-12px * var(--ik,1))}.ed-sech{height:18px;bottom:-9px;width:84px}.ed-stage .wb-el:hover{outline:none}}
 
 </style>
 </head>
@@ -2961,7 +2965,7 @@ a{color:var(--ui-a2)}
   function setView(html) { if (destroyEditor) { destroyEditor(); destroyEditor = null; } app.innerHTML = ''; const n = frag(html); app.appendChild(n); return n; }
 
   function showAuth() {
-    const v = setView('<div class="auth"><div class="auth-card"><div class="logo"><i></i>Webescapade Site Builder</div><h1>Welcome</h1><p class="muted" style="margin:0 0 20px">Sign in to build and edit your website.</p>' +
+    const v = setView('<div class="auth"><div class="auth-card"><div class="logo"><i></i>Webescapade Site Builder</div><h1>Welcome</h1><p class="muted" style="margin:0 0 20px">' + (storedDest() ? 'Sign in to open the website you asked for.' : 'Sign in to build and edit your website.') + '</p>' +
       '<label class="field"><span>Email</span><input class="inp" type="email" id="au-e" autocomplete="email"></label>' +
       '<label class="field"><span>Password</span><input class="inp" type="password" id="au-p" autocomplete="current-password"></label>' +
       '<div class="row"><button class="btn pri" id="au-in">Sign in</button><button class="btn ghost" id="au-up">Create account</button></div>' +
@@ -3231,12 +3235,47 @@ a{color:var(--ui-a2)}
     }
   }
 
+  /* Remember which website a link asked for, so it survives sign-in (password, new account or emailed link). */
+  const DEST_KEY = 'wb.dest';
+  function rememberDest(id) { try { if (id) localStorage.setItem(DEST_KEY, JSON.stringify({ id, t: Date.now() })); else localStorage.removeItem(DEST_KEY); } catch (e) { /* private mode */ } }
+  function storedDest() { try { const d = JSON.parse(localStorage.getItem(DEST_KEY) || 'null'); return d && d.id && Date.now() - d.t < 864e5 ? d.id : ''; } catch (e) { return ''; } }
+  function linkDest() {
+    const m = location.hash.match(/edit=([\w-]+)/) || location.search.match(/[?&]edit=([\w-]+)/);
+    return m ? m[1] : '';
+  }
+
   async function openEditor(id) {
-    const v = setView('<div class="auth"><div class="spin"></div></div>');
+    setView('<div class="auth"><div class="spin"></div></div>');
     let row;
-    try { row = await Store.get(id); } catch (e) { toast(e.message, 'bad', 5000); return showDashboard(); }
+    try { row = await Store.get(id); }
+    catch (e) { return cannotOpen(id, e); }
+    rememberDest('');
     location.hash = 'edit=' + id;
     startEditor(row);
+  }
+
+  async function cannotOpen(id, err) {
+    const msg = (err && err.message) || '';
+    if (/session expired/i.test(msg)) { rememberDest(id); toast('Please sign in again to open this website.', 'bad', 5000); return sb.auth.signOut(); }
+    let why = 'missing', offline = /No connection/i.test(msg);
+    if (!LOCAL && !offline) {
+      if (!/^[0-9a-f-]{36}$/i.test(id)) why = 'missing';
+      else { try { const { data, error } = await sb.rpc('builder_site_access', { p_id: id }); if (error) throw error; why = data || 'missing'; } catch (e) { offline = true; } }
+    }
+    const who = !LOCAL && user && user.email ? '<b>' + esc(user.email) + '</b>' : 'this account';
+    const T = offline ? ['We couldn’t reach your website', 'Your connection or our server didn’t answer. Your work is safe — nothing has been changed.']
+      : why === 'other' ? ['This website belongs to another account', 'You’re signed in as ' + who + ', but this website was made with a different Webescapade account. Sign out, then sign in with the email you used to create it.']
+      : why === 'mine' ? ['We couldn’t open this website', 'It belongs to you, but it didn’t load. Please try again.']
+      : ['We couldn’t find this website', 'It may have been deleted, or the link is incomplete. Your other websites are listed on your dashboard.'];
+    const v = setView('<div class="auth"><div class="auth-card"><div class="logo"><i></i>Webescapade Site Builder</div><h1 style="font-size:22px">' + T[0] + '</h1><p class="muted" style="margin:0 0 20px;line-height:1.55">' + T[1] + '</p>' +
+      '<div class="row" style="flex-wrap:wrap">' +
+      (offline || why === 'mine' ? '<button class="btn pri" id="co-retry">Try again</button>' : '') +
+      (why === 'other' && !LOCAL ? '<button class="btn pri" id="co-switch">Sign in with another account</button>' : '') +
+      '<button class="btn ghost" id="co-dash">Go to my websites</button></div></div></div>');
+    const r = $('#co-retry', v), s = $('#co-switch', v);
+    if (r) r.onclick = () => openEditor(id);
+    if (s) s.onclick = () => { rememberDest(id); sb.auth.signOut(); };
+    $('#co-dash', v).onclick = () => { rememberDest(''); showDashboard(); };
   }
 
   function startEditor(row0) {
@@ -3330,25 +3369,44 @@ a{color:var(--ui-a2)}
       if (S.sel && S.sel.sec && !findSec(S.sel.sec)) S.sel = null;
       markDirty(); render({ left: true });
     }
-    function markDirty() { S.dirty = true; setStatus('Unsaved changes'); clearTimeout(S.saveTimer); S.saveTimer = setTimeout(saveNow, 1200); }
-    function setStatus(t, bad) { const n = $('#t-stat', root); if (n) { n.textContent = t; n.classList.toggle('bad', !!bad); } }
+    function markDirty() { S.dirty = true; if (!S.failed) setStatus('Unsaved changes'); clearTimeout(S.saveTimer); S.saveTimer = setTimeout(saveNow, 1200); }
+    // states: '' (neutral), 'ok' (saved), 'bad' (failed — tap to retry)
+    function setStatus(t, state) {
+      const n = $('#t-stat', root); if (!n) return;
+      n.textContent = t; n.classList.toggle('bad', state === 'bad' || state === true); n.classList.toggle('ok', state === 'ok');
+      n.title = n.classList.contains('bad') ? 'Tap to try saving again' : '';
+    }
     async function saveNow() {
+      if (S.editing) commitEditing();
       if (S.saving) { clearTimeout(S.saveTimer); S.saveTimer = setTimeout(saveNow, 800); return; }
       if (!S.dirty) return;
+      clearTimeout(S.saveTimer);
       S.saving = true; S.dirty = false; setStatus('Saving…');
       try {
         const r = await Store.save(S.row.id, { draft: S.site, name: S.site.name });
         S.row = Object.assign(S.row, r);
-        setStatus(S.dirty ? 'Unsaved changes' : 'All changes saved');
+        if (S.failed) toast('Your changes are saved again', 'ok');
+        S.failed = 0;
+        if (S.dirty) setStatus('Unsaved changes'); else setStatus('All changes saved', 'ok');
       } catch (e) {
-        S.dirty = true; setStatus('Not saved — retrying', true);
-        toast(e.message || 'Save failed', 'bad', 5000);
-        clearTimeout(S.saveTimer); S.saveTimer = setTimeout(saveNow, 6000);
+        S.dirty = true; S.failed = (S.failed || 0) + 1;
+        const off = typeof navigator !== 'undefined' && navigator.onLine === false;
+        setStatus(off ? 'Offline — not saved yet' : 'Not saved — tap to retry', 'bad');
+        if (S.failed === 1) toast((e && e.message ? e.message + ' ' : '') + 'Keep this tab open — we’ll keep trying to save.', 'bad', 7000);
+        clearTimeout(S.saveTimer); S.saveTimer = setTimeout(saveNow, Math.min(30000, 4000 * S.failed));
       }
       S.saving = false;
     }
-    const onUnload = (e) => { if (S.dirty || S.saving) { e.preventDefault(); e.returnValue = ''; } };
+    const pending = () => S.dirty || S.saving || (S.editing && (() => { const f = findEl(S.editing.id); return f && S.editing.target && (f.el.t === 'button' ? S.editing.target.textContent.replace(/\s+/g, ' ').trim() : WB.sanitize(S.editing.target.innerHTML).replace(/(<br>)+$/, '')) !== f.el.c; })());
+    const onUnload = (e) => { if (pending()) { saveNow(); e.preventDefault(); e.returnValue = ''; } };
+    // iPad/phone browsers may close a background tab without warning: save the moment the tab is hidden
+    const onHide = () => { if (document.visibilityState === 'hidden' && pending()) saveNow(); };
+    const onOnline = () => { if (S.dirty) saveNow(); };
     window.addEventListener('beforeunload', onUnload);
+    document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', onHide);
+    window.addEventListener('online', onOnline);
+    root.addEventListener('click', (e) => { if (e.target.id === 't-stat' && S.failed) { S.failed = Math.max(1, S.failed); saveNow(); } });
 
     /* ---------- rendering ---------- */
     function render(opts) {
@@ -3614,11 +3672,20 @@ a{color:var(--ui-a2)}
     }
     cv.addEventListener('pointerup', endPointer);
     cv.addEventListener('pointercancel', endPointer);
-    cv.addEventListener('dblclick', (e) => {
+    function openByDoubleTap(e) {
       const n = e.target.closest('.wb-el'); if (!n || !mount.contains(n)) return;
       const f = findEl(n.dataset.id); if (!f) return;
       if (f.el.t === 'image') replaceImage(f.el.id);
       else if (['heading', 'text', 'button'].indexOf(f.el.t) >= 0 && !S.editing) enterEdit(f.el.id);
+    }
+    cv.addEventListener('dblclick', openByDoubleTap);
+    // iPad / touch screens: Safari doesn't reliably send dblclick, so recognise a double tap ourselves
+    let lastTap = null;
+    cv.addEventListener('pointerup', (e) => {
+      if (e.pointerType !== 'touch' || S.editing) return;
+      const n = e.target.closest('.wb-el'); const now = Date.now();
+      if (n && lastTap && lastTap.id === n.dataset.id && now - lastTap.t < 380 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 24) { lastTap = null; openByDoubleTap(e); return; }
+      lastTap = n ? { id: n.dataset.id, t: now, x: e.clientX, y: e.clientY } : null;
     });
 
     // section height dragging
@@ -3727,8 +3794,21 @@ a{color:var(--ui-a2)}
       if (S.editing && findEl(S.editing.id).el.t === 'button' && e.key === 'Enter') { e.preventDefault(); exitEdit(); }
       e.stopPropagation();
     }
+    // typing in a text box: save it as you go, not only when you click away
+    function commitEditing() {
+      const ed = S.editing; if (!ed) return false;
+      const f = findEl(ed.id); if (!f) return false;
+      const val = f.el.t === 'button' ? ed.target.textContent.replace(/\s+/g, ' ').trim() : WB.sanitize(ed.target.innerHTML).replace(/(<br>)+$/, '');
+      if (!val || val === f.el.c) return false;
+      f.el.c = val;
+      if (!ed.pushed) { pushHist(ed.before); ed.pushed = true; }
+      markDirty();
+      return true;
+    }
     function onEditInput() {
       if (!S.editing) return;
+      setStatus('Unsaved changes');
+      clearTimeout(S.typeTimer); S.typeTimer = setTimeout(commitEditing, 1500);
       const sel = $('.ed-sel', mount); const n = S.editing.node;
       if (sel && n) { const k = kOf(n.closest('.wb-in')); sel.style.height = n.getBoundingClientRect().height / k + 'px'; }
     }
@@ -3744,9 +3824,11 @@ a{color:var(--ui-a2)}
       ed.node.classList.remove('ed-editing');
       if (!f) return;
       const val = f.el.t === 'button' ? ed.target.textContent.replace(/\s+/g, ' ').trim() : WB.sanitize(ed.target.innerHTML).replace(/(<br>)+$/, '');
+      clearTimeout(S.typeTimer);
       if (val !== f.el.c) {
         f.el.c = val || (f.el.t === 'button' ? 'Button' : 'Text');
-        pushHist(ed.before); markDirty();
+        if (!ed.pushed) pushHist(ed.before);
+        markDirty();
       }
       if (!silent) { render(); fitText(ed.id); }
       else fitText(ed.id, true);
@@ -3840,7 +3922,7 @@ a{color:var(--ui-a2)}
         }
         S.sel = { el: el.id };
       });
-      if (kind === 'image') setTimeout(() => toast('Double-click the image (or use Replace) to add your photo'), 200);
+      if (kind === 'image') setTimeout(() => toast((matchMedia('(pointer:coarse)').matches ? 'Double-tap' : 'Double-click') + ' the image (or use Replace) to add your photo'), 200);
       if (window.innerWidth <= 820) root.classList.remove('show-left');
     }
     function insertSection(key, after) {
@@ -4155,7 +4237,7 @@ a{color:var(--ui-a2)}
         }
       }
       const pi = t.closest('[data-pid]');
-      if (pi) { S.pageId = pi.dataset.pid; S.sel = null; cv.scrollTop = 0; render({ left: true }); return; }
+      if (pi) { exitEdit(true); S.pageId = pi.dataset.pid; S.sel = null; cv.scrollTop = 0; render({ left: true }); return; }
       if (t.id === 'st-slug-go') {
         const v = slugify($('#st-slug', lpane).value); const err = slugError(v); if (err) return toast(err, 'bad', 5000);
         if (v === S.row.slug) return;
@@ -4615,7 +4697,13 @@ a{color:var(--ui-a2)}
       const b = e.target.closest('button'); if (!b) return;
       if (b.dataset.dev) { if (S.device !== b.dataset.dev) { exitEdit(true); S.device = b.dataset.dev; render(); if (S.device === 'mobile' && !S.mobHint) { S.mobHint = 1; hint('Phone view: items stack automatically. Drag anything to arrange a section by hand.'); } } return; }
       const a = b.dataset.a;
-      if (a === 'back') { saveNow().then(() => showDashboard()); }
+      if (a === 'back') {
+        exitEdit(true);
+        saveNow().then(async () => {
+          if (S.dirty && !(await confirmBox('Your latest changes aren’t saved', 'We couldn’t reach the server. If you leave now, your most recent changes may be lost. Stay on this page and we’ll keep trying.', 'Leave anyway', true))) return;
+          showDashboard();
+        });
+      }
       if (a === 'undo') undo();
       if (a === 'redo') redo();
       if (a === 'snap') { S.snap = !S.snap; updateTop(); }
@@ -4624,7 +4712,7 @@ a{color:var(--ui-a2)}
       if (a === 'toggleLeft') root.classList.toggle('show-left');
       if (a === 'toggleRight') root.classList.toggle('show-right');
     });
-    $('#t-page', root).addEventListener('change', (e) => { S.pageId = e.target.value; S.sel = null; cv.scrollTop = 0; render({ left: true }); });
+    $('#t-page', root).addEventListener('change', (e) => { exitEdit(true); saveNow(); S.pageId = e.target.value; S.sel = null; cv.scrollTop = 0; render({ left: true }); });
     $('#t-zoom', root).addEventListener('change', (e) => { S.zoom = e.target.value; renderCanvas(); });
     function hint(t) { const n = frag('<div class="ed-hint">' + esc(t) + '</div>'); root.appendChild(n); n.style.position = 'fixed'; setTimeout(() => n.remove(), 5000); }
 
@@ -4641,8 +4729,11 @@ a{color:var(--ui-a2)}
         $('#pv-page', ov).innerHTML = S.site.pages.map((p) => '<option value="' + p.id + '"' + (p.id === pid ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('');
         $$('[data-pd]', ov).forEach((b) => b.classList.toggle('on', b.dataset.pd === dev));
         fr.classList.toggle('phone', dev === 'mobile');
-        const w = dev === 'mobile' ? 390 : sc.clientWidth;
+        let w = dev === 'mobile' ? WB.MOB : sc.clientWidth;
         fr.style.width = w + 'px';
+        // the phone frame scrolls by itself: a classic (non-overlay) scrollbar takes width away from the page,
+        // so widen the frame by the scrollbar instead of letting the page overflow sideways
+        if (dev === 'mobile') { const sb = fr.offsetWidth - fr.clientWidth; if (sb > 0) fr.style.width = (WB.MOB + sb) + 'px'; w = fr.clientWidth || WB.MOB; }
         const pg = S.site.pages.find((p) => p.id === pid) || S.site.pages[0];
         WB.renderPage(S.site, pg, fr, { device: dev, width: w, pageHref: (slug) => '#wbp:' + slug, onSubmit: () => new Promise((r) => setTimeout(r, 500)), shop: { products: (S.products || []).filter((p) => p.active !== false).map((p) => Object.assign({ in_stock: p.stock == null || p.stock > 0 }, p)), enabled: true } });
         const scroller = dev === 'mobile' ? fr : sc;
@@ -4729,6 +4820,10 @@ a{color:var(--ui-a2)}
       window.removeEventListener('resize', onResize);
       window.removeEventListener('wb-lm-loaded', onLm);
       window.removeEventListener('beforeunload', onUnload);
+      document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', onHide);
+      window.removeEventListener('online', onOnline);
+      clearTimeout(S.saveTimer); clearTimeout(S.typeTimer);
       if (S.runtime) S.runtime();
       $$('.ed-pop').forEach((n) => n.remove());
       if (S.dirty) saveNow();
@@ -4758,11 +4853,13 @@ a{color:var(--ui-a2)}
       if (!had && user) route();
       if (had && !user) showAuth();
     });
+    if (!user) rememberDest(linkDest() || storedDest());
     user ? route() : showAuth();
   }
   function route() {
-    const m = location.hash.match(/edit=([\w-]+)/);
-    if (m) openEditor(m[1]); else showDashboard();
+    const id = linkDest() || storedDest();
+    if (location.search.match(/[?&]edit=/)) history.replaceState(null, '', location.pathname + location.search.replace(/[?&]edit=[\w-]+/, '').replace(/^&/, '?') + location.hash);
+    if (id) openEditor(id); else showDashboard();
   }
   window.addEventListener('error', (e) => { console.error(e.error || e.message); });
   boot();
