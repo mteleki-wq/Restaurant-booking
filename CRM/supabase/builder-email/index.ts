@@ -9,6 +9,8 @@
 // unsubscribe link (Spam Act 2003); only customers who said yes (subscribed) are emailed.
 // Secrets: RESEND_API_KEY, FROM_EMAIL (verified sender), ANTHROPIC_API_KEY (for drafts).
 
+import WBMail from "./mail.js";
+
 const SB = (Deno.env.get("SUPABASE_URL") || "").replace(/\/+$/, "");
 const SR = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 const ANON = Deno.env.get("SUPABASE_ANON_KEY") || "";
@@ -31,7 +33,7 @@ async function db(path: string, init: RequestInit = {}) {
 const one = async (p: string) => (await db(p))?.[0] ?? null;
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 const okEmail = (e: unknown) => /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(String(e || ""));
-const okUrl = (u: unknown) => /^https:\/\/[^\s"'<>]+$/i.test(String(u || "")) || /^(mailto:|tel:)[^\s"'<>]+$/i.test(String(u || ""));
+const _okUrl = (u: unknown) => /^https:\/\/[^\s"'<>]+$/i.test(String(u || "")) || /^(mailto:|tel:)[^\s"'<>]+$/i.test(String(u || ""));
 const txt = (v: unknown, n: number) => String(v ?? "").replace(/\r/g, "").slice(0, n);
 
 // who is calling, and may they use the Email Studio for this website?
@@ -51,38 +53,12 @@ async function gate(req: Request, siteId: string) {
 
 function clean(c: any) {
   c = c || {};
-  const accent = /^#[0-9a-f]{6}$/i.test(c.accent || "") ? c.accent : "#5b4bd6";
-  return {
-    subject: txt(c.subject, 140).trim(), preheader: txt(c.preheader, 160), headline: txt(c.headline, 140),
-    message: txt(c.message, 6000), image: okUrl(c.image) && /^https:/.test(c.image) ? c.image : "",
-    button_text: txt(c.button_text, 50), button_url: okUrl(c.button_url) ? c.button_url : "", accent,
-  };
+  const o: any = WBMail.clean(c);
+  o.subject = txt(c.subject, 140).trim();
+  return o;
 }
-
-// the email itself: one column, table layout, works in Outlook, Gmail and Apple Mail
-function render(c: any, biz: { name: string; site: string; reply: string }, first: string, unsub: string) {
-  const fill = (t: string) => esc(t).replace(/\{first_name\}/g, esc(first || "there"));
-  const paras = c.message.split(/\n{2,}/).map((p: string) => p.trim()).filter(Boolean)
-    .map((p: string) => `<p style="margin:0 0 16px;font:16px/1.6 Arial,Helvetica,sans-serif;color:#2b2b33">${fill(p).replace(/\n/g, "<br>")}</p>`).join("");
-  const btn = c.button_text && c.button_url ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 6px"><tr><td style="border-radius:999px;background:${c.accent}"><a href="${esc(c.button_url)}" style="display:inline-block;padding:14px 26px;font:bold 16px Arial,Helvetica,sans-serif;color:#ffffff;text-decoration:none;border-radius:999px">${esc(c.button_text)}</a></td></tr></table>` : "";
-  const img = c.image ? `<tr><td><img src="${esc(c.image)}" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>` : "";
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(c.subject)}</title></head>
-<body style="margin:0;padding:0;background:#f3f2f7">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(c.preheader)}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f2f7"><tr><td align="center" style="padding:24px 12px">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden">
-<tr><td style="padding:22px 32px;border-bottom:4px solid ${c.accent};font:bold 20px Arial,Helvetica,sans-serif;color:#17142b">${esc(biz.name)}</td></tr>
-${img}
-<tr><td style="padding:30px 32px 26px">
-${c.headline ? `<h1 style="margin:0 0 18px;font:bold 28px/1.2 Arial,Helvetica,sans-serif;color:#17142b">${fill(c.headline)}</h1>` : ""}
-${paras}${btn}
-</td></tr>
-<tr><td style="padding:20px 32px 26px;background:#faf9fc;border-top:1px solid #ece9f3;font:13px/1.6 Arial,Helvetica,sans-serif;color:#6b6880">
-<b style="color:#2b2b33">${esc(biz.name)}</b>${biz.site ? ` · <a href="${esc(biz.site)}" style="color:#6b6880">${esc(biz.site.replace(/^https:\/\//, ""))}</a>` : ""}<br>
-You are receiving this because you asked to hear from ${esc(biz.name)}. Reply to this email to contact us.<br>
-<a href="${esc(unsub)}" style="color:#6b6880">Unsubscribe</a></td></tr>
-</table></td></tr></table></body></html>`;
-}
+const render = (c: any, biz: any, first: string, unsub: string) => WBMail.render(c, biz, first, unsub);
+const subj = (s: string, first: string) => s.replace(/\{first_name\}/g, first || "there");
 
 function bizOf(site: any, user: any) {
   return { name: site.name || "Our business", site: `https://webescapade.com/sites/?s=${site.slug}`, reply: user.email || "" };
@@ -101,20 +77,43 @@ const msg = (biz: any, to: string, c: any, html: string, unsub: string) => ({
 });
 const firstName = (n: unknown) => String(n || "").trim().split(/\s+/)[0] || "";
 
-async function draft(site: any, brief: string) {
+const KINDS: Record<string, string> = { restaurant: "restaurant or café", function: "function and events venue", service: "salon, spa or clinic", trades: "trades or home-services business", shop: "shop", general: "small business" };
+async function draft(site: any, brief: string, kind: string, images: string[], book: string) {
   if (!AI) throw new Fail("AI is not set up.", 503);
   const facts = JSON.stringify(site.published || site.draft || {}).replace(/"(src|image|images|url|href|bg)":"[^"]*"/g, "").slice(0, 9000);
+  const imgs = (Array.isArray(images) ? images : []).filter((u) => WBMail.okImg(u)).slice(0, 24);
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST", headers: { "x-api-key": AI, "anthropic-version": "2023-06-01", "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "claude-haiku-5-5", max_tokens: 900,
-      system: `You write short, friendly marketing emails for a small business, to customers who asked to hear from it. Australian English. Plain words, no hype. Use {first_name} at most once. Use only facts from the brief and the website content; never invent prices, discounts, dates, codes, awards or reviews. Return ONLY JSON: {"subject":"under 60 chars","preheader":"under 100 chars","headline":"","message":"2-4 short paragraphs separated by a blank line","button_text":"2-4 words"}`,
+    body: JSON.stringify({ model: "claude-haiku-5-5", max_tokens: 2200,
+      system: `You write friendly marketing emails for a ${KINDS[kind] || KINDS.general}, sent to customers who asked to hear from it. Australian English. Plain, warm words, no hype, short paragraphs.
+Use {first_name} at most twice. Use only facts from the brief and the website content. Never invent prices, discounts, dates, times, numbers, names, codes, awards or reviews: where a detail is needed but unknown, write a short placeholder in square brackets, e.g. [date] or [price per person].
+Pictures: the website has ${imgs.length} photos, numbered 0 to ${Math.max(0, imgs.length - 1)}. Refer to them only by number; use -1 for none. Use each photo at most once.
+Return ONLY JSON:
+{"subject":"under 60 chars","preheader":"under 100 chars","eyebrow":"1-3 words","hero":0,"headline":"","intro":"1-2 short paragraphs separated by a blank line","button_text":"2-4 words",
+ "sections":[ 2 to 4 of:
+   {"t":"pictext","img":1,"title":"","text":"","side":"left|right"}
+   {"t":"gallery","imgs":[2,3,4],"caption":""}
+   {"t":"cards","title":"","items":[{"img":-1,"title":"","text":""}, … 3 items]}
+   {"t":"highlight","title":"","text":""}
+   {"t":"text","title":"","text":""} ],
+ "signoff":"e.g. See you soon,\nThe team at <business>"}`,
       messages: [{ role: "user", content: `Business: ${site.name}\nWhat the owner wants to say: ${brief}\n\nWebsite content (for facts only): ${facts}` }] }),
   });
   const j = await r.json().catch(() => null);
   if (!r.ok) { console.error("[builder-email] ai", r.status, JSON.stringify(j).slice(0, 300)); throw new Fail("The AI couldn't write a draft just now.", 502); }
   const t = (j?.content || []).map((x: any) => x.text || "").join("").replace(/```(json)?/g, "");
-  try { const o = JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1)); return { subject: txt(o.subject, 140), preheader: txt(o.preheader, 160), headline: txt(o.headline, 140), message: txt(o.message, 6000), button_text: txt(o.button_text, 50) }; }
-  catch { throw new Fail("The AI draft came back in the wrong shape. Please try again."); }
+  let o: any;
+  try { o = JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1)); } catch { throw new Fail("The AI draft came back in the wrong shape. Please try again."); }
+  const pic = (n: unknown) => (typeof n === "number" && n >= 0 && n < imgs.length ? imgs[n] : "");
+  const secs = (Array.isArray(o.sections) ? o.sections : []).slice(0, 5).map((s: any) => {
+    if (!s) return null;
+    if (s.t === "pictext") return { ...s, img: pic(s.img), btn_text: "", btn_url: "" };
+    if (s.t === "gallery") return { ...s, imgs: (Array.isArray(s.imgs) ? s.imgs : []).map(pic).filter(Boolean) };
+    if (s.t === "cards") return { ...s, items: (Array.isArray(s.items) ? s.items : []).map((i: any) => ({ ...i, img: pic(i?.img) })) };
+    return s;
+  }).filter(Boolean);
+  const c = WBMail.clean({ ...o, hero: pic(o.hero), sections: secs, button_url: WBMail.okUrl(book) ? book : "" });
+  return { ...c, subject: txt(o.subject, 140) };
 }
 
 Deno.serve(async (req) => {
@@ -133,14 +132,14 @@ Deno.serve(async (req) => {
     if (action === "draft") {
       const brief = txt(b.brief, 1200).trim();
       if (brief.length < 5) throw new Fail("Tell the AI what the email is about.");
-      return json({ content: await draft(site, brief) });
+      return json({ content: await draft(site, brief, String(b.kind || ""), b.images, String(b.book || "")) });
     }
     if (action === "test") {
       const c = clean(b.campaign);
       if (!c.subject) throw new Fail("Add a subject first.");
       if (!okEmail(user.email)) throw new Fail("Your account has no email address.");
       const unsub = UNSUB + "?t=test";
-      const [ok] = await resend([msg(biz, user.email, { ...c, subject: "[Test] " + c.subject }, render(c, biz, "Sam", unsub), unsub)]);
+      const [ok] = await resend([msg(biz, user.email, { ...c, subject: "[Test] " + subj(c.subject, "Sam") }, render(c, biz, "Sam", unsub), unsub)]);
       if (!ok) throw new Fail("The test email could not be sent. Please try again.", 502);
       return json({ ok: true, to: user.email });
     }
@@ -151,7 +150,9 @@ Deno.serve(async (req) => {
       if (!camp) throw new Fail("Campaign not found.", 404);
       if (camp.status !== "draft") throw new Fail("This campaign has already been sent.");
       const c = clean({ ...camp.content, subject: camp.subject });
-      if (!c.subject || !c.message.trim()) throw new Fail("Add a subject and a message first.");
+      if (!c.subject || !WBMail.hasBody(c)) throw new Fail("Add a subject and a message first.");
+      const gaps = WBMail.blanks(c).concat(c.subject.match(/\[[^\]]{2,60}\]/g) || []);
+      if (gaps.length) throw new Fail("Fill in the parts in [square brackets] first: " + gaps.slice(0, 4).join(", "));
       const recent = await db(`builder_campaigns?site_id=eq.${site.id}&status=neq.draft&sent_at=gte.${new Date(Date.now() - 10 * 60e3).toISOString()}&select=id`);
       if (recent?.length) throw new Fail("Please wait 10 minutes between campaigns.");
       const people = (await db(`builder_contacts?site_id=eq.${site.id}&subscribed=is.true&select=email,name,token&limit=${PER_SEND + 1}`) || []).filter((p: any) => okEmail(p.email));
@@ -167,7 +168,7 @@ Deno.serve(async (req) => {
       let sent = 0, failed = 0;
       for (let i = 0; i < people.length; i += 100) {
         const part = people.slice(i, i + 100);
-        const res = await resend(part.map((p: any) => { const unsub = `${UNSUB}?t=${p.token}`; return msg(biz, p.email, c, render(c, biz, firstName(p.name), unsub), unsub); }));
+        const res = await resend(part.map((p: any) => { const unsub = `${UNSUB}?t=${p.token}`; return msg(biz, p.email, { ...c, subject: subj(c.subject, firstName(p.name)) }, render(c, biz, firstName(p.name), unsub), unsub); }));
         res.forEach((ok) => ok ? sent++ : failed++);
         await db("builder_email_sends", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify(part.map((p: any, k: number) => ({ site_id: site.id, campaign_id: id, email: p.email, ok: res[k] }))) });
       }

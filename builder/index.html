@@ -393,6 +393,52 @@ a{color:var(--ui-a2)}
 .em-inbox b{font-size:14px}.em-inbox span{color:#6b6880}
 .em-prev iframe{flex:1;border:0;width:100%;background:#f3f2f7;min-height:480px}
 @media(max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.hgrid{grid-template-columns:1fr}.em,.em-ed{grid-template-columns:1fr}.em-side{border:0;padding:0}.ctr{grid-template-columns:1fr 1fr}.ctr.th{display:none}.hub-tabs{margin-left:0}}
+/* Email Studio v2: ideas, looks, sections */
+.em-ai .btn{white-space:nowrap}
+.em-ideas-h{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.em-ideas-h h3{margin:0 0 4px;font-size:19px}
+.em-kinds{flex-wrap:wrap;margin-bottom:14px}
+.em-idea-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.em-idea{display:flex;flex-direction:column;text-align:left;gap:4px;background:var(--ui-p2);border:1px solid var(--ui-line);border-radius:14px;padding:0 0 12px;color:var(--ui-t);overflow:hidden;cursor:pointer;transition:transform .15s,border-color .15s}
+.em-idea:hover{transform:translateY(-2px);border-color:#7c6cf0}
+.em-idea-pics{display:flex;height:92px;gap:2px;margin-bottom:8px}
+.em-idea-pics i{flex:1;background:#2a2740 center/cover no-repeat}
+.em-idea-pics i.none{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:34px;background:linear-gradient(135deg,#2a2150,#163044)}
+.em-idea b{font-size:14.5px;padding:0 12px}
+.em-idea small{color:var(--ui-m);font-size:12.5px;line-height:1.4;padding:0 12px}
+.em-looks{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 14px}
+.em-looks>span{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ui-m);margin-right:4px}
+.em-looks button{display:flex;align-items:center;gap:6px;border:1px solid var(--ui-line);background:transparent;color:var(--ui-t);border-radius:999px;padding:5px 11px 5px 5px;font-size:12.5px;cursor:pointer}
+.em-looks button.on{border-color:#7c6cf0;background:#24213d}
+.em-looks i{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.15)}
+.em-looks em{width:9px;height:9px;border-radius:50%}
+.em-h{margin:18px 0 8px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ui-m);display:flex;justify-content:space-between}
+.em-h small{letter-spacing:0;text-transform:none}
+.em-sec{background:var(--ui-p2);border:1px solid var(--ui-line);border-radius:14px;padding:12px 14px 4px;margin-bottom:10px}
+.em-sec-h{display:flex;justify-content:space-between;align-items:center;margin:-2px 0 10px;font-size:13.5px}
+.em-sec-h button{border:0;background:transparent;color:var(--ui-m);font-size:15px;padding:2px 7px;border-radius:6px;cursor:pointer}
+.em-sec-h button:hover:not(:disabled){background:#2c2947;color:var(--ui-t)}
+.em-sec-h button:disabled{opacity:.3}
+.em-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.em-pic{position:relative;flex:none}
+.em-pic-i{width:92px;height:70px;border-radius:10px;border:1px dashed #4a4668;background:#1b1930 center/cover no-repeat;color:var(--ui-m);font-size:12px;cursor:pointer}
+.em-pic:not(.empty) .em-pic-i{border-style:solid;border-color:transparent}
+.em-pic.sm .em-pic-i{width:100%;height:64px}
+.em-pic-x{position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;border:0;background:#000c;color:#fff;font-size:13px;line-height:1;cursor:pointer}
+.em-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.em-card .em-pic{display:block;margin-bottom:6px}
+.em-card .field{margin-bottom:6px}
+.em-side-seg{margin:0 0 10px}
+.em-add{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 12px;border:1px dashed #4a4668;border-radius:14px}
+.em-add span{font-size:12.5px;color:var(--ui-m);margin-right:4px}
+.em-add button{border:1px solid var(--ui-line);background:var(--ui-p2);color:var(--ui-t);border-radius:999px;padding:6px 11px;font-size:12.5px;cursor:pointer}
+.em-add button:hover{border-color:#7c6cf0}
+.em-pics{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;max-height:56vh;overflow:auto}
+.em-pics button{aspect-ratio:4/3;border:2px solid transparent;border-radius:10px;background:#222 center/cover no-repeat;cursor:pointer}
+.em-pics button:hover{border-color:#7c6cf0}
+.em-ed .em-form{max-height:74vh;overflow:auto;padding-right:6px}
+.em-prev{position:sticky;top:0;max-height:74vh}
+@media(max-width:980px){.em-cards{grid-template-columns:1fr}.em-ed .em-form,.em-prev{max-height:none}}
 
 </style>
 </head>
@@ -3067,7 +3113,7 @@ WB.AI_DEMO_PLAN = function (a) {
       async emailApi(action, body) {
         await new Promise((r) => setTimeout(r, 700));
         if (action === 'test') return { ok: true, to: 'you@example.com' };
-        if (action === 'draft') return { content: WB.HUB_DEMO_DRAFT(body.brief) };
+        if (action === 'draft') return { content: WB.HUB_DEMO_DRAFT(body.brief, { imgs: body.images || [] }) };
         if (action === 'send') { const a = await this.campaigns(body.site_id); const c = a.find((x) => x.id === body.campaign_id); const n = (await this.contacts(body.site_id)).filter((x) => x.subscribed).length; if (c) { c.status = 'sent'; c.sent_at = nowIso(); c.recipients = n; c.delivered = n; localStorage.setItem('wb.camps.' + body.site_id, JSON.stringify(a)); } return { ok: true, sent: n, failed: 0 }; }
         return {};
       },
@@ -5404,7 +5450,339 @@ WB.AI_DEMO_PLAN = function (a) {
   }
   window.addEventListener('error', (e) => { console.error(e.error || e.message); });
   boot();
-  WB.__hub = { Store, modal, toast, confirmBox, esc, frag, $, $$, I, pickImages, uploadFiles, CFG };
+  WB.__hub = { Store, modal, toast, confirmBox, esc, frag, $, $$, I, pickImages, uploadFiles, chooseImages, CFG };
+})();
+
+/* =====================================================================
+   Webescapade Site Builder — email template (shared).
+   The same file runs in the editor (live preview) and in the builder-email
+   function (what is actually sent), so the preview is always the real email.
+   Content v2: { v:2, look, accent, preheader, eyebrow, hero, headline, intro,
+     button_text, button_url, sections:[…], signoff }
+   Section types: pictext {img,title,text,side,btn_text,btn_url}
+                  gallery {imgs[2-3],caption}
+                  cards {title,items:[{img,title,text}] (2-3)}
+                  text {title,text}
+                  highlight {title,text,btn_text,btn_url}
+                  button {text,url}
+   ===================================================================== */
+const WBMail = (() => {
+  const LOOKS = {
+    site: { label: 'Your website', bg: '#f3f2f7', card: '#ffffff', ink: '#17142b', text: '#2f2d3a', muted: '#6b6880', soft: '#f5f3fa', line: '#ebe8f2', accent: '#5b4bd6', head: 'Arial,Helvetica,sans-serif' },
+    cream: { label: 'Cream & terracotta', bg: '#f3ece2', card: '#fffaf3', ink: '#3a2a20', text: '#4a3a30', muted: '#8a7768', soft: '#f5e8da', line: '#eadccb', accent: '#b4583a', head: 'Georgia,"Times New Roman",serif' },
+    olive: { label: 'Olive', bg: '#edefe4', card: '#fbfcf6', ink: '#2c311d', text: '#3b402c', muted: '#737862', soft: '#e7ebd7', line: '#dfe3cd', accent: '#5f6b2f', head: 'Georgia,"Times New Roman",serif' },
+    sage: { label: 'Soft sage', bg: '#edf3ef', card: '#ffffff', ink: '#24352c', text: '#33453b', muted: '#6c7f74', soft: '#e4efe8', line: '#dbe7df', accent: '#5f8f76', head: 'Georgia,"Times New Roman",serif' },
+    midnight: { label: 'Midnight & gold', bg: '#0e1120', card: '#171b2d', ink: '#ffffff', text: '#d5d8e6', muted: '#959bb3', soft: '#21263d', line: '#2a3049', accent: '#c9a45c', head: 'Georgia,"Times New Roman",serif' },
+  };
+  const TYPES = { pictext: 'Picture + text', gallery: 'Photo row', cards: 'Highlights', text: 'Text', highlight: 'Offer box', button: 'Button' };
+  const MAXSEC = 8;
+
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const txt = (v, n) => String(v == null ? '' : v).replace(/\r/g, '').slice(0, n);
+  const okImg = (u) => /^https:\/\/[^\s"'<>]+$/i.test(String(u || ''));
+  const okUrl = (u) => /^https:\/\/[^\s"'<>]+$/i.test(String(u || '')) || /^(mailto:|tel:)[^\s"'<>]+$/i.test(String(u || ''));
+  const hex = (h) => /^#[0-9a-f]{6}$/i.test(h || '');
+  const onAccent = (h) => { const n = parseInt(h.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; return (0.299 * r + 0.587 * g + 0.114 * b) > 170 ? '#17142b' : '#ffffff'; };
+
+  // accepts v1 ({message,image,button_*}) or v2 content; returns safe v2
+  function clean(c) {
+    c = c || {};
+    const out = { v: 2, look: LOOKS[c.look] ? c.look : 'site', accent: hex(c.accent) ? c.accent : '#5b4bd6', preheader: txt(c.preheader, 160), eyebrow: txt(c.eyebrow, 60),
+      hero: okImg(c.hero) ? c.hero : (okImg(c.image) ? c.image : ''), headline: txt(c.headline, 140), intro: txt(c.intro != null ? c.intro : c.message, 4000),
+      button_text: txt(c.button_text, 50), button_url: okUrl(c.button_url) ? String(c.button_url) : '', signoff: txt(c.signoff, 300), sections: [] };
+    (Array.isArray(c.sections) ? c.sections : []).slice(0, MAXSEC).forEach((s) => {
+      if (!s || !TYPES[s.t]) return;
+      const b = { t: s.t };
+      if (s.t === 'pictext') Object.assign(b, { img: okImg(s.img) ? s.img : '', title: txt(s.title, 120), text: txt(s.text, 1500), side: s.side === 'right' ? 'right' : 'left', btn_text: txt(s.btn_text, 40), btn_url: okUrl(s.btn_url) ? s.btn_url : '' });
+      if (s.t === 'gallery') Object.assign(b, { imgs: (Array.isArray(s.imgs) ? s.imgs : []).filter(okImg).slice(0, 3), caption: txt(s.caption, 200) });
+      if (s.t === 'cards') Object.assign(b, { title: txt(s.title, 120), items: (Array.isArray(s.items) ? s.items : []).slice(0, 3).map((i) => ({ img: okImg(i && i.img) ? i.img : '', title: txt(i && i.title, 60), text: txt(i && i.text, 300) })) });
+      if (s.t === 'text') Object.assign(b, { title: txt(s.title, 120), text: txt(s.text, 3000) });
+      if (s.t === 'highlight') Object.assign(b, { title: txt(s.title, 120), text: txt(s.text, 800), btn_text: txt(s.btn_text, 40), btn_url: okUrl(s.btn_url) ? s.btn_url : '' });
+      if (s.t === 'button') Object.assign(b, { text: txt(s.text, 50), url: okUrl(s.url) ? s.url : '' });
+      out.sections.push(b);
+    });
+    return out;
+  }
+
+  // anything with text the reader would see — used to stop empty sends
+  function hasBody(c) { return !!(c.headline.trim() || c.intro.trim() || c.sections.length); }
+  // [square bracket] notes left in from an idea
+  function blanks(c) {
+    const all = [c.headline, c.intro, c.preheader, c.signoff, c.button_text].concat(c.sections.map((s) => [s.title, s.text, s.caption, s.btn_text].concat((s.items || []).map((i) => i.title + ' ' + i.text)).map((x) => x || '').join(' '))).join(' ');
+    return (all.match(/\[[^\]\n]{2,60}\]/g) || []).filter((v, i, a) => a.indexOf(v) === i);
+  }
+
+  function render(raw, biz, first, unsub) {
+    const c = clean(raw), L = Object.assign({}, LOOKS[c.look]);
+    if (c.look === 'site') L.accent = c.accent;
+    const A = L.accent, AT = onAccent(A), F = 'Arial,Helvetica,sans-serif';
+    const fill = (t) => esc(t).replace(/\{first_name\}/g, esc(first || 'there'));
+    const paras = (t, size) => String(t || '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
+      .map((p) => '<p style="margin:0 0 14px;font:' + (size || 16) + 'px/1.6 ' + F + ';color:' + L.text + '">' + fill(p).replace(/\n/g, '<br>') + '</p>').join('');
+    const h2 = (t, center) => t ? '<h2 style="margin:0 0 10px;font:bold 22px/1.25 ' + L.head + ';color:' + L.ink + (center ? ';text-align:center' : '') + '">' + fill(t) + '</h2>' : '';
+    const btn = (t, u, center) => t && u ? '<table role="presentation" cellpadding="0" cellspacing="0"' + (center ? ' align="center"' : '') + ' style="margin:6px ' + (center ? 'auto' : '0') + ' 4px"><tr><td style="border-radius:999px;background:' + A + '"><a href="' + esc(u) + '" style="display:inline-block;padding:13px 26px;font:bold 15px ' + F + ';color:' + AT + ';text-decoration:none;border-radius:999px">' + esc(t) + '</a></td></tr></table>' : '';
+    const img = (u, r) => '<img src="' + esc(u) + '" alt="" width="100%" style="display:block;width:100%;height:auto;border:0;border-radius:' + (r == null ? 12 : r) + 'px">';
+    const row = (inner, pad) => '<tr><td class="wbm-pad" style="padding:' + (pad || '0 32px 26px') + '">' + inner + '</td></tr>';
+
+    const secs = c.sections.map((s) => {
+      if (s.t === 'text') return row(h2(s.title) + paras(s.text));
+      if (s.t === 'button') return row(btn(s.text, s.url, true));
+      if (s.t === 'highlight') return row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + L.soft + ';border-radius:14px;border-left:5px solid ' + A + '"><tr><td style="padding:22px 24px">' + h2(s.title) + paras(s.text, 15) + btn(s.btn_text, s.btn_url) + '</td></tr></table>');
+      if (s.t === 'gallery') {
+        const n = s.imgs.length; if (!n) return '';
+        const w = n === 1 ? 100 : n === 2 ? 50 : 33;
+        return row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' + s.imgs.map((u, i) => '<td width="' + w + '%" valign="top" style="padding:0 ' + (i < n - 1 ? 4 : 0) + 'px 0 ' + (i ? 4 : 0) + 'px">' + img(u, 10) + '</td>').join('') + '</tr></table>' +
+          (s.caption ? '<p style="margin:10px 0 0;font:italic 14px/1.5 ' + F + ';color:' + L.muted + ';text-align:center">' + fill(s.caption) + '</p>' : ''));
+      }
+      if (s.t === 'cards') {
+        const it = s.items.filter((i) => i.title || i.text || i.img); if (!it.length) return '';
+        const w = it.length === 1 ? 100 : it.length === 2 ? 50 : 33;
+        return row(h2(s.title, true) + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' + it.map((i, k) => '<td class="wbm-col" width="' + w + '%" valign="top" style="padding:8px ' + (k < it.length - 1 ? 6 : 0) + 'px 0 ' + (k ? 6 : 0) + 'px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + L.soft + ';border-radius:12px"><tr><td style="padding:' + (i.img ? '0' : '16px 16px 4px') + '">' + (i.img ? img(i.img, 12) : '') + '</td></tr><tr><td style="padding:' + (i.img ? '14px' : '0') + ' 16px 16px">' +
+          (i.title ? '<p style="margin:0 0 6px;font:bold 16px/1.3 ' + L.head + ';color:' + L.ink + '">' + fill(i.title) + '</p>' : '') + (i.text ? '<p style="margin:0;font:14px/1.5 ' + F + ';color:' + L.text + '">' + fill(i.text).replace(/\n/g, '<br>') + '</p>' : '') + '</td></tr></table></td>').join('') + '</tr></table>');
+      }
+      if (s.t === 'pictext') {
+        const words = h2(s.title) + paras(s.text, 15) + btn(s.btn_text, s.btn_url);
+        if (!s.img) return row(words);
+        const pic = '<td class="wbm-col" width="48%" valign="middle" style="padding:0">' + img(s.img, 12) + '</td>';
+        const gap = '<td class="wbm-gap" width="4%" style="font-size:0">&nbsp;</td>';
+        const tx = '<td class="wbm-col" width="48%" valign="middle" style="padding:0">' + words + '</td>';
+        return row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' + (s.side === 'right' ? tx + gap + pic : pic + gap + tx) + '</tr></table>');
+      }
+      return '';
+    }).join('');
+
+    const site = biz.site || '';
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><title>' + esc(raw && raw.subject || '') + '</title>' +
+      '<style>@media (max-width:540px){.wbm-col{display:block!important;width:100%!important;padding:0 0 12px!important}.wbm-gap{display:none!important}.wbm-pad{padding-left:20px!important;padding-right:20px!important}h1{font-size:26px!important}}</style></head>' +
+      '<body style="margin:0;padding:0;background:' + L.bg + '">' +
+      '<div style="display:none;max-height:0;overflow:hidden;opacity:0">' + esc(c.preheader) + '&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;</div>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + L.bg + '"><tr><td align="center" style="padding:24px 10px">' +
+      '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:' + L.card + ';border-radius:18px;overflow:hidden">' +
+      '<tr><td style="padding:20px 32px;font:bold 19px ' + L.head + ';color:' + L.ink + ';border-bottom:1px solid ' + L.line + '"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + A + ';margin-right:10px"></span>' + esc(biz.name) + '</td></tr>' +
+      (c.hero ? '<tr><td>' + img(c.hero, 0) + '</td></tr>' : '') +
+      '<tr><td class="wbm-pad" style="padding:30px 32px 10px">' +
+      (c.eyebrow ? '<p style="margin:0 0 8px;font:bold 12px ' + F + ';letter-spacing:2px;text-transform:uppercase;color:' + A + '">' + fill(c.eyebrow) + '</p>' : '') +
+      (c.headline ? '<h1 style="margin:0 0 16px;font:bold 30px/1.18 ' + L.head + ';color:' + L.ink + '">' + fill(c.headline) + '</h1>' : '') +
+      paras(c.intro) + btn(c.button_text, c.button_url) + '</td></tr>' +
+      (secs ? '<tr><td style="padding:10px 0 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + secs + '</table></td></tr>' : '') +
+      (c.signoff ? '<tr><td class="wbm-pad" style="padding:0 32px 28px">' + paras(c.signoff, 15) + '</td></tr>' : '<tr><td style="height:8px"></td></tr>') +
+      '<tr><td style="padding:20px 32px 26px;background:' + L.soft + ';font:13px/1.6 ' + F + ';color:' + L.muted + '"><b style="color:' + L.ink + '">' + esc(biz.name) + '</b>' +
+      (site ? ' · <a href="' + esc(site) + '" style="color:' + L.muted + '">' + esc(site.replace(/^https:\/\//, '')) + '</a>' : '') +
+      '<br>You are receiving this because you asked to hear from ' + esc(biz.name) + '. Reply to this email to contact us.<br>' +
+      '<a href="' + esc(unsub || '#') + '" style="color:' + L.muted + '">Unsubscribe</a></td></tr>' +
+      '</table></td></tr></table></body></html>';
+  }
+
+  return { LOOKS, TYPES, MAXSEC, clean, render, hasBody, blanks, okImg, okUrl };
+})();
+if (typeof window !== 'undefined') window.WBMail = WBMail;
+
+/* =====================================================================
+   Webescapade Site Builder — email ideas for the Business hub.
+   Each idea builds a full v2 email from the owner's own website:
+   their name, their booking link and their photos. Details only the
+   owner knows are left in [square brackets] and must be filled in
+   before a test or a send.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  const KIND = {
+    restaurant: { label: 'Restaurant & café', btn: 'Book a table' },
+    function: { label: 'Function & events venue', btn: 'Enquire now' },
+    service: { label: 'Salon, spa & clinic', btn: 'Book now' },
+    trades: { label: 'Trades & home services', btn: 'Book a job' },
+    shop: { label: 'Shop', btn: 'Shop now' },
+    general: { label: 'Any business', btn: 'Visit our website' },
+  };
+
+  // every https picture used on the website, most-used first
+  WB.siteImages = function (site) {
+    const seen = {}, order = [];
+    const walk = (v, k) => {
+      if (!v) return;
+      if (typeof v === 'string') {
+        if (/^https:\/\/[^\s"'<>]+$/i.test(v) && (/\.(jpe?g|png|webp|avif)(\?|$)/i.test(v) || /^(src|img|image|bg|photo|hero|poster)$/i.test(k || ''))) {
+          if (!seen[v]) { seen[v] = 0; order.push(v); } seen[v]++;
+        }
+        return;
+      }
+      if (Array.isArray(v)) return v.forEach((x) => walk(x, k));
+      if (typeof v === 'object') Object.keys(v).forEach((kk) => { if (!/^(favicon|logo|icon|og)$/i.test(kk)) walk(v[kk], kk); });
+    };
+    walk(site, '');
+    return order.filter((u) => !/\.(svg|gif)(\?|$)/i.test(u)).slice(0, 40);
+  };
+
+  // what kind of business is this? (booking system first, then the words on the site)
+  WB.siteKind = function (site, acc) {
+    const words = JSON.stringify(site || {}).replace(/"https?:[^"]*"/g, '').toLowerCase();
+    const has = (re) => re.test(words);
+    if (has(/function (room|centre|center|venue)|wedding|banquet|conference|reception venue|event space|ballroom/)) return 'function';
+    const sys = acc && acc.system;
+    if (sys === 'restaurant') return 'restaurant';
+    if (sys === 'service') return 'service';
+    if (sys === 'trades') return 'trades';
+    if (site && site.shop && (site.shop.products || []).length) return 'shop';
+    if (has(/restaurant|bistro|caf[eé]|menu|dining|brunch|chef/)) return 'restaurant';
+    if (has(/salon|spa|massage|beauty|clinic|dentist|physio|barber|nails|facial/)) return 'service';
+    if (has(/plumb|electric|builder|carpent|roofing|landscap|handyman|air ?con|painting/)) return 'trades';
+    return 'general';
+  };
+
+  const P = (S, i) => (S.imgs.length ? S.imgs[i % S.imgs.length] : '');
+  const P3 = (S, i) => [P(S, i), P(S, i + 1), P(S, i + 2)].filter((v, k, a) => v && a.indexOf(v) === k);
+  const sign = (S) => 'See you soon,\nThe team at ' + S.name;
+  const base = (S, o) => Object.assign({ v: 2, look: S.look || 'site', accent: S.accent, hero: P(S, 0), button_url: S.book, signoff: sign(S), sections: [] }, o);
+
+  const IDEAS = [
+    /* ---------- restaurant & café ---------- */
+    { k: 'restaurant', i: '🍽️', t: 'Our new menu is here', d: 'Show off new dishes with photos and a booking button', b: (S) => base(S, {
+      subject: 'Our new menu is here', preheader: 'New dishes, made fresh — come and taste them first.', eyebrow: 'New menu',
+      headline: 'Hello {first_name}, our new menu is here', intro: 'We’ve been busy in the kitchen. From [start date], our new menu brings [describe the menu in a few words — e.g. lighter spring dishes and new seafood plates].\n\nHere are a few of the dishes we can’t wait for you to try.',
+      button_text: 'Book a table', sections: [
+        { t: 'cards', title: 'Three to try first', items: [{ img: P(S, 1), title: '[Dish name]', text: '[One line about the dish]' }, { img: P(S, 2), title: '[Dish name]', text: '[One line about the dish]' }, { img: P(S, 3), title: '[Dish name]', text: '[One line about the dish]' }] },
+        { t: 'button', text: 'See the full menu', url: S.url },
+      ] }) },
+    { k: 'restaurant', i: '⭐', t: 'Chef’s special of the week', d: 'One dish in the spotlight, with a story', b: (S) => base(S, {
+      subject: 'This week only: [dish name]', preheader: 'A special from our chef, for a few nights only.', eyebrow: 'Chef’s special',
+      headline: '[Dish name], this week only', intro: 'Hi {first_name}, every now and then our chef makes something just for a few nights. This week it’s [dish name].',
+      button_text: 'Book a table', sections: [
+        { t: 'pictext', img: P(S, 1), title: 'Why we love it', text: '[Tell the story of the dish — the ingredients, where they come from, how it’s cooked.]', side: 'left' },
+        { t: 'highlight', title: 'Available [days and dates]', text: 'Only while it lasts — we recommend booking ahead.', btn_text: 'Book now', btn_url: S.book },
+      ] }) },
+    { k: 'restaurant', i: '🎶', t: 'A special night', d: 'Wine dinner, live music, a themed night', b: (S) => base(S, {
+      subject: 'You’re invited: [event name] on [date]', preheader: 'One night, limited seats — save your table.', eyebrow: 'Special night',
+      headline: 'Join us for [event name]', intro: 'Hello {first_name}, on [day and date] we’re hosting [event name] — [one sentence about what makes it special].\n\nSeats are limited, so book early to make sure you’re in.',
+      button_text: 'Save my seat', sections: [
+        { t: 'cards', title: 'The night at a glance', items: [{ title: 'When', text: '[Day, date, time]' }, { title: 'What’s on', text: '[Menu, music or guest]' }, { title: 'Price', text: '[Price per person]' }] },
+        { t: 'gallery', imgs: P3(S, 1), caption: '' },
+      ] }) },
+    { k: 'restaurant', i: '🎄', t: 'Christmas & New Year', d: 'Book your festive table or party early', b: (S) => base(S, {
+      subject: 'Book your Christmas table with us', preheader: 'Festive lunches, dinners and parties — dates are filling up.', eyebrow: 'Festive season',
+      headline: 'Celebrate the season with us', intro: 'Hi {first_name}, the festive season is coming fast. Whether it’s a long lunch with friends, a family dinner or your work party, we’d love to look after you.',
+      button_text: 'Book your table', sections: [
+        { t: 'pictext', img: P(S, 1), title: 'Festive menu', text: '[Describe your Christmas menu or set menu and price.]', side: 'left' },
+        { t: 'pictext', img: P(S, 2), title: 'Groups & parties', text: '[How many guests you can take, and how to book a group.]', side: 'right' },
+        { t: 'highlight', title: 'Opening hours over the holidays', text: '[List your Christmas and New Year opening hours.]' },
+      ] }) },
+    { k: 'restaurant', i: '🌙', t: 'Midweek treat', d: 'Fill quieter nights with a simple offer', b: (S) => base(S, {
+      subject: 'Your midweek treat is waiting', preheader: 'A little something for [day] nights.', eyebrow: 'Midweek',
+      headline: 'Make [day] night a little better', intro: 'Hello {first_name}, the week goes faster with a good dinner. Every [day] we’re offering [describe the offer].',
+      button_text: 'Book for [day]', sections: [{ t: 'gallery', imgs: P3(S, 1) }, { t: 'highlight', title: '[The offer in a few words]', text: '[Any conditions — e.g. dine-in only, bookings recommended.]' }] }) },
+    { k: 'restaurant', i: '🍷', t: 'Private dining & groups', d: 'Promote your space for birthdays and gatherings', b: (S) => base(S, {
+      subject: 'Planning a get-together? We have the space', preheader: 'Birthdays, family lunches and team dinners.', eyebrow: 'Groups',
+      headline: 'Your next celebration, sorted', intro: 'Hi {first_name}, birthdays, family lunches, team dinners — we’d love to host your next get-together. We take care of the food, the drinks and the details so you can enjoy it.',
+      button_text: 'Ask about groups', sections: [{ t: 'pictext', img: P(S, 1), title: 'Room for [number] guests', text: '[Describe the space, set menus and what is included.]', side: 'left' }] }) },
+    /* ---------- function & events venue ---------- */
+    { k: 'function', i: '🏛️', t: 'Introducing our new room', d: 'Launch a new function room with photos and capacity', b: (S) => base(S, {
+      subject: 'Introducing our new function room', preheader: 'A brand-new space for up to [number] guests.', eyebrow: 'Now open',
+      headline: 'Meet our new function room', intro: 'Hello {first_name}, we’re excited to share our newest space: [room name], designed for up to [number] guests.\n\nIt’s the perfect setting for [birthdays, engagement parties, corporate dinners and more].',
+      button_text: 'Enquire about dates', sections: [
+        { t: 'gallery', imgs: P3(S, 1), caption: '[Room name] — set up for [type of event]' },
+        { t: 'cards', title: 'At a glance', items: [{ title: 'Guests', text: 'Up to [number] seated, [number] cocktail' }, { title: 'Included', text: '[AV, dance floor, styling…]' }, { title: 'Menus', text: '[Set menus, canapés, packages]' }] },
+        { t: 'highlight', title: 'Come and see it', text: 'Book a walk-through and we’ll show you around.', btn_text: 'Book a viewing', btn_url: S.book },
+      ] }) },
+    { k: 'function', i: '💍', t: 'Wedding season', d: 'Show the venue at its best for couples', b: (S) => base(S, {
+      subject: 'Your wedding, beautifully looked after', preheader: 'Dates for [year] are now open.', eyebrow: 'Weddings',
+      headline: 'Say “I do” with us', intro: 'Hello {first_name}, we’re now taking bookings for weddings in [year]. From the first glass of bubbles to the last dance, our team looks after every detail.',
+      button_text: 'Check our dates', sections: [
+        { t: 'pictext', img: P(S, 1), title: 'Ceremony & reception', text: '[Describe the spaces, capacity and what makes your venue special.]', side: 'left' },
+        { t: 'pictext', img: P(S, 2), title: 'Packages', text: '[Packages, what is included, starting price.]', side: 'right' },
+      ] }) },
+    { k: 'function', i: '🥂', t: 'End-of-year parties', d: 'Corporate and Christmas functions', b: (S) => base(S, {
+      subject: 'End-of-year party? We’ve got you covered', preheader: 'Packages for teams of all sizes — dates are going fast.', eyebrow: 'Christmas parties',
+      headline: 'Celebrate the year with your team', intro: 'Hi {first_name}, end-of-year dates are filling up. Let us take care of the food, drinks and set-up so your team can just enjoy the night.',
+      button_text: 'Enquire now', sections: [
+        { t: 'cards', title: 'Choose your package', items: [{ img: P(S, 1), title: '[Package 1]', text: '[What’s included · price]' }, { img: P(S, 2), title: '[Package 2]', text: '[What’s included · price]' }, { img: P(S, 3), title: '[Package 3]', text: '[What’s included · price]' }] },
+      ] }) },
+    { k: 'function', i: '💼', t: 'Conferences & meetings', d: 'Day packages for business clients', b: (S) => base(S, {
+      subject: 'Meetings and conferences made easy', preheader: 'Day packages with catering, AV and room set-up.', eyebrow: 'Business events',
+      headline: 'A better place to meet', intro: 'Hello {first_name}, our rooms aren’t just for celebrations. We host meetings, training days and conferences with everything set up and ready.',
+      button_text: 'Get a quote', sections: [{ t: 'pictext', img: P(S, 1), title: 'Day delegate package', text: '[What’s included — room, AV, morning tea, lunch, afternoon tea — and price per person.]', side: 'left' }] }) },
+    { k: 'function', i: '📅', t: 'Last-minute dates', d: 'Fill open dates quickly', b: (S) => base(S, {
+      subject: 'A few dates just opened up', preheader: 'Book now for [month] — they won’t last.', eyebrow: 'Available now',
+      headline: 'Good news — we have dates', intro: 'Hi {first_name}, a few dates have just become available:\n\n[List the dates and rooms]\n\nIf you’ve been thinking about an event, now’s the time.',
+      button_text: 'Grab a date', sections: [{ t: 'gallery', imgs: P3(S, 1) }] }) },
+    /* ---------- salon, spa & clinic ---------- */
+    { k: 'service', i: '✨', t: 'New treatment', d: 'Introduce a new service with what to expect', b: (S) => base(S, {
+      subject: 'New: [treatment name]', preheader: 'Now available — book your first visit.', eyebrow: 'Now available',
+      headline: 'Introducing [treatment name]', intro: 'Hello {first_name}, we’re excited to offer something new: [treatment name]. [One sentence about who it’s for and how it helps.]',
+      button_text: 'Book now', sections: [
+        { t: 'pictext', img: P(S, 1), title: 'What to expect', text: '[How long it takes, how it feels, and any aftercare.]', side: 'left' },
+        { t: 'highlight', title: '[Price and duration]', text: '[Any introductory offer, if you have one.]', btn_text: 'Book your spot', btn_url: S.book },
+      ] }) },
+    { k: 'service', i: '👋', t: 'Meet our new team member', d: 'Welcome a new practitioner or stylist', b: (S) => base(S, {
+      subject: 'Say hello to [name]', preheader: 'A new face on our team — and new appointment times.', eyebrow: 'New to the team',
+      headline: 'Please welcome [name]', intro: 'Hi {first_name}, our team is growing! [Name] joins us as our new [role].',
+      button_text: 'Book with [name]', sections: [{ t: 'pictext', img: P(S, 1), title: 'About [name]', text: '[Experience, specialties, and a friendly personal touch.]', side: 'left' }] }) },
+    { k: 'service', i: '🗓️', t: 'Time for your next visit', d: 'A friendly reminder to rebook', b: (S) => base(S, {
+      subject: 'Time for your next appointment?', preheader: 'Book a time that suits you in a few taps.', eyebrow: 'Friendly reminder',
+      headline: 'We’ve saved you a spot, {first_name}', intro: 'It’s been a little while since your last visit. Regular appointments help you [benefit — e.g. keep your colour fresh / stay on top of your health].\n\nBooking online takes less than a minute.',
+      button_text: 'Book my next visit', sections: [{ t: 'gallery', imgs: P3(S, 1) }] }) },
+    { k: 'service', i: '🌸', t: 'Seasonal offer', d: 'A limited-time offer for the season', b: (S) => base(S, {
+      subject: '[Season] offer: [offer]', preheader: 'For a limited time only.', eyebrow: '[Season] special',
+      headline: 'A little [season] treat for you', intro: 'Hello {first_name}, to welcome the new season we’re offering [describe the offer] until [end date].',
+      button_text: 'Book now', sections: [{ t: 'pictext', img: P(S, 1), title: 'What’s included', text: '[Details of the offer.]', side: 'right' }, { t: 'highlight', title: 'Until [end date]', text: '[Conditions — e.g. new bookings only, one per person.]' }] }) },
+    /* ---------- trades ---------- */
+    { k: 'trades', i: '🛠️', t: 'Seasonal check-up', d: 'Remind customers about seasonal maintenance', b: (S) => base(S, {
+      subject: 'Is your [system] ready for [season]?', preheader: 'Book a check-up before the rush.', eyebrow: 'Seasonal check',
+      headline: 'Get ready for [season], {first_name}', intro: '[Season] is the busiest time for [type of work]. A quick check now can save you a breakdown — and a bigger bill — later.',
+      button_text: 'Book a check-up', sections: [{ t: 'cards', title: 'What we check', items: [{ title: '[Check 1]', text: '[Why it matters]' }, { title: '[Check 2]', text: '[Why it matters]' }, { title: '[Check 3]', text: '[Why it matters]' }] }, { t: 'gallery', imgs: P3(S, 1) }] }) },
+    { k: 'trades', i: '🔧', t: 'New service', d: 'Tell customers what else you can do', b: (S) => base(S, {
+      subject: 'We now offer [service]', preheader: 'Same team you trust — one more thing we can help with.', eyebrow: 'New service',
+      headline: 'Now available: [service]', intro: 'Hi {first_name}, thanks for trusting us with your [past work]. We can now also help with [service].',
+      button_text: 'Get a quote', sections: [{ t: 'pictext', img: P(S, 1), title: 'How it works', text: '[What’s involved, timing, and pricing guide.]', side: 'left' }] }) },
+    { k: 'trades', i: '📆', t: 'Book before the holidays', d: 'Fill the calendar before the break', b: (S) => base(S, {
+      subject: 'Get it done before Christmas', preheader: 'A few spots left before our holiday break.', eyebrow: 'Before the break',
+      headline: 'Last chance before the break', intro: 'Hello {first_name}, we close for the holidays on [date] and reopen on [date]. If there’s a job you’d like finished before then, now’s the time to book.',
+      button_text: 'Book a job', sections: [{ t: 'gallery', imgs: P3(S, 1), caption: 'Some of our recent work' }] }) },
+    /* ---------- shop ---------- */
+    { k: 'shop', i: '🛍️', t: 'New product', d: 'Launch a product with photos and a buy button', b: (S) => base(S, {
+      subject: 'Just in: [product name]', preheader: 'Be one of the first to get it.', eyebrow: 'Just arrived', button_url: S.url,
+      headline: 'Meet [product name]', intro: 'Hi {first_name}, something new has landed in our shop. [One or two sentences about the product.]',
+      button_text: 'Shop now', sections: [{ t: 'pictext', img: P(S, 1), title: 'Why you’ll love it', text: '[Features, sizes or flavours, and the price.]', side: 'left' }, { t: 'gallery', imgs: P3(S, 2) }] }) },
+    { k: 'shop', i: '🎁', t: 'Gift guide', d: 'Three gift ideas for any occasion', b: (S) => base(S, {
+      subject: 'Gift ideas they’ll actually love', preheader: 'Our favourite picks for [occasion].', eyebrow: 'Gift guide', button_url: S.url,
+      headline: 'Our [occasion] gift guide', intro: 'Hello {first_name}, stuck for ideas? Here are three gifts our customers love.',
+      button_text: 'Shop all gifts', sections: [{ t: 'cards', title: '', items: [{ img: P(S, 1), title: '[Gift 1]', text: '[Price]' }, { img: P(S, 2), title: '[Gift 2]', text: '[Price]' }, { img: P(S, 3), title: '[Gift 3]', text: '[Price]' }] }] }) },
+    { k: 'shop', i: '🔁', t: 'Back in stock', d: 'Let people know a favourite is back', b: (S) => base(S, {
+      subject: '[Product] is back in stock', preheader: 'It sold out fast last time.', eyebrow: 'Back in stock', button_url: S.url,
+      headline: 'It’s back!', intro: 'Hi {first_name}, [product] sold out last time, and it’s finally back — but only in limited numbers.',
+      button_text: 'Get yours', sections: [{ t: 'gallery', imgs: P3(S, 1) }] }) },
+    /* ---------- any business ---------- */
+    { k: 'all', i: '🎟️', t: 'Gift vouchers', d: 'The easy present — perfect before holidays', b: (S) => base(S, {
+      subject: 'The easy gift: a voucher from us', preheader: 'Any amount, sent in minutes.', eyebrow: 'Gift vouchers',
+      headline: 'Give them something they’ll love', intro: 'Hello {first_name}, looking for a gift? Our vouchers can be used for [what they can be used for], come in any amount, and never go out of style.',
+      button_text: 'Get a voucher', sections: [{ t: 'pictext', img: P(S, 1), title: 'How it works', text: '[How to buy, how long they last, how to redeem.]', side: 'left' }] }) },
+    { k: 'all', i: '💛', t: 'We miss you', d: 'Welcome back customers you haven’t seen lately', b: (S) => base(S, {
+      subject: 'We’ve missed you, {first_name}', preheader: 'A lot has changed — come and see.', eyebrow: 'It’s been a while',
+      headline: 'We’ve missed you!', intro: 'Hi {first_name}, it’s been a little while since we last saw you. Here’s what’s new since your last visit:\n\n[One or two things that are new.]\n\nWe’d love to welcome you back.',
+      button_text: KIND[S.kind] ? KIND[S.kind].btn : 'Visit us', sections: [{ t: 'gallery', imgs: P3(S, 1) }] }) },
+    { k: 'all', i: '🙏', t: 'Thank you', d: 'A warm thank-you to your customers', b: (S) => base(S, {
+      subject: 'A big thank you from all of us', preheader: 'We couldn’t do it without you.', eyebrow: 'Thank you',
+      headline: 'Thank you, {first_name}', intro: 'We just wanted to say thank you for supporting [business name / our small business]. [One sentence about a milestone or the year you’ve had.]\n\nIf you have a moment, we’d love to hear what you think — just reply to this email.',
+      button_text: '', sections: [{ t: 'gallery', imgs: P3(S, 1) }] }) },
+    { k: 'all', i: '⏰', t: 'Holiday opening hours', d: 'Let customers know when you’re open', b: (S) => base(S, {
+      subject: 'Our holiday opening hours', preheader: 'When we’re open over the break.', eyebrow: 'Opening hours', hero: '',
+      headline: 'Our hours over the holidays', intro: 'Hello {first_name}, here’s when you can find us over the holiday period:',
+      button_text: KIND[S.kind] ? KIND[S.kind].btn : 'Visit us', sections: [{ t: 'highlight', title: 'Opening hours', text: '[Date]: [hours]\n[Date]: [hours]\n[Date]: Closed' }, { t: 'text', title: '', text: 'Thank you for a wonderful year — see you soon!' }] }) },
+    { k: 'all', i: '📰', t: 'News update', d: 'Share a few things that are happening', b: (S) => base(S, {
+      subject: 'What’s new at ' + S.name, preheader: 'A few things we’re excited about.', eyebrow: 'News',
+      headline: 'What’s been happening', intro: 'Hi {first_name}, here’s a quick update on what’s new with us.',
+      button_text: KIND[S.kind] ? KIND[S.kind].btn : 'Visit us', sections: [
+        { t: 'pictext', img: P(S, 1), title: '[First piece of news]', text: '[A few sentences.]', side: 'left' },
+        { t: 'pictext', img: P(S, 2), title: '[Second piece of news]', text: '[A few sentences.]', side: 'right' },
+      ] }) },
+  ];
+
+  WB.MAIL_KINDS = KIND;
+  // ideas for a kind of business: its own first, then the ones that suit everyone
+  WB.mailIdeas = function (kind, S) {
+    const mine = IDEAS.filter((x) => x.k === kind), extra = kind === 'function' ? IDEAS.filter((x) => x.k === 'restaurant').slice(0, 2) : [];
+    return mine.concat(extra, IDEAS.filter((x) => x.k === 'all')).map((x) => ({ icon: x.i, title: x.t, desc: x.d, kind: x.k, build: () => x.b(Object.assign({ kind }, S)) }));
+  };
+  WB.mailIdeasAll = function (S) { return Object.keys(KIND).filter((k) => k !== 'general').reduce((o, k) => { o[k] = WB.mailIdeas(k, S).filter((x) => x.kind === k); return o; }, {}); };
 })();
 
 /* =====================================================================
@@ -5422,23 +5800,8 @@ WB.AI_DEMO_PLAN = function (a) {
   const ACT = { book: ['📅', 'Booking buttons'], call: ['📞', 'Phone calls'], email: ['✉️', 'Email links'], chat: ['💬', 'AI chat opened'], shop: ['🛍️', 'Shop & cart'], menu: ['☰', 'Menu & page links'], map: ['📍', 'Map & directions'], social: ['👍', 'Social media'], link: ['🔗', 'Other websites'], button: ['👆', 'Other buttons'] };
   const SRC = { website: 'Website', booking: 'Booking', shop: 'Shop' };
 
-  /* ---------------- email (same layout as the builder-email function) ---------------- */
-  WB.hubEmailHtml = function (c, biz, first) {
-    const esc = WB.esc;
-    const fill = (t) => esc(t).replace(/\{first_name\}/g, esc(first || 'there'));
-    const accent = /^#[0-9a-f]{6}$/i.test(c.accent || '') ? c.accent : '#5b4bd6';
-    const paras = String(c.message || '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
-      .map((p) => '<p style="margin:0 0 16px;font:16px/1.6 Arial,Helvetica,sans-serif;color:#2b2b33">' + fill(p).replace(/\n/g, '<br>') + '</p>').join('');
-    const btn = c.button_text && c.button_url ? '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 6px"><tr><td style="border-radius:999px;background:' + accent + '"><a href="' + esc(c.button_url) + '" style="display:inline-block;padding:14px 26px;font:bold 16px Arial,Helvetica,sans-serif;color:#ffffff;text-decoration:none;border-radius:999px">' + esc(c.button_text) + '</a></td></tr></table>' : '';
-    const img = c.image ? '<tr><td><img src="' + esc(c.image) + '" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>' : '';
-    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f3f2f7">' +
-      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f2f7"><tr><td align="center" style="padding:24px 12px">' +
-      '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden">' +
-      '<tr><td style="padding:22px 32px;border-bottom:4px solid ' + accent + ';font:bold 20px Arial,Helvetica,sans-serif;color:#17142b">' + esc(biz.name) + '</td></tr>' + img +
-      '<tr><td style="padding:30px 32px 26px">' + (c.headline ? '<h1 style="margin:0 0 18px;font:bold 28px/1.2 Arial,Helvetica,sans-serif;color:#17142b">' + fill(c.headline) + '</h1>' : '') + paras + btn + '</td></tr>' +
-      '<tr><td style="padding:20px 32px 26px;background:#faf9fc;border-top:1px solid #ece9f3;font:13px/1.6 Arial,Helvetica,sans-serif;color:#6b6880"><b style="color:#2b2b33">' + esc(biz.name) + '</b> · ' + esc(biz.site.replace(/^https:\/\//, '')) +
-      '<br>You are receiving this because you asked to hear from ' + esc(biz.name) + '. Reply to this email to contact us.<br><u>Unsubscribe</u></td></tr></table></td></tr></table></body></html>';
-  };
+  /* ---------------- email: one template for preview and sending (mailtpl.js) ---------------- */
+  WB.hubEmailHtml = function (c, biz, first) { return WBMail.render(c, biz, first, '#'); };
 
   /* ---------------- demo data (demo mode only) ---------------- */
   WB.HUB_DEMO_CONTACTS = function () {
@@ -5464,9 +5827,14 @@ WB.AI_DEMO_PLAN = function (a) {
       actions: [{ cat: 'book', n: Math.round(c * 0.38) }, { cat: 'menu', n: Math.round(c * 0.24) }, { cat: 'call', n: Math.round(c * 0.13) }, { cat: 'chat', n: Math.round(c * 0.1) }, { cat: 'map', n: Math.round(c * 0.08) }, { cat: 'shop', n: Math.round(c * 0.07) }],
       buttons: [{ label: 'Book a table', cat: 'book', n: Math.round(c * 0.3) }, { label: 'View menu', cat: 'menu', n: Math.round(c * 0.17) }, { label: 'Call us', cat: 'call', n: Math.round(c * 0.13) }, { label: 'Get directions', cat: 'map', n: Math.round(c * 0.08) }] };
   };
-  WB.HUB_DEMO_DRAFT = function (brief) {
-    return { subject: 'Something new is on the menu', preheader: 'A quick note from us — we would love to see you soon.', headline: 'Hello {first_name}, it’s been a while!',
-      message: 'We wanted to share a little news: ' + String(brief || 'our new season menu has arrived').replace(/\.$/, '') + '.\n\nCome in and try it — we have saved you a seat.\n\nSee you soon!', button_text: 'Book a table' };
+  WB.HUB_DEMO_DRAFT = function (brief, S) {
+    const im = (S && S.imgs) || [], P = (i) => im.length ? im[i % im.length] : '';
+    const b = String(brief || 'our new season menu has arrived').replace(/\.$/, '');
+    return { subject: 'Some news we think you’ll love', preheader: 'A quick note from us — we’d love to see you soon.', eyebrow: 'News', hero: P(0),
+      headline: 'Hello {first_name}, we have news!', intro: 'We wanted you to be among the first to know: ' + b + '.\n\nHere’s a little more about it.', button_text: 'Book now',
+      sections: [{ t: 'pictext', img: P(1), title: 'What’s new', text: 'A short paragraph about ' + b + ', written for your customers.', side: 'left' },
+        { t: 'gallery', imgs: [P(2), P(3), P(4)].filter(Boolean) }, { t: 'highlight', title: 'Come and see us', text: 'We’d love to welcome you soon.' }],
+      signoff: 'See you soon,\nThe team' };
   };
 
   /* ---------------- hub shell ---------------- */
@@ -5610,6 +5978,20 @@ WB.AI_DEMO_PLAN = function (a) {
   }
 
   /* ---------------- Email Studio ---------------- */
+  const SEC_ICON = { pictext: '▣', gallery: '▦', cards: '☷', text: '¶', highlight: '★', button: '⬭' };
+  const SEC_HELP = { pictext: 'A photo beside a short story', gallery: 'Two or three photos in a row', cards: 'Three short points, with or without photos', text: 'A heading and paragraphs', highlight: 'A coloured box for an offer or key detail', button: 'An extra button' };
+  const newSec = (t, S) => {
+    const P = (i) => S.imgs.length ? S.imgs[i % S.imgs.length] : '';
+    if (t === 'pictext') return { t, img: P(1), title: '', text: '', side: 'left', btn_text: '', btn_url: '' };
+    if (t === 'gallery') return { t, imgs: [P(1), P(2), P(3)].filter((v, i, a) => v && a.indexOf(v) === i), caption: '' };
+    if (t === 'cards') return { t, title: '', items: [{ img: '', title: '', text: '' }, { img: '', title: '', text: '' }, { img: '', title: '', text: '' }] };
+    if (t === 'highlight') return { t, title: '', text: '', btn_text: '', btn_url: '' };
+    if (t === 'button') return { t, text: '', url: S.book };
+    return { t: 'text', title: '', text: '' };
+  };
+  const getP = (o, p) => p.split('.').reduce((a, k) => (a == null ? a : a[k]), o);
+  const setP = (o, p, v) => { const ks = p.split('.'); const last = ks.pop(); const t = ks.reduce((a, k) => a[k], o); if (t) t[last] = v; };
+
   async function email(ctx, openId) {
     const { Store, esc, toast } = D();
     if (!ctx.acc.crm) return locked(ctx, 'crm');
@@ -5619,9 +6001,17 @@ WB.AI_DEMO_PLAN = function (a) {
       camps = await Store.campaigns(ctx.row.id);
     } catch (e) { ctx.body.innerHTML = '<p class="hub-err">' + esc(e.message) + '</p>'; return; }
     people = ctx.contacts.filter((c) => c.subscribed).length;
+
+    const siteAccent = (() => { try { const a = ctx.site.theme.colors.accent; return /^#[0-9a-f]{6}$/i.test(a || '') ? a : '#5b4bd6'; } catch (e) { return '#5b4bd6'; } })();
+    const siteUrl = 'https://webescapade.com/sites/?s=' + (ctx.row.slug || '');
+    const book = (ctx.site && ctx.site.booking && WB.bookingUrl && WB.bookingUrl(ctx.site.booking)) || siteUrl;
+    const kind = WB.siteKind(ctx.site, ctx.acc);
+    const S = { name: ctx.row.name || 'Our business', url: siteUrl, book, imgs: WB.siteImages(ctx.site), accent: siteAccent, look: 'site' };
+    const biz = { name: S.name, site: siteUrl };
+
     ctx.body.innerHTML = '<div class="em"><div class="em-side"><button class="btn pri" id="enew" style="width:100%;justify-content:center">' + D().I('plus') + 'New email</button>' +
       '<p class="muted sm" style="margin:12px 2px 8px"><b style="color:var(--ui-t)">' + fmtN(people) + '</b> customer' + (people === 1 ? '' : 's') + ' happy to get emails</p><div id="elist"></div></div><div class="em-main" id="emain"></div></div>';
-    const listEl = ctx.body.querySelector('#elist');
+    const listEl = ctx.body.querySelector('#elist'), main = ctx.body.querySelector('#emain');
     const drawList = (cur) => {
       listEl.innerHTML = camps.length ? '' : '<p class="muted sm" style="padding:4px">No emails yet.</p>';
       camps.forEach((c) => {
@@ -5629,73 +6019,152 @@ WB.AI_DEMO_PLAN = function (a) {
         it.onclick = () => openCamp(c); listEl.appendChild(it);
       });
     };
-    const accent = () => { try { const a = ctx.site && ctx.site.theme && ctx.site.theme.colors && ctx.site.theme.colors.accent; return /^#[0-9a-f]{6}$/i.test(a || '') ? a : '#5b4bd6'; } catch (e) { return '#5b4bd6'; } };
-    const siteUrl = 'https://webescapade.com/sites/?s=' + (ctx.row.slug || '');
-    const biz = { name: ctx.row.name, site: siteUrl };
+
+    /* ----- ideas: pick a ready-made email for this kind of business ----- */
+    function ideas(cur) {
+      drawList(null);
+      let k = kind;
+      const kinds = Object.keys(WB.MAIL_KINDS).filter((x) => x !== 'general');
+      const draw = () => {
+        const list = WB.mailIdeas(k, S);
+        main.innerHTML = '<div class="em-ideas"><div class="em-ideas-h"><div><h3>What would you like to tell your customers?</h3><p class="muted sm">Pick an idea and it’s filled in with your business name, your booking link and photos from your website. Change anything you like.</p></div>' +
+          '<button class="btn ghost sm" id="eblank">Start from blank</button></div>' +
+          '<div class="seg em-kinds">' + kinds.map((x) => '<button data-k="' + x + '"' + (x === k ? ' class="on"' : '') + '>' + esc(WB.MAIL_KINDS[x].label) + (x === kind ? ' ✓' : '') + '</button>').join('') + '</div>' +
+          '<div class="em-idea-grid">' + list.map((x, i) => {
+            const c = x.build(), pics = [c.hero].concat((c.sections || []).map((s) => s.img || (s.imgs || [])[0] || ((s.items || [])[0] || {}).img)).filter(Boolean).slice(0, 3);
+            return '<button class="em-idea" data-i="' + i + '"><span class="em-idea-pics">' + (pics.length ? pics.map((p) => '<i style="background-image:url(\'' + esc(p) + '\')"></i>').join('') : '<i class="none">' + x.icon + '</i>') + '</span>' +
+              '<b>' + x.icon + ' ' + esc(x.title) + '</b><small>' + esc(x.desc) + '</small></button>';
+          }).join('') + '</div></div>';
+        main.querySelectorAll('[data-k]').forEach((b) => { b.onclick = () => { k = b.dataset.k; draw(); }; });
+        main.querySelectorAll('.em-idea').forEach((b) => { b.onclick = () => { const c = list[+b.dataset.i].build(); openCamp({ subject: c.subject, content: c, status: 'draft' }); }; });
+        main.querySelector('#eblank').onclick = () => openCamp(null);
+      };
+      draw();
+    }
+
+    /* ----- choose a picture: website photos, My photos, or upload ----- */
+    function choosePic() {
+      return new Promise((res) => {
+        const { modal, $ } = D();
+        let done = false; const fin = (v) => { if (done) return; done = true; m.close(); res(v); };
+        const m = modal('<h2>Choose a picture</h2><p class="muted sm" style="margin:-4px 0 12px">Photos from your website, ready to use.</p>' +
+          (S.imgs.length ? '<div class="em-pics">' + S.imgs.map((u) => '<button data-u="' + esc(u) + '" style="background-image:url(\'' + esc(u) + '\')"></button>').join('') + '</div>' : '<p class="muted">Your website has no photos yet — upload one below.</p>') +
+          '<div class="acts"><button class="btn ghost" data-x>Cancel</button><button class="btn" id="pup">Upload a new photo</button></div>', { wide: true });
+        m.querySelectorAll('[data-u]').forEach((b) => { b.onclick = () => fin(b.dataset.u); });
+        $('[data-x]', m).onclick = () => fin('');
+        $('#pup', m).onclick = async () => {
+          try {
+            const urls = D().chooseImages ? await D().chooseImages(false, 1400) : await (async () => { const f = await D().pickImages(false); return f.length ? D().uploadFiles(f, 1400) : []; })();
+            if (urls && urls[0]) { if (S.imgs.indexOf(urls[0]) < 0) S.imgs.unshift(urls[0]); fin(urls[0]); }
+          } catch (e) { toast(e.message, 'bad'); }
+        };
+      });
+    }
+
+    /* ----- the editor ----- */
     function openCamp(c) {
-      c = c || { subject: '', content: { headline: '', message: '', preheader: '', button_text: '', button_url: siteUrl, image: '' }, status: 'draft' };
-      const k = Object.assign({ preheader: '', headline: '', message: '', button_text: '', button_url: '', image: '' }, c.content || {});
+      if (!c) c = { subject: '', content: { v: 2, look: 'site', accent: siteAccent, hero: S.imgs[0] || '', headline: '', intro: '', button_text: WB.MAIL_KINDS[kind].btn, button_url: book, signoff: 'See you soon,\nThe team at ' + S.name, sections: [] }, status: 'draft' };
+      const k = WBMail.clean(Object.assign({}, c.content || {}, { accent: siteAccent }));
+      if (c.content && c.content.v !== 2 && !c.content.look) k.look = 'site';
+      k.subject = c.subject || '';
       const sent = c.status !== 'draft';
       drawList(c);
-      const main = ctx.body.querySelector('#emain');
-      const fld = (id, lab, v, ph, area) => '<label class="field"><span>' + lab + '</span>' + (area ? '<textarea class="inp" id="' + id + '" rows="7" placeholder="' + esc(ph || '') + '"' + (sent ? ' readonly' : '') + '>' + esc(v || '') + '</textarea>' : '<input class="inp" id="' + id + '" value="' + esc(v || '') + '" placeholder="' + esc(ph || '') + '"' + (sent ? ' readonly' : '') + '>') + '</label>';
-      main.innerHTML = '<div class="em-ed"><div class="em-form">' +
-        (sent ? '<div class="hub-note ok">Sent ' + esc(day(c.sent_at)) + ' to ' + fmtN(c.recipients) + ' people · ' + fmtN(c.delivered) + ' delivered.</div>'
-          : '<div class="em-ai"><input class="inp" id="eb" placeholder="What’s this email about? e.g. our new spring menu starts Friday"><button class="btn sm" id="eai">✨ Write it for me</button></div>') +
-        fld('es', 'Subject', c.subject, 'e.g. Our spring menu is here') + fld('ep', 'Preview text (shown after the subject in the inbox)', k.preheader, 'A short line that makes people open it') +
-        fld('eh', 'Headline', k.headline, 'Hello {first_name}!') + fld('em', 'Message', k.message, 'Write your news. Leave a blank line between paragraphs. {first_name} becomes each person’s first name.', true) +
-        '<div class="em-2">' + fld('ebt', 'Button text', k.button_text, 'Book now') + fld('ebu', 'Button link', k.button_url, 'https://…') + '</div>' +
-        '<div class="em-img"><span>Picture</span><div>' + (k.image ? '<img src="' + esc(k.image) + '" alt="">' : '<em class="muted sm">No picture</em>') + '</div>' + (sent ? '' : '<button class="btn sm ghost" id="eimg">' + (k.image ? 'Change' : 'Add picture') + '</button>' + (k.image ? '<button class="btn sm ghost" id="eimgx">Remove</button>' : '')) + '</div>' +
-        (sent ? '' : '<div class="acts em-acts"><button class="btn danger sm" id="edel"' + (c.id ? '' : ' hidden') + '>Delete</button><span style="flex:1"></span><button class="btn ghost" id="esave">Save draft</button><button class="btn ghost" id="etest">Send me a test</button><button class="btn pri" id="esend">Send to ' + fmtN(people) + '</button></div>') +
-        '</div><div class="em-prev"><div class="em-inbox"><b id="pvs"></b><span id="pvp"></span></div><iframe id="pvf" title="Email preview"></iframe></div></div>';
-      const g = (id) => main.querySelector('#' + id);
-      const read = () => ({ subject: g('es').value.trim(), content: { preheader: g('ep').value, headline: g('eh').value, message: g('em').value, button_text: g('ebt').value.trim(), button_url: g('ebu').value.trim(), image: k.image || '', accent: accent() } });
-      const prev = () => { const r = read(); g('pvs').textContent = r.subject || 'Subject'; g('pvp').textContent = r.content.preheader || ''; g('pvf').srcdoc = WB.hubEmailHtml(Object.assign({}, r.content), biz, 'Sam'); };
-      main.querySelectorAll('input,textarea').forEach((n) => { n.addEventListener('input', () => { clearTimeout(n._t); n._t = setTimeout(prev, 250); }); });
-      prev();
-      if (sent) return;
+      const RO = sent ? ' readonly' : '';
+      const inp = (p, lab, ph, opt) => { opt = opt || {}; const v = getP(k, p) || ''; return '<label class="field' + (opt.cls ? ' ' + opt.cls : '') + '"><span>' + lab + '</span>' + (opt.area ? '<textarea class="inp" data-p="' + p + '" rows="' + (opt.rows || 4) + '" placeholder="' + esc(ph || '') + '"' + RO + '>' + esc(v) + '</textarea>' : '<input class="inp" data-p="' + p + '" value="' + esc(v) + '" placeholder="' + esc(ph || '') + '"' + RO + '>') + '</label>'; };
+      const pic = (p, small) => { const v = getP(k, p); return '<span class="em-pic' + (small ? ' sm' : '') + (v ? '' : ' empty') + '">' + (v ? '<button class="em-pic-i" data-img="' + p + '" style="background-image:url(\'' + esc(v) + '\')" title="Change picture"' + (sent ? ' disabled' : '') + '></button>' + (sent ? '' : '<button class="em-pic-x" data-imgx="' + p + '" title="Remove picture">×</button>') : '<button class="em-pic-i" data-img="' + p + '"' + (sent ? ' disabled' : '') + '>+ Picture</button>') + '</span>'; };
+      const secHtml = (s, i) => {
+        const P = 'sections.' + i + '.';
+        let f = '';
+        if (s.t === 'pictext') f = '<div class="em-row">' + pic(P + 'img') + '<div style="flex:1">' + inp(P + 'title', 'Heading', 'e.g. Why we love it') + '</div></div>' + inp(P + 'text', 'Text', 'A few sentences', { area: true }) +
+          '<div class="em-2">' + inp(P + 'btn_text', 'Button text (optional)', 'Find out more') + inp(P + 'btn_url', 'Button link', 'https://…') + '</div>' +
+          (sent ? '' : '<div class="seg sm em-side-seg"><button data-side="' + i + ':left"' + (s.side !== 'right' ? ' class="on"' : '') + '>Picture left</button><button data-side="' + i + ':right"' + (s.side === 'right' ? ' class="on"' : '') + '>Picture right</button></div>');
+        if (s.t === 'gallery') { while (s.imgs.length < 3 && !sent) s.imgs.push(''); f = '<div class="em-row">' + s.imgs.map((u, j) => pic(P + 'imgs.' + j)).join('') + '</div>' + inp(P + 'caption', 'Caption (optional)', 'e.g. A few of our favourites'); }
+        if (s.t === 'cards') f = inp(P + 'title', 'Heading (optional)', 'e.g. Three to try first') + '<div class="em-cards">' + s.items.map((it, j) => '<div class="em-card">' + pic(P + 'items.' + j + '.img', true) + inp(P + 'items.' + j + '.title', 'Title', '') + inp(P + 'items.' + j + '.text', 'Text', '', { area: true, rows: 2 }) + '</div>').join('') + '</div>';
+        if (s.t === 'text') f = inp(P + 'title', 'Heading (optional)', '') + inp(P + 'text', 'Text', 'Leave a blank line between paragraphs', { area: true, rows: 5 });
+        if (s.t === 'highlight') f = inp(P + 'title', 'Heading', 'e.g. This week only') + inp(P + 'text', 'Text', '', { area: true, rows: 3 }) + '<div class="em-2">' + inp(P + 'btn_text', 'Button text (optional)', 'Book now') + inp(P + 'btn_url', 'Button link', 'https://…') + '</div>';
+        if (s.t === 'button') f = '<div class="em-2">' + inp(P + 'text', 'Button text', 'e.g. See the full menu') + inp(P + 'url', 'Button link', 'https://…') + '</div>';
+        return '<div class="em-sec"><div class="em-sec-h"><b>' + SEC_ICON[s.t] + ' ' + esc(WBMail.TYPES[s.t]) + '</b>' + (sent ? '' : '<span><button data-mv="' + i + ':-1" title="Move up"' + (i ? '' : ' disabled') + '>↑</button><button data-mv="' + i + ':1" title="Move down"' + (i < k.sections.length - 1 ? '' : ' disabled') + '>↓</button><button data-rm="' + i + '" title="Remove section">✕</button></span>') + '</div>' + f + '</div>';
+      };
+      const draw = () => {
+        const y = main.scrollTop, fy = main.querySelector('.em-form') ? main.querySelector('.em-form').scrollTop : 0;
+        main.innerHTML = '<div class="em-ed"><div class="em-form">' +
+          (sent ? '<div class="hub-note ok">Sent ' + esc(day(c.sent_at)) + ' to ' + fmtN(c.recipients) + ' people · ' + fmtN(c.delivered) + ' delivered.</div>'
+            : '<div class="em-ai"><input class="inp" id="eb" placeholder="What’s this email about? e.g. our new function room for 60 guests"><button class="btn sm" id="eai">✨ Write it for me</button><button class="btn sm ghost" id="eideas">💡 Ideas</button></div>') +
+          '<div class="em-looks"><span>Look</span>' + Object.keys(WBMail.LOOKS).map((l) => { const L = WBMail.LOOKS[l], ac = l === 'site' ? siteAccent : L.accent; return '<button data-look="' + l + '" class="' + (k.look === l ? 'on' : '') + '"' + (sent ? ' disabled' : '') + ' title="' + esc(L.label) + '"><i style="background:' + L.bg + '"><em style="background:' + ac + '"></em></i>' + esc(L.label) + '</button>'; }).join('') + '</div>' +
+          inp('subject', 'Subject', 'e.g. Our spring menu is here') + inp('preheader', 'Preview text (shown after the subject in the inbox)', 'A short line that makes people open it') +
+          '<h4 class="em-h">Top of the email</h4><div class="em-sec"><div class="em-row">' + pic('hero') + '<div style="flex:1">' + inp('eyebrow', 'Small label (optional)', 'e.g. New menu') + '</div></div>' +
+          inp('headline', 'Headline', 'Hello {first_name}!') + inp('intro', 'Message', 'Write your news. Leave a blank line between paragraphs. {first_name} becomes each person’s first name.', { area: true, rows: 5 }) +
+          '<div class="em-2">' + inp('button_text', 'Button text', 'Book now') + inp('button_url', 'Button link', 'https://…') + '</div></div>' +
+          '<h4 class="em-h">More sections <small>' + k.sections.length + ' of ' + WBMail.MAXSEC + '</small></h4>' + k.sections.map(secHtml).join('') +
+          (sent || k.sections.length >= WBMail.MAXSEC ? '' : '<div class="em-add"><span>Add a section</span>' + Object.keys(WBMail.TYPES).map((t) => '<button data-add="' + t + '" title="' + esc(SEC_HELP[t]) + '">' + SEC_ICON[t] + ' ' + esc(WBMail.TYPES[t]) + '</button>').join('') + '</div>') +
+          '<h4 class="em-h">Sign-off</h4>' + inp('signoff', '', 'See you soon,\nThe team', { area: true, rows: 2 }) +
+          (sent ? '' : '<div class="acts em-acts"><button class="btn danger sm" id="edel"' + (c.id ? '' : ' hidden') + '>Delete</button><span style="flex:1"></span><button class="btn ghost" id="esave">Save draft</button><button class="btn ghost" id="etest">Send me a test</button><button class="btn pri" id="esend">Send to ' + fmtN(people) + '</button></div>') +
+          '</div><div class="em-prev"><div class="em-inbox"><b id="pvs"></b><span id="pvp"></span></div><iframe id="pvf" title="Email preview"></iframe></div></div>';
+        wire();
+        main.scrollTop = y; const ff = main.querySelector('.em-form'); if (ff) ff.scrollTop = fy;
+      };
+      const read = () => { const o = WBMail.clean(k); o.sections.forEach((s) => { if (s.imgs) s.imgs = s.imgs.filter(Boolean); }); return { subject: (k.subject || '').trim(), content: o }; };
+      const prev = () => { const r = read(), g = (id) => main.querySelector('#' + id); g('pvs').textContent = (r.subject || 'Subject').replace(/\{first_name\}/g, 'Sam'); g('pvp').textContent = r.content.preheader || ''; g('pvf').srcdoc = WB.hubEmailHtml(r.content, biz, 'Sam'); };
       const save = async (quiet) => {
         const r = read(); if (!r.subject) { toast('Add a subject first.', 'bad'); return null; }
-        if (r.content.button_url && !/^(https:\/\/|mailto:|tel:)/i.test(r.content.button_url)) { toast('The button link should start with https://', 'bad'); return null; }
-        try { const saved = await Store.saveCampaign(ctx.row.id, Object.assign({ id: c.id }, r)); c = saved; const i = camps.findIndex((x) => x.id === saved.id); if (i >= 0) camps[i] = saved; else camps.unshift(saved); drawList(c); g('edel').hidden = false; if (!quiet) toast('Draft saved', 'ok'); return saved; }
+        if ([k.button_url].concat(k.sections.map((s) => s.btn_url || s.url)).some((u) => u && !WBMail.okUrl(u))) { toast('Links should start with https:// (or mailto: / tel:).', 'bad', 5000); return null; }
+        try { const saved = await Store.saveCampaign(ctx.row.id, Object.assign({ id: c.id }, r)); c = saved; const i = camps.findIndex((x) => x.id === saved.id); if (i >= 0) camps[i] = saved; else camps.unshift(saved); drawList(c); const d = main.querySelector('#edel'); if (d) d.hidden = false; if (!quiet) toast('Draft saved', 'ok'); return saved; }
         catch (e) { toast(e.message, 'bad', 5000); return null; }
       };
-      g('eai').onclick = async () => {
-        const brief = g('eb').value.trim(); if (brief.length < 5) return toast('Tell the AI what the email is about first.', 'bad');
-        const b = g('eai'); b.disabled = true; b.textContent = 'Writing…';
-        try { const r = await Store.emailApi('draft', { site_id: ctx.row.id, brief }); const d = r.content || {}; g('es').value = d.subject || ''; g('ep').value = d.preheader || ''; g('eh').value = d.headline || ''; g('em').value = d.message || ''; if (d.button_text) g('ebt').value = d.button_text; prev(); toast('Draft written — please check every detail before sending.', 'ok', 5000); }
-        catch (e) { toast(e.message, 'bad', 5000); }
-        b.disabled = false; b.textContent = '✨ Write it for me';
-      };
-      g('esave').onclick = () => save();
-      g('etest').onclick = async () => {
-        const r = read(); if (!r.subject) return toast('Add a subject first.', 'bad');
-        const b = g('etest'); b.disabled = true;
-        try { const j = await Store.emailApi('test', { site_id: ctx.row.id, campaign: Object.assign({ subject: r.subject }, r.content) }); toast('Test sent to ' + j.to, 'ok', 5000); } catch (e) { toast(e.message, 'bad', 6000); }
-        b.disabled = false;
-      };
-      g('esend').onclick = async () => {
-        const r = read();
-        if (!r.subject || !r.content.message.trim()) return toast('Add a subject and a message first.', 'bad');
-        if (!people) return toast('No one has agreed to receive emails yet.', 'bad', 5000);
-        const ok = await sendConfirm(people, r.subject); if (!ok) return;
-        const saved = await save(true); if (!saved) return;
-        const b = g('esend'); b.disabled = true; b.textContent = 'Sending…';
-        try { const j = await Store.emailApi('send', { site_id: ctx.row.id, campaign_id: saved.id }); toast('Sent to ' + fmtN(j.sent) + ' people' + (j.failed ? ' (' + j.failed + ' could not be delivered)' : ''), 'ok', 6000); camps = await Store.campaigns(ctx.row.id); openCamp(camps.find((x) => x.id === saved.id) || saved); }
-        catch (e) { toast(e.message, 'bad', 7000); b.disabled = false; b.textContent = 'Send to ' + fmtN(people); }
-      };
-      g('edel').onclick = async () => {
-        if (!c.id || !(await D().confirmBox('Delete this draft?', 'This cannot be undone.', 'Delete', true))) return;
-        try { await Store.deleteCampaign(ctx.row.id, c.id); camps = camps.filter((x) => x.id !== c.id); openCamp(null); } catch (e) { toast(e.message, 'bad'); }
-      };
-      const pick = g('eimg');
-      if (pick) pick.onclick = async () => { const f = await D().pickImages(false); if (!f.length) return; const u = await D().uploadFiles(f, 1400); if (u[0]) { k.image = u[0]; const cur = read(); openCamp(Object.assign({}, c, cur, { content: Object.assign(cur.content, { image: u[0] }) })); } };
-      const rm = g('eimgx'); if (rm) rm.onclick = () => { k.image = ''; const cur = read(); openCamp(Object.assign({}, c, cur, { content: Object.assign(cur.content, { image: '' }) })); };
+      const blanksMsg = () => { const b = WBMail.blanks(read().content).concat((k.subject.match(/\[[^\]]{2,60}\]/g) || [])); return b.length ? 'Fill in the parts in [square brackets] first: ' + b.slice(0, 4).join(', ') + (b.length > 4 ? '…' : '') : ''; };
+      function wire() {
+        prev();
+        main.querySelectorAll('[data-p]').forEach((n) => { n.addEventListener('input', () => { setP(k, n.dataset.p, n.value); clearTimeout(n._t); n._t = setTimeout(prev, 250); }); });
+        if (sent) return;
+        const g = (id) => main.querySelector('#' + id);
+        main.querySelectorAll('[data-look]').forEach((b) => { b.onclick = () => { k.look = b.dataset.look; draw(); }; });
+        main.querySelectorAll('[data-add]').forEach((b) => { b.onclick = () => { k.sections.push(newSec(b.dataset.add, S)); draw(); const f = main.querySelectorAll('.em-sec'); if (f.length) f[f.length - 1].scrollIntoView({ block: 'center', behavior: 'smooth' }); }; });
+        main.querySelectorAll('[data-rm]').forEach((b) => { b.onclick = () => { k.sections.splice(+b.dataset.rm, 1); draw(); }; });
+        main.querySelectorAll('[data-mv]').forEach((b) => { b.onclick = () => { const [i, d] = b.dataset.mv.split(':').map(Number), j = i + d; if (j < 0 || j >= k.sections.length) return; const t = k.sections[i]; k.sections[i] = k.sections[j]; k.sections[j] = t; draw(); }; });
+        main.querySelectorAll('[data-side]').forEach((b) => { b.onclick = () => { const [i, v] = b.dataset.side.split(':'); k.sections[+i].side = v; draw(); }; });
+        main.querySelectorAll('[data-img]').forEach((b) => { b.onclick = async () => { const u = await choosePic(); if (u) { setP(k, b.dataset.img, u); draw(); } }; });
+        main.querySelectorAll('[data-imgx]').forEach((b) => { b.onclick = () => { setP(k, b.dataset.imgx, ''); draw(); }; });
+        g('eideas').onclick = () => ideas(c);
+        g('eai').onclick = async () => {
+          const brief = g('eb').value.trim(); if (brief.length < 5) return toast('Tell the AI what the email is about first.', 'bad');
+          const b = g('eai'); b.disabled = true; b.textContent = 'Writing…';
+          try {
+            const r = await Store.emailApi('draft', { site_id: ctx.row.id, brief, kind, images: S.imgs.slice(0, 24), book });
+            const d = WBMail.clean(Object.assign({}, r.content || {}, { look: k.look, accent: siteAccent }));
+            Object.assign(k, d, { subject: (r.content && r.content.subject) || k.subject }); draw();
+            toast('Draft written — please check every detail before sending.', 'ok', 5000);
+          } catch (e) { toast(e.message, 'bad', 5000); b.disabled = false; b.textContent = '✨ Write it for me'; }
+        };
+        g('esave').onclick = () => save();
+        g('etest').onclick = async () => {
+          const r = read(); if (!r.subject) return toast('Add a subject first.', 'bad');
+          const bl = blanksMsg(); if (bl) toast(bl + ' (sending the test anyway)', 'bad', 6000);
+          const b = g('etest'); b.disabled = true;
+          try { const j = await Store.emailApi('test', { site_id: ctx.row.id, campaign: Object.assign({ subject: r.subject }, r.content) }); toast('Test sent to ' + j.to, 'ok', 5000); } catch (e) { toast(e.message, 'bad', 6000); }
+          b.disabled = false;
+        };
+        g('esend').onclick = async () => {
+          const r = read();
+          if (!r.subject || !WBMail.hasBody(r.content)) return toast('Add a subject and a message first.', 'bad');
+          const bl = blanksMsg(); if (bl) return toast(bl, 'bad', 7000);
+          if (!people) return toast('No one has agreed to receive emails yet.', 'bad', 5000);
+          const ok = await sendConfirm(people, r.subject); if (!ok) return;
+          const saved = await save(true); if (!saved) return;
+          const b = g('esend'); b.disabled = true; b.textContent = 'Sending…';
+          try { const j = await Store.emailApi('send', { site_id: ctx.row.id, campaign_id: saved.id }); toast('Sent to ' + fmtN(j.sent) + ' people' + (j.failed ? ' (' + j.failed + ' could not be delivered)' : ''), 'ok', 6000); camps = await Store.campaigns(ctx.row.id); openCamp(camps.find((x) => x.id === saved.id) || saved); }
+          catch (e) { toast(e.message, 'bad', 7000); b.disabled = false; b.textContent = 'Send to ' + fmtN(people); }
+        };
+        g('edel').onclick = async () => {
+          if (!c.id || !(await D().confirmBox('Delete this draft?', 'This cannot be undone.', 'Delete', true))) return;
+          try { await Store.deleteCampaign(ctx.row.id, c.id); camps = camps.filter((x) => x.id !== c.id); ideas(); } catch (e) { toast(e.message, 'bad'); }
+        };
+      }
+      draw();
     }
     function sendConfirm(n, subject) {
       return new Promise((res) => {
         const { modal, $, esc } = D();
-        const m = modal('<h2>Send “' + esc(subject) + '”?</h2><p class="muted">It goes to <b>' + fmtN(n) + '</b> customer' + (n === 1 ? '' : 's') + ' who agreed to hear from you. Each email includes your business name and an unsubscribe link.</p>' +
+        const m = modal('<h2>Send “' + esc(subject.replace(/\{first_name\}/g, '…')) + '”?</h2><p class="muted">It goes to <b>' + fmtN(n) + '</b> customer' + (n === 1 ? '' : 's') + ' who agreed to hear from you. Each email includes your business name and an unsubscribe link.</p>' +
           '<label class="hub-check"><input type="checkbox" id="sc"><span>I’ve checked the test email, and everything in it is correct.</span></label>' +
           '<div class="acts"><button class="btn ghost" data-x>Cancel</button><button class="btn pri" data-ok disabled>Send now</button></div>');
         const ok = $('[data-ok]', m); $('#sc', m).onchange = (e) => { ok.disabled = !e.target.checked; };
@@ -5703,8 +6172,9 @@ WB.AI_DEMO_PLAN = function (a) {
         ok.onclick = () => { m.close(); res(true); };
       });
     }
-    ctx.body.querySelector('#enew').onclick = () => openCamp(null);
-    openCamp(openId ? camps.find((x) => x.id === openId) : camps.find((x) => x.status === 'draft') || null);
+    ctx.body.querySelector('#enew').onclick = () => ideas();
+    const open = openId ? camps.find((x) => x.id === openId) : camps.find((x) => x.status === 'draft');
+    if (open) openCamp(open); else ideas();
   }
 })();
 
