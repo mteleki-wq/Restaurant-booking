@@ -663,6 +663,18 @@ section{position:relative}
 .marc .mono{width:150px;height:150px;border-radius:40px;background:var(--grad);display:grid;place-items:center;color:#fff;font:600 54px var(--serif);box-shadow:0 30px 60px -25px rgba(124,92,255,.8)}
 .marc blockquote{margin:0 0 16px;font:400 italic clamp(22px,2.6vw,30px)/1.35 var(--serif);color:#2a2448}
 .marc cite{font-style:normal;font-weight:600}.marc cite span{display:block;font-weight:500;color:var(--mut);font-size:15px}
+.meet{margin-top:22px;display:grid;grid-template-columns:1.15fr 1fr;gap:36px;align-items:center;background:#17142b;color:#fff;border-radius:30px;padding:30px;position:relative;overflow:hidden}
+.meet:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:#7c5cff;filter:blur(110px);opacity:.35;right:-120px;top:-200px}
+.meet>*{position:relative}
+.meet .mv{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000 center/cover no-repeat;border:0;padding:0;cursor:pointer;width:100%;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.meet .mv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.meet .mv .pl{position:absolute;left:16px;bottom:16px;display:flex;align-items:center;gap:10px;font:700 15px var(--sans);color:#fff;background:rgba(14,13,26,.82);padding:8px 16px 8px 8px;border-radius:999px}
+.meet .mv .pl i{width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-style:normal;font-size:12px;padding-left:2px}
+.meet .eyebrow{color:var(--c,#22d3ee)}
+.meet h3{font-size:clamp(24px,2.6vw,32px);line-height:1.15;margin:8px 0 12px}
+.meet p{color:#c9c5e8;font-size:16px;line-height:1.6;margin:0 0 18px}
+.meet a{color:#fff;font-weight:600}
+@media(max-width:860px){.meet{grid-template-columns:1fr;padding:22px}}
 @media(max-width:760px){.marc{grid-template-columns:1fr;padding:30px;text-align:center}.marc .mono{margin:0 auto}}
 
 /* faq */
@@ -1159,6 +1171,15 @@ document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')h
         <cite>Marc — Webescapade<span>Web designer with 50 years’ experience in hospitality · Sydney</span></cite>
       </div>
     </div>
+    <div class="meet rv">
+      <button class="mv" type="button" id="meetPlay" aria-label="Play Meet Webescapade, a 5-minute video" style="background-image:url(/video/meet-webescapade-thumb.jpg)"><span class="pl"><i>▶</i>Meet Webescapade · 5 min</span></button>
+      <div>
+        <div class="eyebrow">The bigger picture</div>
+        <h3>Meet the team behind the Site Builder</h3>
+        <p>Who we are, why we build these tools, and how the Site Builder works with Restaurant, Service, Trade and Function Deluxe — so your website, bookings and customers all work together.</p>
+        <a href="https://webescapade.com/">Explore everything at webescapade.com →</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1409,5 +1430,6 @@ document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')h
   if(!seen) setTimeout(function(){ if(box.hidden) tip.hidden=false; },9000);
 })();
 </script>
+<script>(function(){var b=document.getElementById('meetPlay');if(!b)return;b.addEventListener('click',function(){if(b.querySelector('iframe'))return;var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/hteoJVDQ7M0?rel=0&modestbranding=1&autoplay=1&playsinline=1&cc_load_policy=0';f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title='Meet Webescapade';b.innerHTML='';b.appendChild(f);b.style.cursor='default';});})();</script>
 </body>
 </html>
