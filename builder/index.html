@@ -5780,7 +5780,9 @@ if (typeof window !== 'undefined') window.WBMail = WBMail;
   // ideas for a kind of business: its own first, then the ones that suit everyone
   WB.mailIdeas = function (kind, S) {
     const mine = IDEAS.filter((x) => x.k === kind), extra = kind === 'function' ? IDEAS.filter((x) => x.k === 'restaurant').slice(0, 2) : [];
-    return mine.concat(extra, IDEAS.filter((x) => x.k === 'all')).map((x) => ({ icon: x.i, title: x.t, desc: x.d, kind: x.k, build: () => x.b(Object.assign({ kind }, S)) }));
+    const rot = (a, n) => (a.length ? a.slice(n % a.length).concat(a.slice(0, n % a.length)) : a);
+    // each idea starts from a different photo, so the ideas don't all look the same
+    return mine.concat(extra, IDEAS.filter((x) => x.k === 'all')).map((x, i) => ({ icon: x.i, title: x.t, desc: x.d, kind: x.k, build: () => x.b(Object.assign({ kind }, S, { imgs: rot(S.imgs || [], i * 2) })) }));
   };
   WB.mailIdeasAll = function (S) { return Object.keys(KIND).filter((k) => k !== 'general').reduce((o, k) => { o[k] = WB.mailIdeas(k, S).filter((x) => x.kind === k); return o; }, {}); };
 })();
