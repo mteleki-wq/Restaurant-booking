@@ -14,10 +14,10 @@
 const WBMail = (() => {
   const LOOKS = {
     site: { label: 'Your website', bg: '#f3f2f7', card: '#ffffff', ink: '#17142b', text: '#2f2d3a', muted: '#6b6880', soft: '#f5f3fa', line: '#ebe8f2', accent: '#5b4bd6', head: 'Arial,Helvetica,sans-serif' },
-    cream: { label: 'Cream & terracotta', bg: '#f3ece2', card: '#fffaf3', ink: '#3a2a20', text: '#4a3a30', muted: '#8a7768', soft: '#f5e8da', line: '#eadccb', accent: '#b4583a', head: 'Georgia,"Times New Roman",serif' },
-    olive: { label: 'Olive', bg: '#edefe4', card: '#fbfcf6', ink: '#2c311d', text: '#3b402c', muted: '#737862', soft: '#e7ebd7', line: '#dfe3cd', accent: '#5f6b2f', head: 'Georgia,"Times New Roman",serif' },
-    sage: { label: 'Soft sage', bg: '#edf3ef', card: '#ffffff', ink: '#24352c', text: '#33453b', muted: '#6c7f74', soft: '#e4efe8', line: '#dbe7df', accent: '#5f8f76', head: 'Georgia,"Times New Roman",serif' },
-    midnight: { label: 'Midnight & gold', bg: '#0e1120', card: '#171b2d', ink: '#ffffff', text: '#d5d8e6', muted: '#959bb3', soft: '#21263d', line: '#2a3049', accent: '#c9a45c', head: 'Georgia,"Times New Roman",serif' },
+    cream: { label: 'Cream & terracotta', bg: '#f3ece2', card: '#fffaf3', ink: '#3a2a20', text: '#4a3a30', muted: '#8a7768', soft: '#f5e8da', line: '#eadccb', accent: '#b4583a', head: 'Georgia,Times,serif' },
+    olive: { label: 'Olive', bg: '#edefe4', card: '#fbfcf6', ink: '#2c311d', text: '#3b402c', muted: '#737862', soft: '#e7ebd7', line: '#dfe3cd', accent: '#5f6b2f', head: 'Georgia,Times,serif' },
+    sage: { label: 'Soft sage', bg: '#edf3ef', card: '#ffffff', ink: '#24352c', text: '#33453b', muted: '#6c7f74', soft: '#e4efe8', line: '#dbe7df', accent: '#5f8f76', head: 'Georgia,Times,serif' },
+    midnight: { label: 'Midnight & gold', bg: '#0e1120', card: '#171b2d', ink: '#ffffff', text: '#d5d8e6', muted: '#959bb3', soft: '#21263d', line: '#2a3049', accent: '#c9a45c', head: 'Georgia,Times,serif' },
   };
   const TYPES = { pictext: 'Picture + text', gallery: 'Photo row', cards: 'Highlights', text: 'Text', highlight: 'Offer box', button: 'Button' };
   const MAXSEC = 8;
