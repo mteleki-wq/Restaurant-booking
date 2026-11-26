@@ -573,6 +573,7 @@ body{min-height:100vh}
           if (f === 'message') h += '<textarea name="message" placeholder="' + lab[f] + '" required maxlength="3000"></textarea>';
           else h += '<input name="' + f + '" type="' + (f === 'email' ? 'email' : f === 'phone' ? 'tel' : 'text') + '" placeholder="' + lab[f] + '"' + (f !== 'phone' ? ' required' : '') + ' maxlength="200">';
         });
+        if (ctx.marketing && fields.indexOf('email') >= 0) h += '<label class="wb-optin"><input type="checkbox" name="optin" value="1"><span>' + esc(cf.optin || 'Keep me posted with news and offers') + '</span></label>';
         h += '<input name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">';
         h += '<button type="submit" class="wb-btn wb-bs-solid wb-hv-lift">' + esc(cf.button || 'Send message') + '</button><div class="wb-form-msg" role="status"></div>';
         c.innerHTML = h;
@@ -875,7 +876,7 @@ body{min-height:100vh}
     const width = opts.width || mount.clientWidth || window.innerWidth;
     const device = opts.device || (width < BREAK ? 'mobile' : 'desktop');
     const k = opts.k || WB.computeK(width, device);
-    const ctx = { device, k, editor: !!opts.editor || !!opts.thumb, thumb: !!opts.thumb, site, page, pageHref: opts.pageHref, onSubmit: opts.onSubmit, lazy: !opts.editor, shop: opts.shop || { products: [], enabled: false } };
+    const ctx = { device, k, editor: !!opts.editor || !!opts.thumb, thumb: !!opts.thumb, site, page, pageHref: opts.pageHref, onSubmit: opts.onSubmit, marketing: !!opts.marketing, lazy: !opts.editor, shop: opts.shop || { products: [], enabled: false } };
     if (site.header && site.header.overlay && page.sections && page.sections[0]) {
       ctx.topPadFor = page.sections[0].id;
       ctx.topPad = site.header.mcustom ? site.header.mh : 76;
@@ -1363,6 +1364,8 @@ body{min-height:100vh}
 .wb-form input,.wb-form textarea{width:100%;padding:13px 15px;border:1px solid color-mix(in srgb,var(--c-muted) 45%,transparent);border-radius:calc(var(--radius) * .7);background:var(--f-in);color:var(--f-fg);font:inherit;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}
 .wb-form input:focus,.wb-form textarea:focus{border-color:var(--c-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--c-accent) 22%,transparent)}
 .wb-form textarea{flex:1;min-height:110px;resize:vertical}
+.wb-optin{display:flex;align-items:flex-start;gap:9px;font-size:.86em;line-height:1.4;color:var(--f-fg);opacity:.85;cursor:pointer;text-align:left}
+.wb-form .wb-optin input{width:auto;flex:none;margin:.2em 0 0;padding:0;accent-color:var(--c-accent)}
 .wb-form button{height:50px;border-radius:var(--radius);font-weight:600;font-size:15px}
 .wb-form-msg{font-size:14px;min-height:1em;color:var(--f-fg)}
 .wb-nav{display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative}
@@ -1664,6 +1667,7 @@ body{min-height:100vh}
       width: w, device,
       pageHref: (s) => base + (s ? '&p=' + encodeURIComponent(s) : ''),
       onSubmit: submit,
+      marketing: state.plan === 'platinum',
       shop: state.shop
     });
     stop = WB.activate(mount.firstElementChild, {});
@@ -1684,8 +1688,56 @@ body{min-height:100vh}
       localStorage.setItem(key, JSON.stringify(a.slice(0, 200)));
       return true;
     }
-    await rpc('submit_site_message', { p_slug: state.slug, p_name: data.name || '', p_email: data.email || '', p_phone: data.phone || '', p_message: data.message || '' });
+    await rpc('submit_site_message', { p_slug: state.slug, p_name: data.name || '', p_email: data.email || '', p_phone: data.phone || '', p_message: data.message || '', p_marketing: data.optin === '1' });
     return true;
+  }
+
+
+  /* ---------- privacy-friendly analytics: no cookies, no personal details ----------
+     A random id for this browser tab only (sessionStorage), the page, where the visitor came from
+     (just the website name), phone/tablet/computer, and which buttons are clicked. */
+  function startTracking() {
+    if (localId || !CFG.supabaseUrl || !state.slug) return;
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1' || q.get('notrack') === '1') return;
+    let sid = '';
+    try { sid = sessionStorage.getItem('wb.sid') || ''; if (!sid) { sid = Math.random().toString(36).slice(2, 12) + Date.now().toString(36).slice(-4); sessionStorage.setItem('wb.sid', sid); } } catch (e) { sid = Math.random().toString(36).slice(2, 14); }
+    const w = window.innerWidth || 1024, dev = w < 700 ? 'phone' : w < 1100 ? 'tablet' : 'computer';
+    const path = '/' + (state.page === state.site.pages[0] ? '' : (state.page.slug || ''));
+    let ref = '';
+    try { const r = document.referrer ? new URL(document.referrer).hostname : ''; if (r && r !== location.hostname) ref = r; } catch (e) { /* none */ }
+    const utm = q.get('utm_source'); if (utm) ref = utm.slice(0, 40);
+    let queue = [{ k: 'view', p: path, r: ref, d: dev, s: sid }], timer = null;
+    const flush = (end) => {
+      if (!queue.length) return; const batch = queue.splice(0, 20);
+      try {
+        fetch(CFG.supabaseUrl.replace(/\/+$/, '') + '/rest/v1/rpc/builder_track', { method: 'POST', keepalive: !!end,
+          headers: { apikey: CFG.supabaseKey, Authorization: 'Bearer ' + CFG.supabaseKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_slug: state.slug, p_events: batch }) }).catch(() => {});
+      } catch (e) { /* never break the page */ }
+    };
+    const push = (e) => { queue.push(e); clearTimeout(timer); timer = setTimeout(flush, 2500); if (queue.length >= 15) flush(); };
+    setTimeout(flush, 800);
+    const SOCIAL = /(^|\.)(facebook|instagram|tiktok|youtube|youtu|linkedin|twitter|x|pinterest|threads)\.com$|(^|\.)youtu\.be$/;
+    document.addEventListener('click', (ev) => {
+      const t = ev.target && ev.target.closest && ev.target.closest('a,button,[role=button]');
+      if (!t || t.closest('.wb-badge')) return;
+      const href = t.getAttribute('href') || '', cls = (t.className && t.className.baseVal != null ? t.className.baseVal : t.className) || '';
+      let cat = 'button', host = '';
+      try { if (/^https?:/i.test(href)) host = new URL(href, location.href).hostname.replace(/^www\./, ''); } catch (e) { /* bad url */ }
+      if (/^tel:/i.test(href)) cat = 'call';
+      else if (/^mailto:/i.test(href)) cat = 'email';
+      else if (/wb-x-chat|chatbtn/.test(cls) || t.closest('.wb-x-chat')) cat = 'chat';
+      else if (/wb-x-pill|wb-x-bookbtn|wb-x-book/.test(cls) || t.dataset.ia === 'book' || /book/i.test(t.textContent || '') && !host) cat = 'book';
+      else if (t.hasAttribute('data-wb-add') || /wb-x-pay|wb-cart|wb-shop/.test(cls) || t.closest('.wb-cart,.wb-shop')) cat = 'shop';
+      else if (/google\.[a-z.]+\/maps|maps\.app\.goo\.gl|maps\.apple/.test(href)) cat = 'map';
+      else if (host && SOCIAL.test(host)) cat = 'social';
+      else if (t.closest('.wb-nav,nav')) cat = 'menu';
+      else if (host && host !== location.hostname) cat = 'link';
+      const label = (t.getAttribute('aria-label') || t.textContent || host || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+      push({ k: 'click', p: path, l: label, c: cat, s: sid });
+    }, true);
+    window.addEventListener('pagehide', () => flush(true));
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(true); });
   }
 
   (async function start() {
@@ -1716,6 +1768,7 @@ body{min-height:100vh}
         WB.mountShop(mount, site, { shop: state.shop, slug: data.slug, api: shopApi, openCart: q.get('cart') === '1', order: q.get('order') ? { id: q.get('order'), token: q.get('t') || '' } : null });
       } catch (e) { console.warn(e); }
     }
+    try { startTracking(); } catch (e) { /* analytics must never break the site */ }
     let rt = null;
     window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(relayout, 80); });
     if (location.hash.length > 1) setTimeout(() => { try { const n = document.querySelector(location.hash); if (n) n.scrollIntoView(); } catch (e) { /* bad hash */ } }, 300);

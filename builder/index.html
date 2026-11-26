@@ -311,6 +311,89 @@ a{color:var(--ui-a2)}
 .ai-miss{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:#fbbf2414;border:1px solid #fbbf2440;font-size:13px}.ai-miss ul{margin:6px 0 0;padding-left:18px;color:var(--ui-m)}
 @media(max-width:640px){.ai-secs{grid-template-columns:1fr}}
 
+/* ---------- business hub ---------- */
+.modal.hubm{width:min(1180px,100%);padding:0;max-height:calc(100vh - 30px);display:flex;flex-direction:column}
+.hub{display:flex;flex-direction:column;min-height:0;flex:1}
+.hub-h{display:flex;align-items:center;gap:18px;padding:18px 22px;border-bottom:1px solid var(--ui-line);flex-wrap:wrap}
+.hub-h h2{margin:0;font-size:20px}
+.hub-k{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ui-a2);font-weight:700}
+.hub-tabs{display:flex;gap:4px;background:var(--ui-p2);padding:4px;border-radius:12px;margin-left:auto}
+.hub-tabs button{border:0;background:transparent;color:var(--ui-m);font-weight:600;padding:8px 14px;border-radius:9px;display:flex;align-items:center;gap:7px}
+.hub-tabs button svg{width:16px;height:16px}
+.hub-tabs button.on{background:var(--ui-grad);color:#fff}
+.hub-b{padding:20px 22px 24px;overflow:auto;flex:1;min-height:420px}
+.hub-err{color:var(--ui-bad)}
+.hub-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.hub-bar .inp{max-width:300px}
+.seg{display:flex;background:var(--ui-p2);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--ui-m);font-weight:600;font-size:13px;padding:7px 12px;border-radius:8px}
+.seg button.on{background:#2b2b40;color:#fff}
+.hub-demo{font-size:12px;color:#fcd34d;background:#3b2f12;padding:5px 10px;border-radius:999px}
+.hub-note{background:var(--ui-p2);border:1px solid var(--ui-line);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:14px;color:var(--ui-m)}
+.hub-note.ok{border-color:#1f5f4b;background:#0f2a23;color:#a7f3d0}
+.hub-note b{color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpis>div{background:var(--ui-p2);border:1px solid var(--ui-line);border-radius:14px;padding:14px 16px}
+.kpis span{display:block;font-size:12px;color:var(--ui-m);text-transform:uppercase;letter-spacing:.08em}
+.kpis b{display:block;font-size:30px;line-height:1.15;margin-top:4px}
+.kpis.sm b{font-size:24px}
+.kpis .hi{background:linear-gradient(135deg,#2a1f55,#152a40);border-color:#3b3a6b}
+.hcard{background:var(--ui-p2);border:1px solid var(--ui-line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.hcard h4{margin:0 0 10px;font-size:14px}
+.hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hgrid .hcard{margin:0}
+.hbars{display:flex;align-items:flex-end;gap:3px;height:120px}
+.hb{flex:1;height:100%;display:flex;align-items:flex-end}
+.hb i{display:block;width:100%;background:var(--ui-grad);border-radius:4px 4px 0 0;min-height:2px}
+.hbars-x{display:flex;justify-content:space-between;font-size:11px;color:var(--ui-m);margin-top:6px}
+.hl{position:relative;display:flex;justify-content:space-between;gap:10px;padding:7px 9px;font-size:13px;border-radius:8px;overflow:hidden;margin-bottom:3px}
+.hl span,.hl b{position:relative;z-index:1}
+.hl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hl i{position:absolute;left:0;top:0;bottom:0;background:#2a2546;border-radius:8px}
+.muted.sm,.sm{font-size:13px}
+.hub-lock{max-width:520px;margin:40px auto;text-align:center}
+.hub-lock-i{width:62px;height:62px;border-radius:18px;background:var(--ui-grad);display:grid;place-items:center;margin:0 auto 14px}
+.hub-lock-i svg{width:30px;height:30px;color:#fff}
+.hub-lock h3{margin:0 0 10px;font-size:22px}
+.hub-lock p{color:var(--ui-m);line-height:1.6}
+.hub-lock b{color:var(--ui-t)}
+.ctab{border:1px solid var(--ui-line);border-radius:14px;overflow:hidden}
+.ctr{display:grid;grid-template-columns:1.2fr 1.4fr 1.3fr .7fr .7fr;gap:12px;padding:11px 14px;border-top:1px solid var(--ui-line);align-items:center;cursor:pointer;font-size:14px}
+.ctr:hover{background:#1f1f30}
+.ctr.th{border-top:0;background:var(--ui-p2);cursor:default;font-size:12px;color:var(--ui-m);text-transform:uppercase;letter-spacing:.06em}
+.ctr span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ctr small{display:block;color:var(--ui-m);font-size:12px;margin-top:2px}
+.chip{font-style:normal;display:inline-block;font-size:11px;background:#262640;border-radius:999px;padding:2px 8px;margin:2px 4px 0 0;color:#c4b5fd}
+.st{font-style:normal;font-size:12px;color:var(--ui-m)}
+.st.yes{color:var(--ui-ok)}.st.no{color:#fca5a5}
+.cc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.cc-grid div{background:var(--ui-p2);border-radius:10px;padding:10px 12px}
+.cc-grid span{display:block;font-size:11px;color:var(--ui-m);text-transform:uppercase;letter-spacing:.06em}
+.cc-grid b{font-size:14px}
+.hub-check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ui-t);background:var(--ui-p2);border-radius:10px;padding:11px 12px;margin:6px 0 4px;cursor:pointer}
+.hub-check input{margin-top:3px;accent-color:#8b5cf6}
+.em{display:grid;grid-template-columns:230px 1fr;gap:18px;min-height:540px}
+.em-side{border-right:1px solid var(--ui-line);padding-right:16px}
+.em-it{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--ui-t);padding:10px 11px;border-radius:10px;margin-bottom:4px}
+.em-it:hover{background:var(--ui-p2)}
+.em-it.on{background:#24213d}
+.em-it b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.em-it small{color:var(--ui-m);font-size:12px}
+.em-ed{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.em-form .field{margin-bottom:11px}
+.em-ai{display:flex;gap:8px;margin-bottom:14px;background:linear-gradient(135deg,#221c45,#142536);padding:10px;border-radius:12px}
+.em-ai .inp{flex:1}
+.em-2{display:grid;grid-template-columns:1fr 1.4fr;gap:10px}
+.em-img{display:flex;align-items:center;gap:10px;margin:2px 0 6px;font-size:13px;color:var(--ui-m)}
+.em-img>div{flex:1}
+.em-img img{height:46px;border-radius:8px;display:block}
+.em-acts{flex-wrap:wrap}
+.em-prev{background:#f3f2f7;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-height:520px}
+.em-inbox{background:#fff;padding:12px 16px;border-bottom:1px solid #e6e4ee;color:#17142b;font-size:13px;display:flex;flex-direction:column}
+.em-inbox b{font-size:14px}.em-inbox span{color:#6b6880}
+.em-prev iframe{flex:1;border:0;width:100%;background:#f3f2f7;min-height:480px}
+@media(max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.hgrid{grid-template-columns:1fr}.em,.em-ed{grid-template-columns:1fr}.em-side{border:0;padding:0}.ctr{grid-template-columns:1fr 1fr}.ctr.th{display:none}.hub-tabs{margin-left:0}}
+
 </style>
 </head>
 <body>
@@ -853,6 +936,7 @@ a{color:var(--ui-a2)}
           if (f === 'message') h += '<textarea name="message" placeholder="' + lab[f] + '" required maxlength="3000"></textarea>';
           else h += '<input name="' + f + '" type="' + (f === 'email' ? 'email' : f === 'phone' ? 'tel' : 'text') + '" placeholder="' + lab[f] + '"' + (f !== 'phone' ? ' required' : '') + ' maxlength="200">';
         });
+        if (ctx.marketing && fields.indexOf('email') >= 0) h += '<label class="wb-optin"><input type="checkbox" name="optin" value="1"><span>' + esc(cf.optin || 'Keep me posted with news and offers') + '</span></label>';
         h += '<input name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">';
         h += '<button type="submit" class="wb-btn wb-bs-solid wb-hv-lift">' + esc(cf.button || 'Send message') + '</button><div class="wb-form-msg" role="status"></div>';
         c.innerHTML = h;
@@ -1155,7 +1239,7 @@ a{color:var(--ui-a2)}
     const width = opts.width || mount.clientWidth || window.innerWidth;
     const device = opts.device || (width < BREAK ? 'mobile' : 'desktop');
     const k = opts.k || WB.computeK(width, device);
-    const ctx = { device, k, editor: !!opts.editor || !!opts.thumb, thumb: !!opts.thumb, site, page, pageHref: opts.pageHref, onSubmit: opts.onSubmit, lazy: !opts.editor, shop: opts.shop || { products: [], enabled: false } };
+    const ctx = { device, k, editor: !!opts.editor || !!opts.thumb, thumb: !!opts.thumb, site, page, pageHref: opts.pageHref, onSubmit: opts.onSubmit, marketing: !!opts.marketing, lazy: !opts.editor, shop: opts.shop || { products: [], enabled: false } };
     if (site.header && site.header.overlay && page.sections && page.sections[0]) {
       ctx.topPadFor = page.sections[0].id;
       ctx.topPad = site.header.mcustom ? site.header.mh : 76;
@@ -1643,6 +1727,8 @@ a{color:var(--ui-a2)}
 .wb-form input,.wb-form textarea{width:100%;padding:13px 15px;border:1px solid color-mix(in srgb,var(--c-muted) 45%,transparent);border-radius:calc(var(--radius) * .7);background:var(--f-in);color:var(--f-fg);font:inherit;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}
 .wb-form input:focus,.wb-form textarea:focus{border-color:var(--c-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--c-accent) 22%,transparent)}
 .wb-form textarea{flex:1;min-height:110px;resize:vertical}
+.wb-optin{display:flex;align-items:flex-start;gap:9px;font-size:.86em;line-height:1.4;color:var(--f-fg);opacity:.85;cursor:pointer;text-align:left}
+.wb-form .wb-optin input{width:auto;flex:none;margin:.2em 0 0;padding:0;accent-color:var(--c-accent)}
 .wb-form button{height:50px;border-radius:var(--radius);font-weight:600;font-size:15px}
 .wb-form-msg{font-size:14px;min-height:1em;color:var(--f-fg)}
 .wb-nav{display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative}
@@ -2866,6 +2952,7 @@ WB.AI_DEMO_PLAN = function (a) {
 
   /* ---------------- icons ---------------- */
   const P = {
+    chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>', users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
     back: '<path d="M15 18l-6-6 6-6"/>', undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>', redo: '<path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/>',
     desk: '<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>', phone: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
     eye: '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>', magnet: '<path d="M6 3v8a6 6 0 0 0 12 0V3"/><path d="M6 7h4M14 7h4"/>',
@@ -2967,6 +3054,23 @@ WB.AI_DEMO_PLAN = function (a) {
       async orders(siteId) { const r = JSON.parse(localStorage.getItem('wb.site.' + siteId) || '{}'); let o = []; try { o = JSON.parse(localStorage.getItem('wb.orders.' + r.slug)) || []; } catch (e) { o = []; } const v = []; o.forEach((x) => (x.vouchers || []).forEach((c) => v.push(Object.assign({ order_id: x.id }, c)))); return { orders: o, vouchers: v }; },
       async updateOrder(id, patch) { Object.keys(localStorage).filter((k) => k.indexOf('wb.orders.') === 0).forEach((k) => { const a = JSON.parse(localStorage.getItem(k) || '[]'); a.forEach((x) => { if (x.id === id) Object.assign(x, patch); }); localStorage.setItem(k, JSON.stringify(a)); }); },
       async setVoucher(code, used) { Object.keys(localStorage).filter((k) => k.indexOf('wb.orders.') === 0).forEach((k) => { const a = JSON.parse(localStorage.getItem(k) || '[]'); a.forEach((x) => (x.vouchers || []).forEach((c) => { if (c.code === code) c.redeemed_at = used ? nowIso() : null; })); localStorage.setItem(k, JSON.stringify(a)); }); },
+      // ---- business hub (demo data in demo mode) ----
+      async hubAccess() { return { platinum: true, insights: true, crm: true, reason: '', system: 'restaurant', code: 'demo', venue: 'Demo restaurant', demo: true }; },
+      async crmSync() { return { ok: true }; },
+      async contacts(siteId) { try { const a = JSON.parse(localStorage.getItem('wb.contacts.' + siteId) || 'null'); if (a) return a; } catch (e) { /* demo */ } const d = WB.HUB_DEMO_CONTACTS(); localStorage.setItem('wb.contacts.' + siteId, JSON.stringify(d)); return d; },
+      async contactSet(siteId, id, sub, notes) { const a = await this.contacts(siteId); const c = a.find((x) => x.id === id); if (!c) return; if (sub && c.unsub_at) throw new Error('This person unsubscribed, so only they can sign up again.'); if (sub != null) { if (sub && !c.subscribed) { c.consent_source = 'added by owner'; c.consent_at = nowIso(); } c.subscribed = sub; } if (notes != null) c.notes = notes; localStorage.setItem('wb.contacts.' + siteId, JSON.stringify(a)); },
+      async deleteContact(siteId, id) { const a = (await this.contacts(siteId)).filter((x) => x.id !== id); localStorage.setItem('wb.contacts.' + siteId, JSON.stringify(a)); },
+      async insights(siteId, days) { return WB.HUB_DEMO_INSIGHTS(days); },
+      async campaigns(siteId) { try { return JSON.parse(localStorage.getItem('wb.camps.' + siteId)) || []; } catch (e) { return []; } },
+      async saveCampaign(siteId, c) { const a = await this.campaigns(siteId); const row = Object.assign({ id: c.id || WB.uid('c'), status: 'draft', created_at: nowIso() }, c, { site_id: siteId, updated_at: nowIso() }); const i = a.findIndex((x) => x.id === row.id); if (i >= 0) a[i] = row; else a.unshift(row); localStorage.setItem('wb.camps.' + siteId, JSON.stringify(a)); return row; },
+      async deleteCampaign(siteId, id) { const a = (await this.campaigns(siteId)).filter((x) => x.id !== id); localStorage.setItem('wb.camps.' + siteId, JSON.stringify(a)); },
+      async emailApi(action, body) {
+        await new Promise((r) => setTimeout(r, 700));
+        if (action === 'test') return { ok: true, to: 'you@example.com' };
+        if (action === 'draft') return { content: WB.HUB_DEMO_DRAFT(body.brief) };
+        if (action === 'send') { const a = await this.campaigns(body.site_id); const c = a.find((x) => x.id === body.campaign_id); const n = (await this.contacts(body.site_id)).filter((x) => x.subscribed).length; if (c) { c.status = 'sent'; c.sent_at = nowIso(); c.recipients = n; c.delivered = n; localStorage.setItem('wb.camps.' + body.site_id, JSON.stringify(a)); } return { ok: true, sent: n, failed: 0 }; }
+        return {};
+      },
       async token() { return ''; },
       chatUrl() { return ''; },
       async get(id) { const r = JSON.parse(localStorage.getItem(key(id)) || 'null'); if (!r) throw new Error('Website not found'); return r; },
@@ -2989,7 +3093,7 @@ WB.AI_DEMO_PLAN = function (a) {
       async deleteMessage(row, m) { const a = (await this.messages(row)).filter((x) => x.id !== m.id); localStorage.setItem('wb.msg.' + row.slug, JSON.stringify(a)); },
       viewUrl(row) { return CFG.viewerUrl + '?local=' + encodeURIComponent(row.id); },
       // demo mode: a fixed sample plan so the AI flow can be tried without a server
-      async aiBuild(ans) { await new Promise((r) => setTimeout(r, 900)); return { plan: WB.AI_DEMO_PLAN(ans), left: 4 }; },
+      async aiBuild(ans) { await new Promise((r) => setTimeout(r, WB.AI_DEMO_DELAY || 900)); return { plan: WB.AI_DEMO_PLAN(ans), left: 4 }; },
       // demo mode: only the sample businesses exist
       async checkBooking(system, code) { const demo = { restaurant: { 'cafe-bojo': 'Cafe Bojo', 'sunset-grill': 'Sunset grill' }, service: { 'serenity-spa': 'Serenity Day Spa' }, trades: { 'zz-trd-test': 'ZZ Trade Test' } }; const n = (demo[system] || {})[code]; if (n) return { ok: true, name: n, code }; for (const k in demo) if (demo[k][code]) return { ok: false, error: 'wrong_system', actual: k, name: demo[k][code] }; return { ok: false, error: code ? 'unknown' : 'missing' }; }
     };
@@ -3050,6 +3154,26 @@ WB.AI_DEMO_PLAN = function (a) {
       try { res = await fetch(CFG.supabaseUrl.replace(/\/+$/, '') + '/functions/v1/builder-ai', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseKey, Authorization: 'Bearer ' + (tok || CFG.supabaseKey) }, body: JSON.stringify({ answers, pasted }) }); }
       catch (e) { throw new Error('No connection — check your internet and try again.'); }
       const j = await res.json().catch(() => ({})); if (!res.ok) throw new Error(j.error || 'The AI couldn’t build your website just now. Please try again.'); return j;
+    },
+    // ---- business hub ----
+    async hubAccess(siteId) { const { data, error } = await sb.rpc('builder_hub_access', { p_site: siteId }); if (error) throw friendly(error); return data; },
+    async crmSync(siteId) { const { data, error } = await sb.rpc('builder_crm_sync', { p_site: siteId }); if (error) throw friendly(error); return data; },
+    async contacts(siteId) { const { data, error } = await sb.from('builder_contacts').select('*').eq('site_id', siteId).order('last_seen', { ascending: false, nullsFirst: false }).limit(5000); if (error) throw friendly(error); return data || []; },
+    async contactSet(siteId, id, sub, notes) { const { error } = await sb.rpc('builder_contact_set', { p_id: id, p_subscribed: sub, p_notes: notes }); if (error) throw friendly(error); },
+    async deleteContact(siteId, id) { const { error } = await sb.from('builder_contacts').delete().eq('id', id); if (error) throw friendly(error); },
+    async insights(siteId, days) { const { data, error } = await sb.rpc('builder_insights', { p_site: siteId, p_days: days }); if (error) throw friendly(error); return data; },
+    async campaigns(siteId) { const { data, error } = await sb.from('builder_campaigns').select('*').eq('site_id', siteId).order('created_at', { ascending: false }).limit(100); if (error) throw friendly(error); return data || []; },
+    async saveCampaign(siteId, c) {
+      const row = { site_id: siteId, subject: c.subject || '', content: c.content || {} };
+      const q = c.id ? sb.from('builder_campaigns').update(Object.assign(row, { updated_at: nowIso() })).eq('id', c.id) : sb.from('builder_campaigns').insert(row);
+      const { data, error } = await q.select().single(); if (error) throw friendly(error); return data;
+    },
+    async deleteCampaign(siteId, id) { const { error } = await sb.from('builder_campaigns').delete().eq('id', id); if (error) throw friendly(error); },
+    async emailApi(action, body) {
+      const tok = await this.token(); let res;
+      try { res = await fetch(CFG.supabaseUrl.replace(/\/+$/, '') + '/functions/v1/builder-email', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseKey, Authorization: 'Bearer ' + (tok || CFG.supabaseKey) }, body: JSON.stringify(Object.assign({ action }, body)) }); }
+      catch (e) { throw new Error('No connection — check your internet and try again.'); }
+      const j = await res.json().catch(() => ({})); if (!res.ok) throw new Error(j.error || 'The email service is not available right now.'); return j;
     },
     async checkBooking(system, code) { const { data, error } = await sb.rpc('builder_check_booking', { p_system: system, p_code: code }); if (error) throw friendly(error); return data || { ok: false, error: 'unknown' }; }
   };
@@ -3217,12 +3341,13 @@ WB.AI_DEMO_PLAN = function (a) {
       const c = frag('<div class="scard"><div class="thumb"><div class="tpv"></div><span class="tletter">' + esc((r.name || '?').trim().charAt(0).toUpperCase()) + '</span><small class="' + (r.published_at ? 'live' : '') + '">' + (r.published_at ? '● LIVE' : 'DRAFT') + '</small></div>' +
         '<div class="meta"><b>' + esc(r.name) + '</b><span>/' + esc(r.slug) + ' · edited ' + new Date(r.updated_at).toLocaleDateString() + '</span></div>' +
         '<div class="acts"><button class="btn sm pri" data-a="edit">' + I('edit') + 'Edit</button>' + (r.published_at ? '<button class="btn sm" data-a="view">' + I('ext') + 'View</button>' : '') +
-        '<button class="btn sm" data-a="msg">' + I('mail') + 'Messages</button><button class="btn sm" data-a="dup" title="Duplicate">' + I('copy') + '</button><button class="btn sm danger" data-a="del" title="Delete">' + I('trash') + '</button></div></div>');
+        '<button class="btn sm" data-a="hub" title="Insights, customers and email">' + I('chart') + 'Insights &amp; customers</button><button class="btn sm" data-a="msg">' + I('mail') + 'Messages</button><button class="btn sm" data-a="dup" title="Duplicate">' + I('copy') + '</button><button class="btn sm danger" data-a="del" title="Delete">' + I('trash') + '</button></div></div>');
       c.addEventListener('click', async (ev) => {
         const b = ev.target.closest('[data-a]'); const a = b ? b.dataset.a : (ev.target.closest('.thumb') ? 'edit' : null);
         if (a === 'edit') openEditor(r.id);
         if (a === 'view') window.open(Store.viewUrl(r), '_blank');
         if (a === 'msg') showMessages(r);
+        if (a === 'hub') WB.openHub(r);
         if (a === 'dup') {
           try {
             const full = await Store.get(r.id);
@@ -5279,6 +5404,308 @@ WB.AI_DEMO_PLAN = function (a) {
   }
   window.addEventListener('error', (e) => { console.error(e.error || e.message); });
   boot();
+  WB.__hub = { Store, modal, toast, confirmBox, esc, frag, $, $$, I, pickImages, uploadFiles, CFG };
+})();
+
+/* =====================================================================
+   Webescapade Site Builder — Business hub: Insights, Customers, Email
+   Insights: Platinum. Customers + Email: Platinum with a verified
+   Restaurant / Service / Trade Deluxe booking connection that the owner runs.
+   ===================================================================== */
+(function () {
+  'use strict';
+  const D = () => WB.__hub;
+  const fmtN = (n) => Number(n || 0).toLocaleString('en-AU');
+  const money = (c) => '$' + (Number(c || 0) / 100).toLocaleString('en-AU', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const day = (d) => { if (!d) return '—'; const x = new Date(d); return isNaN(x) ? '—' : x.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); };
+  const SYS = { restaurant: 'Restaurant Deluxe', service: 'Service Deluxe', trades: 'Trade Deluxe' };
+  const ACT = { book: ['📅', 'Booking buttons'], call: ['📞', 'Phone calls'], email: ['✉️', 'Email links'], chat: ['💬', 'AI chat opened'], shop: ['🛍️', 'Shop & cart'], menu: ['☰', 'Menu & page links'], map: ['📍', 'Map & directions'], social: ['👍', 'Social media'], link: ['🔗', 'Other websites'], button: ['👆', 'Other buttons'] };
+  const SRC = { website: 'Website', booking: 'Booking', shop: 'Shop' };
+
+  /* ---------------- email (same layout as the builder-email function) ---------------- */
+  WB.hubEmailHtml = function (c, biz, first) {
+    const esc = WB.esc;
+    const fill = (t) => esc(t).replace(/\{first_name\}/g, esc(first || 'there'));
+    const accent = /^#[0-9a-f]{6}$/i.test(c.accent || '') ? c.accent : '#5b4bd6';
+    const paras = String(c.message || '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
+      .map((p) => '<p style="margin:0 0 16px;font:16px/1.6 Arial,Helvetica,sans-serif;color:#2b2b33">' + fill(p).replace(/\n/g, '<br>') + '</p>').join('');
+    const btn = c.button_text && c.button_url ? '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 6px"><tr><td style="border-radius:999px;background:' + accent + '"><a href="' + esc(c.button_url) + '" style="display:inline-block;padding:14px 26px;font:bold 16px Arial,Helvetica,sans-serif;color:#ffffff;text-decoration:none;border-radius:999px">' + esc(c.button_text) + '</a></td></tr></table>' : '';
+    const img = c.image ? '<tr><td><img src="' + esc(c.image) + '" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>' : '';
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f3f2f7">' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f2f7"><tr><td align="center" style="padding:24px 12px">' +
+      '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden">' +
+      '<tr><td style="padding:22px 32px;border-bottom:4px solid ' + accent + ';font:bold 20px Arial,Helvetica,sans-serif;color:#17142b">' + esc(biz.name) + '</td></tr>' + img +
+      '<tr><td style="padding:30px 32px 26px">' + (c.headline ? '<h1 style="margin:0 0 18px;font:bold 28px/1.2 Arial,Helvetica,sans-serif;color:#17142b">' + fill(c.headline) + '</h1>' : '') + paras + btn + '</td></tr>' +
+      '<tr><td style="padding:20px 32px 26px;background:#faf9fc;border-top:1px solid #ece9f3;font:13px/1.6 Arial,Helvetica,sans-serif;color:#6b6880"><b style="color:#2b2b33">' + esc(biz.name) + '</b> · ' + esc(biz.site.replace(/^https:\/\//, '')) +
+      '<br>You are receiving this because you asked to hear from ' + esc(biz.name) + '. Reply to this email to contact us.<br><u>Unsubscribe</u></td></tr></table></td></tr></table></body></html>';
+  };
+
+  /* ---------------- demo data (demo mode only) ---------------- */
+  WB.HUB_DEMO_CONTACTS = function () {
+    const P = [['Olivia Chen', 'olivia.chen@example.com', ['booking', 'website'], 4, 1, 0, true, 'website form'], ['James Walker', 'jwalker@example.com', ['booking'], 2, 0, 0, false, ''],
+      ['Priya Sharma', 'priya.s@example.com', ['shop', 'booking'], 1, 0, 1, true, 'shop checkout'], ['Lucas Martin', 'lucas.m@example.com', ['website'], 0, 2, 0, true, 'website form'],
+      ['Emma Wilson', 'emma.wilson@example.com', ['booking'], 6, 0, 0, true, 'added by owner'], ['Noah Brown', 'noah.b@example.com', ['booking'], 1, 0, 0, false, ''],
+      ['Mia Nguyen', 'mia.nguyen@example.com', ['shop'], 0, 0, 2, false, ''], ['Jack Taylor', 'jack.t@example.com', ['booking', 'website'], 3, 1, 0, true, 'website form']];
+    return P.map((p, i) => ({ id: 'demo' + i, name: p[0], email: p[1], phone: i % 3 ? '04' + (12000000 + i * 734521) : '', sources: p[2], bookings: p[3], messages: p[4], orders: p[5], spent_cents: p[5] * 6000,
+      subscribed: p[6], consent_source: p[7], consent_at: p[6] ? new Date(Date.now() - i * 864e5 * 9).toISOString() : null, unsub_at: i === 5 ? new Date(Date.now() - 864e5 * 3).toISOString() : null,
+      first_seen: new Date(Date.now() - (120 - i * 9) * 864e5).toISOString(), last_seen: new Date(Date.now() - (i * 5 + 1) * 864e5).toISOString(), notes: '' }));
+  };
+  WB.HUB_DEMO_INSIGHTS = function (days) {
+    const d = days || 30, series = []; let v = 0, p = 0, c = 0;
+    for (let i = d - 1; i >= 0; i--) {
+      const dt = new Date(Date.now() - i * 864e5), w = dt.getDay(), base = 18 + Math.round(9 * Math.sin((d - i) / 3)) + (w === 5 || w === 6 ? 14 : 0);
+      const vv = Math.max(4, base), pp = Math.round(vv * 2.3), cc = Math.round(vv * 0.6);
+      v += vv; p += pp; c += cc; series.push({ day: dt.toISOString().slice(0, 10), visits: vv, views: pp, clicks: cc });
+    }
+    return { days: d, visits: v, views: p, clicks: c, series,
+      pages: [{ path: '/', n: Math.round(p * 0.52) }, { path: '/menu', n: Math.round(p * 0.24) }, { path: '/about', n: Math.round(p * 0.12) }, { path: '/contact', n: Math.round(p * 0.08) }],
+      sources: [{ src: 'google.com', n: Math.round(v * 0.46) }, { src: 'direct', n: Math.round(v * 0.28) }, { src: 'instagram.com', n: Math.round(v * 0.14) }, { src: 'facebook.com', n: Math.round(v * 0.09) }],
+      devices: [{ device: 'phone', n: Math.round(v * 0.71) }, { device: 'computer', n: Math.round(v * 0.22) }, { device: 'tablet', n: Math.round(v * 0.07) }],
+      actions: [{ cat: 'book', n: Math.round(c * 0.38) }, { cat: 'menu', n: Math.round(c * 0.24) }, { cat: 'call', n: Math.round(c * 0.13) }, { cat: 'chat', n: Math.round(c * 0.1) }, { cat: 'map', n: Math.round(c * 0.08) }, { cat: 'shop', n: Math.round(c * 0.07) }],
+      buttons: [{ label: 'Book a table', cat: 'book', n: Math.round(c * 0.3) }, { label: 'View menu', cat: 'menu', n: Math.round(c * 0.17) }, { label: 'Call us', cat: 'call', n: Math.round(c * 0.13) }, { label: 'Get directions', cat: 'map', n: Math.round(c * 0.08) }] };
+  };
+  WB.HUB_DEMO_DRAFT = function (brief) {
+    return { subject: 'Something new is on the menu', preheader: 'A quick note from us — we would love to see you soon.', headline: 'Hello {first_name}, it’s been a while!',
+      message: 'We wanted to share a little news: ' + String(brief || 'our new season menu has arrived').replace(/\.$/, '') + '.\n\nCome in and try it — we have saved you a seat.\n\nSee you soon!', button_text: 'Book a table' };
+  };
+
+  /* ---------------- hub shell ---------------- */
+  WB.openHub = async function (row, tab) {
+    const { Store, modal, esc, $ } = D();
+    const m = modal('<div class="hub"><div class="hub-h"><div><span class="hub-k">Business hub</span><h2>' + esc(row.name) + '</h2></div>' +
+      '<div class="hub-tabs"><button data-t="insights">' + D().I('chart') + 'Insights</button><button data-t="customers">' + D().I('users') + 'Customers</button><button data-t="email">' + D().I('mail') + 'Email</button></div>' +
+      '<button class="btn ghost sm hub-x" data-x>Close</button></div><div class="hub-b"><div class="spin"></div></div></div>', { wide: true });
+    m.querySelector('.modal').classList.add('hubm');
+    $('[data-x]', m).onclick = () => m.close();
+    let acc;
+    try { acc = await Store.hubAccess(row.id); } catch (e) { $('.hub-b', m).innerHTML = '<p class="hub-err">' + esc(e.message) + '</p>'; return; }
+    let draft = row.draft;
+    if (!draft) { try { draft = (await Store.get(row.id)).draft; } catch (e) { draft = null; } }
+    const ctx = { row, acc, m, body: $('.hub-b', m), site: draft ? WB.normalizeSite(WB.clone(draft)) : null };
+    const show = (t) => {
+      m.querySelectorAll('.hub-tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+      ctx.body.innerHTML = '<div class="spin"></div>';
+      (t === 'customers' ? customers : t === 'email' ? email : insights)(ctx);
+    };
+    m.querySelectorAll('.hub-tabs button').forEach((b) => { b.onclick = () => show(b.dataset.t); });
+    show(tab || 'insights');
+  };
+
+  function locked(ctx, what) {
+    const { esc } = D(), a = ctx.acc || {};
+    let h, p, cta = '';
+    if (!a.platinum) {
+      h = what === 'insights' ? 'See who visits your website' : 'Your customers, all in one place';
+      p = what === 'insights' ? 'Insights shows how many people visit, where they come from, and which buttons they press — bookings, calls, directions and more. It’s part of <b>Platinum</b>.'
+        : 'With <b>Platinum</b> and a Webescapade booking system, every booking, enquiry and shop order becomes a customer you can email with news and offers.';
+      cta = '<a class="btn pri" target="_blank" rel="noopener" href="https://webescapade.com/site-builder/#pricing">See Platinum</a>';
+    } else if (a.reason === 'booking') {
+      h = 'Connect your booking system first';
+      p = 'Customers and Email work with <b>Restaurant Deluxe</b>, <b>Service Deluxe</b> or <b>Trade Deluxe</b>. In the editor, open <b>Extras → Bookings</b>, choose your system, enter your business code, press <b>Test connection</b>, then <b>Publish</b>.';
+      cta = '<a class="btn ghost" target="_blank" rel="noopener" href="https://webescapade.com/site-builder/#platinum">About the booking systems</a>';
+    } else if (a.reason === 'unknown') {
+      h = 'We couldn’t find that business';
+      p = 'The business code <b>' + esc(a.code || '') + '</b> isn’t a Webescapade booking system. Check it in <b>Extras → Bookings</b> and press <b>Test connection</b>.';
+    } else {
+      h = 'Is this your business?';
+      p = 'Your website is connected to <b>' + esc(a.venue || a.code || '') + '</b> (' + esc(SYS[a.system] || 'booking system') + '). To protect customer details, sign in to the Site Builder with the <b>same email</b> you use for ' + esc(SYS[a.system] || 'your booking system') + ', or ask Marc to link your accounts.';
+      cta = '<a class="btn ghost" href="mailto:marc@webescapade.com?subject=Link%20my%20Site%20Builder%20to%20my%20booking%20system">Email Marc</a>';
+    }
+    ctx.body.innerHTML = '<div class="hub-lock"><div class="hub-lock-i">' + D().I(what === 'insights' ? 'chart' : 'users') + '</div><h3>' + h + '</h3><p>' + p + '</p><div class="acts" style="justify-content:center">' + cta + '</div></div>';
+  }
+
+  /* ---------------- Insights ---------------- */
+  async function insights(ctx, days) {
+    const { Store, esc } = D();
+    if (!ctx.acc.insights) return locked(ctx, 'insights');
+    days = days || ctx.days || 30; ctx.days = days;
+    let d;
+    try { d = await Store.insights(ctx.row.id, days); } catch (e) { ctx.body.innerHTML = '<p class="hub-err">' + esc(e.message) + '</p>'; return; }
+    const act = (d.actions || []), bk = (act.find((x) => x.cat === 'book') || {}).n || 0;
+    const ser = d.series || [], max = Math.max(1, ...ser.map((x) => x.visits));
+    const bars = ser.map((x) => '<div class="hb" title="' + esc(day(x.day)) + ': ' + x.visits + ' visits, ' + x.clicks + ' clicks"><i style="height:' + Math.max(2, Math.round(x.visits / max * 100)) + '%"></i></div>').join('');
+    const list = (rows, key, lab) => { const t = Math.max(1, ...rows.map((r) => r.n)); return rows.length ? rows.map((r) => '<div class="hl"><span>' + lab(r) + '</span><b>' + fmtN(r.n) + '</b><i style="width:' + Math.round(r.n / t * 100) + '%"></i></div>').join('') : '<p class="muted sm">Nothing yet.</p>'; };
+    const pg = (p) => p === '/' ? 'Home page' : esc(p.replace(/^\//, '').replace(/-/g, ' ') || 'Home page');
+    const src = (s) => s === 'direct' ? 'Typed the address or a bookmark' : esc(s.replace(/\.com$/, '').replace(/^./, (c) => c.toUpperCase()) + (/\./.test(s) ? '' : ''));
+    const empty = !d.views;
+    ctx.body.innerHTML =
+      '<div class="hub-bar"><div class="seg">' + [7, 30, 90].map((n) => '<button data-d="' + n + '" class="' + (n === days ? 'on' : '') + '">' + n + ' days</button>').join('') + '</div>' +
+      (ctx.acc.demo ? '<span class="hub-demo">Sample numbers</span>' : '') + '</div>' +
+      (empty ? '<div class="hub-note">No visits yet. Numbers appear here as soon as people visit your <b>published</b> website — usually within a minute.</div>' : '') +
+      '<div class="kpis"><div><span>Visits</span><b>' + fmtN(d.visits) + '</b></div><div><span>Pages viewed</span><b>' + fmtN(d.views) + '</b></div><div><span>Button clicks</span><b>' + fmtN(d.clicks) + '</b></div><div class="hi"><span>Booking clicks</span><b>' + fmtN(bk) + '</b></div></div>' +
+      '<div class="hcard"><h4>Visits per day</h4><div class="hbars">' + bars + '</div><div class="hbars-x"><span>' + esc(day(ser[0] && ser[0].day)) + '</span><span>Today</span></div></div>' +
+      '<div class="hgrid"><div class="hcard"><h4>What visitors did</h4>' + list(act, 'cat', (r) => (ACT[r.cat] || ACT.button)[0] + ' ' + (ACT[r.cat] || ACT.button)[1]) + '</div>' +
+      '<div class="hcard"><h4>Most-pressed buttons</h4>' + list(d.buttons || [], 'label', (r) => esc(r.label)) + '</div>' +
+      '<div class="hcard"><h4>Where visitors came from</h4>' + list(d.sources || [], 'src', (r) => src(r.src)) + '</div>' +
+      '<div class="hcard"><h4>Most-viewed pages</h4>' + list(d.pages || [], 'path', (r) => pg(r.path)) + '</div>' +
+      '<div class="hcard"><h4>Phone or computer</h4>' + list(d.devices || [], 'device', (r) => ({ phone: '📱 Phone', tablet: '📲 Tablet', computer: '💻 Computer' }[r.device] || esc(r.device))) + '</div>' +
+      '<div class="hcard hint"><h4>About these numbers</h4><p class="muted sm">No cookies and no personal details. A visit is one person browsing your site in one browser tab. Visitors who ask their browser not to be tracked are not counted, and your own visits are included.</p></div></div>';
+    ctx.body.querySelectorAll('[data-d]').forEach((b) => { b.onclick = () => { ctx.body.innerHTML = '<div class="spin"></div>'; insights(ctx, +b.dataset.d); }; });
+  }
+
+  /* ---------------- Customers ---------------- */
+  async function customers(ctx) {
+    const { Store, esc, toast } = D();
+    if (!ctx.acc.crm) return locked(ctx, 'crm');
+    try { await Store.crmSync(ctx.row.id); } catch (e) { toast(e.message, 'bad', 5000); }
+    let all;
+    try { all = await Store.contacts(ctx.row.id); } catch (e) { ctx.body.innerHTML = '<p class="hub-err">' + esc(e.message) + '</p>'; return; }
+    ctx.contacts = all;
+    let f = 'all', q = '';
+    ctx.body.innerHTML =
+      '<div class="hub-note ok">Connected to <b>' + esc(ctx.acc.venue || '') + '</b> (' + esc(SYS[ctx.acc.system] || '') + '). Customers come from bookings, website messages, AI chat and shop orders, and update each time you open this screen.' + (ctx.acc.demo ? ' <b>Sample customers.</b>' : '') + '</div>' +
+      '<div class="hub-bar"><input class="inp" placeholder="Search name, email or phone" id="hq"><div class="seg" id="hf">' +
+      [['all', 'All'], ['sub', 'Get emails'], ['booking', 'Bookings'], ['website', 'Website'], ['shop', 'Shop']].map((x) => '<button data-f="' + x[0] + '"' + (x[0] === 'all' ? ' class="on"' : '') + '>' + x[1] + '</button>').join('') +
+      '</div><button class="btn sm ghost" id="hcsv">Export CSV</button></div>' +
+      '<div class="kpis sm"><div><span>Customers</span><b>' + fmtN(all.length) + '</b></div><div class="hi"><span>Happy to get emails</span><b>' + fmtN(all.filter((c) => c.subscribed).length) + '</b></div><div><span>From bookings</span><b>' + fmtN(all.filter((c) => (c.sources || []).indexOf('booking') >= 0).length) + '</b></div><div><span>New this month</span><b>' + fmtN(all.filter((c) => c.first_seen && Date.now() - new Date(c.first_seen) < 30 * 864e5).length) + '</b></div></div>' +
+      '<div class="ctab"><div class="ctr th"><span>Name</span><span>Contact</span><span>History</span><span>Last seen</span><span>Emails</span></div><div id="crows"></div></div>';
+    const rowsEl = ctx.body.querySelector('#crows');
+    const status = (c) => c.unsub_at ? '<em class="st no">Unsubscribed</em>' : c.subscribed ? '<em class="st yes">✓ Yes</em>' : '<em class="st">Not asked</em>';
+    const hist = (c) => [c.bookings ? c.bookings + ' booking' + (c.bookings > 1 ? 's' : '') : '', c.messages ? c.messages + ' message' + (c.messages > 1 ? 's' : '') : '', c.orders ? c.orders + ' order' + (c.orders > 1 ? 's' : '') + ' · ' + money(c.spent_cents) : ''].filter(Boolean).join(' · ') || '—';
+    const draw = () => {
+      const qq = q.toLowerCase();
+      const list = all.filter((c) => (f === 'all' || (f === 'sub' ? c.subscribed : (c.sources || []).indexOf(f) >= 0)) && (!qq || [c.name, c.email, c.phone].join(' ').toLowerCase().indexOf(qq) >= 0));
+      rowsEl.innerHTML = list.length ? '' : '<p class="muted" style="padding:18px">' + (all.length ? 'No one matches.' : 'No customers yet. They appear here after their first booking, message or order.') + '</p>';
+      list.slice(0, 500).forEach((c) => {
+        const r = D().frag('<div class="ctr"><span><b>' + esc(c.name || '(no name)') + '</b><small>' + (c.sources || []).map((s) => '<i class="chip">' + esc(SRC[s] || s) + '</i>').join('') + '</small></span><span>' + esc(c.email) + (c.phone ? '<small>' + esc(c.phone) + '</small>' : '') + '</span><span class="sm">' + hist(c) + '</span><span class="sm">' + esc(day(c.last_seen)) + '</span><span>' + status(c) + '</span></div>');
+        r.onclick = () => contactCard(ctx, c, () => { draw(); });
+        rowsEl.appendChild(r);
+      });
+      if (list.length > 500) rowsEl.appendChild(D().frag('<p class="muted sm" style="padding:10px 14px">Showing 500 of ' + list.length + ' — search to narrow it down.</p>'));
+    };
+    ctx.body.querySelector('#hq').oninput = (e) => { q = e.target.value; draw(); };
+    ctx.body.querySelectorAll('[data-f]').forEach((b) => { b.onclick = () => { f = b.dataset.f; ctx.body.querySelectorAll('[data-f]').forEach((x) => x.classList.toggle('on', x === b)); draw(); }; });
+    ctx.body.querySelector('#hcsv').onclick = () => {
+      const cols = ['name', 'email', 'phone', 'sources', 'bookings', 'messages', 'orders', 'spent', 'first_seen', 'last_seen', 'gets_emails', 'notes'];
+      const cell = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+      const csv = [cols.join(',')].concat(all.map((c) => [c.name, c.email, c.phone, (c.sources || []).join(' '), c.bookings, c.messages, c.orders, (c.spent_cents / 100).toFixed(2), c.first_seen, c.last_seen, c.subscribed ? 'yes' : 'no', c.notes].map(cell).join(','))).join('\n');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = (ctx.row.slug || 'customers') + '-customers.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    };
+    draw();
+  }
+
+  function contactCard(ctx, c, redraw) {
+    const { Store, esc, modal, toast, confirmBox, $ } = D();
+    const m = modal('<h2>' + esc(c.name || c.email) + '</h2><p class="muted" style="margin:0 0 14px">' + esc(c.email) + (c.phone ? ' · ' + esc(c.phone) : '') + '</p>' +
+      '<div class="cc-grid"><div><span>First seen</span><b>' + esc(day(c.first_seen)) + '</b></div><div><span>Last seen</span><b>' + esc(day(c.last_seen)) + '</b></div><div><span>Bookings</span><b>' + fmtN(c.bookings) + '</b></div><div><span>Messages</span><b>' + fmtN(c.messages) + '</b></div><div><span>Orders</span><b>' + fmtN(c.orders) + (c.orders ? ' · ' + money(c.spent_cents) : '') + '</b></div><div><span>Emails</span><b>' + (c.unsub_at ? 'Unsubscribed ' + esc(day(c.unsub_at)) : c.subscribed ? 'Yes — ' + esc(c.consent_source || 'agreed') : 'Not asked') + '</b></div></div>' +
+      '<label class="field"><span>Notes (only you see these)</span><textarea class="inp" rows="3" id="cn">' + esc(c.notes || '') + '</textarea></label>' +
+      '<div id="csub"></div>' +
+      '<div class="acts" style="justify-content:space-between"><button class="btn danger sm" id="cdel">Remove</button><span style="display:flex;gap:10px"><button class="btn ghost" data-x>Close</button><button class="btn pri" id="csave">Save</button></span></div>');
+    $('[data-x]', m).onclick = () => m.close();
+    const sub = $('#csub', m);
+    let want = null;
+    if (!c.subscribed && !c.unsub_at) sub.innerHTML = '<label class="hub-check"><input type="checkbox" id="cs"><span>This person told me they’re happy to receive news and offers by email from my business.</span></label>';
+    else if (c.subscribed) sub.innerHTML = '<label class="hub-check"><input type="checkbox" id="cs"><span>Stop sending marketing emails to this person.</span></label>';
+    else sub.innerHTML = '<p class="muted sm">This person unsubscribed. Only they can sign up again, by ticking “Keep me posted” on your website.</p>';
+    const cs = $('#cs', m); if (cs) cs.onchange = () => { want = cs.checked ? !c.subscribed : null; };
+    $('#csave', m).onclick = async () => {
+      const notes = $('#cn', m).value;
+      try { await Store.contactSet(ctx.row.id, c.id, want, notes); c.notes = notes; if (want != null) { c.subscribed = want; if (want) c.consent_source = 'added by owner'; } toast('Saved', 'ok'); m.close(); redraw(); }
+      catch (e) { toast(e.message, 'bad', 5000); }
+    };
+    $('#cdel', m).onclick = async () => {
+      if (!(await confirmBox('Remove ' + (c.name || c.email) + '?', 'They are removed from this list. If they book, message or order again, they will reappear.', 'Remove', true))) return;
+      try { await Store.deleteContact(ctx.row.id, c.id); ctx.contacts.splice(ctx.contacts.indexOf(c), 1); m.close(); customers(ctx); } catch (e) { toast(e.message, 'bad', 5000); }
+    };
+  }
+
+  /* ---------------- Email Studio ---------------- */
+  async function email(ctx, openId) {
+    const { Store, esc, toast } = D();
+    if (!ctx.acc.crm) return locked(ctx, 'crm');
+    let camps, people;
+    try {
+      if (!ctx.contacts) { try { await Store.crmSync(ctx.row.id); } catch (e) { /* show what we have */ } ctx.contacts = await Store.contacts(ctx.row.id); }
+      camps = await Store.campaigns(ctx.row.id);
+    } catch (e) { ctx.body.innerHTML = '<p class="hub-err">' + esc(e.message) + '</p>'; return; }
+    people = ctx.contacts.filter((c) => c.subscribed).length;
+    ctx.body.innerHTML = '<div class="em"><div class="em-side"><button class="btn pri" id="enew" style="width:100%;justify-content:center">' + D().I('plus') + 'New email</button>' +
+      '<p class="muted sm" style="margin:12px 2px 8px"><b style="color:var(--ui-t)">' + fmtN(people) + '</b> customer' + (people === 1 ? '' : 's') + ' happy to get emails</p><div id="elist"></div></div><div class="em-main" id="emain"></div></div>';
+    const listEl = ctx.body.querySelector('#elist');
+    const drawList = (cur) => {
+      listEl.innerHTML = camps.length ? '' : '<p class="muted sm" style="padding:4px">No emails yet.</p>';
+      camps.forEach((c) => {
+        const it = D().frag('<button class="em-it' + (cur && cur.id === c.id ? ' on' : '') + '"><b>' + esc(c.subject || 'Untitled email') + '</b><small>' + (c.status === 'draft' ? 'Draft · ' + esc(day(c.updated_at || c.created_at)) : 'Sent ' + esc(day(c.sent_at)) + ' · ' + fmtN(c.delivered || c.recipients) + ' people') + '</small></button>');
+        it.onclick = () => openCamp(c); listEl.appendChild(it);
+      });
+    };
+    const accent = () => { try { const a = ctx.site && ctx.site.theme && ctx.site.theme.colors && ctx.site.theme.colors.accent; return /^#[0-9a-f]{6}$/i.test(a || '') ? a : '#5b4bd6'; } catch (e) { return '#5b4bd6'; } };
+    const siteUrl = 'https://webescapade.com/sites/?s=' + (ctx.row.slug || '');
+    const biz = { name: ctx.row.name, site: siteUrl };
+    function openCamp(c) {
+      c = c || { subject: '', content: { headline: '', message: '', preheader: '', button_text: '', button_url: siteUrl, image: '' }, status: 'draft' };
+      const k = Object.assign({ preheader: '', headline: '', message: '', button_text: '', button_url: '', image: '' }, c.content || {});
+      const sent = c.status !== 'draft';
+      drawList(c);
+      const main = ctx.body.querySelector('#emain');
+      const fld = (id, lab, v, ph, area) => '<label class="field"><span>' + lab + '</span>' + (area ? '<textarea class="inp" id="' + id + '" rows="7" placeholder="' + esc(ph || '') + '"' + (sent ? ' readonly' : '') + '>' + esc(v || '') + '</textarea>' : '<input class="inp" id="' + id + '" value="' + esc(v || '') + '" placeholder="' + esc(ph || '') + '"' + (sent ? ' readonly' : '') + '>') + '</label>';
+      main.innerHTML = '<div class="em-ed"><div class="em-form">' +
+        (sent ? '<div class="hub-note ok">Sent ' + esc(day(c.sent_at)) + ' to ' + fmtN(c.recipients) + ' people · ' + fmtN(c.delivered) + ' delivered.</div>'
+          : '<div class="em-ai"><input class="inp" id="eb" placeholder="What’s this email about? e.g. our new spring menu starts Friday"><button class="btn sm" id="eai">✨ Write it for me</button></div>') +
+        fld('es', 'Subject', c.subject, 'e.g. Our spring menu is here') + fld('ep', 'Preview text (shown after the subject in the inbox)', k.preheader, 'A short line that makes people open it') +
+        fld('eh', 'Headline', k.headline, 'Hello {first_name}!') + fld('em', 'Message', k.message, 'Write your news. Leave a blank line between paragraphs. {first_name} becomes each person’s first name.', true) +
+        '<div class="em-2">' + fld('ebt', 'Button text', k.button_text, 'Book now') + fld('ebu', 'Button link', k.button_url, 'https://…') + '</div>' +
+        '<div class="em-img"><span>Picture</span><div>' + (k.image ? '<img src="' + esc(k.image) + '" alt="">' : '<em class="muted sm">No picture</em>') + '</div>' + (sent ? '' : '<button class="btn sm ghost" id="eimg">' + (k.image ? 'Change' : 'Add picture') + '</button>' + (k.image ? '<button class="btn sm ghost" id="eimgx">Remove</button>' : '')) + '</div>' +
+        (sent ? '' : '<div class="acts em-acts"><button class="btn danger sm" id="edel"' + (c.id ? '' : ' hidden') + '>Delete</button><span style="flex:1"></span><button class="btn ghost" id="esave">Save draft</button><button class="btn ghost" id="etest">Send me a test</button><button class="btn pri" id="esend">Send to ' + fmtN(people) + '</button></div>') +
+        '</div><div class="em-prev"><div class="em-inbox"><b id="pvs"></b><span id="pvp"></span></div><iframe id="pvf" title="Email preview"></iframe></div></div>';
+      const g = (id) => main.querySelector('#' + id);
+      const read = () => ({ subject: g('es').value.trim(), content: { preheader: g('ep').value, headline: g('eh').value, message: g('em').value, button_text: g('ebt').value.trim(), button_url: g('ebu').value.trim(), image: k.image || '', accent: accent() } });
+      const prev = () => { const r = read(); g('pvs').textContent = r.subject || 'Subject'; g('pvp').textContent = r.content.preheader || ''; g('pvf').srcdoc = WB.hubEmailHtml(Object.assign({}, r.content), biz, 'Sam'); };
+      main.querySelectorAll('input,textarea').forEach((n) => { n.addEventListener('input', () => { clearTimeout(n._t); n._t = setTimeout(prev, 250); }); });
+      prev();
+      if (sent) return;
+      const save = async (quiet) => {
+        const r = read(); if (!r.subject) { toast('Add a subject first.', 'bad'); return null; }
+        if (r.content.button_url && !/^(https:\/\/|mailto:|tel:)/i.test(r.content.button_url)) { toast('The button link should start with https://', 'bad'); return null; }
+        try { const saved = await Store.saveCampaign(ctx.row.id, Object.assign({ id: c.id }, r)); c = saved; const i = camps.findIndex((x) => x.id === saved.id); if (i >= 0) camps[i] = saved; else camps.unshift(saved); drawList(c); g('edel').hidden = false; if (!quiet) toast('Draft saved', 'ok'); return saved; }
+        catch (e) { toast(e.message, 'bad', 5000); return null; }
+      };
+      g('eai').onclick = async () => {
+        const brief = g('eb').value.trim(); if (brief.length < 5) return toast('Tell the AI what the email is about first.', 'bad');
+        const b = g('eai'); b.disabled = true; b.textContent = 'Writing…';
+        try { const r = await Store.emailApi('draft', { site_id: ctx.row.id, brief }); const d = r.content || {}; g('es').value = d.subject || ''; g('ep').value = d.preheader || ''; g('eh').value = d.headline || ''; g('em').value = d.message || ''; if (d.button_text) g('ebt').value = d.button_text; prev(); toast('Draft written — please check every detail before sending.', 'ok', 5000); }
+        catch (e) { toast(e.message, 'bad', 5000); }
+        b.disabled = false; b.textContent = '✨ Write it for me';
+      };
+      g('esave').onclick = () => save();
+      g('etest').onclick = async () => {
+        const r = read(); if (!r.subject) return toast('Add a subject first.', 'bad');
+        const b = g('etest'); b.disabled = true;
+        try { const j = await Store.emailApi('test', { site_id: ctx.row.id, campaign: Object.assign({ subject: r.subject }, r.content) }); toast('Test sent to ' + j.to, 'ok', 5000); } catch (e) { toast(e.message, 'bad', 6000); }
+        b.disabled = false;
+      };
+      g('esend').onclick = async () => {
+        const r = read();
+        if (!r.subject || !r.content.message.trim()) return toast('Add a subject and a message first.', 'bad');
+        if (!people) return toast('No one has agreed to receive emails yet.', 'bad', 5000);
+        const ok = await sendConfirm(people, r.subject); if (!ok) return;
+        const saved = await save(true); if (!saved) return;
+        const b = g('esend'); b.disabled = true; b.textContent = 'Sending…';
+        try { const j = await Store.emailApi('send', { site_id: ctx.row.id, campaign_id: saved.id }); toast('Sent to ' + fmtN(j.sent) + ' people' + (j.failed ? ' (' + j.failed + ' could not be delivered)' : ''), 'ok', 6000); camps = await Store.campaigns(ctx.row.id); openCamp(camps.find((x) => x.id === saved.id) || saved); }
+        catch (e) { toast(e.message, 'bad', 7000); b.disabled = false; b.textContent = 'Send to ' + fmtN(people); }
+      };
+      g('edel').onclick = async () => {
+        if (!c.id || !(await D().confirmBox('Delete this draft?', 'This cannot be undone.', 'Delete', true))) return;
+        try { await Store.deleteCampaign(ctx.row.id, c.id); camps = camps.filter((x) => x.id !== c.id); openCamp(null); } catch (e) { toast(e.message, 'bad'); }
+      };
+      const pick = g('eimg');
+      if (pick) pick.onclick = async () => { const f = await D().pickImages(false); if (!f.length) return; const u = await D().uploadFiles(f, 1400); if (u[0]) { k.image = u[0]; const cur = read(); openCamp(Object.assign({}, c, cur, { content: Object.assign(cur.content, { image: u[0] }) })); } };
+      const rm = g('eimgx'); if (rm) rm.onclick = () => { k.image = ''; const cur = read(); openCamp(Object.assign({}, c, cur, { content: Object.assign(cur.content, { image: '' }) })); };
+    }
+    function sendConfirm(n, subject) {
+      return new Promise((res) => {
+        const { modal, $, esc } = D();
+        const m = modal('<h2>Send “' + esc(subject) + '”?</h2><p class="muted">It goes to <b>' + fmtN(n) + '</b> customer' + (n === 1 ? '' : 's') + ' who agreed to hear from you. Each email includes your business name and an unsubscribe link.</p>' +
+          '<label class="hub-check"><input type="checkbox" id="sc"><span>I’ve checked the test email, and everything in it is correct.</span></label>' +
+          '<div class="acts"><button class="btn ghost" data-x>Cancel</button><button class="btn pri" data-ok disabled>Send now</button></div>');
+        const ok = $('[data-ok]', m); $('#sc', m).onchange = (e) => { ok.disabled = !e.target.checked; };
+        $('[data-x]', m).onclick = () => { m.close(); res(false); };
+        ok.onclick = () => { m.close(); res(true); };
+      });
+    }
+    ctx.body.querySelector('#enew').onclick = () => openCamp(null);
+    openCamp(openId ? camps.find((x) => x.id === openId) : camps.find((x) => x.status === 'draft') || null);
+  }
 })();
 
 </script>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Unsubscribe</title>
+<style>
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f3f2f7;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#2b2b33;padding:20px;box-sizing:border-box}
+.c{background:#fff;border-radius:18px;max-width:460px;width:100%;padding:34px 30px;box-shadow:0 20px 50px -30px rgba(30,20,80,.4);text-align:center}
+h1{font-size:24px;margin:0 0 10px;color:#17142b}p{margin:0 0 18px;color:#55536a}
+button{font:600 16px inherit;font-family:inherit;border:0;border-radius:999px;padding:13px 26px;background:#5b4bd6;color:#fff;cursor:pointer}
+button[disabled]{opacity:.6}small{display:block;margin-top:22px;color:#8a879c;font-size:13px}
+</style></head><body><div class="c" id="c">
+<h1>Unsubscribe</h1><p>Press the button to stop receiving news and offers by email.</p>
+<button id="go" type="button">Unsubscribe me</button>
+<small>You will still receive emails about your own bookings and orders.</small></div>
+<script>
+(function(){
+  var URL_='https://tehxobdokbvqtwtgqzrh.supabase.co', KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE';
+  var t=new URLSearchParams(location.search).get('t')||'', c=document.getElementById('c'), b=document.getElementById('go');
+  function done(name){ c.innerHTML='<h1>You are unsubscribed</h1><p>'+(name?'You will no longer receive news and offers from <b>'+name.replace(/[&<>"]/g,'')+'</b>.':'You will no longer receive these emails.')+'</p><small>Changed your mind? Just tick “Keep me posted” next time you contact them.</small>'; }
+  if(!/^[0-9a-f-]{36}$/i.test(t)){ if(t==='test'||t==='preview'){ b.onclick=function(){ done(''); }; return; } c.innerHTML='<h1>Link not recognised</h1><p>This unsubscribe link looks incomplete. Please reply to the email and ask to be removed.</p>'; return; }
+  b.onclick=function(){
+    b.disabled=true; b.textContent='One moment…';
+    fetch(URL_+'/rest/v1/rpc/builder_unsubscribe',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_token:t})})
+      .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(); done(j&&j.business); }); })
+      .catch(function(){ b.disabled=false; b.textContent='Try again'; });
+  };
+})();
+</script></body></html>
