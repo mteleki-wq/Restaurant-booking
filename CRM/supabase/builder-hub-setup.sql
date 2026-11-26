@@ -156,33 +156,36 @@ begin
     select lower(trim(customer->>'email')), nullif(trim(customer->>'name'), ''), nullif(trim(customer->>'phone'), ''), 'shop', 0, 1, total_cents, 0, coalesce(paid_at, created_at), marketing_ok, 'shop checkout'
       from builder_orders where site_id = p_site and status in ('paid', 'fulfilled')
     union all
-    select lower(trim(email)), nullif(trim(name), ''), nullif(trim(phone), ''), 'booking', 0, 0, 0, 1, booking_date::timestamptz, false, null
+    select lower(trim(email)), nullif(trim(name), ''), nullif(trim(phone), ''), 'booking', 0, 0, 0, 1, created_at, false, null
       from bookings where acc->>'system' = 'restaurant' and venue_id = vid
     union all
-    select lower(trim(client_email)), nullif(trim(client_name), ''), nullif(trim(client_phone), ''), 'booking', 0, 0, 0, 1, starts_at, coalesce(marketing_ok, false), 'booking form'
+    select lower(trim(client_email)), nullif(trim(client_name), ''), nullif(trim(client_phone), ''), 'booking', 0, 0, 0, 1, created_at, coalesce(marketing_ok, false), 'booking form'
       from svc_appointments where acc->>'system' = 'service' and venue_id = vid
     union all
-    select lower(trim(customer_email)), nullif(trim(customer_name), ''), nullif(trim(customer_phone), ''), 'booking', 0, 0, 0, 1, job_date::timestamptz, false, null
+    select lower(trim(customer_email)), nullif(trim(customer_name), ''), nullif(trim(customer_phone), ''), 'booking', 0, 0, 0, 1, created_at, false, null
       from trd_jobs where acc->>'system' = 'trades' and venue_id = vid
   ), agg as (
     select em,
       (array_agg(nm order by at desc) filter (where nm is not null))[1] nm,
       (array_agg(ph order by at desc) filter (where ph is not null))[1] ph,
       array_agg(distinct src) srcs, sum(msg)::int msgs, sum(ord)::int ords, sum(spent)::int spent, sum(bk)::int bks,
-      min(at) first_at, max(at) last_at, bool_or(ok) ok,
+      min(at) first_at, max(at) last_at, bool_or(ok) ok, max(at) filter (where ok) ok_at,
       (array_agg(how order by at) filter (where ok))[1] how
     from raw where em ~ '^[^@\s]+@[^@\s]+\.[^@\s]{2,}$' group by em
   )
   insert into builder_contacts as c (site_id, email, name, phone, sources, messages, orders, spent_cents, bookings, first_seen, last_seen, subscribed, consent_source, consent_at)
-  select p_site, em, nm, ph, srcs, msgs, ords, spent, bks, first_at, last_at, ok, case when ok then how end, case when ok then now() end from agg
+  select p_site, em, nm, ph, srcs, msgs, ords, spent, bks, first_at, last_at, ok, case when ok then how end, case when ok then coalesce(ok_at, now()) end from agg
   on conflict (site_id, email) do update set
     name = coalesce(excluded.name, c.name), phone = coalesce(excluded.phone, c.phone),
     sources = (select array_agg(distinct x) from unnest(c.sources || excluded.sources) x),
     messages = excluded.messages, orders = excluded.orders, spent_cents = excluded.spent_cents, bookings = excluded.bookings,
     first_seen = least(c.first_seen, excluded.first_seen), last_seen = greatest(c.last_seen, excluded.last_seen),
-    subscribed = case when c.unsub_at is not null then false else c.subscribed or excluded.subscribed end,
-    consent_source = case when c.unsub_at is null and not c.subscribed and excluded.subscribed then excluded.consent_source else c.consent_source end,
-    consent_at = case when c.unsub_at is null and not c.subscribed and excluded.subscribed then now() else c.consent_at end,
+    -- someone who unsubscribed stays off the list, unless they later said yes again (e.g. ticked "Keep me posted")
+    subscribed = case when c.unsub_at is not null and not (excluded.subscribed and excluded.consent_at > c.unsub_at) then false
+                      else c.subscribed or excluded.subscribed end,
+    unsub_at = case when excluded.subscribed and excluded.consent_at > c.unsub_at then null else c.unsub_at end,
+    consent_source = case when excluded.subscribed and not c.subscribed and (c.unsub_at is null or excluded.consent_at > c.unsub_at) then excluded.consent_source else c.consent_source end,
+    consent_at = case when excluded.subscribed and not c.subscribed and (c.unsub_at is null or excluded.consent_at > c.unsub_at) then excluded.consent_at else c.consent_at end,
     updated_at = now();
   get diagnostics n = row_count;
   return jsonb_build_object('ok', true, 'touched', n, 'total', (select count(*) from builder_contacts where site_id = p_site));
