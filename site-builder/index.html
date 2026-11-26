@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Website Builder with AI, Bookings &amp; Online Shop | Webescapade</title>
-<meta name="description" content="Build your business website with AI in minutes and change anything yourself. Drag-and-drop editor, online bookings, an AI assistant, a live restaurant menu and a shop. Start free.">
+<title>Website Builder with AI, Bookings, Email &amp; Online Shop | Webescapade</title>
+<meta name="description" content="Build your business website with AI in minutes and change anything yourself. Drag-and-drop editor, online bookings, an AI assistant, a live restaurant menu, a shop, plus insights, a customer list and Email Studio. Start free.">
 <link rel="canonical" href="https://webescapade.com/site-builder/">
 <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
 <meta property="og:site_name" content="Webescapade">
 <meta property="og:locale" content="en_AU">
 <meta property="og:url" content="https://webescapade.com/site-builder/">
-<meta property="og:title" content="Website Builder with AI, Bookings &amp; Online Shop | Webescapade">
+<meta property="og:title" content="Website Builder with AI, Bookings, Email &amp; Online Shop | Webescapade">
 <meta property="og:description" content="AI writes your first draft in under a minute. Then drag anything anywhere, take bookings, answer customers 24/7 and sell online. Start free.">
 <meta property="og:image" content="https://webescapade.com/site-builder/img/og-site-builder.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
@@ -96,7 +96,10 @@
     "AI chat assistant",
     "Online shop with gift vouchers",
     "Automatic phone layout",
-    "Animated welcome screens"
+    "Animated welcome screens",
+    "Website insights: visits, clicks and traffic sources",
+    "Customer list (CRM) from bookings, enquiries and orders",
+    "Email Studio with ready-made ideas and AI writing"
    ],
    "offers": [
     {
@@ -121,6 +124,18 @@
      "url": "https://webescapade.com/site-builder/#plans"
     }
    ]
+  },
+  {
+   "@type": "VideoObject",
+   "@id": "https://webescapade.com/site-builder/#hub-video",
+   "name": "Business Hub: Website Insights, Customer List & Email Studio | Webescapade Site Builder",
+   "description": "See who visits your website and what they do, keep every booking, enquiry and order in one customer list, and send beautiful emails from ready-made ideas, with your own photos, five looks and AI writing.",
+   "thumbnailUrl": "https://webescapade.com/site-builder/img/business-hub-thumb.jpg",
+   "uploadDate": "2026-11-26T19:08:00+11:00",
+   "duration": "PT2M7S",
+   "contentUrl": "https://webescapade.com/site-builder/video/business-hub.mp4",
+   "embedUrl": "https://www.youtube.com/embed/dCuIuJGqv-c",
+   "publisher": { "@id": "https://webescapade.com/#org" }
   },
   {
    "@type": "VideoObject",
@@ -161,7 +176,7 @@
      "name": "How much does it cost?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Building and publishing one website is free. Platinum (bookings + AI assistant, no badge) is $49 a month + GST — or $29 a month + GST if you already use Restaurant, Service, Trade or Function Deluxe. The Shop has no monthly fee: 1.5% per sale plus Stripe’s normal fees. Want us to build it? Setup is $250 + GST, or $400 + GST with bookings, the AI assistant and shop set up too."
+      "text": "Building and publishing one website is free. Platinum (bookings, AI assistant, the Business hub and no badge) is $49 a month + GST — or $29 a month + GST if you already use Restaurant, Service, Trade or Function Deluxe. The Shop has no monthly fee: 1.5% per sale plus Stripe’s normal fees. Want us to build it? Setup is $250 + GST, or $400 + GST with bookings, the AI assistant and shop set up too."
      }
     },
     {
@@ -222,10 +237,18 @@
     },
     {
      "@type": "Question",
-     "name": "What is coming next?",
+     "name": "What is the Business hub?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "A CRM to see all your customers, bookings and orders in one place, then Email Studio so you can send beautiful emails to your own customers. Join the early-access list to be first."
+      "text": "It is part of Platinum. Insights shows how many people visit your website, where they come from and what they press. Customers collects everyone who books, sends a message or buys from you into one list. Email Studio lets you send beautiful emails to them, starting from ready-made ideas for your kind of business, with your own photos, five looks and AI that can write the whole email. Customers and Email Studio work with Restaurant, Service or Trade Deluxe."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Who receives my emails, and is it spam-safe?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Only customers who said yes, by ticking Keep me posted on your website or by telling you directly. Every email shows your business name, replies come straight to you, and every email has an unsubscribe link that works automatically. It is designed around Australia's Spam Act."
      }
     },
     {
@@ -768,9 +791,82 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
 @media(max-width:1000px){.lsn-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.lsn-grid{grid-template-columns:1fr}}
 /*LEARN-CSS-END*/
+/* business hub */
+.hb{background:linear-gradient(180deg,var(--ink) 0%,#160f33 55%,var(--ink) 100%);overflow:hidden;position:relative}
+.hb-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.35),transparent 65%);left:50%;top:-380px;transform:translateX(-50%);pointer-events:none}
+.hb .wrap{position:relative}
+.hb-new{font:800 10px var(--sans);letter-spacing:.14em;color:#1a1240;background:linear-gradient(100deg,#ffd36e,#ff7ab6);padding:5px 9px;border-radius:999px}
+.hb-film{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:34px;align-items:center;margin-bottom:96px}
+.hb-v{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:#000 center/cover no-repeat;border:0;padding:0;cursor:pointer;width:100%;box-shadow:0 40px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.12)}
+.hb-v iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.hb-v .pl{position:absolute;left:18px;bottom:18px;display:flex;align-items:center;gap:10px;font:700 16px var(--sans);color:#fff;background:rgba(14,13,26,.85);padding:9px 18px 9px 9px;border-radius:999px;transition:transform .25s}
+.hb-v:hover .pl{transform:scale(1.04)}
+.hb-v .pl i{width:38px;height:38px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-style:normal;font-size:13px;padding-left:2px;box-shadow:0 0 0 0 rgba(124,92,255,.7);animation:hbp 2.2s infinite}
+@keyframes hbp{70%{box-shadow:0 0 0 14px rgba(124,92,255,0)}100%{box-shadow:0 0 0 0 rgba(124,92,255,0)}}
+.hb-loop{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;position:relative}
+.hb-loop:before{content:"";position:absolute;left:23px;top:24px;bottom:24px;width:2px;background:linear-gradient(var(--v),var(--c),var(--g))}
+.hb-loop li{position:relative;display:grid;grid-template-columns:48px 1fr;column-gap:14px;align-items:center}
+.hb-loop span{grid-row:span 2;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:21px;background:var(--deep2);border:1px solid rgba(255,255,255,.18);position:relative}
+.hb-loop b{font:600 18px var(--sans)}
+.hb-loop small{color:var(--mut2);font-size:14px;line-height:1.4}
+.hb-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:56px;align-items:center;margin-bottom:96px}
+.hb-row.flip .hb-txt{order:2}
+.hb-k{display:inline-flex;align-items:center;gap:10px;font:700 13px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--c);margin-bottom:14px}
+.hb-k i{font-style:normal;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(34,211,238,.12);font-size:17px;letter-spacing:0}
+.hb-txt h3,.hb-h3{font-size:clamp(30px,3.6vw,44px);margin-bottom:16px}
+.hb-txt p{color:var(--mut2);font-size:17px;margin:0 0 20px}
+.hb-l{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.hb-l li{position:relative;padding-left:30px;color:#d9d6f2;font-size:16px;line-height:1.5}
+.hb-l li:before{content:"✓";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;background:rgba(52,211,153,.16);color:var(--g);font:800 11px/20px var(--sans);text-align:center}
+.hb-l.sm li{font-size:15px}
+.hb-shot{margin:0;border-radius:16px;overflow:hidden;background:#0c0b16;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.12);transform:perspective(1600px) rotateY(-4deg);transition:transform .6s}
+.hb-row.flip .hb-shot{transform:perspective(1600px) rotateY(4deg)}
+.hb-shot:hover,.hb-row.flip .hb-shot:hover{transform:none}
+.hb-shot .bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:#1b1930;font:600 12px var(--sans);color:#8f8bb3}
+.hb-shot .bar i{width:10px;height:10px;border-radius:50%;background:#3a3654}
+.hb-shot .bar span{margin-left:10px}
+.hb-shot img{width:100%;height:auto}
+.hb-es{margin-bottom:96px}
+.hb-es .lead{margin:0 auto}
+.hb-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px}
+.hb-tabs button{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#e6e3ff;font:600 15px var(--sans);padding:11px 18px;border-radius:999px;cursor:pointer;transition:background .2s,border-color .2s}
+.hb-tabs button:hover{border-color:rgba(255,255,255,.4)}
+.hb-tabs button.on{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 10px 30px -10px rgba(124,92,255,.8)}
+.hb-pane{display:none;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:center}
+.hb-pane.on{display:grid;animation:hbin .5s ease}
+@keyframes hbin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.hb-pane .hb-shot{transform:none}
+.hb-side h4{font:600 26px/1.15 var(--serif);margin:0 0 12px}
+.hb-side p{color:var(--mut2);margin:0 0 18px}
+.hb-q{font:italic 400 20px/1.4 var(--serif);color:#fff!important;border-left:3px solid var(--c);padding-left:16px}
+.hb-chips{display:flex;flex-wrap:wrap;gap:8px}
+.hb-chips span{font:600 13.5px var(--sans);padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#e6e3ff}
+.hb-phones{display:flex;justify-content:center;gap:26px}
+.hb-ph{width:250px;height:520px;border-radius:40px;padding:10px;background:#0c0c10;box-shadow:0 40px 80px -20px rgba(0,0,0,.9),0 0 0 2px #2b2a36}
+.hb-ph div{width:100%;height:100%;border-radius:31px;overflow:hidden;background:#fff}
+.hb-ph img{width:100%;animation:hbs 10s 1s ease-in-out infinite alternate}
+.hb-ph+.hb-ph{margin-top:44px}.hb-ph+.hb-ph img{animation-delay:2.5s}
+@keyframes hbs{to{transform:translateY(calc(-100% + 500px))}}
+.hb-why{margin-bottom:80px}
+.hb-wg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.hb-w{border-radius:22px;padding:26px;background:rgba(255,255,255,.05);border:1px solid var(--line);transition:transform .3s,border-color .3s}
+.hb-w:hover{transform:translateY(-4px);border-color:rgba(124,92,255,.6)}
+.hb-w span{font-size:28px;display:block;margin-bottom:12px}
+.hb-w b{display:block;font:600 20px var(--sans);margin-bottom:8px}
+.hb-w p{margin:0;color:var(--mut2);font-size:15.5px;line-height:1.55}
+.hb-cta{display:grid;grid-template-columns:minmax(260px,auto) 1fr auto;gap:30px;align-items:center;border-radius:28px;padding:30px 34px;background:linear-gradient(120deg,rgba(124,92,255,.22),rgba(34,211,238,.12));border:1px solid rgba(255,255,255,.16)}
+.hb-cta .pr small{display:block;font:700 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--c)}
+.hb-cta .pr b{display:block;font:600 30px/1.2 var(--serif);margin:6px 0 4px;white-space:nowrap}
+.hb-cta .pr span{display:block;color:var(--mut2);font-size:14px;max-width:300px}
+.hb-cta p b{color:#fff}
+.hb-cta p{margin:0;color:#d9d6f2;font-size:16px}
+.hb-btns{display:flex;flex-direction:column;gap:10px}
+.hb-next{text-align:center;margin:34px 0 0;color:var(--mut2)}.hb-next a{color:#fff;font-weight:600}
+@media(max-width:980px){.hb-film,.hb-row,.hb-pane.on{grid-template-columns:1fr;gap:28px}.hb-row.flip .hb-txt{order:0}.hb-shot,.hb-row.flip .hb-shot{transform:none}.hb-wg{grid-template-columns:1fr 1fr}.hb-cta{grid-template-columns:1fr}.hb-btns{flex-direction:row;flex-wrap:wrap}}
+@media(max-width:620px){.hb-wg{grid-template-columns:1fr}.hb-ph{width:200px;height:420px}.hb-ph+.hb-ph{margin-top:30px}@keyframes hbs{to{transform:translateY(calc(-100% + 400px))}}.hb-tabs button{font-size:13.5px;padding:9px 13px}.hb-film,.hb-row{margin-bottom:64px}}
 </style>
 </head>
-<body data-link-builder="https://webescapade.com/builder/" data-link-demo="https://webescapade.com/Restaurant/demo.html" data-link-platinum="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website" data-link-shop="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20my%20website" data-link-wait="mailto:marc@webescapade.com?subject=Early%20access%3A%20CRM%20%26%20Email%20Studio" data-phone="0413 872 994" data-email="marc@webescapade.com">
+<body data-link-builder="https://webescapade.com/builder/" data-link-demo="https://webescapade.com/Restaurant/demo.html" data-link-platinum="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website" data-link-shop="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20my%20website" data-link-wait="mailto:marc@webescapade.com?subject=Platinum%20%2B%20Business%20hub%20for%20my%20website" data-phone="0413 872 994" data-email="marc@webescapade.com">
 
 <header class="nav" id="nav">
   <div class="wrap">
@@ -779,10 +875,11 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
       <li><a href="#try">Try it</a></li>
       <li><a href="#tour">Videos</a></li>
       <li><a href="#new">New</a></li>
+      <li><a href="#hub">Business hub</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#platinum">Platinum</a></li>
       <li><a href="#shop">Shop</a></li>
-      <li><a href="#learn">Learn</a></li><li><a href="#next">Coming soon</a></li>
+      <li><a href="#learn">Learn</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
     <a class="btn pri navcta" href="https://webescapade.com/builder/">Start building free <span class="arrow">→</span></a>
@@ -795,7 +892,7 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
   <div class="aur"><i></i><i></i><i></i></div><div class="gridlines"></div><div class="grain"></div>
   <div class="wrap">
     <div>
-      <div class="pill rv"><b>NEW</b> You asked. We listened. Now it’s here.</div>
+      <a class="pill rv" href="#hub" style="text-decoration:none"><b>NEW</b> Business hub: insights, customers &amp; Email Studio →</a>
       <h1 class="rv d1"><span class="l">Build your own website.</span> <em>Put anything, anywhere.</em></h1>
       <p class="lead rv d2">A website builder made for real businesses. Drag text, photos and buttons exactly where you want them, add an animated welcome screen — and switch on bookings, an AI assistant and an online shop when you are ready.</p>
       <div class="ctas rv d3">
@@ -914,6 +1011,104 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
     </div>
   </div>
 </section>
+
+<!-- BUSINESS HUB -->
+<section class="s dark hb" id="hub">
+  <div class="hb-glow"></div>
+  <div class="wrap">
+    <div class="head c rv">
+      <div class="eyebrow"><span class="hb-new">NEW</span> Business hub · included in Platinum</div>
+      <h2>Your website brings them in. <em>Now bring them back.</em></h2>
+      <p class="lead">See who visits and what they do. Keep every customer in one list. Then send beautiful emails that fill your tables, your appointment book and your function rooms, all from the same place you edit your website.</p>
+    </div>
+
+    <div class="hb-film rv">
+      <button class="hb-v" type="button" id="hubPlay" aria-label="Play the Business hub video, 2 minutes" style="background-image:url(/site-builder/img/business-hub-thumb.jpg)"><span class="pl"><i>▶</i>Watch the Business hub · 2 min</span></button>
+      <ol class="hb-loop">
+        <li><span>👀</span><b>They visit</b><small>Insights shows where they came from and what they pressed.</small></li>
+        <li><span>📅</span><b>They book, ask or buy</b><small>Bookings, enquiries, AI chat and shop orders.</small></li>
+        <li><span>👥</span><b>They become your customer</b><small>Saved automatically, with their history.</small></li>
+        <li><span>✉️</span><b>You share your news</b><small>A new menu, a new room, a special night.</small></li>
+        <li><span>🔁</span><b>They come back</b><small>And the loop starts again.</small></li>
+      </ol>
+    </div>
+
+    <div class="hb-row rv">
+      <div class="hb-txt">
+        <div class="hb-k"><i>📊</i>Insights</div>
+        <h3>Know what your website is really doing.</h3>
+        <p>How many people visited this week, where they came from, and what they did next. No guessing, no complicated reports, nothing to install.</p>
+        <ul class="hb-l"><li><b>Visits per day</b> over 7, 30 or 90 days</li><li><b>What visitors did:</b> booking clicks, phone calls, directions, AI chat, shop</li><li><b>Where they came from:</b> Google, Instagram, Facebook, or typed your address</li><li><b>Most-viewed pages</b> and <b>phone or computer</b></li><li><b>No cookies</b> and no personal details collected</li></ul>
+      </div>
+      <figure class="hb-shot"><div class="bar"><i></i><i></i><i></i><span>Business hub · Insights</span></div><img src="/site-builder/img/hub/insights.jpg" alt="Business hub Insights: visits, booking clicks, where visitors came from and most-pressed buttons" loading="lazy" width="1400" height="1032"></figure>
+    </div>
+
+    <div class="hb-row flip rv">
+      <div class="hb-txt">
+        <div class="hb-k"><i>👥</i>Customers</div>
+        <h3>Every customer, in one list. <em>Automatically.</em></h3>
+        <p>Every booking from Restaurant, Service or Trade Deluxe, every website message, AI chat enquiry and shop order becomes a customer. You can see who they are, how often they come and how much they’ve spent, without typing a thing.</p>
+        <ul class="hb-l"><li><b>One customer, one record,</b> matched by email</li><li><b>See who said yes</b> to news and offers, with a “Keep me posted” tick on your website</li><li><b>Private notes,</b> search, filters and export to a spreadsheet</li><li><b>Your list, not a social network’s:</b> you own it</li></ul>
+      </div>
+      <figure class="hb-shot"><div class="bar"><i></i><i></i><i></i><span>Business hub · Customers</span></div><img src="/site-builder/img/hub/customers.jpg" alt="Business hub customer list with bookings, messages, orders and email consent" loading="lazy" width="1400" height="1032"></figure>
+    </div>
+
+    <div class="hb-es rv">
+      <div class="head c" style="margin-bottom:34px">
+        <div class="hb-k" style="justify-content:center"><i>✉️</i>Email Studio</div>
+        <h3 class="hb-h3">Your news, in their inbox. <em>In five minutes.</em></h3>
+        <p class="lead">No designer, no blank page. Pick an idea made for your kind of business, and it arrives filled in with your name, your booking button and photos from your own website.</p>
+      </div>
+      <div class="hb-tabs" role="tablist">
+        <button class="on" data-hbt="0" type="button">💡 Ideas for your business</button>
+        <button data-hbt="1" type="button">🧩 Photos &amp; sections</button>
+        <button data-hbt="2" type="button">✨ AI writes it for you</button>
+        <button data-hbt="3" type="button">📱 Beautiful on every phone</button>
+      </div>
+      <div class="hb-panes">
+        <div class="hb-pane on">
+          <figure class="hb-shot"><div class="bar"><i></i><i></i><i></i><span>Email Studio · Ideas</span></div><img src="/site-builder/img/hub/ideas.jpg" alt="Email ideas for a function venue: new room, weddings, end-of-year parties, conferences and more" loading="lazy" width="1400" height="1032"></figure>
+          <div class="hb-side"><h4>Ideas that fit your business</h4><p>Restaurants, cafés, function venues, salons, spas, clinics, tradies and shops each get their own ideas, plus the ones that suit everyone.</p>
+            <div class="hb-chips"><span>🍽️ Our new menu</span><span>🏛️ Introducing our new room</span><span>🎶 A special night</span><span>🎄 Christmas &amp; New Year</span><span>💍 Wedding season</span><span>✨ New treatment</span><span>🛠️ Seasonal check-up</span><span>🛍️ New product</span><span>🎟️ Gift vouchers</span><span>💛 We miss you</span><span>⏰ Holiday hours</span></div></div>
+        </div>
+        <div class="hb-pane">
+          <figure class="hb-shot"><div class="bar"><i></i><i></i><i></i><span>Email Studio · Editor</span></div><img src="/site-builder/img/hub/editor.jpg" alt="Email editor with sections and a live preview in the Cream and terracotta look" loading="lazy" width="1400" height="949"></figure>
+          <div class="hb-side"><h4>More than one photo. More than one story.</h4><p>Stack the sections you need, move them up or down, and watch the preview update as you type.</p>
+            <ul class="hb-l sm"><li>Picture + text, left or right</li><li>A row of two or three photos</li><li>Three highlights, with photos</li><li>An offer box with its own button</li><li><b>Five looks:</b> your website colours, cream &amp; terracotta, olive, soft sage, midnight &amp; gold</li></ul></div>
+        </div>
+        <div class="hb-pane">
+          <figure class="hb-shot"><div class="bar"><i></i><i></i><i></i><span>Email Studio · Write it for me</span></div><img src="/site-builder/img/hub/ai.jpg" alt="AI-written Christmas parties email in the Midnight and gold look" loading="lazy" width="1400" height="949"></figure>
+          <div class="hb-side"><h4>Say it in one sentence.</h4><p class="hb-q">“Christmas parties in our new Crystal Room, up to 60 guests.”</p><p>AI writes the whole email: subject, headline, sections and sign-off, with photos picked from your website. It never makes up prices or dates. Anything it doesn’t know is left in [brackets] for you to fill in, and you can’t send until you do.</p></div>
+        </div>
+        <div class="hb-pane">
+          <div class="hb-phones"><div class="hb-ph"><div><img src="/site-builder/img/hub/phone-room.jpg" alt="A new function room email on a phone" loading="lazy"></div></div><div class="hb-ph"><div><img src="/site-builder/img/hub/phone-xmas.jpg" alt="A Christmas parties email on a phone" loading="lazy"></div></div></div>
+          <div class="hb-side"><h4>Test it. Then send it in one tap.</h4><p>Send yourself a test first, then send to every customer who said yes. Emails are built to display well in Gmail, Outlook and Apple Mail, on phones and computers.</p>
+            <ul class="hb-l sm"><li>Every email shows your business name, and replies come straight to you</li><li>An unsubscribe link in every email, handled automatically</li><li>Only customers who said yes ever receive your emails</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hb-why rv">
+      <div class="head c" style="margin-bottom:34px"><div class="eyebrow">What it means for your business</div><h3 class="hb-h3">Less guessing. <em>More regulars.</em></h3></div>
+      <div class="hb-wg">
+        <div class="hb-w"><span>🌙</span><b>Fill the quiet nights</b><p>A midweek offer or a special night, sent to people who already love you, can get bookings moving the same day.</p></div>
+        <div class="hb-w"><span>🚀</span><b>Launch new things properly</b><p>A new menu, a new room, a new treatment: tell your customers first, with photos, the day it’s ready.</p></div>
+        <div class="hb-w"><span>🎯</span><b>Know what works</b><p>See which buttons people press and where they come from, so you spend your time on what brings bookings.</p></div>
+        <div class="hb-w"><span>🔒</span><b>Own your customer list</b><p>Your customers stay with you, not on a social network that decides who sees your posts.</p></div>
+        <div class="hb-w"><span>⏱️</span><b>Save hours every month</b><p>Ready-made ideas and AI writing mean a great email takes minutes, not an evening.</p></div>
+        <div class="hb-w"><span>🧩</span><b>One system, not five</b><p>Website, bookings, customer list and email together. No separate email, analytics or CRM subscriptions to juggle.</p></div>
+      </div>
+    </div>
+
+    <div class="hb-cta rv">
+      <div class="pr"><small>Included in Platinum</small><b>$49 / month + GST</b><span>$29 / month + GST for Restaurant, Service, Trade and Function Deluxe clients</span></div>
+      <p>Insights work on any Platinum website. Customers and Email Studio connect to your Webescapade booking system: <b>Restaurant Deluxe</b>, <b>Service Deluxe</b> or <b>Trade Deluxe</b>.</p>
+      <div class="hb-btns"><a class="btn pri" href="mailto:marc@webescapade.com?subject=Platinum%20%2B%20Business%20hub%20for%20my%20website">Get Platinum + Business hub <span class="arrow">→</span></a><a class="btn ghost" href="https://webescapade.com/Restaurant/demo.html">Book a free Zoom demo</a></div>
+    </div>
+    <p class="hb-next rv">What should we build next? <a href="mailto:marc@webescapade.com?subject=An%20idea%20for%20the%20Site%20Builder">Tell Marc, he reads every email →</a></p>
+  </div>
+</section>
+
 
 <!-- HOW -->
 <section class="s how" id="how">
@@ -1078,44 +1273,7 @@ footer a{color:#c9c5e6;text-decoration:none}footer nav{display:flex;flex-wrap:wr
   </div>
 </section>
 
-<!-- COMING NEXT -->
-<section class="s dark next" id="next">
-  <div class="wrap">
-    <div class="head c rv">
-      <div class="eyebrow">Coming soon</div>
-      <h2>We’re not stopping here. <em>Here’s what’s next.</em></h2>
-      <p class="lead">You asked for one place to run your website, your customers and your marketing. That is exactly where we are going.</p>
-    </div>
-    <div class="road">
-      <div class="rn done rv"><div class="dot">✓</div><small>Live now</small><h3>Site Builder</h3><p>Design, publish, Platinum bookings &amp; AI assistant, plus the Shop add-on.</p></div>
-      <div class="rn soon rv d1"><div class="dot">👥</div><small>Coming next</small><h3>CRM</h3><p>Every customer, booking, order and message in one place.</p></div>
-      <div class="rn soon rv d2"><div class="dot">✉️</div><small>Then</small><h3>Email Studio</h3><p>Beautiful campaigns to your own customers, right from your website.</p></div>
-    </div>
-    <div class="ngrid">
-      <div class="ncard rv" id="crmcard">
-        <span class="soon">COMING SOON</span>
-        <h3>CRM — know every customer.</h3>
-        <p>See who booked, who bought a voucher and who sent a message — and when they last visited. Your website fills it in for you.</p>
-        <div class="crm">
-          <div class="top"><span>Customers</span><span>Bookings</span><span>Orders</span></div>
-          <div class="row"><span class="av" style="background:#c65a3b">JM</span><span><b>Jess Martin</b><small>Booked for 4 · Sat</small></span><small>Last visit: 2 weeks</small><span class="tg" style="background:#e8fbf3;color:#0f9f6e">Regular</span></div>
-          <div class="row"><span class="av" style="background:#7c5cff">TK</span><span><b>Tom Kelly</b><small>Bought a gift voucher</small></span><small>Last visit: new</small><span class="tg" style="background:#efeaff;color:#5b45d8">Voucher</span></div>
-          <div class="row"><span class="av" style="background:#22a5c4">AL</span><span><b>Amy Lee</b><small>Asked the AI about events</small></span><small>Last visit: 3 months</small><span class="tg" style="background:#fff1e6;color:#c2611f">Win back</span></div>
-        </div>
-      </div>
-      <div class="ncard rv d1">
-        <span class="soon">COMING SOON</span>
-        <h3>Email Studio — bring them back.</h3>
-        <p>The same Email Studio we use to announce our own news — like this one — for your customers.</p>
-        <div class="mailph">
-          <div class="scr"><div><img src="/site-builder/img/email-preview.jpg" alt="A campaign email designed in Email Studio" loading="lazy"></div></div>
-          <ul><li>Ready-made, beautiful templates</li><li>Send to your customers in a few taps</li><li>See who opened and clicked</li><li>Specials, events, new menus, vouchers</li></ul>
-        </div>
-      </div>
-    </div>
-    <div class="waitlist rv"><span>Want to be first to try the CRM and Email Studio?</span><a class="btn ghost" href="mailto:marc@webescapade.com?subject=Early%20access%3A%20CRM%20%26%20Email%20Studio">Join the early-access list →</a></div>
-  </div>
-</section>
+
 
 <!-- LEARN-START -->
 <section class="s" id="learn" style="padding-top:0">
@@ -1148,7 +1306,7 @@ document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')h
     </div>
     <div class="plans">
       <div class="plan rv"><small>Starter</small><h3>Your website</h3><div class="price"><b>Free</b></div><div class="pp">Design and publish your website. No card needed.</div><ul><li>One website · 30 photos</li><li>Drag-and-drop editor</li><li>4 templates + 20 sections</li><li>Animated welcome screens</li><li>Automatic phone layout</li><li>Contact form, map, video</li><li>Import your menu or price list</li><li>Live menu for Restaurant Deluxe venues</li><li>Publish &amp; update any time</li><li>Small “Made with Webescapade” badge</li></ul><a class="btn line" href="https://webescapade.com/builder/">Start building free</a></div>
-      <div class="plan hi rv d1"><small>Platinum</small><h3>Bookings + AI</h3><div class="price"><b>$49</b><span>/ month + GST</span></div><div class="deal">Already a Restaurant, Service, Trade or Function Deluxe client? <b>$29 / month + GST</b></div><ul><li>Everything in Starter</li><li>Up to 10 websites · 500 photos</li><li>Booking panel &amp; floating Book button</li><li>Connects to Restaurant, Service or Trade Deluxe — or any booking link</li><li>AI assistant that learns from your site, 24/7</li><li>Build your website from your resume</li><li>No Webescapade badge</li></ul><a class="btn pri" href="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website">Upgrade to Platinum</a></div>
+      <div class="plan hi rv d1"><small>Platinum</small><h3>Bookings, AI + Business hub</h3><div class="price"><b>$49</b><span>/ month + GST</span></div><div class="deal">Already a Restaurant, Service, Trade or Function Deluxe client? <b>$29 / month + GST</b></div><ul><li>Everything in Starter</li><li>Up to 10 websites · 500 photos</li><li>Booking panel &amp; floating Book button</li><li>Connects to Restaurant, Service or Trade Deluxe — or any booking link</li><li>AI assistant that learns from your site, 24/7</li><li><b>Business hub:</b> website insights — visits, clicks &amp; where visitors come from</li><li>Customer list &amp; Email Studio (with Restaurant, Service or Trade Deluxe)</li><li>Build your website from your resume</li><li>No Webescapade badge</li></ul><a class="btn pri" href="mailto:marc@webescapade.com?subject=Platinum%20for%20my%20website">Upgrade to Platinum</a></div>
       <div class="plan rv d2"><small>Add-on</small><h3>Shop</h3><div class="price"><b>$0</b><span>/ month · 1.5% per sale</span></div><div class="pp">Only pay when you sell. Stripe’s normal fees apply.</div><ul><li>Products, gift vouchers &amp; downloads</li><li>Post, local delivery or pick-up</li><li>Paid straight to your own Stripe account</li><li>Orders page &amp; voucher codes</li><li>Works with Starter or Platinum</li></ul><a class="btn line" href="mailto:marc@webescapade.com?subject=Shop%20add-on%20for%20my%20website">Add the Shop</a></div>
     </div>
     <div class="setup rv">
@@ -1196,7 +1354,7 @@ document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')h
       <details><summary>How does the AI assistant know about my business?</summary><p>It reads the words on your own website — your menu, services, prices and opening hours. When you update your website and publish, the assistant knows the new information too. It’s told to answer only from your website and your notes, and to say when it doesn’t know — but, like any AI, it can occasionally get something wrong. It can point visitors to your booking button; it can’t check availability or make a booking itself.</p></details>
       <details><summary>How do I get paid from the Shop?</summary><p>You connect your own Stripe account. Customers pay by card, Apple Pay or Google Pay and the money goes into your Stripe account, then to your bank. Stripe’s normal fees apply, plus a small Webescapade fee of 1.5% per sale.</p></details>
       <details><summary>Can I import my menu, price list or resume?</summary><p>Yes. Drop in a PDF or Word file, or paste the text. Menus and price lists become a menu section, or Shop products if you have the Shop add-on. With Platinum, your resume becomes a complete website: intro, about, experience, skills, education and contact. Everything is read on your own device, and you check it before it goes on your page.</p></details><details><summary>I use Restaurant Deluxe. Can my website show my live menu?</summary><p>Yes. Add the Live menu section and type your venue code. Your website shows the same menu guests order from when they scan the QR code at the table, with photos, prices, dietary tags and sold-out dishes. Change anything in the Restaurant Deluxe Menu Manager and your website updates by itself, with no need to publish again.</p></details><details><summary>Can I use my own photos?</summary><p>Of course. Upload them from your phone or computer, then drag them where you want them. Choose the focus point so faces and dishes stay in the frame.</p></details>
-      <details><summary>What is coming next?</summary><p>A CRM to see all your customers, bookings and orders in one place, then Email Studio so you can send beautiful emails to your own customers. Join the early-access list to be first.</p></details>
+      <details><summary>What is the Business hub?</summary><p>It’s part of Platinum. <b>Insights</b> shows how many people visit your website, where they come from and what they press — booking buttons, calls, directions. <b>Customers</b> collects everyone who books, sends a message or buys from you into one list. <b>Email Studio</b> lets you send beautiful emails to them, starting from ready-made ideas for your kind of business, with your own photos, five looks and AI that can write the whole email. Customers and Email Studio work with Restaurant, Service or Trade Deluxe. <a href="#hub">See the Business hub →</a></p></details><details><summary>Who receives my emails, and is it spam-safe?</summary><p>Only customers who said yes — by ticking “Keep me posted” on your website, or who told you directly. Every email shows your business name, replies come straight to you, and there’s an unsubscribe link that works automatically. It’s designed around Australia’s Spam Act: consent, identify yourself, and an easy way to unsubscribe.</p></details>
       <details><summary>Can someone help me get started?</summary><p>Yes. Book a free Zoom demo or call Marc on 0413 872 994 — we will walk you through it, or build it for you.</p></details>
     </div>
   </div>
@@ -1430,6 +1588,8 @@ document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')h
   if(!seen) setTimeout(function(){ if(box.hidden) tip.hidden=false; },9000);
 })();
 </script>
+<script>(function(){var b=document.getElementById('hubPlay');if(b)b.addEventListener('click',function(){if(b.querySelector('iframe'))return;var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/dCuIuJGqv-c?rel=0&modestbranding=1&autoplay=1&playsinline=1';f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title='The Business hub';b.innerHTML='';b.appendChild(f);b.style.cursor='default';});
+var t=document.querySelectorAll('[data-hbt]'),p=document.querySelectorAll('.hb-pane');t.forEach(function(x){x.addEventListener('click',function(){var n=+x.dataset.hbt;t.forEach(function(y){y.classList.toggle('on',y===x)});p.forEach(function(q,i){q.classList.toggle('on',i===n)});});});})();</script>
 <script>(function(){var b=document.getElementById('meetPlay');if(!b)return;b.addEventListener('click',function(){if(b.querySelector('iframe'))return;var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/hteoJVDQ7M0?rel=0&modestbranding=1&autoplay=1&playsinline=1&cc_load_policy=0';f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title='Meet Webescapade';b.innerHTML='';b.appendChild(f);b.style.cursor='default';});})();</script>
 </body>
 </html>
