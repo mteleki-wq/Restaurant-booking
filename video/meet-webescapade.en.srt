@@ -1,0 +1,329 @@
+1
+00:00:00,787 --> 00:00:03,612
+Running a business means
+wearing a lot of hats.
+
+2
+00:00:03,612 --> 00:00:08,301
+You're looking after customers, answering
+the same questions, taking bookings,
+
+3
+00:00:08,301 --> 00:00:11,667
+and trying to keep your website
+up to date, all at once.
+
+4
+00:00:12,788 --> 00:00:15,817
+Your website should help take
+some of that work off your hands.
+
+5
+00:00:20,503 --> 00:00:23,198
+I'm Marc Teleki, founder of Webescapade.
+
+6
+00:00:23,198 --> 00:00:27,241
+Drawing on extensive experience
+in business and hospitality,
+
+7
+00:00:27,241 --> 00:00:33,440
+I create practical digital solutions that help
+business owners manage their day more easily,
+
+8
+00:00:33,440 --> 00:00:36,674
+serve their customers and
+work more efficiently.
+
+9
+00:00:37,872 --> 00:00:40,691
+Marc knows what a busy
+day really feels like.
+
+10
+00:00:40,691 --> 00:00:44,575
+The phone ringing, a table
+waiting, a question about the menu,
+
+11
+00:00:44,575 --> 00:00:47,707
+and a website still showing
+last month's specials.
+
+12
+00:00:48,666 --> 00:00:53,323
+So every tool we build starts with a
+real business need, and one simple aim:
+
+13
+00:00:53,323 --> 00:00:57,306
+to make your day easier, and your
+customers' experience smoother.
+
+14
+00:01:00,160 --> 00:01:01,772
+It starts with your website.
+
+15
+00:01:01,772 --> 00:01:04,939
+With the Webescapade Site
+Builder, you stay in control.
+
+16
+00:01:05,760 --> 00:01:07,739
+Click any words to change them.
+
+17
+00:01:07,739 --> 00:01:08,569
+Swap a photo.
+
+18
+00:01:08,569 --> 00:01:12,911
+Update a price, a service or your
+opening hours, then press Publish,
+
+19
+00:01:12,911 --> 00:01:14,507
+and it's live in seconds.
+
+20
+00:01:15,772 --> 00:01:16,889
+Want a fresh look?
+
+21
+00:01:16,889 --> 00:01:20,241
+Change the colours across
+the whole site in one click,
+
+22
+00:01:20,241 --> 00:01:24,028
+or let AI write your first draft
+from a few simple questions.
+
+23
+00:01:25,463 --> 00:01:27,792
+Already have a menu or price list?
+
+24
+00:01:27,792 --> 00:01:31,970
+Drop in the PDF or Word file,
+instead of typing it all again.
+
+25
+00:01:33,354 --> 00:01:37,882
+Every page works beautifully on phones,
+so customers can find your menu,
+
+26
+00:01:37,882 --> 00:01:40,650
+your services or your
+phone number in a tap.
+
+27
+00:01:41,812 --> 00:01:43,954
+Restaurants, salons, tradies, venues:
+
+28
+00:01:43,954 --> 00:01:46,965
+there's a starting point
+for every kind of business.
+
+29
+00:01:46,965 --> 00:01:50,729
+And if you'd rather not do it
+yourself, we'll help you set it up.
+
+30
+00:01:59,964 --> 00:02:04,329
+For restaurants, Restaurant Deluxe
+connects your website with your venue.
+
+31
+00:02:04,329 --> 00:02:08,216
+Guests book a table directly, or
+scan the QR code at their table,
+
+32
+00:02:08,216 --> 00:02:12,401
+order from your live menu, and it
+goes straight to the kitchen screen.
+
+33
+00:02:13,464 --> 00:02:16,545
+Clearer communication between
+your guests and your team,
+
+34
+00:02:16,545 --> 00:02:18,307
+with fewer trips back and forth.
+
+35
+00:02:20,561 --> 00:02:25,446
+For salons, spas and clinics, Service
+Deluxe lets clients choose a treatment,
+
+36
+00:02:25,446 --> 00:02:30,332
+their practitioner, and a time that's
+genuinely free, at any hour of the day.
+
+37
+00:02:31,661 --> 00:02:35,821
+Every booking lands in one calendar,
+so the whole team stays organised.
+
+38
+00:02:39,371 --> 00:02:44,716
+For plumbers, electricians and mobile
+trades, Trade Deluxe, now in early access,
+
+39
+00:02:44,716 --> 00:02:48,523
+lets customers book a job or
+ask for a quote with photos.
+
+40
+00:02:49,672 --> 00:02:53,177
+Arrival windows are planned
+around the drive between jobs,
+
+41
+00:02:53,177 --> 00:02:54,749
+so your day runs in order.
+
+42
+00:02:57,754 --> 00:03:01,241
+And for function centres,
+Function Deluxe shows your rooms,
+
+43
+00:03:01,241 --> 00:03:03,724
+live availability and an instant estimate,
+
+44
+00:03:03,724 --> 00:03:06,856
+so couples and event planners
+can explore their date,
+
+45
+00:03:06,856 --> 00:03:09,338
+and take the next step when they're ready.
+
+46
+00:03:10,559 --> 00:03:13,470
+From there, they can hold
+a date or send an enquiry,
+
+47
+00:03:13,470 --> 00:03:16,212
+with all the details
+already there for your team.
+
+48
+00:03:24,958 --> 00:03:28,015
+Now think about the journey
+from your customer's side.
+
+49
+00:03:28,015 --> 00:03:32,659
+They find you, they understand what you
+offer, they ask a question, and they book.
+
+50
+00:03:33,990 --> 00:03:35,491
+Where it suits your plan,
+
+51
+00:03:35,491 --> 00:03:40,294
+an AI assistant answers common questions
+from your own website when you're busy,
+
+52
+00:03:40,294 --> 00:03:42,395
+and helps them take that next step.
+
+53
+00:03:43,572 --> 00:03:47,704
+Enquiries and customer details
+are kept organised in one place,
+
+54
+00:03:47,704 --> 00:03:52,425
+and Email Studio helps you stay in
+touch with specials, events and news.
+
+55
+00:03:53,563 --> 00:03:58,086
+The right tools depend on your business,
+so we only set up what you'll actually use.
+
+56
+00:04:09,960 --> 00:04:11,183
+So why Webescapade?
+
+57
+00:04:11,183 --> 00:04:13,822
+It's built from real industry experience.
+
+58
+00:04:13,822 --> 00:04:17,555
+Your business looks professional,
+and you stay in control.
+
+59
+00:04:18,362 --> 00:04:22,681
+The tools work together around your
+business, there's a real person to help you,
+
+60
+00:04:22,681 --> 00:04:26,191
+and we keep improving them based
+on what business owners tell us.
+
+61
+00:04:27,558 --> 00:04:30,165
+It can take repetitive
+jobs off your plate,
+
+62
+00:04:30,165 --> 00:04:33,318
+and make every customer
+interaction a little easier.
+
+63
+00:04:33,318 --> 00:04:36,956
+The aim is to give you more
+time to focus on your customers,
+
+64
+00:04:36,956 --> 00:04:39,078
+and the business you want to build.
+
+65
+00:04:49,864 --> 00:04:53,320
+Visit webescapade.com,
+explore the demonstrations,
+
+66
+00:04:53,320 --> 00:04:56,153
+and book a free chat about your business.
+
+67
+00:04:56,153 --> 00:05:00,851
+And subscribe to Webescapade for
+practical demonstrations and ideas.
+
+68
+00:05:01,653 --> 00:05:02,393
+Webescapade.
+
+69
+00:05:02,393 --> 00:05:04,057
+Built around your business.
+
+70
+00:05:04,057 --> 00:05:06,090
+Designed to make your day easier.
+
