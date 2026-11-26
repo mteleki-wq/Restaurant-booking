@@ -307,7 +307,7 @@
     <a class="pill navlink" id="crmLink" href="venue-crm.html?prod=restaurant#campaigns" target="rd-venue-crm" title="Open the CRM: campaign results, pipeline and venue health">📊 CRM &amp; results</a>
     <a class="pill navlink" href="../Control-room/" title="Back to the Control Room">Control Room</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v65</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v66</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -965,7 +965,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v65 \u00b7 Links to the CRM and Control Room in the header';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v66 \u00b7 Meet Webescapade video email for every list';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1475,7 +1475,7 @@
      =================================================================== */
   var BLD_PAGE  = "https://webescapade.com/builder/";
   var BLD_IMG   = "https://webescapade.com/builder/email/";
-  var BLD_VIDEO = "";   /* paste the YouTube link of the Site Builder premium tour here when it is up */
+  var BLD_VIDEO = "https://youtu.be/qJ_jwJqkQDo";   /* Site Builder film (3 min) */
   function bldPresets(p){
     var who = {restaurant:{sys:'Restaurant Deluxe', book:'table bookings', demo:DEMO_BOOK},
                service:{sys:'Service Deluxe', book:'appointment bookings', demo:'https://webescapade.com/service/demo.html'},
@@ -1488,7 +1488,7 @@
       headline:"Now you can build your own website.",
       intro:"So many of you told us the same thing: you want a beautiful website you can change yourself — without waiting, and without code.\n\nWe listened, and now it’s here. The new Webescapade Site Builder lets you place text, photos, buttons and whole sections exactly where you want them. Start from a ready-made template, add an animated welcome screen, and your phone version builds itself.\n\nAnd with Platinum, your website does more than look good: it takes bookings, answers questions with its own AI assistant, and can even sell online.",
       heroImage:BLD_IMG+"sb-hero.jpg", heroLink:BLD_PAGE, heroAlt:"The Webescapade Site Builder: drag, drop and edit any part of your page",
-      videoUrl:BLD_VIDEO, videoTitle:"Watch the Site Builder tour", videoPos:"hero",
+      videoUrl:BLD_VIDEO, videoThumb:"https://webescapade.com/site-builder/img/poster-promo.jpg", videoTitle:"Watch the Site Builder in 3 minutes", videoPos:"hero",
       cta1:"Start building free", cta1url:BLD_PAGE,
       cta2:"Book a Zoom demo", cta2url:who.demo,
       featEyebrow:"Design it your way", featHeading:"Drag it. Drop it.\nPublish it.",
@@ -1519,7 +1519,59 @@
       preheader:"Drag-and-drop website with bookings, an AI assistant and an online shop — now live."
     })];
   }
-  PRESETS = bldPresets('restaurant').concat(PRESETS);
+
+  /* ===================================================================
+     MEET WEBESCAPADE (v-meet) — the 5-minute brand video, as an email.
+     Shown first under every product list. No prices or offers, so it
+     stays true. Each list gets its own "for your business" spotlight.
+     =================================================================== */
+  var MEET_VIDEO = "https://youtu.be/hteoJVDQ7M0";
+  var MEET_THUMB = "https://webescapade.com/video/meet-webescapade-thumb.jpg";
+  function meetPresets(p){
+    var who = {
+      restaurant:{biz:'restaurant', sys:'Restaurant Deluxe', page:RD_PAGE, demo:DEMO_BOOK,
+        line:'Guests book a table on your website, or scan the QR code at their table, order from your live menu and it goes straight to the kitchen screen. They pay at the table or the counter — you choose.',
+        boxes:[{l:'BOOKINGS', v:'On your website'},{l:'TABLE ORDERING', v:'Scan & order'},{l:'LIVE MENU', v:'Always right'}]},
+      service:{biz:'business', sys:'Service Deluxe', page:'https://webescapade.com/service/', demo:'https://webescapade.com/service/demo.html',
+        line:'Clients choose a treatment, their practitioner and a time that is genuinely free — at any hour. Every booking lands in one calendar, so the whole team stays organised.',
+        boxes:[{l:'ONLINE BOOKINGS', v:'24/7'},{l:'ONE CALENDAR', v:'Whole team'},{l:'AI ASSISTANT', v:'Answers clients'}]},
+      'function':{biz:'venue', sys:'Function Deluxe', page:'https://webescapade.com/Function-centre/', demo:'https://webescapade.com/Function-centre/demo.html',
+        line:'Couples and event planners see your rooms, live availability and an instant estimate — then hold a date or send an enquiry, with all the details already there for your team.',
+        boxes:[{l:'AVAILABILITY', v:'Live'},{l:'ESTIMATES', v:'Instant'},{l:'DATE HOLDS', v:'Online'}]},
+      trade:{biz:'business', sys:'Trade Deluxe', page:'https://webescapade.com/trades/', demo:'https://webescapade.com/trades/demo.html',
+        line:'Now in early access: customers book a job or ask for a quote with photos, and arrival windows are planned around the drive between jobs — so your day runs in order.',
+        boxes:[{l:'JOB BOOKINGS', v:'Online'},{l:'QUOTES', v:'With photos'},{l:'YOUR DAY', v:'In order'}]}
+    }[p] || null;
+    if(!who) who = {biz:'business', sys:'Restaurant Deluxe', page:RD_PAGE, demo:DEMO_BOOK, line:'', boxes:[]};
+    return [preset({
+      name:"Meet Webescapade — the 5-minute video",
+      desc:"Introduce Webescapade with the new 5-minute video: who we are, the website builder and "+who.sys+". No prices or offers.",
+      badge:"NEW VIDEO · 5 MINUTES", eyebrow:"Meet Webescapade",
+      headline:"Websites and tools that make business easier.",
+      intro:"Running a "+who.biz+" means wearing a lot of hats: looking after customers, answering the same questions, taking bookings and keeping your website up to date — all at once.\n\nWe’ve made a short video that shows how Webescapade helps. In five minutes you’ll see who we are, why we build these tools, and how your website, your bookings and your customers can all work together.\n\nGrab a coffee and have a look — I’d love to hear what you think.",
+      videoUrl:MEET_VIDEO, videoThumb:MEET_THUMB, videoTitle:"Watch Meet Webescapade (5 minutes)", videoPos:"hero",
+      video2Url:BLD_VIDEO, video2Thumb:"https://webescapade.com/site-builder/img/poster-promo.jpg", video2Title:"Watch the Site Builder in 3 minutes", video2Pos:"end",
+      video2Note:"Want to see the website builder up close?\nAI writes your first draft in under a minute, then you change anything yourself — words, photos, prices and opening hours.",
+      cta1:"Watch the 5-minute video", cta1url:MEET_VIDEO,
+      cta2:"Book a free chat", cta2url:who.demo,
+      featEyebrow:"What you’ll see", featHeading:"Your website.\nYour control.",
+      featSub:"Practical tools, built around real business needs.",
+      cards:[
+        {n:"01", t:"Change it yourself", d:"Click any words to change them, swap a photo, update prices or opening hours — and it’s live in seconds."},
+        {n:"02", t:"Customers take the next step", d:"They find you, understand what you offer, ask a question and book — even when you’re busy."},
+        {n:"03", t:"Everything organised", d:"Enquiries and customer details in one place, and Email Studio to stay in touch."}
+      ],
+      spotOn:!!who.line, spotEyebrow:"For your "+who.biz, spotHeading:who.sys, spotSub:who.line, boxes:who.boxes,
+      priceOn:false, plans:[], priceFoot:"",
+      finalHeading:"More time for your customers.",
+      finalSub:"Explore the demonstrations at webescapade.com, or book a free chat about your "+who.biz+". Questions? Call Marc on 0413 872 994 or simply reply to this email.",
+      finalCta:"Book a free chat", finalUrl:who.demo,
+      siteUrl:"https://webescapade.com/",
+      subject:"Have 5 minutes? Meet Webescapade", resendSubject:"In case you missed it: our 5-minute video",
+      preheader:"Who we are, and how your website, bookings and customers can work together."
+    })];
+  }
+  PRESETS = meetPresets('restaurant').concat(bldPresets('restaurant')).concat(PRESETS);
 
   var camps = PRESETS.map(function(c){ return JSON.parse(JSON.stringify(c)); });
   var cur = 0;
@@ -3708,7 +3760,7 @@
     ];
   }
   function oneProdLabel(){ var el=document.getElementById('oneProd'); if(el) el.textContent=PROD_NAME[PRODUCT]||'Restaurant Deluxe'; }
-  function presetsFor(p){ return p==='service' ? bldPresets(p).concat(svcPresets()) : p==='function' ? bldPresets(p).concat(fnPresets()) : p==='trade' ? bldPresets(p).concat(trdPresets()) : PRESETS; }
+  function presetsFor(p){ return p==='service' ? meetPresets(p).concat(bldPresets(p)).concat(svcPresets()) : p==='function' ? meetPresets(p).concat(bldPresets(p)).concat(fnPresets()) : p==='trade' ? meetPresets(p).concat(bldPresets(p)).concat(trdPresets()) : PRESETS; }
   function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : p==='trade' ? (info.offer||TRD_OFFER) : null; }
   function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; if(p==='trade') TRD_OFFER=o; }
   var OTHER_PRODUCTS=['service','function','trade'];   /* products with their own offer boxes */
