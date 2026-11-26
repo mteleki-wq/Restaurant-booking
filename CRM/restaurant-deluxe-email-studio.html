@@ -307,7 +307,7 @@
     <a class="pill navlink" id="crmLink" href="venue-crm.html?prod=restaurant#campaigns" target="rd-venue-crm" title="Open the CRM: campaign results, pipeline and venue health">📊 CRM &amp; results</a>
     <a class="pill navlink" href="../Control-room/" title="Back to the Control Room">Control Room</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v66</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v67</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
@@ -965,7 +965,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v66 \u00b7 Meet Webescapade video email for every list';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v67 \u00b7 Business hub (CRM + Email Studio) launch email for every list';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -1512,7 +1512,7 @@
       ],
       priceFoot:"Rather we build it for you? Done-for-you setup from $250 + GST.",
       finalHeading:"You asked for it. Now it’s here.",
-      finalSub:"Create your account, pick a template and have your first page ready in minutes. Coming next: CRM and Email Studio, connected to your site. Questions? Call Marc on 0413 872 994 or simply reply to this email.",
+      finalSub:"Create your account, pick a template and have your first page ready in minutes. New: the Business hub — insights, a customer list and Email Studio, with Platinum. Questions? Call Marc on 0413 872 994 or simply reply to this email.",
       finalCta:"Build my website", finalUrl:BLD_PAGE,
       siteUrl:BLD_PAGE,
       subject:"You asked, we listened: build your own website", resendSubject:"Have you tried the new Site Builder yet?",
@@ -1571,7 +1571,54 @@
       preheader:"Who we are, and how your website, bookings and customers can work together."
     })];
   }
-  PRESETS = meetPresets('restaurant').concat(bldPresets('restaurant')).concat(PRESETS);
+  var HUB_VIDEO = "https://youtu.be/dCuIuJGqv-c";   /* Business hub film (2 min) */
+  var HUB_THUMB = "https://webescapade.com/site-builder/img/business-hub-thumb.jpg";
+  var HUB_PAGE = "https://webescapade.com/site-builder/#hub";
+  function hubPresets(p){
+    var who = {
+      restaurant:{biz:'restaurant', sys:'Restaurant Deluxe', ok:true, idea:'a new menu, a special night or a quiet-Tuesday treat',
+        line:'Connect your website to Restaurant Deluxe and every booking becomes a customer in your list, automatically. Then tell them about your new menu, a wine night or Christmas bookings, with photos from your own website.'},
+      service:{biz:'business', sys:'Service Deluxe', ok:true, idea:'a new treatment, a new team member or a seasonal offer',
+        line:'Connect your website to Service Deluxe and every client who books becomes a customer in your list, automatically. Then remind them it’s time for their next visit, or introduce a new treatment, with photos from your own website.'},
+      'function':{biz:'venue', sys:'Function Deluxe', ok:false, idea:'a new room, wedding season or end-of-year parties',
+        line:'Insights works on any Platinum website, so you can see how couples and event planners find you. The customer list and Email Studio connect to Restaurant, Service or Trade Deluxe today: if your venue has a restaurant, they work straight away. Talk to Marc about your venue.'},
+      trade:{biz:'business', sys:'Trade Deluxe', ok:true, idea:'a seasonal check-up, a new service or booking before the holidays',
+        line:'Connect your website to Trade Deluxe and every job booking becomes a customer in your list, automatically. Then remind them about a seasonal check-up or your holiday dates, with photos of your own work.'}
+    }[p] || {biz:'business', sys:'Restaurant Deluxe', ok:true, idea:'your latest news', line:''};
+    return [preset({
+      name:"It’s here: CRM + Email Studio (Business hub video)",
+      desc:"Announce that the CRM and Email Studio are now live in the Site Builder Business hub, with the 2-minute video. Platinum pricing included.",
+      badge:"NOW LIVE · BUSINESS HUB", eyebrow:"We said it was coming. It’s here.",
+      headline:"Your CRM and Email Studio are here.",
+      intro:"A little while ago we told you a CRM and Email Studio were on the way. Today they’re live, inside the Webescapade Site Builder, in one place we call the Business hub.\n\nYour website brings customers in. Now it helps you bring them back: see who visits and what they do, keep every customer in one list, and send beautiful emails about "+who.idea+", in minutes.\n\nDon’t take our word for it. Watch the 2-minute video, then go and see it for yourself.",
+      videoUrl:HUB_VIDEO, videoThumb:HUB_THUMB, videoTitle:"Watch the Business hub in 2 minutes", videoPos:"hero",
+      cta1:"See it for yourself", cta1url:HUB_PAGE,
+      cta2:"Book a free chat", cta2url:"https://webescapade.com/demo.html",
+      featEyebrow:"What’s inside", featHeading:"Bring them in.\nBring them back.",
+      featSub:"Three tools that work together, from the same place you edit your website.",
+      cards:[
+        {n:"01", t:"Insights", d:"How many people visit, where they come from, and what they press: bookings, calls, directions. No cookies, nothing to set up."},
+        {n:"02", t:"Your customer list", d:"Every booking, enquiry and shop order becomes a customer, with their history and who’s happy to hear from you."},
+        {n:"03", t:"Ideas made for you", d:"Pick an email idea for your kind of "+who.biz+". It arrives filled in with your name, your booking button and your own photos."},
+        {n:"04", t:"AI writes it for you", d:"Say it in one sentence and AI writes the whole email. Five looks, a test to yourself, then send in one tap."}
+      ],
+      spotOn:true, spotEyebrow:"For your "+who.biz, spotHeading:who.ok ? "Works with "+who.sys : "For function venues",
+      spotSub:who.line,
+      boxes:[{l:"INSIGHTS", v:"Any website"},{l:"CUSTOMERS", v:"Automatic"},{l:"EMAILS", v:"In minutes"}],
+      bandImage:"https://webescapade.com/site-builder/img/hub/ideas.jpg", bandAlt:"Email Studio ideas for a function venue: new room, weddings, end-of-year parties and more",
+      bandCaption:"Ready-made email ideas, filled in with your own photos. Tap the picture to see the Business hub.", bandLink:HUB_PAGE,
+      priceOn:true, priceEyebrow:"Included in Platinum", priceHeading:"One flat price. No extra email or CRM subscriptions.",
+      plans:[{tier:"SITE BUILDER PLATINUM", price:"$49", per:"/ month + GST", desc:"Bookings on your website, your AI assistant, and the Business hub: insights, customers and Email Studio. Already a Restaurant, Service, Trade or Function Deluxe client? $29 / month + GST.", hi:true}],
+      priceFoot:"Building and publishing your website stays free. Only customers who said yes receive your emails, and every email has an unsubscribe link.",
+      finalHeading:"Go and see it for yourself.",
+      finalSub:"Watch the 2-minute video and explore the Business hub at webescapade.com/site-builder. Questions? Call Marc on 0413 872 994, or simply reply to this email.",
+      finalCta:"See the Business hub", finalUrl:HUB_PAGE,
+      siteUrl:"https://webescapade.com/site-builder/",
+      subject:"It’s here: your CRM and Email Studio", resendSubject:"Have you seen the Business hub yet?",
+      preheader:"See who visits, keep every customer in one list, and send beautiful emails. 2-minute video inside."
+    })];
+  }
+  PRESETS = hubPresets('restaurant').concat(meetPresets('restaurant')).concat(bldPresets('restaurant')).concat(PRESETS);
 
   var camps = PRESETS.map(function(c){ return JSON.parse(JSON.stringify(c)); });
   var cur = 0;
@@ -3760,7 +3807,7 @@
     ];
   }
   function oneProdLabel(){ var el=document.getElementById('oneProd'); if(el) el.textContent=PROD_NAME[PRODUCT]||'Restaurant Deluxe'; }
-  function presetsFor(p){ return p==='service' ? meetPresets(p).concat(bldPresets(p)).concat(svcPresets()) : p==='function' ? meetPresets(p).concat(bldPresets(p)).concat(fnPresets()) : p==='trade' ? meetPresets(p).concat(bldPresets(p)).concat(trdPresets()) : PRESETS; }
+  function presetsFor(p){ return p==='service' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(svcPresets()) : p==='function' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(fnPresets()) : p==='trade' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(trdPresets()) : PRESETS; }
   function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : p==='trade' ? (info.offer||TRD_OFFER) : null; }
   function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; if(p==='trade') TRD_OFFER=o; }
   var OTHER_PRODUCTS=['service','function','trade'];   /* products with their own offer boxes */
