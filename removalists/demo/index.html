@@ -448,6 +448,7 @@ function makeJobs(presetKey){
   return src.map(function(j){ return jobFlags({ id: uid(), cat: j[0], name: j[1], desc: j[2], mins: j[3], minsMax: j[4], price: j[5], a: j[6] || 0, b: j[7] || 0, active: true }); });
 }
 function jobFlags(j){
+  j.emergency=false;j.repeat=false;
   if (j.emergency == null) j.emergency = /blocked|leak|hot water system repair|fault|power out|gas appliance|burst/i.test(j.name);
   if (j.repeat == null) j.repeat = /maintenance|test & tag|lawn mow|hedge|standard home clean|garden clean/i.test(j.name);
   return j;
@@ -464,6 +465,7 @@ function migrate(db){
   if (!B.deposit) B.deposit = { mode: "callout", amount: 0 };
   if (B.quoteDepositPct == null) B.quoteDepositPct = 20;
   if (!B.emergency) B.emergency = { on: false, fee: 0, start: "06:00", end: "22:00", notice: 60 };
+  B.deposit={mode:'none',amount:0};B.quoteDepositPct=0;B.emergency.on=false;
   if (B.gmapsKey == null) B.gmapsKey = "";
   if (!db.tcache) db.tcache = {};
   db.jobTypes.forEach(jobFlags);
@@ -526,7 +528,7 @@ function selectMovingIntent(){
 }
 var QP = new URLSearchParams(location.search);
 selectMovingIntent();
-if (QP.get("emergency") === "1") BK.emerg = true;
+
 if (QP.get("job")) { var _j = DB.jobTypes.filter(function(j){ return j.id === QP.get("job") || j.name === QP.get("job"); })[0]; if (_j) { BK.job = _j; BK.cat = _j.cat; BK.step = 2; } }
 if (QP.get("cat")) BK.cat = QP.get("cat");
 
@@ -958,7 +960,7 @@ function renderCustomerQuote(id){
 function renderSetup(){
   var B = DB.biz, app = $("#app"), cs = Object.keys((PRESETS[B.preset] || PRESETS["plumb-elec"]).cats).concat(cats()).filter(function(c, i, a){ return a.indexOf(c) === i; });
   var dayBoxes = function(t){ return '<div class="days">' + [1,2,3,4,5,6,0].map(function(d){ return '<label><input type="checkbox" data-day="' + d + '"' + (t.days.indexOf(d) >= 0 ? " checked" : "") + '>' + DAYN[d] + '</label>'; }).join("") + '</div>'; };
-  app.innerHTML = '<h1><em>Setup</em></h1><p class="lead">One system for any mobile trade. Choose the trade, set how far you travel, add your team and the jobs you do. Customers only ever see times that genuinely fit.</p>' +
+  app.innerHTML = '<h1><em>Setup</em></h1><p class="lead">Set your quotation-visit area, team and appointment rules. Edit moving estimate rates separately in Website editor. Moving-day arrangements are confirmed directly.</p>' +
     '<div class="card form"><h3 style="margin:0">Business</h3><div class="row2"><label>Business name<input type="text" data-b="name" value="' + esc(B.name) + '"></label>' +
     '<label>Trade<select id="preset">' + Object.keys(PRESETS).map(function(k){ return '<option value="' + k + '"' + (k === B.preset ? " selected" : "") + '>' + PRESETS[k].label + '</option>'; }).join("") + '</select></label></div>' +
     '<div class="row2"><label>Phone<input type="tel" data-b="phone" value="' + esc(B.phone) + '"></label><label>Email<input type="email" data-b="email" value="' + esc(B.email) + '"></label></div></div>' +
@@ -975,19 +977,10 @@ function renderSetup(){
     '<label>Arrival window length<select data-b="windowHours">' + [1,2,3,4].map(function(n){ return '<option value="' + n + '"' + (B.windowHours === n ? " selected" : "") + '>' + n + ' hour' + (n > 1 ? "s" : "") + '</option>'; }).join("") + '</select></label>' +
     '<label>Minimum notice (hours)<input type="number" data-b="noticeHours" value="' + B.noticeHours + '"></label></div>' +
     '<div class="row3"><label>Earliest window<input type="time" data-b="dayStart" value="' + B.dayStart + '"></label><label>Latest finish<input type="time" data-b="dayEnd" value="' + B.dayEnd + '"></label><label>Time step (min)<select data-b="slotStep">' + [15,30,60].map(function(n){ return '<option' + (B.slotStep === n ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></label></div>' +
-    '<label class="check"><input type="checkbox" data-b="chooseTech"' + (B.chooseTech ? " checked" : "") + '> <span>Let customers choose their tradie (otherwise we assign the one with the least extra driving)</span></label></div>' +
+    '<label class="check"><input type="checkbox" data-b="chooseTech"' + (B.chooseTech ? " checked" : "") + '> <span>Let customers choose their quotation assessor (otherwise we assign an available team member)</span></label></div>' +
 
     '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Quotes</h3><div class="row3"><label>Hourly labour rate ($)<input type="number" data-b="labourRate" value="' + B.labourRate + '"></label><label>Call-out fee on quotes ($, 0 = none)<input type="number" data-b="callout" value="' + B.callout + '"></label><label>Quotes valid for (days)<input type="number" data-b="quoteValidDays" value="' + B.quoteValidDays + '"></label></div>' +
     '<label class="check"><input type="checkbox" data-b="gst"' + (B.gst ? " checked" : "") + '> <span>Registered for GST (adds 10% to quotes)</span></label></div>' +
-
-    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Payments when booking</h3><p class="small muted" style="margin:0">' + (LIVE ? 'Card payments switch on once your Stripe account is connected — until then customers pay on the day. ' : 'Paid by card through Stripe in the live version. ') + 'Money goes straight to your own Stripe account.</p>' +
-    '<div class="row3"><label>At booking, customers pay<select data-bx="deposit.mode"><option value="none"' + (B.deposit.mode === "none" ? " selected" : "") + '>Nothing — pay on the day</option><option value="callout"' + (B.deposit.mode === "callout" ? " selected" : "") + '>A call-out fee (taken off the bill)</option></select></label>' +
-    '<label>Call-out fee ($)<input type="number" data-bx="deposit.amount" value="' + B.deposit.amount + '"></label><label>Deposit when a quote is accepted (%)<input type="number" data-b="quoteDepositPct" value="' + B.quoteDepositPct + '"></label></div></div>' +
-
-    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Emergency &amp; after-hours</h3>' +
-    '<label class="check"><input type="checkbox" data-bx="emergency.on"' + (B.emergency.on ? " checked" : "") + '> <span>Take emergency bookings online (only tradies marked "on call" below, only jobs marked "Emergency")</span></label>' +
-    '<div class="row3"><label>Emergency call-out fee ($)<input type="number" data-bx="emergency.fee" value="' + B.emergency.fee + '"></label><label>On-call from<input type="time" data-bx="emergency.start" value="' + B.emergency.start + '"></label><label>On-call until<input type="time" data-bx="emergency.end" value="' + B.emergency.end + '"></label></div>' +
-    '<label style="max-width:260px">Shortest notice (minutes)<input type="number" data-bx="emergency.notice" value="' + B.emergency.notice + '"></label></div>' +
 
     '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Real drive times (optional)</h3><p class="small muted" style="margin:0">Without a key we estimate drive times from distance (free). Add your own Google Maps API key for real drive times with typical traffic. Each pair of suburbs is looked up once and saved, so the Google cost stays very small.</p>' +
     (LIVE ? '<p class="small muted" style="margin:0">Your key is used on your public booking page, so in Google Cloud restrict it to your website address and to the Maps JavaScript API.</p>' : '') +
@@ -999,10 +992,10 @@ function renderSetup(){
       '<div><div style="font-size:14px;font-weight:600;margin-bottom:6px">Can do</div><div class="days">' + cs.map(function(c){ return '<label><input type="checkbox" data-skill="' + c + '"' + (t.skills.indexOf(c) >= 0 ? " checked" : "") + '>' + esc(catName(c)) + '</label>'; }).join("") + '</div>' +
       '<div style="font-size:14px;font-weight:600;margin:8px 0 6px">Works</div>' + dayBoxes(t) + '</div>' +
       '<div><label>Hours<span style="display:flex;gap:6px"><input type="time" data-tf="start" value="' + t.start + '"><input type="time" data-tf="end" value="' + t.end + '"></span></label><label style="margin-top:8px">Colour<input type="color" data-tf="color" value="' + t.color + '" style="height:38px;padding:2px"></label></div>' +
-      '<div style="display:grid;gap:8px;align-content:start"><label class="check" style="font-size:13px"><input type="checkbox" data-tf="onCall"' + (t.onCall ? " checked" : "") + '> <span>On call for emergencies</span></label><button class="btn danger sm" data-rmT="' + i + '">Remove</button></div></div>'; }).join("") + '</div></div>' +
+      '<div style="display:grid;gap:8px;align-content:start"><label class="check" style="font-size:13px;display:none"><input type="checkbox" data-tf="onCall"' + (t.onCall ? " checked" : "") + '> <span>On call for emergencies</span></label><button class="btn danger sm" data-rmT="' + i + '">Remove</button></div></div>'; }).join("") + '</div></div>' +
 
-    '<div class="card" style="margin-top:16px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0">Jobs &amp; price brackets</h3><button class="btn sm" id="addJ">+ Add job</button></div>' +
-    '<p class="small muted" style="margin:0 0 12px">The longer time is what gets blocked in the diary, so a 1–2 hour job never runs into the next one. "Quote" jobs ask for photos and details instead of a time.</p><div id="jobList">' +
+    '<div class="card" style="margin-top:16px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0">Quotation visits &amp; enquiry types</h3><button class="btn sm" id="addJ">+ Add job</button></div>' +
+    '<p class="small muted" style="margin:0 0 12px">The longer quotation-visit duration is reserved in the diary. Moving jobs must use Quote to collect requirements; use non-Quote pricing only for quotation appointments.</p><div id="jobList">' +
     DB.jobTypes.map(function(j, i){ return '<div class="jt-row" data-j="' + i + '"><label>Category<select data-jf="cat">' + cs.map(function(c){ return '<option value="' + c + '"' + (c === j.cat ? " selected" : "") + '>' + esc(catName(c)) + '</option>'; }).join("") + '</select></label>' +
       '<label>Job<input type="text" data-jf="name" value="' + esc(j.name) + '"></label>' +
       '<label>Min time<select data-jf="mins">' + durOpts(j.mins) + '</select></label><label>Max time<select data-jf="minsMax">' + durOpts(j.minsMax) + '</select></label>' +
@@ -1010,7 +1003,7 @@ function renderSetup(){
       '<label>$<input type="number" data-jf="a" value="' + j.a + '"></label><label>to $<input type="number" data-jf="b" value="' + j.b + '"></label>' +
       '<div style="display:flex;align-items:flex-end"><button class="btn danger sm" data-rmJ="' + i + '">✕</button></div>' +
       '<label class="full">Description<input type="text" data-jf="desc" value="' + esc(j.desc) + '"></label>' +
-      '<div class="full days"><label><input type="checkbox" data-jf="emergency"' + (j.emergency ? " checked" : "") + '> Emergency / after hours</label><label><input type="checkbox" data-jf="repeat"' + (j.repeat ? " checked" : "") + '> Can repeat (weekly, fortnightly, 4-weekly)</label><label><input type="checkbox" data-jf="active"' + (j.active !== false ? " checked" : "") + '> Show online</label></div></div>'; }).join("") + '</div></div>' +
+      '<div class="full days"><label hidden><input type="checkbox" data-jf="emergency"' + (j.emergency ? " checked" : "") + '> Emergency / after hours</label><label hidden><input type="checkbox" data-jf="repeat"' + (j.repeat ? " checked" : "") + '> Can repeat (weekly, fortnightly, 4-weekly)</label><label><input type="checkbox" data-jf="active"' + (j.active !== false ? " checked" : "") + '> Show online</label></div></div>'; }).join("") + '</div></div>' +
 
     '<div class="actions"><button class="btn" id="saveS">Save setup</button>' + (LIVE ? '<button class="btn ghost" id="outS">Sign out</button>' : '<button class="btn ghost" id="resetS">Reset demo data</button>') + '</div>';
 
@@ -1027,7 +1020,7 @@ function renderSetup(){
   if (LIVE) liveSetupExtras();
   if ($("#resetS")) $("#resetS").onclick = function(){ if (!confirm("Reset everything back to the demo data?")) return; DB = seed(); save(); BK = freshBK(); ST.date = today(); QS.sel = null; toast("Demo reset"); route(); };
   $("#addT").onclick = function(){ pullSetup(); DB.team.push({ id: uid(), name: "New team member", role: "", skills: [cs[0]], color: "#7A5AA6", days: [1,2,3,4,5], start: "07:30", end: "16:00", active: true }); save(); renderSetup(); };
-  $("#addJ").onclick = function(){ pullSetup(); DB.jobTypes.push({ id: uid(), cat: cs[0], name: "New job", desc: "", mins: 60, minsMax: 60, price: "from", a: 100, b: 0, active: true }); save(); renderSetup(); };
+  $("#addJ").onclick = function(){ pullSetup(); DB.jobTypes.push({ id: uid(), cat: cs[0], name: "New moving quotation", desc: "", mins: 60, minsMax: 60, price: "quote", a: 0, b: 0, active: true }); save(); renderSetup(); };
   $$("[data-rmT]").forEach(function(b){ b.onclick = function(){ pullSetup(); var t = DB.team[+b.getAttribute("data-rmT")];
     if (DB.bookings.some(function(x){ return x.techId === t.id && x.status === "booked" && x.date >= today(); })) return toast(t.name.split(" ")[0] + " still has upcoming jobs — reassign them first");
     DB.team.splice(+b.getAttribute("data-rmT"), 1); save(); renderSetup(); }; });
@@ -1254,7 +1247,7 @@ function renderStart(){
       var b = bizDefaults(); b.name = name; b.preset = preset; b.phone = $("#sPhone").value.trim(); b.email = $("#sEmail").value.trim(); b.base = base; b.state = $("#sState").value;
       b.baseLat = SUB[base][0]; b.baseLng = SUB[base][1]; b.pages = { app: location.origin + location.pathname };
       var cats0 = Object.keys(PRESETS[preset].cats), team = [];
-      if ($("#sWorks").checked) team.push({ id: uid(), name: $("#sOwner").value.trim() || "Me", role: PRESETS[preset].label, skills: cats0, color: "#E8591A", days: [1,2,3,4,5], start: "07:30", end: "16:30", active: true, onCall: true });
+      if ($("#sWorks").checked) team.push({ id: uid(), name: $("#sOwner").value.trim() || "Me", role: PRESETS[preset].label, skills: cats0, color: "#E8591A", days: [1,2,3,4,5], start: "07:30", end: "16:30", active: true, onCall: false });
       return rpc("trd_create_business", { p_name: name, p_phone: b.phone, p_email: b.email, p_config: { biz: b, team: team, jobTypes: makeJobs(preset) }, p_code: $("#sCode").value.trim() })
         .then(function(r){ busy(btn, false); if (!r || !r.ok) return $("#sMsg").innerHTML = '<div class="note warn">' + esc((r && r.error) || "Couldn't create it.") + '</div>';
           location.href = location.pathname + "?b=" + encodeURIComponent(r.slug) + "#setup"; });
@@ -1332,7 +1325,7 @@ function liveBoot(){
 }
 function applyBookParams(){
   selectMovingIntent();
-  if (QP0.get("emergency") === "1") BK.emerg = true;
+  
   var jid = QP0.get("job");
   if (jid) { var j = DB.jobTypes.filter(function(x){ return x.id === jid || x.name === jid; })[0]; if (j) { BK.job = j; BK.cat = j.cat; BK.step = 2; } }
   if (QP0.get("cat")) BK.cat = QP0.get("cat");
