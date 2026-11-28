@@ -1,0 +1,1451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painter Deluxe — demo · Webescapade</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Painter Deluxe — booking + travel-aware scheduling + quotes for electricians, plumbers and other mobile trades.
+   Demo build: everything is stored in this browser (localStorage). Same shape as the Supabase version to come. */
+:root{
+  --bg:#F3F1EC; --card:#FFFFFF; --ink:#16202B; --muted:#65707B; --line:#E2DED6;
+  --accent:#456859; --accent-ink:#FFFFFF; --soft:#e5ecdd; --navy:#16202B; --ok:#2F7A4B; --okbg:#E3F2E8;
+  --warn:#9A3B2E; --warnbg:#F8E4DF; --blue:#2C5F8A; --bluebg:#E2ECF5; --radius:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--accent)}
+.wrap{max-width:1120px;margin:0 auto;padding:18px 16px 120px}
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.top .in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.mark{width:38px;height:38px;border-radius:11px;background:var(--accent);display:grid;place-items:center;flex:none}
+.mark svg{width:22px;height:22px}
+.brand b{font:400 22px/1.05 "Instrument Serif",serif;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#AEB8C2}
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px}
+.tabs button{border:0;background:none;color:#C9D1D9;padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600;font-size:14px;white-space:nowrap}
+.tabs button.on{background:#fff;color:var(--navy)}
+.tabs .cnt{display:inline-block;min-width:18px;padding:0 5px;margin-left:4px;border-radius:9px;background:var(--accent);color:#fff;font-size:11px;line-height:18px;text-align:center}
+.demo-note{background:var(--soft);color:#8A3A10;font-size:13px;text-align:center;padding:7px 12px}
+h1{font:400 clamp(32px,5vw,48px)/1.05 "Instrument Serif",serif;margin:14px 0 6px;letter-spacing:-.01em}
+h1 em{font-style:italic;color:var(--accent)}
+h2{font:400 30px/1.1 "Instrument Serif",serif;margin:0 0 10px}
+h3{margin:0 0 8px;font-size:17px}
+.lead{color:var(--muted);margin:0 0 20px;max-width:62ch}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+/* steps */
+.steps{display:flex;gap:6px;margin:0 0 20px;overflow-x:auto}
+.steps::-webkit-scrollbar{height:0}
+.steps span{white-space:nowrap;flex:none;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.steps span.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.steps span.done{background:var(--soft);border-color:var(--soft);color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr;gap:22px}
+.grid>*{min-width:0}
+@media(min-width:920px){.grid{grid-template-columns:minmax(0,1fr) 330px}}
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:0 1px 2px rgba(22,32,43,.05)}
+.cat{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px;font-weight:700}
+.cat:first-child{margin-top:0}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.seg button{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600}
+.seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.list{display:grid;gap:10px}
+@media(min-width:640px){.list.two{grid-template-columns:1fr 1fr}}
+.opt{display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%;background:var(--card);border:1.5px solid transparent;border-radius:var(--radius);padding:15px 17px;cursor:pointer;box-shadow:0 1px 2px rgba(22,32,43,.05);transition:border-color .15s}
+.opt:hover{border-color:var(--line)}
+.opt.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+.opt .t{font-weight:700}
+.opt .d{color:var(--muted);font-size:14px;margin-top:2px}
+.opt .meta{margin-left:auto;text-align:right;white-space:nowrap;font-size:14px;padding-left:8px}
+.opt .meta b{display:block}
+.opt .meta span{color:var(--muted);font-size:13px}
+.ico{flex:none;width:44px;height:44px;border-radius:12px;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-weight:800}
+.pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--bluebg);color:var(--blue);vertical-align:middle}
+.pill.q{background:var(--soft);color:#A6400F}
+.pill.ok{background:var(--okbg);color:var(--ok)}
+.pill.warn{background:var(--warnbg);color:var(--warn)}
+.pill.grey{background:#ECEAE5;color:var(--muted)}
+/* forms */
+.form{display:grid;gap:14px}
+label{display:grid;gap:6px;font-size:14px;font-weight:600}
+label .opt-l{font-weight:400;color:var(--muted)}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=time],textarea,select{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;background:#fff;font-size:16px;font-weight:400}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+textarea{min-height:90px;resize:vertical}
+.row2{display:grid;gap:14px}
+@media(min-width:640px){.row2{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr 1fr 1fr}}
+.row3{display:grid;gap:14px}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:500}
+.check input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;background:var(--accent);color:var(--accent-ink);font-weight:700;cursor:pointer;text-decoration:none;font-size:15px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.dark{background:var(--ink);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.sm{padding:8px 14px;font-size:13px}
+.btn.danger{background:transparent;color:var(--warn);border:1.5px solid var(--warnbg)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.note{border-radius:14px;padding:12px 14px;font-size:14px;margin:12px 0}
+.note.ok{background:var(--okbg);color:#1F5A35}
+.note.warn{background:var(--warnbg);color:var(--warn)}
+.note.info{background:var(--bluebg);color:#1E4566}
+/* dates + slots */
+.dates{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px}
+.dates::-webkit-scrollbar{height:0}
+.day{flex:none;width:64px;padding:9px 0;border-radius:16px;border:1.5px solid var(--line);background:var(--card);text-align:center;cursor:pointer}
+.day small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.day b{display:block;font:400 26px/1.1 "Instrument Serif",serif}
+.day.sel{background:var(--ink);border-color:var(--ink);color:#fff}
+.day.sel small{color:#C9D1D9}
+.day.closed{opacity:.35;cursor:default}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.slots.exact{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+.slot{padding:11px 8px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;position:relative}
+.slot small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.slot:hover{border-color:var(--accent)}
+.slot.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.slot.sel small{color:#FFE3D2}
+.slot .near{position:absolute;top:-8px;right:8px;background:var(--ok);color:#fff;font-size:10px;font-weight:800;letter-spacing:.04em;padding:1px 7px;border-radius:9px}
+.empty{background:var(--card);border-radius:var(--radius);padding:22px;color:var(--muted);text-align:center}
+/* summary */
+.sum{position:sticky;top:84px;align-self:start}
+.sum .r{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sum .r:last-child{border-bottom:0}
+.sum .r span:first-child{color:var(--muted)}
+.sum .r span:last-child{text-align:right;font-weight:600}
+.photos{display:flex;gap:8px;flex-wrap:wrap}
+.photos img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+/* staff */
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0 18px}
+.toolbar .date{font-weight:700;font-size:18px;min-width:200px;text-align:center}
+.round{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-size:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:18px}
+.stat{background:var(--card);border-radius:14px;padding:12px 16px}
+.stat b{display:block;font-size:24px;font-weight:800}
+.stat span{color:var(--muted);font-size:13px}
+.runs{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:760px){.runs{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}}
+.run{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 2px rgba(22,32,43,.05)}
+.run .hd{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.run .hd .dot{width:12px;height:12px;border-radius:50%;flex:none}
+.run .hd b{font-size:16px}
+.run .hd .muted{font-size:13px}
+.run .bd{padding:10px 14px 14px}
+.leg{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;padding:6px 4px 6px 14px;border-left:2px dashed var(--line);margin-left:10px}
+.gap{font-size:12px;color:var(--ok);padding:3px 4px 3px 14px;border-left:2px dashed var(--line);margin-left:10px}
+.job{border:1.5px solid var(--line);border-left-width:5px;border-radius:12px;padding:10px 12px;margin:2px 0}
+.job .tm{font-weight:800;font-variant-numeric:tabular-nums}
+.job .ti{font-weight:700}
+.job .ad{font-size:13px;color:var(--muted)}
+.job.done{opacity:.55}
+.job .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.job .acts button,.job .acts select{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer;width:auto}
+.run .ft{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);font-size:13px;background:#FAF9F6;flex-wrap:wrap}
+.bar{height:8px;border-radius:5px;background:#ECEAE5;overflow:hidden;display:flex;margin-top:6px}
+.bar i{display:block;height:100%}
+/* tables / editors */
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td input,td select{padding:8px 9px;font-size:14px;border-radius:9px}
+.qrow{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:var(--card);cursor:pointer;border:1.5px solid transparent;margin-bottom:8px}
+.qrow:hover{border-color:var(--line)}
+.qrow.sel{border-color:var(--accent)}
+.totals{margin-left:auto;max-width:300px}
+.totals .r{display:flex;justify-content:space-between;padding:5px 0}
+.totals .r.big{font-size:20px;font-weight:800;border-top:2px solid var(--ink);margin-top:4px;padding-top:8px}
+.days{display:flex;gap:4px;flex-wrap:wrap}
+.days label{display:inline-flex;align-items:center;gap:3px;font-weight:500;font-size:13px;background:#F3F1EC;border-radius:8px;padding:4px 7px}
+.tm-row{display:grid;gap:10px;grid-template-columns:1fr;border:1.5px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+@media(min-width:760px){.tm-row{grid-template-columns:1.2fr 1.2fr 1.6fr 1fr auto}}
+.jt-row{display:grid;gap:8px;grid-template-columns:1fr 1fr;border:1.5px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+@media(min-width:900px){.jt-row{grid-template-columns:1fr 2fr .8fr .8fr 1fr .8fr .8fr auto}}
+.jt-row .full{grid-column:1/-1}
+.emg{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--warnbg);border-radius:16px;padding:14px 16px;margin-bottom:16px}
+.emg b{display:block;color:var(--warn)}.emg span{font-size:14px;color:#6B2A20}
+.emg.on{background:var(--warn)}.emg.on b,.emg.on span{color:#fff}.emg.on .btn{color:#fff;border-color:rgba(255,255,255,.5)}
+.job.emer{background:#FFF6F4}
+.backsite{color:#fff;text-decoration:none;font-size:14px;font-weight:600;opacity:.85}
+body.cust #tabs,body.cust .demo-note,body.cust .staffonly,body.cust #seeQ,body.cust #toRun{display:none!important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-weight:600;transition:transform .25s,opacity .25s;opacity:0;pointer-events:none;z-index:50;max-width:90vw;text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+.qdoc{max-width:760px;margin:0 auto}
+.qdoc .head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:16px}
+[hidden]{display:none!important}
+@media print{.top,.demo-note,.noprint{display:none!important}body{background:#fff}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+
+<div class="top noprint">
+  <div class="in">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></div>
+      <div style="min-width:0"><b id="bizName">Painter Deluxe</b><small>Painter Deluxe · demo</small></div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button data-v="book">Book a job</button>
+      <button data-v="staff">Run sheet</button>
+      <button data-v="quotes">Quotes<span class="cnt" id="qCnt" hidden>0</span></button>
+      <button data-v="crm">Customers</button><button data-v="website">Website editor</button><button data-v="setup">Setup</button>
+    </div>
+  </div>
+</div>
+<div class="demo-note noprint">Demo — everything you do here is saved only in this browser. Try booking a job, then open the run sheet to see travel time built in. <a href="#crm" style="color:inherit;font-weight:700">Open customer CRM →</a></div>
+
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   SUBURBS (demo area: inner-west Sydney + surrounds). Approximate centre points.
+   In the live version these come from a geocoder / the business's own list.
+   ===================================================================== */
+var SUB = {
+ "Annandale":[-33.881,151.170],"Alexandria":[-33.905,151.195],"Ashfield":[-33.888,151.125],"Balmain":[-33.858,151.180],
+ "Bankstown":[-33.918,151.035],"Bondi":[-33.891,151.277],"Bondi Junction":[-33.892,151.250],"Burwood":[-33.877,151.104],
+ "Canterbury":[-33.912,151.118],"Chatswood":[-33.797,151.183],"Concord":[-33.859,151.104],"Coogee":[-33.920,151.255],
+ "Drummoyne":[-33.853,151.154],"Dulwich Hill":[-33.905,151.139],"Earlwood":[-33.925,151.126],"Enmore":[-33.900,151.173],
+ "Erskineville":[-33.903,151.186],"Five Dock":[-33.868,151.129],"Glebe":[-33.879,151.186],"Haberfield":[-33.880,151.139],
+ "Hurlstone Park":[-33.910,151.132],"Hurstville":[-33.967,151.102],"Kogarah":[-33.963,151.133],"Leichhardt":[-33.883,151.157],
+ "Lewisham":[-33.896,151.146],"Lilyfield":[-33.873,151.165],"Marrickville":[-33.911,151.155],"Mascot":[-33.927,151.193],
+ "Newtown":[-33.897,151.179],"Parramatta":[-33.815,151.001],"Petersham":[-33.894,151.155],"Randwick":[-33.914,151.241],
+ "Redfern":[-33.893,151.204],"Rockdale":[-33.952,151.137],"Rozelle":[-33.862,151.171],"St Peters":[-33.912,151.180],
+ "Stanmore":[-33.894,151.164],"Strathfield":[-33.873,151.094],"Summer Hill":[-33.892,151.138],"Surry Hills":[-33.885,151.211],
+ "Sydenham":[-33.916,151.168],"Sydney CBD":[-33.869,151.208],"Tempe":[-33.923,151.160]
+};
+var SUB_NAMES = Object.keys(SUB).sort();
+
+/* =====================================================================
+   TRADE PRESETS — one system, any mobile trade. Add more here later.
+   price types: fixed | from | range | hourly | quote
+   ===================================================================== */
+var PRESETS = {
+ "painter": {label:"Painter",word:"painter",cats:{painting:"Painting"},jobs:[
+ ["painting","Painting quote · site visit","Inspect the surfaces, measure the work and discuss your colours. This books an inspection, not the painting job.",45,60,"fixed",0],
+ ["painting","Interior painting enquiry","One room, several rooms or a whole home. Send your requirements for a written quote.",120,240,"quote"],
+ ["painting","Exterior painting enquiry","Exterior walls and trims. Access and preparation assessed before quoting.",120,240,"quote"]]},
+ "plumb-elec": { label:"Plumber & electrician", word:"tradie",
+   cats:{plumbing:"Plumbing",electrical:"Electrical"},
+   jobs:[
+    ["plumbing","Blocked drain or toilet","Clear blockages in sinks, showers, toilets and drains.",60,90,"range",180,380],
+    ["plumbing","Leaking tap, toilet or pipe","Washers, cisterns, mixers and small pipe repairs.",45,60,"from",149],
+    ["plumbing","Hot water system repair","No hot water, leaks, thermostat or element faults.",60,120,"from",220],
+    ["plumbing","Hot water system replacement","Supply and install a new gas, electric or heat-pump system.",180,240,"quote"],
+    ["plumbing","Gas appliance install or check","Cooktops, heaters and gas compliance checks.",60,90,"from",190],
+    ["plumbing","Bathroom or kitchen renovation plumbing","Rough-in and fit-off for renovations.",240,480,"quote"],
+    ["plumbing","General plumbing (hourly)","Anything else — billed by the hour plus parts.",60,60,"hourly",120],
+    ["plumbing","Drain maintenance service (businesses)","Regular jetting and grease-trap checks for cafes, restaurants and strata.",60,60,"fixed",165],
+    ["electrical","Power point install or replace","New or replacement GPOs, USB outlets.",30,60,"from",135],
+    ["electrical","Ceiling fan install","Supply or install, with or without light.",60,120,"from",180],
+    ["electrical","Lighting and downlights","LED upgrades, new lights, outdoor lighting.",60,180,"range",160,650],
+    ["electrical","Smoke alarm install or test","Hard-wired and lithium alarms, compliance test.",30,60,"from",99],
+    ["electrical","Safety inspection and report","Full home electrical check with written report.",90,90,"fixed",249],
+    ["electrical","Switchboard upgrade","Replace old fuses with a modern board and safety switches.",240,360,"quote"],
+    ["electrical","EV charger installation","Home EV charger supply and install.",180,300,"quote"],
+    ["electrical","Fault finding / power out","Tripping safety switch, no power, faults.",60,120,"hourly",130],
+    ["electrical","Test & tag (businesses)","Portable appliance testing and RCD checks for workplaces.",120,120,"from",220]
+   ]},
+ "plumber": { label:"Plumber", word:"plumber", cats:{plumbing:"Plumbing",gas:"Gas"}, jobs:null },
+ "electrician": { label:"Electrician", word:"electrician", cats:{electrical:"Electrical",data:"Data & AV"}, jobs:null },
+ "lawn": { label:"Lawn mowing & gardening", word:"gardener", cats:{lawn:"Lawn care",garden:"Garden"},
+   jobs:[
+    ["lawn","Lawn mow — small yard","Mow, edge and blow, up to about 100 m².",30,45,"fixed",55],
+    ["lawn","Lawn mow — medium yard","Mow, edge and blow, 100–300 m².",45,60,"fixed",75],
+    ["lawn","Lawn mow — large yard","Over 300 m² — price confirmed on the day.",60,120,"from",110],
+    ["garden","Hedge trimming","Hedges and shrubs, green waste removed.",60,120,"hourly",70],
+    ["garden","Garden clean-up","Weeding, pruning, mulching, green waste.",120,240,"range",180,480],
+    ["garden","Landscaping or turf laying","New turf, garden beds, edging.",240,480,"quote"]
+   ]},
+ "handyman": { label:"Handyman", word:"handyman", cats:{repairs:"Repairs",install:"Assembly & install"},
+   jobs:[
+    ["repairs","Small repairs (hourly)","Doors, hinges, patching, shelves.",60,120,"hourly",85],
+    ["install","Flat-pack assembly","Furniture assembly, any brand.",60,180,"from",90],
+    ["install","TV wall mount","Mount and hide cables (no electrical work).",60,90,"fixed",149],
+    ["repairs","Deck or fence repair","Replace boards, palings, re-fix posts.",120,240,"quote"]
+   ]},
+ "cleaning": { label:"Cleaning", word:"cleaner", cats:{home:"Home cleaning",special:"Specialist"},
+   jobs:[
+    ["home","Standard home clean","Kitchen, bathrooms, floors, dusting.",120,180,"from",160],
+    ["home","End-of-lease clean","Bond-back standard clean.",240,360,"quote"],
+    ["special","Carpet steam clean","Per room, stain treatment included.",60,120,"from",120],
+    ["special","Window cleaning","Inside and out, screens and tracks.",90,180,"range",150,350]
+   ]}
+};
+
+/* =====================================================================
+   STORAGE (demo = this browser). Wrapped so a blocked storage still runs.
+   ===================================================================== */
+var KEY = "painterDeluxeDemo_v1", MEM = null;
+var QP0 = new URLSearchParams(location.search);
+var LIVE = !!QP0.get("b") || /\/painters\/app\//.test(location.pathname) || QP0.get("live") === "1";
+function load(){ try { var s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch(e){} return MEM; }
+function save(){ if (LIVE) return; MEM = DB; try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch(e){ toast("Couldn't save in this browser — changes last until you close the page"); } }
+
+/* ---------- helpers ---------- */
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function $(s, r){ return (r || document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function uid(){ return Math.random().toString(36).slice(2, 10); }
+function ref(p){ var c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", s = ""; for (var i = 0; i < 5; i++) s += c[Math.floor(Math.random() * c.length)]; return p + "-" + s; }
+function pad(n){ return (n < 10 ? "0" : "") + n; }
+function hm(s){ var p = String(s || "0:0").split(":"); return (+p[0]) * 60 + (+p[1] || 0); }
+function hhmm(m){ return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
+function fmt(m){ var h = Math.floor(m / 60), mm = m % 60, ap = h >= 12 ? "pm" : "am", h12 = h % 12 || 12; return h12 + (mm ? ":" + pad(mm) : "") + ap; }
+function dur(m){ if (m < 60) return m + " min"; var h = Math.floor(m / 60), r = m % 60; return h + " h" + (r ? " " + r + " min" : ""); }
+function money(n){ n = Math.round(n * 100) / 100; return "$" + n.toLocaleString("en-AU", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
+function today(){ var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+function addDays(ds, n){ var d = new Date(ds + "T12:00:00"); d.setDate(d.getDate() + n); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+function dow(ds){ return new Date(ds + "T12:00:00").getDay(); }
+function fmtDay(ds, o){ return new Date(ds + "T12:00:00").toLocaleDateString("en-AU", o || { weekday: "long", day: "numeric", month: "long" }); }
+function nowMin(){ var d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
+function findSub(name){ name = String(name || "").trim().toLowerCase(); for (var i = 0; i < SUB_NAMES.length; i++) if (SUB_NAMES[i].toLowerCase() === name) return SUB_NAMES[i]; return null; }
+var DAYN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function toast(t){ var e = $("#toast"); e.textContent = t; e.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(function(){ e.classList.remove("on"); }, 2600); }
+
+/* =====================================================================
+   TRAVEL — straight-line distance × road factor ÷ average suburban speed,
+   plus a fixed allowance for parking / unloading / walking in.
+   ===================================================================== */
+function km(a, b){
+  var A = SUB[a], B = SUB[b]; if (!A || !B) return null;
+  var R = 6371, dLa = (B[0] - A[0]) * Math.PI / 180, dLo = (B[1] - A[1]) * Math.PI / 180;
+  var x = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(A[0] * Math.PI / 180) * Math.cos(B[0] * Math.PI / 180) * Math.sin(dLo / 2) * Math.sin(dLo / 2);
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+function roadKm(a, b){ var k = km(a, b); return k == null ? null : k * DB.biz.roadFactor; }
+function travel(a, b){
+  var B = DB.biz, c = DB.tcache && (DB.tcache[a + "|" + b] != null ? DB.tcache[a + "|" + b] : DB.tcache[b + "|" + a]);
+  if (a === b) return B.bufferMin + 5;
+  if (c != null) return Math.max(B.bufferMin + 5, Math.ceil((c + B.bufferMin) / 5) * 5);   // real Google drive time
+  var rk = roadKm(a, b);
+  if (rk == null) return B.unknownTravel;
+  var m = rk / B.speedKmh * 60 + B.bufferMin;
+  return Math.max(B.bufferMin + 5, Math.ceil(m / 5) * 5);
+}
+/* ---- optional: real drive times from Google Maps (needs the business's own API key).
+   Times are saved per pair of suburbs, so each pair is looked up once — keeps the Google bill tiny. ---- */
+var GM = { loading: null };
+function gmLoad(){
+  if (window.google && google.maps && google.maps.DistanceMatrixService) return Promise.resolve();
+  if (GM.loading) return GM.loading;
+  GM.loading = new Promise(function(res, rej){
+    window.__gmReady = res;
+    var s = document.createElement("script");
+    s.src = "https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(DB.biz.gmapsKey) + "&callback=__gmReady&loading=async";
+    s.onerror = function(){ GM.loading = null; rej(new Error("Google Maps didn't load")); };
+    document.head.appendChild(s);
+  });
+  return GM.loading;
+}
+function gmPrefetch(sub){
+  if (!DB.biz.gmapsKey || !SUB[sub]) return Promise.resolve(0);
+  DB.tcache = DB.tcache || {};
+  var others = {}, end = addDays(today(), 22);
+  others[DB.biz.base] = 1; DB.team.forEach(function(t){ others[baseOf(t)] = 1; });
+  DB.bookings.forEach(function(b){ if (b.status === "booked" && b.date >= today() && b.date <= end) others[b.suburb] = 1; });
+  var need = Object.keys(others).filter(function(o){ return SUB[o] && o !== sub && DB.tcache[sub + "|" + o] == null && DB.tcache[o + "|" + sub] == null; }).slice(0, 25);
+  if (!need.length) return Promise.resolve(0);
+  var place = function(s){ return s + " NSW, Australia"; };
+  var work = gmLoad().then(function(){
+    return new Promise(function(res, rej){
+      new google.maps.DistanceMatrixService().getDistanceMatrix({ origins: [place(sub)], destinations: need.map(place), travelMode: "DRIVING",
+        drivingOptions: { departureTime: new Date(Date.now() + 864e5), trafficModel: "best_guess" } }, function(r, st){
+        if (st !== "OK") return rej(new Error("Google: " + st));
+        var n = 0, pairs = {};
+        r.rows[0].elements.forEach(function(e, i){ if (e.status === "OK") { var d = e.duration_in_traffic || e.duration; DB.tcache[sub + "|" + need[i]] = pairs[sub + "|" + need[i]] = Math.round(d.value / 60); n++; } });
+        save(); if (LIVE) liveTravelSave(pairs); res(n);
+      });
+    });
+  });
+  var timeout = new Promise(function(res){ setTimeout(function(){ res(-1); }, 7000); });
+  return Promise.race([work, timeout]).catch(function(e){ toast("Using estimated drive times (" + e.message + ")"); return 0; });
+}
+function baseOf(t){ return t.base || DB.biz.base; }
+
+/* =====================================================================
+   SCHEDULER
+   A job fits a tradie at time t when:
+   • it's inside their working hours that day (and they work that weekday),
+   • the job before it finishes early enough to drive here,
+   • it finishes early enough to drive to the job after it,
+   • the first job of the day leaves time to drive from base (optional).
+   Among tradies who fit, the one adding the least extra driving wins.
+   ===================================================================== */
+function jobsFor(techId, date, ignoreId){
+  return DB.bookings.filter(function(b){ return b.techId === techId && b.date === date && b.status !== "cancelled" && b.id !== ignoreId; })
+    .sort(function(a, b){ return a.start - b.start; });
+}
+/* working hours for a tradie on a date; in emergency mode on-call tradies stretch to the after-hours window */
+function hoursFor(tech, date, emerg){
+  var normal = tech.days.indexOf(dow(date)) >= 0 && (tech.off || []).indexOf(date) < 0, E = DB.biz.emergency;
+  var nh = normal ? [hm(tech.start), hm(tech.end)] : null;
+  if (emerg && E.on && tech.onCall) return { start: Math.min(hm(E.start), nh ? nh[0] : 1440), end: Math.max(hm(E.end), nh ? nh[1] : 0), normal: nh };
+  return nh ? { start: nh[0], end: nh[1], normal: nh } : null;
+}
+function fits(tech, date, t, mins, sub, ignoreId, emerg){
+  var H = hoursFor(tech, date, emerg); if (!H) return null;
+  var ds = H.start, de = H.end;
+  if (t < ds || t + mins > de) return null;
+  var after = !H.normal || t < H.normal[0] || t + mins > H.normal[1];
+  var jobs = jobsFor(tech.id, date, ignoreId), prev = null, next = null;
+  for (var i = 0; i < jobs.length; i++) {
+    var j = jobs[i], je = j.start + j.mins;
+    if (je <= t) prev = j;
+    else if (j.start >= t + mins) { if (!next) next = j; }
+    else return null;                                    // overlaps
+  }
+  var from = prev ? prev.suburb : baseOf(tech);
+  var tIn = travel(from, sub);
+  if (prev && prev.start + prev.mins + tIn > t) return null;
+  if (!prev && DB.biz.countFirstLeg && t < ds + tIn) return null;
+  var tOut = next ? travel(sub, next.suburb) : 0;
+  if (next && t + mins + tOut > next.start) return null;
+  var extra = tIn + tOut - (next ? travel(from, next.suburb) : 0);
+  var near = (prev && tIn <= DB.biz.bufferMin + 10) || (next && tOut <= DB.biz.bufferMin + 10);
+  return { tech: tech, t: t, extra: extra, near: !!near, driveIn: tIn, after: after };
+}
+function canDo(tech, cat){ return tech.active !== false && tech.skills.indexOf(cat) >= 0; }
+function options(date, mins, cat, sub, techId, emerg){
+  var B = DB.biz, best = {}, min0 = 0;
+  if (date === today()) min0 = nowMin() + (emerg ? B.emergency.notice : B.noticeHours * 60);
+  DB.team.forEach(function(tech){
+    if (!canDo(tech, cat) || (techId && tech.id !== techId)) return;
+    var H = hoursFor(tech, date, emerg); if (!H) return;
+    for (var t = H.start; t + mins <= H.end; t += B.slotStep) {
+      if (t < min0) continue;
+      var r = fits(tech, date, t, mins, sub, null, emerg);
+      if (!r) continue;
+      if (!best[t] || r.extra < best[t].extra) best[t] = r;
+    }
+  });
+  return Object.keys(best).map(function(k){ return best[k]; }).sort(function(a, b){ return a.t - b.t; });
+}
+/* group exact starts into arrival windows ("we'll arrive between 9 and 11") */
+function windows(opts){
+  var B = DB.biz, w = B.windowHours * 60, out = [], ds = hm(B.dayStart), de = hm(B.dayEnd);
+  for (var s = ds; s < de; s += w) {
+    var inW = opts.filter(function(o){ return o.t >= s && o.t < s + w; });
+    if (!inW.length) continue;
+    inW.sort(function(a, b){ return (a.extra - b.extra) || (a.t - b.t); });
+    out.push({ from: s, to: Math.min(s + w, de), pick: inW[0], near: inW.some(function(o){ return o.near; }) });
+  }
+  return out;
+}
+function dateOpen(date, emerg){ return DB.team.some(function(t){ return t.active !== false && !!hoursFor(t, date, emerg); }); }
+/* repeat bookings: same weekday + time with the same tradie where possible, otherwise the closest fit that day */
+function planSeries(first, every, count, mins, cat, sub){
+  var out = [{ date: first.date, t: first.t, tech: first.tech, moved: false }];
+  for (var i = 1; i < count; i++) {
+    var d = addDays(first.date, i * every), r = fits(first.tech, d, first.t, mins, sub), moved = false;
+    if (!r) {
+      var opts = options(d, mins, cat, sub, null);
+      opts.sort(function(a, b){ return (Math.abs(a.t - first.t) - Math.abs(b.t - first.t)) || ((a.tech.id === first.tech.id ? 0 : 1) - (b.tech.id === first.tech.id ? 0 : 1)); });
+      r = opts[0] && Math.abs(opts[0].t - first.t) <= 180 ? opts[0] : null; moved = true;
+    }
+    out.push(r ? { date: d, t: r.t, tech: r.tech, moved: moved } : { date: d, t: null, tech: null, moved: true });
+  }
+  return out;
+}
+
+/* =====================================================================
+   DEMO DATA
+   ===================================================================== */
+function makeJobs(presetKey){
+  var p = PRESETS[presetKey], src = p.jobs || PRESETS["plumb-elec"].jobs.filter(function(j){ return p.cats[j[0]]; });
+  return src.map(function(j){ return jobFlags({ id: uid(), cat: j[0], name: j[1], desc: j[2], mins: j[3], minsMax: j[4], price: j[5], a: j[6] || 0, b: j[7] || 0, active: true }); });
+}
+function jobFlags(j){
+  if (j.emergency == null) j.emergency = /blocked|leak|hot water system repair|fault|power out|gas appliance|burst/i.test(j.name);
+  if (j.repeat == null) j.repeat = /maintenance|test & tag|lawn mow|hedge|standard home clean|garden clean/i.test(j.name);
+  return j;
+}
+/* older demo data → add the newer settings */
+function seedBiz(){
+  return { name: "Your Painting Business", preset: "painter", phone: "", email: "", base: "Marrickville",
+    radiusKm: 15, speedKmh: 28, roadFactor: 1.35, bufferMin: 10, unknownTravel: 40, slotStep: 30,
+    bookMode: "exact", windowHours: 2, dayStart: "07:00", dayEnd: "17:00", countFirstLeg: true, noticeHours: 2,
+    chooseTech: true, gst: true, callout: 0, quoteValidDays: 30, labourRate: 120 };
+}
+function migrate(db){
+  var B = db.biz;
+  if (!B.deposit) B.deposit = { mode: "callout", amount: 0 };
+  if (B.quoteDepositPct == null) B.quoteDepositPct = 20;
+  if (!B.emergency) B.emergency = { on: false, fee: 0, start: "06:00", end: "22:00", notice: 60 };
+  if (B.gmapsKey == null) B.gmapsKey = "";
+  if (!db.tcache) db.tcache = {};
+  db.jobTypes.forEach(jobFlags);
+  if (!db.team.some(function(t){ return t.onCall != null; })) db.team.forEach(function(t, i){ t.onCall = i < 2; });
+  return db;
+}
+function seed(){return migrate({biz:seedBiz(),team:[{id:"p1",name:"Demo painter",role:"Painter",skills:["painting"],color:"#456859",days:[1,2,3,4,5],start:"08:00",end:"17:00",active:true,onCall:false}],jobTypes:makeJobs("painter"),bookings:[],quotes:[],tcache:{}});}
+var DB = LIVE ? migrate({ biz: seedBiz(), team: [], jobTypes: [], bookings: [], quotes: [], tcache: {} }) : migrate(load() || seed()); save();
+
+/* =====================================================================
+   PRICE LABELS
+   ===================================================================== */
+function priceLabel(j){
+  if (j.price === "fixed") return { b: money(j.a), s: "fixed price" };
+  if (j.price === "from") return { b: "from " + money(j.a), s: "plus parts if needed" };
+  if (j.price === "range") return { b: money(j.a) + "–" + money(j.b), s: "typical range" };
+  if (j.price === "hourly") return { b: money(j.a) + "/hr", s: "plus parts" };
+  return { b: "Free quote", s: "we'll price it first" };
+}
+function durLabel(j){ return j.mins === j.minsMax ? "about " + dur(j.mins) : dur(j.mins) + "–" + dur(j.minsMax); }
+function catName(c){ var p = PRESETS[DB.biz.preset] || PRESETS["plumb-elec"]; return (DB.biz.cats && DB.biz.cats[c]) || p.cats[c] || c; }
+function cats(){ var o = {}; DB.jobTypes.forEach(function(j){ if (j.active !== false) o[j.cat] = 1; }); return Object.keys(o); }
+function jobType(id){ return DB.jobTypes.filter(function(j){ return j.id === id; })[0]; }
+function tech(id){ return DB.team.filter(function(t){ return t.id === id; })[0]; }
+function quote(id){ return DB.quotes.filter(function(q){ return q.id === id; })[0]; }
+function qTotals(q){ var sub = 0; (q.lines || []).forEach(function(l){ sub += (+l.q || 0) * (+l.u || 0); }); var gst = DB.biz.gst ? sub * 0.1 : 0; return { sub: sub, gst: gst, total: sub + gst }; }
+
+/* =====================================================================
+   ROUTER
+   ===================================================================== */
+var VIEW = "book";
+function go(v){ location.hash = v; }
+function route(){
+  if (LIVE) { var la = hashArgs(); if (la.quote || la.cancel || la.start || la.join) return liveBoot(); if ((la.staff || la.quotes || la.setup || la.crm || la.website) && !STAFF) return liveBoot(); }
+  var h = location.hash.replace(/^#/, "");
+  if (h.indexOf("quote=") === 0) { VIEW = "cq"; renderCustomerQuote(h.slice(6)); }
+  else { VIEW = ["book","staff","quotes","setup","crm","website"].indexOf(h) >= 0 ? h : "book"; ({ book: renderBook, staff: renderStaff, quotes: renderQuotes, setup: renderSetup, crm: renderCRM, website: renderWebsite })[VIEW](); }
+  $$("#tabs button").forEach(function(b){ b.classList.toggle("on", b.dataset.v === VIEW); });
+  $("#bizName").textContent = DB.biz.name;
+  if (LIVE && DB.biz.name) document.title = DB.biz.name + (STAFF ? " — Painter Deluxe" : " — book online");
+  var n = DB.quotes.filter(function(q){ return q.status === "new"; }).length;
+  $("#qCnt").textContent = n; $("#qCnt").hidden = !n;
+  window.scrollTo(0, 0);
+}
+$$("#tabs button").forEach(function(b){ b.onclick = function(){ if (b.dataset.v === "book") BK = freshBK(); go(b.dataset.v); if (location.hash === "#" + b.dataset.v) route(); }; });
+window.addEventListener("hashchange", route);
+
+/* =====================================================================
+   CUSTOMER BOOKING
+   ===================================================================== */
+function freshBK(){ return { step: 1, cat: null, job: null, street: "", suburb: "", date: null, pick: null, techId: "", name: "", phone: "", email: "", notes: "", photos: [], prefer: "", desc: "", emerg: false, every: 0, count: 6 }; }
+var BK = freshBK();
+try { var brief=JSON.parse(sessionStorage.getItem("painterBrief:"+(QP0.get("b")||"demo"))||"null"); if(brief && Date.now()-brief.at<7200000){BK.notes=brief.text.slice(0,1450);BK.desc=brief.text.slice(0,1900);} }catch(e){}
+var QP = new URLSearchParams(location.search);
+if (QP.get("emergency") === "1") BK.emerg = true;
+if (QP.get("job")) { var _j = DB.jobTypes.filter(function(j){ return j.id === QP.get("job") || j.name === QP.get("job"); })[0]; if (_j) { BK.job = _j; BK.cat = _j.cat; BK.step = 2; } }
+if (QP.get("cat")) BK.cat = QP.get("cat");
+
+function payDue(){
+  var B = DB.biz, j = BK.job;
+  if (!j || j.price === "quote" || BK.outOfArea || LIVE) return 0;   // live: card payments switch on with Stripe
+  if (BK.emerg && B.emergency.on) return B.emergency.fee;
+  return B.deposit.mode === "callout" ? B.deposit.amount : 0;
+}
+function renderBook(){
+  var app = $("#app"), j = BK.job, isQuote = j && j.price === "quote", pay = payDue() > 0;
+  if (!BK.cat || cats().indexOf(BK.cat) < 0) BK.cat = cats()[0];
+  var labels = [["Job",1],["Address",2],[isQuote ? "Describe it" : "Time",3],["Your details",4]]; if (pay) labels.push(["Pay",5]);
+  var h = (BK.emerg ? '<h1>Emergency <em>call-out</em></h1><p class="lead">Burst pipe, no power or a blocked toilet that can\'t wait? Book an on-call ' + esc(word()) + ' today — including evenings and weekends.</p>'
+      : '<h1>Book a <em>' + esc(word()) + '</em></h1><p class="lead">Pick the job, tell us where, and choose a time that works. Arrival times already allow for the drive between jobs, so we turn up when we say.</p>') +
+    '<div class="steps">' + labels.map(function(l, i){ return '<span class="' + (BK.step === l[1] ? "on" : BK.step > l[1] ? "done" : "") + '">' + (i + 1) + ' · ' + l[0] + '</span>'; }).join("") + '</div>' +
+    '<div class="grid"><div id="stepBody"></div><div class="card sum" id="sumBox"></div></div>';
+  app.innerHTML = h;
+  ({ 1: stepJob, 2: stepAddress, 3: isQuote ? stepDescribe : stepTime, 4: stepDetails, 5: stepPay, 6: stepDone })[BK.step]();
+  renderSummary();
+}
+function word(){ return (PRESETS[DB.biz.preset] || {}).word || "tradie"; }
+function renderSummary(){
+  var b = $("#sumBox"); if (!b) return;
+  if (BK.step === 6) { b.hidden = true; return; }
+  var j = BK.job, r = [];
+  if (BK.emerg) r.push(['Type', '<span class="pill warn">Emergency</span>']);
+  r.push(['Job', j ? esc(j.name) : '<span class="muted">—</span>']);
+  if (j) r.push(['Allow', durLabel(j)]);
+  if (j) r.push(['Price', priceLabel(j).b]);
+  if (BK.suburb) r.push(['Where', esc((BK.street ? BK.street + ", " : "") + BK.suburb)]);
+  if (BK.pick) {
+    r.push(['When', fmtDay(BK.date, { weekday: "short", day: "numeric", month: "short" }) + '<br>' + (BK.pick.win ? "arrive " + fmt(BK.pick.win.from) + "–" + fmt(BK.pick.win.to) : fmt(BK.pick.t)) + (BK.pick.after ? ' <span class="pill warn">After hours</span>' : '')]);
+    if (DB.biz.chooseTech || BK.emerg) r.push(['Tradie', esc(BK.pick.tech.name.split(" ")[0])]);
+    if (BK.every) r.push(['Repeats', 'every ' + (BK.every === 7 ? 'week' : BK.every === 14 ? '2 weeks' : '4 weeks') + ', ' + BK.count + ' visits']);
+  }
+  var due = payDue();
+  if (due) r.push([BK.emerg ? 'Emergency fee' : 'Call-out fee', money(due) + '<br><span class="small muted">paid now, ' + (BK.emerg ? 'plus the job' : 'taken off your bill') + '</span>']);
+  b.innerHTML = '<h3>Your booking</h3>' + r.map(function(x){ return '<div class="r"><span>' + x[0] + '</span><span>' + x[1] + '</span></div>'; }).join("") +
+    '<p class="small muted" style="margin:12px 0 0">Questions? Call <b>' + esc(DB.biz.phone) + '</b></p>';
+}
+function stepJob(){
+  var cs = cats(), body = $("#stepBody"), E = DB.biz.emergency;
+  var list = DB.jobTypes.filter(function(j){ return j.cat === BK.cat && j.active !== false && (!BK.emerg || j.emergency); });
+  var h = (E.on ? (BK.emerg
+      ? '<div class="emg on"><div><b>🚨 Emergency mode</b><span>Showing urgent jobs only. Times today and tomorrow, including after hours. Emergency call-out ' + money(E.fee) + '.</span></div><button class="btn sm ghost" id="emg">Back to normal booking</button></div>'
+      : '<div class="emg"><div><b>🚨 Can\'t wait?</b><span>Burst pipe, no power, blocked toilet — book an on-call ' + esc(word()) + ' today, ' + fmt(hm(E.start)) + '–' + fmt(hm(E.end)) + ', 7 days.</span></div><button class="btn sm" id="emg" style="background:var(--warn)">Emergency booking</button></div>') : '') +
+    '<div class="seg">' + cs.map(function(c){ return '<button data-c="' + c + '" class="' + (c === BK.cat ? "on" : "") + '">' + esc(catName(c)) + '</button>'; }).join("") + '</div><div class="list">';
+  list.forEach(function(j){
+    var p = priceLabel(j);
+    h += '<button class="opt' + (BK.job && BK.job.id === j.id ? " sel" : "") + '" data-j="' + j.id + '"><div class="ico">' + esc(catName(j.cat).charAt(0)) + '</div><div><div class="t">' + esc(j.name) +
+      (j.price === "quote" ? ' <span class="pill q">Quote</span>' : '') + (j.repeat && !BK.emerg ? ' <span class="pill grey">Can repeat</span>' : '') + '</div><div class="d">' + esc(j.desc) + '</div><div class="d">Allow ' + durLabel(j) + '</div></div>' +
+      '<div class="meta"><b>' + p.b + '</b><span>' + p.s + '</span></div></button>';
+  });
+  if (!list.length) h += '<div class="empty">No ' + (BK.emerg ? 'emergency ' : '') + 'jobs in this group.</div>';
+  body.innerHTML = h + '</div><p class="small muted" style="margin-top:16px">Not sure which job it is? Choose the closest one — add details on the last step. For bigger jobs we send a written quote first.</p>';
+  if ($("#emg")) $("#emg").onclick = function(){ BK.emerg = !BK.emerg; BK.job = null; BK.pick = null; BK.every = 0; renderBook(); };
+  $$(".seg button", body).forEach(function(b){ b.onclick = function(){ BK.cat = b.dataset.c; stepJob(); }; });
+  $$(".opt", body).forEach(function(b){ b.onclick = function(){ BK.job = jobType(b.dataset.j); BK.pick = null; BK.date = null; BK.every = 0; BK.step = 2; renderBook(); }; });
+}
+function stepAddress(){
+  var body = $("#stepBody");
+  body.innerHTML = '<div class="card form"><h3 style="margin:0">Where is the job?</h3>' +
+    '<label>Street address<input type="text" id="aStreet" autocomplete="address-line1" value="' + esc(BK.street) + '" placeholder="e.g. 14 King Street"></label>' +
+    '<label>Suburb<input type="text" id="aSub" list="subList" autocomplete="address-level2" value="' + esc(BK.suburb) + '" placeholder="Start typing your suburb"></label>' +
+    '<datalist id="subList">' + SUB_NAMES.map(function(s){ return '<option value="' + s + '">'; }).join("") + '</datalist>' +
+    '<div id="areaMsg"></div><div class="actions" style="margin-top:4px"><button class="btn ghost" id="back">Back</button><button class="btn" id="next">Continue</button></div></div>';
+  var check = function(){
+    var raw = $("#aSub").value, s = findSub(raw) || (LIVE && SUB[subName(raw)] ? subName(raw) : null), m = $("#areaMsg");
+    if (!raw.trim()) { m.innerHTML = ""; return null; }
+    if (!s && LIVE && !check.tried[subName(raw)]) { m.innerHTML = '<div class="note info">We\'ll look up ' + esc(subName(raw)) + ' when you press Continue.</div>'; return { s: subName(raw), out: true, unknown: true, pending: true }; }
+    if (!s) { m.innerHTML = '<div class="note info">We don\'t have that suburb on our list yet. You can still send the job and we\'ll call to confirm a time.</div>'; return { s: $("#aSub").value.trim(), out: true, unknown: true }; }
+    var d = roadKm(DB.biz.base, s);
+    if (d > DB.biz.radiusKm) { m.innerHTML = '<div class="note warn">' + esc(s) + ' is about ' + Math.round(d) + ' km from our base — outside our usual ' + DB.biz.radiusKm + ' km area. Send it as a request and we\'ll let you know if we can fit it in.</div>'; return { s: s, out: true }; }
+    m.innerHTML = '<div class="note ok">Good news — ' + esc(s) + ' is in our area (about ' + Math.round(d) + ' km from base).</div>'; return { s: s, out: false };
+  };
+  check.tried = {};
+  $("#aSub").oninput = check; check();
+  $("#back").onclick = function(){ BK.step = 1; renderBook(); };
+  $("#next").onclick = function(){
+    var st0 = $("#aStreet").value.trim(), c0 = check(), self = this;
+    if (LIVE && c0 && c0.pending && st0) { busy(self, true, "Finding suburb…"); check.tried[c0.s] = 1;
+      return geoSub(c0.s).then(function(){ busy(self, false); check(); self.click(); }); }
+    var st = st0, c = c0, btn = this;
+    if (!st || !c) return toast("Please add the street address and suburb");
+    BK.street = st; BK.suburb = c.s; BK.outOfArea = c.out; BK.pick = null;
+    btn.disabled = true; btn.textContent = DB.biz.gmapsKey ? "Checking drive times…" : "Continue";
+    gmPrefetch(c.s).then(function(){ BK.step = 3; renderBook(); });
+  };
+}
+function stepTime(){
+  var body = $("#stepBody"), j = BK.job;
+  if (BK.outOfArea) {
+    body.innerHTML = '<div class="card"><h3>We\'ll call you to arrange a time</h3><p class="muted">Because ' + esc(BK.suburb) + ' is outside our usual area, we can\'t offer online times. Send the job and we\'ll come back to you with a time — or a quote if it\'s worth the trip.</p><label>Best days or times for you <span class="opt-l">(optional)</span><input type="text" id="pref" value="' + esc(BK.prefer) + '" placeholder="e.g. Tuesday afternoon"></label><div class="actions"><button class="btn ghost" id="back">Back</button><button class="btn" id="next">Continue</button></div></div>';
+    $("#back").onclick = function(){ BK.step = 2; renderBook(); };
+    $("#next").onclick = function(){ BK.prefer = $("#pref").value; BK.step = 4; renderBook(); };
+    return;
+  }
+  timePicker(body, { mins: j.minsMax, cat: j.cat, suburb: BK.suburb, state: BK, emerg: BK.emerg, repeat: j.repeat && !BK.emerg,
+    onBack: function(){ BK.step = 2; renderBook(); },
+    onPick: function(){ renderSummary(); },
+    onNext: function(){ BK.step = 4; renderBook(); } });
+}
+/* shared time picker — used for normal bookings, emergencies and accepted quotes */
+function timePicker(body, o){
+  var S = o.state, days = o.emerg ? 3 : 21, exact = o.emerg || DB.biz.bookMode !== "window";
+  if (!S.date) { var d = today(); for (var i = 0; i < days && !(dateOpen(d, o.emerg) && options(d, o.mins, o.cat, o.suburb, S.techId, o.emerg).length); i++) d = addDays(d, 1); S.date = d; }
+  var dts = []; for (var k = 0; k < days; k++) dts.push(addDays(today(), k));
+  var techs = DB.team.filter(function(t){ return canDo(t, o.cat) && (!o.emerg || t.onCall); });
+  var h = '<div class="card">';
+  if (o.repeat) {
+    h += '<div class="cat">How often?</div><div class="seg" id="rep">' + [[0,"Just once"],[7,"Every week"],[14,"Every 2 weeks"],[28,"Every 4 weeks"]].map(function(x){ return '<button data-e="' + x[0] + '" class="' + (S.every === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") +
+      (S.every ? '<select id="repN" style="width:auto;padding:7px 10px;border-radius:999px">' + [2,3,4,6,8,12,26].map(function(n){ return '<option value="' + n + '"' + (S.count === n ? " selected" : "") + '>' + n + ' visits</option>'; }).join("") + '</select>' : '') + '</div>';
+  }
+  if ((DB.biz.chooseTech || o.emerg) && techs.length > 1) {
+    h += '<div class="cat">Who would you like?</div><div class="seg" id="who"><button data-t="" class="' + (!S.techId ? "on" : "") + '">First available</button>' +
+      techs.map(function(t){ return '<button data-t="' + t.id + '" class="' + (S.techId === t.id ? "on" : "") + '">' + esc(t.name.split(" ")[0]) + '</button>'; }).join("") + '</div>';
+  }
+  h += '<div class="cat">Choose a day</div><div class="dates">' + dts.map(function(d){
+    var open = dateOpen(d, o.emerg);
+    return '<div class="day' + (d === S.date ? " sel" : "") + (open ? "" : " closed") + '" data-d="' + d + '"><small>' + (d === today() ? "Today" : DAYN[dow(d)]) + '</small><b>' + (+d.slice(8)) + '</b><small>' + fmtDay(d, { month: "short" }) + '</small></div>';
+  }).join("") + '</div>';
+  var opts = options(S.date, o.mins, o.cat, o.suburb, S.techId, o.emerg);
+  h += '<div class="cat">' + (exact ? "Choose a start time" : "Choose an arrival window") + ' · ' + fmtDay(S.date) + '</div>';
+  if (!opts.length) h += '<div class="empty">No times left that day — try another day' + (S.techId ? ' or "First available"' : '') + (o.emerg ? ', or call us on ' + esc(DB.biz.phone) : '') + '.</div>';
+  else if (!exact) {
+    h += '<div class="slots">' + windows(opts).map(function(w, i){
+      var sel = S.pick && S.pick.win && S.pick.win.from === w.from && S.date === S.pickDate;
+      return '<button class="slot' + (sel ? " sel" : "") + '" data-w="' + i + '">' + (w.near ? '<span class="near">NEARBY</span>' : '') + fmt(w.from) + ' – ' + fmt(w.to) + '<small>arrival window</small></button>';
+    }).join("") + '</div>';
+  } else {
+    h += '<div class="slots exact">' + opts.map(function(x, i){
+      var sel = S.pick && !S.pick.win && S.pick.t === x.t && S.date === S.pickDate;
+      return '<button class="slot' + (sel ? " sel" : "") + '" data-i="' + i + '">' + (x.near ? '<span class="near">NEARBY</span>' : '') + fmt(x.t) + (x.after ? '<small>after hours</small>' : '') + '</button>';
+    }).join("") + '</div>';
+  }
+  if (S.every && S.pick && S.pickDate === S.date) {
+    var plan = planSeries({ date: S.date, t: S.pick.t, tech: S.pick.tech }, S.every, S.count, o.mins, o.cat, o.suburb);
+    S.plan = plan;
+    h += '<div class="cat">Your visits</div><div class="small" style="display:grid;gap:4px">' + plan.map(function(p, i){
+      return '<div>' + (i + 1) + '. ' + fmtDay(p.date, { weekday: "short", day: "numeric", month: "short" }) + ' — ' + (p.t == null ? '<span class="pill warn">no time free — we\'ll call you</span>' : fmt(p.t) + ' with ' + esc(p.tech.name.split(" ")[0]) + (p.moved ? ' <span class="pill grey">adjusted</span>' : '')) + '</div>';
+    }).join("") + '</div>';
+  } else S.plan = null;
+  h += '<p class="small muted" style="margin:14px 0 0">Times allow ' + durLabel({ mins: o.mins, minsMax: o.mins }) + ' on site plus travel between jobs' + (DB.biz.gmapsKey && Object.keys(DB.tcache || {}).length ? ' (real drive times from Google Maps)' : '') + '. <span class="pill ok">Nearby</span> means a tradie is already working close to you then.</p>' +
+    '<div class="actions"><button class="btn ghost" id="back">Back</button><button class="btn" id="next"' + (S.pick && S.pickDate === S.date ? "" : " disabled") + '>Continue</button></div></div>';
+  body.innerHTML = h;
+  $$("#rep [data-e]", body).forEach(function(b){ b.onclick = function(){ S.every = +b.dataset.e; timePicker(body, o); o.onPick(); }; });
+  if ($("#repN", body)) $("#repN", body).onchange = function(){ S.count = +this.value; timePicker(body, o); o.onPick(); };
+  $$("#who button", body).forEach(function(b){ b.onclick = function(){ S.techId = b.dataset.t; S.pick = null; timePicker(body, o); o.onPick(); }; });
+  $$(".day", body).forEach(function(b){ if (!b.classList.contains("closed")) b.onclick = function(){ S.date = b.dataset.d; timePicker(body, o); }; });
+  var ws = !exact ? windows(opts) : null;
+  $$(".slot", body).forEach(function(b){ b.onclick = function(){
+    if (ws) { var w = ws[+b.dataset.w]; S.pick = { t: w.pick.t, tech: w.pick.tech, win: { from: w.from, to: w.to }, after: w.pick.after }; }
+    else { var x = opts[+b.dataset.i]; S.pick = { t: x.t, tech: x.tech, win: null, after: x.after }; }
+    S.pickDate = S.date; timePicker(body, o); o.onPick();
+  }; });
+  $("#back", body).onclick = o.onBack;
+  $("#next", body).onclick = o.onNext;
+}
+function photoInput(arr, box, max){
+  var render = function(){ box.querySelector(".photos").innerHTML = arr.map(function(p, i){ return '<img src="' + p + '" alt="photo ' + (i + 1) + '">'; }).join(""); };
+  box.querySelector("input[type=file]").onchange = function(e){
+    var files = Array.prototype.slice.call(e.target.files || []).slice(0, max - arr.length);
+    files.forEach(function(f){ shrink(f, function(u){ if (u && arr.length < max) { arr.push(u); render(); } }); });
+    e.target.value = "";
+  };
+  render();
+}
+function shrink(file, cb){
+  var r = new FileReader();
+  r.onload = function(){ var im = new Image(); im.onload = function(){
+    var s = Math.min(1, 900 / Math.max(im.width, im.height)), c = document.createElement("canvas");
+    c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+    c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); cb(c.toDataURL("image/jpeg", 0.68));
+  }; im.onerror = function(){ cb(null); }; im.src = r.result; };
+  r.readAsDataURL(file);
+}
+function stepDescribe(){
+  var body = $("#stepBody");
+  body.innerHTML = '<div class="card form"><h3 style="margin:0">Tell us about the job</h3><p class="muted" style="margin:0">' + esc(BK.job.name) + ' is priced as a written quote. A few details and photos mean we can usually quote without a site visit.</p>' +
+    '<label>What needs doing?<textarea id="qDesc" placeholder="What\'s there now, what you\'d like, anything we should know">' + esc(BK.desc) + '</textarea></label>' +
+    '<div id="phBox"><label>Photos <span class="opt-l">(up to 4 — e.g. the old unit, the switchboard, the area)</span><input type="file" accept="image/*" multiple></label><div class="photos" style="margin-top:8px"></div></div>' +
+    '<label>Best days or times for a visit <span class="opt-l">(optional)</span><input type="text" id="qPref" value="' + esc(BK.prefer) + '" placeholder="e.g. Weekday mornings"></label>' +
+    '<div class="actions"><button class="btn ghost" id="back">Back</button><button class="btn" id="next">Continue</button></div></div>';
+  photoInput(BK.photos, $("#phBox"), 4);
+  $("#back").onclick = function(){ BK.step = 2; renderBook(); };
+  $("#next").onclick = function(){ BK.desc = $("#qDesc").value.trim(); BK.prefer = $("#qPref").value.trim(); if (!BK.desc) return toast("Please describe the job"); BK.step = 4; renderBook(); };
+}
+function stepDetails(){
+  var body = $("#stepBody"), isReq = BK.job.price === "quote" || BK.outOfArea, due = payDue();
+  body.innerHTML = '<div class="card form"><h3 style="margin:0">Your details</h3><div class="row2">' +
+    '<label>Name<input type="text" id="dName" autocomplete="name" value="' + esc(BK.name) + '"></label>' +
+    '<label>Mobile<input type="tel" id="dPhone" autocomplete="tel" value="' + esc(BK.phone) + '"></label></div>' +
+    '<label>Email<input type="email" id="dEmail" autocomplete="email" value="' + esc(BK.email) + '"></label>' +
+    (BK.job.price === "quote" ? '' : '<label>' + (BK.emerg ? 'What\'s happening?' : 'Anything we should know? <span class="opt-l">(access, pets, parking)</span>') + '<textarea id="dNotes">' + esc(BK.notes) + '</textarea></label>') +
+    '<label class="check"><input type="checkbox" id="dOk"> <span>I\'m happy to be contacted about this job by SMS or email.</span></label>' +
+    '<div class="actions"><button class="btn ghost" id="back">Back</button><button class="btn" id="next">' + (BK.job.price === "quote" ? "Send quote request" : BK.outOfArea ? "Send job request" : due ? "Continue to payment" : "Confirm booking") + '</button></div></div>';
+  $("#back").onclick = function(){ BK.step = 3; renderBook(); };
+  $("#next").onclick = function(){
+    BK.name = $("#dName").value.trim(); BK.phone = $("#dPhone").value.trim(); BK.email = $("#dEmail").value.trim();
+    if ($("#dNotes")) BK.notes = $("#dNotes").value.trim();
+    if (!BK.name || !BK.phone) return toast("Please add your name and mobile");
+    if (!$("#dOk").checked) return toast("Please tick the box so we can contact you");
+    if (isReq && LIVE) return liveQuoteRequest();
+    if (isReq) {
+      var q = { id: uid(), ref: ref("Q"), created: Date.now(), typeId: BK.job.id, cat: BK.job.cat, title: BK.job.name, customer: { name: BK.name, phone: BK.phone, email: BK.email }, street: BK.street, suburb: BK.suburb,
+        description: BK.desc || BK.notes || "(Out-of-area job request — " + BK.job.name + ")", photos: BK.photos.slice(), prefer: BK.prefer, status: "new", lines: [], estMins: BK.job.minsMax, note: "", sentAt: null };
+      DB.quotes.unshift(q); save(); BK.done = { type: "quote", ref: q.ref }; BK.step = 6; renderBook(); route(); return;
+    }
+    if (!fits(BK.pick.tech, BK.date, BK.pick.t, BK.job.minsMax, BK.suburb, null, BK.emerg)) { toast("Sorry — that time was just taken. Please pick another."); BK.pick = null; BK.step = 3; return renderBook(); }
+    if (due) { BK.step = 5; return renderBook(); }
+    finishBooking(null);
+  };
+}
+function finishBooking(payment){
+  if (LIVE) return liveBook();
+  var p = BK.pick, cust = { name: BK.name, phone: BK.phone, email: BK.email }, sid = BK.every ? uid() : null;
+  var plan = BK.every && BK.plan ? BK.plan : [{ date: BK.date, t: p.t, tech: p.tech }], made = [], skipped = [];
+  plan.forEach(function(v, i){
+    if (v.t == null || (i > 0 && !fits(v.tech, v.date, v.t, BK.job.minsMax, BK.suburb))) { skipped.push(v.date); return; }
+    var b = { id: uid(), ref: ref("TD"), date: v.date, start: v.t, mins: BK.job.minsMax, techId: v.tech.id, typeId: BK.job.id, title: BK.job.name, customer: cust,
+      street: BK.street, suburb: BK.suburb, notes: BK.notes, status: "booked", window: i === 0 ? p.win : null, created: Date.now() };
+    if (i === 0 && BK.emerg) { b.emergency = true; b.afterHours = !!p.after; }
+    if (i === 0 && payment) { b.paid = payment.amount; b.payRef = payment.ref; }
+    if (sid) { b.seriesId = sid; b.seriesIdx = i + 1; b.seriesN = plan.length; b.repeatEvery = BK.every; }
+    DB.bookings.push(b); made.push(b);
+  });
+  save(); BK.done = { type: "booking", ref: made[0].ref, b: made[0], all: made, skipped: skipped, payment: payment };
+  BK.step = 6; renderBook(); route();
+}
+/* demo card payment — the live version hands this to Stripe Checkout */
+function payForm(box, amount, label, onPaid, onBack){
+  box.innerHTML = '<div class="card form"><h3 style="margin:0">Pay ' + money(amount) + '</h3><p class="muted" style="margin:0">' + esc(label) + '</p>' +
+    '<div class="note info" style="margin:0">Demo — no card is charged. In the live version this is a secure Stripe payment page; card details never touch our system.</div>' +
+    '<label>Name on card<input type="text" id="cName" value="' + esc(BK.name || "") + '"></label>' +
+    '<label>Card number<input type="text" id="cNum" inputmode="numeric" value="4242 4242 4242 4242"></label>' +
+    '<div class="row2"><label>Expiry<input type="text" id="cExp" value="12 / 29"></label><label>CVC<input type="text" id="cCvc" value="123"></label></div>' +
+    '<div class="actions"><button class="btn ghost" id="pBack">Back</button><button class="btn" id="pGo">Pay ' + money(amount) + '</button></div></div>';
+  $("#pBack", box).onclick = onBack;
+  $("#pGo", box).onclick = function(){
+    var b = this; if ($("#cNum", box).value.replace(/\D/g, "").length < 12) return toast("Please check the card number");
+    b.disabled = true; b.textContent = "Processing…";
+    setTimeout(function(){ onPaid({ amount: amount, ref: "pi_demo_" + uid() }); }, 900);
+  };
+}
+function stepPay(){
+  var due = payDue();
+  payForm($("#stepBody"), due, BK.emerg ? "Emergency call-out fee for " + BK.job.name + ". The job itself is charged when it's done." : "Call-out fee to lock in your booking. It's taken off your final bill.",
+    function(pay){ if (!fits(BK.pick.tech, BK.date, BK.pick.t, BK.job.minsMax, BK.suburb, null, BK.emerg)) { toast("That time was just taken — please pick another"); BK.pick = null; BK.step = 3; return renderBook(); } finishBooking(pay); },
+    function(){ BK.step = 4; renderBook(); });
+}
+function stepDone(){
+  var body = $("#stepBody"), d = BK.done;
+  if (d.type === "quote") body.innerHTML = '<div class="card"><span class="pill q">Quote request · ' + esc(d.ref) + '</span><h2 style="margin-top:12px">Thanks, ' + esc(BK.name.split(" ")[0]) + ' — request received</h2><p class="muted">We\'ll look over the details and send your written quote by email or SMS, usually within one business day. Once you accept it, you can pick a time online.</p>' +
+    '<div class="actions"><button class="btn dark" id="again">Book another job</button><button class="btn ghost" id="seeQ">See it in the Quotes inbox →</button></div></div>';
+  else {
+    var b = d.b, t = tech(b.techId);
+    body.innerHTML = '<div class="card"><span class="pill ok">Booked · ' + esc(d.ref) + '</span>' + (b.emergency ? ' <span class="pill warn">Emergency</span>' : '') + '<h2 style="margin-top:12px">' + (b.emergency ? 'Help is on the way' : 'You\'re booked in') + '</h2>' +
+      '<p style="font-size:18px;margin:0 0 6px"><b>' + (b.date === today() ? "Today, " : "") + fmtDay(b.date) + '</b></p><p style="font-size:18px;margin:0 0 14px">' + (b.window ? 'Arriving between <b>' + fmt(b.window.from) + ' and ' + fmt(b.window.to) + '</b>' : 'Arriving at <b>' + fmt(b.start) + '</b>') + '</p>' +
+      (d.all.length > 1 ? '<p><b>' + d.all.length + ' visits booked:</b> ' + d.all.map(function(x){ return fmtDay(x.date, { day: "numeric", month: "short" }) + ' ' + fmt(x.start); }).join(" · ") + '</p>' : '') +
+      (d.skipped.length ? '<div class="note warn">We couldn\'t fit ' + d.skipped.map(function(x){ return fmtDay(x, { day: "numeric", month: "short" }); }).join(", ") + ' — we\'ll call you to arrange those.</div>' : '') +
+      (d.payment ? '<div class="note ok">Paid ' + money(d.payment.amount) + ' · receipt sent</div>' : '') +
+      '<p class="muted">' + esc(t.name.split(" ")[0]) + ' (' + esc(t.role) + ') will text you when on the way. Confirmation sent to ' + esc(b.customer.phone) + (b.customer.email ? ' and ' + esc(b.customer.email) : '') + '.</p>' +
+      '<div class="actions"><button class="btn dark" id="again">Book another job</button><button class="btn ghost" id="seeQ">See it on the run sheet →</button></div></div>';
+  }
+  $("#again").onclick = function(){ BK = freshBK(); renderBook(); };
+  $("#seeQ").onclick = function(){ if (d.type === "booking") ST.date = d.b.date; BK = freshBK(); go(d.type === "quote" ? "quotes" : "staff"); };
+}
+
+/* =====================================================================
+   STAFF — DAILY RUN SHEET with travel legs
+   ===================================================================== */
+var ST = { date: today() };
+function renderStaff(){
+  var app = $("#app"), date = ST.date, all = DB.bookings.filter(function(b){ return b.date === date && b.status !== "cancelled"; });
+  var totJobs = all.length, totDrive = 0, totKm = 0, totOn = 0;
+  var runs = DB.team.filter(function(t){ return t.active !== false; }).map(function(t){
+    var jobs = jobsFor(t.id, date), cur = baseOf(t), curEnd = hm(t.start), h = "", drive = 0, dist = 0, on = 0, working = t.days.indexOf(dow(date)) >= 0;
+    h += '<div class="leg">🏠 Start at base · ' + esc(cur) + (working ? ' · ' + fmt(hm(t.start)) : ' · called out on a day off') + '</div>';
+    jobs.forEach(function(j){
+      var tv = travel(cur, j.suburb), k = roadKm(cur, j.suburb) || 0; drive += tv; dist += k; on += j.mins;
+      var idle = j.start - (curEnd + tv);
+      h += '<div class="leg">🚗 ~' + tv + ' min · ' + k.toFixed(1) + ' km' + (cur !== j.suburb ? ' to ' + esc(j.suburb) : ' (same suburb)') + '</div>';
+      if (idle >= 20 && working && curEnd < hm(t.end)) h += '<div class="gap">● Free ' + dur(Math.min(idle, hm(t.end) - curEnd - tv)) + ' — bookable</div>';
+      if (idle < 0) h += '<div class="note warn" style="margin:4px 0">Tight: needs ' + (-idle) + ' more minutes to get here.</div>';
+      var jt = jobType(j.typeId) || {};
+      h += '<div class="job' + (j.status === "done" ? " done" : "") + (j.emergency ? " emer" : "") + '" style="border-left-color:' + t.color + '">' +
+        '<div style="display:flex;justify-content:space-between;gap:8px"><span class="tm">' + fmt(j.start) + '–' + fmt(j.start + j.mins) + '</span>' + '<span>' + (j.status === "done" ? '<span class="pill ok">Done</span> ' : '') + (j.emergency ? '<span class="pill warn">Emergency' + (j.afterHours ? ' · after hours' : '') + '</span> ' : '') + (j.quoteId ? '<span class="pill q">Quoted job</span> ' : '') + (j.seriesId ? '<span class="pill grey">Repeat ' + j.seriesIdx + '/' + j.seriesN + '</span> ' : '') + (j.paid ? '<span class="pill ok">Paid ' + money(j.paid) + '</span>' : '') + '</span></div>' +
+        '<div class="ti">' + esc(j.title) + '</div><div class="ad">' + esc(j.street) + ', ' + esc(j.suburb) + ' · ' + esc(j.customer.name) + ' · <a href="tel:' + esc(j.customer.phone.replace(/\s/g, "")) + '">' + esc(j.customer.phone) + '</a></div>' +
+        (j.window ? '<div class="ad">Customer told: arrive ' + fmt(j.window.from) + '–' + fmt(j.window.to) + '</div>' : '') +
+        (j.notes ? '<div class="ad">📝 ' + esc(j.notes) + '</div>' : '') +
+        '<div class="acts">' + (j.status !== "done" ? '<button data-act="done" data-id="' + j.id + '">Mark done</button>' : '<button data-act="undo" data-id="' + j.id + '">Undo</button>') +
+        '<select data-act="move" data-id="' + j.id + '"><option value="">Reassign…</option>' + DB.team.filter(function(o){ return o.id !== t.id && canDo(o, jt.cat || ""); }).map(function(o){ return '<option value="' + o.id + '">' + esc(o.name.split(" ")[0]) + '</option>'; }).join("") + '</select>' +
+        '<button data-act="cancel" data-id="' + j.id + '">Cancel</button></div></div>';
+      cur = j.suburb; curEnd = j.start + j.mins;
+    });
+    if (jobs.length) { var back = travel(cur, baseOf(t)); h += '<div class="leg">🏠 Back to base ~' + back + ' min</div>'; }
+    else h = working ? '<div class="empty" style="padding:16px">No jobs yet — whole day free.</div>' : '<div class="empty" style="padding:16px">Not working today.</div>';
+    totDrive += drive; totKm += dist; totOn += on;
+    var span = hm(t.end) - hm(t.start), pOn = working ? Math.min(100, on / span * 100) : 0, pDr = working ? Math.min(100 - pOn, drive / span * 100) : 0;
+    var stops = [baseOf(t) + " NSW"].concat(jobs.map(function(j){ return j.street + ", " + j.suburb + " NSW"; }));
+    return '<div class="run"><div class="hd"><span class="dot" style="background:' + t.color + '"></span><div style="flex:1"><b>' + esc(t.name) + '</b><div class="muted">' + esc(t.role) + ' · ' + (working ? fmt(hm(t.start)) + '–' + fmt(hm(t.end)) : 'day off') + '</div>' +
+      '<div class="bar"><i style="width:' + pOn + '%;background:' + t.color + '"></i><i style="width:' + pDr + '%;background:#C9C3B8"></i></div></div></div>' +
+      '<div class="bd">' + h + '</div><div class="ft"><span>' + jobs.length + (jobs.length === 1 ? ' job · ' : ' jobs · ') + dur(on) + ' on site · ' + dur(drive) + ' driving</span>' +
+      (jobs.length ? '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/' + stops.map(encodeURIComponent).join("/") + '">Open route in Maps ↗</a>' : '') + '</div></div>';
+  }).join("");
+  app.innerHTML = '<h1>Run <em>sheet</em></h1><p class="lead">Each tradie\'s day in order, with the drive between jobs worked out. Grey on the bar is driving time; coloured is time on site.</p>' +
+    '<div class="toolbar"><button class="round" id="prev">‹</button><div class="date">' + fmtDay(date) + '</div><button class="round" id="nxt">›</button>' +
+    (date !== today() ? '<button class="btn ghost sm" id="tdy">Today</button>' : '') + '<span style="flex:1"></span><button class="btn sm" id="phone">+ Phone booking</button></div>' +
+    '<div class="stats"><div class="stat"><b>' + totJobs + '</b><span>jobs booked</span></div><div class="stat"><b>' + dur(totOn) + '</b><span>on site</span></div><div class="stat"><b>' + dur(totDrive) + '</b><span>driving (est.)</span></div><div class="stat"><b>' + Math.round(totKm) + ' km</b><span>travel (est.)</span></div></div>' +
+    '<div class="runs">' + runs + '</div>';
+  $("#prev").onclick = function(){ ST.date = addDays(ST.date, -1); renderStaff(); };
+  $("#nxt").onclick = function(){ ST.date = addDays(ST.date, 1); renderStaff(); };
+  if ($("#tdy")) $("#tdy").onclick = function(){ ST.date = today(); renderStaff(); };
+  $("#phone").onclick = function(){ BK = freshBK(); go("book"); };
+  $$("[data-act]", app).forEach(function(el){
+    var b = DB.bookings.filter(function(x){ return x.id === el.dataset.id; })[0];
+    if (el.tagName === "SELECT") el.onchange = function(){
+      var to = tech(el.value); if (!to) return;
+      if (LIVE) { if (!fits(to, b.date, b.start, b.mins, b.suburb, b.id, b.emergency)) { el.value = ""; return toast(to.name.split(" ")[0] + " can't fit that time (including travel)"); } return liveJob(b.id, "move", to.id); }
+      if (!fits(to, b.date, b.start, b.mins, b.suburb, b.id, b.emergency)) { el.value = ""; return toast(to.name.split(" ")[0] + " can't fit that time (including travel)"); }
+      b.techId = to.id; save(); toast("Moved to " + to.name.split(" ")[0]); renderStaff();
+    };
+    else el.onclick = function(){
+      if (el.dataset.act === "done") b.status = "done";
+      if (el.dataset.act === "undo") b.status = "booked";
+      if (el.dataset.act === "cancel") { if (!confirm("Cancel " + b.title + " for " + b.customer.name + "?")) return; if (LIVE) return liveJob(b.id, "cancel"); b.status = "cancelled"; }
+      if (LIVE) return liveJob(b.id, el.dataset.act);
+      save(); renderStaff();
+    };
+  });
+}
+
+/* =====================================================================
+   QUOTES — inbox, builder, customer view
+   ===================================================================== */
+var QS = { sel: null, filter: "open" };
+var QSTAT = { "new": ["New request","q"], sent: ["Sent","blue"], accepted: ["Accepted","ok"], booked: ["Booked","ok"], declined: ["Declined","grey"] };
+function qPill(s){ var x = QSTAT[s] || [s,"grey"]; return '<span class="pill ' + (x[1] === "blue" ? "" : x[1]) + '">' + x[0] + '</span>'; }
+function renderQuotes(){
+  var app = $("#app"), list = DB.quotes.filter(function(q){ return QS.filter === "all" || ["new","sent","accepted"].indexOf(q.status) >= 0; });
+  if (!QS.sel && list.length) QS.sel = list[0].id;
+  app.innerHTML = '<h1><em>Quotes</em></h1><p class="lead">Quote requests from your website land here. Price it up, send it, and when the customer accepts they book a time themselves — travel included.</p>' +
+    '<div class="grid" style="grid-template-columns:minmax(0,1fr)"><div class="row2" style="grid-template-columns:minmax(260px,340px) minmax(0,1fr);align-items:start" id="qgrid">' +
+    '<div><div class="seg"><button data-f="open" class="' + (QS.filter === "open" ? "on" : "") + '">Open</button><button data-f="all" class="' + (QS.filter === "all" ? "on" : "") + '">All</button><button id="newQ">+ New</button></div>' +
+    (list.length ? list.map(function(q){ var tt = qTotals(q);
+      return '<div class="qrow' + (q.id === QS.sel ? " sel" : "") + '" data-q="' + q.id + '"><div style="flex:1;min-width:0"><b>' + esc(q.customer.name) + '</b> ' + qPill(q.status) + '<div class="small muted">' + esc(q.title) + ' · ' + esc(q.suburb) + '</div></div><div class="small" style="text-align:right">' + (tt.total ? '<b>' + money(tt.total) + '</b>' : '') + '<div class="muted">' + esc(q.ref) + '</div></div></div>';
+    }).join("") : '<div class="empty">No open quotes.</div>') + '</div><div id="qEd"></div></div></div>';
+  if (window.innerWidth < 760) $("#qgrid").style.gridTemplateColumns = "1fr";
+  $$(".seg [data-f]", app).forEach(function(b){ b.onclick = function(){ QS.filter = b.dataset.f; QS.sel = null; renderQuotes(); }; });
+  $("#newQ").onclick = function(){
+    var jt0 = DB.jobTypes.filter(function(j){ return j.price === "quote"; })[0] || DB.jobTypes[0];
+    var q = { id: uid(), ref: ref("Q"), created: Date.now(), typeId: jt0.id, cat: jt0.cat, title: jt0.name, customer: { name: "New customer", phone: "", email: "" }, street: "", suburb: DB.biz.base,
+      description: "", photos: [], prefer: "", status: "new", lines: [], estMins: jt0.minsMax, note: "", sentAt: null };
+    DB.quotes.unshift(q); save(); QS.sel = q.id; QS.filter = "open"; renderQuotes();
+  };
+  $$(".qrow", app).forEach(function(r){ r.onclick = function(){ QS.sel = r.dataset.q; renderQuotes(); if (window.innerWidth < 760) $("#qEd").scrollIntoView({ behavior: "smooth" }); }; });
+  if (QS.sel && quote(QS.sel)) quoteEditor($("#qEd"), quote(QS.sel));
+}
+function qLink(q, full){
+  var base = full ? location.origin + location.pathname + location.search : "";
+  if (LIVE) return location.origin + location.pathname + "?b=" + encodeURIComponent(SLUG) + "#quote=" + q.id + "&t=" + q.token;
+  return base + "#quote=" + q.id;
+}
+function quoteEditor(box, q){
+  if (!q.lines.length && q.status === "new") {
+    var jt = jobType(q.typeId) || {};
+    if (DB.biz.callout) q.lines.push({ d: "Call-out / site attendance", q: 1, u: DB.biz.callout });
+    q.lines.push({ d: "Labour — " + (jt.name || q.title), q: Math.max(1, Math.round((q.estMins || 60) / 60)), u: DB.biz.labourRate });
+    q.lines.push({ d: "Materials and parts", q: 1, u: 0 });
+  }
+  var locked = ["accepted","booked","declined"].indexOf(q.status) >= 0, dis = locked ? " disabled" : "";
+  var hrsOpts = [60,90,120,180,240,300,360,480,600,720,960].map(function(m){ return '<option value="' + m + '"' + (q.estMins === m ? " selected" : "") + '>' + dur(m) + (m > 600 ? " (2 days)" : "") + '</option>'; }).join("");
+  var bk = q.bookingId ? DB.bookings.filter(function(b){ return b.id === q.bookingId; })[0] : null;
+  box.innerHTML = '<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><span class="small muted">' + esc(q.ref) + ' · received ' + new Date(q.created).toLocaleDateString("en-AU") + '</span><h2 style="margin:4px 0">' + esc(q.title) + '</h2></div><div>' + qPill(q.status) + '</div></div>' +
+    (bk ? '<div class="note ok">Booked for ' + fmtDay(bk.date) + ' at ' + fmt(bk.start) + ' with ' + esc((tech(bk.techId) || {}).name || "") + '.</div>' : '') +
+    '<div class="row2" style="margin:10px 0"><div class="form"><label>Customer<input type="text" data-k="name" value="' + esc(q.customer.name) + '"' + dis + '></label><div class="row2"><label>Mobile<input type="tel" data-k="phone" value="' + esc(q.customer.phone) + '"' + dis + '></label><label>Email<input type="email" data-k="email" value="' + esc(q.customer.email) + '"' + dis + '></label></div></div>' +
+    '<div class="form"><label>Street<input type="text" data-k="street" value="' + esc(q.street) + '"' + dis + '></label><label>Suburb<input type="text" list="subList2" data-k="suburb" value="' + esc(q.suburb) + '"' + dis + '></label></div></div>' +
+    '<datalist id="subList2">' + SUB_NAMES.map(function(s){ return '<option value="' + s + '">'; }).join("") + '</datalist>' +
+    '<label style="margin-bottom:10px">Job type<select data-k="type"' + dis + '>' + DB.jobTypes.map(function(j){ return '<option value="' + j.id + '"' + (j.id === q.typeId ? " selected" : "") + '>' + esc(catName(j.cat)) + ' — ' + esc(j.name) + '</option>'; }).join("") + '</select></label>' +
+    '<label>What the customer asked for<textarea data-k="description"' + dis + '>' + esc(q.description) + '</textarea></label>' +
+    (q.prefer ? '<p class="small muted">Preferred times: ' + esc(q.prefer) + '</p>' : '') +
+    (q.photos && q.photos.length ? '<div class="photos" style="margin:10px 0">' + q.photos.map(function(p){ return '<img src="' + p + '">'; }).join("") + '</div>' : '') +
+    '<div class="cat">Quote lines</div><div style="overflow-x:auto"><table><thead><tr><th style="width:55%">Description</th><th>Qty</th><th>Unit $</th><th style="text-align:right">Amount</th><th></th></tr></thead><tbody>' +
+    q.lines.map(function(l, i){ return '<tr><td><input type="text" data-l="' + i + '" data-f="d" value="' + esc(l.d) + '"' + dis + '></td><td><input type="number" step="0.5" min="0" data-l="' + i + '" data-f="q" value="' + l.q + '" style="width:70px"' + dis + '></td><td><input type="number" step="1" min="0" data-l="' + i + '" data-f="u" value="' + l.u + '" style="width:95px"' + dis + '></td><td style="text-align:right;white-space:nowrap" class="amt">' + money((+l.q || 0) * (+l.u || 0)) + '</td><td>' + (locked ? '' : '<button class="btn ghost sm" data-del="' + i + '">✕</button>') + '</td></tr>'; }).join("") +
+    '</tbody></table></div>' + (locked ? '' : '<button class="btn ghost sm" id="addL" style="margin-top:8px">+ Add line</button>') +
+    '<div class="totals" id="tots"></div>' +
+    '<div class="row2" style="margin-top:14px"><label>Time needed on site <span class="opt-l">(blocks the diary when they book)</span><select data-k="est"' + dis + '>' + hrsOpts + '</select></label><label>Valid for (days)<input type="number" data-k="valid" value="' + (q.validDays || DB.biz.quoteValidDays) + '"' + dis + '></label></div>' +
+    '<label style="margin-top:12px">Note to customer<textarea data-k="note" placeholder="Inclusions, exclusions, warranty…"' + dis + '>' + esc(q.note) + '</textarea></label>' +
+    '<div class="actions">' + (locked ? '' : '<button class="btn" id="send">' + (q.status === "sent" ? "Re-send quote" : "Send quote") + '</button><button class="btn ghost" id="saveQ">Save draft</button>') +
+    (q.status !== "new" ? '<a class="btn dark" href="' + esc(qLink(q)) + '"' + (LIVE ? ' target="_blank" rel="noopener"' : '') + '>Open customer view ↗</a>' : '') +
+    (locked ? '' : '<button class="btn danger" id="declQ">Mark declined</button>') + '</div>' +
+    (q.status === "sent" ? '<p class="small muted">Customer link: <code style="word-break:break-all">' + esc(qLink(q, true)) + '</code>' + (LIVE ? (q.customer.email ? ' — emailed to ' + esc(q.customer.email) + '. You can also text it.' : ' — no email on file, so text this link to the customer.') : ' — in the live version this goes out by email automatically.') + '</p>' : '') + '</div>';
+  var tots = function(){ var t = qTotals(q); $("#tots", box).innerHTML = '<div class="r"><span>Subtotal</span><span>' + money(t.sub) + '</span></div>' + (DB.biz.gst ? '<div class="r"><span>GST 10%</span><span>' + money(t.gst) + '</span></div>' : '') + '<div class="r big"><span>Total</span><span>' + money(t.total) + '</span></div>'; };
+  tots();
+  var pull = function(){
+    $$("[data-k]", box).forEach(function(el){
+      var k = el.dataset.k, v = el.value;
+      if (["name","phone","email"].indexOf(k) >= 0) q.customer[k] = v.trim();
+      else if (k === "suburb") q.suburb = findSub(v) || v.trim();
+      else if (k === "type") { var j = jobType(v); if (j) { q.typeId = j.id; q.cat = j.cat; q.title = j.name; } }
+      else if (k === "est") q.estMins = +v;
+      else if (k === "valid") q.validDays = +v || 30;
+      else q[k] = v;
+    });
+  };
+  $$("[data-l]", box).forEach(function(el){ el.oninput = function(){ var l = q.lines[+el.dataset.l]; l[el.dataset.f] = el.dataset.f === "d" ? el.value : +el.value; el.closest("tr").querySelector(".amt").textContent = money((+l.q || 0) * (+l.u || 0)); tots(); }; });
+  $$("[data-del]", box).forEach(function(b){ b.onclick = function(){ pull(); q.lines.splice(+b.dataset.del, 1); save(); quoteEditor(box, q); }; });
+  if ($("#addL", box)) $("#addL", box).onclick = function(){ pull(); q.lines.push({ d: "", q: 1, u: 0 }); save(); quoteEditor(box, q); };
+  if ($("#saveQ", box)) $("#saveQ", box).onclick = function(){ pull(); if (LIVE) { busy(this, true, "Saving…"); return liveQuoteSave(q, "new").then(function(r){ if (r) toast("Draft saved"); renderQuotes(); }); } save(); toast("Draft saved"); renderQuotes(); };
+  if ($("#send", box)) $("#send", box).onclick = function(){
+    pull(); if (!qTotals(q).total) return toast("Add prices before sending");
+    if (LIVE) { busy(this, true, "Sending…"); return liveQuoteSave(q, "sent").then(function(r){ if (r) toast(q.customer.email ? "Quote emailed to " + q.customer.email : "Quote ready — text the customer the link"); renderQuotes(); }); }
+    q.status = "sent"; q.sentAt = Date.now(); save(); toast("Quote sent to " + (q.customer.email || q.customer.phone || "customer")); renderQuotes();
+  };
+  if ($("#declQ", box)) $("#declQ", box).onclick = function(){ pull(); if (LIVE) return liveQuoteSave(q, "declined").then(renderQuotes); q.status = "declined"; save(); renderQuotes(); };
+}
+var CQ = {};
+function bookQuote(q, t, pay){
+  if (LIVE) {
+    var pk = CQ.pick, nx = $("#next"); busy(nx, true, "Booking…");
+    return rpc("trd_quote_book", { p_id: q.id, p_token: q.token, p: { date: CQ.date, start: pk.t, tech_id: pk.tech.id, win_from: pk.win ? pk.win.from : null, win_to: pk.win ? pk.win.to : null } }).then(function(r){
+      if (!r || !r.ok) { busy(nx, false); toast((r && r.error) || "Sorry, that didn't work."); if (r && r.code === "taken") { CQ.pick = null; return loadPublic().then(function(){ renderCustomerQuote(q.id); }); } return; }
+      q.status = "booked"; CQ.booking = { date: CQ.date, start: pk.t, win_from: pk.win ? pk.win.from : null, win_to: pk.win ? pk.win.to : null, ref: r.ref };
+      CQ.stage = "done"; renderCustomerQuote(q.id);
+    }, function(e){ busy(nx, false); toast(e.message); });
+  }
+  var p = CQ.pick;
+  var b = { id: uid(), ref: ref("TD"), date: CQ.date, start: p.t, mins: q.estMins, techId: p.tech.id, typeId: q.typeId, title: q.title, customer: q.customer,
+    street: q.street, suburb: q.suburb, notes: "Quote " + q.ref + " · " + money(t.total) + (DB.biz.gst ? " inc GST" : ""), status: "booked", window: p.win, quoteId: q.id, created: Date.now() };
+  if (pay) { b.paid = pay.amount; b.payRef = pay.ref; q.depositPaid = pay.amount; }
+  DB.bookings.push(b); q.status = "booked"; q.bookingId = b.id; save(); CQ.stage = "done"; renderCustomerQuote(q.id); route();
+}
+function renderCustomerQuote(id){
+  var q = quote(id), app = $("#app");
+  if (!q) { app.innerHTML = '<div class="empty" style="margin-top:30px">This quote link isn\'t valid any more.</div>'; return; }
+  if (CQ.id !== id) CQ = { id: id, date: null, pick: null, techId: "", stage: "view", live: LIVE };
+  var t = qTotals(q), exp = new Date((q.sentAt || q.created) + (q.validDays || DB.biz.quoteValidDays) * 864e5);
+  var h = '<div class="qdoc"><p class="noprint staffonly" style="margin:14px 0"><a href="#quotes">‹ Back to Quotes (staff)</a> <span class="small muted">— this is the page your customer sees</span></p>';
+  if (CQ.stage === "time") {
+    h += '<h1>Pick a time for <em>' + esc(q.title.toLowerCase()) + '</em></h1><p class="lead">You\'ve accepted quote ' + esc(q.ref) + '. Choose when we start — we\'ve allowed ' + dur(q.estMins) + ' on site.</p><div id="cqTime"></div></div>';
+    app.innerHTML = h;
+    timePicker($("#cqTime"), { mins: q.estMins, cat: q.cat, suburb: q.suburb, state: CQ,
+      onBack: function(){ CQ.stage = "view"; renderCustomerQuote(id); }, onPick: function(){},
+      onNext: function(){
+        var p = CQ.pick;
+        if (!fits(p.tech, CQ.date, p.t, q.estMins, q.suburb)) { toast("That time was just taken — please pick another"); CQ.pick = null; return renderCustomerQuote(id); }
+        var dep = Math.round(t.total * (DB.biz.quoteDepositPct || 0)) / 100;
+        if (dep > 0 && !CQ.paid && !LIVE) { CQ.stage = "pay"; return renderCustomerQuote(id); }
+        bookQuote(q, t, CQ.paid);
+      } });
+    return;
+  }
+  if (CQ.stage === "pay") {
+    var dep = Math.round(t.total * (DB.biz.quoteDepositPct || 0)) / 100;
+    h += '<h1>Pay your <em>deposit</em></h1><p class="lead">' + DB.biz.quoteDepositPct + '% deposit for quote ' + esc(q.ref) + ' locks in ' + fmtDay(CQ.date, { weekday: "long", day: "numeric", month: "long" }) + '. The balance is due when the job is done.</p><div id="cqPay"></div></div>';
+    app.innerHTML = h; BK.name = q.customer.name;
+    payForm($("#cqPay"), dep, "Deposit on " + money(t.total) + " (" + q.title + ")", function(pay){
+      CQ.paid = pay; var p = CQ.pick;
+      if (!fits(p.tech, CQ.date, p.t, q.estMins, q.suburb)) { toast("That time was just taken — please pick another"); CQ.pick = null; CQ.stage = "time"; return renderCustomerQuote(id); }
+      bookQuote(q, t, pay);
+    }, function(){ CQ.stage = "time"; renderCustomerQuote(id); });
+    return;
+  }
+  if (CQ.stage === "done" || q.status === "booked") {
+    var bk = LIVE ? (CQ.booking ? { date: String(CQ.booking.date).slice(0, 10), start: CQ.booking.start, window: CQ.booking.win_from != null ? { from: CQ.booking.win_from, to: CQ.booking.win_to } : null } : null)
+      : DB.bookings.filter(function(b){ return b.id === q.bookingId; })[0];
+    h += '<div class="card" style="margin-top:10px"><span class="pill ok">Booked</span><h2 style="margin-top:12px">All set, ' + esc(q.customer.name.split(" ")[0]) + '</h2>' +
+      (bk ? '<p style="font-size:18px"><b>' + fmtDay(bk.date) + '</b> — ' + (bk.window ? 'arriving between ' + fmt(bk.window.from) + ' and ' + fmt(bk.window.to) : 'starting ' + fmt(bk.start)) + '</p>' : '') +
+      (q.depositPaid ? '<div class="note ok">Deposit paid ' + money(q.depositPaid) + ' · balance ' + money(t.total - q.depositPaid) + ' when the job is done</div>' : '') + '<p class="muted">Quote ' + esc(q.ref) + ' · ' + money(t.total) + (DB.biz.gst ? ' inc GST' : '') + '. We\'ll text you the day before.</p><div class="actions noprint"><a class="btn ghost" href="#staff" id="toRun">See it on the run sheet (staff) →</a></div></div></div>';
+    app.innerHTML = h;
+    if (bk) $("#toRun").onclick = function(){ ST.date = bk.date; };
+    return;
+  }
+  h += '<div class="card" style="margin-top:10px"><div class="head"><div><div class="small muted">QUOTE ' + esc(q.ref) + '</div><h2 style="margin:4px 0 2px">' + esc(DB.biz.name) + '</h2><div class="small muted">' + esc(DB.biz.phone) + ' · ' + esc(DB.biz.email) + '</div></div>' +
+    '<div style="text-align:right"><div class="small muted">Prepared for</div><b>' + esc(q.customer.name) + '</b><div class="small">' + esc(q.street) + ', ' + esc(q.suburb) + '</div><div class="small muted">Valid until ' + exp.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }) + '</div></div></div>' +
+    '<h3>' + esc(q.title) + '</h3>' + (q.description ? '<p class="muted small" style="margin-top:0">Your request: ' + esc(q.description) + '</p>' : '') +
+    '<table><thead><tr><th>Item</th><th>Qty</th><th style="text-align:right">Amount</th></tr></thead><tbody>' +
+    q.lines.filter(function(l){ return (+l.q) * (+l.u); }).map(function(l){ return '<tr><td>' + esc(l.d) + '</td><td>' + l.q + '</td><td style="text-align:right">' + money(l.q * l.u) + '</td></tr>'; }).join("") + '</tbody></table>' +
+    '<div class="totals" style="margin-top:10px"><div class="r"><span>Subtotal</span><span>' + money(t.sub) + '</span></div>' + (DB.biz.gst ? '<div class="r"><span>GST</span><span>' + money(t.gst) + '</span></div>' : '') + '<div class="r big"><span>Total</span><span>' + money(t.total) + '</span></div></div>' +
+    (q.note ? '<p style="margin-top:16px"><b>Notes.</b> ' + esc(q.note) + '</p>' : '') +
+    '<p class="small muted">Estimated time on site: ' + dur(q.estMins) + '.' + (DB.biz.quoteDepositPct && !LIVE ? ' A ' + DB.biz.quoteDepositPct + '% deposit (' + money(Math.round(t.total * DB.biz.quoteDepositPct) / 100) + ') is paid when you book your time.' : '') + '</p>';
+  if (q.status === "declined") h += '<div class="note warn">This quote was declined.</div>';
+  else if (q.status === "new") h += '<div class="note info">This quote hasn\'t been sent yet.</div>';
+  else h += '<div class="actions noprint"><button class="btn" id="acc">Accept and choose a time</button><button class="btn ghost" onclick="window.print()">Print / save PDF</button><button class="btn danger" id="dec">No thanks</button></div>';
+  app.innerHTML = h + '</div></div>';
+  if ($("#acc")) {
+    $("#acc").onclick = function(){ if (!LIVE) { q.status = "accepted"; save(); } CQ.stage = "time"; renderCustomerQuote(id); };
+    $("#dec").onclick = function(){ if (!confirm("Decline this quote?")) return;
+      if (LIVE) return rpc("trd_quote_decline", { p_id: q.id, p_token: q.token }).then(function(r){ if (r && r.ok) { q.status = "declined"; renderCustomerQuote(id); } else toast((r && r.error) || "Couldn't update the quote."); });
+      q.status = "declined"; save(); renderCustomerQuote(id); };
+  }
+}
+
+/* =====================================================================
+   SETUP — business, travel rules, team, job types
+   ===================================================================== */
+function renderSetup(){
+  var B = DB.biz, app = $("#app"), cs = Object.keys((PRESETS[B.preset] || PRESETS["plumb-elec"]).cats).concat(cats()).filter(function(c, i, a){ return a.indexOf(c) === i; });
+  var dayBoxes = function(t){ return '<div class="days">' + [1,2,3,4,5,6,0].map(function(d){ return '<label><input type="checkbox" data-day="' + d + '"' + (t.days.indexOf(d) >= 0 ? " checked" : "") + '>' + DAYN[d] + '</label>'; }).join("") + '</div>'; };
+  app.innerHTML = '<h1><em>Setup</em></h1><p class="lead">One system for any mobile trade. Choose the trade, set how far you travel, add your team and the jobs you do. Customers only ever see times that genuinely fit.</p>' +
+    '<div class="card form"><h3 style="margin:0">Business</h3><div class="row2"><label>Business name<input type="text" data-b="name" value="' + esc(B.name) + '"></label>' +
+    '<label>Trade<select id="preset">' + Object.keys(PRESETS).map(function(k){ return '<option value="' + k + '"' + (k === B.preset ? " selected" : "") + '>' + PRESETS[k].label + '</option>'; }).join("") + '</select></label></div>' +
+    '<div class="row2"><label>Phone<input type="tel" data-b="phone" value="' + esc(B.phone) + '"></label><label>Email<input type="email" data-b="email" value="' + esc(B.email) + '"></label></div></div>' +
+
+    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Travel &amp; area</h3>' +
+    '<div class="row3"><label>Base suburb<input type="text" list="subList3" data-b="base" value="' + esc(B.base) + '"></label><label>Service radius (km)<input type="number" data-b="radiusKm" value="' + B.radiusKm + '"></label><label>Average driving speed (km/h)<input type="number" data-b="speedKmh" value="' + B.speedKmh + '"></label></div>' +
+    '<datalist id="subList3">' + SUB_NAMES.map(function(s){ return '<option value="' + s + '">'; }).join("") + '</datalist>' +
+    '<div class="row3"><label>Parking &amp; setup allowance (min)<input type="number" data-b="bufferMin" value="' + B.bufferMin + '"></label><label>Road distance factor<input type="number" step="0.05" data-b="roadFactor" value="' + B.roadFactor + '"></label><label>Travel if suburb unknown (min)<input type="number" data-b="unknownTravel" value="' + B.unknownTravel + '"></label></div>' +
+    '<label class="check"><input type="checkbox" data-b="countFirstLeg"' + (B.countFirstLeg ? " checked" : "") + '> <span>Count the drive from base for the first job of the day</span></label>' +
+    '<div class="note info" style="margin:0">Example with these settings: Marrickville → Newtown is about ' + travel(B.base, "Newtown") + ' min, ' + B.base + ' → Balmain about ' + travel(B.base, "Balmain") + ' min, ' + B.base + ' → Chatswood about ' + travel(B.base, "Chatswood") + ' min.</div></div>' +
+
+    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Booking rules</h3>' +
+    '<div class="row3"><label>Customers choose<select data-b="bookMode"><option value="window"' + (B.bookMode === "window" ? " selected" : "") + '>An arrival window</option><option value="exact"' + (B.bookMode === "exact" ? " selected" : "") + '>An exact start time</option></select></label>' +
+    '<label>Arrival window length<select data-b="windowHours">' + [1,2,3,4].map(function(n){ return '<option value="' + n + '"' + (B.windowHours === n ? " selected" : "") + '>' + n + ' hour' + (n > 1 ? "s" : "") + '</option>'; }).join("") + '</select></label>' +
+    '<label>Minimum notice (hours)<input type="number" data-b="noticeHours" value="' + B.noticeHours + '"></label></div>' +
+    '<div class="row3"><label>Earliest window<input type="time" data-b="dayStart" value="' + B.dayStart + '"></label><label>Latest finish<input type="time" data-b="dayEnd" value="' + B.dayEnd + '"></label><label>Time step (min)<select data-b="slotStep">' + [15,30,60].map(function(n){ return '<option' + (B.slotStep === n ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></label></div>' +
+    '<label class="check"><input type="checkbox" data-b="chooseTech"' + (B.chooseTech ? " checked" : "") + '> <span>Let customers choose their tradie (otherwise we assign the one with the least extra driving)</span></label></div>' +
+
+    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Quotes</h3><div class="row3"><label>Hourly labour rate ($)<input type="number" data-b="labourRate" value="' + B.labourRate + '"></label><label>Call-out fee on quotes ($, 0 = none)<input type="number" data-b="callout" value="' + B.callout + '"></label><label>Quotes valid for (days)<input type="number" data-b="quoteValidDays" value="' + B.quoteValidDays + '"></label></div>' +
+    '<label class="check"><input type="checkbox" data-b="gst"' + (B.gst ? " checked" : "") + '> <span>Registered for GST (adds 10% to quotes)</span></label></div>' +
+
+    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Payments when booking</h3><p class="small muted" style="margin:0">' + (LIVE ? 'Card payments switch on once your Stripe account is connected — until then customers pay on the day. ' : 'Paid by card through Stripe in the live version. ') + 'Money goes straight to your own Stripe account.</p>' +
+    '<div class="row3"><label>At booking, customers pay<select data-bx="deposit.mode"><option value="none"' + (B.deposit.mode === "none" ? " selected" : "") + '>Nothing — pay on the day</option><option value="callout"' + (B.deposit.mode === "callout" ? " selected" : "") + '>A call-out fee (taken off the bill)</option></select></label>' +
+    '<label>Call-out fee ($)<input type="number" data-bx="deposit.amount" value="' + B.deposit.amount + '"></label><label>Deposit when a quote is accepted (%)<input type="number" data-b="quoteDepositPct" value="' + B.quoteDepositPct + '"></label></div></div>' +
+
+    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Emergency &amp; after-hours</h3>' +
+    '<label class="check"><input type="checkbox" data-bx="emergency.on"' + (B.emergency.on ? " checked" : "") + '> <span>Take emergency bookings online (only tradies marked "on call" below, only jobs marked "Emergency")</span></label>' +
+    '<div class="row3"><label>Emergency call-out fee ($)<input type="number" data-bx="emergency.fee" value="' + B.emergency.fee + '"></label><label>On-call from<input type="time" data-bx="emergency.start" value="' + B.emergency.start + '"></label><label>On-call until<input type="time" data-bx="emergency.end" value="' + B.emergency.end + '"></label></div>' +
+    '<label style="max-width:260px">Shortest notice (minutes)<input type="number" data-bx="emergency.notice" value="' + B.emergency.notice + '"></label></div>' +
+
+    '<div class="card form" style="margin-top:16px"><h3 style="margin:0">Real drive times (optional)</h3><p class="small muted" style="margin:0">Without a key we estimate drive times from distance (free). Add your own Google Maps API key for real drive times with typical traffic. Each pair of suburbs is looked up once and saved, so the Google cost stays very small.</p>' +
+    (LIVE ? '<p class="small muted" style="margin:0">Your key is used on your public booking page, so in Google Cloud restrict it to your website address and to the Maps JavaScript API.</p>' : '') +
+    '<label>Google Maps API key<input type="text" data-b="gmapsKey" value="' + esc(B.gmapsKey) + '" placeholder="AIza…"></label>' +
+    '<div class="small muted">' + Object.keys(DB.tcache || {}).length + ' suburb pairs saved.' + (LIVE ? '' : ' <button class="btn ghost sm" id="clrT" type="button">Clear saved drive times</button>') + '</div></div>' +
+
+    '<div class="card" style="margin-top:16px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><h3 style="margin:0">Team</h3><button class="btn sm" id="addT">+ Add team member</button></div><div id="teamList">' +
+    DB.team.map(function(t, i){ return '<div class="tm-row" data-t="' + i + '"><label>Name<input type="text" data-tf="name" value="' + esc(t.name) + '"></label><label>Role<input type="text" data-tf="role" value="' + esc(t.role) + '"></label>' +
+      '<div><div style="font-size:14px;font-weight:600;margin-bottom:6px">Can do</div><div class="days">' + cs.map(function(c){ return '<label><input type="checkbox" data-skill="' + c + '"' + (t.skills.indexOf(c) >= 0 ? " checked" : "") + '>' + esc(catName(c)) + '</label>'; }).join("") + '</div>' +
+      '<div style="font-size:14px;font-weight:600;margin:8px 0 6px">Works</div>' + dayBoxes(t) + '</div>' +
+      '<div><label>Hours<span style="display:flex;gap:6px"><input type="time" data-tf="start" value="' + t.start + '"><input type="time" data-tf="end" value="' + t.end + '"></span></label><label style="margin-top:8px">Colour<input type="color" data-tf="color" value="' + t.color + '" style="height:38px;padding:2px"></label></div>' +
+      '<div style="display:grid;gap:8px;align-content:start"><label class="check" style="font-size:13px"><input type="checkbox" data-tf="onCall"' + (t.onCall ? " checked" : "") + '> <span>On call for emergencies</span></label><button class="btn danger sm" data-rmT="' + i + '">Remove</button></div></div>'; }).join("") + '</div></div>' +
+
+    '<div class="card" style="margin-top:16px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0">Jobs &amp; price brackets</h3><button class="btn sm" id="addJ">+ Add job</button></div>' +
+    '<p class="small muted" style="margin:0 0 12px">The longer time is what gets blocked in the diary, so a 1–2 hour job never runs into the next one. "Quote" jobs ask for photos and details instead of a time.</p><div id="jobList">' +
+    DB.jobTypes.map(function(j, i){ return '<div class="jt-row" data-j="' + i + '"><label>Category<select data-jf="cat">' + cs.map(function(c){ return '<option value="' + c + '"' + (c === j.cat ? " selected" : "") + '>' + esc(catName(c)) + '</option>'; }).join("") + '</select></label>' +
+      '<label>Job<input type="text" data-jf="name" value="' + esc(j.name) + '"></label>' +
+      '<label>Min time<select data-jf="mins">' + durOpts(j.mins) + '</select></label><label>Max time<select data-jf="minsMax">' + durOpts(j.minsMax) + '</select></label>' +
+      '<label>Pricing<select data-jf="price">' + [["fixed","Fixed"],["from","From"],["range","Range"],["hourly","Hourly"],["quote","Quote"]].map(function(p){ return '<option value="' + p[0] + '"' + (p[0] === j.price ? " selected" : "") + '>' + p[1] + '</option>'; }).join("") + '</select></label>' +
+      '<label>$<input type="number" data-jf="a" value="' + j.a + '"></label><label>to $<input type="number" data-jf="b" value="' + j.b + '"></label>' +
+      '<div style="display:flex;align-items:flex-end"><button class="btn danger sm" data-rmJ="' + i + '">✕</button></div>' +
+      '<label class="full">Description<input type="text" data-jf="desc" value="' + esc(j.desc) + '"></label>' +
+      '<div class="full days"><label><input type="checkbox" data-jf="emergency"' + (j.emergency ? " checked" : "") + '> Emergency / after hours</label><label><input type="checkbox" data-jf="repeat"' + (j.repeat ? " checked" : "") + '> Can repeat (weekly, fortnightly, 4-weekly)</label><label><input type="checkbox" data-jf="active"' + (j.active !== false ? " checked" : "") + '> Show online</label></div></div>'; }).join("") + '</div></div>' +
+
+    '<div class="actions"><button class="btn" id="saveS">Save setup</button>' + (LIVE ? '<button class="btn ghost" id="outS">Sign out</button>' : '<button class="btn ghost" id="resetS">Reset demo data</button>') + '</div>';
+
+  $("#preset").onchange = function(){
+    if (LIVE) toast("Remember to press Save setup");
+    if (!confirm("Load the standard job list for " + PRESETS[this.value].label + "? Your current job list will be replaced (bookings stay).")) { this.value = B.preset; return; }
+    B.preset = this.value; DB.jobTypes = makeJobs(B.preset);
+    var c0 = Object.keys(PRESETS[B.preset].cats);
+    DB.team.forEach(function(t){ t.skills = t.skills.filter(function(s){ return c0.indexOf(s) >= 0; }); if (!t.skills.length) t.skills = [c0[0]]; });
+    save(); renderSetup(); toast("Loaded " + PRESETS[B.preset].label + " jobs");
+  };
+  if ($("#clrT")) $("#clrT").onclick = function(){ DB.tcache = {}; save(); renderSetup(); toast("Saved drive times cleared"); };
+  $("#saveS").onclick = function(){ pullSetup(); if (LIVE) return liveSaveSetup(this); save(); toast("Setup saved"); route(); };
+  if (LIVE) liveSetupExtras();
+  if ($("#resetS")) $("#resetS").onclick = function(){ if (!confirm("Reset everything back to the demo data?")) return; DB = seed(); save(); BK = freshBK(); ST.date = today(); QS.sel = null; toast("Demo reset"); route(); };
+  $("#addT").onclick = function(){ pullSetup(); DB.team.push({ id: uid(), name: "New team member", role: "", skills: [cs[0]], color: "#7A5AA6", days: [1,2,3,4,5], start: "07:30", end: "16:00", active: true }); save(); renderSetup(); };
+  $("#addJ").onclick = function(){ pullSetup(); DB.jobTypes.push({ id: uid(), cat: cs[0], name: "New job", desc: "", mins: 60, minsMax: 60, price: "from", a: 100, b: 0, active: true }); save(); renderSetup(); };
+  $$("[data-rmT]").forEach(function(b){ b.onclick = function(){ pullSetup(); var t = DB.team[+b.getAttribute("data-rmT")];
+    if (DB.bookings.some(function(x){ return x.techId === t.id && x.status === "booked" && x.date >= today(); })) return toast(t.name.split(" ")[0] + " still has upcoming jobs — reassign them first");
+    DB.team.splice(+b.getAttribute("data-rmT"), 1); save(); renderSetup(); }; });
+  $$("[data-rmJ]").forEach(function(b){ b.onclick = function(){ pullSetup(); DB.jobTypes.splice(+b.getAttribute("data-rmJ"), 1); save(); renderSetup(); }; });
+}
+function durOpts(v){ return [15,30,45,60,90,120,150,180,240,300,360,480].map(function(m){ return '<option value="' + m + '"' + (m === v ? " selected" : "") + '>' + dur(m) + '</option>'; }).join(""); }
+function pullSetup(){
+  var B = DB.biz, num = ["quoteDepositPct","radiusKm","speedKmh","bufferMin","roadFactor","unknownTravel","windowHours","noticeHours","slotStep","labourRate","callout","quoteValidDays"];
+  $$("[data-b]").forEach(function(el){
+    var k = el.dataset.b;
+    if (el.type === "checkbox") B[k] = el.checked;
+    else if (num.indexOf(k) >= 0) B[k] = +el.value || 0;
+    else if (k === "base") B[k] = findSub(el.value) || B.base;
+    else B[k] = el.value;
+  });
+  $$("[data-bx]").forEach(function(el){
+    var p = el.dataset.bx.split("."), o = B[p[0]];
+    o[p[1]] = el.type === "checkbox" ? el.checked : (el.type === "number" ? +el.value || 0 : el.value);
+  });
+  if (B.speedKmh < 5) B.speedKmh = 28; if (B.roadFactor < 1) B.roadFactor = 1; if (B.windowHours < 1) B.windowHours = 2; if (B.slotStep < 5) B.slotStep = 30;
+  $$("[data-t]").forEach(function(row){
+    var t = DB.team[+row.dataset.t]; if (!t) return;
+    $$("[data-tf]", row).forEach(function(el){ t[el.dataset.tf] = el.type === "checkbox" ? el.checked : el.value; });
+    t.skills = $$("[data-skill]", row).filter(function(c){ return c.checked; }).map(function(c){ return c.dataset.skill; });
+    t.days = $$("[data-day]", row).filter(function(c){ return c.checked; }).map(function(c){ return +c.dataset.day; });
+  });
+  $$("[data-j]").forEach(function(row){
+    var j = DB.jobTypes[+row.dataset.j]; if (!j) return;
+    $$("[data-jf]", row).forEach(function(el){ var k = el.dataset.jf; j[k] = el.type === "checkbox" ? el.checked : ["mins","minsMax","a","b"].indexOf(k) >= 0 ? +el.value || 0 : el.value; });
+    if (j.minsMax < j.mins) j.minsMax = j.mins;
+  });
+}
+
+/* =====================================================================
+   LIVE MODE — real businesses on Supabase (same project as Service Deluxe)
+   /trades/app/?b=<business>#book      customer booking page
+   /trades/app/?b=<business>#staff     run sheet, quotes, setup (sign in)
+   /trades/app/#start                  set up a new business
+   #quote=<id>&t=<token>  ·  #cancel=<ref>&t=<token>  ·  #join=<slug>&k=<key>
+   ===================================================================== */
+var CONFIG = {
+  supabaseUrl: "https://tehxobdokbvqtwtgqzrh.supabase.co",
+  supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE"
+};
+var SLUG = (QP0.get("b") || "").trim().toLowerCase(), SES = null, STAFF = null, PUB = null;
+function hashArgs(){ var o = {}; location.hash.replace(/^#/, "").split("&").forEach(function(kv){ var i = kv.indexOf("="); if (i > 0) o[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1)); else if (kv) o[kv] = true; }); return o; }
+function saveSes(s){ SES = s; try { if (s) localStorage.setItem("trd_staff_session", JSON.stringify(s)); else localStorage.removeItem("trd_staff_session"); } catch (e) {} }
+function loadSes(){ try { return JSON.parse(localStorage.getItem("trd_staff_session") || "null"); } catch (e) { return null; } }
+function authCall(path, body){
+  return fetch(CONFIG.supabaseUrl + "/auth/v1/" + path, { method: "POST", headers: { apikey: CONFIG.supabaseKey, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error_description || j.msg || j.message || "Sign-in failed"); return j; }); });
+}
+function token(){
+  if (!SES) return Promise.resolve(null);
+  if (SES.expires_at && SES.expires_at * 1000 - Date.now() > 60000) return Promise.resolve(SES.access_token);
+  return authCall("token?grant_type=refresh_token", { refresh_token: SES.refresh_token }).then(function(s){ saveSes(s); return s.access_token; }, function(){ saveSes(null); return null; });
+}
+function rpc(fn, args){
+  return token().then(function(tok){
+    return fetch(CONFIG.supabaseUrl + "/rest/v1/rpc/" + fn, { method: "POST",
+      headers: { apikey: CONFIG.supabaseKey, Authorization: "Bearer " + (tok || CONFIG.supabaseKey), "Content-Type": "application/json" }, body: JSON.stringify(args || {}) });
+  }).then(function(r){ return r.text().then(function(t){ var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {}
+    if (!r.ok) throw new Error((j && (j.message || j.hint)) || ("Error " + r.status)); return j; }); });
+}
+/* any Australian suburb: built-in list first, then OpenStreetMap (free), remembered on this device */
+var GEO = {};
+try { GEO = JSON.parse(localStorage.getItem("trd_geo") || "{}"); } catch (e) {}
+Object.keys(GEO).forEach(function(k){ if (!SUB[k] && GEO[k]) SUB[k] = GEO[k]; });
+function subName(s){ return String(s || "").trim().replace(/\s+/g, " ").replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
+function geoSub(name){
+  var n = findSub(name) || subName(name);
+  if (SUB[n]) return Promise.resolve(n);
+  if (!n) return Promise.resolve(null);
+  var q = n + ", " + (DB.biz.state || "NSW") + ", Australia";
+  return fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=au&q=" + encodeURIComponent(q), { headers: { Accept: "application/json" } })
+    .then(function(r){ return r.json(); }).then(function(a){
+      if (!a || !a[0]) return null;
+      SUB[n] = [+(+a[0].lat).toFixed(4), +(+a[0].lon).toFixed(4)]; GEO[n] = SUB[n];
+      if (SUB_NAMES.indexOf(n) < 0) SUB_NAMES.push(n);
+      try { localStorage.setItem("trd_geo", JSON.stringify(GEO)); } catch (e) {}
+      return n;
+    }).catch(function(){ return null; });
+}
+function ll(sub){ var c = SUB[sub]; return c ? { lat: c[0], lng: c[1] } : { lat: null, lng: null }; }
+function bizDefaults(){
+  var s = seedBiz(); s.name = ""; s.phone = ""; s.email = ""; s.gmapsKey = ""; s.state = "NSW"; return s;
+}
+function applyCfg(cfg, venue){
+  cfg = cfg || {};
+  DB.biz = Object.assign(bizDefaults(), cfg.biz || {});
+  DB.biz.name = venue.name || DB.biz.name; DB.biz.phone = venue.phone || DB.biz.phone || ""; DB.biz.email = venue.email || DB.biz.email || "";
+  if (DB.biz.baseLat != null && DB.biz.base) SUB[DB.biz.base] = [DB.biz.baseLat, DB.biz.baseLng];
+  DB.team = cfg.team || []; DB.jobTypes = (cfg.jobTypes || []).map(jobFlags);
+  migrate(DB);
+}
+function mapJob(j){
+  if (j.lat != null && j.suburb && !SUB[j.suburb]) SUB[j.suburb] = [j.lat, j.lng];
+  return { id: j.id, ref: j.ref || "", date: String(j.date).slice(0, 10), start: j.start, mins: j.mins, techId: j.techId, typeId: j.typeId, title: j.title || "",
+    customer: j.customer || { name: "", phone: "", email: "" }, street: j.street || "", suburb: j.suburb || "", notes: j.notes || "", status: j.status || "booked",
+    window: j.window || null, emergency: !!j.emergency, afterHours: !!j.afterHours, paid: j.paid || 0, seriesId: j.seriesId, seriesIdx: j.seriesIdx,
+    seriesN: j.seriesN, repeatEvery: j.repeatEvery, quoteId: j.quoteId };
+}
+function loadPublic(slug){
+  return rpc("trd_public", { p_venue: slug || SLUG }).then(function(d){
+    if (!d || !d.ok) throw new Error((d && d.error) || "Couldn't load this business.");
+    PUB = d; applyCfg(d.config, d.venue);
+    DB.bookings = (d.busy || []).map(mapJob); DB.quotes = DB.quotes || []; DB.tcache = d.travel || {};
+    return d;
+  });
+}
+function loadStaff(){
+  return rpc("trd_staff_load", { p_venue: SLUG }).then(function(d){
+    if (!d || !d.ok) throw new Error((d && d.error) || "No access to this business.");
+    STAFF = d; applyCfg(d.config, d.venue);
+    DB.bookings = (d.jobs || []).map(mapJob); DB.tcache = d.travel || {};
+    DB.quotes = (d.quotes || []).map(function(q){ if (q.lat != null && q.suburb && !SUB[q.suburb]) SUB[q.suburb] = [q.lat, q.lng];
+      q.photos = q.photos || []; q.lines = q.lines || []; return q; });
+    document.body.classList.remove("cust");
+    return d;
+  });
+}
+function reload(){ return (STAFF ? loadStaff() : loadPublic()).catch(function(e){ toast(e.message); }); }
+function liveCfg(){ var b = Object.assign({}, DB.biz); if (SUB[b.base]) { b.baseLat = SUB[b.base][0]; b.baseLng = SUB[b.base][1]; }
+  b.pages = { app: location.origin + location.pathname }; return { biz: b, team: DB.team, jobTypes: DB.jobTypes }; }
+function busy(el, on, txt){ if (!el) return; if (on) { el.dataset.t = el.textContent; el.textContent = txt || "Working…"; el.disabled = true; } else { el.textContent = el.dataset.t || el.textContent; el.disabled = false; } }
+
+/* ---- live versions of the actions ---- */
+function liveBook(){
+  var p = BK.pick, plan = BK.every && BK.plan ? BK.plan : null, c = ll(BK.suburb);
+  var body = { type_id: BK.job.id, date: BK.date, start: p.t, tech_id: p.tech.id, street: BK.street, suburb: BK.suburb, lat: c.lat, lng: c.lng,
+    name: BK.name, phone: BK.phone, email: BK.email, notes: BK.notes, win_from: p.win ? p.win.from : null, win_to: p.win ? p.win.to : null,
+    emergency: !!BK.emerg, every: BK.every || 0, staff: !!STAFF,
+    visits: plan ? plan.filter(function(v){ return v.t != null; }).map(function(v){ return { date: v.date, start: v.t, tech_id: v.tech.id }; }) : [] };
+  var btn = $("#next"); busy(btn, true, "Booking…");
+  rpc("trd_book", { p_venue: SLUG, p: body }).then(function(r){
+    if (!r || !r.ok) { busy(btn, false); toast((r && r.error) || "Sorry, that didn't work."); if (r && r.code === "taken") { BK.pick = null; BK.step = 3; reload().then(renderBook); } return; }
+    var cust = { name: BK.name, phone: BK.phone, email: BK.email };
+    var all = (r.made || []).map(function(m){ return { date: String(m.date).slice(0, 10), start: m.start, techId: m.techId }; });
+    var skipped = (r.skipped || []).slice();
+    if (plan) plan.forEach(function(v){ if (v.t == null) skipped.push(v.date); });
+    BK.done = { type: "booking", ref: r.ref, b: { date: BK.date, start: p.t, techId: p.tech.id, window: p.win, customer: cust, emergency: r.emergency }, all: all, skipped: skipped, payment: null };
+    BK.step = 6; reload().then(function(){ renderBook(); });
+  }, function(e){ busy(btn, false); toast(e.message); });
+}
+function liveQuoteRequest(){
+  var c = ll(BK.suburb), btn = $("#next"); busy(btn, true, "Sending…");
+  rpc("trd_quote_request", { p_venue: SLUG, p: { type_id: BK.job.id, title: BK.job.name, cat: BK.job.cat, name: BK.name, phone: BK.phone, email: BK.email,
+    street: BK.street, suburb: BK.suburb, lat: c.lat, lng: c.lng, description: BK.desc || BK.notes || ("(Out-of-area job request — " + BK.job.name + ")"),
+    photos: BK.photos, prefer: BK.prefer } }).then(function(r){
+    if (!r || !r.ok) { busy(btn, false); return toast((r && r.error) || "Sorry, that didn't send."); }
+    BK.done = { type: "quote", ref: r.ref }; BK.step = 6; if (STAFF) reload().then(renderBook); else renderBook();
+  }, function(e){ busy(btn, false); toast(e.message); });
+}
+function liveJob(id, action, techId){
+  return rpc("trd_job_update", { p_venue: SLUG, p_id: id, p_action: action, p_tech: techId || null }).then(function(r){
+    if (!r || !r.ok) toast((r && r.error) || "That didn't work."); return loadStaff();
+  }, function(e){ toast(e.message); }).then(function(){ renderStaff(); });
+}
+function liveQuoteSave(q, status){
+  var c = ll(q.suburb);
+  return rpc("trd_quote_save", { p_venue: SLUG, p: { id: /^[0-9a-f-]{36}$/.test(q.id) ? q.id : null, type_id: q.typeId, cat: q.cat, title: q.title, customer: q.customer,
+    street: q.street, suburb: q.suburb, lat: c.lat, lng: c.lng, description: q.description, lines: q.lines, est_mins: q.estMins,
+    valid_days: q.validDays || DB.biz.quoteValidDays, note: q.note, status: status } }).then(function(r){
+    if (!r || !r.ok) { toast((r && r.error) || "Couldn't save the quote."); return null; }
+    QS.sel = r.id; return loadStaff().then(function(){ return r; });
+  }, function(e){ toast(e.message); return null; });
+}
+function liveSaveSetup(btn){
+  busy(btn, true, "Saving…");
+  return geoSub(DB.biz.base).then(function(n){
+    if (n) DB.biz.base = n;
+    return rpc("trd_save_config", { p_venue: SLUG, p_config: liveCfg() });
+  }).then(function(r){ busy(btn, false); if (!r || !r.ok) return toast((r && r.error) || "Couldn't save."); toast("Setup saved"); return loadStaff().then(route); },
+    function(e){ busy(btn, false); toast(e.message); });
+}
+function liveTravelSave(pairs){ if (!SLUG || !Object.keys(pairs).length) return; rpc("trd_travel_save", { p_venue: SLUG, p_pairs: pairs }).catch(function(){}); }
+
+/* ---- screens only the live version has ---- */
+function renderLogin(why){
+  document.body.classList.add("cust");
+  $("#app").innerHTML = '<div class="card form" style="max-width:440px;margin:40px auto"><h2 style="margin:0">Staff sign in</h2>' +
+    (why ? '<p class="muted" style="margin:0">' + esc(why) + '</p>' : '') +
+    '<label>Email<input type="email" id="lEmail" autocomplete="username"></label><label>Password<input type="password" id="lPass" autocomplete="current-password"></label>' +
+    '<div class="actions"><button class="btn" id="lIn">Sign in</button><button class="btn ghost" id="lUp">Create a login</button></div>' +
+    '<p class="small muted">Same login as Service Deluxe works here. New business? <a href="#start">Set it up</a>.</p><div id="lMsg"></div></div>';
+  var go2 = function(path, body){
+    var e = $("#lEmail").value.trim(), p = $("#lPass").value;
+    if (!e || p.length < 6) return toast("Enter your email and a password (6+ characters)");
+    authCall(path, Object.assign({ email: e, password: p }, body || {})).then(function(s){
+      if (!s.access_token) { $("#lMsg").innerHTML = '<div class="note ok">Check your email to confirm your login, then come back and sign in.</div>'; return; }
+      saveSes(s); liveBoot();
+    }, function(er){ $("#lMsg").innerHTML = '<div class="note warn">' + esc(er.message) + '</div>'; });
+  };
+  $("#lIn").onclick = function(){ go2("token?grant_type=password"); };
+  $("#lUp").onclick = function(){ go2("signup"); };
+}
+function renderPicker(list){
+  document.body.classList.add("cust");
+  $("#app").innerHTML = '<div class="card" style="max-width:520px;margin:40px auto"><h2>Your businesses</h2><div class="list">' +
+    list.map(function(v){ return '<a class="opt" style="text-decoration:none;color:inherit" href="?b=' + encodeURIComponent(v.slug) + '#staff"><div class="ico">' + esc(v.name.charAt(0)) + '</div><div><div class="t">' + esc(v.name) + '</div><div class="d">' + esc(v.role) + '</div></div></a>'; }).join("") +
+    '</div><div class="actions"><a class="btn ghost" href="#start">+ Set up another business</a><button class="btn ghost" id="out">Sign out</button></div></div>';
+  $("#out").onclick = function(){ saveSes(null); renderLogin(); };
+}
+function renderStart(){
+  document.body.classList.add("cust");
+  if (!SES) return renderLogin("Sign in or create a login first, then set up your business.");
+  $("#app").innerHTML = '<h1>Set up <em>your business</em></h1><p class="lead">Takes a minute. You can change everything later in Setup.</p>' +
+    '<div class="card form" style="max-width:640px"><label>Business name<input type="text" id="sName"></label>' +
+    '<label>Trade<select id="sPreset">' + Object.keys(PRESETS).map(function(k){ return '<option value="' + k + '">' + PRESETS[k].label + '</option>'; }).join("") + '</select></label>' +
+    '<div class="row2"><label>Business phone<input type="tel" id="sPhone"></label><label>Business email<input type="email" id="sEmail" value="' + esc((SES.user && SES.user.email) || "") + '"></label></div>' +
+    '<div class="row2"><label>Base suburb (where the vans start)<input type="text" id="sBase" list="subListS"></label><label>State<select id="sState">' + ["NSW","VIC","QLD","WA","SA","TAS","ACT","NT"].map(function(s){ return '<option>' + s + '</option>'; }).join("") + '</select></label></div>' +
+    '<datalist id="subListS">' + SUB_NAMES.map(function(s){ return '<option value="' + s + '">'; }).join("") + '</datalist>' +
+    '<div class="row2"><label>Your name<input type="text" id="sOwner"></label><label class="check" style="align-self:end"><input type="checkbox" id="sWorks" checked> <span>I do jobs myself</span></label></div>' +
+    '<label>Setup code <span class="opt-l">(from Webescapade)</span><input type="text" id="sCode" value="' + esc(QP0.get("code") || "") + '"></label>' +
+    '<div class="actions"><button class="btn" id="sGo">Create my business</button></div><div id="sMsg"></div></div>';
+  $("#sGo").onclick = function(){
+    var btn = this, name = $("#sName").value.trim(), preset = $("#sPreset").value;
+    if (!name) return toast("Please enter the business name");
+    DB.biz.state = $("#sState").value; busy(btn, true, "Setting up…");
+    geoSub($("#sBase").value).then(function(base){
+      if (!base) { busy(btn, false); return toast("We couldn't find that base suburb — check the spelling"); }
+      var b = bizDefaults(); b.name = name; b.preset = preset; b.phone = $("#sPhone").value.trim(); b.email = $("#sEmail").value.trim(); b.base = base; b.state = $("#sState").value;
+      b.baseLat = SUB[base][0]; b.baseLng = SUB[base][1]; b.pages = { app: location.origin + location.pathname };
+      var cats0 = Object.keys(PRESETS[preset].cats), team = [];
+      if ($("#sWorks").checked) team.push({ id: uid(), name: $("#sOwner").value.trim() || "Me", role: PRESETS[preset].label, skills: cats0, color: "#E8591A", days: [1,2,3,4,5], start: "07:30", end: "16:30", active: true, onCall: true });
+      return rpc("trd_create_business", { p_name: name, p_phone: b.phone, p_email: b.email, p_config: { biz: b, team: team, jobTypes: makeJobs(preset) }, p_code: $("#sCode").value.trim() })
+        .then(function(r){ busy(btn, false); if (!r || !r.ok) return $("#sMsg").innerHTML = '<div class="note warn">' + esc((r && r.error) || "Couldn't create it.") + '</div>';
+          location.href = location.pathname + "?b=" + encodeURIComponent(r.slug) + "#setup"; });
+    }).catch(function(e){ busy(btn, false); toast(e.message); });
+  };
+}
+function renderJoin(a){
+  document.body.classList.add("cust");
+  if (!SES) return renderLogin("Sign in or create a login to join the team.");
+  $("#app").innerHTML = '<div class="empty" style="margin-top:40px">Joining…</div>';
+  rpc("trd_join", { p_slug: a.join, p_key: a.k }).then(function(r){
+    if (!r || !r.ok) { $("#app").innerHTML = '<div class="note warn" style="max-width:520px;margin:40px auto">' + esc((r && r.error) || "That invite didn't work.") + '</div>'; return; }
+    location.href = location.pathname + "?b=" + encodeURIComponent(r.slug) + "#staff";
+  }, function(e){ toast(e.message); });
+}
+function renderCancel(a){
+  document.body.classList.add("cust");
+  $("#app").innerHTML = '<div class="empty" style="margin-top:40px">Finding your booking…</div>';
+  rpc("trd_lookup", { p_ref: a.cancel, p_token: a.t }).then(function(r){
+    if (!r || !r.ok) { $("#app").innerHTML = '<div class="note warn" style="max-width:520px;margin:40px auto">' + esc((r && r.error) || "We couldn't find that booking.") + '</div>'; return; }
+    $("#bizName").textContent = r.venue;
+    var wh = r.win_from != null ? "arriving between " + fmt(r.win_from) + " and " + fmt(r.win_to) : "arriving at " + fmt(r.start);
+    $("#app").innerHTML = '<div class="card" style="max-width:560px;margin:30px auto"><span class="pill ' + (r.status === "booked" ? "ok" : "grey") + '">' + esc(r.status) + ' · ' + esc(r.ref) + '</span>' +
+      '<h2 style="margin-top:12px">' + esc(r.title) + '</h2><p style="font-size:18px"><b>' + fmtDay(String(r.date).slice(0, 10)) + '</b>, ' + wh + '</p><p class="muted">' + esc((r.street ? r.street + ", " : "") + r.suburb) + '</p>' +
+      (r.can_cancel ? '<div class="actions"><button class="btn danger" id="cx">Cancel this booking</button></div>' : r.status === "booked" ? '<div class="note info">It\'s less than 24 hours away — please call ' + esc(r.venue) + (r.phone ? ' on <a href="tel:' + esc(String(r.phone).replace(/\s/g, "")) + '">' + esc(r.phone) + '</a>' : '') + ' to change it.</div>' : '') +
+      '<div class="actions"><a class="btn ghost" href="?b=' + encodeURIComponent(r.slug) + '#book">Book another job</a></div></div>';
+    if ($("#cx")) $("#cx").onclick = function(){ if (!confirm("Cancel this booking?")) return; var b = this; busy(b, true);
+      rpc("trd_cancel", { p_ref: a.cancel, p_token: a.t }).then(function(x){ if (!x || !x.ok) { busy(b, false); return toast((x && x.error) || "Couldn't cancel."); } toast("Booking cancelled"); renderCancel(a); }); };
+  });
+}
+function renderLiveQuote(a){
+  document.body.classList.add("cust");
+  if (CQ.id === a.quote && CQ.live) return renderCustomerQuote(a.quote);
+  $("#app").innerHTML = '<div class="empty" style="margin-top:40px">Loading your quote…</div>';
+  rpc("trd_quote_view", { p_id: a.quote, p_token: a.t }).then(function(r){
+    if (!r || !r.ok) { $("#app").innerHTML = '<div class="note warn" style="max-width:520px;margin:40px auto">' + esc((r && r.error) || "This quote link isn't valid any more.") + '</div>'; return; }
+    SLUG = r.slug;
+    return loadPublic(r.slug).then(function(){
+      var q = r.quote; q.token = a.t; q.photos = []; q.lines = q.lines || [];
+      if (q.lat != null && q.suburb && !SUB[q.suburb]) SUB[q.suburb] = [q.lat, q.lng];
+      DB.quotes = [q]; CQ = { id: q.id, date: null, pick: null, techId: "", stage: q.status === "booked" ? "done" : "view", live: true, booking: r.booking };
+      $("#bizName").textContent = DB.biz.name; renderCustomerQuote(q.id);
+    });
+  }).catch(function(e){ toast(e.message); });
+}
+
+function liveBoot(){
+  SES = SES || loadSes();
+  var a = hashArgs();
+  if (a.start) return renderStart();
+  if (a.join) return renderJoin(a);
+  if (a.cancel) return renderCancel(a);
+  if (a.quote) return renderLiveQuote(a);
+  var staffView = a.staff || a.quotes || a.setup || a.crm || a.website;
+  if (SES) {
+    return rpc("trd_my_venues", {}).then(function(m){
+      var list = (m && m.venues) || [];
+      if (!SLUG) { if (list.length === 1) { SLUG = list[0].slug; } else if (staffView || !list.length) { return list.length ? renderPicker(list) : renderStart(); } }
+      var mine = list.some(function(v){ return v.slug === SLUG; });
+      if (mine) return loadStaff().then(route);
+      if (staffView) return renderLogin("This login doesn't have access to that business.");
+      return loadPublic().then(function(){ document.body.classList.add("cust"); applyBookParams(); route(); });
+    }).catch(function(e){ if (/JWT|expired|401/i.test(e.message)) { saveSes(null); return liveBoot(); } toast(e.message); });
+  }
+  if (staffView) return renderLogin();
+  if (!SLUG) { $("#app").innerHTML = '<div class="card" style="max-width:560px;margin:40px auto"><h2>Painter Deluxe</h2><p class="muted">Looking to book? Use the booking link from your tradie\'s website.</p><div class="actions"><a class="btn" href="#staff">Staff sign in</a><a class="btn ghost" href="#start">Set up a business</a></div></div>'; document.body.classList.add("cust"); return; }
+  document.body.classList.add("cust");
+  $("#app").innerHTML = '<div class="empty" style="margin-top:40px">Loading…</div>';
+  loadPublic().then(function(){ applyBookParams(); route(); }, function(e){ $("#app").innerHTML = '<div class="note warn" style="max-width:520px;margin:40px auto">' + esc(e.message) + '</div>'; });
+}
+function applyBookParams(){
+  if (QP0.get("emergency") === "1") BK.emerg = true;
+  var jid = QP0.get("job");
+  if (jid) { var j = DB.jobTypes.filter(function(x){ return x.id === jid || x.name === jid; })[0]; if (j) { BK.job = j; BK.cat = j.cat; BK.step = 2; } }
+  if (QP0.get("cat")) BK.cat = QP0.get("cat");
+}
+function liveSetupExtras(){
+  var base = location.origin + location.pathname + "?b=" + encodeURIComponent(SLUG);
+  var site = "https://webescapade.com/painters/";
+  var invite = STAFF && STAFF.join_key && STAFF.role !== "staff" ? base + "#join=" + encodeURIComponent(SLUG) + "&k=" + STAFF.join_key : null;
+  var box = document.createElement("div"); box.className = "card"; box.style.marginBottom = "16px";
+  var row = function(label, url){ return '<label>' + label + '<span style="display:flex;gap:8px"><input type="text" readonly value="' + esc(url) + '"><button class="btn ghost sm" type="button" data-copy="' + esc(url) + '">Copy</button></span></label>'; };
+  box.innerHTML = '<h3>Your links</h3><div class="form">' + row("Booking page — put this on your website, Google profile and Facebook", base + "#book") +
+    row("Your painter website", new URL("../index.html?b="+encodeURIComponent(SLUG), location.href).href) + row("Run sheet for your team", base + "#staff") +
+    (invite ? row("Invite a team member (they sign in, then get access)", invite) : '') + '</div>' +
+    '<p class="small muted" style="margin:10px 0 0">On your Painter Deluxe website, set the booking page to <code>' + esc(location.pathname + "?b=" + SLUG) + '</code> (Bookings button in the editor).</p>';
+  var app = $("#app"), first = app.querySelector(".card"); app.insertBefore(box, first);
+  $$("[data-copy]", box).forEach(function(b){ b.onclick = function(){ var u = b.getAttribute("data-copy");
+    (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function(){ toast("Copied"); }, function(){ prompt("Copy this link:", u); }); }; });
+  if ($("#outS")) $("#outS").onclick = function(){ saveSes(null); STAFF = null; location.hash = ""; location.reload(); };
+}
+
+(function(){
+  var a = QP.get("accent"); if (a && /^#?[0-9a-f]{6}$/i.test(a)) document.documentElement.style.setProperty("--accent", a.replace(/^#?/, "#"));
+  var bk = QP.get("back"); if (bk && /^https?:/i.test(bk)) { var l = document.createElement("a"); l.href = bk; l.className = "backsite"; l.textContent = "‹ Back to website"; document.querySelector(".top .in").insertBefore(l, document.querySelector("#tabs")); }
+  if (QP.get("view") === "customer") document.body.classList.add("cust");
+  if (LIVE) { var dn = document.querySelector(".demo-note"); if (dn) dn.remove(); var sm = document.querySelector(".brand small"); if (sm) sm.textContent = "Online booking"; }
+})();
+
+function renderCRM(){
+ if(LIVE&&!STAFF)return renderLogin();
+ var records=DB.bookings.map(function(b){return {kind:"Booking",name:b.customer&&b.customer.name,email:b.customer&&b.customer.email,phone:b.customer&&b.customer.phone,title:b.title,status:b.status,date:b.date,notes:b.notes,suburb:b.suburb,street:b.street};}).concat(DB.quotes.map(function(q){return {kind:"Quote",name:q.customer&&q.customer.name,email:q.customer&&q.customer.email,phone:q.customer&&q.customer.phone,title:q.title,status:q.status,date:new Date(q.created).toLocaleDateString(),notes:q.description,suburb:q.suburb,street:q.street};}));
+ $("#app").innerHTML='<h1>Your <em>customers</em></h1><p class="lead">Bookings, quote requests and what each customer needs.</p><label>Search customers<input id="crmSearch" placeholder="Name, email, suburb or project"></label><div class="actions"><button class="btn ghost" id="crmRefresh">Refresh</button><a class="btn" href="#quotes">Manage quotes</a></div><div id="crmRows"></div><p class="small muted">Shows records returned by the run sheet and quote inbox, not a complete lifetime archive. Contact details are only available after authorised staff sign in.</p>';
+ function draw(){var q=$("#crmSearch").value.toLowerCase();$("#crmRows").innerHTML=records.filter(function(r){return JSON.stringify(r).toLowerCase().includes(q);}).map(function(r){return '<article class="card" style="margin-top:14px"><span class="pill">'+esc(r.kind+' · '+r.status)+'</span><h3>'+esc(r.name||"Customer")+'</h3><p>'+esc(r.title)+' · '+esc(r.date)+'</p><p>'+esc([r.email,r.phone].filter(Boolean).join(' · '))+'</p><p>'+esc([r.street,r.suburb].filter(Boolean).join(', '))+'</p><p style="white-space:pre-wrap">'+esc(r.notes||'No additional notes')+'</p></article>';}).join('')||'<div class="empty">No matching customers yet.</div>';}
+ $("#crmSearch").oninput=draw;$("#crmRefresh").onclick=function(){if(LIVE)reload().then(renderCRM);else renderCRM();};draw();
+}
+function renderWebsite(){
+ if(LIVE&&!STAFF)return renderLogin();
+ var w=DB.biz.website||{}, fields=[['headline','Headline','A fresh coat. A whole new feeling.'],['intro','Introduction','Explore colours, get an indicative painting estimate and book a site visit online.'],['about','About your business','Tell customers about your approach, experience and service area.'],['hero','Hero photo URL',''],['accent','Brand colour','#456859'],['wallRate','Walls AUD / m²',24],['ceilingRate','Ceilings AUD / m²',16],['trimRate','Skirting AUD / metre',10],['exteriorRate','Exterior AUD / m²',32],['minimum','Minimum job AUD',350]];
+ $("#app").innerHTML='<h1>Your <em>website</em></h1><p class="lead">Update your public landing page and estimator. Save to publish changes to your business page.</p><form class="card form" id="websiteForm">'+fields.map(function(f){return '<label>'+esc(f[1])+'<input data-web="'+f[0]+'" type="'+(typeof f[2]==='number'?'number':f[0]==='accent'?'color':f[0]==='hero'?'url':'text')+'" '+(typeof f[2]==='number'?'min="0" max="10000" step="0.5"':'maxlength="1200"')+' value="'+esc(w[f[0]]==null?f[2]:w[f[0]])+'"></label>';}).join('')+'<label>Or upload a hero photo<input id="heroFile" type="file" accept="image/jpeg,image/png,image/webp"></label><p class="small muted">Photos are resized before saving. Use images you own or are licensed to use. Business name and contact details are edited in Setup. These website fields are public; never enter private notes here.</p><div class="actions"><button class="btn">Save website</button><a class="btn ghost" target="_blank" rel="noopener" href="../index.html'+(SLUG?'?b='+encodeURIComponent(SLUG):'')+'">Preview website ↗</a></div><p id="webMessage" role="status"></p></form>';
+ var photo=null;
+ $("#heroFile").onchange=async function(){var file=this.files[0];if(!file)return;if(file.size>12000000)return toast('Please choose an image smaller than 12 MB');try{var img=await createImageBitmap(file),c=document.createElement('canvas'),ratio=Math.min(1,1000/img.width);c.width=img.width*ratio;c.height=img.height*ratio;c.getContext('2d').drawImage(img,0,0,c.width,c.height);photo=c.toDataURL('image/jpeg',.65);img.close();if(photo.length>180000){photo=null;return toast('Photo is too detailed. Choose a smaller image.');}toast('Photo ready — save website to publish.');}catch(e){toast('Could not read that photo');}};
+ $("#websiteForm").onsubmit=function(e){e.preventDefault();var nw={};$$('[data-web]').forEach(function(i){nw[i.dataset.web]=i.type==='number'?Number(i.value):i.value.trim();});if(photo)nw.hero=photo;DB.biz.website=nw;var btn=this.querySelector('button');if(LIVE){busy(btn,true,'Saving…');rpc('trd_save_config',{p_venue:SLUG,p_config:liveCfg()}).then(function(r){if(!r||!r.ok)throw Error(r&&r.error||'Save failed');$('#webMessage').textContent='Saved. Your landing page and estimator now use these settings.';}).catch(function(e){$('#webMessage').textContent=e.message;}).finally(function(){busy(btn,false);});}else{save();$('#webMessage').textContent='Demo saved in this browser. Live business settings save privately to your account.';}};
+}
+
+if (LIVE) liveBoot(); else route();
+</script>
+</body>
+</html>
+
