@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>if(new URLSearchParams(location.search).get("b")){location.replace("/removalists/site.html"+location.search+location.hash);}</script><title>Removalist Deluxe · Moving estimates, quotations &amp; appointments · Webescapade</title>
+<meta name="description" content="An editable removalist website, room-and-distance moving estimates, quotations, AI answers and quotation-visit bookings. Removalist Deluxe by Webescapade.">
+<link rel="canonical" href="https://webescapade.com/removalists/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="Webescapade">
+<meta property="og:locale" content="en_AU">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://webescapade.com/removalists/">
+<meta property="og:title" content="Removalist Deluxe · A clearer quote. A smoother start.">
+<meta property="og:description" content="An editable removalist website, room-and-distance moving estimates, quotations, AI answers and quotation-visit bookings. Removalist Deluxe by Webescapade.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Removalist Deluxe · A clearer quote. A smoother start.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F2EC; --paper2:#ECE7DE; --card:#FFFFFF; --ink:#14202C; --ink2:#26333F; --muted:#5F6A75; --line:#E0DAD0;
+  --acc:#E8591A; --acc2:#F07A3E; --mint:#FCE8DB; --deep:#14202C; --btn:#14202C; --btnink:#fff;
+  --r:22px; --shadow:0 30px 60px -30px rgba(20,32,44,.4), 0 10px 24px -12px rgba(20,32,44,.2);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.015em;margin:0}
+h1{font-size:clamp(46px,7.2vw,94px);line-height:.96}
+h2{font-size:clamp(36px,5vw,62px);line-height:1}
+h3{font-size:28px;line-height:1.1}
+h1 em,h2 em,h3 em{font-style:italic;color:var(--acc)}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--acc)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:16px 26px;font:700 15px Manrope,sans-serif;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn.dark{background:var(--btn);color:var(--btnink);box-shadow:0 10px 24px -10px rgba(20,32,44,.6)}
+.btn.acc{background:var(--acc);color:#fff;box-shadow:0 10px 24px -10px var(--acc)}
+.btn.line{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.light{background:#fff;color:var(--ink)}
+.btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
+/* nav */
+nav.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.top.s{border-bottom-color:var(--line)}
+nav.top .w{display:flex;align-items:center;gap:26px;height:72px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .m{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center}
+.brand .m svg{width:20px;height:20px}
+.brand b{font:400 25px "Instrument Serif",serif;letter-spacing:-.01em}
+.brand small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+nav.top .links{display:flex;gap:22px;margin-left:auto;font-size:15px;font-weight:600}
+nav.top .links a{text-decoration:none;color:var(--muted)}nav.top .links a:hover{color:var(--ink)}
+nav.top .btn{padding:11px 20px;font-size:14px}
+@media(max-width:960px){nav.top .links{display:none}nav.top .btn{margin-left:auto}}
+@media(max-width:480px){nav.top .w{gap:12px}.brand b{font-size:21px}nav.top .btn{padding:10px 14px;font-size:13px}nav.top .btn .ar{display:none}}
+/* hero */
+.hero{padding:64px 0 60px;position:relative;overflow-x:clip}
+.hero .w{display:grid;gap:56px;align-items:center}
+@media(min-width:1020px){.hero .w{grid-template-columns:1fr 1.08fr}}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:13.5px;font-weight:700;color:var(--ink2);margin-bottom:24px}
+.pill i{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-style:normal;font-size:12px}
+.hero .lead{margin:24px 0 32px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.trust{display:flex;gap:10px 18px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted);font-weight:700}
+.trust span:before{content:"✓";color:var(--acc);margin-right:6px}
+.stage{position:relative;padding-bottom:40px}
+.browser{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.browser .bar{height:30px;background:var(--paper2);display:flex;align-items:center;gap:6px;padding:0 12px}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.browser .bar span{margin-left:10px;font-size:11px;color:var(--muted);background:var(--card);border-radius:6px;padding:2px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phone{position:absolute;width:32%;min-width:150px;right:-2%;bottom:-6%;border-radius:34px;background:#111;padding:8px;box-shadow:var(--shadow)}
+.phone img{border-radius:26px}
+.hero .browser{transform:rotate(-1.2deg)}
+.hero .phone{transform:rotate(3deg)}
+.fc{position:absolute;left:-3%;bottom:4%;background:#fff;border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center;font-size:14px;max-width:270px}
+.fc .ic{width:36px;height:36px;border-radius:10px;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-weight:900;flex:none}
+.fc b{display:block}
+.fc span{color:var(--muted);font-size:12.5px}
+@media(max-width:600px){.phone{width:40%;right:0;bottom:-10%}.fc{display:none}}
+/* trades strip */
+.made{padding:40px 0 20px}
+.made p{text-align:center;color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 16px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.chips span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px}
+.chips span.soon{color:var(--muted);border-style:dashed}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:40px}
+@media(min-width:860px){.facts{grid-template-columns:repeat(4,1fr)}}
+.facts div{background:var(--card);border-radius:18px;padding:20px 22px;border:1px solid var(--line)}
+.facts b{display:block;font:400 34px/1.05 "Instrument Serif",serif}
+.facts span{font-size:14px;color:var(--muted)}
+section.s{padding:110px 0}
+.head{max-width:780px;margin-bottom:50px}
+.head p{color:var(--muted);font-size:18px;margin:18px 0 0}
+/* travel explainer */
+.route{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:grid;gap:26px}
+@media(min-width:900px){.route{grid-template-columns:1.25fr .75fr;align-items:center}}
+.tl{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px}
+.tl>div{flex:none;display:flex;flex-direction:column;justify-content:center;border-radius:12px;padding:10px 12px;font-size:13px;min-height:86px}
+.tl .jb{background:var(--deep);color:#fff;width:150px}
+.tl .jb b{font-size:14px}
+.tl .jb span{opacity:.7}
+.tl .dv{width:86px;background:repeating-linear-gradient(90deg,var(--mint) 0 8px,transparent 8px 12px);color:var(--acc);font-weight:800;text-align:center;border-radius:0}
+.tl .fr{width:120px;background:#E3F2E8;color:#1F6A3E;font-weight:800;text-align:center;border:2px dashed #7CC398}
+.why3{display:grid;gap:16px;margin-top:30px}
+@media(min-width:860px){.why3{grid-template-columns:repeat(3,1fr)}}
+.w3{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.w3 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:14px;margin-bottom:10px}
+.w3 b{display:block;font-size:17px;margin-bottom:4px}
+.w3 span{color:var(--muted);font-size:15px}
+/* steps */
+.steps{display:grid;gap:22px}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font:800 12px Manrope;letter-spacing:.16em;color:var(--acc)}
+.step h3{margin:8px 0 6px;font-size:28px}
+.step p{margin:0 0 20px;color:var(--muted);font-size:15.5px}
+.step .shot{margin-top:auto;border-radius:26px 26px 0 0;background:#111;padding:8px 8px 0;max-width:270px;align-self:center;width:100%}
+.step .shot img{border-radius:20px 20px 0 0;height:360px;width:100%;object-fit:cover;object-position:top}
+/* splits */
+.split{display:grid;gap:44px;align-items:center}
+@media(min-width:980px){.split{grid-template-columns:.9fr 1.1fr}.split.flip{grid-template-columns:1.1fr .9fr}.split.flip .txt{order:2}}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:16px}
+.ticks li{display:flex;gap:14px}
+.ticks li:before{content:"";flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12l4 4 8-8'/%3E%3C/svg%3E") center/14px no-repeat;margin-top:1px}
+.ticks b{display:block}
+.ticks span span{color:var(--muted);font-size:15.5px}
+.dark{background:var(--deep);color:#EEF0EC}
+.dark .ticks span span,.dark .lead{color:rgba(238,240,236,.72)}
+.dark .eyebrow{color:var(--acc2)}
+.dark h2 em{color:var(--acc2)}
+.phones{display:flex;gap:16px;justify-content:center}
+.phones .ph{flex:1;max-width:250px;border-radius:30px;background:#000;padding:7px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.phones .ph img{border-radius:24px}
+.phones .ph:nth-child(2){transform:translateY(40px)}
+/* looks */
+.looks{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.looks button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font:700 14px Manrope,sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.looks button i{width:14px;height:14px;border-radius:50%}
+.looks button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lookimg{position:relative}
+.lookimg img{transition:opacity .4s}
+/* video */
+.video{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/9;background:#000;box-shadow:var(--shadow);max-width:1000px;margin:0 auto;cursor:pointer;border:0;padding:0;width:100%;display:block}
+.video img{width:100%;height:100%;object-fit:cover}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video .play{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;background:var(--acc);box-shadow:0 14px 34px -8px rgba(0,0,0,.55);display:grid;place-items:center;transition:transform .2s}
+.video .play:after{content:"";margin-left:6px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent #fff}
+.video:hover .play{transform:scale(1.08)}
+.crmd{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:center;max-width:980px;margin:40px auto 0}.crmd img{width:100%;height:auto;display:block;border-radius:18px;box-shadow:0 20px 50px rgba(20,32,44,.18)}.crmd h3{font-size:30px;margin:6px 0 10px}.crmd p{margin:0 0 16px}@media(max-width:760px){.crmd{grid-template-columns:1fr}}
+.vnote{text-align:center;color:var(--muted);font-size:14px;margin-top:16px}
+/* pricing */
+.plans{display:grid;gap:18px}
+@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;position:relative}
+.plan.hi{background:var(--deep);color:#fff;border-color:var(--deep)}
+.plan.hi .muted,.plan.hi li{color:rgba(255,255,255,.78)}
+.plan .tag{position:absolute;top:-12px;left:28px;background:var(--acc);color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 12px}
+.plan .pr{margin:18px 0 8px}
+.plan .pr span{font:400 54px/1 "Instrument Serif",serif}
+.plan .pr small{color:var(--muted)}
+.plan.hi .pr small{color:rgba(255,255,255,.7)}
+.plan ul{list-style:none;padding:0;margin:14px 0 24px;display:grid;gap:10px;flex:1}
+.plan li{padding-left:24px;position:relative;font-size:15.5px;color:var(--ink2)}
+.plan li:before{content:"✓";position:absolute;left:0;color:var(--acc);font-weight:900}
+.muted{color:var(--muted)}
+.notes{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;margin-top:22px;color:var(--muted);font-size:14px}
+/* faq */
+.faq{max-width:860px}
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:14px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--acc);font-size:22px;line-height:1}
+details[open] summary:after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+/* enquire */
+.enq{display:grid;gap:40px}
+@media(min-width:960px){.enq{grid-template-columns:.9fr 1.1fr;align-items:start}}
+.contact{display:grid;gap:10px;margin-top:26px}
+.contact a{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;font-weight:700}
+.contact i{width:36px;height:36px;border-radius:10px;background:var(--mint);display:grid;place-items:center;font-style:normal}
+.form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;display:grid;gap:14px}
+.form label{display:grid;gap:6px;font-size:14px;font-weight:700}
+.form input,.form select,.form textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:16px Manrope,sans-serif;background:#fff;color:var(--ink)}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--acc)}
+.two{display:grid;gap:14px}
+@media(min-width:620px){.two{grid-template-columns:1fr 1fr}}
+.hp{position:absolute;left:-9999px}
+.msg{font-size:15px;font-weight:600;min-height:1.4em}
+.msg.ok{color:#1F6A3E}.msg.err{color:#9A3B2E}
+footer{padding:40px 0 110px;color:var(--muted);font-size:14px}
+footer .w{display:flex;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
+.float{position:fixed;left:18px;bottom:18px;z-index:25;opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
+.float.on{opacity:1;transform:none;pointer-events:auto}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+/* light editor (?edit=1) */
+#eng{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:4px;background:#111;color:#fff;border-radius:999px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 13px Manrope,sans-serif;max-width:calc(100% - 16px);overflow-x:auto}
+#eng button{border:0;background:none;color:#ddd;padding:8px 13px;border-radius:999px;cursor:pointer;font:inherit;white-space:nowrap}
+#eng button.on,#eng button:hover{background:#fff;color:#111}
+body.editing [data-edit]{outline:1.5px dashed rgba(232,89,26,.6);outline-offset:4px;border-radius:4px;cursor:text}
+body.editing [data-img]{outline:3px dashed var(--acc);outline-offset:-3px;cursor:pointer}
+#engp{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:101;width:min(460px,calc(100% - 20px));max-height:calc(100vh - 80px);overflow:auto;background:#fff;color:#111;border-radius:18px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);font:14px/1.45 Manrope,sans-serif}
+#engp h4{margin:0 0 10px;font-size:16px}
+#engp label{display:grid;gap:4px;font-weight:600;font-size:12px;color:#555;margin-bottom:10px}
+#engp input{border:1px solid #ddd;border-radius:9px;padding:8px 10px;font:15px Manrope,sans-serif;color:#111;width:100%}
+#engp .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+#engp .b{border:0;border-radius:9px;padding:9px 14px;font:600 14px Manrope,sans-serif;cursor:pointer;background:#eee;color:#111}
+#engp .b.p{background:#111;color:#fff}
+#engp .note{background:#F4F4F2;border-radius:10px;padding:10px 12px;color:#444;font-size:13px;margin-bottom:10px}
+#engp .msg{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+.chat{--acc:#E8591A;--btn:#14202C;--btnink:#fff;--card:#fff;--deep:#14202C;--paper:#F5F2EC;--shadow:0 24px 70px rgba(20,32,44,.28)}
+.chat-q[hidden],.chat-tip[hidden]{display:none}
+.chat-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--acc);color:#fff;border-radius:999px;padding:8px 18px 8px 8px;font:700 15px Manrope,sans-serif;box-shadow:0 16px 34px -12px rgba(0,0,0,.45);transition:transform .2s}
+.chat-fab:hover{transform:translateY(-2px)}
+.chat-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;position:relative}
+.chat-fab .ci svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-fab .ci:after{content:"";position:absolute;right:1px;top:1px;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid var(--acc)}
+.chat.open .chat-fab{display:none}
+.chat-tip{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;max-width:260px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font-size:14px;line-height:1.45;box-shadow:var(--shadow);cursor:pointer;animation:chatIn .35s ease}
+.chat-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;padding:4px}
+.chat-box{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:200;width:min(392px,calc(100vw - 32px));height:min(620px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:chatIn .3s ease}
+.chat-box[hidden]{display:none}
+@keyframes chatIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.chat-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--deep);color:#fff}
+.chat-hd .av{width:38px;height:38px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font:400 21px "Instrument Serif",Georgia,serif;flex:none}
+.chat-hd b{display:block;font-size:15px}
+.chat-hd small{display:block;font-size:12px;color:rgba(255,255,255,.7);margin-top:1px}
+.chat-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.12);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.chat-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.cm{max-width:86%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
+.cm.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.cm.u{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:5px}
+.cm a{color:var(--acc);font-weight:700}.cm.u a{color:#fff}
+.cm p{margin:0 0 6px}.cm p:last-child{margin:0}
+.cm ul{margin:4px 0 6px;padding-left:18px}.cm li{margin:2px 0}
+.cm.typing{display:flex;gap:4px;padding:14px}
+.cm.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.4;animation:cdot 1s infinite}
+.cm.typing i:nth-child(2){animation-delay:.15s}.cm.typing i:nth-child(3){animation-delay:.3s}
+@keyframes cdot{50%{opacity:1;transform:translateY(-3px)}}
+.chat-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
+.chat-q button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 13px Manrope,sans-serif;cursor:pointer}
+.chat-q button:hover{border-color:var(--acc);color:var(--acc)}
+.chat-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--card)}
+.chat-f input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font:400 16px Manrope,sans-serif;background:var(--paper);color:var(--ink)}
+.chat-f input:focus{outline:none;border-color:var(--acc)}
+.chat-f button{border:0;border-radius:999px;background:var(--btn);color:var(--btnink);font:700 14px Manrope,sans-serif;padding:0 16px;cursor:pointer}
+.chat-f button:disabled{opacity:.5}
+.chat-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--card)}
+.chat-ft a{color:var(--muted)}
+@media(max-width:600px){.chat-fab{padding:8px}.chat-fab .tx{display:none}.chat-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.chat-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+body:has(.chat.open) #float{visibility:hidden}
+body:has(.chat.open) .float{visibility:hidden}
+</style>
+<style>
+:root{--acc:#23566a;--acc2:#6e8565;--mint:#e3ead7;--deep:#183c4c;--btn:#183c4c;--ink:#183c4c}
+.hero{padding-top:75px}.hero .stage{padding-bottom:35px}.stage .browser img{aspect-ratio:16/10;object-fit:cover}.hero .browser{transform:none}.fc{bottom:-3%;left:5%;background:#fff}.stage::before{content:"";position:absolute;width:75%;height:110%;background:var(--mint);border-radius:45% 45% 30% 45%;right:-8%;top:-10%;z-index:-1}.stage{isolation:isolate}
+.steps .shot{max-height:none;aspect-ratio:16/10;border-radius:14px;overflow:hidden;margin-top:18px}.steps .shot img{width:100%;height:100%;object-fit:cover}.phones{display:grid;gap:25px}.phones .ph{position:static!important;width:100%!important;transform:none!important;padding:5px;border-radius:15px}.phones .ph img{border-radius:10px}.crmd img{aspect-ratio:16/9;object-fit:cover}.lookimg img{aspect-ratio:16/10;object-fit:cover}
+[data-parallax]{will-change:transform}body.editing [data-parallax]{transform:none!important}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.rv{opacity:1!important;transform:none!important;transition:none!important}[data-parallax]{transform:none!important;will-change:auto}.btn{transition:none}}
+@media(max-width:700px){.hero{padding-top:38px}.hero .w{gap:35px}.fc{display:none}.plans{gap:22px}.crmd{gap:20px}section.s{padding:65px 0}.phones{grid-template-columns:1fr}.tl>div{font-size:12px}.tl .jb{width:135px}}
+</style><style>
+.rmgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.rmcard{background:white;border:1px solid var(--line);border-radius:20px;padding:28px}.rmcard p{font-size:15px;color:var(--muted)}.rmnumber{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--acc);font-weight:800}.rmprice{font-size:42px;font-weight:750;line-height:1.3;margin:18px 0}.rmprice small{font-size:14px;color:var(--muted)}.rmcard ul{padding-left:20px;font-size:14px;line-height:2}.rmcard .btn{margin-top:20px}.rmcard.featured{border:2px solid var(--acc)}.rmtwo{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center}.rmcallout{background:#183c4c;color:white;border-radius:24px;padding:42px}.rmcallout p{color:#d0dce0}.rmline{display:flex;justify-content:space-between;padding:20px 0;border-bottom:1px solid #ffffff30}.rmtwo .lead{font-size:17px}.rmfaq details{padding:22px 0;border-bottom:1px solid var(--line)}.rmfaq summary{font-weight:700;cursor:pointer}.rmfaq p{max-width:850px;color:var(--muted)}@media(max-width:800px){.rmgrid,.rmtwo{grid-template-columns:1fr}.rmtwo{gap:25px}.rmcallout{padding:28px}}
+</style></head>
+<body data-demo-url="/removalists/site.html" data-site-url="/removalists/site.html" data-phone="0413 872 994" data-email="marc@webescapade.com" data-lead-url="https://tehxobdokbvqtwtgqzrh.supabase.co/rest/v1/rpc/trd_lead_submit" data-lead-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-path="removalists/index.html">
+<nav class="top" id="nav"><div class="w"><a class="brand" href="#top"><span class="m">↗</span><span><b data-edit="brand">Removalist Deluxe</b><small>by Webescapade</small></span></a><div class="links"><a href="#estimator">Estimates</a><a href="#how">How it works</a><a href="#website">Your website</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div><a class="btn dark" href="#enquire">Get early access →</a></div></nav>
+<header class="hero" id="top"><div class="w"><div class="rv"><div class="pill"><i>✦</i><span data-edit="pill">For independent removalists and growing moving businesses</span></div><h1 data-edit="h1">A clearer quote.<br><em>A smoother start.</em></h1><p class="lead" data-edit="lead">Give customers an idea of moving costs before the first phone call. Room counts, distance and access come together in an editable website, with quote requests, AI answers and quotation appointments.</p><div class="ctas"><a class="btn acc" href="/removalists/estimate.html" target="_blank" rel="noopener">Try the moving estimator →</a><a class="btn line" href="/removalists/site.html" data-link="demo">See the customer website</a></div><div class="trust"><span data-edit="t1">No commission</span><span data-edit="t2">Your rates and service area</span><span data-edit="t3">Private business dashboard</span></div></div><div class="stage rv"><div class="browser" data-parallax="0.035"><div class="bar"><i></i><i></i><i></i><span>Removalist Deluxe · estimate preview</span></div><img data-img="hero" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22900%22%20height%3D%22750%22%20viewBox%3D%220%200%20900%20750%22%3E%3Crect%20width%3D%22900%22%20height%3D%22750%22%20fill%3D%22%23e4eced%22%2F%3E%3Ctext%20x%3D%2265%22%20y%3D%2285%22%20fill%3D%22%23183c4c%22%20font-family%3D%22Georgia%22%20font-size%3D%2242%22%3EYour%20moving%20estimate%3C%2Ftext%3E%3Ctext%20x%3D%2265%22%20y%3D%22123%22%20fill%3D%22%2357737e%22%20font-family%3D%22Arial%22%20font-size%3D%2218%22%3EFrom%20a%20few%20details%20to%20a%20clearer%20starting%20budget.%3C%2Ftext%3E%3Crect%20x%3D%2265%22%20y%3D%22175%22%20width%3D%22770%22%20height%3D%22100%22%20rx%3D%2218%22%20fill%3D%22white%22%2F%3E%3Ctext%20x%3D%2290%22%20y%3D%22215%22%20fill%3D%22%2357737e%22%20font-family%3D%22Arial%22%20font-size%3D%2217%22%3EROOMS%20%26amp%3B%20CONTENTS%3C%2Ftext%3E%3Ctext%20x%3D%2290%22%20y%3D%22250%22%20fill%3D%22%23183c4c%22%20font-family%3D%22Arial%22%20font-size%3D%2227%22%3EBedrooms%20%2B%20living%20rooms%20%2B%20storage%3C%2Ftext%3E%3Crect%20x%3D%2265%22%20y%3D%22300%22%20width%3D%22770%22%20height%3D%22100%22%20rx%3D%2218%22%20fill%3D%22white%22%2F%3E%3Ctext%20x%3D%2290%22%20y%3D%22340%22%20fill%3D%22%2357737e%22%20font-family%3D%22Arial%22%20font-size%3D%2217%22%3ETHE%20JOURNEY%3C%2Ftext%3E%3Ctext%20x%3D%2290%22%20y%3D%22375%22%20fill%3D%22%23183c4c%22%20font-family%3D%22Arial%22%20font-size%3D%2227%22%3EPickup%20%E2%86%92%20driving%20distance%20%E2%86%92%20destination%3C%2Ftext%3E%3Crect%20x%3D%2265%22%20y%3D%22425%22%20width%3D%22770%22%20height%3D%22100%22%20rx%3D%2218%22%20fill%3D%22white%22%2F%3E%3Ctext%20x%3D%2290%22%20y%3D%22465%22%20fill%3D%22%2357737e%22%20font-family%3D%22Arial%22%20font-size%3D%2217%22%3EACCESS%20AT%20BOTH%20ENDS%3C%2Ftext%3E%3Ctext%20x%3D%2290%22%20y%3D%22500%22%20fill%3D%22%23183c4c%22%20font-family%3D%22Arial%22%20font-size%3D%2227%22%3EStairs%20%C2%B7%20lifts%20%C2%B7%20carrying%20%C2%B7%20packing%3C%2Ftext%3E%3Crect%20x%3D%2265%22%20y%3D%22560%22%20width%3D%22770%22%20height%3D%22125%22%20rx%3D%2218%22%20fill%3D%22%23183c4c%22%2F%3E%3Ctext%20x%3D%2290%22%20y%3D%22608%22%20fill%3D%22%23d9e7bc%22%20font-family%3D%22Arial%22%20font-size%3D%2218%22%3EAN%20INDICATIVE%20RANGE%3C%2Ftext%3E%3Ctext%20x%3D%2290%22%20y%3D%22651%22%20fill%3D%22white%22%20font-family%3D%22Georgia%22%20font-size%3D%2234%22%3EA%20budget%20to%20explore.%20A%20quote%20to%20confirm.%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Moving estimate: room count, driving distance and property access"></div><div class="fc" data-parallax="-0.025"><span class="ic">↗</span><span><b data-edit="fcB">From first estimate to written quote</b><span data-edit="fcS">Moving day is confirmed directly.</span></span></div></div></div></header>
+<section class="made"><div class="w"><p data-edit="madeP">Built around the details of a move</p><div class="chips"><span>House moves</span><span>Apartments</span><span>Stairs & lifts</span><span>Room counts</span><span>Driving distance</span><span>Quotation visits</span></div></div></section>
+<section class="s" id="estimator"><div class="w rmtwo"><div class="rv"><div class="eyebrow" data-edit="eEy">A useful starting budget</div><h2 data-edit="eH">Size, journey<br><em>and access.</em></h2><p class="lead" data-edit="eP">Customers enter bedrooms, living spaces and extra rooms, then a driving distance or an approximate suburb route. Access at both properties and optional packing and bulky items refine the planning range.</p><p data-edit="eNote">Room counts approximate furniture volume. Your own rates and assumptions drive the calculator. Final prices depend on inventory, access, inclusions and your written quote.</p><a class="btn dark" href="/removalists/estimate.html">Try an estimate →</a></div><div class="rmcallout rv"><div class="rmnumber" style="color:#d9e7bc" data-edit="modelEy">The estimate explained</div><div class="rmline"><span data-edit="model1">Approximate volume</span><b>Rooms & contents</b></div><div class="rmline"><span data-edit="model2">Crew and truck time</span><b>Load + drive + unload</b></div><div class="rmline"><span data-edit="model3">Property access</span><b>Stairs, lift & carry</b></div><div class="rmline"><span data-edit="model4">Agreed extras</span><b>Packing & bulky items</b></div><p data-edit="modelP">Demo rates are illustrative. Each business publishes its own rates. Tolls, storage, overnight stays and specialist handling are confirmed separately.</p></div></div></section>
+<section class="s" id="how" style="background:var(--paper2)"><div class="w"><div class="eyebrow rv" data-edit="hEy">From interest to a conversation</div><h2 class="rv" data-edit="howH">A quote journey<br><em>customers can follow.</em></h2><div class="rmgrid" style="margin-top:35px"><article class="rmcard rv"><span class="rmnumber">01 · Estimate</span><h3 data-edit="step1">Understand the move</h3><p data-edit="step1p">Room counts, pickup and destination, distance and access at both ends. A transparent breakdown shows what shaped the estimate.</p></article><article class="rmcard rv"><span class="rmnumber">02 · Enquire</span><h3 data-edit="step2">Carry the details forward</h3><p data-edit="step2p">The estimate summary follows the customer into a quotation request or quotation-visit booking, ready for your team to review.</p></article><article class="rmcard rv"><span class="rmnumber">03 · Confirm</span><h3 data-edit="step3">Prepare a written quote</h3><p data-edit="step3p">Review requests and customer requirements in your private dashboard. Confirm inventory, scope, truck and moving-day availability directly.</p></article></div></div></section>
+<section class="s" id="website"><div class="w rmtwo"><div class="rv"><div class="eyebrow" data-edit="wEy">Your website, your words</div><h2 data-edit="wH">Edit it yourself.<br><em>Keep answers useful.</em></h2><p class="lead" data-edit="wP">Update your business introduction, photo, brand colour and moving estimate rates from the signed-in Website editor. Switch the customer chatbot on or off, name it and add public FAQs.</p><p data-edit="wNote">The live assistant uses that removalist’s published information. It cannot access private customer records or reserve moving dates. Customers check quotation-visit availability through the booking form.</p><a class="btn dark" href="/removalists/demo/#website">Explore the website editor →</a></div><div class="rmcallout rv"><h3 data-edit="chatH">“Do stairs affect the price?”</h3><p data-edit="chatP">“Add stairs, lift access and carrying distance at both properties. The calculator includes these allowances; your removalist confirms the final access requirements.”</p><p class="small" data-edit="chatExample">Illustrative assistant answer. Extra public knowledge is editable by the business.</p><div class="rmline"><span>Website information</span><b>Published details</b></div><div class="rmline"><span>Additional answers</span><b>Your public FAQs</b></div></div></div></section>
+<section class="s" id="travel" style="background:var(--paper2)"><div class="w rmtwo"><div class="rv"><div class="eyebrow" data-edit="bEy">Appointments with room for the drive</div><h2 data-edit="bH">Book a quote visit.<br><em>Keep moving day separate.</em></h2><p class="lead" data-edit="bP">Quotation appointments check working hours, time off, existing appointments and estimated travel. Availability is checked again when a customer confirms.</p><p data-edit="bNote">A quote visit is an inspection, not a truck booking. Preferred moving dates are requests. Your team confirms moving day after reviewing the full scope.</p></div><div class="rv"><h3 data-edit="crmH">Customer details in one place.</h3><p data-edit="crmP">See quotation requests, bookings and customer requirements in the basic customer view. Advanced CRM follow-ups, campaigns and Email Studio are planned additions, with launch timing and upgrade prices to be confirmed.</p><a class="btn line" href="/removalists/demo/#crm">Explore the business demo →</a></div></div></section>
+<section class="s" id="pricing"><div class="w"><div class="eyebrow rv" data-edit="pEy">Early-access pricing</div><h2 class="rv" data-edit="pH">One flat price.<br><em>No lead fees.</em></h2><p class="lead rv" data-edit="pIntro">AUD per business per month, plus GST. Every plan includes quotation-visit booking, estimated travel scheduling, quotes and the basic customer view.</p><div class="rmgrid" style="margin-top:30px"><article class="rmcard rv"><h3 data-edit="p1">Bookings</h3><p data-edit="p1s">Connect your existing website</p><div class="rmprice" data-edit="p1price">$39 <small>/ month + GST</small></div><ul data-edit="p1features"><li>Quotation appointment page</li><li>Run sheet and travel allowances</li><li>Quote requests & customer view</li><li>Up to 3 team members</li></ul><a class="btn line" href="#enquire">Get early access</a></article><article class="rmcard featured rv"><div class="rmnumber">Recommended</div><h3 data-edit="p2">Website</h3><p data-edit="p2s">Your site and connected tools</p><div class="rmprice" data-edit="p2price">$59 <small>/ month + GST</small></div><ul data-edit="p2features"><li>Everything in Bookings</li><li>Editable removalist website</li><li>Moving cost estimator</li><li>Editable customer chatbot</li><li>Up to 3 team members</li></ul><a class="btn dark" href="#enquire">Get early access →</a></article><article class="rmcard rv"><h3 data-edit="p3">Team</h3><p data-edit="p3s">For a growing business</p><div class="rmprice" data-edit="p3price">$89 <small>/ month + GST</small></div><ul data-edit="p3features"><li>Everything in Website</li><li>4–10 team members</li><li>Individual quotation schedules</li><li>Priority support</li></ul><a class="btn line" href="#enquire">Get early access</a></article></div><p class="small" style="margin-top:25px" data-edit="priceNote">Optional website setup: $40 + GST to connect completed content, or from $250 + GST for us to fill in your site. Domain, paid integrations and usage charges are separate. AI allowances are confirmed during setup. Advanced CRM and Email Studio are planned upgrades and are not included as live features. More than 10 team members: price on request.</p></div></section>
+<section class="s rmfaq" id="faq" style="background:var(--paper2)"><div class="w"><div class="eyebrow">Questions</div><h2 data-edit="faqH">Straight answers.</h2><details><summary data-edit="faq1">Is the moving estimate a final quote?</summary><p data-edit="faq1p">No. It is an indicative range using the business’s configured rates and customer inputs. Room counts approximate volume. Inventory, truck size, access, traffic, tolls and specialist items need confirmation.</p></details><details><summary data-edit="faq2">Can it estimate distance automatically?</summary><p data-edit="faq2p">Customers can enter driving kilometres or request an approximate route between suburbs/postcodes using OpenStreetMap and OSRM. It is not live traffic or a truck-access guarantee. Manual distance entry remains available if routing is unavailable.</p></details><details><summary data-edit="faq3">Does booking reserve moving day?</summary><p data-edit="faq3p">No. Online appointment slots reserve quotation visits only. Customers may request a moving date, and the removalist confirms the truck, crew and moving date directly.</p></details><details><summary data-edit="faq4">Can each removalist edit the chatbot?</summary><p data-edit="faq4p">Yes. The signed-in Website editor has an on/off switch, a chatbot name and an extra public information box. Live answers use that business’s published details; private customer records are not supplied to the assistant.</p></details><details><summary data-edit="faq5">What about CRM and Email Studio?</summary><p data-edit="faq5p">Basic customer records are included now. Advanced follow-ups, campaigns and Email Studio are planned upgrades. Launch dates and upgrade prices are to be confirmed.</p></details></div></section>
+<section class="s" id="enquire"><div class="w"><div class="enq"><div class="rv"><div class="eyebrow">Talk to Marc</div><h2 data-edit="enqH">Make it work for<br><em>your removal business.</em></h2><p class="lead" data-edit="enqP">Tell me about your service area, team and quoting process, and I will show you how Removalist Deluxe can fit your work.</p><div class="contact"><a data-link="tel" href="tel:0413872994"><span data-link-text="phone">0413 872 994</span></a><a data-link="mail" href="mailto:marc@webescapade.com"><span data-link-text="email">marc@webescapade.com</span></a></div><a class="btn line" href="/removalists/app/#start">Set up a business →</a></div><form class="form rv" id="enqForm" novalidate><div class="two"><label>Your name<input name="name" autocomplete="name" required></label><label>Business name<input name="business" autocomplete="organization" required></label></div><div class="two"><label>Email<input name="email" type="email" autocomplete="email" required></label><label>Mobile<input name="phone" type="tel" autocomplete="tel"></label></div><div class="two"><label>Business type<select name="type"><option value="Removalist Deluxe">Removal business</option></select></label><label>Base suburb<input name="suburb"></label></div><label>Team size and requirements<textarea name="message" rows="3"></textarea></label><div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></div><button class="btn dark" type="submit">Send my enquiry →</button><div id="enqMsg" class="msg" role="status"></div></form></div></div></section>
+<footer><div class="w"><span data-edit="footer">© Webescapade · Sydney, Australia · Removalist Deluxe</span><span><a href="/painters/">Painter Deluxe</a> · <a href="/trades/">Trade Deluxe</a> · <a href="https://www.youtube.com/@webescapadesydney" target="_blank" rel="noopener">YouTube</a></span></div></footer><a class="btn acc float" id="float" href="/removalists/estimate.html">Estimate a move →</a>
+<script>/* ---------- page runtime ---------- */
+(function () {
+  var B = document.body.dataset;
+  var LINKS = { demo: function () { return B.demoUrl; }, site: function () { return B.siteUrl; },
+    tel: function () { return "tel:" + String(B.phone || "").replace(/[^0-9+]/g, ""); }, mail: function () { return "mailto:" + (B.email || ""); } };
+  function applyLinks(){
+    document.querySelectorAll("[data-link]").forEach(function (a) { var f = LINKS[a.getAttribute("data-link")]; if (f && f()) a.setAttribute("href", f()); });
+    document.querySelectorAll('[data-link-text="phone"]').forEach(function (el) { el.textContent = B.phone || ""; });
+    document.querySelectorAll('[data-link-text="email"]').forEach(function (el) { el.textContent = B.email || ""; });
+  }
+  applyLinks(); window.PAGE = { applyLinks: applyLinks };
+
+  var nav = document.getElementById("nav"), fl = document.getElementById("float"), hero = document.querySelector(".hero");
+  function sc(){ var y = window.scrollY; nav.classList.toggle("s", y > 10); fl.classList.toggle("on", y > hero.offsetHeight && (window.innerHeight + y) < document.body.scrollHeight - 400); }
+  window.addEventListener("scroll", sc, { passive: true }); sc();
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .1 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+
+  /* enquiry form: posts to data-lead-url (Supabase RPC, when set up) — otherwise opens an email to Marc */
+  var f = document.getElementById("enqForm"), msg = document.getElementById("enqMsg");
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (document.body.classList.contains("editing")) return;
+    var d = {}; Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name] = el.value.trim(); });
+    msg.className = "msg";
+    if (d.website) return;
+    if (!d.name || !d.business) { msg.className = "msg err"; msg.textContent = "Please add your name and your business name."; return; }
+    if (!/^\S+@\S+\.\S{2,}$/.test(d.email)) { msg.className = "msg err"; msg.textContent = "Please check your email address."; return; }
+    var done = function () { msg.className = "msg ok"; msg.textContent = "Thanks " + d.name.split(" ")[0] + " — Marc will be in touch shortly."; f.reset(); };
+    if (B.leadUrl) {
+      var btn = f.querySelector("button"); btn.disabled = true; msg.textContent = "Sending…";
+      fetch(B.leadUrl, { method: "POST", headers: { apikey: B.leadKey || "", Authorization: "Bearer " + (B.leadKey || ""), "Content-Type": "application/json" },
+        body: JSON.stringify({ p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: "Removalist Deluxe — " + d.message, p_trap: d.website }) })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j || !j.ok) throw new Error((j && (j.error || j.message)) || "Something went wrong"); done(); }); })
+        .catch(function (er) { msg.className = "msg err"; msg.textContent = er.message; })
+        .then(function () { btn.disabled = false; });
+      return;
+    }
+    var body = "Name: " + d.name + "\nBusiness: " + d.business + "\nEmail: " + d.email + "\nMobile: " + d.phone + "\nTrade: " + d.type + "\nBase suburb: " + d.suburb + "\n\n" + d.message;
+    location.href = "mailto:" + B.email + "?subject=" + encodeURIComponent("Removalist Deluxe enquiry — " + d.business) + "&body=" + encodeURIComponent(body);
+    msg.className = "msg ok"; msg.textContent = "Your email app should open with the details filled in — just press Send.";
+  });
+})();
+
+/* ---------- light editor: open this page with ?edit=1 ---------- */
+(function () {
+  if (new URLSearchParams(location.search).get("edit") !== "1") return;
+  var B = document.body.dataset, editing = false, panel = null;
+  var bar = document.createElement("div"); bar.id = "eng";
+  bar.innerHTML = '<button data-a="edit">✏️ Edit</button><button data-a="links">🔗 Links</button><button data-a="deploy">🚀 Deploy</button><button data-a="save">💾 Save copy</button>';
+  document.body.appendChild(bar);
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function closeP(){ if (panel) { panel.remove(); panel = null; } }
+  function openP(html){ closeP(); panel = document.createElement("div"); panel.id = "engp"; panel.innerHTML = html; document.body.appendChild(panel); panel.querySelectorAll("[data-close]").forEach(function (x) { x.onclick = closeP; }); }
+  function setEditing(on){
+    editing = on; document.body.classList.toggle("editing", on); bar.querySelector('[data-a="edit"]').textContent = on ? "✓ Done" : "✏️ Edit";
+    document.querySelectorAll("[data-edit]").forEach(function (el) { if (on) el.setAttribute("contenteditable", "true"); else el.removeAttribute("contenteditable"); });
+  }
+  document.addEventListener("click", function (e) {
+    if (!editing) return;
+    var a = e.target.closest("a,button"); if (a && !a.closest("#eng") && !a.closest("#engp")) e.preventDefault();
+    var img = e.target.closest("img[data-img]");
+    if (img) { var i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = function () { var fr = new FileReader(); fr.onload = function () { var im = new Image(); im.onload = function () { var s = Math.min(1, 1800 / Math.max(im.width, im.height)), c = document.createElement("canvas"); c.width = im.width * s; c.height = im.height * s; c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); img.src = c.toDataURL("image/jpeg", .75); }; im.src = fr.result; }; fr.readAsDataURL(i.files[0]); }; i.click(); }
+  }, true);
+  document.addEventListener("paste", function (e) { if (!editing || !e.target.closest || !e.target.closest("[data-edit]")) return; e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text/plain")); });
+  function snapshot(){
+    var was = editing; if (was) setEditing(false);
+    var root = document.documentElement.cloneNode(true); if (was) setEditing(true);
+    ["#eng", "#engp", "#removalistKnowledgeDialog"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
+    root.querySelectorAll(".rv.in").forEach(function (n) { n.classList.remove("in"); });
+    var b = root.querySelector("body"); b.classList.remove("editing"); if (!b.className) b.removeAttribute("class");
+    root.querySelector("#nav").classList.remove("s"); root.querySelector("#float").classList.remove("on");
+    var chatLog = root.querySelector("#chatLog"); if (chatLog) chatLog.replaceChildren();
+    var chatBox = root.querySelector("#chatBox"); if (chatBox) chatBox.hidden = true;
+    var chat = root.querySelector("#chat"); if (chat) chat.classList.remove("open");
+    var chatTip = root.querySelector("#chatTip"); if (chatTip) chatTip.hidden = true;
+    return "<!doctype html>\n" + root.outerHTML;
+  }
+  function b64(s){ var bytes = new TextEncoder().encode(s), bin = ""; for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+  function gh(method, path, body){
+    var tok = ""; try { tok = localStorage.getItem("removalistlanding_gh_token") || ""; } catch (e) {}
+    if (!tok) return Promise.reject(new Error("Add your GitHub token first."));
+    return fetch("https://api.github.com/repos/" + B.ghOwner + "/" + B.ghRepo + "/" + path, { method: method, headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || ("GitHub " + r.status)); return j; }); });
+  }
+  function commit(path, html){
+    var dir = path.slice(0, path.lastIndexOf("/")), name = path.slice(path.lastIndexOf("/") + 1);
+    return gh("GET", "contents/" + dir + "?ref=" + (B.ghBranch || "main")).then(function (l) { var f = (l || []).filter(function (x) { return x.name === name; })[0]; return f ? f.sha : null; }, function () { return null; })
+      .then(function (sha) { var body = { message: "Publish Removalist Deluxe landing", content: b64(html), branch: B.ghBranch || "main" }; if (sha) body.sha = sha; return gh("PUT", "contents/" + path, body); });
+  }
+  bar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-a]"); if (!b) return; var a = b.getAttribute("data-a");
+    if (a === "edit") { closeP(); return setEditing(!editing); }
+    if (a === "save") { var x = document.createElement("a"); x.href = URL.createObjectURL(new Blob([snapshot()], { type: "text/html" })); x.download = "removalists-index.html"; document.body.appendChild(x); x.click(); x.remove(); return; }
+    if (a === "links") {
+      openP('<h4>Links &amp; contact</h4><label>Live demo address<input id="l1" value="' + esc(B.demoUrl) + '"></label><label>Demo website address<input id="l2" value="' + esc(B.siteUrl) + '"></label><label>Phone<input id="l3" value="' + esc(B.phone) + '"></label><label>Email<input id="l4" value="' + esc(B.email) + '"></label><label>Lead form endpoint (optional, Supabase RPC URL)<input id="l5" value="' + esc(B.leadUrl) + '"></label><div class="note">Leave the endpoint empty and enquiries open an email to you instead.</div><div class="r"><button class="b p" id="lsave">Apply</button><button class="b" data-close>Close</button></div>');
+      panel.querySelector("#lsave").onclick = function () { B.demoUrl = panel.querySelector("#l1").value.trim(); B.siteUrl = panel.querySelector("#l2").value.trim(); B.phone = panel.querySelector("#l3").value.trim(); B.email = panel.querySelector("#l4").value.trim(); B.leadUrl = panel.querySelector("#l5").value.trim(); window.PAGE.applyLinks(); closeP(); };
+    }
+    if (a === "deploy") {
+      var tok = ""; try { tok = localStorage.getItem("removalistlanding_gh_token") || ""; } catch (er) {}
+      openP('<h4>Deploy to GitHub</h4><div class="note">Publishes this page (editor included, but it only shows with ?edit=1).</div><label>Repository<input id="gr" value="' + esc(B.ghOwner + "/" + B.ghRepo) + '"></label><label>Page path<input id="gp" value="' + esc(B.ghPath) + '"></label><label>Fine-grained token (kept on this device only)<input id="gt" type="password" value="' + esc(tok) + '" placeholder="github_pat_…"></label><div class="r"><button class="b p" id="gpub">Publish</button><button class="b" data-close>Close</button></div><div class="msg" id="gmsg"></div>');
+      panel.querySelector("#gpub").onclick = function () {
+        var m = panel.querySelector("#gmsg"), rp = panel.querySelector("#gr").value.trim().split("/");
+        B.ghOwner = rp[0]; B.ghRepo = rp[1]; B.ghPath = panel.querySelector("#gp").value.trim().replace(/^\/+/, "");
+        try { localStorage.setItem("removalistlanding_gh_token", panel.querySelector("#gt").value.trim()); } catch (er) {}
+        if (B.ghPath.indexOf("/") < 0) { m.textContent = "✗ Page path needs a folder (e.g. removalists/index.html) so the main site isn't replaced."; return; }
+        m.textContent = "Publishing…"; commit(B.ghPath, snapshot()).then(function () { m.textContent = "✓ Published " + B.ghPath + ". Live within a minute."; }, function (er) { m.textContent = "✗ " + er.message; });
+      };
+    }
+  });
+})();
+</script><script>(function(){var reduced=matchMedia('(prefers-reduced-motion: reduce)'),els=[].slice.call(document.querySelectorAll('[data-parallax]')),pending=false;function draw(){pending=false;els.forEach(function(el){if(reduced.matches||innerWidth<800||document.body.classList.contains('editing')){el.style.transform='';return;}var p=el.closest('.hero'),r=p.getBoundingClientRect(),offset=Math.max(-45,Math.min(45,-r.top*Number(el.dataset.parallax)));el.style.transform='translate3d(0,'+offset+'px,0)';});}function schedule(){if(!pending){pending=true;requestAnimationFrame(draw);}}addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);if(reduced.addEventListener)reduced.addEventListener('change',schedule);draw();})();</script>
+<script type="application/json" id="removalist-chat-knowledge">{"notes":"Removalist Deluxe is a Webescapade product for removal businesses. Customers get indicative moving estimates based on room counts, driving distance and access. Online bookings reserve quotation visits only, not moving day or a truck. Moving dates are confirmed directly by the removalist. Each business can edit the website, moving estimate rates and customer chatbot public FAQs. Basic customer records are live; advanced CRM follow-ups and Email Studio are planned, with timing and upgrade prices to be confirmed."}</script>
+<!-- PAINTER CHAT START -->
+<div class="chat" id="chat">
+<button aria-label="Open the chat assistant" class="chat-fab" id="chatFab" type="button"><span class="ci"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"></path></svg></span><span class="tx">Questions? Ask me</span></button>
+<div class="chat-tip" hidden="" id="chatTip"><button aria-label="Close" type="button">×</button><span>Got a question about moving estimates, quotations or appointments? I can answer in seconds.</span></div>
+<div aria-label="Chat assistant" class="chat-box" hidden="" id="chatBox" role="dialog">
+<div class="chat-hd"><span class="av">P</span><div><b>Removalist Deluxe assistant</b><small>Estimates, quotes, appointments — ask away</small></div><button aria-label="Close chat" class="x" id="chatX" type="button">×</button></div>
+<div aria-live="polite" class="chat-log" id="chatLog"></div>
+<div class="chat-q" id="chatQ"><button type="button">How much does it cost?</button><button type="button">Does booking reserve moving day?</button><button type="button">Can each removalist edit their rates?</button><button type="button">How are moving costs estimated?</button><button type="button">Is Email Studio available?</button></div>
+<form class="chat-f" id="chatF"><input aria-label="Your question" autocomplete="off" id="chatIn" maxlength="600" placeholder="Type your question…" style=""><button id="chatSend" type="submit">Send</button></form>
+<div class="chat-ft">AI assistant — answers can be wrong. <a href="#enquire" id="chatHuman">Talk to Marc</a></div>
+<template id="chatHi">Hi! I’m the Removalist Deluxe assistant. Ask me about moving estimates, quotation visits, access details, prices or the removalist website.</template>
+
+</div></div>
+<!-- PAINTER CHAT END -->
+<script>/*CHAT-JS — Removalist Deluxe assistant (edge function removalist-chat)*/
+(function(){
+  var B={supabaseUrl:"https://tehxobdokbvqtwtgqzrh.supabase.co",supabaseKey:"sb_publishable_CrlY9xXYdhI7qCQwuMnDWg_hFQ3mXCJ"}, box=document.getElementById("chatBox"), fab=document.getElementById("chatFab"), log=document.getElementById("chatLog"),
+      f=document.getElementById("chatF"), inp=document.getElementById("chatIn"), q=document.getElementById("chatQ"), tip=document.getElementById("chatTip"), wrap=document.getElementById("chat");
+  if(!box||!fab) return;
+  var KEY="removalistChatV1", st={id:"",msgs:[]}, busy=false;
+  try{ st=JSON.parse(sessionStorage.getItem(KEY))||st; }catch(e){}
+  if(!st.id) st.id="t-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function md(t){
+    var h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+      .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:|#)[^\s)]+)\)/g,function(_,a,u){ var ext=/^https?:/.test(u); return '<a href="'+u+'"'+(ext?' target="_blank" rel="noopener"':' data-in')+'>'+a+'</a>'; })
+      .replace(/(^|[\s(])(https:\/\/(?:webescapade\.com|youtu\.be)\/[^\s<)]*)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+    var out=[], list=false;
+    h.split(/\n/).forEach(function(l){
+      var m=l.match(/^\s*(?:[-•*]|\d+\.)\s+(.*)/);
+      if(m){ if(!list){ out.push("<ul>"); list=true; } out.push("<li>"+m[1]+"</li>"); }
+      else { if(list){ out.push("</ul>"); list=false; } if(l.trim()) out.push("<p>"+l+"</p>"); }
+    });
+    if(list) out.push("</ul>");
+    return out.join("");
+  }
+  function hi(){ var t=document.getElementById("chatHi"); return t ? t.content.textContent.trim() : "Hi! Ask me anything."; }
+  function bubble(role,text){ var d=document.createElement("div"); d.className="cm "+(role==="user"?"u":"a"); d.innerHTML=role==="user"?esc(text).replace(/\n/g,"<br>"):md(text); log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
+  function render(){ log.innerHTML=""; bubble("assistant",hi()); st.msgs.forEach(function(m){ bubble(m.role,m.content); }); q.hidden=st.msgs.length>2; }
+  function open(){ if(document.body.classList.contains("editing")) return; tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(e){} render(); box.hidden=false; wrap.classList.add("open"); if(matchMedia("(pointer:fine)").matches) inp.focus(); }
+  function close(){ box.hidden=true; wrap.classList.remove("open"); }
+  fab.addEventListener("click",open);
+  var ha=document.getElementById("heroAsk"); if(ha) ha.addEventListener("click",function(e){ e.preventDefault(); open(); });
+  document.getElementById("chatX").addEventListener("click",close);
+  tip.addEventListener("click",function(e){ if(e.target.tagName==="BUTTON"){ tip.hidden=true; try{sessionStorage.setItem(KEY+"Tip","1");}catch(x){} return; } open(); });
+  log.addEventListener("click",function(e){ var a=e.target.closest("a[data-in]"); if(a&&innerWidth<600) close(); });
+  document.getElementById("chatHuman").addEventListener("click",function(){ if(innerWidth<600) close(); });
+  q.addEventListener("click",function(e){ var b=e.target.closest("button"); if(b) send(b.textContent.trim()); });
+  f.addEventListener("submit",function(e){ e.preventDefault(); send(inp.value); });
+  function send(text){
+    text=String(text||"").trim(); if(!text||busy) return;
+    inp.value=""; st.msgs.push({role:"user",content:text.slice(0,600)}); save(); bubble("user",text); q.hidden=true;
+    busy=true; document.getElementById("chatSend").disabled=true;
+    var t=document.createElement("div"); t.className="cm a typing"; t.innerHTML="<i></i><i></i><i></i>"; log.appendChild(t); log.scrollTop=log.scrollHeight;
+    var base=String(B.supabaseUrl||"").replace(/\/+$/,"");
+    fetch(base+"/functions/v1/removalist-chat",{method:"POST",headers:{"Content-Type":"application/json",apikey:B.supabaseKey||"",Authorization:"Bearer "+(B.supabaseKey||"")},
+      body:JSON.stringify({session:st.id,messages:st.msgs.slice(-16)})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!j||!j.ok||!j.reply) throw new Error(); return j.reply; })
+      .catch(function(){ return "Sorry — I can't answer right now. You can email [marc@webescapade.com](mailto:marc@webescapade.com), call [0413 872 994](tel:0413872994), or [book a free Zoom demo](https://webescapade.com/removalists/#enquire)."; })
+      .then(function(reply){ t.remove(); st.msgs.push({role:"assistant",content:reply}); st.msgs=st.msgs.slice(-24); save(); bubble("assistant",reply); busy=false; document.getElementById("chatSend").disabled=false; });
+  }
+  var seen=false; try{ seen=!!sessionStorage.getItem(KEY+"Tip"); }catch(e){}
+  if(!seen) setTimeout(function(){ if(box.hidden) tip.hidden=false; },9000);
+})();
+</script>
+<script>
+(function(){
+ const bar=document.getElementById("eng");if(!bar)return;
+ const button=document.createElement("button");button.type="button";button.dataset.a="knowledge";button.textContent="🤖 AI information";bar.appendChild(button);
+ button.addEventListener("click",()=>{
+  document.getElementById("removalistKnowledgeDialog")?.remove();
+  const node=document.getElementById("removalist-chat-knowledge");
+  let notes="";try{notes=JSON.parse(node.textContent).notes||"";}catch{}
+  const dialog=document.createElement("dialog");dialog.id="removalistKnowledgeDialog";
+  dialog.style.cssText="width:min(680px,calc(100% - 28px));max-height:85vh;overflow:auto;border:1px solid #d9dfd0;border-radius:16px;padding:26px;color:#23473c;background:#f6f4eb";
+  const heading=document.createElement("h3");heading.textContent="Extra information for the chatbot";
+  const help=document.createElement("p");help.textContent="The assistant reads your published landing page automatically. Add extra FAQs, setup explanations or service details here. This is public chatbot knowledge: do not add passwords or private customer information.";
+  const label=document.createElement("label");label.textContent="Additional public information";
+  const area=document.createElement("textarea");area.maxLength=8000;area.rows=12;area.value=notes;area.style.cssText="width:100%;font:15px/1.6 system-ui;padding:12px;border:1px solid #bcc8b5;border-radius:8px;margin-top:8px";label.appendChild(area);
+  const hint=document.createElement("p");hint.textContent="Apply updates this editable copy. Use Deploy or Save copy to keep it. Live answers update after publication, normally within about a minute after the new page is served. If notes conflict with displayed prices, the assistant uses the page prices or asks the visitor to confirm with Marc.";
+  const status=document.createElement("p");status.setAttribute("role","status");
+  const apply=document.createElement("button");apply.type="button";apply.className="btn dark";apply.textContent="Apply information";
+  const close=document.createElement("button");close.type="button";close.className="btn line";close.textContent="Close";close.style.marginLeft="10px";
+  apply.onclick=()=>{node.textContent=JSON.stringify({notes:area.value.trim()}).replace(/</g,"\\u003c");status.textContent="Applied to this copy. Deploy the page to update live answers.";};
+  close.onclick=()=>dialog.close();dialog.onclose=()=>dialog.remove();
+  dialog.append(heading,help,label,hint,apply,close,status);document.body.appendChild(dialog);dialog.showModal();
+ });
+})();</script>
+</body>
+</html>
