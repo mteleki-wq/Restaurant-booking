@@ -439,5 +439,114 @@ body:has(.chat.open) .float{visibility:hidden}
 <footer><div class="w"><span data-edit="foot1">© Webescapade · Sydney, Australia</span><span data-edit="foot2">Painter Deluxe — colour previews, estimates and quote-visit bookings</span><span><a href="/service/">Service Deluxe</a> · <a href="/Restaurant/">Restaurant Deluxe</a> · <a href="/Function-centre/">Function Deluxe</a></span><span><a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a></span></div></footer>
 <a class="btn acc float" id="float" href="/painters/site.html" data-link="demo" target="_blank" rel="noopener"><span data-edit="floatcta">Try Painter Deluxe</span> <span class="ar">→</span></a>
 
-<script>(function(){var reduced=matchMedia('(prefers-reduced-motion: reduce)'),els=[].slice.call(document.querySelectorAll('[data-parallax]')),pending=false;function draw(){pending=false;els.forEach(function(el){if(reduced.matches||innerWidth<800||document.body.classList.contains('editing')){el.style.transform='';return;}var p=el.closest('.hero'),r=p.getBoundingClientRect(),offset=Math.max(-45,Math.min(45,-r.top*Number(el.dataset.parallax)));el.style.transform='translate3d(0,'+offset+'px,0)';});}function schedule(){if(!pending){pending=true;requestAnimationFrame(draw);}}addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);if(reduced.addEventListener)reduced.addEventListener('change',schedule);draw();})();</script></body>
+<script>/* ---------- page runtime ---------- */
+(function () {
+  var B = document.body.dataset;
+  var LINKS = { demo: function () { return B.demoUrl; }, site: function () { return B.siteUrl; },
+    tel: function () { return "tel:" + String(B.phone || "").replace(/[^0-9+]/g, ""); }, mail: function () { return "mailto:" + (B.email || ""); } };
+  function applyLinks(){
+    document.querySelectorAll("[data-link]").forEach(function (a) { var f = LINKS[a.getAttribute("data-link")]; if (f && f()) a.setAttribute("href", f()); });
+    document.querySelectorAll('[data-link-text="phone"]').forEach(function (el) { el.textContent = B.phone || ""; });
+    document.querySelectorAll('[data-link-text="email"]').forEach(function (el) { el.textContent = B.email || ""; });
+  }
+  applyLinks(); window.PAGE = { applyLinks: applyLinks };
+
+  var nav = document.getElementById("nav"), fl = document.getElementById("float"), hero = document.querySelector(".hero");
+  function sc(){ var y = window.scrollY; nav.classList.toggle("s", y > 10); fl.classList.toggle("on", y > hero.offsetHeight && (window.innerHeight + y) < document.body.scrollHeight - 400); }
+  window.addEventListener("scroll", sc, { passive: true }); sc();
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .1 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+
+  /* enquiry form: posts to data-lead-url (Supabase RPC, when set up) — otherwise opens an email to Marc */
+  var f = document.getElementById("enqForm"), msg = document.getElementById("enqMsg");
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (document.body.classList.contains("editing")) return;
+    var d = {}; Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name] = el.value.trim(); });
+    msg.className = "msg";
+    if (d.website) return;
+    if (!d.name || !d.business) { msg.className = "msg err"; msg.textContent = "Please add your name and your business name."; return; }
+    if (!/^\S+@\S+\.\S{2,}$/.test(d.email)) { msg.className = "msg err"; msg.textContent = "Please check your email address."; return; }
+    var done = function () { msg.className = "msg ok"; msg.textContent = "Thanks " + d.name.split(" ")[0] + " — Marc will be in touch shortly."; f.reset(); };
+    if (B.leadUrl) {
+      var btn = f.querySelector("button"); btn.disabled = true; msg.textContent = "Sending…";
+      fetch(B.leadUrl, { method: "POST", headers: { apikey: B.leadKey || "", Authorization: "Bearer " + (B.leadKey || ""), "Content-Type": "application/json" },
+        body: JSON.stringify({ p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: "Painter Deluxe — " + d.message, p_trap: d.website }) })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j || !j.ok) throw new Error((j && (j.error || j.message)) || "Something went wrong"); done(); }); })
+        .catch(function (er) { msg.className = "msg err"; msg.textContent = er.message; })
+        .then(function () { btn.disabled = false; });
+      return;
+    }
+    var body = "Name: " + d.name + "\nBusiness: " + d.business + "\nEmail: " + d.email + "\nMobile: " + d.phone + "\nTrade: " + d.type + "\nBase suburb: " + d.suburb + "\n\n" + d.message;
+    location.href = "mailto:" + B.email + "?subject=" + encodeURIComponent("Painter Deluxe enquiry — " + d.business) + "&body=" + encodeURIComponent(body);
+    msg.className = "msg ok"; msg.textContent = "Your email app should open with the details filled in — just press Send.";
+  });
+})();
+
+/* ---------- light editor: open this page with ?edit=1 ---------- */
+(function () {
+  if (new URLSearchParams(location.search).get("edit") !== "1") return;
+  var B = document.body.dataset, editing = false, panel = null;
+  var bar = document.createElement("div"); bar.id = "eng";
+  bar.innerHTML = '<button data-a="edit">✏️ Edit</button><button data-a="links">🔗 Links</button><button data-a="deploy">🚀 Deploy</button><button data-a="save">💾 Save copy</button>';
+  document.body.appendChild(bar);
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function closeP(){ if (panel) { panel.remove(); panel = null; } }
+  function openP(html){ closeP(); panel = document.createElement("div"); panel.id = "engp"; panel.innerHTML = html; document.body.appendChild(panel); panel.querySelectorAll("[data-close]").forEach(function (x) { x.onclick = closeP; }); }
+  function setEditing(on){
+    editing = on; document.body.classList.toggle("editing", on); bar.querySelector('[data-a="edit"]').textContent = on ? "✓ Done" : "✏️ Edit";
+    document.querySelectorAll("[data-edit]").forEach(function (el) { if (on) el.setAttribute("contenteditable", "true"); else el.removeAttribute("contenteditable"); });
+  }
+  document.addEventListener("click", function (e) {
+    if (!editing) return;
+    var a = e.target.closest("a,button"); if (a && !a.closest("#eng") && !a.closest("#engp")) e.preventDefault();
+    var img = e.target.closest("img[data-img]");
+    if (img) { var i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = function () { var fr = new FileReader(); fr.onload = function () { var im = new Image(); im.onload = function () { var s = Math.min(1, 1800 / Math.max(im.width, im.height)), c = document.createElement("canvas"); c.width = im.width * s; c.height = im.height * s; c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); img.src = c.toDataURL("image/jpeg", .75); }; im.src = fr.result; }; fr.readAsDataURL(i.files[0]); }; i.click(); }
+  }, true);
+  document.addEventListener("paste", function (e) { if (!editing || !e.target.closest || !e.target.closest("[data-edit]")) return; e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text/plain")); });
+  function snapshot(){
+    var was = editing; if (was) setEditing(false);
+    var root = document.documentElement.cloneNode(true); if (was) setEditing(true);
+    ["#eng", "#engp"].forEach(function (s) { var n = root.querySelector(s); if (n) n.remove(); });
+    root.querySelectorAll(".rv.in").forEach(function (n) { n.classList.remove("in"); });
+    var b = root.querySelector("body"); b.classList.remove("editing"); if (!b.className) b.removeAttribute("class");
+    root.querySelector("#nav").classList.remove("s"); root.querySelector("#float").classList.remove("on");
+    return "<!doctype html>\n" + root.outerHTML;
+  }
+  function b64(s){ var bytes = new TextEncoder().encode(s), bin = ""; for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+  function gh(method, path, body){
+    var tok = ""; try { tok = localStorage.getItem("painterlanding_gh_token") || ""; } catch (e) {}
+    if (!tok) return Promise.reject(new Error("Add your GitHub token first."));
+    return fetch("https://api.github.com/repos/" + B.ghOwner + "/" + B.ghRepo + "/" + path, { method: method, headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || ("GitHub " + r.status)); return j; }); });
+  }
+  function commit(path, html){
+    var dir = path.slice(0, path.lastIndexOf("/")), name = path.slice(path.lastIndexOf("/") + 1);
+    return gh("GET", "contents/" + dir + "?ref=" + (B.ghBranch || "main")).then(function (l) { var f = (l || []).filter(function (x) { return x.name === name; })[0]; return f ? f.sha : null; }, function () { return null; })
+      .then(function (sha) { var body = { message: "Publish Painter Deluxe landing", content: b64(html), branch: B.ghBranch || "main" }; if (sha) body.sha = sha; return gh("PUT", "contents/" + path, body); });
+  }
+  bar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-a]"); if (!b) return; var a = b.getAttribute("data-a");
+    if (a === "edit") { closeP(); return setEditing(!editing); }
+    if (a === "save") { var x = document.createElement("a"); x.href = URL.createObjectURL(new Blob([snapshot()], { type: "text/html" })); x.download = "painters-index.html"; document.body.appendChild(x); x.click(); x.remove(); return; }
+    if (a === "links") {
+      openP('<h4>Links &amp; contact</h4><label>Live demo address<input id="l1" value="' + esc(B.demoUrl) + '"></label><label>Demo website address<input id="l2" value="' + esc(B.siteUrl) + '"></label><label>Phone<input id="l3" value="' + esc(B.phone) + '"></label><label>Email<input id="l4" value="' + esc(B.email) + '"></label><label>Lead form endpoint (optional, Supabase RPC URL)<input id="l5" value="' + esc(B.leadUrl) + '"></label><div class="note">Leave the endpoint empty and enquiries open an email to you instead.</div><div class="r"><button class="b p" id="lsave">Apply</button><button class="b" data-close>Close</button></div>');
+      panel.querySelector("#lsave").onclick = function () { B.demoUrl = panel.querySelector("#l1").value.trim(); B.siteUrl = panel.querySelector("#l2").value.trim(); B.phone = panel.querySelector("#l3").value.trim(); B.email = panel.querySelector("#l4").value.trim(); B.leadUrl = panel.querySelector("#l5").value.trim(); window.PAGE.applyLinks(); closeP(); };
+    }
+    if (a === "deploy") {
+      var tok = ""; try { tok = localStorage.getItem("painterlanding_gh_token") || ""; } catch (er) {}
+      openP('<h4>Deploy to GitHub</h4><div class="note">Publishes this page (editor included, but it only shows with ?edit=1).</div><label>Repository<input id="gr" value="' + esc(B.ghOwner + "/" + B.ghRepo) + '"></label><label>Page path<input id="gp" value="' + esc(B.ghPath) + '"></label><label>Fine-grained token (kept on this device only)<input id="gt" type="password" value="' + esc(tok) + '" placeholder="github_pat_…"></label><div class="r"><button class="b p" id="gpub">Publish</button><button class="b" data-close>Close</button></div><div class="msg" id="gmsg"></div>');
+      panel.querySelector("#gpub").onclick = function () {
+        var m = panel.querySelector("#gmsg"), rp = panel.querySelector("#gr").value.trim().split("/");
+        B.ghOwner = rp[0]; B.ghRepo = rp[1]; B.ghPath = panel.querySelector("#gp").value.trim().replace(/^\/+/, "");
+        try { localStorage.setItem("painterlanding_gh_token", panel.querySelector("#gt").value.trim()); } catch (er) {}
+        if (B.ghPath.indexOf("/") < 0) { m.textContent = "✗ Page path needs a folder (e.g. painters/index.html) so the main site isn't replaced."; return; }
+        m.textContent = "Publishing…"; commit(B.ghPath, snapshot()).then(function () { m.textContent = "✓ Published " + B.ghPath + ". Live within a minute."; }, function (er) { m.textContent = "✗ " + er.message; });
+      };
+    }
+  });
+})();
+</script><script>(function(){var reduced=matchMedia('(prefers-reduced-motion: reduce)'),els=[].slice.call(document.querySelectorAll('[data-parallax]')),pending=false;function draw(){pending=false;els.forEach(function(el){if(reduced.matches||innerWidth<800||document.body.classList.contains('editing')){el.style.transform='';return;}var p=el.closest('.hero'),r=p.getBoundingClientRect(),offset=Math.max(-45,Math.min(45,-r.top*Number(el.dataset.parallax)));el.style.transform='translate3d(0,'+offset+'px,0)';});}function schedule(){if(!pending){pending=true;requestAnimationFrame(draw);}}addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);if(reduced.addEventListener)reduced.addEventListener('change',schedule);draw();})();</script></body>
 </html>
