@@ -190,6 +190,7 @@ body.cust #tabs,body.cust .demo-note,body.cust .staffonly,body.cust #seeQ,body.c
       <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></div>
       <div style="min-width:0"><b id="bizName">Painter Deluxe</b><small>Painter Deluxe · demo</small></div>
     </div>
+    <a id="painterHome" href="../" class="backsite" style="color:white;text-decoration:none;border:1px solid #ffffff70;border-radius:6px;padding:8px 12px;white-space:nowrap">← Back to homepage</a>
     <div class="tabs" id="tabs">
       <button data-v="book">Book a job</button>
       <button data-v="staff">Run sheet</button>
@@ -512,6 +513,7 @@ function qTotals(q){ var sub = 0; (q.lines || []).forEach(function(l){ sub += (+
 var VIEW = "book";
 function go(v){ location.hash = v; }
 function route(){
+  updatePainterHome();
   if (LIVE) { var la = hashArgs(); if (la.quote || la.cancel || la.start || la.join) return liveBoot(); if ((la.staff || la.quotes || la.setup || la.crm || la.website) && !STAFF) return liveBoot(); }
   var h = location.hash.replace(/^#/, "");
   if (h.indexOf("quote=") === 0) { VIEW = "cq"; renderCustomerQuote(h.slice(6)); }
@@ -1192,6 +1194,7 @@ function bizDefaults(){
   var s = seedBiz(); s.name = ""; s.phone = ""; s.email = ""; s.gmapsKey = ""; s.state = "NSW"; return s;
 }
 function applyCfg(cfg, venue){
+  updatePainterHome();
   cfg = cfg || {};
   DB.biz = Object.assign(bizDefaults(), cfg.biz || {});
   DB.biz.name = venue.name || DB.biz.name; DB.biz.phone = venue.phone || DB.biz.phone || ""; DB.biz.email = venue.email || DB.biz.email || "";
@@ -1444,6 +1447,12 @@ function renderWebsite(){
  $("#websiteForm").onsubmit=function(e){e.preventDefault();var nw={};$$('[data-web]').forEach(function(i){nw[i.dataset.web]=i.type==='number'?Number(i.value):i.value.trim();});if(photo)nw.hero=photo;DB.biz.website=nw;var btn=this.querySelector('button');if(LIVE){busy(btn,true,'Saving…');rpc('trd_save_config',{p_venue:SLUG,p_config:liveCfg()}).then(function(r){if(!r||!r.ok)throw Error(r&&r.error||'Save failed');$('#webMessage').textContent='Saved. Your landing page and estimator now use these settings.';}).catch(function(e){$('#webMessage').textContent=e.message;}).finally(function(){busy(btn,false);});}else{save();$('#webMessage').textContent='Demo saved in this browser. Live business settings save privately to your account.';}};
 }
 
+function updatePainterHome(){
+ var link=document.getElementById("painterHome"); if(!link)return;
+ var business=(typeof SLUG!=="undefined" && SLUG)||QP0.get("b")||"";
+ link.href="../"+(business?"?b="+encodeURIComponent(business):"");
+}
+updatePainterHome();
 if (LIVE) liveBoot(); else route();
 </script>
 </body>
