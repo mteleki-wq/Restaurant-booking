@@ -77,7 +77,7 @@ async function readAll(path: string, cap = 20000) {
 async function snapshot() {
   const [venues, prospects, campaigns, deliveries, optouts, badDeliveries, badEvents, svcVenues] = await Promise.all([
     db("rpc/rd_platform_health", { method: "POST", body: "{}" }),
-    readAll("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at,product,source&order=created_at.desc,id.desc"),
+    readAll("crm_prospects?select=id,restaurant,name,email,phone,website,suburb,venue_type,priority,crm_status,crm_notes,follow_up_at,crm_updated_at,created_at,product,product_interests,source&order=created_at.desc,id.desc"),
     db("email_marketing_campaigns?select=name,subject,status,sent_at,created_at&order=created_at.desc&limit=12"),
     db(`crm_email_deliveries?select=status,campaign,subject,created_at&created_at=gte.${new Date(Date.now() - 60 * 864e5).toISOString()}&limit=1000`),
     readAll("email_optouts?select=email&order=id.asc"),
@@ -409,7 +409,8 @@ RULES — follow all of them:
 // Each product the studio sells (Restaurant, Service, Function and Trade Deluxe) keeps its
 // own facts, rules and offer (prices) in public.crm_products, edited from the
 // studio. The restaurant row falls back to FACTS/RULES above until edited.
-const PRODUCTS = ["restaurant", "service", "function", "trade"];
+const PRODUCTS = ["restaurant", "service", "function", "trade", "painter", "removalist"];
+function interestedIn(p: any, key: string) { return (p.product || "restaurant") === key || (Array.isArray(p.product_interests) && p.product_interests.includes(key)); }
 function productKey(v: unknown) { return PRODUCTS.includes(String(v)) ? String(v) : "restaurant"; }
 const money = (n: unknown) => { const x = Number(n); return isFinite(x) ? "$" + (Number.isInteger(x) ? x : x.toFixed(2)) : String(n ?? ""); };
 function offerText(o: any) {
@@ -427,7 +428,7 @@ function offerText(o: any) {
 async function loadProduct(key: string) {
   let row: any = null;
   try { row = (await db(`crm_products?key=eq.${key}&select=key,name,facts,rules,offer,updated_at`))?.[0] || null; } catch { row = null; }
-  const name = row?.name || (key === "service" ? "Service Deluxe" : key === "function" ? "Function Deluxe" : key === "trade" ? "Trade Deluxe" : "Restaurant Deluxe");
+  const name = row?.name || (key === "service" ? "Service Deluxe" : key === "function" ? "Function Deluxe" : key === "trade" ? "Trade Deluxe" : key === "painter" ? "Painter Deluxe" : key === "removalist" ? "Removalist Deluxe" : "Restaurant Deluxe");
   const facts = (row?.facts && row.facts.trim()) || (key === "restaurant" ? FACTS : "");
   const rules = (row?.rules && row.rules.trim()) || RULES;
   const offer = row?.offer || null;
@@ -626,6 +627,10 @@ Deno.serve(async (req) => {
             body: JSON.stringify(fresh),
           });
         }
+        // One email keeps one CRM record, even when interested in several products.
+        for (const r of clean.filter((x) => existing.has(x.email))) {
+          await db("rpc/crm_add_product_interest", { method: "POST", body: JSON.stringify({p_email:r.email,p_product:product}) });
+        }
         let updated = 0;
         if (update) {
           // Fill in details for people already saved, without touching their
@@ -691,7 +696,7 @@ Deno.serve(async (req) => {
       case "ai_ideas": {
         const P = await loadProduct(productKey(body.product));
         const snap = await snapshot();
-        snap.prospects = (snap.prospects || []).filter((p: any) => (p.product || "restaurant") === P.key);
+        snap.prospects = (snap.prospects || []).filter((p: any) => interestedIn(p, P.key));
         const svcMode = P.key === "service";
         const svcV = svcMode ? svcSummary(snap.svc_venues || []) : [];
         if (P.key !== "restaurant") snap.venues = [];
@@ -704,7 +709,7 @@ Deno.serve(async (req) => {
           `Here is the current state of the business (JSON):\n${JSON.stringify(s)}\n\n` +
           (focus ? `Marc's focus right now: ${focus}\n\n` : "") +
           `Product: ${P.name}. Suggest 4 email campaigns Marc could send in the next two weeks to promote ${P.name}, most valuable first. ` +
-          (P.key === "function" || P.key === "trade" ? `Base each one on something specific in the data (prospects never contacted, prospects who opened or clicked, follow-ups due, a past campaign to follow up). ` :
+          (["function", "trade", "painter", "removalist"].includes(P.key) ? `Base each one on something specific in the data (prospects never contacted, prospects who opened or clicked, follow-ups due, a past campaign to follow up). ` :
           svcMode ? `Base each one on something specific in the data (a trial ending, a business with few or no online bookings, a setup step missing, prospects never contacted, a past campaign to follow up). ` :
           `Base each one on something specific in the data (a trial ending, a venue gone quiet, a drop in orders, prospects never contacted, a setup step missing, a past campaign to follow up). `) +
           `Name the venue(s) or group it is for. Keep it honest — if the data is thin, say so in "why".\n\n` +

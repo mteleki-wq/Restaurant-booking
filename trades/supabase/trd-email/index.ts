@@ -138,12 +138,17 @@ async function quote(p: P, ev: string) {
 
 /* ---- sales-page enquiry ---- */
 async function lead(p: P) {
-  const marc = await send(LEAD_TO, `🧰 Trade Deluxe enquiry — ${p.business}${p.existing ? " (already in CRM)" : ""}`,
-    wrap("New Trade Deluxe enquiry", rows([["Name", p.name], ["Business", p.business], ["Email", p.email], ["Mobile", p.phone], ["Trade", p.type],
-      ["Base suburb", p.suburb], ["Message", p.message]]) + para("It's in the Venue CRM under <b>Trade</b>."), "Trade Deluxe sales page"), "Trade Deluxe", p.email);
+  const message=String(p.message||"");
+  const key=message.startsWith("Painter Deluxe — ")?"painter":message.startsWith("Removalist Deluxe — ")?"removalist":"trade";
+  const label=key==="painter"?"Painter Deluxe":key==="removalist"?"Removalist Deluxe":"Trade Deluxe";
+  const tab=key==="painter"?"Painter":key==="removalist"?"Removalist":"Trade";
+  const marc = await send(LEAD_TO, `${label} enquiry — ${p.business}${p.existing ? " (already in CRM)" : ""}`,
+    wrap("New "+label+" enquiry", rows([["Name", p.name], ["Business", p.business], ["Email", p.email], ["Mobile", p.phone], ["Business type", p.type],
+      ["Base suburb", p.suburb], ["Message", p.message]]) + para("It's in the promotional CRM under <b>"+tab+"</b>.")+
+      btn("https://webescapade.com/CRM/venue-crm.html?prod="+key+"#pipeline","Open this product's CRM"), label+" sales page"), label, p.email);
   const first = String(p.name || "").trim().split(/\s+/)[0] || "there";
-  const receipt = await send(p.email, "Thanks — we've got your Trade Deluxe enquiry", wrap(`Thanks, ${esc(first)}.`,
-    para(`Thanks for your interest in Trade Deluxe for <b>${esc(p.business)}</b>. I'll be in touch shortly to show you how it would work for your business.`) +
+  const receipt = await send(p.email, "Thanks — we've got your "+label+" enquiry", wrap(`Thanks, ${esc(first)}.`,
+    para(`Thanks for your interest in ${label} for <b>${esc(p.business)}</b>. I'll be in touch shortly to show you how it would work for your business.`) +
     para("Need to add something? Just reply to this email.") + para("Marc<br><span style=\"color:#65707B\">Webescapade · 0413 872 994 · marc@webescapade.com</span>"),
     "Webescapade · Sydney"), "Marc at Webescapade", LEAD_TO);
   return { marc, receipt };

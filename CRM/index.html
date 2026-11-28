@@ -274,6 +274,8 @@
     'Marketing',
     'Restaurant Deluxe',
     'Service Deluxe',
+    'Painter Deluxe',
+    'Removalist Deluxe',
     'Table Ordering',
     'Set up a client',
     'Behind the scenes'
@@ -282,6 +284,30 @@
   /* Links left blank are ones only Marc knows — the tile says so plainly
      rather than guessing an address that would 404. */
   var DEFAULT_TILES = [
+    {"t":"Painter Deluxe — Sales page","n":"Open sales page for Painter Deluxe.","u":"https://webescapade.com/painters/","g":"Painter Deluxe","i":"↗","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Customer website","n":"Open customer website for Painter Deluxe.","u":"https://webescapade.com/painters/site.html","g":"Painter Deluxe","i":"↗","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Try colours and costs","n":"Open try colours and costs for Painter Deluxe.","u":"https://webescapade.com/painters/studio.html","g":"Painter Deluxe","i":"↗","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Customer quote request","n":"Open customer quote request for Painter Deluxe.","u":"https://webescapade.com/painters/demo/?intent=quote#book","g":"Painter Deluxe","i":"↗","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Customer quote visit","n":"Open customer quote visit for Painter Deluxe.","u":"https://webescapade.com/painters/demo/?intent=visit#book","g":"Painter Deluxe","i":"↗","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Business demo","n":"Open business demo for Painter Deluxe.","u":"https://webescapade.com/painters/demo/#website","g":"Painter Deluxe","i":"↗","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Business sign-in","n":"Owner login required.","u":"https://webescapade.com/painters/app/#website","g":"Painter Deluxe","i":"🔐","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — New-client setup","n":"Create a business using the private setup code supplied by Webescapade.","u":"https://webescapade.com/painters/app/#start","g":"Painter Deluxe","i":"➕","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Website editor","n":"Owner login required.","u":"https://webescapade.com/painters/app/#website","g":"Painter Deluxe","i":"✏️","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Sales-page editor","n":"Open sales-page editor for Painter Deluxe.","u":"https://webescapade.com/painters/?edit=1","g":"Painter Deluxe","i":"✏️","c":"teal","b":"New"},
+    {"t":"Painter Deluxe — Promo CRM","n":"Enquiries, prospect pipeline and campaign follow-ups","u":"../CRM/venue-crm.html?prod=painter","g":"Painter Deluxe","i":"📈","c":"cyan"},
+    {"t":"Painter Deluxe — Promo Email Studio","n":"Four editable email starters and product facts","u":"../CRM/restaurant-deluxe-email-studio.html?prod=painter","g":"Painter Deluxe","i":"✉️","c":"violet"},
+    {"t":"Removalist Deluxe — Sales page","n":"Open sales page for Removalist Deluxe.","u":"https://webescapade.com/removalists/","g":"Removalist Deluxe","i":"↗","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Customer website","n":"Open customer website for Removalist Deluxe.","u":"https://webescapade.com/removalists/site.html","g":"Removalist Deluxe","i":"↗","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Try the moving estimator","n":"Open try the moving estimator for Removalist Deluxe.","u":"https://webescapade.com/removalists/estimate.html","g":"Removalist Deluxe","i":"↗","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Customer quote request","n":"Open customer quote request for Removalist Deluxe.","u":"https://webescapade.com/removalists/demo/?intent=quote#book","g":"Removalist Deluxe","i":"↗","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Customer quote visit","n":"Open customer quote visit for Removalist Deluxe.","u":"https://webescapade.com/removalists/demo/?intent=visit#book","g":"Removalist Deluxe","i":"↗","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Business demo","n":"Open business demo for Removalist Deluxe.","u":"https://webescapade.com/removalists/demo/#website","g":"Removalist Deluxe","i":"↗","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Business sign-in","n":"Owner login required.","u":"https://webescapade.com/removalists/app/#website","g":"Removalist Deluxe","i":"🔐","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — New-client setup","n":"Create a business using the private setup code supplied by Webescapade.","u":"https://webescapade.com/removalists/app/#start","g":"Removalist Deluxe","i":"➕","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Website editor","n":"Owner login required.","u":"https://webescapade.com/removalists/app/#website","g":"Removalist Deluxe","i":"✏️","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Sales-page editor","n":"Open sales-page editor for Removalist Deluxe.","u":"https://webescapade.com/removalists/?edit=1","g":"Removalist Deluxe","i":"✏️","c":"gold","b":"New"},
+    {"t":"Removalist Deluxe — Promo CRM","n":"Enquiries, prospect pipeline and campaign follow-ups","u":"../CRM/venue-crm.html?prod=removalist","g":"Removalist Deluxe","i":"📈","c":"cyan"},
+    {"t":"Removalist Deluxe — Promo Email Studio","n":"Four editable email starters and product facts","u":"../CRM/restaurant-deluxe-email-studio.html?prod=removalist","g":"Removalist Deluxe","i":"✉️","c":"violet"},
     { t:'Run a demo', n:'Step-by-step demos of Restaurant, Service, Webescapade and ChefLink, with QR codes', u:'../CRM/venue-crm.html#demo', g:'Marketing', i:'🎬', c:'gold', b:'New' },
     { t:'Venue CRM', n:'Restaurant & Service Deluxe: health, pipeline and AI campaign ideas', u:'../CRM/venue-crm.html', g:'Marketing', i:'📈', c:'cyan', b:'New' },
     { t:'Email Studio', n:'Write, send and report on campaigns — now with AI', u:'../CRM/restaurant-deluxe-email-studio.html', g:'Marketing', i:'✉️', c:'violet' },
@@ -362,6 +388,17 @@
       }
       save();
     }
+    ['Painter Deluxe','Removalist Deluxe'].forEach(function(g){
+      var key='group:'+g;
+      if(state.seen.indexOf(key)<0){state.seen.push(key);if(state.groups.indexOf(g)<0)state.groups.push(g);}
+    });
+    DEFAULT_TILES.filter(function(t){return t.g==='Painter Deluxe'||t.g==='Removalist Deluxe';}).forEach(function(t){
+      var key='deluxe20261128:'+t.t;
+      if(state.seen.indexOf(key)>=0)return;
+      state.seen.push(key);
+      if(!state.tiles.some(function(x){return x.t===t.t&&x.g===t.g;}))state.tiles.push(Object.assign({},t));
+    });
+    save();
     DEFAULT_TILES.forEach(function(t){
       if((t.t!=='Venue CRM' && t.g!=='Service Deluxe') || state.seen.indexOf(t.t)>=0) return;
       state.seen.push(t.t);

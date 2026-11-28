@@ -73,7 +73,7 @@
   .tab:hover{color:var(--ink)}
   .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--cyan)}
   .pane[hidden]{display:none}
-  .prodsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--glass)}
+  .prodsw{display:inline-flex;flex-wrap:wrap;max-width:100%;border:1px solid var(--line);border-radius:18px;padding:3px;gap:2px;background:var(--glass)}
   .prodsw button{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer;opacity:.65}
   .prodsw button.on{background:var(--grad);color:#fff;opacity:1}
   .offer-row{display:grid;grid-template-columns:1.2fr .6fr 2fr auto auto;gap:6px;align-items:center;margin-bottom:6px}
@@ -302,15 +302,18 @@
       <button type="button" data-prod="service">Service Deluxe</button>
       <button type="button" data-prod="function">Function Deluxe</button>
       <button type="button" data-prod="trade">Trade Deluxe</button>
+      <button type="button" data-prod="painter">Painter Deluxe</button>
+      <button type="button" data-prod="removalist">Removalist Deluxe</button>
     </div>
     <a class="pill" id="salesLink" href="https://webescapade.com/Restaurant/" target="_blank" rel="noopener" title="Open this product's sales page" style="text-decoration:none;color:inherit">Sales page ↗</a>
     <a class="pill navlink" id="crmLink" href="venue-crm.html?prod=restaurant#campaigns" target="rd-venue-crm" title="Open the CRM: campaign results, pipeline and venue health">📊 CRM &amp; results</a>
     <a class="pill navlink" href="../Control-room/" title="Back to the Control Room">Control Room</a>
     <div class="spacer"></div>
-    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v67</span></span>
+    <span class="pill" id="verPill" title="Which build of the studio this is"><span class="dot"></span><span id="verLbl">v68</span></span>
     <span class="pill"><span class="dot"></span><span id="campCount">campaigns</span></span>
   </header>
 
+  <div id="deluxeAccess" hidden></div>
   <div class="layout">
     <aside class="rail" aria-label="Campaigns">
       <p class="rail-h">Campaigns</p>
@@ -925,6 +928,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="fileIn" accept="application/json,.json,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" hidden>
 
+<script src="deluxe-products.js?v=20261128"></script>
 <script>
 /* A visible banner for anything that goes wrong. Silent failure is the
    worst kind: the page looks fine and nothing responds. */
@@ -965,7 +969,7 @@
   /* Buttons are dispatched from one listener on the document, registered
      before anything else can throw. If a handler never registered, the
      click says so instead of doing nothing at all. */
-  var BUILD='v67 \u00b7 Business hub (CRM + Email Studio) launch email for every list';   /* shown in the header, so the running build is never a guess */
+  var BUILD='v68 \u00b7 Painter + Removalist Deluxe: promos and client access';   /* shown in the header, so the running build is never a guess */
 
   var ACTIONS={};
   function act(name,fn){ ACTIONS[name]=fn; }
@@ -2297,11 +2301,12 @@
     return String(html).replace(/href="(https?:\/\/[^"]+)"/g, function(m, href){
       if(/\{\{\{/.test(href)) return m;                    /* never touch merge tags */
       if(/utm_source=/.test(href)) return m;               /* already tagged */
-      var sep = href.indexOf('?')<0 ? '?' : '&';
+      var hashAt=href.indexOf('#'), fragment=hashAt<0?'':href.slice(hashAt), base=hashAt<0?href:href.slice(0,hashAt);
+      var sep = base.indexOf('?')<0 ? '?' : '&';
       var q = 'utm_source='+encodeURIComponent(src)+
               '&utm_medium='+encodeURIComponent(med)+
               '&utm_campaign='+encodeURIComponent(cmp);
-      return 'href="'+href+sep+q+'"';
+      return 'href="'+base+sep+q+fragment+'"';
     });
   }
   function finalHtml(c){ return addUtm(buildEmail(c), c.name); }
@@ -3287,7 +3292,7 @@
      =================================================================== */
   var K_PROD='rdes.product';
   var PRODUCT='restaurant';
-  var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe', 'function':'Function Deluxe', trade:'Trade Deluxe'};
+  var PROD_NAME={restaurant:'Restaurant Deluxe', service:'Service Deluxe', 'function':'Function Deluxe', trade:'Trade Deluxe', painter:'Painter Deluxe', removalist:'Removalist Deluxe'};
   var SVC_SITE  = "https://webescapade.com/service/demo/";   /* demo spa website */
   var SVC_PAGE  = "https://webescapade.com/service/";        /* Service Deluxe sales page */
   var SVC_IMG   = "https://webescapade.com/service/img/email/";   /* email pictures, 1100px wide */
@@ -3311,7 +3316,7 @@
   var SVC_SBOOK = "https://webescapade.com/service/service-booking.html?venue=atelier-hair&accent=A9503A&word=stylist";
   var SVC_SVIDEO = "https://youtu.be/B-1hhWIhQh4";   /* Premium for salons tour */
   var SVC_STHUMB = "https://webescapade.com/service/img/salon-video-thumb.jpg";
-  var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE, 'function':"https://webescapade.com/Function-centre/", trade:"https://webescapade.com/trades/"};
+  var SALES_PAGE= {restaurant:"https://webescapade.com/Restaurant/", service:SVC_PAGE, 'function':"https://webescapade.com/Function-centre/", trade:"https://webescapade.com/trades/",painter:"https://webescapade.com/painters/",removalist:"https://webescapade.com/removalists/"};
   var SVC_BOOK  = "https://webescapade.com/service/service-booking.html?venue=serenity-spa";
   var SVC_START = "https://webescapade.com/service/service-start.html?code=ESCAPADE-01AC";   /* same setup code as the sales page */
   var SVC_OFFER = {trial_days:14, gst:true, plans:[
@@ -3807,14 +3812,14 @@
     ];
   }
   function oneProdLabel(){ var el=document.getElementById('oneProd'); if(el) el.textContent=PROD_NAME[PRODUCT]||'Restaurant Deluxe'; }
-  function presetsFor(p){ return p==='service' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(svcPresets()) : p==='function' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(fnPresets()) : p==='trade' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(trdPresets()) : PRESETS; }
-  function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : p==='trade' ? (info.offer||TRD_OFFER) : null; }
-  function setOffer(p,o){ if(!o) return; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; if(p==='trade') TRD_OFFER=o; }
-  var OTHER_PRODUCTS=['service','function','trade'];   /* products with their own offer boxes */
+  function presetsFor(p){ if(window.WE_DELUXE && WE_DELUXE.get(p)) return WE_DELUXE.presets(p,preset,FIRST,offerFor(p)); return p==='service' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(svcPresets()) : p==='function' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(fnPresets()) : p==='trade' ? hubPresets(p).concat(meetPresets(p)).concat(bldPresets(p)).concat(trdPresets()) : PRESETS; }
+  function offerFor(p){ var info=PRODUCTS_INFO[p]||{}; if(window.WE_DELUXE && WE_DELUXE.get(p)) return info.offer||WE_DELUXE.get(p).offer; return p==='service' ? (info.offer||SVC_OFFER) : p==='function' ? (info.offer||FN_OFFER) : p==='trade' ? (info.offer||TRD_OFFER) : null; }
+  function setOffer(p,o){ if(!o) return; if(window.WE_DELUXE && WE_DELUXE.get(p)) WE_DELUXE.get(p).offer=o; if(p==='service') SVC_OFFER=o; if(p==='function') FN_OFFER=o; if(p==='trade') TRD_OFFER=o; }
+  var OTHER_PRODUCTS=['service','function','trade','painter','removalist'];   /* products with their own offer boxes */
   function isProd(p){ return p==='restaurant' || OTHER_PRODUCTS.indexOf(p)>=0; }
   function curPresets(){ return presetsFor(PRODUCT); }
 
-  function paintProduct(){ try{ oneProdLabel(); }catch(e){}
+  function paintProduct(){ try{ oneProdLabel(); }catch(e){} if(window.WE_DELUXE) WE_DELUXE.paint(PRODUCT);
     document.querySelectorAll('#prodSw [data-prod]').forEach(function(b){ var on=b.getAttribute('data-prod')===PRODUCT; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
     $('#prodName').textContent=PROD_NAME[PRODUCT]; $('#prodEyebrow').textContent=PROD_NAME[PRODUCT];
     document.title=PROD_NAME[PRODUCT]+' — Email Studio';
@@ -3826,6 +3831,7 @@
   function switchProduct(p,quiet){
     p=isProd(p)?p:'restaurant';
     CUR_BY[PRODUCT]=cur; try{ audRemember(); }catch(e){}
+    if(p!==PRODUCT){ SET.list=''; var recipients=document.getElementById('sList');if(recipients)recipients.value='';var count=document.getElementById('listCount');if(count)count.textContent='0';if(typeof PK!=='undefined'&&PK){PK.types={};PK.subs={};PK.subQ='';PK.batch=0;} }
     if(!CAMPS_BY[p]) CAMPS_BY[p]=presetsFor(p).map(function(c){ return JSON.parse(JSON.stringify(c)); });
     PRODUCT=p; camps=CAMPS_BY[p]; cur=Math.min(CUR_BY[p]||0, camps.length-1);
     try{ store.set(K_PROD,p); }catch(e){}
@@ -4284,7 +4290,7 @@
     var selT=Object.keys(PK.types).filter(function(k){ return PK.types[k]; });
     var selS=Object.keys(PK.subs).filter(function(k){ return PK.subs[k]; });
     (PK.list||[]).forEach(function(p){
-      if((p.product||'restaurant')!==PRODUCT) return;
+      if(window.WE_DELUXE ? !WE_DELUXE.has(p,PRODUCT) : (p.product||'restaurant')!==PRODUCT) return;
       if(PK.skipWonLost && (p.crm_status==='Won'||p.crm_status==='Lost')) return;
       if(selT.length && !pkTypes(p.venue_type).some(function(t){ return selT.indexOf(t)>=0; })) return;
       if(selS.length && selS.indexOf(pkSub(p.suburb))<0) return;
@@ -4320,7 +4326,7 @@
   function pkFill(){
     var list=PK.list||[], tc={}, sc={};
     list.forEach(function(p){
-      if((p.product||'restaurant')!==PRODUCT) return;
+      if(window.WE_DELUXE ? !WE_DELUXE.has(p,PRODUCT) : (p.product||'restaurant')!==PRODUCT) return;
       if(PK.skipWonLost && (p.crm_status==='Won'||p.crm_status==='Lost')) return;
       pkTypes(p.venue_type).forEach(function(t){ tc[t]=(tc[t]||0)+1; });
       var s=pkSub(p.suburb); sc[s]=(sc[s]||0)+1;

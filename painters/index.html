@@ -269,13 +269,14 @@ body:has(.chat.open) .float{visibility:hidden}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.rv{opacity:1!important;transform:none!important;transition:none!important}[data-parallax]{transform:none!important;will-change:auto}.btn{transition:none}}
 @media(max-width:700px){.hero{padding-top:38px}.hero .w{gap:35px}.fc{display:none}.plans{gap:22px}.crmd{gap:20px}section.s{padding:65px 0}.phones{grid-template-columns:1fr}.tl>div{font-size:12px}.tl .jb{width:135px}}
 </style></head>
-<body data-demo-url="/painters/site.html" data-site-url="/painters/site.html" data-phone="0413 872 994" data-email="marc@webescapade.com" data-lead-url="https://tehxobdokbvqtwtgqzrh.supabase.co/rest/v1/rpc/trd_lead_submit" data-lead-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-path="painters/index.html">
+<body data-demo-url="/painters/site.html" data-site-url="/painters/site.html" data-phone="0413 872 994" data-email="marc@webescapade.com" data-lead-url="https://tehxobdokbvqtwtgqzrh.supabase.co/rest/v1/rpc/deluxe_lead_submit" data-lead-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-path="painters/index.html">
 
 <nav class="top" id="nav"><div class="w">
   <a class="brand" href="#top"><span class="m"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"></path></svg></span><span><b data-edit="brand">Painter Deluxe</b><small>by Webescapade</small></span></a>
   <div class="links"><a href="#video" data-edit="n0">Watch</a><a href="#travel" data-edit="n1">Travel time</a><a href="#how" data-edit="n2">How it works</a><a href="#quotes" data-edit="n3">Quotes</a><a href="#website" data-edit="n4">Your website</a><a href="#pricing" data-edit="n5">Pricing</a><a href="#faq" data-edit="n6">FAQ</a></div>
   <a class="btn dark" href="#enquire"><span data-edit="navcta">Get early access</span> <span class="ar">→</span></a>
 </div></nav>
+<div class="w" style="display:flex;justify-content:flex-end;gap:18px;flex-wrap:wrap;padding:12px 24px;font-size:13px" aria-label="Business owner access"><a href="/painters/app/#website" style="color:inherit">Business sign-in ↗</a><a href="/painters/app/#start" style="color:inherit">New-client setup ↗</a></div>
 
 <header class="hero" id="top"><div class="w">
   <div class="rv">
@@ -473,7 +474,7 @@ body:has(.chat.open) .float{visibility:hidden}
     if (B.leadUrl) {
       var btn = f.querySelector("button"); btn.disabled = true; msg.textContent = "Sending…";
       fetch(B.leadUrl, { method: "POST", headers: { apikey: B.leadKey || "", Authorization: "Bearer " + (B.leadKey || ""), "Content-Type": "application/json" },
-        body: JSON.stringify({ p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: "Painter Deluxe — " + d.message, p_trap: d.website }) })
+        body: JSON.stringify({ p_product: "painter", p_name: d.name, p_business: d.business, p_email: d.email, p_phone: d.phone, p_type: d.type, p_suburb: d.suburb, p_message: d.message, p_trap: d.website }) })
         .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j || !j.ok) throw new Error((j && (j.error || j.message)) || "Something went wrong"); done(); }); })
         .catch(function (er) { msg.className = "msg err"; msg.textContent = er.message; })
         .then(function () { btn.disabled = false; });
