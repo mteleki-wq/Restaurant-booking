@@ -192,14 +192,14 @@ body.cust #tabs,body.cust .demo-note,body.cust .staffonly,body.cust #seeQ,body.c
     </div>
     <a id="removalistHome" href="../" class="backsite" style="color:white;text-decoration:none;border:1px solid #ffffff70;border-radius:6px;padding:8px 12px;white-space:nowrap">← Back to homepage</a>
     <div class="tabs" id="tabs">
-      <button data-v="book">Book a job</button>
+      <button data-v="book">Quotation appointments</button>
       <button data-v="staff">Run sheet</button>
       <button data-v="quotes">Quotes<span class="cnt" id="qCnt" hidden>0</span></button>
       <button data-v="crm">Customers</button><button data-v="website">Website editor</button><button data-v="setup">Setup</button>
     </div>
   </div>
 </div>
-<div class="demo-note noprint">Demo — everything you do here is saved only in this browser. Try booking a job, then open the run sheet to see travel time built in. <a href="#crm" style="color:inherit;font-weight:700">Open customer CRM →</a></div>
+<div class="demo-note noprint">Demo — everything you do here is saved only in this browser. Try booking a quotation visit, then open the run sheet to see travel time built in. <a href="#crm" style="color:inherit;font-weight:700">Open customer CRM →</a></div>
 
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
@@ -458,7 +458,7 @@ function seedBiz(){
   return { name: "Your Removal Business", preset: "removalist", phone: "", email: "", base: "Marrickville",
     radiusKm: 15, speedKmh: 28, roadFactor: 1.35, bufferMin: 10, unknownTravel: 40, slotStep: 30,
     bookMode: "exact", windowHours: 2, dayStart: "07:00", dayEnd: "17:00", countFirstLeg: true, noticeHours: 2,
-    chooseTech: true, gst: true, callout: 0, quoteValidDays: 30, labourRate: 120 };
+    chooseTech: true, gst: true, callout: 0, quoteValidDays: 30, labourRate: 160 };
 }
 function migrate(db){
   var B = db.biz;
@@ -483,7 +483,7 @@ function priceLabel(j){
   if (j.price === "from") return { b: "from " + money(j.a), s: "plus parts if needed" };
   if (j.price === "range") return { b: money(j.a) + "–" + money(j.b), s: "typical range" };
   if (j.price === "hourly") return { b: money(j.a) + "/hr", s: "plus parts" };
-  return { b: "Free quote", s: "we'll price it first" };
+  return { b: "Quote required", s: "we'll price it first" };
 }
 function durLabel(j){ return j.mins === j.minsMax ? "about " + dur(j.mins) : dur(j.mins) + "–" + dur(j.minsMax); }
 function catName(c){ var p = PRESETS[DB.biz.preset] || PRESETS["plumb-elec"]; return (DB.biz.cats && DB.biz.cats[c]) || p.cats[c] || c; }
@@ -500,6 +500,7 @@ var VIEW = "book";
 function go(v){ location.hash = v; }
 function route(){
   updateRemovalistHome();
+  if(!LIVE){var demoArgs=hashArgs();var customerDemo=QP0.has("intent")||QP0.get("view")==="customer"||!!demoArgs.quote;document.body.classList.toggle("cust",customerDemo&&!(demoArgs.staff||demoArgs.quotes||demoArgs.setup||demoArgs.crm||demoArgs.website));}
   if (LIVE) { var customerRoute = !(hashArgs().staff || hashArgs().quotes || hashArgs().setup || hashArgs().crm || hashArgs().website); document.body.classList.toggle("cust", customerRoute); }
   if (LIVE) { var la = hashArgs(); if (la.quote || la.cancel || la.start || la.join) return liveBoot(); if ((la.staff || la.quotes || la.setup || la.crm || la.website) && !STAFF) return liveBoot(); }
   var h = location.hash.replace(/^#/, "");
@@ -543,7 +544,7 @@ function renderBook(){
   if (!BK.cat || cats().indexOf(BK.cat) < 0) BK.cat = cats()[0];
   var labels = [["Job",1],["Address",2],[isQuote ? "Describe it" : "Time",3],["Your details",4]]; if (pay) labels.push(["Pay",5]);
   var h = (BK.emerg ? '<h1>Emergency <em>call-out</em></h1><p class="lead">Burst pipe, no power or a blocked toilet that can\'t wait? Book an on-call ' + esc(word()) + ' today — including evenings and weekends.</p>'
-      : '<h1>Book a <em>' + esc(word()) + '</em></h1><p class="lead">Choose a quotation visit or send your moving requirements. Quotation-visit times allow for existing appointments and estimated travel. A moving date is agreed separately.</p>') +
+      : '<h1>'+(isQuote?'Request a <em>moving quote</em>':'Book a <em>quotation visit</em>')+'</h1><p class="lead">Choose a quotation visit or send your moving requirements. Quotation-visit times allow for existing appointments and estimated travel. A moving date is agreed separately.</p>') +
     '<div class="steps">' + labels.map(function(l, i){ return '<span class="' + (BK.step === l[1] ? "on" : BK.step > l[1] ? "done" : "") + '">' + (i + 1) + ' · ' + l[0] + '</span>'; }).join("") + '</div>' +
     '<div class="grid"><div id="stepBody"></div><div class="card sum" id="sumBox"></div></div>';
   app.innerHTML = h;
@@ -708,7 +709,7 @@ function shrink(file, cb){
 }
 function stepDescribe(){
   var body = $("#stepBody");
-  body.innerHTML = '<div class="card form"><h3 style="margin:0">Tell us about the job</h3><p class="muted" style="margin:0">' + esc(BK.job.name) + ' is priced as a written quote. A few details and photos mean we can usually quote without a site visit.</p>' +
+  body.innerHTML = '<div class="card form"><h3 style="margin:0">Tell us about the job</h3><p class="muted" style="margin:0">' + esc(BK.job.name) + ' is priced as a written quote. Share your inventory and access details so the removalist can assess whether a quotation visit is needed.</p>' +
     '<label>What needs doing?<textarea id="qDesc" placeholder="What\'s there now, what you\'d like, anything we should know">' + esc(BK.desc) + '</textarea></label>' +
     '<div id="phBox"><label>Photos <span class="opt-l">(up to 4 — e.g. the old unit, the switchboard, the area)</span><input type="file" accept="image/*" multiple></label><div class="photos" style="margin-top:8px"></div></div>' +
     '<label>Best days or times for a visit <span class="opt-l">(optional)</span><input type="text" id="qPref" value="' + esc(BK.prefer) + '" placeholder="e.g. Weekday mornings"></label>' +
@@ -950,7 +951,7 @@ var CQ = {};
 function bookQuote(){return toast("Please contact the removalist to confirm moving day. This system books quotation visits only.");}
 function renderCustomerQuote(id){
  var q=quote(id),app=$("#app");if(!q){app.innerHTML='<div class="empty">This quote link is not available.</div>';return;}
- var t=qTotals(q);
+ var t=qTotals(q),expiry=new Date((q.sentAt||q.created)+(q.validDays||DB.biz.quoteValidDays)*864e5);
  app.innerHTML='<div class="qdoc card"><p class="small muted">WRITTEN MOVING QUOTE '+esc(q.ref)+'</p><h1>'+esc(DB.biz.name)+'</h1><h2>'+esc(q.title)+'</h2><p>Prepared for '+esc(q.customer.name)+'</p><p style="white-space:pre-wrap">'+esc(q.description||'')+'</p><table><thead><tr><th>Item</th><th>Qty</th><th>Amount</th></tr></thead><tbody>'+q.lines.map(function(l){return '<tr><td>'+esc(l.d)+'</td><td>'+esc(l.q)+'</td><td>'+money(l.q*l.u)+'</td></tr>';}).join('')+'</tbody></table><div class="totals"><div class="r"><span>Subtotal</span><b>'+money(t.sub)+'</b></div>'+(DB.biz.gst?'<div class="r"><span>GST</span><b>'+money(t.gst)+'</b></div>':'')+'<div class="r big"><span>Total</span><b>'+money(t.total)+'</b></div></div><p style="white-space:pre-wrap">'+esc(q.note||'')+'</p><div class="note info">Please contact the removalist to confirm the scope, written quote and moving date. Viewing this quote does not reserve a truck or crew.</div><p>'+esc(DB.biz.phone||'')+' · '+esc(DB.biz.email||'')+'</p><div class="actions noprint"><button class="btn" onclick="window.print()">Print / save PDF</button><a class="btn ghost" href="../site.html'+(SLUG?'?b='+encodeURIComponent(SLUG):'')+'">Back to homepage</a></div></div>';
 }
 
@@ -1372,7 +1373,7 @@ function renderWebsite(){
 function updateRemovalistHome(){
  var link=document.getElementById("removalistHome"); if(!link)return;
  var business=(typeof SLUG!=="undefined" && SLUG)||QP0.get("b")||"";
- link.href="../"+(business?"?b="+encodeURIComponent(business):"");
+ link.href="../site.html"+(business?"?b="+encodeURIComponent(business):"");
 }
 updateRemovalistHome();
 if (LIVE) liveBoot(); else route();
