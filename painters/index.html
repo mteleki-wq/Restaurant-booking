@@ -1,6 +1,443 @@
-<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Painter Deluxe — Your next chapter in colour</title><meta name="description" content="Explore paint colours, estimate your painting cost and book an available site visit online."><style>
-:root{--ink:#23473c;--cream:#f6f4eb;--accent:#456859}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.65 system-ui,sans-serif}a{color:inherit}button,input{font:inherit}header,main,footer{max-width:1250px;margin:auto;padding:25px 5%}header{display:flex;justify-content:space-between;align-items:center;gap:20px}.brand{font-weight:750;font-size:21px}.brand small{display:block;font-weight:400;letter-spacing:3px;text-transform:uppercase;font-size:9px}nav{display:flex;gap:24px;align-items:center}nav a{text-decoration:none;font-size:13px}.btn{display:inline-block;background:var(--accent);color:white;border:1px solid var(--accent);padding:13px 23px;text-decoration:none;border-radius:5px;font-weight:600;font-size:14px}.outline{background:transparent;color:var(--ink);border-color:#b8c4b2}.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:55px;align-items:center;padding:45px 0 65px}h1{font:400 clamp(44px,5vw,72px)/1.06 Georgia,serif;letter-spacing:-2px;margin:20px 0 25px}h2{font:400 38px/1.15 Georgia,serif;margin:12px 0 22px}h3{font:400 25px/1.2 Georgia,serif}.eyebrow{text-transform:uppercase;font-size:11px;letter-spacing:2px;font-weight:700}.hero p{color:#68796d;max-width:440px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.visual{min-height:480px;position:relative;border-radius:150px 150px 8px 8px;overflow:hidden;background:#b6bda7;box-shadow:0 22px 60px #244b3215}.wall-art{position:absolute;width:100%;height:100%;object-fit:cover}.hero-tag{position:absolute;bottom:20px;left:20px;right:20px;background:#fffE;padding:16px;border-radius:6px;font-size:13px}.strip{display:flex;justify-content:space-around;gap:20px;border-top:1px solid #d3d9c9;border-bottom:1px solid #d3d9c9;padding:22px 0;font-size:12px}.section{padding:65px 0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.card{border:1px solid #d3d9c9;background:#fff8;border-radius:8px;padding:28px}.num{color:#83916a;font:40px Georgia,serif}.card p{font-size:14px;color:#68796d}.split{display:grid;grid-template-columns:1fr 1fr;gap:60px}.colour-row{display:flex;gap:9px;margin-top:22px}.colour-row span{height:48px;width:48px;border-radius:50%;border:4px solid #fff}.banner{background:var(--ink);color:#fff;padding:42px;border-radius:9px}.banner p{color:#d5dfcf}.banner .btn{background:#d9e7a3;color:#23473c;border-color:#d9e7a3}details{border-bottom:1px solid #d3d9c9;padding:18px 0}summary{cursor:pointer;font-weight:600}details p{font-size:14px;color:#68796d;margin-bottom:0}footer{font-size:12px;display:flex;justify-content:space-between;gap:20px;border-top:1px solid #d3d9c9}.notice{padding:12px 5%;background:#e5eadb;font-size:12px;text-align:center}.error{background:#f4ddd4}a:focus-visible{outline:3px solid #bc703f;outline-offset:4px}@media(max-width:750px){.hero,.split,.cards{grid-template-columns:1fr}.hero{gap:24px;padding-top:20px}.visual{min-height:370px}nav a:not(.btn){display:none}.strip{flex-wrap:wrap}.section{padding:40px 0}.split{gap:25px}footer{flex-direction:column}.banner{padding:26px}}
-</style><script src="settings.js"></script></head><body><div class="notice" id="notice">Example painter website · try the colours and booking demo. <a href="app/#start">Set up your business →</a></div><header><div class="brand" id="business">Painter Deluxe<small>Painting made personal</small></div><nav><a href="#how">How it works</a><a href="#about">About</a><a class="btn booking" href="demo/#book">Book a quote visit ↗</a></nav></header><main><section class="hero"><div><div class="eyebrow">Your next chapter in colour</div><h1 id="headline">A fresh coat.<br>A whole new feeling.</h1><p id="intro">Explore colours, get an indicative painting estimate and book a site visit online. Your home’s next chapter starts here.</p><div class="actions"><a class="btn studio" href="studio.html">Get an online estimate →</a><a class="btn outline booking" href="demo/#book">Book a quote visit</a></div><p style="font-size:11px;margin-top:20px">Instant inspiration. An estimate to help you plan. A final quote after inspection.</p></div><div class="visual"><svg class="wall-art" viewBox="0 0 600 620" preserveAspectRatio="xMidYMid slice" aria-label="Illustrated sage lounge room"><rect width="600" height="620" fill="#b6bda7"/><path d="M0 480H600V620H0Z" fill="#c9b192"/><rect x="0" y="473" width="600" height="12" fill="#f5f0e4"/><rect x="231" y="100" width="150" height="180" fill="#7d7057"/><rect x="239" y="108" width="134" height="164" fill="#eee8da"/><path d="M253 244L289 147L351 244Z" fill="#8a977b"/><circle cx="338" cy="139" r="17" fill="#c79d76"/><ellipse cx="317" cy="551" rx="220" ry="42" fill="#e4dccb"/><rect x="123" y="337" width="385" height="136" rx="25" fill="#d4cab5"/><rect x="111" y="415" width="410" height="90" rx="15" fill="#c6baa3"/><rect x="100" y="392" width="49" height="117" rx="14" fill="#b9ad95"/><rect x="484" y="392" width="49" height="117" rx="14" fill="#b9ad95"/><rect x="165" y="365" width="75" height="68" rx="9" fill="#7c8a70" transform="rotate(-8 200 398)"/><rect x="398" y="363" width="66" height="70" rx="10" fill="#ede4d2"/><ellipse cx="319" cy="542" rx="93" ry="20" fill="#997b57"/><path d="M258 548L249 595M379 548L389 595" stroke="#80674b" stroke-width="7"/><path d="M50 474V306M50 410Q-10 381 14 353Q50 369 50 410M50 370Q111 329 86 305Q52 321 50 370" fill="#6e8259" stroke="#6e8259" stroke-width="4"/><path d="M15 465H86L75 517H27Z" fill="#a38360"/></svg><img id="heroPhoto" class="wall-art" alt="Painting project" hidden><div class="hero-tag">Find your palette. Make the space your own.<div class="colour-row"><span style="background:#b5bda7"></span><span style="background:#e8dfce"></span><span style="background:#9cabb6"></span><span style="background:#c79785"></span></div></div></div></section><div class="strip"><span>Interior & exterior painting</span><span>Online estimates</span><span>Available appointment times</span><span>Colours you can explore</span></div><section class="section" id="how"><div class="eyebrow">From idea to appointment</div><h2>Three simple steps to a fresh start.</h2><div class="cards"><article class="card"><div class="num">01</div><h3>Picture the change</h3><p>Try colours in a lounge, bedroom, kitchen or exterior illustration. Explore walls, feature walls and trims.</p><a class="studio" href="studio.html">Open the colour studio →</a></article><article class="card"><div class="num">02</div><h3>Plan your budget</h3><p>Enter room sizes and the work you have in mind. See an indicative estimate based on the painter’s configured rates.</p><a class="studio" href="studio.html#estimate">Estimate my project →</a></article><article class="card"><div class="num">03</div><h3>Book a quote visit</h3><p>Tell us your suburb and select an available appointment. Scheduling allows for existing work and estimated travel between jobs.</p><a class="booking" href="demo/#book">Find a time →</a></article></div></section><section class="section split" id="about"><div><div class="eyebrow">Your home, thoughtfully refreshed</div><h2>Good preparation.<br>A finish to enjoy.</h2></div><div><p id="aboutText">This is your space to introduce your painting business. Explain your approach, the areas you serve and how you help customers choose the right finish.</p><p id="contact"></p><a class="btn outline booking" href="demo/#book">Let’s discuss your project</a></div></section><section class="banner"><div class="eyebrow">Make room for something new</div><h2>A colour you love.<br>A plan you can start.</h2><p>Start with a room or the whole house. Explore the possibilities today.</p><div class="actions"><a class="btn studio" href="studio.html">Try colours & estimate</a><a class="btn booking" href="demo/#book">Book an inspection</a></div></section><section class="section"><h2>A few things to know.</h2><details><summary>Is the online estimate a final quote?</summary><p>No. It gives you a starting budget. The painter checks measurements, surface preparation, access and finishes before confirming the price.</p></details><details><summary>Am I booking the painting job?</summary><p>The initial appointment is a site visit for a quote. Painting work is scheduled once the scope, price and duration are agreed.</p></details><details><summary>Does the calendar allow for travel?</summary><p>It checks the painter’s working hours and existing bookings, with a travel allowance between suburbs and a parking buffer. The time is checked again when the booking is submitted.</p></details><details><summary>Will the colour look exactly like the screen?</summary><p>The illustrations provide inspiration. Lighting, screens and paint finishes change appearance. Always test a physical paint sample.</p></details></section></main><footer><span id="footerName">Painter Deluxe · by Webescapade</span><span><a id="staffLink" href="app/#staff">Business sign in & website editor</a> · <a href="app/#start">Set up a business</a></span></footer><script>
-(async()=>{let b;try{b=await PD.load();}catch(e){document.getElementById('notice').textContent='This business is unavailable. Please contact the painter directly.';document.getElementById('notice').classList.add('error');document.querySelectorAll('.booking,.studio').forEach(a=>{a.removeAttribute('href');a.setAttribute('aria-disabled','true');});return;}
-const suffix=PD.slug?'?b='+encodeURIComponent(PD.slug):'';document.querySelectorAll('.booking').forEach(a=>a.href=PD.booking());document.querySelectorAll('.studio').forEach(a=>{const hash=new URL(a.href).hash;a.href='studio.html'+suffix+hash;});document.getElementById('staffLink').href='app/'+suffix+'#website';if(!b)return;const w=b.website||{};document.getElementById('business').textContent=b.name;document.title=b.name+' · Painting estimates & bookings';document.getElementById('footerName').textContent=b.name+' · Powered by Painter Deluxe';for(const [id,key] of [['headline','headline'],['intro','intro'],['aboutText','about']])if(w[key])document.getElementById(id).textContent=w[key];document.getElementById('contact').textContent=[b.phone,b.email,b.base?'Based in '+b.base:''].filter(Boolean).join(' · ');if(/^#[0-9a-f]{6}$/i.test(w.accent||''))document.documentElement.style.setProperty('--accent',w.accent);if(/^(https:\/\/|data:image\/(jpeg|png|webp);base64,)/i.test(w.hero||'')){const img=document.getElementById('heroPhoto');img.src=w.hero;img.hidden=false;img.onerror=()=>img.hidden=true;}if(PD.slug)document.getElementById('notice').hidden=true;
-})();</script></body></html>
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>if(new URLSearchParams(location.search).get("b")){location.replace("/painters/site.html"+location.search+location.hash);}</script><title>Painter Deluxe · Online painting estimates, colour previews &amp; bookings · Webescapade</title>
+<meta name="description" content="An editable painter website, colour previews, indicative estimates and quote-visit bookings that allow for travel. Painter Deluxe by Webescapade.">
+<link rel="canonical" href="https://webescapade.com/painters/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="Webescapade">
+<meta property="og:locale" content="en_AU">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://webescapade.com/painters/">
+<meta property="og:title" content="Painter Deluxe · More colour. Less admin.">
+<meta property="og:description" content="An editable painter website, colour previews, indicative estimates and quote-visit bookings that allow for travel. Painter Deluxe by Webescapade.">
+<meta property="og:image" content="https://webescapade.com/painters/img/lounge.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Painter Deluxe · More colour. Less admin.">
+<meta name="twitter:image" content="https://webescapade.com/painters/img/lounge.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F2EC; --paper2:#ECE7DE; --card:#FFFFFF; --ink:#14202C; --ink2:#26333F; --muted:#5F6A75; --line:#E0DAD0;
+  --acc:#E8591A; --acc2:#F07A3E; --mint:#FCE8DB; --deep:#14202C; --btn:#14202C; --btnink:#fff;
+  --r:22px; --shadow:0 30px 60px -30px rgba(20,32,44,.4), 0 10px 24px -12px rgba(20,32,44,.2);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 Manrope,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.015em;margin:0}
+h1{font-size:clamp(46px,7.2vw,94px);line-height:.96}
+h2{font-size:clamp(36px,5vw,62px);line-height:1}
+h3{font-size:28px;line-height:1.1}
+h1 em,h2 em,h3 em{font-style:italic;color:var(--acc)}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--acc)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:16px 26px;font:700 15px Manrope,sans-serif;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn.dark{background:var(--btn);color:var(--btnink);box-shadow:0 10px 24px -10px rgba(20,32,44,.6)}
+.btn.acc{background:var(--acc);color:#fff;box-shadow:0 10px 24px -10px var(--acc)}
+.btn.line{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.light{background:#fff;color:var(--ink)}
+.btn .ar{transition:transform .2s}.btn:hover .ar{transform:translateX(3px)}
+/* nav */
+nav.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.top.s{border-bottom-color:var(--line)}
+nav.top .w{display:flex;align-items:center;gap:26px;height:72px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .m{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center}
+.brand .m svg{width:20px;height:20px}
+.brand b{font:400 25px "Instrument Serif",serif;letter-spacing:-.01em}
+.brand small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+nav.top .links{display:flex;gap:22px;margin-left:auto;font-size:15px;font-weight:600}
+nav.top .links a{text-decoration:none;color:var(--muted)}nav.top .links a:hover{color:var(--ink)}
+nav.top .btn{padding:11px 20px;font-size:14px}
+@media(max-width:960px){nav.top .links{display:none}nav.top .btn{margin-left:auto}}
+@media(max-width:480px){nav.top .w{gap:12px}.brand b{font-size:21px}nav.top .btn{padding:10px 14px;font-size:13px}nav.top .btn .ar{display:none}}
+/* hero */
+.hero{padding:64px 0 60px;position:relative;overflow-x:clip}
+.hero .w{display:grid;gap:56px;align-items:center}
+@media(min-width:1020px){.hero .w{grid-template-columns:1fr 1.08fr}}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:13.5px;font-weight:700;color:var(--ink2);margin-bottom:24px}
+.pill i{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-style:normal;font-size:12px}
+.hero .lead{margin:24px 0 32px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.trust{display:flex;gap:10px 18px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted);font-weight:700}
+.trust span:before{content:"✓";color:var(--acc);margin-right:6px}
+.stage{position:relative;padding-bottom:40px}
+.browser{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.browser .bar{height:30px;background:var(--paper2);display:flex;align-items:center;gap:6px;padding:0 12px}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.browser .bar span{margin-left:10px;font-size:11px;color:var(--muted);background:var(--card);border-radius:6px;padding:2px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phone{position:absolute;width:32%;min-width:150px;right:-2%;bottom:-6%;border-radius:34px;background:#111;padding:8px;box-shadow:var(--shadow)}
+.phone img{border-radius:26px}
+.hero .browser{transform:rotate(-1.2deg)}
+.hero .phone{transform:rotate(3deg)}
+.fc{position:absolute;left:-3%;bottom:4%;background:#fff;border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center;font-size:14px;max-width:270px}
+.fc .ic{width:36px;height:36px;border-radius:10px;background:var(--mint);color:var(--acc);display:grid;place-items:center;font-weight:900;flex:none}
+.fc b{display:block}
+.fc span{color:var(--muted);font-size:12.5px}
+@media(max-width:600px){.phone{width:40%;right:0;bottom:-10%}.fc{display:none}}
+/* trades strip */
+.made{padding:40px 0 20px}
+.made p{text-align:center;color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 16px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.chips span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px}
+.chips span.soon{color:var(--muted);border-style:dashed}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:40px}
+@media(min-width:860px){.facts{grid-template-columns:repeat(4,1fr)}}
+.facts div{background:var(--card);border-radius:18px;padding:20px 22px;border:1px solid var(--line)}
+.facts b{display:block;font:400 34px/1.05 "Instrument Serif",serif}
+.facts span{font-size:14px;color:var(--muted)}
+section.s{padding:110px 0}
+.head{max-width:780px;margin-bottom:50px}
+.head p{color:var(--muted);font-size:18px;margin:18px 0 0}
+/* travel explainer */
+.route{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:grid;gap:26px}
+@media(min-width:900px){.route{grid-template-columns:1.25fr .75fr;align-items:center}}
+.tl{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px}
+.tl>div{flex:none;display:flex;flex-direction:column;justify-content:center;border-radius:12px;padding:10px 12px;font-size:13px;min-height:86px}
+.tl .jb{background:var(--deep);color:#fff;width:150px}
+.tl .jb b{font-size:14px}
+.tl .jb span{opacity:.7}
+.tl .dv{width:86px;background:repeating-linear-gradient(90deg,var(--mint) 0 8px,transparent 8px 12px);color:var(--acc);font-weight:800;text-align:center;border-radius:0}
+.tl .fr{width:120px;background:#E3F2E8;color:#1F6A3E;font-weight:800;text-align:center;border:2px dashed #7CC398}
+.why3{display:grid;gap:16px;margin-top:30px}
+@media(min-width:860px){.why3{grid-template-columns:repeat(3,1fr)}}
+.w3{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.w3 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:14px;margin-bottom:10px}
+.w3 b{display:block;font-size:17px;margin-bottom:4px}
+.w3 span{color:var(--muted);font-size:15px}
+/* steps */
+.steps{display:grid;gap:22px}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font:800 12px Manrope;letter-spacing:.16em;color:var(--acc)}
+.step h3{margin:8px 0 6px;font-size:28px}
+.step p{margin:0 0 20px;color:var(--muted);font-size:15.5px}
+.step .shot{margin-top:auto;border-radius:26px 26px 0 0;background:#111;padding:8px 8px 0;max-width:270px;align-self:center;width:100%}
+.step .shot img{border-radius:20px 20px 0 0;height:360px;width:100%;object-fit:cover;object-position:top}
+/* splits */
+.split{display:grid;gap:44px;align-items:center}
+@media(min-width:980px){.split{grid-template-columns:.9fr 1.1fr}.split.flip{grid-template-columns:1.1fr .9fr}.split.flip .txt{order:2}}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:16px}
+.ticks li{display:flex;gap:14px}
+.ticks li:before{content:"";flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12l4 4 8-8'/%3E%3C/svg%3E") center/14px no-repeat;margin-top:1px}
+.ticks b{display:block}
+.ticks span span{color:var(--muted);font-size:15.5px}
+.dark{background:var(--deep);color:#EEF0EC}
+.dark .ticks span span,.dark .lead{color:rgba(238,240,236,.72)}
+.dark .eyebrow{color:var(--acc2)}
+.dark h2 em{color:var(--acc2)}
+.phones{display:flex;gap:16px;justify-content:center}
+.phones .ph{flex:1;max-width:250px;border-radius:30px;background:#000;padding:7px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.phones .ph img{border-radius:24px}
+.phones .ph:nth-child(2){transform:translateY(40px)}
+/* looks */
+.looks{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.looks button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font:700 14px Manrope,sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.looks button i{width:14px;height:14px;border-radius:50%}
+.looks button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lookimg{position:relative}
+.lookimg img{transition:opacity .4s}
+/* video */
+.video{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/9;background:#000;box-shadow:var(--shadow);max-width:1000px;margin:0 auto;cursor:pointer;border:0;padding:0;width:100%;display:block}
+.video img{width:100%;height:100%;object-fit:cover}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video .play{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;background:var(--acc);box-shadow:0 14px 34px -8px rgba(0,0,0,.55);display:grid;place-items:center;transition:transform .2s}
+.video .play:after{content:"";margin-left:6px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent #fff}
+.video:hover .play{transform:scale(1.08)}
+.crmd{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:center;max-width:980px;margin:40px auto 0}.crmd img{width:100%;height:auto;display:block;border-radius:18px;box-shadow:0 20px 50px rgba(20,32,44,.18)}.crmd h3{font-size:30px;margin:6px 0 10px}.crmd p{margin:0 0 16px}@media(max-width:760px){.crmd{grid-template-columns:1fr}}
+.vnote{text-align:center;color:var(--muted);font-size:14px;margin-top:16px}
+/* pricing */
+.plans{display:grid;gap:18px}
+@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;position:relative}
+.plan.hi{background:var(--deep);color:#fff;border-color:var(--deep)}
+.plan.hi .muted,.plan.hi li{color:rgba(255,255,255,.78)}
+.plan .tag{position:absolute;top:-12px;left:28px;background:var(--acc);color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 12px}
+.plan .pr{margin:18px 0 8px}
+.plan .pr span{font:400 54px/1 "Instrument Serif",serif}
+.plan .pr small{color:var(--muted)}
+.plan.hi .pr small{color:rgba(255,255,255,.7)}
+.plan ul{list-style:none;padding:0;margin:14px 0 24px;display:grid;gap:10px;flex:1}
+.plan li{padding-left:24px;position:relative;font-size:15.5px;color:var(--ink2)}
+.plan li:before{content:"✓";position:absolute;left:0;color:var(--acc);font-weight:900}
+.muted{color:var(--muted)}
+.notes{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;margin-top:22px;color:var(--muted);font-size:14px}
+/* faq */
+.faq{max-width:860px}
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:14px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--acc);font-size:22px;line-height:1}
+details[open] summary:after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+/* enquire */
+.enq{display:grid;gap:40px}
+@media(min-width:960px){.enq{grid-template-columns:.9fr 1.1fr;align-items:start}}
+.contact{display:grid;gap:10px;margin-top:26px}
+.contact a{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;font-weight:700}
+.contact i{width:36px;height:36px;border-radius:10px;background:var(--mint);display:grid;place-items:center;font-style:normal}
+.form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;display:grid;gap:14px}
+.form label{display:grid;gap:6px;font-size:14px;font-weight:700}
+.form input,.form select,.form textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:16px Manrope,sans-serif;background:#fff;color:var(--ink)}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--acc)}
+.two{display:grid;gap:14px}
+@media(min-width:620px){.two{grid-template-columns:1fr 1fr}}
+.hp{position:absolute;left:-9999px}
+.msg{font-size:15px;font-weight:600;min-height:1.4em}
+.msg.ok{color:#1F6A3E}.msg.err{color:#9A3B2E}
+footer{padding:40px 0 110px;color:var(--muted);font-size:14px}
+footer .w{display:flex;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
+.float{position:fixed;left:18px;bottom:18px;z-index:25;opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
+.float.on{opacity:1;transform:none;pointer-events:auto}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+/* light editor (?edit=1) */
+#eng{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:4px;background:#111;color:#fff;border-radius:999px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 13px Manrope,sans-serif;max-width:calc(100% - 16px);overflow-x:auto}
+#eng button{border:0;background:none;color:#ddd;padding:8px 13px;border-radius:999px;cursor:pointer;font:inherit;white-space:nowrap}
+#eng button.on,#eng button:hover{background:#fff;color:#111}
+body.editing [data-edit]{outline:1.5px dashed rgba(232,89,26,.6);outline-offset:4px;border-radius:4px;cursor:text}
+body.editing [data-img]{outline:3px dashed var(--acc);outline-offset:-3px;cursor:pointer}
+#engp{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:101;width:min(460px,calc(100% - 20px));max-height:calc(100vh - 80px);overflow:auto;background:#fff;color:#111;border-radius:18px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);font:14px/1.45 Manrope,sans-serif}
+#engp h4{margin:0 0 10px;font-size:16px}
+#engp label{display:grid;gap:4px;font-weight:600;font-size:12px;color:#555;margin-bottom:10px}
+#engp input{border:1px solid #ddd;border-radius:9px;padding:8px 10px;font:15px Manrope,sans-serif;color:#111;width:100%}
+#engp .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+#engp .b{border:0;border-radius:9px;padding:9px 14px;font:600 14px Manrope,sans-serif;cursor:pointer;background:#eee;color:#111}
+#engp .b.p{background:#111;color:#fff}
+#engp .note{background:#F4F4F2;border-radius:10px;padding:10px 12px;color:#444;font-size:13px;margin-bottom:10px}
+#engp .msg{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+.chat{--acc:#E8591A;--btn:#14202C;--btnink:#fff;--card:#fff;--deep:#14202C;--paper:#F5F2EC;--shadow:0 24px 70px rgba(20,32,44,.28)}
+.chat-q[hidden],.chat-tip[hidden]{display:none}
+.chat-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--acc);color:#fff;border-radius:999px;padding:8px 18px 8px 8px;font:700 15px Manrope,sans-serif;box-shadow:0 16px 34px -12px rgba(0,0,0,.45);transition:transform .2s}
+.chat-fab:hover{transform:translateY(-2px)}
+.chat-fab .ci{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;position:relative}
+.chat-fab .ci svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-fab .ci:after{content:"";position:absolute;right:1px;top:1px;width:10px;height:10px;border-radius:50%;background:#34D399;border:2px solid var(--acc)}
+.chat.open .chat-fab{display:none}
+.chat-tip{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;max-width:260px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 34px 12px 14px;font-size:14px;line-height:1.45;box-shadow:var(--shadow);cursor:pointer;animation:chatIn .35s ease}
+.chat-tip button{position:absolute;right:6px;top:6px;border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;padding:4px}
+.chat-box{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:200;width:min(392px,calc(100vw - 32px));height:min(620px,calc(100svh - 110px));display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);animation:chatIn .3s ease}
+.chat-box[hidden]{display:none}
+@keyframes chatIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.chat-hd{display:flex;align-items:center;gap:11px;padding:14px 14px 14px 16px;background:var(--deep);color:#fff}
+.chat-hd .av{width:38px;height:38px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font:400 21px "Instrument Serif",Georgia,serif;flex:none}
+.chat-hd b{display:block;font-size:15px}
+.chat-hd small{display:block;font-size:12px;color:rgba(255,255,255,.7);margin-top:1px}
+.chat-hd .x{margin-left:auto;border:0;background:rgba(255,255,255,.12);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;flex:none}
+.chat-log{flex:1;overflow-y:auto;padding:16px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.cm{max-width:86%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;word-wrap:break-word}
+.cm.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.cm.u{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:5px}
+.cm a{color:var(--acc);font-weight:700}.cm.u a{color:#fff}
+.cm p{margin:0 0 6px}.cm p:last-child{margin:0}
+.cm ul{margin:4px 0 6px;padding-left:18px}.cm li{margin:2px 0}
+.cm.typing{display:flex;gap:4px;padding:14px}
+.cm.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.4;animation:cdot 1s infinite}
+.cm.typing i:nth-child(2){animation-delay:.15s}.cm.typing i:nth-child(3){animation-delay:.3s}
+@keyframes cdot{50%{opacity:1;transform:translateY(-3px)}}
+.chat-q{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 10px}
+.chat-q button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 13px Manrope,sans-serif;cursor:pointer}
+.chat-q button:hover{border-color:var(--acc);color:var(--acc)}
+.chat-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--card)}
+.chat-f input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font:400 16px Manrope,sans-serif;background:var(--paper);color:var(--ink)}
+.chat-f input:focus{outline:none;border-color:var(--acc)}
+.chat-f button{border:0;border-radius:999px;background:var(--btn);color:var(--btnink);font:700 14px Manrope,sans-serif;padding:0 16px;cursor:pointer}
+.chat-f button:disabled{opacity:.5}
+.chat-ft{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px;background:var(--card)}
+.chat-ft a{color:var(--muted)}
+@media(max-width:600px){.chat-fab{padding:8px}.chat-fab .tx{display:none}.chat-box{right:0;left:0;top:0;bottom:0;width:100%;height:100%;height:100dvh;border-radius:0;border:0}.chat-hd{padding-top:calc(14px + env(safe-area-inset-top))}}
+body:has(.chat.open) #float{visibility:hidden}
+body:has(.chat.open) .float{visibility:hidden}
+</style>
+<style>
+:root{--acc:#456859;--acc2:#6e8565;--mint:#e3ead7;--deep:#23473c;--btn:#23473c;--ink:#23473c}
+.hero{padding-top:75px}.hero .stage{padding-bottom:35px}.stage .browser img{aspect-ratio:16/10;object-fit:cover}.hero .browser{transform:none}.fc{bottom:-3%;left:5%;background:#fff}.stage::before{content:"";position:absolute;width:75%;height:110%;background:var(--mint);border-radius:45% 45% 30% 45%;right:-8%;top:-10%;z-index:-1}.stage{isolation:isolate}
+.steps .shot{max-height:none;aspect-ratio:16/10;border-radius:14px;overflow:hidden;margin-top:18px}.steps .shot img{width:100%;height:100%;object-fit:cover}.phones{display:grid;gap:25px}.phones .ph{position:static!important;width:100%!important;transform:none!important;padding:5px;border-radius:15px}.phones .ph img{border-radius:10px}.crmd img{aspect-ratio:16/9;object-fit:cover}.lookimg img{aspect-ratio:16/10;object-fit:cover}
+[data-parallax]{will-change:transform}body.editing [data-parallax]{transform:none!important}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.rv{opacity:1!important;transform:none!important;transition:none!important}[data-parallax]{transform:none!important;will-change:auto}.btn{transition:none}}
+@media(max-width:700px){.hero{padding-top:38px}.hero .w{gap:35px}.fc{display:none}.plans{gap:22px}.crmd{gap:20px}section.s{padding:65px 0}.phones{grid-template-columns:1fr}.tl>div{font-size:12px}.tl .jb{width:135px}}
+</style></head>
+<body data-demo-url="/painters/site.html" data-site-url="/painters/site.html" data-phone="0413 872 994" data-email="marc@webescapade.com" data-lead-url="https://tehxobdokbvqtwtgqzrh.supabase.co/rest/v1/rpc/trd_lead_submit" data-lead-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlaHhvYmRva2J2cXR3dGdxenJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTA0MzEsImV4cCI6MjA5NzY2NjQzMX0.ofwrtvy7T4_uDP4hcWdO9roO2viWEmrplp8CCpFNupE" data-gh-owner="mteleki-wq" data-gh-repo="Restaurant-booking" data-gh-branch="main" data-gh-path="painters/index.html">
+
+<nav class="top" id="nav"><div class="w">
+  <a class="brand" href="#top"><span class="m"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"></path></svg></span><span><b data-edit="brand">Painter Deluxe</b><small>by Webescapade</small></span></a>
+  <div class="links"><a href="#video" data-edit="n0">Watch</a><a href="#travel" data-edit="n1">Travel time</a><a href="#how" data-edit="n2">How it works</a><a href="#quotes" data-edit="n3">Quotes</a><a href="#website" data-edit="n4">Your website</a><a href="#pricing" data-edit="n5">Pricing</a><a href="#faq" data-edit="n6">FAQ</a></div>
+  <a class="btn dark" href="#enquire"><span data-edit="navcta">Get early access</span> <span class="ar">→</span></a>
+</div></nav>
+
+<header class="hero" id="top"><div class="w">
+  <div class="rv">
+    <div class="pill"><i>✦</i><span data-edit="pill">For independent painters and growing painting businesses</span></div>
+    <h1 data-edit="h1">More colour. <em>Less admin.</em></h1>
+    <p class="lead" data-edit="lead">Give customers a place to explore colours, estimate their painting project and book a quote visit. One connected website, with a private dashboard for your business.</p>
+    <div class="ctas">
+      <a class="btn acc" href="/painters/site.html" data-link="demo" target="_blank" rel="noopener"><span data-edit="cta1">Try the customer experience</span> <span class="ar">→</span></a>
+      <a class="btn line" href="#video"><span data-edit="cta2">▶ Watch the 43-second showcase</span></a>
+    </div>
+    <div class="trust"><span data-edit="t1">No commission</span><span data-edit="t2">One painter or a whole team</span><span data-edit="t3">Works on phones and tablets</span></div>
+  </div>
+  <div class="stage rv">
+    <div class="browser" data-parallax="0.045"><div class="bar"><i></i><i></i><i></i><span>Painter Deluxe · demonstration</span></div><img data-img="hero" src="/painters/img/lounge.jpg" alt="Painter Deluxe lounge — demonstration"></div>
+    <div class="fc" data-parallax="-0.035"><span class="ic">🚗</span><span><b data-edit="fcB">Room for the drive</b><span data-edit="fcS">Availability checked before confirming</span></span></div>
+  </div>
+</div></header>
+
+<section class="made"><div class="w">
+  <p data-edit="madeP">Built around the way painters work</p>
+  <div class="chips"><span data-edit="c1">Interior painting</span><span data-edit="c2">Exterior painting</span><span data-edit="c3">Room repaints</span><span data-edit="c4">Whole-home enquiries</span><span data-edit="c5">Quote visits</span><span class="soon" data-edit="c6">Your colours. Your rates. Your business.</span></div>
+  <div class="facts rv">
+    <div><b data-edit="f1b">Colour</b><span data-edit="f1">previews help customers explore a look before they enquire</span></div>
+    <div><b data-edit="f2b">24/7</b><span data-edit="f2">customers can request a quote or book an available inspection</span></div>
+    <div><b data-edit="f3b">0%</b><span data-edit="f3">commission — no lead fees or per-job charges</span></div>
+    <div><b data-edit="f4b">Private</b><span data-edit="f4">business dashboard for appointments and customer requirements</span></div>
+  </div>
+</div></section>
+
+<section class="s" id="video" style="padding-bottom:0"><div class="w">
+  <div class="head rv" style="text-align:center;margin-left:auto;margin-right:auto"><div class="eyebrow" data-edit="vEy">Watch it work</div><h2 data-edit="vH">43 seconds. <em>See the possibilities.</em></h2>
+    <p data-edit="vP" style="margin-left:auto;margin-right:auto">Follow a customer from colour inspiration to an indicative estimate and a quote visit. Then see the tools behind the scenes.</p></div>
+  <video id="showcase" controls playsinline preload="metadata" poster="/painters/img/lounge.jpg" style="width:100%;border-radius:22px;background:#23473c" aria-label="Painter Deluxe showcase"><source src="/painters/media/showcase.mp4" type="video/mp4"></source></video><p class="vnote">Explore more Webescapade tutorials: <a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">Visit our YouTube channel ↗</a></p>
+  <div class="crmd rv">
+    <a href="/painters/demo/#crm" target="_blank" rel="noopener"><img data-img="crmThumb" src="/painters/img/crm.jpg" alt="Painter Deluxe crm — demonstration" loading="lazy"></a>
+    <div><div class="eyebrow" data-edit="crmEy">Today &amp; what comes next</div><h3 data-edit="crmH">Customer records now. More follow-up tools planned.</h3>
+      <p class="muted" data-edit="crmP">The current customer view brings bookings, quote requests and project requirements together. Advanced CRM follow-ups, email campaigns and Email Studio are planned additions; they are not included as live features in these plans.</p>
+      <a class="btn acc" href="/painters/demo/#crm" target="_blank" rel="noopener" data-edit="crmB">Explore the business demo ↗</a></div>
+  </div>
+</div></section>
+
+<section class="s" id="travel"><div class="w">
+  <div class="head rv"><div class="eyebrow" data-edit="trEy">Bookings that understand travel</div><h2 data-edit="trH">An hour on site needs <em>room for the drive.</em></h2>
+    <p data-edit="trP">A quote visit in Newtown cannot run straight into one in Petersham. Painter Deluxe checks existing appointments, working hours and estimated travel before offering a time, then checks again when the customer confirms.</p></div>
+  <div class="route rv">
+    <div class="tl" aria-label="Illustrative painter day with travel allowances"><div class="jb">9:00 Quote visit<br>Newtown · 1 h</div><div class="dv">Travel<br>30 min</div><div class="jb">10:30 Quote visit<br>Petersham · 1 h</div><div class="fr">Free time<br>for the next visit</div></div><div><h3 data-edit="trH3">A diary that respects the journey.</h3><p class="muted" data-edit="trP3" style="margin:8px 0 0">Your run sheet puts appointments in order, with estimated travel between them. Record telephone bookings here too, so online availability reflects your day.</p></div>
+  </div>
+  <div class="why3">
+    <div class="w3 rv"><span class="n">1</span><b data-edit="w1">The time on site</b><span data-edit="w1s">Set a duration range for quote visits. The longer duration is reserved so the diary has room for your inspection.</span></div>
+    <div class="w3 rv"><span class="n">2</span><b data-edit="w2">Travel either side</b><span data-edit="w2s">Suburb-based distance estimates plus your road factor, average speed and parking allowance. Times are estimates, not live traffic guarantees.</span></div>
+    <div class="w3 rv"><span class="n">3</span><b data-edit="w3">Your team’s availability</b><span data-edit="w3s">Working days, hours, days off and existing appointments determine which painter can take the visit.</span></div>
+  </div>
+</div></section>
+
+<section class="s" id="how" style="padding-top:0"><div class="w">
+  <div class="head rv"><div class="eyebrow" data-edit="hEy">How customers start</div><h2 data-edit="hH">See the colour. Plan the cost. <em>Book the visit.</em></h2>
+    <p data-edit="hP">Customers can explore the possibilities first. You assess the property and confirm the scope and final price.</p></div>
+  <div class="steps">
+    <div class="step rv"><span class="n">01</span><h3 data-edit="s1h">Explore a new colour</h3><p data-edit="s1p">Try colours in a lounge, bedroom, kitchen or exterior illustration. A helpful starting point before testing physical samples.</p><div class="shot"><img data-img="st1" src="/painters/img/lounge.jpg" alt="Painter Deluxe lounge — demonstration" loading="lazy"></div></div>
+    <div class="step rv"><span class="n">02</span><h3 data-edit="s2h">Get an indicative estimate</h3><p data-edit="s2p">Enter room dimensions, preparation and finishes. The estimate uses your configured rates, with the final quote subject to inspection.</p><div class="shot"><img data-img="st2" src="/painters/img/estimate.jpg" alt="Painter Deluxe estimate — demonstration" loading="lazy"></div></div>
+    <div class="step rv"><span class="n">03</span><h3 data-edit="s3h">Book an available quote visit</h3><p data-edit="s3p">Choose the service, enter an address and select an available time. The customer sees booking steps, while your management tools stay private.</p><div class="shot"><img data-img="st3" src="/painters/img/calendar.jpg" alt="Painter Deluxe calendar — demonstration" loading="lazy"></div></div>
+  </div>
+</div></section>
+
+<section class="s dark" id="emergency"><div class="w"><div class="split flip">
+  <div class="rv"><div class="phones"><div class="ph"><img data-img="em1" src="/painters/img/bedroom.jpg" alt="Painter Deluxe bedroom — demonstration" loading="lazy"></div><div class="ph"><img data-img="em2" src="/painters/img/exterior.jpg" alt="Painter Deluxe exterior — demonstration" loading="lazy"></div></div></div>
+  <div class="txt rv"><div class="eyebrow" data-edit="eEy">Colour inspiration, built in</div><h2 data-edit="eH">Help customers <em>picture the change.</em></h2>
+    <ul class="ticks">
+      <li><span><b data-edit="ea">Different spaces, different possibilities</b><span data-edit="eas">Switch between lounge, bedroom, kitchen and house exterior previews.</span></span></li>
+      <li><span><b data-edit="eb">Walls, features and trims</b><span data-edit="ebs">Try a palette colour or a custom colour. Screen previews are illustrative and not manufacturer-matched.</span></span></li>
+      <li><span><b data-edit="ec">A starting point for a conversation</b><span data-edit="ecs">Customers can carry their estimate and colour ideas into their quote-visit booking notes.</span></span></li>
+    </ul></div>
+</div></div></section>
+
+<section class="s" id="quotes"><div class="w"><div class="split">
+  <div class="txt rv"><div class="eyebrow" data-edit="qEy">Quotes &amp; customer requirements</div><h2 data-edit="qH">From initial interest <em>to a written quote.</em></h2>
+    <ul class="ticks">
+      <li><span><b data-edit="qa">Capture the project details</b><span data-edit="qas">Customers describe interior or exterior painting requirements. Quote requests and bookings appear in the private business area.</span></span></li>
+      <li><span><b data-edit="qb">Prepare an itemised quote</b><span data-edit="qbs">Add labour and materials, GST where applicable, scope notes and an estimated on-site duration.</span></span></li>
+      <li><span><b data-edit="qc">Keep the next step clear</b><span data-edit="qcs">Send the customer their quote link. Payment collection and automatic multi-day project scheduling are not included in this release.</span></span></li>
+    </ul></div>
+  <div class="rv"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>Painter Deluxe · demonstration</span></div><img data-img="quotes" src="/painters/img/quotes.jpg" alt="Painter Deluxe quotes — demonstration" loading="lazy"></div></div>
+</div></div></section>
+
+<section class="s" id="website" style="padding-top:0"><div class="w"><div class="split flip">
+  <div class="txt rv"><div class="eyebrow" data-edit="wEy">Your painter website</div><h2 data-edit="wH">A website <em>you can update yourself.</em></h2>
+    <p class="lead" data-edit="wP" style="margin-top:18px">Make the site your own from the signed-in website editor: your headline, introduction, photographs, brand colour and estimate rates.</p>
+    <ul class="ticks">
+      <li><span><b data-edit="wa">Your business on the page</b><span data-edit="was">Introduce your painting business and service area, using your own words and photos.</span></span></li>
+      <li><span><b data-edit="wb">Edit your estimate rates</b><span data-edit="wbs">Set wall, ceiling, skirting and exterior rates, plus your minimum job amount.</span></span></li>
+      <li><span><b data-edit="wc">Connected booking buttons</b><span data-edit="wcs">Your business website sends visitors to your own customer booking page.</span></span></li>
+    </ul>
+    <div class="ctas" style="margin-top:28px"><a class="btn line" href="/painters/site.html" data-link="site" target="_blank" rel="noopener"><span data-edit="wcta">See the customer website</span> <span class="ar">→</span></a></div></div>
+  <div class="rv">
+    <div class="browser lookimg"><div class="bar"><i></i><i></i><i></i><span>Painter Deluxe · demonstration</span></div><img id="lookImg" data-img="site" src="/painters/img/landing.jpg" alt="Painter Deluxe landing — demonstration" loading="lazy"></div>
+  </div>
+</div></div></section>
+
+<section class="s" style="padding-top:0"><div class="w"><div class="split">
+  <div class="txt rv"><div class="eyebrow" data-edit="uEy">Setup</div><h2 data-edit="uH">Your area, your team, <em>your rules.</em></h2>
+    <ul class="ticks">
+      <li><span><b data-edit="ua">Start with the painter preset</b><span data-edit="uas">Quote visits and painting enquiries are ready to configure. Change your services and visit durations.</span></span></li>
+      <li><span><b data-edit="ub">Set your service area</b><span data-edit="ubs">Choose your base suburb, service radius and estimated travel settings.</span></span></li>
+      <li><span><b data-edit="uc">Add your painters</b><span data-edit="ucs">Set each team member’s skills, working days, hours and time off.</span></span></li>
+      <li><span><b data-edit="ud">Keep your business private</b><span data-edit="uds">Customers book without an account. Authorised business staff sign in to the dashboard.</span></span></li>
+    </ul></div>
+  <div class="rv"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>Painter Deluxe · demonstration</span></div><img data-img="setup" src="/painters/img/editor.jpg" alt="Painter Deluxe editor — demonstration" loading="lazy"></div></div>
+</div></div></section>
+
+<section class="s" id="pricing" style="padding-top:0"><div class="w">
+  <div class="head rv" style="text-align:center;margin-left:auto;margin-right:auto"><div class="eyebrow" data-edit="pEy">Simple early-access pricing</div><h2 data-edit="pH">One flat price. <em>No lead fees.</em></h2>
+    <p data-edit="pP">All prices are AUD, per business, plus GST. Every plan includes quote-visit bookings, estimated travel scheduling, the run sheet, quotes and the basic customer view.</p></div>
+  <div class="plans">
+    <div class="plan rv"><h3 data-edit="pl1n">Bookings</h3><p class="muted" data-edit="pl1d" style="margin:6px 0 0">Keep your existing website</p>
+      <div class="pr"><span data-edit="pl1p">$39</span> <small data-edit="pl1u">/ month + GST</small></div>
+      <ul><li data-edit="pl1a">Online quote-visit booking page</li><li data-edit="pl1b">Run sheet with estimated travel</li><li data-edit="pl1c">Quote requests &amp; basic customer view</li><li data-edit="pl1e">Up to 3 painters</li></ul>
+      <a class="btn line" href="#enquire"><span data-edit="pl1cta">Get early access</span></a></div>
+    <div class="plan hi rv"><span class="tag" data-edit="pl2t">Recommended</span><h3 data-edit="pl2n">Website</h3><p class="muted" data-edit="pl2d" style="margin:6px 0 0">Your website + the connected tools</p>
+      <div class="pr"><span data-edit="pl2p">$59</span> <small data-edit="pl2u">/ month + GST</small></div>
+      <ul><li data-edit="pl2a">Everything in Bookings</li><li data-edit="pl2b">Editable painter website</li><li data-edit="pl2c">Colour studio &amp; indicative estimator</li><li data-edit="pl2e">Up to 3 painters</li></ul>
+      <a class="btn light" href="#enquire"><span data-edit="pl2cta">Get early access</span> <span class="ar">→</span></a></div>
+    <div class="plan rv"><h3 data-edit="pl3n">Team</h3><p class="muted" data-edit="pl3d" style="margin:6px 0 0">For growing painting businesses</p>
+      <div class="pr"><span data-edit="pl3p">$89</span> <small data-edit="pl3u">/ month + GST</small></div>
+      <ul><li data-edit="pl3a">Everything in Website</li><li data-edit="pl3b">4 to 10 painters</li><li data-edit="pl3c">Individual hours &amp; assignment</li><li data-edit="pl3e">Priority support</li></ul>
+      <a class="btn line" href="#enquire"><span data-edit="pl3cta">Get early access</span></a></div>
+  </div>
+  <div class="notes"><span data-edit="pn1">Advanced CRM and Email Studio are planned upgrades. Availability, sending allowances and upgrade pricing will be confirmed at launch.</span><span data-edit="pn2">Optional one-off website setup: $40 + GST to connect your completed content, or from $250 + GST for us to fill in your site.</span><span data-edit="pn3">Domain registration, paid integrations and usage charges are separate. More than 10 painters: price on request.</span></div>
+</div></section>
+
+<section class="s" id="faq" style="padding-top:0"><div class="w faq">
+  <div class="eyebrow" data-edit="fqEy">Questions</div><h2 data-edit="fqH" style="margin-bottom:18px">Straight <em>answers.</em></h2>
+  <details><summary data-edit="fq1">Does it prevent double bookings?</summary><p data-edit="fa1">It checks the selected painter’s hours, time off, existing appointments and travel allowance, then checks the slot again on the server at confirmation. Telephone bookings must also be entered into the system.</p></details>
+  <details><summary data-edit="fq2">Can I use it as a one-person business?</summary><p data-edit="fa2">Yes. Start with one painter, set your available days and hours, and use the same booking and quote tools as a team.</p></details>
+  <details><summary data-edit="fq3">Does the estimate replace my final quote?</summary><p data-edit="fa3">No. It is an indicative budget based on the customer’s dimensions and your rates. You inspect the property to confirm preparation, access, finishes and the final written price.</p></details>
+  <details><summary data-edit="fq4">Can it book a whole multi-day painting project?</summary><p data-edit="fa4">The initial online booking is a quote visit. Multi-day painting projects need manual planning of each work day. Automatic multi-day reservations and card payments are not included in this release.</p></details>
+  <details><summary data-edit="fq5">Do customers need an app or login?</summary><p data-edit="fa5">No. Customers use the website, estimate and booking form in their browser. The private management dashboard requires an authorised staff login.</p></details>
+  <details><summary data-edit="fq6">Are CRM and Email Studio included?</summary><p data-edit="fa6">A basic customer view is available now, bringing together the records returned by the booking and quote tools. Advanced CRM follow-ups, email campaigns and Email Studio are planned upgrades. Timing and pricing will be confirmed before release.</p></details>
+  <details><summary data-edit="fq7">How do I start?</summary><p data-edit="fa7">Try the customer experience and business demo, then contact Marc. We can help you configure your painter profile, rates, service area, content and booking availability.</p></details>
+</div></section>
+
+<section class="s" id="enquire" style="padding-top:0"><div class="w"><div class="enq">
+  <div class="rv"><div class="eyebrow" data-edit="xEy">Talk to Marc</div><h2 data-edit="xH">Make it work for <em>your painting business.</em></h2>
+    <p class="lead" data-edit="xP" style="margin-top:18px">I’m Marc, a web designer in Sydney. Tell me about your painting business, team size and service area, and I’ll show you how Painter Deluxe can fit your work.</p>
+    <div class="contact">
+      <a href="tel:0413872994" data-link="tel"><i>☎</i><span data-link-text="phone">0413 872 994</span></a>
+      <a href="mailto:marc@webescapade.com" data-link="mail"><i>✉</i><span data-link-text="email">marc@webescapade.com</span></a>
+      <a href="/trades/demo.html" style="background:var(--deep);color:#fff;border-color:var(--deep)"><i style="background:rgba(255,255,255,.15)">📅</i><span data-edit="xDemo">Book a free Zoom demo</span></a>
+    </div></div>
+  <form class="form rv" id="enqForm" novalidate>
+    <div class="two"><label>Your name<input name="name" autocomplete="name" required></label><label>Business name<input name="business" autocomplete="organization" required></label></div>
+    <div class="two"><label>Email<input name="email" type="email" autocomplete="email" inputmode="email" required></label><label>Mobile<input name="phone" type="tel" autocomplete="tel" inputmode="tel"></label></div>
+    <div class="two"><label>Business type<select name="type"><option value="Painter Deluxe">Painting business</option></select></label>
+      <label>Base suburb<input name="suburb" autocomplete="address-level2"></label></div>
+    <label>How many painters? Anything else?<textarea name="message" rows="3" style="resize:vertical"></textarea></label>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <button class="btn dark" type="submit" style="width:100%"><span data-edit="fbtn">Send my enquiry</span> <span class="ar">→</span></button>
+    <div class="msg" id="enqMsg" role="status"></div>
+  </form>
+</div></div></section>
+
+<footer><div class="w"><span data-edit="foot1">© Webescapade · Sydney, Australia</span><span data-edit="foot2">Painter Deluxe — colour previews, estimates and quote-visit bookings</span><span><a href="/service/">Service Deluxe</a> · <a href="/Restaurant/">Restaurant Deluxe</a> · <a href="/Function-centre/">Function Deluxe</a></span><span><a href="https://www.youtube.com/@webescapadesydney?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a></span></div></footer>
+<a class="btn acc float" id="float" href="/painters/site.html" data-link="demo" target="_blank" rel="noopener"><span data-edit="floatcta">Try Painter Deluxe</span> <span class="ar">→</span></a>
+
+<script>(function(){var reduced=matchMedia('(prefers-reduced-motion: reduce)'),els=[].slice.call(document.querySelectorAll('[data-parallax]')),pending=false;function draw(){pending=false;els.forEach(function(el){if(reduced.matches||innerWidth<800||document.body.classList.contains('editing')){el.style.transform='';return;}var p=el.closest('.hero'),r=p.getBoundingClientRect(),offset=Math.max(-45,Math.min(45,-r.top*Number(el.dataset.parallax)));el.style.transform='translate3d(0,'+offset+'px,0)';});}function schedule(){if(!pending){pending=true;requestAnimationFrame(draw);}}addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);if(reduced.addEventListener)reduced.addEventListener('change',schedule);draw();})();</script></body>
+</html>
