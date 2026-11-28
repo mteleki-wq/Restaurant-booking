@@ -514,6 +514,7 @@ var VIEW = "book";
 function go(v){ location.hash = v; }
 function route(){
   updatePainterHome();
+  if (LIVE) { var customerRoute = !(hashArgs().staff || hashArgs().quotes || hashArgs().setup || hashArgs().crm || hashArgs().website); document.body.classList.toggle("cust", customerRoute); }
   if (LIVE) { var la = hashArgs(); if (la.quote || la.cancel || la.start || la.join) return liveBoot(); if ((la.staff || la.quotes || la.setup || la.crm || la.website) && !STAFF) return liveBoot(); }
   var h = location.hash.replace(/^#/, "");
   if (h.indexOf("quote=") === 0) { VIEW = "cq"; renderCustomerQuote(h.slice(6)); }
@@ -1386,6 +1387,11 @@ function liveBoot(){
   if (a.cancel) return renderCancel(a);
   if (a.quote) return renderLiveQuote(a);
   var staffView = a.staff || a.quotes || a.setup || a.crm || a.website;
+  if (!staffView && SLUG) {
+    STAFF = null;
+    document.body.classList.add("cust");
+    return loadPublic().then(function(){ applyBookParams(); route(); }, function(e){ $("#app").innerHTML = '<div class="note warn">' + esc(e.message) + '</div>'; });
+  }
   if (SES) {
     return rpc("trd_my_venues", {}).then(function(m){
       var list = (m && m.venues) || [];
